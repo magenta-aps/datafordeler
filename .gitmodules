@@ -1,6 +1,8 @@
 [submodule "core"]
 	path = core
 	url = git@github.com:magenta-aps/datafordeler-core.git
+	branch = master
 [submodule "engine"]
 	path = engine
 	url = git@github.com:magenta-aps/datafordeler-engine.git
+	branch = master
