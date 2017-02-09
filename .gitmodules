@@ -6,3 +6,16 @@
 	path = engine
 	url = git@github.com:magenta-aps/datafordeler-engine.git
 	branch = master
+[submodule "sts"]
+	path = sts
+	url = git@github.com:magenta-aps/datafordeler-sts.git
+[submodule "log"]
+	path = log
+	url = git@github.com:magenta-aps/datafordeler-log.git
+[submodule "admin"]
+	path = admin
+	url = git@github.com:magenta-aps/datafordeler-admin.git
+[submodule "plugindemo"]
+	path = plugindemo
+	url = git@github.com:magenta-aps/datafordeler-plugindemo.git
+
