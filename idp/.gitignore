@@ -10,6 +10,9 @@
 /wso2/bin/*
 !/wso2/repository
 /wso2/repository/*
+!/wso2/repository/components
+/wso2/repository/components/*
+!/wso2/repository/components/lib
 !/wso2/repository/conf
 /wso2/repository/conf/*
 !/wso2/repository/conf/datasources
