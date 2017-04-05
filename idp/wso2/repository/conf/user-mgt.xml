@@ -17,7 +17,7 @@
 <UserManager>
     <Realm>
         <Configuration>
-		<AddAdmin>true</AddAdmin>
+            <AddAdmin>true</AddAdmin>
             <AdminRole>admin</AdminRole>
             <AdminUser>
                 <UserName>admin</UserName>
@@ -25,8 +25,9 @@
             </AdminUser>
             <EveryOneRoleName>everyone</EveryOneRoleName> <!-- By default users in this role sees the registry root -->
             <Property name="isCascadeDeleteEnabled">true</Property>
- <Property name="initializeNewClaimManager">true</Property>
+            <Property name="initializeNewClaimManager">true</Property>
             <Property name="dataSource">jdbc/WSO2CarbonDB</Property>
+            <!-- Property name="dataSource">jdbc/WSO2CarbonDB</Property -->
         </Configuration>
 
 	    <!-- Following is the configuration for internal JDBC user store. This user store manager is based on JDBC.
@@ -38,7 +39,7 @@
 	         Note: Do not comment within UserStoreManager tags. Cause, specific tag names are used as tokens
 	         when building configurations for products.
 	    -->
-        <!--UserStoreManager class="org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager">
+        <UserStoreManager class="org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager">
             <Property name="TenantManager">org.wso2.carbon.user.core.tenant.JDBCTenantManager</Property>
             <Property name="ReadOnly">false</Property>
             <Property name="ReadGroups">true</Property>
@@ -59,9 +60,9 @@
             <Property name="MultiAttributeSeparator">,</Property>
             <Property name="MaxUserNameListLength">100</Property>
             <Property name="MaxRoleNameListLength">100</Property>
-            <Property name="UserRolesCacheEnabled">true</Property>
+            <Property name="UserRolesCacheEnabled">false</Property>
             <Property name="UserNameUniqueAcrossTenants">false</Property>
-        </UserStoreManager-->
+        </UserStoreManager>
 	
 	    <!-- If product is using an external LDAP as the user store in READ ONLY mode, use following user manager.
 		     In case if user core cache domain is needed to identify uniquely set property
@@ -167,7 +168,7 @@
              service password formats. In case if user core cache domain is needed to identify uniquely set property
              <Property name="UserCoreCacheIdentifier">domain</Property>
         -->
-        <UserStoreManager class="org.wso2.carbon.user.core.ldap.ReadWriteLDAPUserStoreManager">
+        <!-- UserStoreManager class="org.wso2.carbon.user.core.ldap.ReadWriteLDAPUserStoreManager">
             <Property name="TenantManager">org.wso2.carbon.user.core.tenant.CommonHybridLDAPTenantManager</Property>
             <Property name="ConnectionURL">ldap://localhost:${Ports.EmbeddedLDAP.LDAPServerPort}</Property>
             <Property name="ConnectionName">uid=admin,ou=system</Property>
@@ -210,7 +211,7 @@
             <Property name="LDAPConnectionTimeout">5000</Property>
             <Property name="ReadTimeout"/>
             <Property name="RetryAttempts"/>
-        </UserStoreManager>
+        </UserStoreManager-->
 
         <AuthorizationManager class="org.wso2.carbon.user.core.authorization.JDBCAuthorizationManager">
             <Property name="AdminRoleManagementPermissions">/permission</Property>
