@@ -162,9 +162,6 @@ cd ..
 rem ---------- Load DAFO configuration --------------
 set DAFO_CMD_ARGS=-Ddafo.is_configured=yes
 call %CARBON_HOME%\..\set_wso2_settings.bat
-echo %DAFO_CMD_ARGS%
-pause
-goto END
 
 rem ---------- Add jars to classpath ----------------
 
