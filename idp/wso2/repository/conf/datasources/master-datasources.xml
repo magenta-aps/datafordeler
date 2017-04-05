@@ -6,8 +6,8 @@
   
     <datasources>
       
-        <datasource>
-            <name>WSO2_CARBON_DB</name>
+        <!-- datasource>
+            <name>WSO2_CARBON_DB_OLD</name>
             <description>The datasource used for registry and user manager</description>
             <jndiConfig>
                 <name>jdbc/WSO2CarbonDB</name>
@@ -25,6 +25,27 @@
                     <validationInterval>30000</validationInterval>
                     <defaultAutoCommit>false</defaultAutoCommit>
                 </configuration>
+            </definition>
+        </datasource -->
+
+        <datasource>
+            <name>WSO2_CARBON_DB</name>
+            <description>The datasource used for registry and user manager</description>
+            <jndiConfig>
+                   <name>jdbc/WSO2CarbonDB</name>
+            </jndiConfig>
+            <definition type="RDBMS">
+                   <configuration>
+                      <url>${dafo.database.url}</url>
+                      <username>${dafo.database.username}</username>
+                      <password>${dafo.database.password}</password>
+                      <driverClassName>com.microsoft.sqlserver.jdbc.SQLServerDriver</driverClassName>
+                      <maxActive>80</maxActive>
+                      <maxWait>60000</maxWait>
+                      <testOnBorrow>true</testOnBorrow>
+                      <validationQuery>SELECT 1</validationQuery>
+                      <validationInterval>30000</validationInterval>
+                   </configuration>
             </definition>
         </datasource>
 
