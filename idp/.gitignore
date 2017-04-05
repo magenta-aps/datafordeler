@@ -1,0 +1,19 @@
+# wso2 source zip file
+/wso2is-5.3.0.zip
+
+# Files within the ws2o folder which has changes from the default
+# and should be tracked with git
+
+# Folders for changed files
+/wso2/*
+!/wso2/repository
+/wso2/repository/*
+!/wso2/repository/conf
+/wso2/repository/conf/*
+
+# The actual files
+!/wso2/repository/conf/carbon.xml
+!/wso2/repository/conf/datasources/master-datasources.xml
+!/wso2/repository/conf/registry.xml
+!/wso2/repository/conf/user-mgt.xml
+
