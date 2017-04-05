@@ -21,3 +21,6 @@
 !/wso2/repository/conf/datasources/master-datasources.xml
 !/wso2/repository/conf/registry.xml
 !/wso2/repository/conf/user-mgt.xml
+
+# Local settings file
+/set_wso2_settings_local.bat
