@@ -14,6 +14,11 @@
 /wso2/repository/conf/*
 !/wso2/repository/conf/datasources
 /wso2/repository/conf/datasources/*
+!/wso2/repository/deployment
+/wso2/repository/deployment/*
+!/wso2/repository/deployment/server
+/wso2/repository/deployment/server/*
+!/wso2/repository/deployment/server/userstores
 
 # The actual files
 !/wso2/bin/wso2server.bat
