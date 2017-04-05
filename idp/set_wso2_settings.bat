@@ -18,8 +18,8 @@ set DATABASE_USERNAME=dafo_wso2
 set DATABASE_PASSWORD=dafo_wso2
 
 set USERSTORE_URL="jdbc:sqlserver://127.0.0.1:1433;databaseName=dafo_users"
-set USERSTORE_USERNAME=dafo_users
-set USERSTORE_PASSWORD=dafo_users
+set USERSTORE_USERNAME=dafo_useradmin
+set USERSTORE_PASSWORD=dafo_useradmin
 
 rem Allow defaults to be overwritting by local script
 if exist "%~dp0%set_wso2_settings_local.bat" (
