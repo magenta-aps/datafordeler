@@ -6,6 +6,8 @@
 
 # Folders for changed files
 /wso2/*
+!/wso2/bin
+/wso2/bin/*
 !/wso2/repository
 /wso2/repository/*
 !/wso2/repository/conf
@@ -14,8 +16,8 @@
 /wso2/repository/conf/datasources/*
 
 # The actual files
+!/wso2/bin/wso2server.bat
 !/wso2/repository/conf/carbon.xml
 !/wso2/repository/conf/datasources/master-datasources.xml
 !/wso2/repository/conf/registry.xml
 !/wso2/repository/conf/user-mgt.xml
-
