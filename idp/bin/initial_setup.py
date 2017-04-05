@@ -66,4 +66,8 @@ def download(url):
 
 if __name__ == '__main__':
 
+    raise Exception(
+        "TODO: Unpack wso2 files, except for the ones we added in git"
+    )
+
     print "initial_setup.py done"
