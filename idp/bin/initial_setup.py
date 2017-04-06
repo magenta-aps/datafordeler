@@ -64,10 +64,74 @@ def download(url):
     return file_name
 
 
+def unpack_wso2():
+
+    ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
+    DEST_DIR = os.path.join(ROOT_DIR, "wso2")
+
+    if os.path.exists(os.path.join(DEST_DIR, "bin", "version.txt")):
+        print "WSO2 seems to already exists, skipping unpacking WSO2"
+        return True
+
+    OUTPUT_DIR = os.path.join(ROOT_DIR, "tmp_unzip")
+    ZIP_FILE = os.path.join(ROOT_DIR, "wso2.zip")
+
+    if not os.path.exists(ZIP_FILE):
+        print "".join([
+            "No wso2.zip file found. ",
+            "Please download wso2 5.3.0 as a zip file, ",
+            "place it in the same folder as the initial_setup.bat file and ",
+            "rename it to wso2.zip"
+        ])
+        return False
+
+    EXCLUDE_LIST_FILE = os.path.join(ROOT_DIR, "unzip_exclude_list.txt")
+    exclude_list = []
+    f = open(EXCLUDE_LIST_FILE, 'r')
+    for line in f:
+        # Remove wso2/ at start and whitespaces at end
+        line = line.strip()[5:]
+        if line:
+            exclude_list.append(line)
+    f.close()
+
+    zip_archive = zipfile.ZipFile(ZIP_FILE, 'r', allowZip64=True)
+
+    members = zip_archive.namelist()
+    first_name = members[0]
+    archive_dir = first_name[:first_name.index("/") + 1]
+    exclude_set = set([archive_dir + x for x in exclude_list])
+    members = [x for x in members if x not in exclude_set]
+
+    print "Unpacking wso2.zip"
+    zip_archive.extractall(path=OUTPUT_DIR, members=members)
+
+    print "Moving unpacked files to wso2 folder"
+    UNZIPPED_ROOT = os.path.join(OUTPUT_DIR, archive_dir[:-1])
+
+    for path, dirs, files in os.walk(UNZIPPED_ROOT):
+        sub_path = path[len(UNZIPPED_ROOT) + 1:]
+        for x in dirs:
+            dest = os.path.join(DEST_DIR, sub_path, x)
+            if not os.path.exists(dest):
+                os.mkdir(dest)
+        for x in files:
+            dest = os.path.join(DEST_DIR, sub_path, x)
+
+            if os.path.exists(dest):
+                os.remove(dest)
+
+            os.rename(os.path.join(path, x), dest)
+
+    shutil.rmtree(OUTPUT_DIR)
+
+    return True
+
+
 if __name__ == '__main__':
 
-    raise Exception(
-        "TODO: Unpack wso2 files, except for the ones we added in git"
-    )
+    if not unpack_wso2():
+        print "Unpacking of WSO2 failed!"
+        exit(1)
 
     print "initial_setup.py done"
