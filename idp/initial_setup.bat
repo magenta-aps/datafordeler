@@ -11,6 +11,7 @@ if exist "c:\Python27\python.exe" (
     GOTO nopython
 )
 
+:pythonok
 echo Running initial_setup.py
 %PYTHON_EXE% "%~dp0%bin\initial_setup.py"
 
