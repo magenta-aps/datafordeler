@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><UserStoreManager class="org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager">
-      <Property name="url">jdbc:sqlserver://jubk-win10.magenta-aps.dk:1433;databaseName=dafo_users</Property>
-      <Property name="userName">dafo_useradmin</Property>
-      <Property encrypted="true" name="password">eNC8uqAVZsEhYBFq350LZRhnnHbqp7PydGf/vGWtpSz1/pIHEV+OIM/KG0tS7OXI2lUIUSMC/wt4KqO87WEPZKMr7jU3PVxSAmdLyITHtdBnK9pst2TJ4sr2GyJfqTezw/4QgZo+LqB21U8oKqlDUIxYIdq4UILyc9EmnLf7gtM=</Property>
+      <Property name="url">${dafo.userstore.url}</Property>
+      <Property name="userName">${dafo.userstore.username}</Property>
+      <Property name="password">${dafo.userstore.password}</Property>
       <Property name="driverName">com.microsoft.sqlserver.jdbc.SQLServerDriver</Property>
       <Property name="Disabled">false</Property>
       <Property name="ReadOnly">true</Property>
