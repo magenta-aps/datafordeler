@@ -22,3 +22,4 @@
 [submodule "registerdemo"]
 	path = registerdemo
 	url = git@github.com:magenta-aps/datafordeler-registerdemo.git
+
