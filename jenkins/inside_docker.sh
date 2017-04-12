@@ -5,6 +5,8 @@ function subtitle(){ CHAR=' ';CONTENT="$CHAR $* $CHAR";BORDER=$(echo "$CONTENT" 
 
 title "Inside docker"
 
+echo "here's a bit of output"
+
 # Switch to the source directory
 # Example:
 #   cd src/
