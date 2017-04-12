@@ -19,3 +19,6 @@
 	path = plugindemo
 	url = git@github.com:magenta-aps/datafordeler-plugindemo.git
 
+[submodule "registerdemo"]
+	path = registerdemo
+	url = git@github.com:magenta-aps/datafordeler-registerdemo.git
