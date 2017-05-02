@@ -33,5 +33,4 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/by_certificate/hello").setViewName("by_certificate/hello");
         registry.addViewController("/by_certificate/login").setViewName("by_certificate/login");
     }
-
 }
