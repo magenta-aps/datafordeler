@@ -87,7 +87,7 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .metadataGenerator() //(1)
                         .entityId(this.identityId)
                         // TODO: This should not be hardcoded
-                        .entityBaseURL("http://localhost:8080/by_saml")
+                        .entityBaseURL("https://localhost:7443/by_saml")
                 .and()
                     .sso() //(2)
                     .defaultSuccessURL("/")

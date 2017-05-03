@@ -1,9 +1,5 @@
 package dk.magenta.dafosts.controller;
 
-/**
- * @author Ulises Bocchio
- */
-
 import com.github.ulisesbocchio.spring.boot.security.saml.annotation.SAMLUser;
 import com.github.ulisesbocchio.spring.boot.security.saml.user.SAMLUserDetails;
 import dk.magenta.dafosts.stereotypes.DafoSAMLUser;
