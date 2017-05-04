@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import sun.security.x509.X509CertImpl;
 
 import java.security.Principal;
 
@@ -30,7 +31,6 @@ public class CertificateGetTokenController {
 
         return getTokenView;
     }
-
 
     @RequestMapping("/get_token")
     @ResponseBody
