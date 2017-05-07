@@ -1,7 +1,7 @@
 package dk.magenta.dafosts.saml.users;
 
 import com.github.ulisesbocchio.spring.boot.security.saml.user.SAMLUserDetails;
-import dk.magenta.dafosts.DafoUserData;
+import dk.magenta.dafosts.users.DafoUserData;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.saml.SAMLCredential;

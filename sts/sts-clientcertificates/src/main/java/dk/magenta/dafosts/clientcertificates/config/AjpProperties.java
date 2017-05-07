@@ -1,9 +1,9 @@
-package dk.magenta.dafosts.clientcertificates;
+package dk.magenta.dafosts.clientcertificates.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Created by jubk on 04-05-2017.
+ * Configuration properties used for setting up the Ajp connector.
  */
 @ConfigurationProperties("dafo.ajp")
 public class AjpProperties {

@@ -1,43 +1,16 @@
 package dk.magenta.dafosts.clientcertificates;
 
 import dk.magenta.dafosts.DatabaseQueryManager;
-import org.apache.catalina.connector.Connector;
-import org.springframework.beans.factory.annotation.Autowired;
+import dk.magenta.dafosts.SharedConfig;
+import dk.magenta.dafosts.clientcertificates.config.AjpProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication
-@EnableConfigurationProperties(AjpProperties.class)
 public class DafoStsByCertificateApplication {
-
-	@Autowired
-	AjpProperties ajpProperties;
-
-	/**
-	 * Create a custom factory for the Tomcat embedded servlet container that adds an Ajp connector to
-	 * created Tomcats.
-	 * @return EmbeddedServletContainerFactory bean.
-	 */
-	@Bean
-	EmbeddedServletContainerFactory servletContainer() {
-
-		TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
-		if (ajpProperties.isEnabled()) {
-			Connector ajpConnector = new Connector("AJP/1.3");
-			ajpConnector.setPort(ajpProperties.getAjpPort());
-			ajpConnector.setSecure(ajpProperties.isSecure());
-			ajpConnector.setAllowTrace(ajpProperties.isAllowTrace());
-			ajpConnector.setScheme(ajpProperties.getScheme());
-			tomcat.addAdditionalTomcatConnectors(ajpConnector);
-		}
-
-		return tomcat;
-	}
 
     /**
      * A bean for the querymanager
@@ -50,6 +23,16 @@ public class DafoStsByCertificateApplication {
         manager.getLocalIdpUsers();
         return manager;
     }
+
+	/**
+	 * Load shared config from dafo-sts-library
+	 * @return SharedConfig bean
+	 */
+	@Bean
+	SharedConfig sharedConfigBean() {
+		return new SharedConfig();
+	}
+
 
 	public static void main(String[] args) throws Exception {
 		// Boostrap the Opensaml Library to use default configuration

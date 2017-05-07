@@ -1,19 +1,23 @@
 package dk.magenta.dafosts;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
+
+import com.nimbusds.jose.util.Base64;
+import dk.magenta.dafosts.users.DafoPasswordUserDetails;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 public class DatabaseQueryManager {
 
     private JdbcTemplate jdbcTemplate;
 
-    public static int INVALID_CERTIFICATE_USER_ID = -1;
+    public static int INVALID_USER_ID = -1;
     public static int ACCESS_ACCOUNT_STATUS_ACTIVE = 1;
 
     public DatabaseQueryManager(JdbcTemplate jdbcTemplate) {
@@ -35,8 +39,8 @@ public class DatabaseQueryManager {
         return result;
     }
 
-    public int getCertificateUserIdByCertificateData(String fingerprint) {
-        int result = INVALID_CERTIFICATE_USER_ID;
+    public int getUserIdByCertificateData(String fingerprint) {
+        int result = INVALID_USER_ID;
 
         SqlRowSet rows = jdbcTemplate.queryForRowSet(
                 String.join("\n",
@@ -68,6 +72,47 @@ public class DatabaseQueryManager {
         }
 
         return result;
+    }
+
+    public DafoPasswordUserDetails getDafoPasswordUserByUsername(String username) {
+
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                String.join("\n",
+                        "SELECT",
+                        "   [dafousers_accessaccount].[id],",
+                        "   [dafousers_accessaccount].[status],",
+                        "   [dafousers_passworduser].[givenname],",
+                        "   [dafousers_passworduser].[lastname],",
+                        "   [dafousers_passworduser].[email],",
+                        "   [dafousers_passworduser].[organisation],",
+                        "   [dafousers_passworduser].[encrypted_password],",
+                        "   [dafousers_passworduser].[password_salt]",
+                        "FROM",
+                        "   [dafousers_passworduser] INNER JOIN",
+                        "   [dafousers_accessaccount] ON (",
+                        "       [dafousers_passworduser].[accessaccount_ptr_id] =",
+                        "           [dafousers_accessaccount].[id]",
+                        "   )",
+                        "WHERE",
+                        "   [dafousers_passworduser].[email] = ?"
+                ),
+                new Object[] {username}
+        );
+        if(rows.next()) {
+            return new DafoPasswordUserDetails(
+                    rows.getInt(1), // UserId
+                    rows.getInt(2), // Status
+                    rows.getString( 3), // givenName
+                    rows.getString(4), // lastName
+                    rows.getString(5), // email
+                    rows.getString(6), // organisation
+                    rows.getString(7), // encrypted password
+                    rows.getString(8), // salt
+                    this
+            );
+        }
+
+        return null;
     }
 
     public Collection<String> getUserProfiles(int accessAccountId) {

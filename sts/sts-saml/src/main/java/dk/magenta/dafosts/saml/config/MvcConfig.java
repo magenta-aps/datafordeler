@@ -1,6 +1,7 @@
 package dk.magenta.dafosts.saml.config;
 
 import dk.magenta.dafosts.DafoTokenGenerator;
+import dk.magenta.dafosts.SharedConfig;
 import dk.magenta.dafosts.TokenGeneratorProperties;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +15,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.util.List;
 
 @Configuration
-@EnableConfigurationProperties(TokenGeneratorProperties.class)
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     DafoSAMLUserArgumentResolver dafoSAMLUserArgumentResolver;
-
-    @Bean
-    DafoTokenGenerator dafoTokenGenerator(TokenGeneratorProperties tokenGeneratorProperties) throws Exception {
-        return new DafoTokenGenerator(tokenGeneratorProperties);
-    };
+    @Autowired
+    SharedConfig sharedConfig;
 
     /**
      * Adds the dafoSAMLUserArgumentResolver to the list of argumentResolvers processed for each request.
@@ -37,6 +34,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("index");
+        sharedConfig.addViewControllers(registry);
+        registry.addViewController("/by_saml_sso/").setViewName("by_saml_sso/index");
     }
 }

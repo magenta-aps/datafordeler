@@ -26,7 +26,7 @@ public class IdpSelectionController {
             idpSelection.addObject(
                     "idpNameAliasMap",
                     Collections.singletonMap(
-                            "Datafordeler-IdP", "Dafo IdP"
+                            "https://dafo-idp.magenta.dk", "Dafo IdP"
                     )
             );
             return idpSelection;

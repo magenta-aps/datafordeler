@@ -7,7 +7,7 @@ import re
 import requests
 import zlib
 
-endpoint = "https://localhost:7443/by_saml/saml/SSO"
+endpoint = "dafo-sts-default-entity-id"
 username = "amalie@serviceudbyder.gl"
 password = "amalie"
 
@@ -24,13 +24,6 @@ REQUEST_DATA = {
 
 BASE_DIR = os.path.dirname(__file__)
 TEMPLATE_FILE = os.path.join(BASE_DIR, "templates", "requestsecuritytoken.xml")
-
-
-def _gzipstring(s):
-    compressor = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION,
-                                  zlib.DEFLATED, 16 + zlib.MAX_WBITS)
-
-    return compressor.compress(s) + compressor.flush()
 
 
 def replace_vars(match):
@@ -65,6 +58,9 @@ if __name__ == '__main__':
 
     tokens = doc.findall('.//{*}RequestedSecurityToken/{*}Assertion')
 
+
     print etree.tostring(tokens[0], pretty_print=True)
     print "\n======\n"
-    print base64.standard_b64encode(_gzipstring(etree.tostring(tokens[0])))
+
+    xml_str = etree.tostring(tokens[0])
+    print base64.b64encode(zlib.compress(xml_str.encode('utf-8'), zlib.Z_DEFAULT_COMPRESSION)[2:])

@@ -1,4 +1,4 @@
-package dk.magenta.dafosts;
+package dk.magenta.dafosts.users;
 
 import java.util.Collection;
 

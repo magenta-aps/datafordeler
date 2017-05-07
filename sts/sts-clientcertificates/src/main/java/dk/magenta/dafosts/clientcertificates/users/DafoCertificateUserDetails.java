@@ -1,6 +1,6 @@
 package dk.magenta.dafosts.clientcertificates.users;
 
-import dk.magenta.dafosts.DafoUserData;
+import dk.magenta.dafosts.users.DafoUserData;
 import dk.magenta.dafosts.DatabaseQueryManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -46,9 +46,9 @@ public class DafoCertificateUserDetails implements UserDetails, DafoUserData {
         catch(CertificateEncodingException e) {
             throw new UsernameNotFoundException("Could not encode certificate for fingerprint");
         }
-        this.databaseId = databaseQueryManager.getCertificateUserIdByCertificateData(fingerprint);
+        this.databaseId = databaseQueryManager.getUserIdByCertificateData(fingerprint);
 
-        if(this.databaseId == DatabaseQueryManager.INVALID_CERTIFICATE_USER_ID) {
+        if(this.databaseId == DatabaseQueryManager.INVALID_USER_ID) {
             throw new UsernameNotFoundException("No user found for the given certificate");
         }
     }
@@ -112,7 +112,7 @@ public class DafoCertificateUserDetails implements UserDetails, DafoUserData {
     @Override
     public Collection<String> getUserProfiles() {
         // TODO: Lookup UserProfiles in the database
-        if(databaseId == DatabaseQueryManager.INVALID_CERTIFICATE_USER_ID) {
+        if(databaseId == DatabaseQueryManager.INVALID_USER_ID) {
             return new ArrayList<>();
         } else {
             return databaseQueryManager.getUserProfiles(databaseId);

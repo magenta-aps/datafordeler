@@ -3,21 +3,29 @@ package dk.magenta.dafosts.saml.config;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.SAMLConfigurerBean;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLSAMLAuthenticationProvider;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLWebSSOProfileConsumerHoKImpl;
-import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLWebSSOProfileConsumerImpl;
 import dk.magenta.dafosts.TokenGeneratorProperties;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetailsService;
+import org.opensaml.saml2.metadata.provider.MetadataProvider;
+import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.saml.log.SAMLDefaultLogger;
+import org.springframework.security.saml.metadata.CachingMetadataManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
+/**
+ * Configures SAML SSO Login below the /by_saml_sso/ URL.
+ */
 @Configuration
 @EnableConfigurationProperties(TokenGeneratorProperties.class)
 public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -29,6 +37,11 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
     String idpMetadataLocation;
 
     private TokenGeneratorProperties tokenGeneratorProperties;
+    private DafoWebSSOProfileConsumer dafoWebSSOProfileConsumer;
+
+    public DafoWebSSOProfileConsumer getDafoWebSSOProfileConsumer() {
+        return dafoWebSSOProfileConsumer;
+    }
 
     @Autowired
     public void setTokenGeneratorProperties(TokenGeneratorProperties tokenGeneratorProperties) {
@@ -44,7 +57,8 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DSLSAMLAuthenticationProvider dslsamlAuthenticationProvider() {
         DSLSAMLAuthenticationProvider dslsamlAuthenticationProvider = new DSLSAMLAuthenticationProvider();
         dslsamlAuthenticationProvider.setUserDetails(dafoSAMLUserDetailsService);
-        dslsamlAuthenticationProvider.setConsumer(new DSLWebSSOProfileConsumerImpl());
+        dafoWebSSOProfileConsumer = new DafoWebSSOProfileConsumer();
+        dslsamlAuthenticationProvider.setConsumer(dafoWebSSOProfileConsumer);
         dslsamlAuthenticationProvider.setHokConsumer(new DSLWebSSOProfileConsumerHoKImpl());
         return dslsamlAuthenticationProvider;
     }
@@ -62,18 +76,14 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DafoSAMLUserDetailsService dafoSAMLUserDetailsService;
 
-
-    @Autowired
-    private ApplicationContext context;
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http
-                .httpBasic()
-                    .disable().csrf()
-                    .disable().anonymous()
-                .and()
+            .httpBasic()
+                .disable().csrf()
+                .disable().anonymous()
+            .and()
                 .apply(saml())
                     .serviceProvider()
                         .metadataGenerator() //(1)
@@ -82,7 +92,7 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .entityBaseURL("https://localhost:7443")
                 .and()
                     .sso() //(2)
-                    .defaultSuccessURL("/")
+                    .defaultSuccessURL("/by_saml_sso/get_token")
                     .idpSelectionPageURL("/idpselection")
                 .and()
                     .logout() //(3)
@@ -94,7 +104,7 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .extendedMetadata() //(5)
                     // TODO: Remember to change this back
-                    .idpDiscoveryEnabled(false)
+                    .idpDiscoveryEnabled(true)
                 .and()
                     .keyManager() //(6)
                     .privateKeyDERLocation(tokenGeneratorProperties.getPrivateKeyDerLocation())
@@ -102,12 +112,12 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .http()
                 .authorizeRequests()
-                .requestMatchers(saml().endpointsMatcher())
-                .permitAll()
+                .antMatchers("/by_saml_sso/**").authenticated()
             .and()
                 .authorizeRequests()
-                .anyRequest().authenticated();
+                .antMatchers("/").permitAll()
+                .antMatchers("/error").permitAll()
+                .requestMatchers(saml().endpointsMatcher()).permitAll();
         // @formatter:on
-
     }
 }
