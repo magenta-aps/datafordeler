@@ -19,6 +19,13 @@ if exist "%DIR%local_settings.properties" (
 rem If the WAR file does not exist, build it
 if not exist "%DIR%target\%WARNAME%" (
     echo %DIR%target\%WARNAME% not found, building project
+
+    rem Build and install sts-library dependency
+    cd "%DIR%..\sts-library"
+    call "%DIR%..\sts-library\mvnw.cmd" -Dmaven.test.skip=true clean install
+
+    rem Build the war
+    cd %DIR%
     call "%DIR%mvnw.cmd" -Dmaven.test.skip=true package
 )
 
