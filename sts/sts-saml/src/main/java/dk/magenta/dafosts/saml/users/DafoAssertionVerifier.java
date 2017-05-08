@@ -1,21 +1,10 @@
 package dk.magenta.dafosts.saml.users;
 
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.SAMLConfigurerBean;
-import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLWebSSOProfileConsumerImpl;
 import dk.magenta.dafosts.saml.config.DafoWebSSOProfileConsumer;
 import dk.magenta.dafosts.saml.config.SamlWebSecurityConfig;
 import org.opensaml.common.SAMLException;
-import org.opensaml.common.binding.decoding.BasicURLComparator;
-import org.opensaml.common.binding.decoding.URIComparator;
-import org.opensaml.common.xml.SAMLConstants;
 import org.opensaml.saml2.core.*;
-import org.opensaml.saml2.metadata.Endpoint;
-import org.opensaml.saml2.metadata.EntityDescriptor;
-import org.opensaml.saml2.metadata.RoleDescriptor;
-import org.opensaml.saml2.metadata.SPSSODescriptor;
-import org.opensaml.saml2.metadata.impl.EntityDescriptorImpl;
-import org.opensaml.saml2.metadata.impl.RoleDescriptorImpl;
-import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.Configuration;
 import org.opensaml.xml.encryption.DecryptionException;
@@ -23,11 +12,6 @@ import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallerFactory;
 import org.opensaml.xml.io.UnmarshallingException;
 import org.opensaml.xml.security.SecurityException;
-import org.opensaml.xml.security.x509.BasicX509CredentialNameEvaluator;
-import org.opensaml.xml.signature.Signature;
-import org.opensaml.xml.signature.SignatureTrustEngine;
-import org.opensaml.xml.signature.impl.ExplicitKeySignatureTrustEngine;
-import org.opensaml.xml.signature.impl.PKIXSignatureTrustEngine;
 import org.opensaml.xml.util.Base64;
 import org.opensaml.xml.validation.ValidationException;
 import org.slf4j.Logger;
@@ -35,25 +19,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.saml.context.SAMLContextProvider;
 import org.springframework.security.saml.context.SAMLMessageContext;
-import org.springframework.security.saml.metadata.ExtendedMetadata;
 import org.springframework.security.saml.metadata.MetadataManager;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Context;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -63,7 +40,6 @@ public class DafoAssertionVerifier {
     protected final Logger log = LoggerFactory.getLogger(getClass());
     private long maxAuthenticationAge = 7200;
 
-    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
     @Autowired
     SamlWebSecurityConfig samlWebSecurityConfig;
@@ -95,6 +71,7 @@ public class DafoAssertionVerifier {
             InputStream in = new ByteArrayInputStream(outputStream.toByteArray());
 
 
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
 
