@@ -1,4 +1,7 @@
 /target
+/local_settings.properties
+/local_settings.bat
+
 
 ### STS ###
 .apt_generated
