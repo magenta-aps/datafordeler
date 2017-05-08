@@ -11,7 +11,7 @@
     <li><a th:href="@{/by_saml_sso/get_token}">Get a token using SAML Single Sign On</a>.</li>
     <li>
         Get a token using username and password:<br />
-        <form name="usernamepasswordform" h:action="@{/get_token_passive}" method="GET">
+        <form name="usernamepasswordform" th:action="@{/get_token_passive}" method="GET">
             <div>
                 <label for="username">Username</label>
                 <input type="text" name="username" id="username" value="" />
