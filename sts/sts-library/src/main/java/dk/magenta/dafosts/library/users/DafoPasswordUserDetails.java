@@ -1,8 +1,7 @@
-package dk.magenta.dafosts.users;
+package dk.magenta.dafosts.library.users;
 
 import com.nimbusds.jose.util.Base64;
-import dk.magenta.dafosts.users.DafoUserData;
-import dk.magenta.dafosts.DatabaseQueryManager;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

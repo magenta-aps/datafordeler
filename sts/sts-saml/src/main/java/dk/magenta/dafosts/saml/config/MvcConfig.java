@@ -1,12 +1,8 @@
 package dk.magenta.dafosts.saml.config;
 
-import dk.magenta.dafosts.DafoTokenGenerator;
-import dk.magenta.dafosts.SharedConfig;
-import dk.magenta.dafosts.TokenGeneratorProperties;
+import dk.magenta.dafosts.library.SharedConfig;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

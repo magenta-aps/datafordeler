@@ -1,15 +1,15 @@
 package dk.magenta.dafosts.clientcertificates;
 
-import dk.magenta.dafosts.DatabaseQueryManager;
-import dk.magenta.dafosts.SharedConfig;
-import dk.magenta.dafosts.clientcertificates.config.AjpProperties;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
+import dk.magenta.dafosts.library.SharedConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication
+@ComponentScan(basePackages = {"dk.magenta.dafosts.clientcertificates", "dk.magenta.dafosts.library"})
 public class DafoStsByCertificateApplication {
 
     /**

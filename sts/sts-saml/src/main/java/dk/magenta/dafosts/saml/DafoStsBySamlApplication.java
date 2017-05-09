@@ -1,19 +1,21 @@
 package dk.magenta.dafosts.saml;
 
 import com.github.ulisesbocchio.spring.boot.security.saml.annotation.EnableSAMLSSO;
-import dk.magenta.dafosts.DafoTokenGenerator;
-import dk.magenta.dafosts.DatabaseQueryManager;
-import dk.magenta.dafosts.SharedConfig;
-import dk.magenta.dafosts.TokenGeneratorProperties;
+import dk.magenta.dafosts.library.DafoTokenGenerator;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
+import dk.magenta.dafosts.library.SharedConfig;
+import dk.magenta.dafosts.library.TokenGeneratorProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication
 @EnableSAMLSSO
 @EnableConfigurationProperties(TokenGeneratorProperties.class)
+@ComponentScan(basePackages = {"dk.magenta.dafosts.saml", "dk.magenta.dafosts.library"})
 public class DafoStsBySamlApplication {
 
 	/**

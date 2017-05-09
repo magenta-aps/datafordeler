@@ -1,7 +1,7 @@
 package dk.magenta.dafosts.clientcertificates;
 
-import dk.magenta.dafosts.DafoTokenGenerator;
-import dk.magenta.dafosts.DatabaseQueryManager;
+import dk.magenta.dafosts.library.DafoTokenGenerator;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
@@ -9,8 +9,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.opensaml.ws.message.decoder.MessageDecodingException;
-import org.opensaml.xml.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,13 +20,9 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.ResourceAccessException;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.security.KeyStore;
 import java.util.Arrays;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;

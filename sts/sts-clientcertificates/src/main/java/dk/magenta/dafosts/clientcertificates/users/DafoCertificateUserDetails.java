@@ -1,7 +1,7 @@
 package dk.magenta.dafosts.clientcertificates.users;
 
-import dk.magenta.dafosts.users.DafoUserData;
-import dk.magenta.dafosts.DatabaseQueryManager;
+import dk.magenta.dafosts.library.users.DafoUserData;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,13 +1,9 @@
-package dk.magenta.dafosts;
+package dk.magenta.dafosts.library;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.nimbusds.jose.util.Base64;
-import dk.magenta.dafosts.users.DafoPasswordUserDetails;
+import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 

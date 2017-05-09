@@ -1,9 +1,9 @@
 package dk.magenta.dafosts.saml.controller;
 
-import dk.magenta.dafosts.DafoTokenGenerator;
-import dk.magenta.dafosts.DatabaseQueryManager;
+import dk.magenta.dafosts.library.DafoTokenGenerator;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
-import dk.magenta.dafosts.users.DafoPasswordUserDetails;
+import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.Assertion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Context;
 
 /**
  * Controller that allow users to passively get tokens from the STS.

@@ -3,12 +3,9 @@ package dk.magenta.dafosts.saml.config;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.SAMLConfigurerBean;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLSAMLAuthenticationProvider;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLWebSSOProfileConsumerHoKImpl;
-import dk.magenta.dafosts.TokenGeneratorProperties;
+import dk.magenta.dafosts.library.TokenGeneratorProperties;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetailsService;
-import org.opensaml.saml2.metadata.provider.MetadataProvider;
-import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,10 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.saml.log.SAMLDefaultLogger;
-import org.springframework.security.saml.metadata.CachingMetadataManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**

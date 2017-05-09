@@ -1,4 +1,4 @@
-package dk.magenta.dafosts;
+package dk.magenta.dafosts.library;
 
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 

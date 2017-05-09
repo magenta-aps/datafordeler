@@ -1,7 +1,7 @@
 package dk.magenta.dafosts.clientcertificates.config;
 
-import dk.magenta.dafosts.DafoTokenGenerator;
-import dk.magenta.dafosts.TokenGeneratorProperties;
+import dk.magenta.dafosts.library.DafoTokenGenerator;
+import dk.magenta.dafosts.library.TokenGeneratorProperties;
 import dk.magenta.dafosts.clientcertificates.users.DafoCertificateUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

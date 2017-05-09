@@ -1,6 +1,6 @@
-package dk.magenta.dafosts;
+package dk.magenta.dafosts.library;
 
-import dk.magenta.dafosts.users.DafoUserData;
+import dk.magenta.dafosts.library.users.DafoUserData;
 import org.joda.time.DateTime;
 import org.opensaml.common.SAMLObjectBuilder;
 import org.opensaml.common.SAMLVersion;

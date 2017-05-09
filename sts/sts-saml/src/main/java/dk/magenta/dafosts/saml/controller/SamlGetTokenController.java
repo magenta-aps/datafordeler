@@ -1,12 +1,10 @@
 package dk.magenta.dafosts.saml.controller;
 
 import com.github.ulisesbocchio.spring.boot.security.saml.annotation.SAMLUser;
-import dk.magenta.dafosts.DafoTokenGenerator;
-import dk.magenta.dafosts.TokenGeneratorProperties;
+import dk.magenta.dafosts.library.DafoTokenGenerator;
 import dk.magenta.dafosts.saml.stereotypes.DafoSAMLUser;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

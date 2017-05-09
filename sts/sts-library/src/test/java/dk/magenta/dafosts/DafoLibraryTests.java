@@ -1,6 +1,9 @@
 package dk.magenta.dafosts;
 
-import dk.magenta.dafosts.users.DafoUserData;
+import dk.magenta.dafosts.library.DafoTokenGenerator;
+import dk.magenta.dafosts.library.SharedConfig;
+import dk.magenta.dafosts.library.TokenGeneratorProperties;
+import dk.magenta.dafosts.library.users.DafoUserData;
 import org.junit.Test;
 
 import java.util.Arrays;

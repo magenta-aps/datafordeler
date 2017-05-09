@@ -1,16 +1,15 @@
 package dk.magenta.dafosts.saml;
 
-import dk.magenta.dafosts.DafoTokenGenerator;
-import dk.magenta.dafosts.DatabaseQueryManager;
+import dk.magenta.dafosts.library.DafoTokenGenerator;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.saml.controller.PassiveGetTokenController;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
-import dk.magenta.dafosts.users.DafoPasswordUserDetails;
+import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
 import org.hamcrest.Description;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
-import org.opensaml.xml.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,12 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
