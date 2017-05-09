@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>dk.magenta</groupId>
+	<groupId>dk.magenta.datafordeler</groupId>
 	<artifactId>dafo-sts-clientcertificates</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -50,10 +50,10 @@
 			<!-- scope>provided</scope -->
 		</dependency>
         <dependency>
-            <groupId>dk.magenta</groupId>
+            <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>dafo-sts-library</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
     </dependencies>
 
 	<build>
