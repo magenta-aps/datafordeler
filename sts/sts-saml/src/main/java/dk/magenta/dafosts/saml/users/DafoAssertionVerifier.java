@@ -6,6 +6,7 @@ import dk.magenta.dafosts.saml.config.SamlWebSecurityConfig;
 import org.opensaml.common.SAMLException;
 import org.opensaml.saml2.core.*;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
+import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.Configuration;
 import org.opensaml.xml.encryption.DecryptionException;
 import org.opensaml.xml.io.Unmarshaller;
@@ -33,6 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 @Component
 public class DafoAssertionVerifier {
@@ -58,18 +60,14 @@ public class DafoAssertionVerifier {
 
     public Assertion parseAssertion(String fromString) {
         try {
-            Inflater inflater = new Inflater(true);
-            byte[] data = Base64.decode(fromString);
-            inflater.setInput(data);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-            byte[] buffer = new byte[1024];
-            while (!inflater.finished()) {
-                int count = inflater.inflate(buffer);
-                outputStream.write(buffer, 0, count);
+            byte[] decodedBytes = Base64.decode(fromString);
+            if(decodedBytes == null){
+                throw new MessageDecodingException("Unable to Base64 decode incoming message");
             }
-            outputStream.close();
-            InputStream in = new ByteArrayInputStream(outputStream.toByteArray());
 
+            Inflater inflater = new Inflater(true);
+            ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
+            InflaterInputStream in = new InflaterInputStream(bytesIn, new Inflater(true));
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
@@ -83,7 +81,8 @@ public class DafoAssertionVerifier {
 
             return (Assertion) unmarshaller.unmarshall(element);
         }
-        catch (IOException|ParserConfigurationException|SAXException|UnmarshallingException|DataFormatException e) {
+        catch (IOException|ParserConfigurationException|SAXException|UnmarshallingException|
+                MessageDecodingException e) {
             e.printStackTrace();
         }
 

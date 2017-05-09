@@ -6,6 +6,7 @@ import org.opensaml.common.SAMLObjectBuilder;
 import org.opensaml.common.SAMLVersion;
 import org.opensaml.saml2.core.*;
 import org.opensaml.saml2.core.impl.ResponseMarshaller;
+import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.Configuration;
 import org.opensaml.xml.XMLObjectBuilder;
 import org.opensaml.xml.schema.XSString;
@@ -20,6 +21,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.core.io.ClassPathResource;
 
 import javax.xml.namespace.QName;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.security.KeyFactory;
@@ -31,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
 @EnableConfigurationProperties(TokenGeneratorProperties.class)
 public class DafoTokenGenerator {
@@ -368,5 +372,40 @@ public class DafoTokenGenerator {
         deflaterStream.finish();
         return Base64.encodeBytes(bytesOut.toByteArray(), Base64.DONT_BREAK_LINES);
     }
+
+    /**
+     * Base64 decodes and inflates the input string
+     * @param input - A base64 and deflated string
+     * @return decoded and inflated string
+     * @throws MessageDecodingException
+     */
+    public String decodeAndInflate(String input) throws MessageDecodingException {
+        byte[] decodedBytes = Base64.decode(input);
+        if(decodedBytes == null){
+            throw new MessageDecodingException("Unable to Base64 decode incoming message");
+        }
+
+        try {
+            ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
+            InflaterInputStream inflater = new InflaterInputStream(bytesIn, new Inflater(true));
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            int nRead;
+            byte[] data = new byte[1024];
+            while ((nRead = inflater.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            buffer.flush();
+
+            return new String(buffer.toByteArray(), "UTF-8");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MessageDecodingException("Unable to Base64 decode and inflate SAML message", e);
+        }
+    }
+
 
 }

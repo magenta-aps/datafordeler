@@ -24,14 +24,6 @@ public class CertificateGetTokenController {
     @Autowired
     DafoTokenGenerator dafoTokenGenerator;
 
-    @RequestMapping("/get_token_for_service")
-    public ModelAndView get_token_for_service() throws Exception {
-
-        ModelAndView getTokenView = new ModelAndView("get_token");
-
-        return getTokenView;
-    }
-
     @RequestMapping("/get_token")
     @ResponseBody
     @PreAuthorize("hasAuthority('ROLE_CERTIFICATE_USER')")

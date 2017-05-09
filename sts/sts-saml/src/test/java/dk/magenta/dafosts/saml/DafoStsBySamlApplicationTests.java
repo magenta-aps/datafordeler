@@ -1,5 +1,6 @@
 package dk.magenta.dafosts.saml;
 
+import dk.magenta.dafosts.DafoTokenGenerator;
 import dk.magenta.dafosts.DatabaseQueryManager;
 import dk.magenta.dafosts.saml.controller.PassiveGetTokenController;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
@@ -7,9 +8,7 @@ import dk.magenta.dafosts.users.DafoPasswordUserDetails;
 import org.hamcrest.Description;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.opensaml.saml2.core.Assertion;
-import org.opensaml.saml2.core.impl.AssertionImpl;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -83,6 +81,9 @@ public class DafoStsBySamlApplicationTests {
     private PassiveGetTokenController passiveGetTokenController;
 
     @Autowired
+    DafoTokenGenerator dafoTokenGenerator;
+
+    @Autowired
     private MockMvc mockMvc;
 
     public DafoPasswordUserDetails mockPasswordUser(int activeStatus) {
@@ -99,41 +100,13 @@ public class DafoStsBySamlApplicationTests {
         );
     }
 
-    String decodeMessage(String message) throws MessageDecodingException {
-        byte[] decodedBytes = Base64.decode(message);
-        if(decodedBytes == null){
-            throw new MessageDecodingException("Unable to Base64 decode incoming message");
-        }
-
-        try {
-            ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
-            InflaterInputStream inflater = new InflaterInputStream(bytesIn, new Inflater(true));
-
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-            int nRead;
-            byte[] data = new byte[1024];
-            while ((nRead = inflater.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-
-            buffer.flush();
-
-            return new String(buffer.toByteArray(), "UTF-8");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new MessageDecodingException("Unable to Base64 decode and inflate SAML message", e);
-        }
-    }
-
     org.hamcrest.Matcher<java.lang.String> decodedAndInflatedContains(String matchingString) {
 
         return new org.hamcrest.TypeSafeMatcher<String>() {
             @Override
             protected boolean matchesSafely(String item) {
                 try {
-                    String decodedMessage = decodeMessage(item);
+                    String decodedMessage = dafoTokenGenerator.decodeAndInflate(item);
                     return decodedMessage.contains(matchingString);
                 }
                 catch(MessageDecodingException e) {
@@ -212,7 +185,7 @@ public class DafoStsBySamlApplicationTests {
     @Test
     public void issueTokenByBootstrapToken() throws Exception {
         // Do not actually verify the token, just parse it so we can get the username
-        when(dafoAssertionVerifier.parseAssertion(any(String.class))).thenCallRealMethod();
+        when(dafoAssertionVerifier.parseAssertion(anyString())).thenCallRealMethod();
         Assertion assertion = dafoAssertionVerifier.parseAssertion(BOOTSTRAP_TOKEN);
         when(dafoAssertionVerifier.verifyAssertion(
                 anyString(), any(HttpServletRequest.class), any(HttpServletResponse.class))
