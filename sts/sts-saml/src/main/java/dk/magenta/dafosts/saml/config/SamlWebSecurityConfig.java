@@ -36,6 +36,9 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${dafo.sts.dafo-idp-metadata-location}")
     String idpMetadataLocation;
 
+    @Value("${dafo.sts.dafo-sts-root-url}")
+    String spRootURL;
+
     private TokenGeneratorProperties tokenGeneratorProperties;
     private DafoWebSSOProfileConsumer dafoWebSSOProfileConsumer;
 
@@ -88,8 +91,7 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .serviceProvider()
                         .metadataGenerator() //(1)
                         .entityId(this.identityId)
-                        // TODO: This should not be hardcoded
-                        .entityBaseURL("https://localhost:7443")
+                        .entityBaseURL(spRootURL)
                 .and()
                     .sso() //(2)
                     .defaultSuccessURL("/by_saml_sso/get_token")
