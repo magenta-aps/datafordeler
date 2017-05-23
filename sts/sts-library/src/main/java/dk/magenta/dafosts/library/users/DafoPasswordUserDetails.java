@@ -100,12 +100,23 @@ public class DafoPasswordUserDetails implements DafoUserData {
     }
 
     @Override
+    public int getAccessAccountId() {
+        return userId;
+    }
+
+    @Override
     public String getUsername() {
         return emailAddress;
+    }
+
+    @Override
+    public String getOnBehalfOf() {
+        return null;
     }
 
     @Override
     public Collection<String> getUserProfiles() {
         return databaseQueryManager.getUserProfiles(userId);
     }
+
 }

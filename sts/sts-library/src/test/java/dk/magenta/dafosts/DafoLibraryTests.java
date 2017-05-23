@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static dk.magenta.dafosts.library.DatabaseQueryManager.INVALID_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DafoLibraryTests {
@@ -45,6 +46,16 @@ public class DafoLibraryTests {
             @Override
             public Collection<String> getUserProfiles() {
                 return Arrays.asList(new String[] {"UserProfile1", "UserProfile2"});
+            }
+
+            @Override
+            public int getAccessAccountId() {
+                return 42;
+            }
+
+            @Override
+            public String getOnBehalfOf() {
+                return null;
             }
         });
     }

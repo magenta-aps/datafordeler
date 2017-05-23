@@ -9,5 +9,9 @@ public interface DafoUserData {
 
     public String getUsername();
 
+    public int getAccessAccountId();
+
+    public String getOnBehalfOf();
+
     public Collection<String> getUserProfiles();
 }

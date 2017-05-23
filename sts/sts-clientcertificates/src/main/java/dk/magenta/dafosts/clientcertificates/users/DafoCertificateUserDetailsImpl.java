@@ -1,6 +1,6 @@
 package dk.magenta.dafosts.clientcertificates.users;
 
-import dk.magenta.dafosts.library.users.DafoUserData;
+import dk.magenta.dafosts.library.users.DafoCertificateUserDetails;
 import dk.magenta.dafosts.library.DatabaseQueryManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -12,24 +12,26 @@ import sun.security.x509.X509CertImpl;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
-import java.util.ArrayList;
 import java.util.Collection;
 
-public class DafoCertificateUserDetails implements UserDetails, DafoUserData {
+import static dk.magenta.dafosts.library.DatabaseQueryManager.IDENTIFICATION_MODE_INVALID;
+import static dk.magenta.dafosts.library.DatabaseQueryManager.INVALID_USER_ID;
+
+public class DafoCertificateUserDetailsImpl implements UserDetails, DafoCertificateUserDetails {
     private String username;
     private X509CertImpl certificate;
-    int databaseId;
+    int accessAccountId = INVALID_USER_ID;
+    int identificationMode = IDENTIFICATION_MODE_INVALID;
+    String onBehalfOf = null;
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     DatabaseQueryManager databaseQueryManager;
 
-
-    public DafoCertificateUserDetails(
+    public DafoCertificateUserDetailsImpl(
             PreAuthenticatedAuthenticationToken preAuthenticatedAuthenticationToken,
             DatabaseQueryManager databaseQueryManager ) throws UsernameNotFoundException {
 
-        this.databaseQueryManager = databaseQueryManager;
         this.username = preAuthenticatedAuthenticationToken.getPrincipal().toString();
 
         // TODO: Validate the certificate against the database using issuer and serialnumber
@@ -46,9 +48,12 @@ public class DafoCertificateUserDetails implements UserDetails, DafoUserData {
         catch(CertificateEncodingException e) {
             throw new UsernameNotFoundException("Could not encode certificate for fingerprint");
         }
-        this.databaseId = databaseQueryManager.getUserIdByCertificateData(fingerprint);
 
-        if(this.databaseId == DatabaseQueryManager.INVALID_USER_ID) {
+        this.databaseQueryManager = databaseQueryManager;
+
+        this.accessAccountId = databaseQueryManager.getUserIdByCertificateData(fingerprint);
+
+        if(this.accessAccountId == INVALID_USER_ID) {
             throw new UsernameNotFoundException("No user found for the given certificate");
         }
     }
@@ -71,6 +76,17 @@ public class DafoCertificateUserDetails implements UserDetails, DafoUserData {
         }
 
         return new String(hexChars).toLowerCase();
+    }
+
+
+    @Override
+    public int getIdentificationMode() {
+        return databaseQueryManager.getCertUserIdentificationMode(accessAccountId);
+    }
+
+    @Override
+    public int getAccessAccountId() {
+        return accessAccountId;
     }
 
     @Override
@@ -109,17 +125,24 @@ public class DafoCertificateUserDetails implements UserDetails, DafoUserData {
         return true;
     }
 
+
     @Override
     public Collection<String> getUserProfiles() {
-        // TODO: Lookup UserProfiles in the database
-        if(databaseId == DatabaseQueryManager.INVALID_USER_ID) {
-            return new ArrayList<>();
-        } else {
-            return databaseQueryManager.getUserProfiles(databaseId);
-        }
+        return databaseQueryManager.getUserProfiles(accessAccountId);
+    }
+
+    @Override
+    public String getOnBehalfOf() {
+        return onBehalfOf;
+    }
+
+    @Override
+    public void setOnBehalfOf(String onBehalfOf) {
+        this.onBehalfOf = onBehalfOf;
     }
 
     public X509CertImpl getCertificate() {
         return certificate;
     }
+
 }

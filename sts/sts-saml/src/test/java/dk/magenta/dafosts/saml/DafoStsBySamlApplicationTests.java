@@ -136,8 +136,9 @@ public class DafoStsBySamlApplicationTests {
 
 	@Test
     public void issueTokenByUsernamePassword() throws Exception {
-
-        when(dbManager.getDafoPasswordUserByUsername(USERNAME)).thenReturn(mockPasswordUser(VALID_USER_STATUS));
+        when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(new ArrayList<String>());
+        DafoPasswordUserDetails user = mockPasswordUser(VALID_USER_STATUS);
+        when(dbManager.getDafoPasswordUserByUsername(USERNAME)).thenReturn(user);
 
         mockMvc.perform(get(correctPasswordURI))
                 .andExpect(status().isOk())
@@ -151,7 +152,9 @@ public class DafoStsBySamlApplicationTests {
 
     @Test
     public void rejectWrongUsernameAndPassword() throws Exception {
-        when(dbManager.getDafoPasswordUserByUsername(USERNAME)).thenReturn(mockPasswordUser(VALID_USER_STATUS));
+        when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(new ArrayList<String>());
+        DafoPasswordUserDetails user = mockPasswordUser(VALID_USER_STATUS);
+        when(dbManager.getDafoPasswordUserByUsername(USERNAME)).thenReturn(user);
 
         mockMvc.perform(get(wrongPasswordURI))
                 .andExpect(status().isUnauthorized());
@@ -159,7 +162,9 @@ public class DafoStsBySamlApplicationTests {
 
     @Test
     public void rejectInactiveUsers() throws Exception {
-        when(dbManager.getDafoPasswordUserByUsername(USERNAME)).thenReturn(mockPasswordUser(INVALID_USER_STATUS));
+        when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(new ArrayList<String>());
+        DafoPasswordUserDetails user = mockPasswordUser(INVALID_USER_STATUS);
+        when(dbManager.getDafoPasswordUserByUsername(USERNAME)).thenReturn(user);
 
         mockMvc.perform(get(correctPasswordURI)).andExpect(status().isForbidden());
     }
@@ -168,7 +173,8 @@ public class DafoStsBySamlApplicationTests {
     public void tokenContainsUserProfiles() throws Exception {
         String[] userProfiles = new String[] {"MockUserProfile1", "MockUserProfile2"};
         when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(new ArrayList<String>(Arrays.asList(userProfiles)));
-        when(dbManager.getDafoPasswordUserByUsername(USERNAME)).thenReturn(mockPasswordUser(VALID_USER_STATUS));
+        DafoPasswordUserDetails user = mockPasswordUser(VALID_USER_STATUS);
+        when(dbManager.getDafoPasswordUserByUsername(USERNAME)).thenReturn(user);
 
         mockMvc.perform(get(correctPasswordURI))
                 .andExpect(status().isOk())
@@ -185,7 +191,9 @@ public class DafoStsBySamlApplicationTests {
         when(dafoAssertionVerifier.verifyAssertion(
                 anyString(), any(HttpServletRequest.class), any(HttpServletResponse.class))
         ).thenReturn(assertion);
-        when(dbManager.getDafoPasswordUserByUsername(anyString())).thenReturn(mockPasswordUser(VALID_USER_STATUS));
+        when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(new ArrayList<String>());
+        DafoPasswordUserDetails user = mockPasswordUser(VALID_USER_STATUS);
+        when(dbManager.getDafoPasswordUserByUsername(anyString())).thenReturn(user);
 
         mockMvc.perform(get("/get_token_passive?bootstrap_token=" + BOOTSTRAP_TOKEN))
                 .andExpect(status().isOk())

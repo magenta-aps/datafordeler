@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static dk.magenta.dafosts.library.DatabaseQueryManager.INVALID_USER_ID;
+
 /**
  * Extended version of SAMLUserDetails that allows access to the SAMLCredentials used to create the object.
  */
@@ -27,6 +29,17 @@ public class DafoSAMLUserDetails extends SAMLUserDetails implements DafoUserData
 
     public SAMLCredential getSAMLCredential() {
         return samlCredential;
+    }
+
+
+    @Override
+    public int getAccessAccountId() {
+        return INVALID_USER_ID;
+    }
+
+    @Override
+    public String getOnBehalfOf() {
+        return null;
     }
 
     @Override

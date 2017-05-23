@@ -39,6 +39,9 @@ import java.util.zip.InflaterInputStream;
 @EnableConfigurationProperties(TokenGeneratorProperties.class)
 public class DafoTokenGenerator {
 
+    public static String USERPROFILE_CLAIM_URL = "https://data.gl/claims/userprofile";
+    public static String ON_BEHALF_OF_CLAIM_URL = "https://data.gl/claims/on-behalf-of";
+
     TokenGeneratorProperties properties;
 
     BasicX509Credential signingCredential;
@@ -236,10 +239,14 @@ public class DafoTokenGenerator {
         AttributeStatement attrStatement = (AttributeStatement) attrStatementBuilder.buildObject();
 
 
-        Attribute attrUserProfiles = buildStringAttribute(
-                "https://data.gl/claims/userprofile", user.getUserProfiles()
-        );
+        Attribute attrUserProfiles = buildStringAttribute(USERPROFILE_CLAIM_URL, user.getUserProfiles());
         attrStatement.getAttributes().add(attrUserProfiles);
+
+        // Set on-behalf-of claim if the token is issued on behalf of a user behind a common login
+        if(user.getOnBehalfOf() != null && !user.getOnBehalfOf().isEmpty()) {
+            Attribute attrOnBehalfOf = buildStringAttribute(ON_BEHALF_OF_CLAIM_URL, user.getOnBehalfOf());
+            attrStatement.getAttributes().add(attrOnBehalfOf);
+        }
 
         return attrStatement;
     }

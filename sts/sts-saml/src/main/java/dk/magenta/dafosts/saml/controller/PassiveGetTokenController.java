@@ -120,7 +120,7 @@ public class PassiveGetTokenController {
 
         DafoPasswordUserDetails user = databaseQueryManager.getDafoPasswordUserByUsername(username);
         if(user == null) {
-            throw new InvalidCredentialsException("User identified by bootstrap token not was not found");
+            throw new InvalidCredentialsException("User identified by bootstrap token was not found");
         }
 
         if(!user.isActive()) {

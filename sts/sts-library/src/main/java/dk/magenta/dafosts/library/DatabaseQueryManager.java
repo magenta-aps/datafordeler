@@ -3,6 +3,7 @@ package dk.magenta.dafosts.library;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import dk.magenta.dafosts.library.users.DafoCertificateUserDetails;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -15,6 +16,13 @@ public class DatabaseQueryManager {
 
     public static int INVALID_USER_ID = -1;
     public static int ACCESS_ACCOUNT_STATUS_ACTIVE = 1;
+
+    public static int IDENTIFICATION_MODE_INVALID = -1;
+    public static int IDENTIFICATION_MODE_SINGLE_USER = 1;
+    public static int IDENTIFICATION_MODE_ON_BEHALF_OF = 2;
+
+
+
 
     public DatabaseQueryManager(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -134,4 +142,26 @@ public class DatabaseQueryManager {
         }
         return result;
     }
+
+
+    public int getCertUserIdentificationMode(int accessAccountId) {
+        int result = IDENTIFICATION_MODE_INVALID;
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                String.join("\n",
+                        "SELECT ",
+                        "[dafousers_certificateuser].[identification_mode] ",
+                        "FROM [dafousers_certificateuser] ",
+                        "WHERE [dafousers_certificateuser].[accessaccount_ptr_id] = ?"
+                ),
+                new Object[] {accessAccountId}
+        );
+        if(rows.next()) {
+            result = rows.getByte(1);
+        } else {
+            result = IDENTIFICATION_MODE_INVALID;
+        }
+
+        return result;
+    }
+
 }

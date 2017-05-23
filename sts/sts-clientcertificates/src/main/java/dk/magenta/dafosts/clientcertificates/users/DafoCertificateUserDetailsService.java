@@ -7,7 +7,8 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.stereotype.Component;
 
 @Component
-public class DafoCertificateUserDetailsService implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
+public class DafoCertificateUserDetailsService
+        implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 
     @Autowired
     DatabaseQueryManager databaseQueryManager;
@@ -15,7 +16,7 @@ public class DafoCertificateUserDetailsService implements AuthenticationUserDeta
     @Override
     public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken preAuthenticatedAuthenticationToken)
             throws UsernameNotFoundException {
-        DafoCertificateUserDetails user = new DafoCertificateUserDetails(
+        DafoCertificateUserDetailsImpl user = new DafoCertificateUserDetailsImpl(
                 preAuthenticatedAuthenticationToken,
                 databaseQueryManager
         );
