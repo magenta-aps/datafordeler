@@ -15,9 +15,6 @@
 [submodule "admin"]
 	path = admin
 	url = https://github.com/magenta-aps/datafordeler-admin.git
-[submodule "plugindemo"]
-	path = plugindemo
-	url = https://github.com/magenta-aps/datafordeler-plugindemo.git
 [submodule "registerdemo"]
 	path = registerdemo
 	url = https://github.com/magenta-aps/datafordeler-registerdemo.git
