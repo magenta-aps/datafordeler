@@ -23,3 +23,6 @@
 	path = registerdemo
 	url = git@github.com:magenta-aps/datafordeler-registerdemo.git
 
+[submodule "plugins/GladdregPlugin"]
+	path = plugins/GladdregPlugin
+	url = git@github.com:magenta-aps/datafordeler-plugin-gladdrreg.git
