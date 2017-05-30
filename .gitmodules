@@ -1,28 +1,27 @@
 [submodule "core"]
 	path = core
-	url = git@github.com:magenta-aps/datafordeler-core.git
+	url = https://github.com/magenta-aps/datafordeler-core.git
 	branch = master
 [submodule "engine"]
 	path = engine
-	url = git@github.com:magenta-aps/datafordeler-engine.git
+	url = https://github.com/magenta-aps/datafordeler-engine.git
 	branch = master
 [submodule "sts"]
 	path = sts
-	url = git@github.com:magenta-aps/datafordeler-sts.git
+	url = https://github.com/magenta-aps/datafordeler-sts.git
 [submodule "log"]
 	path = log
-	url = git@github.com:magenta-aps/datafordeler-log.git
+	url = https://github.com/magenta-aps/datafordeler-log.git
 [submodule "admin"]
 	path = admin
-	url = git@github.com:magenta-aps/datafordeler-admin.git
+	url = https://github.com/magenta-aps/datafordeler-admin.git
 [submodule "plugindemo"]
 	path = plugindemo
-	url = git@github.com:magenta-aps/datafordeler-plugindemo.git
-
+	url = https://github.com/magenta-aps/datafordeler-plugindemo.git
 [submodule "registerdemo"]
 	path = registerdemo
-	url = git@github.com:magenta-aps/datafordeler-registerdemo.git
-
+	url = https://github.com/magenta-aps/datafordeler-registerdemo.git
 [submodule "plugins/GladdregPlugin"]
 	path = plugins/GladdregPlugin
-	url = git@github.com:magenta-aps/datafordeler-plugin-gladdrreg.git
+	url = https://github.com/magenta-aps/datafordeler-plugin-gladdrreg.git
+
