@@ -19,3 +19,12 @@
 	path = plugins/GladdregPlugin
 	url = https://github.com/magenta-aps/datafordeler-plugin-gladdrreg.git
 
+[submodule "plugins/CvrPlugin"]
+	path = plugins/CvrPlugin
+	url = https://github.com/magenta-aps/datafordeler-plugin-cvr.git
+[submodule "CprPlugin"]
+	path = CprPlugin
+	url = https://github.com/magenta-aps/datafordeler-plugin-cpr.git
+[submodule "plugins/CprPlugin"]
+	path = plugins/CprPlugin
+	url = https://github.com/magenta-aps/datafordeler-plugin-cpr.git
