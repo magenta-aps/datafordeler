@@ -68,6 +68,8 @@ public class DafoTokenGenerator {
     // TODO: Externalize this to a @ConfiguratonProperties class?
     @Value("${dafo.sts.issuer-entity-id:Dafo-STS}")
     private String issuerEntityID = "Dafo-STS";
+    @Value("${dafo.sts.audience-url:https://data.gl/}")
+    private String audienceURL = "https://data.gl/";
 
     public DafoTokenGenerator(TokenGeneratorProperties properties) throws Exception {
         this.properties = properties;
@@ -139,7 +141,8 @@ public class DafoTokenGenerator {
         SAMLObjectBuilder builder = getObjectBuilder(SubjectConfirmationData.DEFAULT_ELEMENT_NAME);
 
         SubjectConfirmationData confirmationMethod = (SubjectConfirmationData) builder.buildObject();
-        confirmationMethod.setNotBefore(now);
+        // NotBefore is not allowed for BEARER tokens
+        // confirmationMethod.setNotBefore(now);
         confirmationMethod.setNotOnOrAfter(now.plusMinutes(10));
 
         return confirmationMethod;
@@ -212,7 +215,8 @@ public class DafoTokenGenerator {
     public AuthnContextClassRef buildAuthnContextClassRef() {
         SAMLObjectBuilder authContextClassRefBuilder = getObjectBuilder(AuthnContextClassRef.DEFAULT_ELEMENT_NAME);
         AuthnContextClassRef authnContextClassRef = (AuthnContextClassRef) authContextClassRefBuilder.buildObject();
-        // TODO: Copy this from the original token?
+        // DAFO tokens will always contain an unspecified identity, since we can identify subjects via many
+        // different methods.
         authnContextClassRef.setAuthnContextClassRef("urn:oasis:names:tc:SAML:2.0:ac:classes:unspecified");
 
         return authnContextClassRef;
@@ -314,7 +318,7 @@ public class DafoTokenGenerator {
         SAMLObjectBuilder builder = getObjectBuilder(Audience.DEFAULT_ELEMENT_NAME);
         Audience audience = (Audience) builder.buildObject();
 
-        audience.setAudienceURI("TODO:audience-URI");
+        audience.setAudienceURI(audienceURL);
 
         return audience;
     }
