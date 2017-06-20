@@ -65,7 +65,8 @@ public class DafoTokenGenerator {
 
     BasicX509Credential signingCredential;
 
-    @Value("dafo.sts.issuer-entity-id")
+    // TODO: Externalize this to a @ConfiguratonProperties class?
+    @Value("${dafo.sts.issuer-entity-id:Dafo-STS}")
     private String issuerEntityID = "Dafo-STS";
 
     public DafoTokenGenerator(TokenGeneratorProperties properties) throws Exception {
