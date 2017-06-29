@@ -2,6 +2,8 @@
 
 set DIR=%~dp0%
 set RUN_ARGS=
+set RUN_WAR=%DIR%target\dafo-sts-certs.war
+
 
 rem Load global settings
 call "%~dp0%settings.bat"
@@ -29,5 +31,11 @@ if not exist "%DIR%target\%WARNAME%" (
     call "%DIR%mvnw.cmd" -Dmaven.test.skip=true package
 )
 
+rem Copy compiled WAR so running will not hold a lock on the compiled file destination
+if not exist "%RUN_WAR%" (
+    copy "%DIR%target\%WARNAME%" %RUN_WAR%
+)
+
+
 rem Run the WAR file
-call "%JAVA_HOME%\bin\java.exe" -jar "%DIR%target\%WARNAME%" %RUN_ARGS%
+call "%JAVA_HOME%\bin\java.exe" -jar "%RUN_WAR%" %RUN_ARGS%
