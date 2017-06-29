@@ -283,4 +283,4 @@ wrapper.filter.script.0.args=Exception
 placeHolderSoGenPropsComeHere=
 wrapper.java.app.jar = .\\\\target\\\\dafo-sts-certs.war
 wrapper.java.command = {{ JAVA_EXE }}
-wrapper.app.parameter.1 = --spring.config.location=classpath:/application.properties,file:.\\\\local_settings.properties
+wrapper.app.parameter.1 = --spring.config.location=classpath:/application.properties\,file:.\\\\local_settings.properties
