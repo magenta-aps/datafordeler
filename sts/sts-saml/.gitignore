@@ -1,6 +1,10 @@
-/target
-/local_settings.properties
 /local_settings.bat
+/local_settings.properties
+/src/main/resources/Win32EventLogAppender.dll
+/src/main/resources/log4j2.xml
+/target
+/yajsw
+/yajsw-stable-12.09.zip
 
 
 ### STS ###
@@ -24,3 +28,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
