@@ -145,7 +145,7 @@ def expand_template():
             password = x
 
     replace_map = {
-        'BASE_DIR': escape_conf_path(BASE_DIR),
+        'BASE_DIR': escape_conf_path(BASE_DIR + "\\"),
         'USERNAME': re.sub(r'\\', '\\\\\\\\', username),
         'PASSWORD': password,
         'JAVA_EXE': escape_conf_path(java_exe)
