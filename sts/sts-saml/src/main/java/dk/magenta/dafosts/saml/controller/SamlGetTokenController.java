@@ -2,8 +2,12 @@ package dk.magenta.dafosts.saml.controller;
 
 import com.github.ulisesbocchio.spring.boot.security.saml.annotation.SAMLUser;
 import dk.magenta.dafosts.library.DafoTokenGenerator;
+import dk.magenta.dafosts.library.LogRequestWrapper;
 import dk.magenta.dafosts.saml.stereotypes.DafoSAMLUser;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetails;
+import org.opensaml.saml2.core.Assertion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/by_saml_sso")
 public class SamlGetTokenController {
+    private static final Logger logger = LoggerFactory.getLogger(SamlGetTokenController.class);
 
     @Autowired
     DafoTokenGenerator dafoTokenGenerator;
@@ -41,11 +48,20 @@ public class SamlGetTokenController {
 
     @RequestMapping("/get_token")
     @ResponseBody
-    public ResponseEntity<String> get_token(@DafoSAMLUser DafoSAMLUserDetails user) throws Exception {
+    public ResponseEntity<String> get_token(
+            @DafoSAMLUser DafoSAMLUserDetails user, HttpServletRequest request
+    ) throws Exception {
+        LogRequestWrapper logRequestWrapper = new LogRequestWrapper(logger, request, user.getUsername());
+
+
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
+
+        Assertion assertion = dafoTokenGenerator.buildAssertion(user);
+        logRequestWrapper.logIssuedToken(assertion);
+
         return new ResponseEntity<String>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(user)),
+                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),
                 httpHeaders,
                 HttpStatus.OK
         );

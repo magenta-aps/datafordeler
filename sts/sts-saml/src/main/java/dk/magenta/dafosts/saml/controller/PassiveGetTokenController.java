@@ -2,10 +2,13 @@ package dk.magenta.dafosts.saml.controller;
 
 import dk.magenta.dafosts.library.DafoTokenGenerator;
 import dk.magenta.dafosts.library.DatabaseQueryManager;
+import dk.magenta.dafosts.library.LogRequestWrapper;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.Assertion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class PassiveGetTokenController {
+    private static final Logger logger = LoggerFactory.getLogger(PassiveGetTokenController.class);
+
     @Autowired
     DatabaseQueryManager databaseQueryManager;
     @Autowired
@@ -60,11 +65,16 @@ public class PassiveGetTokenController {
             @RequestParam(required = false) String bootstrap_token,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+        LogRequestWrapper logWrapper = new LogRequestWrapper(logger, request);
+
+        logWrapper.info("Incoming token request with querystring: [" + request.getQueryString() + "]");
+
         if(StringUtils.isNotBlank(bootstrap_token)) {
-            return getTokenByBootstrapToken(bootstrap_token, request, response);
+            return getTokenByBootstrapToken(bootstrap_token, request, response, logWrapper);
         } else if(StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
-            return getTokenByUsernamePassword(username, password);
+            return getTokenByUsernamePassword(username, password, logWrapper);
         } else {
+            logWrapper.info("No known authentication method found in request data");
             throw new IllegalArgumentException("No valid credentials given for passive STS");
         }
     }
@@ -75,21 +85,33 @@ public class PassiveGetTokenController {
      * @param password
      * @return
      */
-    public ResponseEntity<String> getTokenByUsernamePassword(String username, String password) throws Exception {
+    public ResponseEntity<String> getTokenByUsernamePassword(
+            String username, String password, LogRequestWrapper logWrapper) throws Exception {
+
+        logWrapper.setUserName(username);
+        logWrapper.info("Performing password authentication");
+
         DafoPasswordUserDetails user = databaseQueryManager.getDafoPasswordUserByUsername(username);
 
         if(user == null || !user.checkPassword(password)) {
+            logWrapper.info("Failed to authenticate user");
             throw new InvalidCredentialsException("Failed to authenticate user");
         }
 
         if(!user.isActive()) {
+            logWrapper.info("User is not active, denying access");
             throw new NoAccessException("The specified user is not active");
         }
 
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
+
+        Assertion assertion = dafoTokenGenerator.buildAssertion(user);
+
+        logWrapper.logIssuedToken(assertion);
+
         return new ResponseEntity<>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(user)),
+                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),
                 httpHeaders,
                 HttpStatus.OK
         );
@@ -101,12 +123,15 @@ public class PassiveGetTokenController {
     public ResponseEntity<String> getTokenByBootstrapToken(
             String bootstrap_token,
             HttpServletRequest request,
-            HttpServletResponse response)
+            HttpServletResponse response,
+            LogRequestWrapper logRequestWrapper)
             throws InvalidCredentialsException, NoAccessException, Exception {
 
+        logRequestWrapper.info("Trying authentication using bootstrap token");
         Assertion assertion = dafoAssertionVerifier.verifyAssertion(bootstrap_token, request, response);
 
         if(assertion == null) {
+            logRequestWrapper.info("Invalid bootstrap token");
             throw new InvalidCredentialsException("Failed to authenticate user");
         }
 
@@ -118,19 +143,29 @@ public class PassiveGetTokenController {
             username = username.substring(username.indexOf('/') + 1);
         }
 
+        logRequestWrapper.setUserName(username);
+        logRequestWrapper.info("Got valid bootstrap token for " + username);
+
         DafoPasswordUserDetails user = databaseQueryManager.getDafoPasswordUserByUsername(username);
         if(user == null) {
+            logRequestWrapper.info("Unknown bootstrap user, denying access");
             throw new InvalidCredentialsException("User identified by bootstrap token was not found");
         }
 
         if(!user.isActive()) {
+            logRequestWrapper.info("User is not active, denying access");
             throw new NoAccessException("The specified user is not active");
         }
 
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
+
+        Assertion outgoingToken = dafoTokenGenerator.buildAssertion(user);
+
+        logRequestWrapper.logIssuedToken(outgoingToken);
+
         return new ResponseEntity<>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(user)),
+                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(outgoingToken)),
                 httpHeaders,
                 HttpStatus.OK
         );

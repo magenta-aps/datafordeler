@@ -394,6 +394,19 @@ public class DafoTokenGenerator {
         return XMLHelper.nodeToString(marshaller.marshall(assertion));
     }
 
+
+    /**
+     * Convert an assertion to an XML string.
+     * @param assertion the assertion to output as string
+     * @return
+     * @throws Exception
+     */
+    public String getTokenXml(Assertion assertion) throws Exception {
+        ResponseMarshaller marshaller = new ResponseMarshaller();
+        return XMLHelper.nodeToString(marshaller.marshall(assertion));
+    }
+
+
     /**
      * Deflates and Base64-encodes the input string
      * @param input - The string to be deflated and Base64-encoded

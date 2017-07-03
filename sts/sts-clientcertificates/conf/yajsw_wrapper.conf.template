@@ -73,8 +73,8 @@ wrapper.java.app.mainclass=
 # Application Account
 # Equivalent to Posix sudo or windows runas
 # Note Posix: 
-#     <group>\<user> (note: use \\ in configuration file). 
-#     If no group is configured default group of the user is used
+#     <group>\<userName> (note: use \\ in configuration file).
+#     If no group is configured default group of the userName is used
 #********************************************************************
 wrapper.app.account={{ USERNAME }}
 wrapper.app.password={{ PASSWORD }}
@@ -184,7 +184,7 @@ wrapper.ntservice.description=Dafo STS service for client certificate authentica
 # Allow the service to interact with the desktop.
 # wrapper.ntservice.interactive=false
 
-# wrapper service user. only for windows. on *nix system this is root.
+# wrapper service userName. only for windows. on *nix system this is root.
 # see also wrapper.app.account
 wrapper.ntservice.account={{ USERNAME }}
 wrapper.ntservice.password={{ PASSWORD }}
@@ -254,7 +254,7 @@ wrapper.filter.script.0.args=Exception
 
 # JMX RMI credentials
 # mandatory if accessing from remote server
-#wrapper.jmx.rmi.user =
+#wrapper.jmx.rmi.userName =
 #wrapper.jmx.rmi.password =
 
 #********************************************************************
