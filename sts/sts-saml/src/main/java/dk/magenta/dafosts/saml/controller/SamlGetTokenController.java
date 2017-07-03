@@ -59,6 +59,7 @@ public class SamlGetTokenController {
 
         Assertion assertion = dafoTokenGenerator.buildAssertion(user);
         logRequestWrapper.logIssuedToken(assertion);
+        dafoTokenGenerator.signAssertion(assertion);
 
         return new ResponseEntity<String>(
                 dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),

@@ -86,6 +86,7 @@ public class CertificateGetTokenController {
         dafoTokenGenerator.signAssertion(assertion);
 
         logWrapper.logIssuedToken(assertion);
+        dafoTokenGenerator.signAssertion(assertion);
 
         return new ResponseEntity<String>(
                 dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),

@@ -109,6 +109,7 @@ public class PassiveGetTokenController {
         Assertion assertion = dafoTokenGenerator.buildAssertion(user);
 
         logWrapper.logIssuedToken(assertion);
+        dafoTokenGenerator.signAssertion(assertion);
 
         return new ResponseEntity<>(
                 dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),
@@ -163,6 +164,7 @@ public class PassiveGetTokenController {
         Assertion outgoingToken = dafoTokenGenerator.buildAssertion(user);
 
         logRequestWrapper.logIssuedToken(outgoingToken);
+        dafoTokenGenerator.signAssertion(outgoingToken);
 
         return new ResponseEntity<>(
                 dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(outgoingToken)),
