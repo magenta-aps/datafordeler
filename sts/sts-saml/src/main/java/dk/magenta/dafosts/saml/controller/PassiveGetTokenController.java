@@ -67,7 +67,7 @@ public class PassiveGetTokenController {
             HttpServletResponse response) throws Exception {
         LogRequestWrapper logWrapper = new LogRequestWrapper(logger, request);
 
-        logWrapper.info("Incoming token request with querystring: [" + request.getQueryString() + "]");
+        logWrapper.info("Incoming token request");
 
         if(StringUtils.isNotBlank(bootstrap_token)) {
             return getTokenByBootstrapToken(bootstrap_token, request, response, logWrapper);
