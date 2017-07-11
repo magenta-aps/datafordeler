@@ -22,13 +22,14 @@
 !/wso2/repository/deployment/server
 /wso2/repository/deployment/server/*
 !/wso2/repository/deployment/server/userstores
+/wso2/repository/deployment/server/userstores/*
 
 # The actual files
-!/wso2/bin/wso2server.bat
 !/wso2/repository/conf/carbon.xml
-!/wso2/repository/conf/datasources/master-datasources.xml
+!/wso2/repository/conf/datasources/master-datasources.xml.example
 !/wso2/repository/conf/registry.xml
 !/wso2/repository/conf/user-mgt.xml
+!/wso2/repository/deployment/server/userstores/DATAFORDELER.xml.example
 
 # Local settings file
 /set_wso2_settings_local.bat

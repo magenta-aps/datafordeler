@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><UserStoreManager class="org.wso2.carbon.user.core.jdbc.JDBCUserStoreManager">
-      <Property name="url">${dafo.userstore.url}</Property>
-      <Property name="userName">${dafo.userstore.username}</Property>
-      <Property name="password">${dafo.userstore.password}</Property>
+      <Property name="url">jdbc:sqlserver://localhost;databaseName=dafo_users;IntegratedSecurity=true</Property>
+      <Property name="userName"></Property>
+      <Property name="password"></Property>
       <Property name="driverName">com.microsoft.sqlserver.jdbc.SQLServerDriver</Property>
       <Property name="Disabled">false</Property>
       <Property name="ReadOnly">true</Property>

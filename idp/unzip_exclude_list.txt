@@ -1,8 +1,7 @@
-wso2/bin/wso2server.bat
 wso2/repository/components/lib/sqljdbc42.jar
 wso2/repository/components/lib/sqljdbc42_LICENSE.txt
 wso2/repository/conf/carbon.xml
-wso2/repository/conf/datasources/master-datasources.xml
+wso2/repository/conf/datasources/master-datasources.xml.example
 wso2/repository/conf/registry.xml
 wso2/repository/conf/user-mgt.xml
-wso2/repository/deployment/server/userstores/DATAFORDELER.xml
+wso2/repository/deployment/server/userstores/DATAFORDELER.xml.example
