@@ -44,12 +44,12 @@
        This is will become part of the End Point Reference of the
        services deployed on this server instance.
     -->
-    <HostName>localhost</HostName>
+    <HostName>myhostname.example.com</HostName>
 
     <!--
     Host name to be used for the Carbon management console
     -->
-    <MgtHostName>localhost</MgtHostName>
+    <MgtHostName>myhostname.example.com</MgtHostName>
 
     <!--
         The URL of the back end server. This is where the admin services are hosted and
@@ -361,15 +361,15 @@
         -->
         <KeyStore>
             <!-- Keystore file location-->
-            <Location>${carbon.home}/repository/resources/security/wso2carbon.jks</Location>
+            <Location>${carbon.home}/repository/resources/security/mykeystore.jks</Location>
             <!-- Keystore type (JKS/PKCS12 etc.)-->
             <Type>JKS</Type>
             <!-- Keystore password-->
-            <Password>wso2carbon</Password>
+            <Password>mypassword</Password>
             <!-- Private Key alias-->
-            <KeyAlias>wso2carbon</KeyAlias>
+            <KeyAlias>myalias</KeyAlias>
             <!-- Private Key password-->
-            <KeyPassword>wso2carbon</KeyPassword>
+            <KeyPassword>mypassword</KeyPassword>
         </KeyStore>
 
         <!--
