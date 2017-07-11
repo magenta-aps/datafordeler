@@ -36,3 +36,7 @@
 
 # Local settings file
 /set_wso2_settings_local.bat
+
+# Yajsw
+/yajsw
+/yajsw-stable-11.11.zip
