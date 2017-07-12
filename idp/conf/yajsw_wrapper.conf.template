@@ -37,16 +37,24 @@ wrapper.logfile.maxsize=10m
 #  files are deleted.  The default value of 0 implies no limit.
 wrapper.logfile.maxfiles=100
 # Title to use when running as a console
-wrapper.console.title="Dafo-IdP"
+wrapper.console.title=Dafo-IdP
+#********************************************************************
+# Wrapper runas account/nt account
+#********************************************************************
+wrapper.app.account={{ USERNAME }}
+wrapper.app.password={{ PASSWORD }}
+wrapper.ntservice.account={{ USERNAME }}
+wrapper.ntservice.password={{ PASSWORD }}
+
 #********************************************************************
 # Wrapper Windows Service and Posix Daemon Properties
 #********************************************************************
 # Name of the service
-wrapper.ntservice.name="Dafo-IdP"
+wrapper.ntservice.name=Dafo-IdP
 # Display name of the service
-wrapper.ntservice.displayname="Dafo IdP"
+wrapper.ntservice.displayname=Dafo IdP
 # Description of the service
-wrapper.ntservice.description="Dafo WSO2 Carbon Identity Server"
+wrapper.ntservice.description=Dafo WSO2 Carbon Identity Server
 #********************************************************************
 # Wrapper System Tray Properties
 #********************************************************************
