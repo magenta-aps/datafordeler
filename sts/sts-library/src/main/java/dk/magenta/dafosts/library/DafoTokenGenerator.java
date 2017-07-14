@@ -39,9 +39,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.core.io.ClassPathResource;
 
 import javax.xml.namespace.QName;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.cert.CertificateEncodingException;
@@ -76,17 +74,11 @@ public class DafoTokenGenerator {
         this.signingCredential = new BasicX509Credential();
         CertificateFactory fact = CertificateFactory.getInstance("X.509");
 
-        String publicKeyLocation = properties.getPublicKeyPemLocation();
-        String publicKeyPath = publicKeyLocation.substring(publicKeyLocation.indexOf(":") + 1);
-        ClassPathResource publibKeyResource = new ClassPathResource(publicKeyPath);
-        InputStream is = publibKeyResource.getInputStream();
+        InputStream is = getInputStreamFromConfigLocation(properties.getPublicKeyPemLocation());
         X509Certificate cert = (X509Certificate) fact.generateCertificate(is);
         this.signingCredential.setEntityCertificate(cert);
 
-        String privateKeyLocation = properties.getPrivateKeyDerLocation();
-        String privateKeyPath = privateKeyLocation.substring(privateKeyLocation.indexOf(":") + 1);
-        ClassPathResource privateKeyResource = new ClassPathResource(privateKeyPath);
-        InputStream privateKeyInputStream = privateKeyResource.getInputStream();
+        InputStream privateKeyInputStream = getInputStreamFromConfigLocation(properties.getPrivateKeyDerLocation());
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
         byte[] data = new byte[16384];
@@ -99,6 +91,20 @@ public class DafoTokenGenerator {
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         PrivateKey pk = keyFactory.generatePrivate(keySpec);
         this.signingCredential.setPrivateKey(pk);
+    }
+
+    public static InputStream getInputStreamFromConfigLocation(String location) throws IOException {
+        if(location.startsWith("classpath:")) {
+            String publicKeyPath = location.substring(location.indexOf(":") + 1);
+            ClassPathResource publibKeyResource = new ClassPathResource(publicKeyPath);
+            return publibKeyResource.getInputStream();
+        } else {
+            if(location.startsWith("file:")) {
+                location = location.substring(location.indexOf(":") + 1);
+            }
+            return new FileInputStream(location);
+        }
+
     }
 
     /**

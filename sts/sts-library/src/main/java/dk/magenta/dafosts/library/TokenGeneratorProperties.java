@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * Definition of properties used for generating DAFO tokens.
  */
-@ConfigurationProperties("dafo.tokengenerator")
+@ConfigurationProperties("dafo.sts")
 public class TokenGeneratorProperties {
     /**
      * The location of the private key used for signing tokens, in DER format.
