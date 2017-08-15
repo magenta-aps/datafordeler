@@ -42,7 +42,7 @@ public class DafoStsBySamlConfiguration {
      * <p>
      *  Default value: "dafo-sts-default-entity-id"
      * </p>
-     * @return The configured value
+     * @return The value configured by the {@code dafo.sts.identity-id} property
      */
     public String getIdentityId() {
         return identityId;
@@ -56,7 +56,7 @@ public class DafoStsBySamlConfiguration {
      * <p>
      *  Default value: "classpath:/saml/dafo-idp.xml"
      * </p>
-     * @return The configured value
+     * @return The value configured by the {@code dafo.sts.idp-metadata-location} property
      */
     public String getIdpMetadataLocation() {
         return idpMetadataLocation;
@@ -74,7 +74,7 @@ public class DafoStsBySamlConfiguration {
      * If the server is running behind a reverse proxy the URL of that reverse proxy should be specified here.
      * The URL should be specified without an ending slash.
      * </p>
-     * @return The configured value
+     * @return The value configured by the {@code dafo.sts.server-root-url} property
      */
     public String getServerRootURL() {
         return serverRootURL;
