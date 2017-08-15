@@ -4,9 +4,9 @@ import com.github.ulisesbocchio.spring.boot.security.saml.bean.SAMLConfigurerBea
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLSAMLAuthenticationProvider;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLWebSSOProfileConsumerHoKImpl;
 import dk.magenta.dafosts.library.TokenGeneratorProperties;
+import dk.magenta.dafosts.saml.DafoStsBySamlConfiguration;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,18 +20,10 @@ import org.springframework.security.saml.log.SAMLDefaultLogger;
  * Configures SAML SSO Login below the /by_saml_sso/ URL.
  */
 @Configuration
-@EnableConfigurationProperties(TokenGeneratorProperties.class)
+@EnableConfigurationProperties(DafoStsBySamlConfiguration.class)
 public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${dafo.sts.identity-id}")
-    String identityId;
-
-    @Value("${dafo.sts.dafo-idp-metadata-location}")
-    String idpMetadataLocation;
-
-    @Value("${dafo.sts.dafo-sts-root-url}")
-    String spRootURL;
-
+    private DafoStsBySamlConfiguration config;
     private TokenGeneratorProperties tokenGeneratorProperties;
     private DafoWebSSOProfileConsumer dafoWebSSOProfileConsumer;
 
@@ -40,8 +32,9 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void setTokenGeneratorProperties(TokenGeneratorProperties tokenGeneratorProperties) {
-        this.tokenGeneratorProperties = tokenGeneratorProperties;
+    public void setConfigProperties(DafoStsBySamlConfiguration config) {
+        this.config = config;
+        this.tokenGeneratorProperties = config.getTokenGeneratorProperties();
     }
 
     @Bean
@@ -83,8 +76,8 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .apply(saml())
                     .serviceProvider()
                         .metadataGenerator() //(1)
-                        .entityId(this.identityId)
-                        .entityBaseURL(spRootURL)
+                        .entityId(config.getIdentityId())
+                        .entityBaseURL(config.getServerRootURL())
                 .and()
                     .sso() //(2)
                     .defaultSuccessURL("/by_saml_sso/get_token")
@@ -94,7 +87,7 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .defaultTargetURL("/")
                 .and()
                     .metadataManager() //(4)
-                    .metadataLocations(this.idpMetadataLocation)
+                    .metadataLocations(config.getIdpMetadataLocation())
                     .refreshCheckInterval(0)
                 .and()
                     .extendedMetadata() //(5)
