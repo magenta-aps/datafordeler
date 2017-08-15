@@ -37,7 +37,7 @@ public class DafoStsBySamlConfiguration {
     /**
      * The SAML identity id used by the STS when acting as an IdP and issuing tokens.
      * <p>
-     *  Configuration property: dafo.sts.identity-id
+     *  Configuration property: {@code dafo.sts.identity-id}
      * </p>
      * <p>
      *  Default value: "dafo-sts-default-entity-id"
@@ -51,7 +51,7 @@ public class DafoStsBySamlConfiguration {
     /**
      * The location of the metadata for the default primary IdP.
      * <p>
-     *  Configuration property: dafo.sts.idp-metadata-location
+     *  Configuration property: {@code dafo.sts.idp-metadata-location}
      * </p>
      * <p>
      *  Default value: "classpath:/saml/dafo-idp.xml"
@@ -65,7 +65,7 @@ public class DafoStsBySamlConfiguration {
     /**
      * The root URL of the server that can be used to access it from the outside.
      * <p>
-     *  Configuration property: dafo.sts.server-root-url
+     *  Configuration property: {@code dafo.sts.server-root-url}
      * </p>
      * <p>
      *  Default value: "https://localhost:7443"
