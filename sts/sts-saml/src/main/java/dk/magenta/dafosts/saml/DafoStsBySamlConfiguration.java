@@ -17,11 +17,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 public class DafoStsBySamlConfiguration {
 
     @Autowired
-    private TokenGeneratorProperties tokenGeneratorProperties;
-    String identityId = "dafo-sts-default-entity-id";
-    String idpMetadataLocation = "classpath:/saml/dafo-idp.xml";
-    String serverRootURL = "https://localhost:7443";
-
     /**
      * The configuration used when issuing tokens from the STS.
      * <p>
@@ -30,10 +25,7 @@ public class DafoStsBySamlConfiguration {
      * </p>
      * @return A configured instance of {@link dk.magenta.dafosts.library.TokenGeneratorProperties}.
      */
-    public TokenGeneratorProperties getTokenGeneratorProperties() {
-        return tokenGeneratorProperties;
-    }
-
+    private TokenGeneratorProperties tokenGeneratorProperties;
     /**
      * dafo.sts.identity-id -  The SAML identity id used by the STS when acting as an IdP and issuing tokens.
      * <p>
@@ -41,10 +33,7 @@ public class DafoStsBySamlConfiguration {
      * </p>
      * @return The configured value
      */
-    public String getIdentityId() {
-        return identityId;
-    }
-
+    String identityId = "dafo-sts-default-entity-id";
     /**
      * dafo.sts.idp-metadata-location - The location of the metadata for the default primary IdP.
      * <p>
@@ -52,10 +41,7 @@ public class DafoStsBySamlConfiguration {
      * </p>
      * @return The configured value
      */
-    public String getIdpMetadataLocation() {
-        return idpMetadataLocation;
-    }
-
+    String idpMetadataLocation = "classpath:/saml/dafo-idp.xml";
     /**
      * dafo.sts.server-root-url - The root URL of the server that can be used to access it from the outside.
      * <p>
@@ -67,6 +53,20 @@ public class DafoStsBySamlConfiguration {
      * </p>
      * @return The configured value
      */
+    String serverRootURL = "https://localhost:7443";
+
+    public TokenGeneratorProperties getTokenGeneratorProperties() {
+        return tokenGeneratorProperties;
+    }
+
+    public String getIdentityId() {
+        return identityId;
+    }
+
+    public String getIdpMetadataLocation() {
+        return idpMetadataLocation;
+    }
+
     public String getServerRootURL() {
         return serverRootURL;
     }
