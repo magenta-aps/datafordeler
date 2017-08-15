@@ -25,7 +25,7 @@ public class DafoStsBySamlConfiguration {
      * </p>
      * @return A configured instance of {@link dk.magenta.dafosts.library.TokenGeneratorProperties}.
      */
-    private TokenGeneratorProperties tokenGeneratorProperties;
+    TokenGeneratorProperties tokenGeneratorProperties;
     /**
      * dafo.sts.identity-id -  The SAML identity id used by the STS when acting as an IdP and issuing tokens.
      * <p>
