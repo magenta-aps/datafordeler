@@ -1,27 +1,33 @@
-[submodule "core"]
-	path = core
-	url = https://github.com/magenta-aps/datafordeler-core.git
-	branch = master
-[submodule "engine"]
-	path = engine
-	url = https://github.com/magenta-aps/datafordeler-engine.git
-	branch = master
-[submodule "sts"]
-	path = sts
-	url = https://github.com/magenta-aps/datafordeler-sts.git
-[submodule "log"]
-	path = log
-	url = https://github.com/magenta-aps/datafordeler-log.git
+[submodule "performance/monitor"]
+	path = performance/monitor
+	url = git@github.com:magenta-aps/datafordeler-performance-monitor.git
+[submodule "plugin/cpr"]
+	path = plugin/cpr
+	url = git@github.com:magenta-aps/datafordeler-plugin-cpr.git
+[submodule "plugin/cvr"]
+	path = plugin/cvr
+	url = git@github.com:magenta-aps/datafordeler-plugin-cvr.git
+[submodule "plugindemo"]
+	path = plugindemo
+	url = git@github.com:magenta-aps/datafordeler-plugindemo.git
+[submodule "plugin/gladdrreg"]
+	path = plugin/gladdrreg
+	url = git@github.com:magenta-aps/datafordeler-plugin-gladdrreg.git
+[submodule "registerdemo"]
+	path = registerdemo
+	url = git@github.com:magenta-aps/datafordeler-registerdemo.git
 [submodule "admin"]
 	path = admin
-	url = https://github.com/magenta-aps/datafordeler-admin.git
-[submodule "plugins/GladdregPlugin"]
-	path = plugins/GladdregPlugin
-	url = https://github.com/magenta-aps/datafordeler-plugin-gladdrreg.git
-
-[submodule "plugins/CvrPlugin"]
-	path = plugins/CvrPlugin
-	url = https://github.com/magenta-aps/datafordeler-plugin-cvr.git
-[submodule "plugins/CprPlugin"]
-	path = plugins/CprPlugin
-	url = https://github.com/magenta-aps/datafordeler-plugin-cpr.git
+	url = git@github.com:magenta-aps/datafordeler-admin.git
+[submodule "core"]
+	path = core
+	url = git@github.com:magenta-aps/datafordeler-core.git
+[submodule "engine"]
+	path = engine
+	url = git@github.com:magenta-aps/datafordeler-engine.git
+[submodule "log"]
+	path = log
+	url = git@github.com:magenta-aps/datafordeler-log.git
+[submodule "sts"]
+	path = sts
+	url = git@github.com:magenta-aps/datafordeler-sts.git
