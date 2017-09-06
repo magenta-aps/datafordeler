@@ -12,3 +12,7 @@ To clone this repository recursively, please run:
      cd datafordeler
      git checkout feature/19886_documentation
      git submodule update --init --recursive
+     
+Or (using a modern git implementation):
+
+     git clone --recursive -j8 -b feature/19886_documentation git@github.com:magenta-aps/datafordeler.git
