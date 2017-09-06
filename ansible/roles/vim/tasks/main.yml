@@ -1,0 +1,10 @@
+---
+# tasks file for vim
+  - name: Install vim
+    apt:
+      name: vim
+      update_cache: yes
+      state: present
+    tags: Copy /etc/hosts
+
+...
