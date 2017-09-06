@@ -21,8 +21,10 @@ while true; do
     # Get the number of repos found
     KEEP_GOING=$(echo "$RESPONSE" | grep "full_name" | wc -l)
 
+    # Print out progress to stderr
     echoerr "Found $KEEP_GOING repositories on request $PAGE"
 
+    # Print out the found DAFO repositories
     DAFO_REPOS=$(echo "$RESPONSE" | grep -Po '"name": "datafordeler-.*?"' | tr -d '"' | cut -f2 -d' ')
     if [ -n "$DAFO_REPOS" ]; then
         echo "$DAFO_REPOS"
@@ -36,3 +38,4 @@ while true; do
     # Get the next page
     PAGE=$(($PAGE+1))
 done
+exit 0

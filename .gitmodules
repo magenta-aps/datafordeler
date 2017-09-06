@@ -28,3 +28,6 @@
 [submodule "sts"]
 	path = sts
 	url = git@github.com:magenta-aps/datafordeler-sts.git
+[submodule "log"]
+	path = log
+	url = git@github.com:magenta-aps/datafordeler-log.git
