@@ -25,9 +25,6 @@
 [submodule "engine"]
 	path = engine
 	url = git@github.com:magenta-aps/datafordeler-engine.git
-[submodule "log"]
-	path = log
-	url = git@github.com:magenta-aps/datafordeler-log.git
 [submodule "sts"]
 	path = sts
 	url = git@github.com:magenta-aps/datafordeler-sts.git
