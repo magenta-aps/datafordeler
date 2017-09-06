@@ -21,3 +21,7 @@ Or using older versions of git:
 On Windows (inside `git-on-windows`), the clone command may have to become:
 
      ssh-agent bash -c 'ssh-add; git clone git@github.com:magenta-aps/datafordeler.git'
+
+## Vagrant:
+For information on the Vagrantfile, and Ansible, please check:
+[This repository](https://github.com/magenta-aps/vagrant-ansible-example)
