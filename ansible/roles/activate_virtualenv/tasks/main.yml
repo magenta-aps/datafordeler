@@ -1,0 +1,12 @@
+---
+
+  - name: List pip packages
+    shell: bash -c 'source /root/venv/bin/activate; pip list'
+    register: result
+
+  - name: Print pip packages
+    debug:
+      var: result
+      verbosity: 2
+
+...

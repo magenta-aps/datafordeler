@@ -10,5 +10,8 @@
 
   roles:
   - vim
+  - python
+  - pip_dependencies
+  - activate_virtualenv
 
 ...
