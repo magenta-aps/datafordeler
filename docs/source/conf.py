@@ -30,12 +30,15 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
+extensions = [
+    'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
-    'sphinx.ext.viewcode', 'javasphinx']
+    'sphinx.ext.viewcode',
+    'javasphinx',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -50,9 +53,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'ddd'
-copyright = u'2017, ddd'
-author = u'ddd'
+project = u'datafordeler'
+copyright = u'2017, Magenta ApS'
+author = u'Magenta ApS'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -131,7 +134,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ddd.tex', u'ddd Documentation',
+    (master_doc, 'ddd.tex', u'Datafordeler Documentation',
      u'ddd', 'manual'),
 ]
 
