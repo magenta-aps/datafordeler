@@ -14,5 +14,6 @@
   - python
   - pip_dependencies
   - activate_virtualenv
+  - demo
 
 ...

@@ -1,0 +1,18 @@
+---
+# tasks file for vim
+  - name: Install cron-script
+    copy:
+      src: root/gen_and_serve.sh
+      dest: /root/gen_and_serve.sh
+      owner: root
+      group: root
+      mode: u+x,g+x,o+x
+
+  - name: Install cron-job
+    cron:
+      name: "Generate documentation and run server"
+      special_time: reboot
+      job: "/root/gen_and_serve.sh"
+      state: present
+
+...
