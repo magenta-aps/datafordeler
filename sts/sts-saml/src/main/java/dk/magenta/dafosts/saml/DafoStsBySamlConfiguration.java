@@ -4,6 +4,8 @@ import dk.magenta.dafosts.library.TokenGeneratorProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * Specification of external configuration for the dafo-sts-saml application.
@@ -12,10 +14,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  *  {@code application.properties} or {@code application.yml} files.
  * </p>
  */
-@ConfigurationProperties("dafo.sts")
+@ConfigurationProperties(prefix="dafo.sts")
 @EnableConfigurationProperties(TokenGeneratorProperties.class)
 public class DafoStsBySamlConfiguration {
-
     @Autowired
     private TokenGeneratorProperties tokenGeneratorProperties;
     private String identityId = "dafo-sts-default-entity-id";
@@ -35,7 +36,8 @@ public class DafoStsBySamlConfiguration {
     }
 
     /**
-     * The SAML identity id used by the STS when acting as an IdP and issuing tokens.
+     * The SAML identity id used by the STS when acting as an IdP and issuing tokens. This IdentityID is also used
+     * when acting as a service provider in regards to single-sign-on with external IdPs.
      * <p>
      *  Configuration property: {@code dafo.sts.identity-id}
      * </p>
@@ -46,6 +48,10 @@ public class DafoStsBySamlConfiguration {
      */
     public String getIdentityId() {
         return identityId;
+    }
+
+    public void setIdentityId(String identityId) {
+        this.identityId = identityId;
     }
 
     /**
@@ -60,6 +66,10 @@ public class DafoStsBySamlConfiguration {
      */
     public String getIdpMetadataLocation() {
         return idpMetadataLocation;
+    }
+
+    public void setIdpMetadataLocation(String idpMetadataLocation) {
+        this.idpMetadataLocation = idpMetadataLocation;
     }
 
     /**
@@ -78,5 +88,9 @@ public class DafoStsBySamlConfiguration {
      */
     public String getServerRootURL() {
         return serverRootURL;
+    }
+
+    public void setServerRootURL(String serverRootURL) {
+        this.serverRootURL = serverRootURL;
     }
 }

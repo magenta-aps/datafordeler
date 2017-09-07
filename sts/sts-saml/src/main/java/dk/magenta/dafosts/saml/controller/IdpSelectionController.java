@@ -1,6 +1,8 @@
 package dk.magenta.dafosts.saml.controller;
 
+import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.saml.SAMLConstants;
 import org.springframework.security.saml.SAMLDiscovery;
@@ -16,6 +18,9 @@ import java.util.Collections;
 @Slf4j
 public class IdpSelectionController {
 
+    @Autowired
+    DafoCachingMetadataManager dafoCachingMetadataManager;
+
     @RequestMapping
     public ModelAndView idpSelection(HttpServletRequest request) {
 
@@ -23,12 +28,7 @@ public class IdpSelectionController {
             ModelAndView idpSelection = new ModelAndView("idpselection");
             idpSelection.addObject(SAMLDiscovery.RETURN_URL, request.getAttribute(SAMLDiscovery.RETURN_URL));
             idpSelection.addObject(SAMLDiscovery.RETURN_PARAM, request.getAttribute(SAMLDiscovery.RETURN_PARAM));
-            idpSelection.addObject(
-                    "idpNameAliasMap",
-                    Collections.singletonMap(
-                            "https://dafo-idp.magenta.dk", "Dafo IdP"
-                    )
-            );
+            idpSelection.addObject("idpNameAliasMap", dafoCachingMetadataManager.getIdpProviderMap());
             return idpSelection;
         }
         throw new AuthenticationServiceException("SP Discovery flow not detected");
