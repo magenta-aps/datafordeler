@@ -1,7 +1,9 @@
 #!/bin/bash
 
 vagrant halt
-vagrant up
+PLAYBOOK='demo.yml' vagrant up --provision
+vagrant halt
+PLAYBOOK='demo.yml' vagrant up
 IFCONFIG=$(./vagrant_sudo.sh 'ifconfig eth0')
 IP=$(echo "$IFCONFIG" | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
 

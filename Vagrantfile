@@ -14,7 +14,11 @@ Vagrant.configure("2") do |config|
   ENV['ANSIBLE_ROLES_PATH'] = "#{vagrant_root}/ansible/roles"
 
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = "ansible/playbooks/test.yml"
+    if ENV['PLAYBOOK']
+        ansible.playbook = "ansible/playbooks/" + ENV['PLAYBOOK']
+    else
+        ansible.playbook = "ansible/playbooks/default.yml"
+    end
     ansible.verbose = "vv"
   end
 end
