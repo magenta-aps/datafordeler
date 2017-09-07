@@ -19,4 +19,5 @@ javasphinx-apidoc -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api -v \
 echo "doing sphinx-build -M for html and pdflatex"
 mkdir -p $OUTPUT_FOLDER
 sphinx-build -M html $SPHINX_SOURCE $OUTPUT_FOLDER
-sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
+# TODO: Reenable pdf generation
+# sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
