@@ -14,17 +14,12 @@ import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.parse.ParserPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.security.saml.metadata.CachingMetadataManager;
 import org.springframework.security.saml.metadata.ExtendedMetadata;
-import org.springframework.security.saml.metadata.ExtendedMetadataDelegate;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.*;
-
-import static dk.magenta.dafosts.saml.metadata.DafoMetadataProvider.IDP_TYPE_PRIMARY;
 
 /**
  * A metadatamanager that provides extra methods for updating the list of available IdPs from the DAFO admin database.
@@ -65,6 +60,10 @@ public class DafoCachingMetadataManager extends CachingMetadataManager {
             defaultMetadataProvider.setParserPool(parserPool);
             addMetadataProvider(defaultMetadataProvider);
         }
+    }
+
+    public DatabaseQueryManager getDatabaseQueryManager() {
+        return queryManager;
     }
 
     public void updateDafoMetadataProviders() throws MetadataProviderException {
@@ -142,4 +141,21 @@ public class DafoCachingMetadataManager extends CachingMetadataManager {
         return result;
     }
 
+    public boolean isDefaultMetadataProvider(String entityID) {
+        try {
+            String defaultEntityId = ((EntityDescriptor) defaultMetadataProvider.getMetadata()).getEntityID();
+            return (defaultEntityId ==  entityID);
+        } catch(MetadataProviderException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public DafoMetadataProvider getDafoMetadataProvider(String entityID) {
+        if(dafoMetadataProviderMap.containsKey(entityID)) {
+            return dafoMetadataProviderMap.get(entityID);
+        } else {
+            return null;
+        }
+    }
 }

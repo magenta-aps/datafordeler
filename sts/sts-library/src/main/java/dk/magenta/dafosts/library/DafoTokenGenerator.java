@@ -48,6 +48,7 @@ import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
@@ -275,8 +276,11 @@ public class DafoTokenGenerator {
         AttributeStatement attrStatement = (AttributeStatement) attrStatementBuilder.buildObject();
 
         if(user != null) {
-            Attribute attrUserProfiles = buildStringAttribute(USERPROFILE_CLAIM_URL, user.getUserProfiles());
-            attrStatement.getAttributes().add(attrUserProfiles);
+            Collection<String> userProfiles = user.getUserProfiles();
+            if(userProfiles.size() > 0) {
+                Attribute attrUserProfiles = buildStringAttribute(USERPROFILE_CLAIM_URL, userProfiles);
+                attrStatement.getAttributes().add(attrUserProfiles);
+            }
         }
 
         // Set on-behalf-of claim if the token is issued on behalf of a user behind a common login

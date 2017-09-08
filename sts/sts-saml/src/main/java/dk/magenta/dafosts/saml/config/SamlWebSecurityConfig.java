@@ -26,6 +26,7 @@ import org.springframework.security.saml.key.JKSKeyManager;
 import org.springframework.security.saml.key.KeyManager;
 import org.springframework.security.saml.log.SAMLDefaultLogger;
 import org.springframework.security.saml.storage.EmptyStorageFactory;
+import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
 
 import java.security.KeyStore;
 import java.util.Collections;
@@ -77,18 +78,24 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
         String defaultKey = "localhost";
         String keyPassword = "";
         Map<String, String> keyPasswords = Collections.singletonMap("localhost", keyPassword);
-        KeyStore keyStore = keystoreFactory.loadKeystore(publicKeyPEMLocation, privateKeyDERLocation, defaultKey, "");
+        KeyStore keyStore = keystoreFactory.loadKeystore(
+                publicKeyPEMLocation, privateKeyDERLocation, defaultKey, ""
+        );
         return new JKSKeyManager(keyStore, keyPasswords, defaultKey);
     }
 
     @Bean
     @Qualifier("metadata")
-    public DafoCachingMetadataManager metadata(KeyManager keyManager, DatabaseQueryManager queryManager)
-            throws MetadataProviderException, ResourceException {
+    public DafoCachingMetadataManager metadata(
+            KeyManager keyManager,
+            DatabaseQueryManager queryManager,
+            DafoSAMLUserDetailsService samlUserDetailsService
+    ) throws MetadataProviderException, ResourceException {
         DafoCachingMetadataManager manager = new DafoCachingMetadataManager();
 
         manager.initialize(config.getIdpMetadataLocation(), queryManager);
 
+        samlUserDetailsService.setMetadataManager(manager);
         return manager;
     }
 

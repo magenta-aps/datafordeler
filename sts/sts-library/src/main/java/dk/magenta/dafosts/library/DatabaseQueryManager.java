@@ -176,11 +176,27 @@ public class DatabaseQueryManager {
         );
         if(rows.next()) {
             result = rows.getByte(1);
-        } else {
-            result = IDENTIFICATION_MODE_INVALID;
         }
 
         return result;
+    }
+
+    public int getAccountIdByEntityId(String entityID) {
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                "SELECT [dafousers_accessaccount].[id] " +
+                        "FROM [dafousers_accessaccount] " +
+                        "INNER JOIN [dafousers_identityprovideraccount] ON (" +
+                        "   [dafousers_accessaccount].[id] = " +
+                        "       [dafousers_identityprovideraccount].[accessaccount_ptr_id]" +
+                        ") " +
+                        "WHERE [dafousers_identityprovideraccount].[idp_entity_id] = ?",
+                new Object[] {entityID}
+        );
+        if(rows.next()) {
+            return rows.getInt(1);
+        }
+
+        return INVALID_USER_ID;
     }
 
 
