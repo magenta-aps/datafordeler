@@ -130,8 +130,9 @@ public class DafoTokenGenerator {
 
         NameID nameId = (NameID) builder.buildObject();
         nameId.setValue(user.getUsername());
-        // TODO: This should uniquely identify the original IdP.
-        nameId.setNameQualifier("NameIdQualifier");
+        if(user.getNameQualifier() != null) {
+            nameId.setNameQualifier(user.getNameQualifier());
+        }
         nameId.setFormat(NameID.UNSPECIFIED);
 
         return nameId;
@@ -273,9 +274,10 @@ public class DafoTokenGenerator {
         SAMLObjectBuilder attrStatementBuilder = getObjectBuilder(AttributeStatement.DEFAULT_ELEMENT_NAME);
         AttributeStatement attrStatement = (AttributeStatement) attrStatementBuilder.buildObject();
 
-
-        Attribute attrUserProfiles = buildStringAttribute(USERPROFILE_CLAIM_URL, user.getUserProfiles());
-        attrStatement.getAttributes().add(attrUserProfiles);
+        if(user != null) {
+            Attribute attrUserProfiles = buildStringAttribute(USERPROFILE_CLAIM_URL, user.getUserProfiles());
+            attrStatement.getAttributes().add(attrUserProfiles);
+        }
 
         // Set on-behalf-of claim if the token is issued on behalf of a user behind a common login
         if(user.getOnBehalfOf() != null && !user.getOnBehalfOf().isEmpty()) {

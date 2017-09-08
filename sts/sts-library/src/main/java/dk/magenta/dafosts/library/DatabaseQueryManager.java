@@ -43,6 +43,25 @@ public class DatabaseQueryManager {
         return result;
     }
 
+    public String getUserIdentificationByAccountId(int accountId) {
+        String result = null;
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                String.join("\n",
+                    "SELECT [dafousers_useridentification].[user_id] ",
+                        "FROM [dafousers_useridentification] INNER JOIN [dafousers_accessaccount] ON (",
+                        "    [dafousers_useridentification].[id] = [dafousers_accessaccount].[identified_user_id]",
+                        ")",
+                        "WHERE [dafousers_accessaccount].[id] = ?"
+                ),
+                new Object[] {accountId}
+        );
+        if(rows.next()) {
+            result = rows.getString(1);
+        }
+
+        return result;
+    }
+
     public int getUserIdByCertificateData(String fingerprint) {
         int result = INVALID_USER_ID;
 

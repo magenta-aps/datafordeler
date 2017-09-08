@@ -123,7 +123,8 @@ public class DafoCachingMetadataManager extends CachingMetadataManager {
      * Returns a map that maps IdP EntityIDs to their aliases
      * @return A map of EntityIDs to aliases
      */
-    public Map<String, String> getIdpProviderMap() {
+    public Map<String, String> getIdpProviderMap() throws MetadataProviderException {
+        updateDafoMetadataProviders();
         Map<String, String> result = new ListOrderedMap();
 
         if(defaultMetadataProvider != null) {

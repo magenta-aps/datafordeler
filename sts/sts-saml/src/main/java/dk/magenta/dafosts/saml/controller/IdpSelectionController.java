@@ -2,6 +2,7 @@ package dk.magenta.dafosts.saml.controller;
 
 import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
 import lombok.extern.slf4j.Slf4j;
+import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.saml.SAMLConstants;
@@ -22,7 +23,7 @@ public class IdpSelectionController {
     DafoCachingMetadataManager dafoCachingMetadataManager;
 
     @RequestMapping
-    public ModelAndView idpSelection(HttpServletRequest request) {
+    public ModelAndView idpSelection(HttpServletRequest request) throws MetadataProviderException {
 
         if (comesFromDiscoveryFilter(request)) {
             ModelAndView idpSelection = new ModelAndView("idpselection");

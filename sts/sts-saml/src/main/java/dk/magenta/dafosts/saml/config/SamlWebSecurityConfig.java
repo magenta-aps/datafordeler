@@ -2,6 +2,7 @@ package dk.magenta.dafosts.saml.config;
 
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.SAMLConfigurerBean;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLSAMLAuthenticationProvider;
+import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLSAMLContextProviderImpl;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLWebSSOProfileConsumerHoKImpl;
 import com.github.ulisesbocchio.spring.boot.security.saml.resource.KeystoreFactory;
 import dk.magenta.dafosts.library.DatabaseQueryManager;
@@ -19,9 +20,12 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.saml.context.SAMLContextProvider;
+import org.springframework.security.saml.context.SAMLContextProviderImpl;
 import org.springframework.security.saml.key.JKSKeyManager;
 import org.springframework.security.saml.key.KeyManager;
 import org.springframework.security.saml.log.SAMLDefaultLogger;
+import org.springframework.security.saml.storage.EmptyStorageFactory;
 
 import java.security.KeyStore;
 import java.util.Collections;
@@ -91,6 +95,15 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     SAMLConfigurerBean saml() {
         return new SAMLConfigurerBean();
+    }
+
+    @Bean
+    SAMLContextProvider samlContextProvider() {
+        DSLSAMLContextProviderImpl provider = new DSLSAMLContextProviderImpl();
+        // Disable in-response-to checking
+        // TODO: Make this configurable
+        provider.setStorageFactory(new EmptyStorageFactory());
+        return provider;
     }
 
     @Bean

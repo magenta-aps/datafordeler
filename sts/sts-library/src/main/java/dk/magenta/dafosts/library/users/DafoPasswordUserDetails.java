@@ -119,4 +119,8 @@ public class DafoPasswordUserDetails implements DafoUserData {
         return databaseQueryManager.getUserProfiles(userId);
     }
 
+    @Override
+    public String getNameQualifier() {
+        return "<none>";
+    }
 }

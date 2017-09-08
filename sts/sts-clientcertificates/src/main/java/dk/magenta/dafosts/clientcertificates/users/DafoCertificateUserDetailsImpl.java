@@ -32,9 +32,6 @@ public class DafoCertificateUserDetailsImpl implements UserDetails, DafoCertific
             PreAuthenticatedAuthenticationToken preAuthenticatedAuthenticationToken,
             DatabaseQueryManager databaseQueryManager ) throws UsernameNotFoundException {
 
-        this.username = preAuthenticatedAuthenticationToken.getPrincipal().toString();
-
-        // TODO: Validate the certificate against the database using issuer and serialnumber
         this.certificate = (X509CertImpl)preAuthenticatedAuthenticationToken.getCredentials();
 
         // Validate certificate agains the user database
@@ -52,6 +49,7 @@ public class DafoCertificateUserDetailsImpl implements UserDetails, DafoCertific
         this.databaseQueryManager = databaseQueryManager;
 
         this.accessAccountId = databaseQueryManager.getUserIdByCertificateData(fingerprint);
+        this.username = databaseQueryManager.getUserIdentificationByAccountId(this.accessAccountId);
 
         if(this.accessAccountId == INVALID_USER_ID) {
             throw new UsernameNotFoundException("No user found for the given certificate");
@@ -145,4 +143,8 @@ public class DafoCertificateUserDetailsImpl implements UserDetails, DafoCertific
         return certificate;
     }
 
+    @Override
+    public String getNameQualifier() {
+        return "<none>";
+    }
 }
