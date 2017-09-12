@@ -10,6 +10,8 @@ Vagrant.configure("2") do |config|
       :mode => "bridge",
       :type => "bridge"
 
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
+
   vagrant_root = File.dirname(__FILE__)
   ENV['ANSIBLE_ROLES_PATH'] = "#{vagrant_root}/ansible/roles"
 
