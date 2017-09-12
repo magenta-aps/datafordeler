@@ -1,11 +1,30 @@
 #!/bin/bash
 
+set -e
+
 function title(){ CHAR='*';CONTENT="$CHAR $* $CHAR";BORDER=$(echo "$CONTENT" | sed "s/./$CHAR/g");echo "";echo "$BORDER";echo "$CONTENT";echo "$BORDER";}
 function subtitle(){ CHAR=' ';CONTENT="$CHAR $* $CHAR";BORDER=$(echo "$CONTENT" | sed "s/./$CHAR/g");echo "";echo "$BORDER";echo "$CONTENT";echo "$BORDER";}
 
+function build()
+{
+    subtitle "Building $(basename $1)"
+
+    dir="$1"
+    shift
+
+    mvn -f "$dir/pom.xml" install $*
+}
+
 title "Inside docker"
 
-echo "here's a bit of output"
+build core -P no-repackage
+
+for plugin in plugins/*Plugin
+do
+    build $plugin
+done
+
+build core
 
 # Switch to the source directory
 # Example:
