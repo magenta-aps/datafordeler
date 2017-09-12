@@ -27,7 +27,7 @@ Your new docoumentation is generated at `vagrant/docs/output`.
 
 The gen_doc script generates a static HTML website with the documentation. 
 
-To use a web browser to view the site, navigate to the root dir of the documentation site and start a server:
+To use a web browser to view the site, navigate to the root dir of the documentation site, and start a server:
 
     cd /vagrant/docs/output/html
     python -m SimpleHTTPServer
