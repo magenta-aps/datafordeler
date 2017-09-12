@@ -59,9 +59,11 @@ public class SamlGetTokenController {
         // If session contains info from sso_proxy landing page, add them to the model.
         String returnURL = (String)httpSession.getAttribute(SSO_RETURN_URL);
         if(returnURL != null) {
+            httpSession.removeAttribute(SSO_RETURN_URL);
             getTokenView.addObject("returnURL", returnURL);
             String returnParam = (String)httpSession.getAttribute(SSO_TOKEN_RETURN_PARAM);
             if(returnParam == null) {
+                httpSession.removeAttribute(SSO_TOKEN_RETURN_PARAM);
                 returnParam = "token";
             }
             getTokenView.addObject("returnParam", returnParam);
