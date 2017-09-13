@@ -1,6 +1,5 @@
-
-Another Page
-============
+General Information Page
+========================
 
 This is another stand-alone page of doc.
 
