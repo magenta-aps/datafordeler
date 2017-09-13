@@ -6,7 +6,7 @@ Grønlands Datafordeler API
    :caption: Indhold
 
    api-declarations
-      cpr-api-declarations
+   cpr-api-declarations
    api-connection
    api-results
    json
@@ -64,10 +64,10 @@ _                 Understregning repræsenterer et tegn                         
 [^tegnliste]      repræsenterer et sæt eller et række af tegn som skal udelades i søgningen  @fornavn=N[^a-d]v[^a-d]@ Finder alle uden bogstaverne a, b, c, d, f.eks. Nivi (men Naja findes ikke)
 ================= ========================================================================== =====================================================================================================================
 
+
 ================= ========================================================================== =====================================================================================================================
 *Sammenligninger* Anvendelse                                                                 Eksempel
 ================= ========================================================================== =====================================================================================================================
-
 =                 Lighedstegn finder alle som passer med mønsteret                           @fornavn=Benjamin@ finder netop Benjamin og ikke Malik, Zakæus eller andre
 !=                Ulighedstegn finder allesom er forskellig fra mønsteret                    @fornavn!=Zakæus@ finder f.eks. Benjamin, Malik med flere men ikke Zakæus
 &                 Ambersand kombinerer de to sammenligninger                                 @fornavn=Zakæus&efternavn=Petersen@ finder netop Zakæus Petersen
