@@ -109,7 +109,6 @@ function cleanup_old_documentation
 }
 task "Cleaning up old documentation..." cleanup_old_documentation
 
-
 title "Building reST files from Java API"
 function generate_java_api_doc
 {
@@ -124,6 +123,8 @@ title "Building reST files from submodules"
 function pull_in_module_docs
 {
     mkdir -p $SPHINX_SOURCE/autopulled-docs
+
+    FOLDERS=$(echo -e "localdocs\n$SUBMODULE_FOLDERS")
 
     AUTOPULLED_MODULES=""
     while read -r FOLDER; do
@@ -142,7 +143,7 @@ function pull_in_module_docs
             echoerr "Warning: '$FOLDER' does not contain a doc/ subfolder."
             echoerr -e "${NORMAL}\c"
         fi
-    done <<< "$SUBMODULE_FOLDERS"
+    done <<< "$FOLDERS"
 }
 task "Pulling in module specific documentation..." pull_in_module_docs
 
@@ -165,7 +166,6 @@ function generate_pdf_documentation
     mkdir -p $OUTPUT_FOLDER
     sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
 }
-
 # TODO: Reenable pdf documentation
 # task "Generating pdf documentation..." generate_pdf_documentation
 

@@ -28,6 +28,10 @@ body {
     color: #79b6e5;
 }
 
+.bodywrapper a {
+    border-bottom: solid 1px #79b6e5;
+}
+
 .related {
     padding: 1rem;
     background-color: #1c5a88;
@@ -72,10 +76,11 @@ body {
     display: inline-block;
 }
 
-.headerlink {
+a.headerlink {
     padding: .5rem;
-    opacity: .5;
-    font-size: smaller;
+    opacity: .33;
+    font-size: small;
+    border: none;
 }
 
 
