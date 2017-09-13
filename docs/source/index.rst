@@ -10,7 +10,6 @@ Grønlands Adresseopslagsregister
    :maxdepth: 2
    :caption: Contents
 
-   other
    autopulled-docs/index
    autogen-api/packages
 
