@@ -13,11 +13,12 @@ Koden er open source og kan findes på `Github. <https://github.com/magenta-aps/
 
 
 Indholdsfortegnelse
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    :maxdepth: 1
 
+   agreements
    overview
    autopulled-docs/index
    autogen-api/packages
@@ -25,7 +26,7 @@ Indholdsfortegnelse
 
 
 Opslagsværktøjer
-----------------
+^^^^^^^^^^^^^^^^
 
 * :ref:`genindex`
 * :ref:`search`

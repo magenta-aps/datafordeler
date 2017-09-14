@@ -16,6 +16,6 @@ Opbygningen af datafordeleren
 
 Skitsen viser datafordelerens hovedkomponenter. For dataanvendere ses ikke andet end API'erne på data.gl. 
 
-Tegningen viser hvor de seks principper kommer til udtryk. De tekniske ord på tegningen findes i Datafordelerens [[Ordliste]].
+Tegningen viser hvor de seks principper kommer til udtryk. De tekniske ord på tegningen findes i Datafordelerens :ref:`Ordliste <wordlist>`
 
 .. image:: DAFO_Stand_20170701.png

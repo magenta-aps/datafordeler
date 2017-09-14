@@ -1,3 +1,5 @@
+.. _wordlist:
+
 Ordliste
 ========
 
@@ -66,11 +68,15 @@ Bruger/superbruger i adresseopslagsregistret
 Bruger og Superbruger er to begreber i adresseopslagsregisterets administrationsmodul. En bruger kaldes også en kommunal bruger, da vedkommende kan oprette, redigere og nedlægge veje, B-numre og adresser i sin egen kommune. En superbruger kan oprette, redigere og nedlægge brugere, procestilstande, kommunale data samt fælles oplysninger om kommuner, distrikter, postnumre, lokaliteter.
 
 
+.. _certificat:
+
 Certificat
 ----------
 
 Certifikat bruges til autentificere at vedkommende bruger eller virksomhed virkelig også er anvender, som de siger at de er. Det svarer til en avanceret elektronisk underskrift, hvor andre har garanteret for underskriftens ægthed.
 
+
+.. _certificat-typer:
 
 Certificat-typer OCES - MOCES - VOCES - FOCES - POCES
 -----------------------------------------------------
@@ -178,6 +184,8 @@ Open Source
 Programkoden til Datafordeler og Adresseopslagsregistret er underlagt bestemmelserne om Open source kode under licensbestemmelserne "Mozilla Public License Version 2.0":https://www.mozilla.org/en-US/MPL/2.0/.
 
 
+.. _parse:
+
 Parse
 -----
 
@@ -207,6 +215,8 @@ Security Assertion Markup Language (SAML)
 
 Datafordeleren gør brug af SAML som defineret i OIO- standarderne (Offentlig Information Online), se “OIO Identity-based Web Services” på http://digitaliser.dk/resource/526486
 
+
+.. _security-token-service:
 
 Security Token Service (STS)
 ----------------------------
