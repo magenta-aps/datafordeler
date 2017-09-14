@@ -109,23 +109,44 @@ td {
     display: none;
 }
 
-.related ul {
+.breadcrumb,
+.pager {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.related li {
-    display: inline-block;
+.breadcrumb li,
+.pager li {
+    padding: 0 .25rem;;
 }
 
-.related .nav-item {
+.breadcrumb {
+    display: flex;
+    align-items: center;
+}
 
+.breadcrumb li::before {
+    content: '>';
+
+}
+
+.breadcrumb li:first-child a {
+    background: url('../img/home_white.svg') no-repeat center center transparent;
+    background-size: 66.66% auto;
+    text-indent: -1000em;
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    border-radius: .25rem;
+}
+
+.breadcrumb li:first-child::before {
+    content: none;
 }
 
 .pager li {
     float: right;
-    padding: 0 .25rem;
 }
 
 .pager a {
@@ -136,6 +157,10 @@ td {
     width: 2rem;
     height: 2rem;
     border-radius: .25rem;
+}
+
+.pager li:nth-child(1) a {
+    background-size: 50% auto;
 }
 
 .pager li:nth-child(2) a {
