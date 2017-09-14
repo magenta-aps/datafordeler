@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * Created by row on 07-09-2017.
@@ -41,7 +42,8 @@ public class SSOProxyController {
             ) throws MetadataProviderException {
         httpSession.setAttribute(SSO_RETURN_URL, returnURL);
         if(preselectedIdP != null) {
-            if(metadataManager.getIdpProviderMap().containsKey(preselectedIdP)) {
+            Map<String, String> idpProviderMap = metadataManager.getIdpProviderMap();
+            if(idpProviderMap.containsKey(preselectedIdP)) {
                 httpSession.setAttribute(SSO_PRESELECTED_IDP, preselectedIdP);
             }
         }
