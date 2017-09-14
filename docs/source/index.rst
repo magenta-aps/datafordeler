@@ -1,5 +1,8 @@
 .. Datafordeler documentation master file
 
+.. image:: dafo_docs_theme/static/img/gd-logo_til_lys_baggrund.svg
+
+
 Grønlands Datafordeler: Dokumentation
 =====================================
 

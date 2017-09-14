@@ -1,4 +1,4 @@
-.. _json-results::
+.. _json-results:
 
 Resultater af forespørgsler
 ===========================

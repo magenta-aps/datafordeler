@@ -18,6 +18,15 @@ ul {
     padding: 0 0 0 1rem;
 }
 
+ol li,
+ul li {
+    padding: .25rem 0;
+}
+
+table {
+    margin: 1rem 0;
+}
+
 table,
 tr,
 th,
@@ -31,14 +40,13 @@ td {
 }
 
 th {
-    background-color: #BF9960;
+    background-color: #CEDBE5;
     text-align: left;
     font-weight: normal;
-
 }
 
 td {
-    border-bottom: solid 1px #79b6e5;
+    border-bottom: solid 1px #CEDBE5;
 }
 
 .document {
@@ -54,7 +62,8 @@ td {
 
 .document a:hover,
 .document a:active {
-    color: #79b6e5;
+    color: #000;
+    border-color: #000;
 }
 
 .bodywrapper a {
@@ -110,16 +119,54 @@ td {
     display: inline-block;
 }
 
+.related .nav-item {
+
+}
+
+.pager li {
+    float: right;
+    padding: 0 .25rem;
+}
+
+.pager a {
+    background: url('../img/list2_white.svg') no-repeat center center transparent;
+    background-size: 66.66% auto;
+    text-indent: -1000em;
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    border-radius: .25rem;
+}
+
+.pager li:nth-child(2) a {
+    background-image: url('../img/forward3_white.svg');
+}
+
+.pager li:nth-child(3) a {
+    background-image: url('../img/backward2_white.svg');
+}
+
+.pager a:hover,
+.pager a:active {
+    background-color: #79b6e5;
+}
+
 a.headerlink {
     padding: .5rem;
     opacity: .33;
-    font-size: small;
+    font-size: medium;
     border: none;
 }
 
 .pre {
     font-size: larger;
     opacity: .75;
+}
+
+.highlight {
+    background-color: #E6EDF2 !important;
+    padding: .5rem 1rem;
+    margin: 1rem 0;
 }
 
 
@@ -131,26 +178,37 @@ a.headerlink {
         min-height: 100vh;
     }
 
+    ol,
+    ul {
+        padding: 0;
+    }
+    
+    li > ol,
+    li > ul {
+        padding: 0 0 0 1rem;
+    }
+
     .document {
         display: flex;
         flex-flow: row nowrap;
+        justify-content: center;
         padding: 2rem;
     }
 
     .documentwrapper {
-        flex: 0 0 75%;
+        flex: 0 1 45rem;
         order: 2;
         padding-left: 1rem;
     }
 
     .sphinxsidebar {
-        flex: 0 0 25%;
+        flex: 0 0 15rem;
         order: 1;
         padding-right: 1rem;
     }
 
     .related {
-        padding: 2rem;
+        padding: 1rem 2rem;
     }
 
     .footer {

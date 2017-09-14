@@ -6,11 +6,10 @@ API-deklarationer for de enkelte registre
 Datafordeleren tilbyder API'er fra flere registre. Listen ændres og udvides løbende i takt med nye systemer kommer til og særlige behov viser sig.
 
 .. toctree::
-   :maxdepth: 0
+   :maxdepth: 1
 
    cpr-api-declarations
 
----
 
 CVR API-deklaration *(IKKE TILGÆNGELIG)*
 -----------------------------------------
@@ -21,7 +20,7 @@ Offentligt tilgængelige data fra det Civile Virksomhedsregister
 
 
 :ref:`CPR API-deklaration <cpr-api-declarations>`
---------------------------------------------
+-------------------------------------------------
 
 CPR-data fra det Civile PersonRegister vedrørende borgere med grønlandsk tilknytning
 
