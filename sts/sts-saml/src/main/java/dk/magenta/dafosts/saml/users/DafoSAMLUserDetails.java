@@ -107,7 +107,9 @@ public class DafoSAMLUserDetails extends SAMLUserDetails implements DafoUserData
         List<String> groupsFromToken = new ArrayList<>();
         if(this.userProfileAttributeFormat == USERPROFILE_FORMAT_MULTIVALUE) {
             String[] groups = samlCredential.getAttributeAsStringArray(this.userProfileAttributeName);
-            groupsFromToken.addAll(Arrays.asList(groups));
+            if(groups != null) {
+                groupsFromToken.addAll(Arrays.asList(groups));
+            }
         } else if(this.userProfileAttributeFormat == USERPROFILE_FORMAT_COMMASEPARATED) {
             String valueFromToken = samlCredential.getAttributeAsString(this.userProfileAttributeName);
             if(valueFromToken != null && !valueFromToken.isEmpty()) {
