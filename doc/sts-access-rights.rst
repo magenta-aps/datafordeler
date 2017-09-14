@@ -13,11 +13,9 @@ Systemroller defineres af datafordelerens plugins, der skaber forbindelsen til d
 
 Systemroller defineres på tre niveauer:
 
-• Serviceniveau - Bruges til at give adgang til en hel service, f.eks. CVR-data
-
-• Entitetsniveau – Bruges til at give adgang til enkelte dataentiteter inden for et givent register, f.eks. ejerregistreret i CVR.
-
-• Attributniveau – Bruges til at give adgang til enkelte attributter på entiteter, f.eks. objekter tilknyttet et bestemt CPR-nummer.
+* Serviceniveau - Bruges til at give adgang til en hel service, f.eks. CVR-data
+* Entitetsniveau – Bruges til at give adgang til enkelte dataentiteter inden for et givent register, f.eks. ejerregistreret i CVR.
+* Attributniveau – Bruges til at give adgang til enkelte attributter på entiteter, f.eks. objekter tilknyttet et bestemt CPR-nummer.
 
 Derudover er det muligt at angive tilpassede systemroller, der kan bruges til at implementere rettigheder der ikke kan dækkes af ovenstående. Disse roller gives betegnelse ”Custom” i systemet. Custom-roller bruges for eksempel til at definere om en bruger i systemet er administrator eller serviceudbyder.
 
@@ -31,7 +29,7 @@ For overskuelighedens skyld oprettes der kun systemroller for services, hvor der
 
 Illustrationen herunder viser model for systemroller i datafordeleren og hvordan systemroller defineres under udvikling af et plugin til datafordeleren.
 
-!Systemroller_plugin.png!
+.. image:: Systemroller_plugin.png
 
 
 Områdeafgrænsning
@@ -63,4 +61,4 @@ Det skal bemærkes at samme metode bruges til at tildele read- og admin-roller i
 
 Illustration herunder viser datamodel for bruger/profil/rolle system igennem administrationssystemet og oversættelse af brugerprofiler til systemroller og områdeafgrænsninger.
 
-!Datamodel_bruger_profil_system.png!
+.. image:: Datamodel_bruger_profil_system.png

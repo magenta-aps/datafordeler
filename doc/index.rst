@@ -1,3 +1,5 @@
+.. _sts-secure-token-service:
+
 STS Secure Token Service
 ========================
 
@@ -14,9 +16,9 @@ Introduktion til token
 
 I den grønlandske datafordeler https://www.data.gl skal alle tilgange udføres med SAML2-token, når der er behov for autorisation og autentifikation. Disse vejledninger skal hjælpe tredjeparter i gang med at forberede hvordan de kan anvende systemet. 
 
-Hvordan et anvender-system sættes op og stiller forespørgsler, findes beskrevet i [[API forbindelse]].
+Hvordan et anvender-system sættes op og stiller forespørgsler, findes beskrevet i :ref:`API forbindels <api-connection>`
 
-Sammenhængen mellem STS og brugere, profiler samt roller er beskrevet i dokumentationen [[STS og hvordan datafordeleren anvender det]].
+Sammenhængen mellem STS og brugere, profiler samt roller er beskrevet i dokumentationen :ref:`STS og hvordan datafordeleren anvender det. <sts-and-how-it-is-used>`
 
 
 Brugernavn og kodeord?
