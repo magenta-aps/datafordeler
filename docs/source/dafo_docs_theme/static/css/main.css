@@ -5,8 +5,11 @@
  * darker blue: #0e2c44
  */
 
+ * {
+    box-sizing: border-box;
+}
 
- body {
+body {
     font: 100%/1.3 sans-serif;
     padding: 0;
     margin: 0;
@@ -50,7 +53,7 @@ td {
 }
 
 .document {
-    padding: 1rem;
+    padding: 1rem 1rem 1.5rem;
 }
 
 .document a,
@@ -76,9 +79,13 @@ td {
 }
 
 .related {
-    padding: 1rem;
+    padding: .5rem 1rem;
     background-color: #1c5a88;
     color: #fff;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .footer {
@@ -111,24 +118,31 @@ td {
 
 .breadcrumb,
 .pager {
+    display: block;
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-.breadcrumb li,
-.pager li {
-    padding: 0 .25rem;;
+    overflow: hidden;
 }
 
 .breadcrumb {
+    flex: 1 0 calc(100vw-6rem);
     display: flex;
+    flex-flow: row wrap;
     align-items: center;
+    order: 1;
 }
 
-.breadcrumb li::before {
-    content: '>';
+.breadcrumb li {
+    background: url('../img/arrow-right2_white.svg') no-repeat center left transparent;
+    background-size: auto .75rem;
+    padding: 0 .25rem 0 1.25rem;
+    font-size: smaller;
+}
 
+.breadcrumb li:first-child {
+    background-image: none;
+    padding: 0 .25rem .25rem 0;
 }
 
 .breadcrumb li:first-child a {
@@ -141,12 +155,13 @@ td {
     border-radius: .25rem;
 }
 
-.breadcrumb li:first-child::before {
-    content: none;
-}
-
-.pager li {
-    float: right;
+.pager {
+    flex: 0 0 6rem;
+    order: 2;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .pager a {
@@ -157,6 +172,18 @@ td {
     width: 2rem;
     height: 2rem;
     border-radius: .25rem;
+}
+
+.pager li:nth-child(1) {
+    order: 3;
+}
+
+.pager li:nth-child(2) {
+    order: 2;
+}
+
+.pager li:nth-child(3) {
+    order: 1;
 }
 
 .pager li:nth-child(1) a {
@@ -171,9 +198,11 @@ td {
     background-image: url('../img/backward2_white.svg');
 }
 
+.breadcrumb li:first-child a:hover,
+.breadcrumb li:first-child a:active,
 .pager a:hover,
 .pager a:active {
-    background-color: #79b6e5;
+    background-color: #17496E;
 }
 
 a.headerlink {
@@ -194,8 +223,19 @@ a.headerlink {
     margin: 1rem 0;
 }
 
+.toctree-wrapper a {
+    border: none;
+}
 
-@media screen and (min-width: 45rem) {
+.toctree-wrapper a:hover,
+.toctree-wrapper a:active,
+.sphinxsidebarwrapper a:hover,
+.sphinxsidebarwrapper a:active {
+    border-bottom: solid 1px #79b6e5;
+}
+
+
+@media screen and (min-width: 60rem) {
 
     body {
         display: flex;
@@ -217,23 +257,23 @@ a.headerlink {
         display: flex;
         flex-flow: row nowrap;
         justify-content: center;
-        padding: 2rem;
+        padding: 2rem 2rem 3rem;
     }
 
     .documentwrapper {
-        flex: 0 1 45rem;
+        width: 45rem;
         order: 2;
-        padding-left: 1rem;
+        padding: 0 2rem 0 1rem;
     }
 
     .sphinxsidebar {
-        flex: 0 0 15rem;
+        flex: 0 0 25%;
         order: 1;
-        padding-right: 1rem;
+        padding: 0 1rem 0 2rem;
     }
 
     .related {
-        padding: 1rem 2rem;
+        padding: .5rem 2rem;
     }
 
     .footer {
