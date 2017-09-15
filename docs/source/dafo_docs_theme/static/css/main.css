@@ -5,7 +5,7 @@
  * darker blue: #0e2c44
  */
 
-* {
+ * {
     box-sizing: border-box;
 }
 
@@ -140,6 +140,7 @@ td {
 }
 
 .navigationwrapper ul li > ul {
+    padding: 0 0 1rem;
     background-color: rgba(255,255,255,0.1);
 }
 
@@ -305,10 +306,6 @@ td {
     padding: 0.5rem 1rem;
 }
 
-.search > div {
-
-}
-
 .search input[type="text"] {
     padding: .25rem .5rem;
     border-radius: .25rem;
@@ -370,20 +367,20 @@ a.headerlink {
 
     .wrapper {
         flex-flow: row nowrap;
-        justify-content: center;
         min-height: 100vh;
     }
     
     .contentwrapper {
         order: 2;
-        max-width: 55rem;
+        width: 60%;
+        min-width: 45rem;
         display: flex;
         flex-flow: column nowrap;
     }
 
     .navigationwrapper {
         order: 1;
-        flex: 0 0 15rem;
+        flex: 0 0 20%;
         padding: 0 0 3rem;
     }
 
