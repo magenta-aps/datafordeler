@@ -117,16 +117,14 @@
 {%- if html_tag %}
 {{ html_tag }}
 {%- else %}
-<html xmlns="http://www.w3.org/1999/xhtml"{% if language is not none %} lang="{{ language }}"{% endif %}>
+<html{% if language is not none %} lang="{{ language }}"{% endif %}>
 {%- endif %}
   <head>
-    {%- if not html5_doctype %}
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    {%- endif %}
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     {%- if use_meta_charset or html5_doctype %}
     <meta charset="{{ encoding }}" />
     {%- else %}
-    <meta http-equiv="Content-Type" content="text/html; charset={{ encoding }}" />
+    <meta http-equiv="Content-Type" content="text/html; charset={{ encoding }}">
     {%- endif %}
     {{- metatags }}
     {%- block htmltitle %}
@@ -142,80 +140,73 @@
     {%- if use_opensearch %}
     <link rel="search" type="application/opensearchdescription+xml"
           title="{% trans docstitle=docstitle|e %}Search within {{ docstitle }}{% endtrans %}"
-          href="{{ pathto('_static/opensearch.xml', 1) }}"/>
+          href="{{ pathto('_static/opensearch.xml', 1) }}">
     {%- endif %}
     {%- if favicon %}
-    <link rel="shortcut icon" href="{{ pathto('_static/' + favicon, 1) }}"/>
+    <link rel="shortcut icon" href="{{ pathto('_static/' + favicon, 1) }}">
     {%- endif %}
     {%- endif %}
 {%- block linktags %}
     {%- if hasdoc('about') %}
-    <link rel="author" title="{{ _('About these documents') }}" href="{{ pathto('about') }}" />
+    <link rel="author" title="{{ _('About these documents') }}" href="{{ pathto('about') }}">
     {%- endif %}
     {%- if hasdoc('genindex') %}
-    <link rel="index" title="{{ _('Index') }}" href="{{ pathto('genindex') }}" />
+    <link rel="index" title="{{ _('Index') }}" href="{{ pathto('genindex') }}">
     {%- endif %}
     {%- if hasdoc('search') %}
-    <link rel="search" title="{{ _('Search') }}" href="{{ pathto('search') }}" />
+    <link rel="search" title="{{ _('Search') }}" href="{{ pathto('search') }}">
     {%- endif %}
     {%- if hasdoc('copyright') %}
-    <link rel="copyright" title="{{ _('Copyright') }}" href="{{ pathto('copyright') }}" />
+    <link rel="copyright" title="{{ _('Copyright') }}" href="{{ pathto('copyright') }}">
     {%- endif %}
     {%- if next %}
-    <link rel="next" title="{{ next.title|striptags|e }}" href="{{ next.link|e }}" />
+    <link rel="next" title="{{ next.title|striptags|e }}" href="{{ next.link|e }}">
     {%- endif %}
     {%- if prev %}
-    <link rel="prev" title="{{ prev.title|striptags|e }}" href="{{ prev.link|e }}" />
+    <link rel="prev" title="{{ prev.title|striptags|e }}" href="{{ prev.link|e }}">
     {%- endif %}
 {%- endblock %}
 {%- block extrahead %} {% endblock %}
   </head>
   <body>
-{%- block header %}{% endblock %}
-
-{%- block relbar1 %}{{ relbar() }}{% endblock %}
-
-{%- block content %}
-  {%- block sidebar1 %} {# possible location for sidebar #} {% endblock %}
-
-    <div class="document">
-  {%- block document %}
-      <div class="documentwrapper">
-      {%- if render_sidebar %}
-        <div class="bodywrapper">
-      {%- endif %}
-          <div class="body" role="main">
-            {% block body %} {% endblock %}
-          </div>
-      {%- if render_sidebar %}
-        </div>
-      {%- endif %}
+    <div class="wrapper">
+      <div class="navigationwrapper">
+        <header class="header">
+          <img src="{{ pathto('_static/img/gd-logo_til_mork_baggrund.svg', 1) }}" alt="">
+        </header>
+        {%- block sidebar1 %}{{ sidebar() }}{% endblock %}
       </div>
-  {%- endblock %}
-
-  {%- block sidebar2 %}{{ sidebar() }}{% endblock %}
-      <div class="clearer"></div>
+      <div class="contentwrapper">
+        {%- block relbar1 %}{{ relbar() }}{% endblock %}
+        {%- block content %}
+          <main class="document">
+            {%- block document %}
+              <div class="body" role="main">
+                {% block body %} {% endblock %}
+              </div>
+            {%- endblock %}
+            {%- block sidebar2 %}{% endblock %}
+          </main>
+        {%- endblock %}
+        {%- block relbar2 %}{{ relbar() }}{% endblock %}
+        {%- block footer %}
+          <footer class="footer" role="contentinfo">
+            {%- if show_copyright %}
+              {%- if hasdoc('copyright') %}
+                {% trans path=pathto('copyright'), copyright=copyright|e %}&#169; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
+              {%- else %}
+                {% trans copyright=copyright|e %}&#169; Copyright {{ copyright }}.{% endtrans %}
+              {%- endif %}
+            {%- endif %}
+            {%- if last_updated %}
+              {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+            {%- endif %}
+            {%- if show_sphinx %}
+              {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+            {%- endif %}
+          </footer>
+        {%- endblock %}
+      </div>
     </div>
-{%- endblock %}
-
-{%- block relbar2 %}{{ relbar() }}{% endblock %}
-
-{%- block footer %}
-    <div class="footer" role="contentinfo">
-    {%- if show_copyright %}
-      {%- if hasdoc('copyright') %}
-        {% trans path=pathto('copyright'), copyright=copyright|e %}&#169; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
-      {%- else %}
-        {% trans copyright=copyright|e %}&#169; Copyright {{ copyright }}.{% endtrans %}
-      {%- endif %}
-    {%- endif %}
-    {%- if last_updated %}
-      {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
-    {%- endif %}
-    {%- if show_sphinx %}
-      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
-    {%- endif %}
-    </div>
-{%- endblock %}
   </body>
 </html>
