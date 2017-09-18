@@ -1,19 +1,23 @@
+.. _api-results:
+
 API resultater
 ==============
 
-REST-API'er returnerer "HTTP's svarkoder.":https://tools.ietf.org/html/rfc7231". I det følgende findes de hyppigst forventede svarkoder til en række almindelige forespørgsler.
+REST-API'er returnerer `HTTP svarkoder. <https://tools.ietf.org/html/rfc7231>`_ I det følgende findes de hyppigst forventede svarkoder til en række almindelige forespørgsler.
+
 
 Forventede resultater
 ---------------------
 
 I dette afsnit er eksempler på API-forespørgsler, hvor der er succes med at få besked om det søgte findes eller ej. Dele af teksten er anonymiseret med ˽ som erstatningstegn.
 
+
 200 - OK - En succesfuld forespørgsel med svar
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* URL: https://test.data.gl/cpr/1/rest/search?cpr=˽˽˽˽˽˽˽˽˽˽
+URL: https://test.data.gl/cpr/1/rest/search?cpr=˽˽˽˽˽˽˽˽˽˽
 
-Kendetegnet for en velykket søgning med resultat er indhold i feltet @"results": [ _indhold_ ]@. Datafordeleren sætter ikke statuskode på resultatet.::
+Kendetegnet for en velykket søgning med resultat er indhold i feltet ``"results": [ _indhold_ ]``. Datafordeleren sætter ikke statuskode på resultatet.::
 
     {
         "path": "/cpr/person/1/rest/search",
@@ -38,9 +42,9 @@ Kendetegnet for en velykket søgning med resultat er indhold i feltet @"results"
 204 - No content - En succesfuld forespørgsel med et tomt resultat
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* URL: @https://test.data.gl/cpr/person/1/rest/search?lastName=Jansson@
+URL: https://test.data.gl/cpr/person/1/rest/search?lastName=Jansson
 
-Kendetegnet for en vellykket søgning uden resultat er linjen @"results": []@. Forventes der et indhold, skal man efterse parametrene og det søgte mønster.  Datafordeleren sætter ikke statuskode på resultatet.::
+Kendetegnet for en vellykket søgning uden resultat er linjen ``"results": []``. Forventes der et indhold, skal man efterse parametrene og det søgte mønster.  Datafordeleren sætter ikke statuskode på resultatet.::
 
     {
         "path": "/cpr/person/1/rest/search",
@@ -56,7 +60,7 @@ Kendetegnet for en vellykket søgning uden resultat er linjen @"results": []@. F
 Andre resultater end de forventede
 ----------------------------------
 
-Her findes de typiske fejl, som brugere kan møde i datafordelerens API. REST API'er anvender fejlmeddelelserne i HTTP-protokollen:https://tools.ietf.org/html/rfc7231#section-6.1, der rummer den fulde oversigt over mulige fejlkoder.
+Her findes de typiske fejl, som brugere kan møde i datafordelerens API. REST API'er anvender fejlmeddelelserne i `HTTP-protokollen, <https://tools.ietf.org/html/rfc7231#section-6.1>`_ der rummer den fulde oversigt over mulige fejlkoder.
 
 400 - Bad request - Fejl i parametre
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -72,12 +76,13 @@ Forespørgslen indeholder parametre eller mønstre som API ikke kan genkende. Ef
         "path": "/cpr/person/1/rest/find=Finn"
     }
 
-URL'en @https://test.data.gl/cpr/person/1/rest/find=Finn@ giver fejl, da 'find' ikke er et kendt navn på API'et. 
+URL'en https://test.data.gl/cpr/person/1/rest/find=Finn giver fejl, da 'find' ikke er et kendt navn på API'et. 
+
 
 403 - Forbidden - Ingen adgang til API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forespørgslen mangler en token som beskrevet i [[STS Secure Token Service]]. I beskeden kan desuden være anført brugernavn for login, så bruger kan efterse om det er det korrekte navn.::
+Forespørgslen mangler en token som beskrevet i :ref:`STS Secure Token Service. <sts-secure-token-service>` I beskeden kan desuden være anført brugernavn for login, så bruger kan efterse om det er det korrekte navn.::
 
     {
         "timestamp": 1499420553669,
@@ -87,6 +92,7 @@ Forespørgslen mangler en token som beskrevet i [[STS Secure Token Service]]. I 
         "message": "User [anonymous]@[anonymous] does not have access to ReadCpr",
         "path": "/cpr/person/1/rest/search"
     }
+
 
 401 - Unauthorized - Token er ubrugelig
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -102,6 +108,7 @@ Token er ikke gyldig. Anvender-systemet skal efterse at aftale er på plads om s
         "path": "/cpr/person/1/rest/search"
     }
 
+
 401 - Unauthorized - Token is older than 3600 seconds
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -116,6 +123,7 @@ Tiden er udløbet, så forbindelsen skal fornys. I de fleste anvender-systemer s
         "path": "/cpr/person/1/rest/search"
     }
 
+
 404 - Not found - Ingen besked er modtaget
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -129,4 +137,3 @@ API'et svarer ikke på henvendelsen. Efterse i dokumentation om API'et findes el
         "path": "/cvr/1/rest/"
     }
 
-{{include(Undertekst)}}
