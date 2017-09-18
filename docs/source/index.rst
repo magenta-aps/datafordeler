@@ -1,9 +1,12 @@
 .. Datafordeler documentation master file
 
-.. image:: dafo_docs_theme/static/img/gd-logo_til_lys_baggrund.svg
+.. raw:: html
 
+    <div class="frontpage-image">
+        <img src="_static/img/gd-logo_til_mork_baggrund.svg" alt="Grønlands datafordeler" title="Grønlands datafordeler" class="frontpage-logo">
+    </div>
 
-Grønlands Datafordeler: Dokumentation
+Dokumentation
 =====================================
 
 Velkommen til den offentlige dokumentation for Grønlands Datafordeler.

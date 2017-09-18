@@ -13,7 +13,7 @@ body {
     font: 100%/1.3 sans-serif;
     padding: 4rem 0 0;
     margin: 0;
-    background-color: #999;
+    background-color: #eee;
 }
 
 ol,
@@ -25,6 +25,10 @@ ul {
 ol li,
 ul li {
     padding: .25rem 0;
+}
+
+ul {
+    list-style: square;
 }
 
 table {
@@ -44,13 +48,13 @@ td {
 }
 
 th {
-    background-color: #CEDBE5;
+    background-color: #eee;
     text-align: left;
     font-weight: normal;
 }
 
 td {
-    border-bottom: solid 1px #CEDBE5;
+    border-bottom: solid 1px #eee;
 }
 
 
@@ -63,31 +67,12 @@ td {
 
 .contentwrapper {
     order: 1;
-    box-shadow: 0 .5rem 1rem .5rem rgba(0,0,0,0.25);
+    box-shadow: -.25rem 0 1rem .5rem rgba(0,0,0,0.1);
     background-color: #fff;
 }
 
 .navigationwrapper {
     order: 2;
-}
-
-
-/* Header */
-
-.header {
-    padding: .5rem 1rem;
-    background-color: #0e2c44;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-    z-index: 1000;
-}
-
-.header img {
-    height: auto;
-    width: 10rem;
 }
 
 
@@ -100,7 +85,7 @@ td {
 .document a,
 .document a:link,
 .document a:visited {
-    color: #1c5a88;
+    color: #79b6e5;
     text-decoration: none;
     border-bottom: solid 1px #79b6e5;
 }
@@ -117,22 +102,11 @@ td {
 }
 
 
-/* Footer */
-
-.footer {
-    padding: 1rem;
-    background-color: #0e2c44;
-    color: #fff;
-    font-size: smaller;
-}
-
-
 /* Navigation */
 
 .navigationwrapper {
-    padding: 1rem 1rem 1.5rem;
-    background-color: #666;
-    color: #aaa;
+    padding: 0 0 2rem;
+    background-color: #ddd;
 }
 
 .navigationwrapper ul {
@@ -160,7 +134,7 @@ td {
 .navigationwrapper a:visited {
     display: block;
     text-decoration: none;
-    color: #fff;
+    color: #1c5a88;
     font-weight: normal;
     padding: .25rem 1rem;
 }
@@ -173,6 +147,7 @@ td {
 .navigationwrapper a:hover,
 .navigationwrapper a:active {
     background-color: #1c5a88;
+    color: #fff;
     border: none;
 }
 
@@ -297,6 +272,45 @@ td {
 }
 
 
+/* Header */
+
+.header {
+    padding: .5rem 1rem;
+    background-color: #0e2c44;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 1000;
+}
+
+.logo-link {
+    display: inline-block !important;
+    padding: 0 !important;
+}
+
+.logo-link:hover,
+.logo-link:active {
+    background-color: transparent !important;
+}
+
+.logo-img {
+    height: auto;
+    width: 10rem;
+}
+
+
+/* Footer */
+
+.footer {
+    padding: 1rem;
+    background-color: #0e2c44;
+    color: #fff;
+    font-size: smaller;
+}
+
+
 /* Search */
 
 .search {
@@ -335,7 +349,7 @@ a.headerlink {
     padding: .5rem;
     opacity: .33;
     font-size: medium;
-    border: none;
+    border: none !important;
 }
 
 .pre {
@@ -344,18 +358,22 @@ a.headerlink {
 }
 
 .highlight {
-    background-color: #E6EDF2 !important;
+    background-color: #eee !important;
     padding: .5rem 1rem;
     margin: 1rem 0;
 }
 
-.toctree-wrapper a {
+.document .toctree-wrapper a {
     border: none;
 }
 
-.toctree-wrapper a:hover,
-.toctree-wrapper a:active {
+.document .toctree-wrapper a:hover,
+.document .toctree-wrapper a:active {
     border-bottom: solid 1px #79b6e5;
+}
+
+.frontpage-image {
+    display: none;
 }
 
 
@@ -380,18 +398,27 @@ a.headerlink {
 
     .navigationwrapper {
         order: 1;
-        flex: 0 0 20%;
-        padding: 0 0 3rem;
+        width: 20%;
+        min-width: 15rem;
     }
 
     .header {
         position: static;
-        padding: 3rem 1rem;
+        padding: 3rem 2rem;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
     }
 
-    .header img {
-        width: auto;
-        max-width: 100%;
+    .logo-link {
+        display: block !important;
+        width: 100%;
+        max-width: 15rem;
+    }
+
+    .logo-img {
+        width: 100%;
         height: auto;
     }
 
@@ -406,16 +433,38 @@ a.headerlink {
     }
 
     .document {
-        padding: 2rem 2rem 3rem;
+        padding: 2rem 3rem 3rem;
     }
 
     .related {
-        padding: .5rem 2rem;
+        padding: .5rem 3rem;
     }
 
     .footer {
-        padding: 2rem;
+        padding: 2rem 3rem 3rem;
         flex: 1 0 auto;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+    }
+
+
+    /* Make layout a little different on front page */
+
+    .frontpage-image {
+        display: block;
+        background: url('../img/img-by-frank-thomsen-renard.jpg') no-repeat center top transparent;
+        background-size: cover;
+        padding: 6rem 10rem;
+        margin-right: -3rem;
+        margin-left: -3rem;
+        margin-top: -2rem;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    .document .frontpage-logo {
+        max-width: 30rem;   
     }
 
 }
