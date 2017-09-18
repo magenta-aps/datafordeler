@@ -106,6 +106,7 @@ task "Acquiring submodule information..." submodule_setup
 function cleanup_old_documentation
 {
     rm -rf $SPHINX_SOURCE/autogen-api
+    rm -rf .java_sphinx_cache
 }
 task "Cleaning up old documentation..." cleanup_old_documentation
 

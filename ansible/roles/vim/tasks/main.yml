@@ -5,6 +5,6 @@
       name: vim
       update_cache: yes
       state: present
-    tags: Copy /etc/hosts
+    become: yes
 
 ...

@@ -5,26 +5,31 @@
       name: python
       update_cache: yes
       state: present
+    become: yes
 
   - name: Install python (dev)
     apt:
       name: python-dev
       update_cache: yes
       state: present
+    become: yes
 
   - name: Install pip
     apt:
       name: python-pip
       update_cache: yes
       state: present
+    become: yes
 
   - name: Upgrade pip
     pip:
       name: pip
       extra_args: --upgrade
+    become: yes
 
   - name: Install virtualenv
     pip:
       name: virtualenv
+    become: yes
 
 ...
