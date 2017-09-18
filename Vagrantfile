@@ -3,8 +3,8 @@
 
 Vagrant.configure("2") do |config|
   # TODO: Ubuntu Xenial image
-  config.vm.box = "debian/jessie64"
-  config.vm.box_version = "8.7.0"
+  config.vm.box = "debian/stretch64"
+  config.vm.box_version = "9.1.0"
   config.vm.network :public_network,
       :dev => "virbr0",
       :mode => "bridge",
