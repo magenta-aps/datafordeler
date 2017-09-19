@@ -1,0 +1,1008 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-19 12:26+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../source/autopulled-docs/admin/index.rst:2
+msgid "Admin"
+msgstr ""
+
+#: ../../source/autopulled-docs/admin/index.rst:4
+msgid "And it's good!"
+msgstr ""
+
+#: ../../source/autopulled-docs/engine/index.rst:2
+msgid "Engine"
+msgstr ""
+
+#: ../../source/autopulled-docs/engine/index.rst:4
+msgid "Documentation for the Engine component."
+msgstr ""
+
+#: ../../source/autopulled-docs/index.rst:2
+msgid "Module documentation"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:4
+msgid "API forbindelse"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:6
+msgid "Datafordeleren udstiller data til andre systemer via https://test.data.gl, hvorfra anvender-systemer bruger disse data. Denne vejledning viser hvordan et system taler med datafordeleren. Det forudsættes at læseren er bekendt med skrivning og afsendelse af HTML samt læsning i JSON."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:10
+msgid "Anvendelse uden autorisering og autentificering"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:12
+msgid "Som eksempel vil et anvendersystem gerne have en liste med alle aktive byer og bygder i Grønland. Det er ikke personfølsomme data og vil være tilgængelig for alle systemer på internettet."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:14
+msgid "Hvilke kommandoer, der kan anvendes på et API, findes på :ref:`API-deklarationer, <api-declarations>` hvor det ses hvad man skriver for at finde bestemte data."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:18
+msgid "Her er trinene i at få offentlige data hjem uden autorisation og autentificering:"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:20
+msgid "Systemet sender en besked med de søgte oplysninger - for eksempel ``https://data.gl/najugaq/municipality/1/search?lokaliteter=*``"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:21
+msgid "Resultatet kommer tilbage i et :ref:`JSON-format. <json-results>` Herfra kan anvender-systemet læse og bruge de ønskede oplysninger i henhold til :ref:`betingelser <agreements>` for både datafordeler og det aktuelle register."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:25
+msgid "Anvendelse med autorisering og autentificering"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:27
+msgid "Et eksempel er et anvendersystem, der gerne vil kende navn og adresse for et CPR-nummer. CPR-numre er personfølsomme data, så anvender-systemet skal dokumentere sin ret og lovhjemmel til disse data, oplyse de korrekte personlige oplysninger for brugeren, der efterspørger data. Datafordeleren logger alle disse oplysninger af hensyn til sikkerhed og lovgivning. Hvordan den sikre tilgang virker, er beskrevet i :ref:`STS og hvordan datafordeleren anvender det. <sts-and-how-it-is-used>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:29
+msgid "I dette eksempel kaldes personnummeret ``ddmmåååå-nnnn``, og det er i virkeligheden selvfølgelig en række af tallene fra 0 til 9."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:33
+msgid "Forhåndsbetingelserne for adgang til fortrolige data er:"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:35
+msgid "Aftale med den grønlandske digitaliseringsstyrelse og aftale med de aktuelle dataansvarlige myndigheder for de data, som skal hentes, og hvilke måde som systemet vil give sig til kende overfor Datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:37
+msgid "Anvendersystemet skal have installeret og anvende et FOCES-certifikat, der udstedes til offentlige myndigheder og andre. Alternativt skal anvendersystemet have en aftale med en Identity-provider (IpS), som kan være en tredjepart, det kan være en kommunes eget system eller det kan være en aftale om at anvende Datafordelerens identity provider. Hvorledes token fungerer er beskrevet i :ref:`STS og hvordan datafordeleren anvender det. <sts-and-how-it-is-used>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:41
+msgid "Her er trinene i at hente data med autorisering og autentificering"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:43
+msgid "Forhåndsbetingelser fra forrige afsnit skal være opfyldt:"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:45
+msgid "Systemet klargør og sender nu en besked med følgende komponenter:"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:47
+msgid "Certifikatet  indsættes i header som attribut."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:48
+msgid "De søgte oplysninger skrives i URL'en: ``https://test.data.gl/cpr/najugaq/1/rest/search?Personnummer=*``"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:50
+msgid "Datafordeleren veksler certifikat til en token, hvis ikke der medfølger en gyldig token, og iværksætter søgningen tilpasset rettighederne i token."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:52
+msgid "Resultatet kommer tilbage til anvendelse i :ref:`JSON-format. <json-results>` Herfra kan anvender-systemet læse og bruge de ønskede oplysninger i henhold til :ref:`betingelser <agreements>` for både datafordeler og det aktuelle register."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-connection.rst:54
+msgid "Du kan se mere om API-deklarationerne på siden om :ref:`API. <dafo-api>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:4
+msgid "API-deklarationer for de enkelte registre"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:6
+msgid "Datafordeleren tilbyder API'er fra flere registre. Listen ændres og udvides løbende i takt med nye systemer kommer til og særlige behov viser sig."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:15
+msgid "CVR API-deklaration *(IKKE TILGÆNGELIG)*"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:17
+msgid "Offentligt tilgængelige data fra det Civile Virksomhedsregister"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:19
+msgid "Myndighedsdelen er kun tilgængeligt efter forudgående aftale med Den Grønlandske Digitaliseringsstyrelse og CVR-kontoret."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:23
+msgid ":ref:`CPR API-deklaration <cpr-api-declarations>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:25
+msgid "CPR-data fra det Civile PersonRegister vedrørende borgere med grønlandsk tilknytning"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:27
+msgid "Kun myndigheder har adgang til disse data efter forudgående aftale med Den Grønlandske Digitaliseringsstyrelse og CPR-kontoret."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:31
+msgid "CPR Vejregistret API-deklaration  *(IKKE TILGÆNGELIG)*"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:33
+msgid "Vejregisteret fra CPR er offentligt og orienterende register for grønlandske adresser anvendt i CPR."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:37
+msgid "CPR Myndighedsregistret API-deklaration  *(IKKE TILGÆNGELIG)*"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:39
+msgid "Myndighedsregisteret fra CPR-kontoret er offentligt og registeret over myndigheder anvendt i CPR"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:43
+msgid "Adresseopslagsregisteret API-deklaration  *(IKKE TILGÆNGELIG)*"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:45
+msgid "Adresseopslagsregistret fra den Grønlandske Digitaliseringsstyrelse er den autoritative og offentlige liste over alle steder med mulighed for registrering af permanent bolig eller virksomhed. Det er tillige den autoritative liste over grønlandske kommuner, distrikter, postnumre, lokaliteter, byer/bygder/stationer, veje/stednavne, B-numre og adresser (husnumre, etager og sidedøre) med deres individuelle geografiske ID'er."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:49
+msgid "Stednavne API-deklaration  *(IKKE TILGÆNGELIG)*"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-declarations.rst:51
+msgid "Stednavne-registret (eller Gazeeter of Greenland) er Stednavnenævnets autoritative liste over alle officielle og uofficielle alternative navne i Grønland på nygrønlandsk, gammelgrønlandsk og dansk med geografiske ID'er og link til udtale."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:4
+msgid "API resultater"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:6
+msgid "REST-API'er returnerer `HTTP svarkoder. <https://tools.ietf.org/html/rfc7231>`_ I det følgende findes de hyppigst forventede svarkoder til en række almindelige forespørgsler."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:10
+msgid "Forventede resultater"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:12
+msgid "I dette afsnit er eksempler på API-forespørgsler, hvor der er succes med at få besked om det søgte findes eller ej. Dele af teksten er anonymiseret med ˽ som erstatningstegn."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:16
+msgid "200 - OK - En succesfuld forespørgsel med svar"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:18
+msgid "URL: https://test.data.gl/cpr/1/rest/search?cpr=˽˽˽˽˽˽˽˽˽˽"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:20
+msgid "Kendetegnet for en velykket søgning med resultat er indhold i feltet ``\"results\": [ _indhold_ ]``. Datafordeleren sætter ikke statuskode på resultatet.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:43
+msgid "204 - No content - En succesfuld forespørgsel med et tomt resultat"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:45
+msgid "URL: https://test.data.gl/cpr/person/1/rest/search?lastName=Jansson"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:47
+msgid "Kendetegnet for en vellykket søgning uden resultat er linjen ``\"results\": []``. Forventes der et indhold, skal man efterse parametrene og det søgte mønster.  Datafordeleren sætter ikke statuskode på resultatet.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:61
+msgid "Andre resultater end de forventede"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:63
+msgid "Her findes de typiske fejl, som brugere kan møde i datafordelerens API. REST API'er anvender fejlmeddelelserne i `HTTP-protokollen, <https://tools.ietf.org/html/rfc7231#section-6.1>`_ der rummer den fulde oversigt over mulige fejlkoder."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:66
+msgid "400 - Bad request - Fejl i parametre"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:68
+msgid "Forespørgslen indeholder parametre eller mønstre som API ikke kan genkende. Efterse parametre, deres stavning og om navnene findes på API'et. Navne er versalfølsomme og skal skrives præcist. Mønstre er ikke versalfølsomme.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:79
+msgid "URL'en https://test.data.gl/cpr/person/1/rest/find=Finn giver fejl, da 'find' ikke er et kendt navn på API'et."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:83
+msgid "403 - Forbidden - Ingen adgang til API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:85
+msgid "Forespørgslen mangler en token som beskrevet i :ref:`STS Secure Token Service. <sts-secure-token-service>` I beskeden kan desuden være anført brugernavn for login, så bruger kan efterse om det er det korrekte navn.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:98
+msgid "401 - Unauthorized - Token er ubrugelig"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:100
+msgid "Token er ikke gyldig. Anvender-systemet skal efterse at aftale er på plads om sikker adgang til Datafordeleren, at certifikater er på plads og i orden, at brugeren er tildelt de rette rettigheder i anvendersystemet og hvorvidt anvender er oprettet med de ønskede rettigheder i Datafordeleren af den registeransvarlige eller den dataansvarlige for det pågældende register.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:113
+msgid "401 - Unauthorized - Token is older than 3600 seconds"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:115
+msgid "Tiden er udløbet, så forbindelsen skal fornys. I de fleste anvender-systemer skal bruger blot gentage sin forespørgsel og så sørger anvender-systemet for at forny brugers token.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:128
+msgid "404 - Not found - Ingen besked er modtaget"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:130
+msgid "API'et svarer ikke på henvendelsen. Efterse i dokumentation om API'et findes eller ej. Hvis API er korrekt, kan det være ude af drift, så vent lidt og forsøg igen.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:4
+msgid "CPR API-deklaration"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:6
+msgid "CPR API udstiller persondata tilknyttet Grønland fra `Det Civile Personregister. <https://cpr.dk>`_"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:10
+msgid "Datakilder"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:12
+msgid "Data kommer fra CPR-kontoret en gang i døgnet i midnatstimerne og opdateres i Datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:14
+msgid "Data i CPR-registret vedligeholdes af kommuner i andre systemer. Desuden opdaterer  Indenrigsministreriet og Styrelsen for Dataeffektivisering og Effektivisering fælles oplysninger."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:16
+msgid "Adgang kræver autorisation og autenficering med :ref:`STS Secure Token Service, <sts-secure-token-service>` og det er kun muligt for myndigheder efter forudgående aftale med Den Grønlandske Digitaliseringsstyrelse og CPR-kontoret."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:20
+msgid "Datamodeller"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:22
+msgid "Datamodel CPR-data modtages i klassisk CPR-format og overføres til domænemodellen Person fra den danske grunddatamodel\":http://data.gov.dk, der også er model for CPR-data i Datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:24
+msgid "Tegnsæt i CPR-data er ISO-8859-1 (Latin 1), der er en komplet delmængde af Datafordelerens tegnsæt UTF-8, så der foretages ingen tegnkonvertering."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:26
+msgid "Klokkeslæt i CPR-data har klokkeslæt stemplet uden angivelse af tidszone eller relation til UTC. Konvertering til grunddatamodel og den grønlandske tilpasning kræver kendskab til UTC eller tidszone. Tidsstempling er i testperioden under aftestning og grundlaget kan skifte."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:30
+msgid "Kontakt API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:32
+msgid "API-Udstilling og selvdeklaration:  https://test.data.gl/cpr/person/1/rest/"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:33
+msgid "Udvidet dokumentation til API'er: https://redmine.magenta-aps.dk/projects/dafodoc/wiki/API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:34
+msgid "Betingelser for anvendelse: https://redmine.magenta-aps.dk/projects/dafodoc/wiki/betingelser"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:38
+msgid "Entiteter og felter"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:40
+msgid "Domænemodellen Person fra den danske `grunddatamodel <http://data.gov.dk>`_ dækker omfanget."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:44
+msgid "Eksempler på kald"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:46
+msgid "Disse eksempler på kald vil næsten alle give en fejl, da der kræves myndighedsadgang med STS."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:48
+msgid "https://test.data.gl/cpr/person/1/rest/"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:49
+msgid "https://test.data.gl/cpr/person/1/rest/search?cpr=2902800752"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:50
+msgid "https://test.data.gl/cpr/person/1/rest/search?firstName=zakæus"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:51
+msgid "https://test.data.gl/cpr/person/1/rest/search?lastName=Eqqarleriit&firstName=Benjamin"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:52
+msgid "https://test.data.gl/cpr/person/1/rest/04e1b9f9-cf82-4cbb-bb89-305b528ae34f"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:54
+msgid "NB! Ovenstående persondata er eksempler på hvordan kald kunne se, hvis de aktuelle data fandtes og man var blevet autoriseret til at udføre kaldene."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:58
+msgid "Fejlkoder"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/cpr-api-declarations.rst:60
+msgid "Succes-svar og fejlkoder er fælles for alle API'er i datafordeleren og oversigten findes på :ref:`API resultater. <api-results>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:4
+msgid "Grønlands Datafordeler API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:6
+msgid "Indhold"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:16
+msgid "Anvendelse af API er underlagt :ref:`betingelser for anvendelse <agreements>` af Datafordeleren og dens formidlede data. API findes på https://test.data.gl/"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:20
+msgid "API'er og deklarationer"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:22
+msgid "Generelt gælder det at:"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:24
+msgid "API'er er selvdeklarerende RESTfull API'er og de er alle af typen ``GET``."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:25
+msgid "Navngivning af URL til API følger hovedreglen: ``/ et kort registernavn (f.eks. cpr) / et versionnummer f.eks. (1) / API-type (f.eks. rest) /`` og så følger parametrene."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:26
+msgid "Et kald til roden på de enkelte API'er giver en liste over parametre, der er tilgængelige i API'et."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:27
+msgid "Uddybning af felter, navne, deres anvendelse og særlige betingelser findes hos de respektive myndigheder, der udstiller data via datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:29
+msgid "Eventuelle afvigelser og særlige forhold for Datafordeleren vil være nævnt i deklarationen."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:31
+msgid "De resulterende svarformater er beskrevet på siden om :ref:`JSON-formatet. <json-results>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:35
+msgid "Et eksempel på deklarationskald til API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:37
+msgid "Et kald som ``https://test.data.gl/cpr/person/1/rest`` giver resultat som på billedet. Opsætningen kan variere fra browser til browser."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:41
+msgid "Selvdeklarationen af et API på datafordeleren rummer disse oplysninger:"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:43
+msgid "\"metadata_url\": Adressen på metadata om API'et"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:44
+msgid "\"fetch_url\": Adressen til at hente oplysninger ved personens unikke UUID, der alene anvendes i Datafordeleren\""
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:45
+msgid "\"search_url\": Adressen til søgning på API'et"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:46
+msgid "\"declaration_url\": Web-adressen til :ref:`betingelser <agreements>` for anvendelse af API'et"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:47
+msgid "\"search_queryfields\": Oversigten over søgefelter på det aktuelle API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:48
+msgid "\"name\": Navn(ene) på de tilgængelige søgefelter"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:49
+msgid "\"type\": Datatypen der skal anvendes ved søgningen"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:51
+msgid "Uddybning af feltnavnene og deres indhold samt anvendelse er dokumenteret hos de ansvarlige myndigheder for registret. Hvor det er muligt, vil der være link til myndighedens databeskrivelse. Eventuelle særlige forhold i forbindelse med Datafordeleren vil være nævnt i deklarationen af API'et."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:55
+msgid "Søgemønstre i API-søgninger"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:57
+msgid "Søgning skrives i en parameterform som ``search?\"felt\"=\"mønster\"``"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:59
+msgid "Alle tilgængelige objekter bliver gennemsøgt for mønstret i det nævnte søgefeltnavn. Der kan anvendes forskellige sammenligninger og mønstre"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:62
+msgid "Joker"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:62
+#: ../../source/autopulled-docs/localdocs/index.rst:74
+msgid "Anvendelse"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:62
+#: ../../source/autopulled-docs/localdocs/index.rst:74
+msgid "Eksempel"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:64
+msgid "tegn"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:64
+msgid "Finder alle felter med den givne værdi (mellemrum ˽ er også et tegn)"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:64
+msgid "``fornavn=Malik`` finder alle med navn Malik - @fornavn= Malik˽@ (med mellemrum foran eller bagved) finder _ikke_ Malik"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:65
+msgid "?"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:65
+msgid "Spørgsmålstegn repræsenterer nul, et eller mange vilkårlige tegn"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:65
+msgid "``fornavn=Pa%uaq`` finder alt der begynder med pa og slutter med uaq, f.eks. Paninnguaq"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:66
+msgid "_"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:66
+msgid "Understregning repræsenterer et tegn"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:66
+msgid "``fornavn=a?e`` finder alt på tre bogstaver, starter med a og slutter med e, f.eks. Ane"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:67
+msgid "[tegnliste]"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:67
+msgid "repræsenterer et sæt (f.eks. [abc]) eller et række (f.eks. [a-g] af tegn"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:67
+msgid "``fornavn=N[a-d]v[a-d]`` finder alle med netop de bogstaver i navnet, f.eks. Naja (men Nivi findes ikke)"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:68
+msgid "[^tegnliste]"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:68
+msgid "repræsenterer et sæt eller et række af tegn som skal udelades i søgningen"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:68
+msgid "``fornavn=N[^a-d]v[^a-d]`` Finder alle uden bogstaverne a, b, c, d, f.eks. Nivi (men Naja findes ikke)"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:74
+msgid "Sammenligninger"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:76
+msgid "="
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:76
+msgid "Lighedstegn finder alle som passer med mønsteret"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:76
+msgid "``fornavn=Benjamin`` finder netop Benjamin og ikke Malik, Zakæus eller andre"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:77
+msgid "!="
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:77
+msgid "Ulighedstegn finder allesom er forskellig fra mønsteret"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:77
+msgid "``fornavn!=Zakæus`` finder f.eks. Benjamin, Malik med flere men ikke Zakæus"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:78
+msgid "&"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:78
+msgid "Ambersand kombinerer de to sammenligninger"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:78
+msgid "``fornavn=Zakæus&efternavn=Petersen`` finder netop Zakæus Petersen"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:4
+msgid "Resultater af forespørgsler"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:6
+msgid "JSON er et almindeligt tekstformat med forud-bestemte definitioner. Det er et format som er nemt for systemer at :ref:`parse` og udtrække de netop oplysninger, som brugeren skal anvende."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:8
+msgid "Resultatet af en forespørgsel er en JSON-tekst, der ser ud som følger::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:21
+msgid "\"path\": fortæller kilden til informationerne og dermed  kender man også søgetypen, der har været anvendt."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:22
+msgid "\"terms\": er link til de betingelser og regler, der gælder for data fra datafordeleren. De ses også på siden med :ref:`Betingelser. <agreements>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:23
+msgid "\"requestTimestamp\": er tidspunktet for hvornår serveren fik henvendelsen"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:24
+msgid "\"responseTimestamp\": er tidspunktet for hvornår serveren afleverede resultatet"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:25
+msgid "\"username\": er identifikationen for den anvender, som har bedt om data. Det vil være tomt, hvis brugernavn ikke er anvendt."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:26
+msgid "... Listen fortsætter med flere oplysninger om forespørgselen og her kan også findes fejlbeskeder."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:27
+msgid "\"results:\" starter resultaterne for søgningen."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:28
+msgid "... Indholdet og nøgleord vil variere efter søgningerne, der har været anvendt. Søgemulighederne er beskrevet i den fælles deklaration for API'ere på :ref:`API-deklarationer. <api-declarations>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:4
+msgid "STS Secure Token Service"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:6
+msgid "De beskyttede personfølsomme data er kun tilgængelig for godkendte og aftalte systemer! Alle brugere være kendt og de er ansvarlige for deres anvendelse af systemet. Alt aktiviteter logges i henhold til lovgivningen om personfølsomme data - Her kan du læse mere om hvordan man får adgang til aftalte data, efter at din virksomhed har lavet aftale  med den grønlandske digitaliseringsstyrelse og de aktuelle dataejere."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:15
+msgid "Introduktion til token"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:17
+msgid "I den grønlandske datafordeler https://www.data.gl skal alle tilgange udføres med SAML2-token, når der er behov for autorisation og autentifikation. Disse vejledninger skal hjælpe tredjeparter i gang med at forberede hvordan de kan anvende systemet."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:19
+msgid "Hvordan et anvender-system sættes op og stiller forespørgsler, findes beskrevet i :ref:`API forbindels <api-connection>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:21
+msgid "Sammenhængen mellem STS og brugere, profiler samt roller er beskrevet i dokumentationen :ref:`STS og hvordan datafordeleren anvender det. <sts-and-how-it-is-used>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:25
+msgid "Brugernavn og kodeord?"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:27
+msgid "En almindelig reaktion er at det er besværligt at komme på systemet med personfølsomme data. Så her er en kort beskrivelse af årsagen til sikkerhedssystemet."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:31
+msgid "Hvorfor kan jeg ikke bare få et brugernavn og et kodeord?"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:33
+msgid "Det korte svar er at brugernavn og kodeord er alt for usikkert til fortrolige data - Det er ubrugeligt!"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:34
+msgid "Det er af samme årsag som der anvendes personlige og sikker login på borgerportaler som for eksempel sullissivik.gl."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:38
+msgid "Hvad er så fordelene ved token-systemet?"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:40
+msgid "Datafordeleren samler data fra mange forskellige myndigheder. Hver enkelt af disse myndigheder har krav på at få præcise navne på hvem der har set hvilke af deres data og hvornår."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:41
+msgid "Både bruger og datansvarlig myndighed har krav til at registrering af brugeren og dennes aktivitet."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:42
+msgid "Der skal være sikkerhed for at brugeren virkelig er den rigtige levende person, som retsforfølges ved misbrug."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:43
+msgid "Misbrug af data er strafbart og med sikkerhedssystemet er der sikkerhed for at den registrerede bruger også er den som straffes ved misbrug."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:44
+msgid "Hver bruger arbejder på vegne af sin arbejdsplads. Arbejdspladsen sikrer at brugeren er berettiget til at se de fortrolige data. Systemet sikrer at arbejdspladsen har godkendt adgang."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:45
+msgid "Arbejdspladsen garanterer for at det nu også er den rigtige person som er bag brugeren på datafordeler, så hvis arbejdspladsen beviseligt misbruger brugers oplysninger, straffes arbejdspladsen og dens ledelse hårdt på baggrund af beviserne i systemet."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:46
+msgid "Rettigheder til de enkelte dele af data oprettes ikke centralt, men af  de myndigheder som har ansvaret for de enkelte data. Det er muligt at styre med sikkerhedssystemet."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:47
+msgid "Bruger forhindres i at kunne videregive sine oplysninger til andre, eller sætte brugernavn og kodeord på sin skærm, så andre kan bruge det."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/index.rst:49
+msgid "Det er kun personfølsomme data, der er beskyttet. Alle andre data er åbne for alle, der kan trække på dem uden at de skal registreres på forhånd."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:2
+msgid "STS og adgangsrettigheder"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:4
+msgid "Dette afsnit beskriver hvorledes rettigheder defineres og lagres i datafordeleren, så de kan bruges i forbindelse med udstedelse af tokens."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:6
+msgid "Afsnittet beskriver ikke de fuldstændige procedurer for hvordan rettigheder ændres via datafordelerens brugergrænseflade, da denne information vil være at finde i dokumentationen for brugergrænsefladen."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:10
+msgid "Systemroller"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:12
+msgid "Systemroller defineres af datafordelerens plugins, der skaber forbindelsen til de individuelle registre. De bruges til at alle steder hvor det er nødvendigt at have specielle rettigheder for at gøre brug af datafordelerens services."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:14
+msgid "Systemroller defineres på tre niveauer:"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:16
+msgid "Serviceniveau - Bruges til at give adgang til en hel service, f.eks. CVR-data"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:17
+msgid "Entitetsniveau – Bruges til at give adgang til enkelte dataentiteter inden for et givent register, f.eks. ejerregistreret i CVR."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:18
+msgid "Attributniveau – Bruges til at give adgang til enkelte attributter på entiteter, f.eks. objekter tilknyttet et bestemt CPR-nummer."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:20
+msgid "Derudover er det muligt at angive tilpassede systemroller, der kan bruges til at implementere rettigheder der ikke kan dækkes af ovenstående. Disse roller gives betegnelse ”Custom” i systemet. Custom-roller bruges for eksempel til at definere om en bruger i systemet er administrator eller serviceudbyder."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:22
+msgid "For hver rolletype defineres der både read-roller og admin-roller. Read-roller bruges til at give adgang til data og services. Admin-roller bruges til at give administratorer og serviceudbydere mulighed for at tildele read-roller til anvendere."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:24
+msgid "I implementeringen af hver enkelt service angives hvilke systemroller den har brug for i forbindelse med kontrol af rettigheder og logikken for hvordan systemrollerne bruges til at verificere adgangen."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:26
+msgid "Systemrollerne fødes således under implementering af plugins og services i datafordeleren og stilles derfra til rådighed for datafordelerens administrationssystem, hvor datafordelerens administratorer og serviceudbydere kan tildele dem til datafordelerens anvendere."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:28
+msgid "For overskuelighedens skyld oprettes der kun systemroller for services, hvor der er behov for rettighedskontrol. For eksempel vil services uden følsomme data ikke have systemroller, da det ikke vil være nødvendigt at kontrollere adgangen til disse services. Ligeledes vil der ikke eksistere attribut-systemroller for en adgangsbeskyttet entitet, hvis denne entitet kun kan tilgås i sin helhed.Så vil der i det tilfælde ikke være behov for kontrol på individuelle attributter."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:30
+msgid "Illustrationen herunder viser model for systemroller i datafordeleren og hvordan systemroller defineres under udvikling af et plugin til datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:36
+msgid "Områdeafgrænsning"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:38
+msgid "Områdeafgrænsning giver en service i datafordeleren mulighed for at definere en række områder som adgangen til en service kan opdeles i. Det er op til implementeringen af servicen at definere hvad områderne er, hvad de hedder, hvad de dækker og hvordan de teknisk bruges til at afgrænse forespørgsler til servicen."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:40
+msgid "Områdeafgrænsninger kan tilknyttes til brugerprofiler, når disse oprettes i datafordelerens administrationssystem. De vil begrænse anvendere der tildeles brugerprofilen til data fra de valgte områder."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:44
+msgid "Brugerprofiler"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:46
+msgid "Rettigheder i datafordeleren tildeles til anvendere via brugerprofiler. En brugerprofil dækker en række systemroller der giver adgang til deres respektive service/entitet/attribut og en eventuel liste af områdeafgrænsninger."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:48
+msgid "Brugerprofiler kan oprettes af administratorer og serviceudbydere via datafordelerens administrationssystem."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:52
+msgid "Tildeling af rettigheder"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:54
+msgid "Rettigheder til anvendelse af datafordeleren tildeles af administratorer og serviceudbydere til anvendere via datafordelerens administrationssystem."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:56
+msgid "Tildeling af rettigheder til en given anvender, der logger ind via datafordelerens identity provider eller via system-til-system certifikat vil typisk være en todelt process: Først oprettes en række brugerprofiler, der beskriver de services, data og områder, anvenderen skal have adgang til. Efterfølgende tildeles disse brugerprofiler til anvenderens brugeridentitet. Skal flere anvendere have de samme adgange, vil det være muligt at genbruge tidligere oprettede brugerprofiler, og det første trin kan springes over."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:58
+msgid "Tildeling af rettigheder til brugere der kommer fra en ekstern identity provider, følger en anden model. Her skal den eksterne identity provider først oprettes i datafordelerens administrationssystem. Derefter oprettes en række brugerprofiler, der definerer rettigheder som den eksterne provider skal kunne uddele og disse tilknyttes den oprettede provider. Denne liste af brugerprofiler vil fungere som en ”white-list” der bruges til at godkende brugerprofiler angivet i en SAML token fra den eksterne provider, så de kan blive videreført til en datafordelertoken i forbindelse med login til datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:60
+msgid "Det skal bemærkes at samme metode bruges til at tildele read- og admin-roller i administrationssystemet. Retten til at oprette brugerprofiler, der indeholder admin-roller, vil blot være afgrænset til brugere med den specielle rolle, der gør dem til administratorer."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-access-rights.rst:62
+msgid "Illustration herunder viser datamodel for bruger/profil/rolle system igennem administrationssystemet og oversættelse af brugerprofiler til systemroller og områdeafgrænsninger."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:4
+msgid "STS og hvordan datafordeleren anvender det"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:6
+msgid "Her finder du et overblik over :ref:`Security Token Service (STS) <security-token-service>` og bruger/profil/rolle systemet for Grønlands Datafordeler."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:8
+msgid "Dokumentet beskriver datamodellen der ligger til grund for adgangsbegrænsning og login i datafordeleren samt hvordan adgangsdata opdateres og hvordan de anvendes ved udstedelse af datafordelertokens fra STS’en. :ref:`Ordlisten <wordlist>` kan være en hjælp, hvis det er ukendt teknik."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:10
+msgid "Når man arbejder med personfølsomme data og lignende, skal autorisation (hvad må anvender) og autentifikation (hvem er anvender) være korrekt."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:14
+msgid "Introduktion"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:16
+msgid "Dette dokument giver et overblik over STS og bruger/profil/rolle systemet for den Grønlands Datafordeler. Dokumentet beskriver datamodellen der ligger til grund for adgangsbegrænsning og login i datafordeleren samt hvordan adgangsdata opdateres og hvordan de anvendes ved udstedelse af datafordelertokens fra STS’en."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:18
+msgid "De enkelte komponenter og processer er illustreret nedenfor."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:22
+msgid "Klientcertifikat er en forudsætning for nogle typer forespørgsler"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:24
+msgid "Nogle typer af forespørgsler kræver ikke certifikater for login, f.eks. en liste over alle byer og bygder. Hvis du er i tvivl om du skal godkendes, kan du prøve at stille en forespørgsel og resultatet vil være svaret eller en afvisning."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:26
+msgid "Klientcertifikat kræves for at kunne spørge efter udvalgte fortrolige oplysninger. Klientcertifikater er bevis for at man nu også er den som man giver sig ud for at være. Certifikater udstedes af autoriteter, som står inden for at personen eller virksomheden nu også er de rigtige. Du kan se mere i ordlisten om :ref:`Certificat <certificat>` og :ref:`Certificat-typer. <certificat-typer>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:28
+msgid "Hvordan man får et certifikat, installerer det og anvender det, er meget forskelligt. Den opgave ligger uden for denne vejledning."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:32
+msgid "Adgang til datafordeleren via STS"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:34
+msgid "STS’ens opgave er at udstede SAML2 tokens der identificerer en bruger og angiver hvilke adgange brugeren har til den ønskede service. Forløbet vil typisk være som følger (og illustreret nedenfor):"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:38
+msgid "1. En anvender laver en forespørgsel til datafordeleren"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:40
+msgid "*TODO* EKSEMPEL PÅ FIKTIV PERSONSØGNING MED CERTIFIKAT"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:44
+msgid "2. Datafordeleren undersøger om bruger allerede har en sikker session"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:46
+msgid "Datafordeleren ser at brugeren ikke har nogen aktiv session og at den ønskede service kræver specielle rettigheder. Den viderestiller derfor brugeren til STS’en for at få udstedt en datafordelertoken."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:48
+msgid "Hvis bruger har en aktiv session, sendes brugeren direkte til trin 8."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:52
+msgid "3. Brugeren identificeres nu ved hjælp af sit certifikat"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:54
+msgid "Afhængigt af brugerens adgangsmetode sker der nu en af tre ting, afhængigt af brugerens type:"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:58
+msgid "Hvis brugeren har et FOCES klientcertifikat identificerer STS’en brugeren via dette."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:60
+msgid "Hvis brugeren er registreret i datafordelerens egen brugerdatabase, viderestilles til datafordelerens egen identity provider, der ved korrekt login udsteder en SAML token, der identificerer brugeren og sender denne tilbage til STS’en."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:62
+msgid "Hvis brugeren er tilknyttet en organisation, der har en godkendt SAML identity provider registreret i datafordeleren, viderestilles brugeren til denne for at logge ind."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:64
+msgid "Ved korrekt login returnerer identity provideren en token der identificerer brugeren og indeholder claims, der angiver brugerens brugerprofiler."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:68
+msgid "4. STS’en identificerer nu hvilke brugerprofiler, der matcher den pågældende bruger"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:70
+msgid "Afhængigt af om brugeren er identificeret via en ekstern identity provider, sker dette på en af to måder:"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:73
+msgid "Hvis der identificeres via en ekstern identity provider, slår datafordeleren op hvilke brugerprofiler den eksterne identity provider har lov til at udstede. Det bliver brugt som en white-list for de brugerprofiler, der blev angivet i tokenet fra identity provideren. Tilladte brugerprofiler videreføres og bruges til at udstede datafordelertoken med."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:75
+msgid "Ved lokal IdP login eller FOCES login slår datafordeleren op hvilke brugerprofiler der er tilknyttet til den identificerede bruger / systemadgangsbruger og bruger disse til at udstede datafordelertoken med."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:79
+msgid "5. STS’en udsteder en datafordelertoken, der identificerer brugeren"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:81
+msgid "Token angiver hvilke brugerprofiler vedkommende har, og sender denne token tilbage til datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:85
+msgid "6. Datafordeleren verificerer at tokenet kommer fra STS’en"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:87
+msgid "Datafordeleren bruger de angivne brugerprofiler til at afgøre om anvenderens forespørgsel kan gennemføres."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:91
+msgid "7. Datafordeleren veksler profiler til roller"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:93
+msgid "Datafordeleren laver nu et opslag der veksler brugerprofilerne til systemroller og områdeafgrænsninger."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:97
+msgid "8. Brugeren forsynes med en session"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:99
+msgid "Sessionen kan kan bruges til yderligere opslag til den samme service inden for et kortere tidsrum."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:103
+msgid "9. Efter autentificering og autorisation udføres forespørgslen"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:105
+msgid "Den modtagne forespørgsel bliver nu håndteret i datafordeleren, logget med brugers oplysninger og anvenderen modtager svar eller en afvisning."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:109
+msgid "Scenariet"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:111
+msgid "Ovenstående beskriver et scenarie der svarer til OIO Identity-based Web Services2, sådan som det er fastlagt i kontrakten."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:113
+msgid "Ved system-til-system adgang vil der dog ofte være tale om at anvendersystemet selv beder STS’en om at udstedeen token før der rettes henvendelse til datafordeleren. En illustration af komponenterne i STSløsningen og hvordan de interagerer i ovenstående scenarie, kan ses i Illustrationen herunder"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:117
+msgid "Overblik over STS-komponenter"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:119
+msgid "Numrene henviser til numrene i afsnittet ovenfor."
+msgstr ""
+
