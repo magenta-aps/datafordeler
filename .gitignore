@@ -1,6 +1,5 @@
 /.idea
 /.java_sphinx_cache
-/.vagrant
 /gen_doc.log
 
 *.retry
