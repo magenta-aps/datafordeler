@@ -9,7 +9,7 @@ For specific documentation about the documentation, see [This README](docs/READM
 ## Usage:
 To clone this repository recursively, please run:
 
-     git clone --recursive -j8 -b feature/19886_documentation git@github.com:magenta-aps/datafordeler.git
+     git clone --recursive -b feature/19886_documentation git@github.com:magenta-aps/datafordeler.git
 
 Or using older versions of git:
 

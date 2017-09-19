@@ -98,7 +98,7 @@ SPHINX_SOURCE=docs/source
 title "Setup"
 function submodule_setup
 {
-    SUBMODULE_FOLDERS=$(git submodule | sed "s/^ //g" | cut -f2 -d' ')
+    SUBMODULE_FOLDERS=$(git submodule | sed "s/^ //g" | cut -f2 -d' ' | grep -v "vagrant")
     SUBMODULE_INCLUDES=$(echo "$SUBMODULE_FOLDERS" | sed "s/^/-I /g" | tr '\n' ' ')
 }
 task "Acquiring submodule information..." submodule_setup

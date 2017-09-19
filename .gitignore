@@ -3,5 +3,7 @@
 /.vagrant
 /gen_doc.log
 
+*.retry
+
 # MacOS system files
 .DS_Store

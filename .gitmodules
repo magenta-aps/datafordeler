@@ -31,3 +31,9 @@
 [submodule "log"]
 	path = log
 	url = git@github.com:magenta-aps/datafordeler-log.git
+[submodule "vagrant"]
+	path = vagrant
+	url = git@github.com:magenta-aps/vagrant.git
+[submodule "ansible/roles/vim"]
+	path = ansible/roles/vim
+	url = git@github.com:magenta-aps/ansible-role-vim.git
