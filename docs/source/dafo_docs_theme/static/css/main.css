@@ -57,6 +57,16 @@ td {
     border-bottom: solid 1px #eee;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    padding: 0;
+    margin: 2rem 0 1rem;
+}
+
 
 /* Layout */
 
@@ -107,26 +117,40 @@ td {
 .navigationwrapper {
     padding: 0 0 2rem;
     background-color: #ddd;
+    font-size: smaller;
 }
 
 .navigationwrapper ul {
     list-style: none;
 }
 
-.navigationwrapper ul li > ul {
-    padding: 0 0 1rem;
-    background-color: rgba(255,255,255,0.1);
-}
-
 .navigationwrapper li {
     padding: 0;
 }
 
+.navbar-toc > ul {
+    border-bottom: solid 1px #fff;
+    margin-bottom: 1rem;
+    padding: 0;
+    font-size: medium;
+}
+
+.navbar-toc ul > li > ul {
+    font-size: smaller;
+    padding: 0;
+    background-color: rgba(255,255,255,.5);
+}
+
+.navbar-toc li > ul > li {
+    border-top: solid 1px #fff;
+}
+
 .navigationwrapper h3,
 .navigationwrapper h4 {
-    background-color: rgba(0,0,0,0.1);
-    padding: 0.5rem 1rem;
+    color: #999;
+    padding: .5rem 1rem 0;
     font-weight: normal;
+    margin: 0;
 }
 
 .navigationwrapper a,
@@ -136,20 +160,78 @@ td {
     text-decoration: none;
     color: #1c5a88;
     font-weight: normal;
-    padding: .25rem 1rem;
-}
-
-.navigationwrapper h3 > a,
-.navigationwrapper h4 > a {
-    padding: 0;
+    padding: .5rem 1rem;
 }
 
 .navigationwrapper a:hover,
 .navigationwrapper a:active {
+    color: #000;
+}
+
+.navbar-toc a,
+.navbar-toc a:link,
+.navbar-toc a:visited {
+    display: block;
+    text-decoration: none;
+    color: #1c5a88;
+    font-weight: normal;
+    padding: .5rem 1rem;
+}
+
+.navbar-toc a:hover,
+.navbar-toc a:active {
     background-color: #1c5a88;
     color: #fff;
     border: none;
 }
+
+.navigationwrapper a[href="#"] {
+    position: relative;
+    margin-top: 1rem;
+}
+
+.navigationwrapper a[href="#"]::before {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 1rem;
+    width: 1rem;
+    background-color: #0e2c44;
+    transform: rotate(45deg);
+    top: .5rem;
+    left: -.75rem;
+}
+
+.navigationwrapper li > ul > li > ul > li > a {
+    padding-left: 2rem !important;
+}
+
+.relationswrapper {
+    margin: 1rem 0;
+}
+
+.nexttopic,
+.prevtopic {
+    background-color: rgba(255,255,255,.25);
+    margin: .25rem 0;
+}
+
+.nexttopic {
+    text-align: right;
+}
+
+.nexttopic::after {
+    content: '▶';
+    font-size: smaller;
+}
+
+.prevtopic::before {
+    content: '◀';
+    font-size: smaller;
+}
+
+
+/* Related bar */
 
 .related {
     padding: .5rem 1rem;
@@ -313,33 +395,63 @@ td {
 
 /* Search */
 
-.search {
+#searchbox {
+    margin: .5rem 0;
+}
+
+#searchbox .search {
     display: flex;
     flex-flow: row nowrap;
     align-items: stretch;
     padding: 0.5rem 1rem;
 }
 
-.search input[type="text"] {
-    padding: .25rem .5rem;
+#searchbox .search > div:first-child {
+    flex: 1 0 auto;
+}
+
+#searchbox input[type="text"] {
+    padding: .5rem;
+    border: none;
     border-radius: .25rem;
     width: 100%;
 }
 
-.search input[type="submit"] {
+#searchbox input[type="submit"] {
     border: none;
     background-color: #1c5a88;
     border-radius: .25rem;
-    padding: .25rem .5rem;
+    padding: .5rem;
     color: #fff;
-    font-size: medium;
+    font-size: smaller;
     cursor: pointer;
     margin: 0 0 0 .25rem;
 }
 
-.search input[type="submit"]:hover,
-.search input[type="submit"]:active {
+#searchbox input[type="submit"]:hover,
+#searchbox input[type="submit"]:active {
     background-color: #0e2c44;
+}
+
+.searchresultpage #searchbox {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    max-width: 30rem;
+}
+
+.searchresultpage #searchbox input[type="text"] {
+    background-color: #ddd;
+    flex: 1 0 auto;
+    width: auto;
+}
+
+ul.search {
+    list-style: none;
+}
+
+ul.search > li {
+    margin: 0 0 1rem;
 }
 
 
@@ -363,6 +475,22 @@ a.headerlink {
     margin: 1rem 0;
 }
 
+.document .toctree-wrapper {
+    border-top: dashed 1px #ddd;
+    border-bottom: dashed 1px #ddd;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+.document .toctree-wrapper .caption {
+    font-weight: bold;
+    margin: 0 0 .5rem;
+}
+
+.document .toctree-wrapper ul {
+    list-style: none;
+}
+
 .document .toctree-wrapper a {
     border: none;
 }
@@ -370,6 +498,11 @@ a.headerlink {
 .document .toctree-wrapper a:hover,
 .document .toctree-wrapper a:active {
     border-bottom: solid 1px #79b6e5;
+}
+
+.topless {
+    margin: 0;
+    padding: 0;
 }
 
 .frontpage-image {

@@ -4,6 +4,7 @@ Grønlands Datafordeler API
 ==========================
 
 .. toctree::
+   :caption: Indhold
    :maxdepth: 1
 
    api-declarations
