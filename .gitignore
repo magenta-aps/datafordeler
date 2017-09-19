@@ -2,6 +2,7 @@
 /.java_sphinx_cache
 /.vagrant
 /gen_doc.log
+/test.log
 
 # MacOS system files
 .DS_Store
