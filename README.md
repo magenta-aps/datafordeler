@@ -9,13 +9,12 @@ For specific documentation about the documentation, see [This README](docs/READM
 ## Usage:
 To clone this repository recursively, please run:
 
-     git clone --recursive -b feature/19886_documentation git@github.com:magenta-aps/datafordeler.git
+     git clone --recursive git@github.com:magenta-aps/datafordeler.git
 
 Or using older versions of git:
 
      git clone git@github.com:magenta-aps/datafordeler.git
      cd datafordeler
-     git checkout feature/19886_documentation
      git submodule update --init --recursive
      
 On Windows (inside `git-on-windows`), the clone command may have to become:
@@ -26,4 +25,6 @@ On Windows (inside `git-on-windows`), the clone command may have to become:
 For information on the Vagrantfile, and Ansible, please check:
 [This repository](https://github.com/magenta-aps/vagrant-ansible-example)
 
-*Note:* When using vagrant with Virtualbox, you'll be prompted to choose a bridged network interface. Select the interface that is being used to connect to the internet.
+*Note: When using vagrant with Virtualbox, you'll be prompted to choose a 
+bridged network interface. Select the interface that is being used to connect
+to the internet.*
