@@ -455,6 +455,32 @@ ul.search > li {
 }
 
 
+/* Index */
+
+.genindex-jumpbox {
+    color: #ddd;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+}
+
+.indextable > ul {
+    list-style: none;
+}
+
+.document .indextable a,
+.document .genindex-jumpbox a {
+    border: none;
+}
+
+.document .indextable a:hover,
+.document .indextable a:active,
+.document .genindex-jumpbox a:hover,
+.document .genindex-jumpbox a:active {
+    border-bottom: solid 1px #79b6e5;
+}
+
+
 /* Misc. classes */
 
 a.headerlink {
@@ -581,6 +607,11 @@ a.headerlink {
         justify-content: space-between;
     }
 
+    .indextable > ul {
+        columns: auto 2;
+        overflow: hidden;
+    }
+
 
     /* Make layout a little different on front page */
 
@@ -588,7 +619,7 @@ a.headerlink {
         display: block;
         background: url('../img/img-by-frank-thomsen-renard.jpg') no-repeat center top transparent;
         background-size: cover;
-        padding: 6rem 10rem;
+        padding: 8rem 10rem;
         margin-right: -3rem;
         margin-left: -3rem;
         margin-top: -2rem;
@@ -597,7 +628,9 @@ a.headerlink {
     }
 
     .document .frontpage-logo {
-        max-width: 30rem;   
+        max-width: 30rem;
+        padding: 1rem;
+        background: radial-gradient(rgba(0,0,0,.5), rgba(0,0,0,.1), rgba(0,0,0,0)); 
     }
 
 }
