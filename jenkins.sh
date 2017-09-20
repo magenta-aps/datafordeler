@@ -22,5 +22,5 @@ title "Listing dockers"
 docker ps -a
 
 title "Starting docker + building"
-docker run --rm -v $PWD:/srv/ ubuntu:xenial bash -c "cd /srv/ && ./jenkins/inside_docker.sh"
+docker run --rm -v $PWD:/srv/ maven:latest bash -c "cd /srv/ && ./jenkins/inside_docker.sh"
 
