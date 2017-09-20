@@ -166,6 +166,13 @@ task "Generating html documentation..." generate_html_documentation
 
 function generate_pdf_documentation
 {
+    PDFLATEX=$(which pdflatex)
+    if [ -z "$PDFLATEX" ]; then
+        echoerr -e "${RED}\c"
+        echoerr "Error: Cannot generate pdf files, without pdflatex."
+        echoerr -e "${NORMAL}\c"
+        exit 1
+    fi
     mkdir -p $OUTPUT_FOLDER
     sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
 }
