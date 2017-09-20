@@ -1,5 +1,7 @@
-DAFO STS
-########
+.. _sts-services:
+
+Services i DAFO STS
+############################################
 
 DAFO STS er en Secure Token Service der genererer tokens til brug i
 den grønlandske datafordeler.
