@@ -10,6 +10,7 @@ Her kan du læse mere om hvordan man får adgang til aftalte data, efter at din 
 har lavet aftale  med den grønlandske digitaliseringsstyrelse og de aktuelle dataejere.
 
 .. toctree::
+   :maxdepth: 2
 
    sts-access-rights
    sts-usage
