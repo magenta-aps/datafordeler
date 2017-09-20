@@ -105,6 +105,7 @@ task "Acquiring submodule information..." submodule_setup
 
 function cleanup_old_documentation
 {
+    rm -rf $SPHINX_SOURCE/autogen-docs
     rm -rf $SPHINX_SOURCE/autogen-api
     rm -rf .java_sphinx_cache
 }
@@ -115,6 +116,7 @@ function generate_java_api_doc
 {
     EMPTY_FOLDER=$(mktemp -d)
     mkdir -p $SPHINX_SOURCE/autogen-api
+    cp $SPHINX_SOURCE/javadoc.in $SPHINX_SOURCE/autogen-api/javadoc.rst
     javasphinx-apidoc -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api -v \
         $SUBMODULE_INCLUDES $EMPTY_FOLDER
 }
@@ -136,7 +138,7 @@ function pull_in_module_docs
             mkdir -p $DOC_FOLDER
 
             AUTOPULLED_MODULES+="\n   ${FOLDER}/index.rst"
-            cp $FOLDER_PATH/* $DOC_FOLDER/
+            cp -r $FOLDER_PATH/* $DOC_FOLDER/
 
             echo "Found doc/ subfolder inside '$FOLDER_PATH'"
         else
@@ -164,8 +166,14 @@ task "Generating html documentation..." generate_html_documentation
 
 function generate_pdf_documentation
 {
+    PDFLATEX=$(which pdflatex)
+    if [ -z "$PDFLATEX" ]; then
+        echoerr -e "${RED}\c"
+        echoerr "Error: Cannot generate pdf files, without pdflatex."
+        echoerr -e "${NORMAL}\c"
+        exit 1
+    fi
     mkdir -p $OUTPUT_FOLDER
     sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
 }
-# TODO: Reenable pdf documentation
-# task "Generating pdf documentation..." generate_pdf_documentation
+task "Generating pdf documentation..." generate_pdf_documentation
