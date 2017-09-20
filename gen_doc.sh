@@ -136,7 +136,7 @@ function pull_in_module_docs
             mkdir -p $DOC_FOLDER
 
             AUTOPULLED_MODULES+="\n   ${FOLDER}/index.rst"
-            cp $FOLDER_PATH/* $DOC_FOLDER/
+            cp -r $FOLDER_PATH/* $DOC_FOLDER/
 
             echo "Found doc/ subfolder inside '$FOLDER_PATH'"
         else
