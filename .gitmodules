@@ -7,15 +7,9 @@
 [submodule "plugin/cvr"]
 	path = plugin/cvr
 	url = git@github.com:magenta-aps/datafordeler-plugin-cvr.git
-[submodule "plugindemo"]
-	path = plugindemo
-	url = git@github.com:magenta-aps/datafordeler-plugindemo.git
 [submodule "plugin/gladdrreg"]
 	path = plugin/gladdrreg
 	url = git@github.com:magenta-aps/datafordeler-plugin-gladdrreg.git
-[submodule "registerdemo"]
-	path = registerdemo
-	url = git@github.com:magenta-aps/datafordeler-registerdemo.git
 [submodule "admin"]
 	path = admin
 	url = git@github.com:magenta-aps/datafordeler-admin.git
