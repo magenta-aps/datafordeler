@@ -54,27 +54,9 @@ Uddybning af feltnavnene og deres indhold samt anvendelse er dokumenteret hos de
 Søgemønstre i API-søgninger
 ---------------------------
 
-Søgning skrives i en parameterform som ``search?"felt"="mønster"``
+Søgning skrives i en parameterform som ``search?felt=værdi``
 
-Alle tilgængelige objekter bliver gennemsøgt for mønstret i det nævnte søgefeltnavn. Der kan anvendes forskellige sammenligninger og mønstre 
+Alle tilgængelige objekter bliver gennemsøgt for værdien i det nævnte søgefeltnavn. 
 
-================= ========================================================================== =======================================================================================================================
-Joker             Anvendelse                                                                 Eksempel
-================= ========================================================================== =======================================================================================================================
-tegn              Finder alle felter med den givne værdi (mellemrum ˽ er også et tegn)       ``fornavn=Malik`` finder alle med navn Malik - @fornavn= Malik˽@ (med mellemrum foran eller bagved) finder _ikke_ Malik
-?                 Spørgsmålstegn repræsenterer nul, et eller mange vilkårlige tegn           ``fornavn=Pa%uaq`` finder alt der begynder med pa og slutter med uaq, f.eks. Paninnguaq
-_                 Understregning repræsenterer et tegn                                       ``fornavn=a?e`` finder alt på tre bogstaver, starter med a og slutter med e, f.eks. Ane
-[tegnliste]       repræsenterer et sæt (f.eks. [abc]) eller et række (f.eks. [a-g] af tegn   ``fornavn=N[a-d]v[a-d]`` finder alle med netop de bogstaver i navnet, f.eks. Naja (men Nivi findes ikke)
-[^tegnliste]      repræsenterer et sæt eller et række af tegn som skal udelades i søgningen  ``fornavn=N[^a-d]v[^a-d]`` Finder alle uden bogstaverne a, b, c, d, f.eks. Nivi (men Naja findes ikke)
-================= ========================================================================== =======================================================================================================================
-
-
-
-================= ========================================================================== =====================================================================================================================
-Sammenligninger   Anvendelse                                                                 Eksempel
-================= ========================================================================== =====================================================================================================================
-=                 Lighedstegn finder alle som passer med mønsteret                           ``fornavn=Benjamin`` finder netop Benjamin og ikke Malik, Zakæus eller andre
-!=                Ulighedstegn finder allesom er forskellig fra mønsteret                    ``fornavn!=Zakæus`` finder f.eks. Benjamin, Malik med flere men ikke Zakæus
-&                 Ambersand kombinerer de to sammenligninger                                 ``fornavn=Zakæus&efternavn=Petersen`` finder netop Zakæus Petersen
-================= ========================================================================== =====================================================================================================================
+Asterisk (stjerne) repræsenterer nul, et eller mange vilkårlige tegn; ``search?navn=Pa*aq`` finder alt der begynder med pa og ender med aq, f.eks. Paninnguaq. Asterisk kan anbringes først, midt i, eller sidst i søgeordet.
 
