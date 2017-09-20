@@ -105,6 +105,7 @@ task "Acquiring submodule information..." submodule_setup
 
 function cleanup_old_documentation
 {
+    rm -rf $SPHINX_SOURCE/autogen-docs
     rm -rf $SPHINX_SOURCE/autogen-api
     rm -rf .java_sphinx_cache
 }
@@ -115,6 +116,7 @@ function generate_java_api_doc
 {
     EMPTY_FOLDER=$(mktemp -d)
     mkdir -p $SPHINX_SOURCE/autogen-api
+    cp $SPHINX_SOURCE/javadoc.in $SPHINX_SOURCE/autogen-api/javadoc.rst
     javasphinx-apidoc -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api -v \
         $SUBMODULE_INCLUDES $EMPTY_FOLDER
 }
@@ -167,5 +169,4 @@ function generate_pdf_documentation
     mkdir -p $OUTPUT_FOLDER
     sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
 }
-# TODO: Reenable pdf documentation
-# task "Generating pdf documentation..." generate_pdf_documentation
+task "Generating pdf documentation..." generate_pdf_documentation

@@ -119,7 +119,7 @@ htmlhelp_basename = 'ddddoc'
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
-    # 'papersize': 'letterpaper',
+    'papersize': 'a4paper',
 
     # The font size ('10pt', '11pt' or '12pt').
     #
@@ -127,7 +127,12 @@ latex_elements = {
 
     # Additional stuff for the LaTeX preamble.
     #
-    # 'preamble': '',
+    'preamble': r"""
+    \usepackage[utf8]{inputenc}
+    \DeclareUnicodeCharacter{2FD}{\_}
+    \DeclareUnicodeCharacter{33A}{\_}
+    \DeclareUnicodeCharacter{2011}{-}
+    """,
 
     # Latex figure (float) alignment
     #
@@ -138,18 +143,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ddd.tex', u'Datafordeler Documentation',
-     u'ddd', 'manual'),
-]
-
-
-# -- Options for manual page output ---------------------------------------
-
-# One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'ddd', u'ddd Documentation',
-     [author], 1)
+    (master_doc, 'main.tex', u'Datafordeler Documentation',
+     author, 'manual'),
 ]
 
 
@@ -159,12 +154,10 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ddd', u'ddd Documentation',
-     author, 'ddd', 'One line description of project.',
+    (master_doc, 'main', u'Datafordeler Documentation',
+     author, 'Datafordeler', 'Datafordeleren giver myndigheder, virksomheder og borgere nem og sikker adgang til data.',
      'Miscellaneous'),
 ]
-
-
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
