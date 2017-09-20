@@ -1,1 +1,8 @@
 /.idea
+/.java_sphinx_cache
+/gen_doc.log
+
+*.retry
+
+# MacOS system files
+.DS_Store

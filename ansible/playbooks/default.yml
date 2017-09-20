@@ -1,0 +1,24 @@
+# Default playbook.
+#
+# Should configure a development setup to the point where a server or
+# equivalent can be started with a single command.
+#
+# For Django projects, this means configured to a point where all there's left
+# to do after running `vagrant ssh`, is running: `python manage.py runserver`.
+---
+
+- hosts: all
+
+  remote_user: vagrant
+  # become: true
+  become_method: sudo
+  become_user: root
+
+  roles:
+  - vim
+  - git
+  - python
+  - pip_dependencies
+  - activate_virtualenv
+
+...
