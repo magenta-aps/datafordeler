@@ -37,13 +37,16 @@ It should display the documentation site.
 
 ## Translations
 
-You should be able to find language files for Greenlandic (kl), Danish (da), and English (en) i the `/docs/source/locales` folder.
+The documentation site(s) is translated in the Sphinx build process. 
+More info at: http://www.sphinx-doc.org/en/stable/intl.html
+
+You should be able to find language files for Greenlandic (kl), Danish (da), and English (en) i the `source/locales` folder.
 
 **If you're a translater,** you'll want to edit all the `.po` files in the directory containing your language files. When done, just run another build with your translation as an argument. 
 
 Say you want to translate the docs from Danish to Greenlandic (kl):
 
-* Find the language files for Greenlandic in `/docs/source/locales/kl/LC_MESSAGES`
+* Find the language files for Greenlandic in `source/locales/kl/LC_MESSAGES`
 * Open each `.po` file and add the corresponding Greenlandic paragraphs in each empty `msgstr`. Say for example:
 
     #: ../../../index.rst:12
@@ -54,7 +57,7 @@ Say you want to translate the docs from Danish to Greenlandic (kl):
 
     ./gen_doc.sh kl
 
-* If all goes well, a copy of the site with Greenlandic translations will be available at `/docs/output/html/kl/`
+* If all goes well, a copy of the site with Greenlandic translations will be available at `output/html/kl/`
 
 
 ### Creating translation templates

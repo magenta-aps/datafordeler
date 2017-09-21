@@ -195,13 +195,13 @@
               {%- if last_updated %}
                 {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
               {%- endif %}
-              Created by <a href="http://magenta.dk/">Magenta ApS</a>
+              {% trans %} Created by <a href="http://magenta.dk/">Magenta ApS</a>{% endtrans %}
               {%- if show_sphinx %}
                 {% trans sphinx_version=sphinx_version|e %}using <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
               {%- endif %}
             </p>
             <p>
-              Check us out on <a href="https://github.com/magenta-aps/datafordeler">Github</a>
+              {% trans %}Check us out on <a href="https://github.com/magenta-aps/datafordeler">Github</a>
             </p>
           </footer>
         {%- endblock %}

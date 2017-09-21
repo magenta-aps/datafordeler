@@ -89,7 +89,7 @@ echo "-----------------------------"  >> $LOG
 title "Deploy a development server at 0.0.0.0:8000"
 function start_server
 {
-    cd docs/output/html
+    cd docs/output/html/da/
     python -m SimpleHTTPServer
 }
 task "Serving docs on development server (0.0.0.0:8000)..." start_server

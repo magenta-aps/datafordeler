@@ -58,7 +58,7 @@ msgstr ""
 
 #: ../../../autopulled-docs/index.rst:2
 msgid "Module documentation"
-msgstr ""
+msgstr "Dokumentation for moduler"
 
 #: ../../../autopulled-docs/localdocs/api-connection.rst:4
 msgid "API forbindelse"
