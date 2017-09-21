@@ -73,6 +73,11 @@
               {%- include "searchbox.html" %}
             {%- endblock %}
           {%- endif %}
+          <ul class="langselect">
+            <li><a class="lang lang-kl" href="/kl">Kalaallisut</a></li>
+            <li><a class="lang lang-da" href="/da">Dansk</a></li>
+            <li><a class="lang lang-en" href="/en">English</a></li>
+          </ul>
         </div>
       </div>
     {%- endif %}
@@ -195,13 +200,13 @@
               {%- if last_updated %}
                 {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
               {%- endif %}
-              {% trans %} Created by <a href="http://magenta.dk/">Magenta ApS</a>{% endtrans %}
+              {% trans %}Created by <a href="http://magenta.dk/">Magenta ApS</a>{% endtrans %}
               {%- if show_sphinx %}
                 {% trans sphinx_version=sphinx_version|e %}using <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
               {%- endif %}
             </p>
             <p>
-              {% trans %}Check us out on <a href="https://github.com/magenta-aps/datafordeler">Github</a>
+              {% trans %}Check us out on <a href="https://github.com/magenta-aps/datafordeler">Github</a>{% endtrans %}
             </p>
           </footer>
         {%- endblock %}
