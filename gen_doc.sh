@@ -186,9 +186,9 @@ function generate_release_zip
     ls $TMP/html
     CWD=$PWD
     cd $TMP
-    zip -r doc_release.zip html
+    zip -r docs.zip html
     cd $CWD
-    cp $TMP/doc_release.zip .
+    cp $TMP/docs.zip .
 }
 task "Generating release zip documentation..." generate_release_zip
 
