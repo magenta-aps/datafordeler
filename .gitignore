@@ -1,7 +1,7 @@
 /.idea
 /.java_sphinx_cache
 /gen_doc.log
-/doc_release.zip
+/docs.zip
 *.retry
 *.swp
 

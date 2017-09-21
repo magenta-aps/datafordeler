@@ -117,7 +117,7 @@ function generate_java_api_doc
     EMPTY_FOLDER=$(mktemp -d)
     mkdir -p $SPHINX_SOURCE/autogen-api
     cp $SPHINX_SOURCE/javadoc.in $SPHINX_SOURCE/autogen-api/javadoc.rst
-    javasphinx-apidoc -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api -v \
+    javasphinx-apidoc -f -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api -v \
         $SUBMODULE_INCLUDES $EMPTY_FOLDER
 }
 task "Generating java-api documentation..." generate_java_api_doc
