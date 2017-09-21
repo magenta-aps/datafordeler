@@ -93,7 +93,7 @@ echo "-----------------------------"  >> $LOG
 
 # Output folder
 OUTPUT_FOLDER=docs/output/
-SPHINX_SOURCE=docs/source
+SPHINX_SOURCE=docs/source/
 
 title "Setup"
 function submodule_setup
