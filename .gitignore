@@ -1,8 +1,9 @@
 /.idea
 /.java_sphinx_cache
 /gen_doc.log
-
+/doc_release.zip
 *.retry
+*.swp
 
 # MacOS system files
 .DS_Store

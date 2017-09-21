@@ -177,3 +177,19 @@ function generate_pdf_documentation
     sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
 }
 task "Generating pdf documentation..." generate_pdf_documentation
+
+function generate_release_zip
+{
+    TMP=$(mktemp -d)
+    cp -r $OUTPUT_FOLDER/html/ $TMP
+    cp -r $OUTPUT_FOLDER/latex/latex/main.pdf $TMP/html/
+    ls $TMP/html
+    CWD=$PWD
+    cd $TMP
+    zip -r doc_release.zip html
+    cd $CWD
+    cp $TMP/doc_release.zip .
+}
+task "Generating release zip documentation..." generate_release_zip
+
+
