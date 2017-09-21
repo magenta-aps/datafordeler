@@ -37,7 +37,7 @@ It should display the documentation site.
 
 ## Translations
 
-The documentation site(s) is translated in the Sphinx build process. 
+The documentation site is translated in the Sphinx build process. 
 More info at: http://www.sphinx-doc.org/en/stable/intl.html
 
 You should be able to find language files for Greenlandic (kl), Danish (da), and English (en) i the `source/locales` folder.
