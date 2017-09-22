@@ -182,7 +182,7 @@ function generate_release_zip
 {
     TMP=$(mktemp -d)
     cp -r $OUTPUT_FOLDER/html/ $TMP
-    cp -r $OUTPUT_FOLDER/latex/latex/main.pdf $TMP/html/
+    cp -r $OUTPUT_FOLDER/latex/main.pdf $TMP/html/
     ls $TMP/html
     CWD=$PWD
     cd $TMP
