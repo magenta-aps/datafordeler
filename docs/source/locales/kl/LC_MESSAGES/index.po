@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../../../index.rst:10
 msgid "Dokumentation"
-msgstr ""
+msgstr "Uppernarsaaneq"
 
 #: ../../../index.rst:12
 msgid "Velkommen til den offentlige dokumentation for Grønlands Datafordeler."
