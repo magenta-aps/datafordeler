@@ -164,8 +164,8 @@ function generate_html_documentation
     for lang in "${langs[@]}"
     do
        subtitle "Generating: $lang"
-       mkdir -p $OUTPUT_FOLDER/$lang/
-       sphinx-build -D language="$lang" -b html $SPHINX_SOURCE $OUTPUT_FOLDER/$lang/
+       mkdir -p $OUTPUT_FOLDER/html/$lang/
+       sphinx-build -D language="$lang" -b html $SPHINX_SOURCE $OUTPUT_FOLDER/html/$lang/
     done
 }
 task "Generating html documentation..." generate_html_documentation
@@ -180,13 +180,20 @@ function generate_pdf_documentation
         exit 1
     fi
 
-    mkdir -p $OUTPUT_FOLDER/$lang-latex/
-    sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
-    # for lang in "${langs[@]}"
-    # do
-    #    subtitle "Generating: $lang"
-    #    mkdir -p $OUTPUT_FOLDER/$lang-latex/
-    #    sphinx-build -M latexpdf -D language="$lang" $SPHINX_SOURCE $OUTPUT_FOLDER/$lang-latex/
-    # done
+    for lang in "${langs[@]}"
+    do
+        subtitle "Generating: $lang"
+        mkdir -p $OUTPUT_FOLDER/latex/$lang/
+        sphinx-build -b latex -D language="$lang" $SPHINX_SOURCE $OUTPUT_FOLDER/latex/$lang/
+    done
+    
+    CWD=$PWD
+    for lang in "${langs[@]}"
+    do
+        subtitle "Making: $lang"
+        cd $OUTPUT_FOLDER/latex/$lang/
+        make
+        cd $CWD
+    done
 }
 task "Generating pdf documentation..." generate_pdf_documentation
