@@ -74,9 +74,9 @@
             {%- endblock %}
           {%- endif %}
           <ul class="langselect">
-            <li><a class="lang lang-kl" href="/kl">Kalaallisut</a></li>
-            <li><a class="lang lang-da" href="/da">Dansk</a></li>
-            <li><a class="lang lang-en" href="/en">English</a></li>
+            <li><a class="lang lang-da" href="/da/" title="Dansk">Dansk</a></li>
+            <li><a class="lang lang-kl" href="/kl/" title="Kalaallisut">Kalaallisut</a></li>
+            <li><a class="lang lang-en" href="/en/" title="English">English</a></li>
           </ul>
         </div>
       </div>
@@ -200,17 +200,18 @@
               {%- if last_updated %}
                 {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
               {%- endif %}
-              {% trans %}Created by <a href="http://magenta.dk/">Magenta ApS</a>{% endtrans %}
+              {% trans %}Bygget af <a href="http://magenta.dk/">Magenta ApS</a>{% endtrans %}
               {%- if show_sphinx %}
-                {% trans sphinx_version=sphinx_version|e %}using <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+                {% trans sphinx_version=sphinx_version|e %}med <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
               {%- endif %}
             </p>
             <p>
-              {% trans %}Check us out on <a href="https://github.com/magenta-aps/datafordeler">Github</a>{% endtrans %}
+              {% trans %}Se koden på <a href="https://github.com/magenta-aps/datafordeler">Github</a>{% endtrans %}
             </p>
           </footer>
         {%- endblock %}
       </div>
     </div>
+    <script type="text/javascript" src="{{ pathto('_static/js/main.js', 1) }}"></script>
   </body>
 </html>
