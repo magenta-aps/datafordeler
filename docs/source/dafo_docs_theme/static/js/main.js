@@ -16,16 +16,14 @@ if (currentLangUrl === '/da/') {
     currentLangLink.classList.add('active');
 }
 
-function jumpToLang(ev,lang) {
-    ev.preventDefault();
-    var urlPath = location.pathname.slice(4);
-    console.log('urlPath');
-    console.log(urlPath);
-    urlPath = '/' + lang + '/' + urlPath;
-    location.href = location.host + urlPath;
-}
-
 // When clicking language picker, redirect to same page with different translation
-daLangLink.addEventListener("click", function(event){ jumpToLang(event,'da') });
-klLangLink.addEventListener("click", function(event){ jumpToLang(event,'kl') });
-enLangLink.addEventListener("click", function(event){ jumpToLang(event,'en') });
+function fixTranslationLink(el, language) {
+    var locPath = location.pathname 
+    var path = locPath.slice(4);
+    if (locPath.slice(0,1) === '/' || path === '') {
+        el.href = '/' + language + '/' + path; 
+    }
+}
+fixTranslationLink(daLangLink, 'da');
+fixTranslationLink(klLangLink, 'kl');
+fixTranslationLink(enLangLink, 'en');
