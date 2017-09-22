@@ -200,13 +200,13 @@
               {%- if last_updated %}
                 {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
               {%- endif %}
-              {% trans %}Bygget af <a href="http://magenta.dk/">Magenta ApS</a>{% endtrans %}
+              {% trans %}Created by{% endtrans %} <a href="http://magenta.dk/">Magenta ApS</a>
               {%- if show_sphinx %}
-                {% trans sphinx_version=sphinx_version|e %}med <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+                {% trans sphinx_version=sphinx_version|e %}using <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
               {%- endif %}
             </p>
             <p>
-              {% trans %}Se koden på <a href="https://github.com/magenta-aps/datafordeler">Github</a>{% endtrans %}
+              {% trans %}Check us out on{% endtrans %} <a href="https://github.com/magenta-aps/datafordeler">Github</a>
             </p>
           </footer>
         {%- endblock %}
