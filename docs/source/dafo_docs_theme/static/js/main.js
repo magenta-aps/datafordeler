@@ -4,7 +4,7 @@ var currentLangLink,
     klLangLink = document.querySelector(".lang-kl"),
     enLangLink = document.querySelector(".lang-en"),
     currentLangUrl = location.pathname.slice(0,4);
-    
+
 if (currentLangUrl === '/da/') {
     currentLangLink = daLangLink;
     currentLangLink.classList.add('active');
@@ -19,6 +19,8 @@ if (currentLangUrl === '/da/') {
 function jumpToLang(ev,lang) {
     ev.preventDefault();
     var urlPath = location.pathname.slice(4);
+    console.log('urlPath');
+    console.log(urlPath);
     urlPath = '/' + lang + '/' + urlPath;
     location.href = location.host + urlPath;
 }
