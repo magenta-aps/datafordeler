@@ -7,11 +7,13 @@ import java.util.Collection;
  */
 public interface DafoUserData {
 
-    public String getUsername();
+    String getUsername();
 
-    public int getAccessAccountId();
+    int getAccessAccountId();
 
-    public String getOnBehalfOf();
+    String getOnBehalfOf();
 
-    public Collection<String> getUserProfiles();
+    Collection<String> getUserProfiles();
+
+    String getNameQualifier();
 }

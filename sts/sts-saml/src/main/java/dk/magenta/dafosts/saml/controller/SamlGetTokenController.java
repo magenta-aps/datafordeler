@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import static dk.magenta.dafosts.saml.controller.SSOProxyController.SSO_RETURN_URL;
+import static dk.magenta.dafosts.saml.controller.SSOProxyController.SSO_TOKEN_RETURN_PARAM;
 
 @Controller
 @RequestMapping("/by_saml_sso")
@@ -35,12 +39,35 @@ public class SamlGetTokenController {
      * @throws Exception
      */
     @RequestMapping("/get_token_for_service")
-    public ModelAndView get_token_for_service(@SAMLUser DafoSAMLUserDetails user) throws Exception {
+    public ModelAndView get_token_for_service(
+            @DafoSAMLUser DafoSAMLUserDetails user, HttpServletRequest request, HttpSession httpSession
+    ) throws Exception {
+        LogRequestWrapper logRequestWrapper = new LogRequestWrapper(logger, request, user.getUsername());
 
         ModelAndView getTokenView = new ModelAndView("by_saml_sso/get_token");
+
+        Assertion assertion = dafoTokenGenerator.buildAssertion(user);
+        logRequestWrapper.logIssuedToken(assertion);
+        dafoTokenGenerator.signAssertion(assertion);
         String xmlString = dafoTokenGenerator.getTokenXml(user);
+
         getTokenView.addObject("userId", user.getUsername());
-        getTokenView.addObject("compressed_and_encoded_token", dafoTokenGenerator.deflateAndEncode(xmlString));
+        getTokenView.addObject(
+                "compressed_and_encoded_token",
+                dafoTokenGenerator.deflateAndEncode(xmlString)
+        );
+        // If session contains info from sso_proxy landing page, add them to the model.
+        String returnURL = (String)httpSession.getAttribute(SSO_RETURN_URL);
+        if(returnURL != null) {
+            httpSession.removeAttribute(SSO_RETURN_URL);
+            getTokenView.addObject("returnURL", returnURL);
+            String returnParam = (String)httpSession.getAttribute(SSO_TOKEN_RETURN_PARAM);
+            if(returnParam == null) {
+                httpSession.removeAttribute(SSO_TOKEN_RETURN_PARAM);
+                returnParam = "token";
+            }
+            getTokenView.addObject("returnParam", returnParam);
+        }
 
         return getTokenView;
     }

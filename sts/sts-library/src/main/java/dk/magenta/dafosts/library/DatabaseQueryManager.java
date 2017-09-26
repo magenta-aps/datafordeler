@@ -1,14 +1,14 @@
 package dk.magenta.dafosts.library;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.*;
 
 import dk.magenta.dafosts.library.users.DafoCertificateUserDetails;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-
-import java.util.List;
 
 public class DatabaseQueryManager {
 
@@ -21,8 +21,8 @@ public class DatabaseQueryManager {
     public static int IDENTIFICATION_MODE_SINGLE_USER = 1;
     public static int IDENTIFICATION_MODE_ON_BEHALF_OF = 2;
 
-
-
+    // If updating this, also update django/dafousers/model_constants.py in the DAFO-admin project.
+    public static final String IDP_UPDATE_TIMESTAMP_NAME = "LAST_IDP_UPDATE";
 
     public DatabaseQueryManager(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -38,6 +38,25 @@ public class DatabaseQueryManager {
         while(rows.next()) {
             result.add(rows.getString(1));
             System.out.println(rows.getString(1));
+        }
+
+        return result;
+    }
+
+    public String getUserIdentificationByAccountId(int accountId) {
+        String result = null;
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                String.join("\n",
+                    "SELECT [dafousers_useridentification].[user_id] ",
+                        "FROM [dafousers_useridentification] INNER JOIN [dafousers_accessaccount] ON (",
+                        "    [dafousers_useridentification].[id] = [dafousers_accessaccount].[identified_user_id]",
+                        ")",
+                        "WHERE [dafousers_accessaccount].[id] = ?"
+                ),
+                new Object[] {accountId}
+        );
+        if(rows.next()) {
+            result = rows.getString(1);
         }
 
         return result;
@@ -157,11 +176,117 @@ public class DatabaseQueryManager {
         );
         if(rows.next()) {
             result = rows.getByte(1);
-        } else {
-            result = IDENTIFICATION_MODE_INVALID;
         }
 
         return result;
     }
 
+    public int getAccountIdByEntityId(String entityID) {
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                "SELECT [dafousers_accessaccount].[id] " +
+                        "FROM [dafousers_accessaccount] " +
+                        "INNER JOIN [dafousers_identityprovideraccount] ON (" +
+                        "   [dafousers_accessaccount].[id] = " +
+                        "       [dafousers_identityprovideraccount].[accessaccount_ptr_id]" +
+                        ") " +
+                        "WHERE [dafousers_identityprovideraccount].[idp_entity_id] = ?",
+                new Object[] {entityID}
+        );
+        if(rows.next()) {
+            return rows.getInt(1);
+        }
+
+        return INVALID_USER_ID;
+    }
+
+
+    public Map<String, LocalDateTime> getIdPUpdateMap() {
+        Map<String, LocalDateTime> results = new HashMap<>();
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                    "SELECT " +
+                            "   [dafousers_identityprovideraccount].[updated], " +
+                            "   [dafousers_identityprovideraccount].[idp_entity_id] " +
+                            "FROM " +
+                            "   [dafousers_identityprovideraccount]" +
+                            "   INNER JOIN" +
+                            "   [dafousers_accessaccount] ON (" +
+                            "       [dafousers_identityprovideraccount].[accessaccount_ptr_id] =" +
+                            "        [dafousers_accessaccount].[id]" +
+                            "   )"
+        );
+        while(rows.next()) {
+            results.put(rows.getString(2), rows.getTimestamp(1).toLocalDateTime());
+        }
+
+        return results;
+    }
+
+    public DafoIdPData getIdPDataByName(String identityId) {
+        DafoIdPData result = null;
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                "SELECT " +
+                        "   [dafousers_accessaccount].[id], " +
+                        "   [dafousers_accessaccount].[status], " +
+                        "   [dafousers_identityprovideraccount].[updated], " +
+                        "   [dafousers_identityprovideraccount].[name], " +
+                        "   [dafousers_identityprovideraccount].[idp_entity_id], " +
+                        "   [dafousers_identityprovideraccount].[idp_type], " +
+                        "   [dafousers_identityprovideraccount].[metadata_xml], " +
+                        "   [dafousers_identityprovideraccount].[userprofile_attribute], " +
+                        "   [dafousers_identityprovideraccount].[userprofile_attribute_format], " +
+                        "   [dafousers_identityprovideraccount].[userprofile_adjustment_filter_type], " +
+                        "   [dafousers_identityprovideraccount].[userprofile_adjustment_filter_value] " +
+                        "FROM " +
+                        "   [dafousers_identityprovideraccount]" +
+                        "   INNER JOIN" +
+                        "   [dafousers_accessaccount] ON (" +
+                        "       [dafousers_identityprovideraccount].[accessaccount_ptr_id] =" +
+                        "        [dafousers_accessaccount].[id]" +
+                        "   )" +
+                        "WHERE" +
+                        "   [dafousers_identityprovideraccount].[idp_entity_id] = ?",
+                new Object[] {identityId}
+        );
+        if(rows.next()) {
+            result = new DafoIdPData(
+                    rows.getInt(1),
+                    rows.getInt(2),
+                    rows.getTimestamp(3).toLocalDateTime(),
+                    rows.getString(4),
+                    rows.getString(5),
+                    rows.getInt(6),
+                    rows.getString(7),
+                    rows.getString(8),
+                    rows.getInt(9),
+                    rows.getInt(10),
+                    rows.getString(11)
+            );
+        }
+
+        return result;
+    }
+
+    public LocalDateTime getLastIdPUpdate() {
+        LocalDateTime result = null;
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+        "SELECT " +
+                "[dafousers_updatetimestamps].[updated] " +
+                "FROM" +
+                "   [dafousers_updatetimestamps]" +
+                "WHERE" +
+                "   [dafousers_updatetimestamps].[name] = ?",
+                new Object[] { IDP_UPDATE_TIMESTAMP_NAME }
+        );
+        if(rows.next()) {
+            Timestamp tmp = rows.getTimestamp(1);
+            if(tmp != null) {
+                result = tmp.toLocalDateTime();
+            }
+        }
+        if(result == null) {
+            // Provide a reasonable static default far in the past
+            result = LocalDateTime.of(2000, 1,1,1,1,1);
+        }
+        return result;
+    }
 }

@@ -2,36 +2,44 @@ package dk.magenta.dafosts.saml.config;
 
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.SAMLConfigurerBean;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLSAMLAuthenticationProvider;
+import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLSAMLContextProviderImpl;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.override.DSLWebSSOProfileConsumerHoKImpl;
+import com.github.ulisesbocchio.spring.boot.security.saml.resource.KeystoreFactory;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.library.TokenGeneratorProperties;
+import dk.magenta.dafosts.saml.DafoStsBySamlConfiguration;
+import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetailsService;
+import org.opensaml.saml2.metadata.provider.MetadataProviderException;
+import org.opensaml.util.resource.ResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.saml.context.SAMLContextProvider;
+import org.springframework.security.saml.context.SAMLContextProviderImpl;
+import org.springframework.security.saml.key.JKSKeyManager;
+import org.springframework.security.saml.key.KeyManager;
 import org.springframework.security.saml.log.SAMLDefaultLogger;
+import org.springframework.security.saml.storage.EmptyStorageFactory;
+import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
+
+import java.security.KeyStore;
+import java.util.Collections;
+import java.util.Map;
 
 
 /**
  * Configures SAML SSO Login below the /by_saml_sso/ URL.
  */
 @Configuration
-@EnableConfigurationProperties(TokenGeneratorProperties.class)
 public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${dafo.sts.identity-id}")
-    String identityId;
-
-    @Value("${dafo.sts.dafo-idp-metadata-location}")
-    String idpMetadataLocation;
-
-    @Value("${dafo.sts.dafo-sts-root-url}")
-    String spRootURL;
-
+    private DafoStsBySamlConfiguration config;
     private TokenGeneratorProperties tokenGeneratorProperties;
     private DafoWebSSOProfileConsumer dafoWebSSOProfileConsumer;
 
@@ -40,8 +48,9 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void setTokenGeneratorProperties(TokenGeneratorProperties tokenGeneratorProperties) {
-        this.tokenGeneratorProperties = tokenGeneratorProperties;
+    public void setConfigProperties(DafoStsBySamlConfiguration config) {
+        this.config = config;
+        this.tokenGeneratorProperties = config.getTokenGeneratorProperties();
     }
 
     @Bean
@@ -60,8 +69,48 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public KeyManager keyManager() {
+        DefaultResourceLoader loader = new DefaultResourceLoader();
+        KeystoreFactory keystoreFactory = new KeystoreFactory(loader);
+        String publicKeyPEMLocation = tokenGeneratorProperties.getPublicKeyPemLocation();
+        String privateKeyDERLocation = tokenGeneratorProperties.getPrivateKeyDerLocation();
+        // This uses the same defaults as defined in ...spring.boot.security.saml.properties.KeyManagerProperties
+        String defaultKey = "localhost";
+        String keyPassword = "";
+        Map<String, String> keyPasswords = Collections.singletonMap("localhost", keyPassword);
+        KeyStore keyStore = keystoreFactory.loadKeystore(
+                publicKeyPEMLocation, privateKeyDERLocation, defaultKey, ""
+        );
+        return new JKSKeyManager(keyStore, keyPasswords, defaultKey);
+    }
+
+    @Bean
+    @Qualifier("metadata")
+    public DafoCachingMetadataManager metadata(
+            KeyManager keyManager,
+            DatabaseQueryManager queryManager,
+            DafoSAMLUserDetailsService samlUserDetailsService
+    ) throws MetadataProviderException, ResourceException {
+        DafoCachingMetadataManager manager = new DafoCachingMetadataManager();
+
+        manager.initialize(config.getIdpMetadataLocation(), queryManager);
+
+        samlUserDetailsService.setMetadataManager(manager);
+        return manager;
+    }
+
+    @Bean
     SAMLConfigurerBean saml() {
         return new SAMLConfigurerBean();
+    }
+
+    @Bean
+    SAMLContextProvider samlContextProvider() {
+        DSLSAMLContextProviderImpl provider = new DSLSAMLContextProviderImpl();
+        // Disable in-response-to checking
+        // TODO: Make this configurable
+        provider.setStorageFactory(new EmptyStorageFactory());
+        return provider;
     }
 
     @Bean
@@ -83,8 +132,8 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .apply(saml())
                     .serviceProvider()
                         .metadataGenerator() //(1)
-                        .entityId(this.identityId)
-                        .entityBaseURL(spRootURL)
+                        .entityId(config.getIdentityId())
+                        .entityBaseURL(config.getServerRootURL())
                 .and()
                     .sso() //(2)
                     .defaultSuccessURL("/by_saml_sso/get_token")
@@ -93,17 +142,8 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logout() //(3)
                     .defaultTargetURL("/")
                 .and()
-                    .metadataManager() //(4)
-                    .metadataLocations(this.idpMetadataLocation)
-                    .refreshCheckInterval(0)
-                .and()
                     .extendedMetadata() //(5)
-                    // TODO: Remember to change this back
                     .idpDiscoveryEnabled(true)
-                .and()
-                    .keyManager() //(6)
-                    .privateKeyDERLocation(tokenGeneratorProperties.getPrivateKeyDerLocation())
-                    .publicKeyPEMLocation(tokenGeneratorProperties.getPublicKeyPemLocation())
                 .and()
             .http()
                 .authorizeRequests()

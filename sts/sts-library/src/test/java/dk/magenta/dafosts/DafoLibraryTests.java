@@ -57,6 +57,11 @@ public class DafoLibraryTests {
             public String getOnBehalfOf() {
                 return null;
             }
+
+            @Override
+            public String getNameQualifier() {
+                return "<none>";
+            }
         });
     }
 

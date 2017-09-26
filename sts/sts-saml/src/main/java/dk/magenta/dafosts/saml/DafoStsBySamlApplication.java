@@ -14,8 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication
 @EnableSAMLSSO
-@EnableConfigurationProperties(TokenGeneratorProperties.class)
 @ComponentScan(basePackages = {"dk.magenta.dafosts.saml", "dk.magenta.dafosts.library"})
+@EnableConfigurationProperties(DafoStsBySamlConfiguration.class)
 public class DafoStsBySamlApplication {
 
 	/**

@@ -18,5 +18,25 @@
     </select>
     <input type="submit" value="Initiate SSO"/>
 </form>
+<div th:if="${preselected} != null" th:text="${preselected}" id="preselected" style="display: none;"></div>
+<script type="text/javascript"><!--
+(function() {
+    var preselected = document.getElementById("preselected"),
+        select = document.getElementsByTagName("select").item(0),
+        doSubmit = false;
+    if(preselected) {
+        for(var i=0; i<select.options.length;i++) {
+            if(select.options[i].value == preselected.innerHTML) {
+                select.selectedIndex = i;
+                doSubmit = true;
+                break;
+            }
+        }
+        if(doSubmit) {
+            select.form.submit();
+        }
+    }
+})();
+//--></script>
 </body>
 </html>
