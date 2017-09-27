@@ -24,7 +24,7 @@ public class DafoMetadataProvider extends AbstractMetadataProvider {
     // These values should correspond to the values used in django/dafousers/model_constants.py in the DAFO-admin
     // project.
     public static final int USERPROFILE_FORMAT_MULTIVALUE = 1;
-    public static final int USERPROFILE_FORMAT_COMMASEPARATED = 1;
+    public static final int USERPROFILE_FORMAT_COMMASEPARATED = 2;
 
     public static final int USERPROFILE_FILTER_NONE = 1;
     public static final int USERPROFILE_FILTER_REMOVE_PREFIX = 2;
