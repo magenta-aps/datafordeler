@@ -28,6 +28,3 @@
 [submodule "ansible/roles/vim"]
 	path = ansible/roles/vim
 	url = git@github.com:magenta-aps/ansible-role-vim.git
-[submodule "engine"]
-	path = engine
-	url = git@github.com:magenta-aps/datafordeler-engine.git
