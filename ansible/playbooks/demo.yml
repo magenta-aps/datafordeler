@@ -21,6 +21,7 @@
   - git
   - python
   - pip_dependencies
+  - texlive
   - activate_virtualenv
   - demo
 
