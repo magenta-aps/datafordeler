@@ -1,30 +1,33 @@
 [submodule "performance/monitor"]
 	path = performance/monitor
-	url = git@github.com:magenta-aps/datafordeler-performance-monitor.git
+	url = https://github.com/magenta-aps/datafordeler-performance-monitor.git
 [submodule "plugin/cpr"]
 	path = plugin/cpr
-	url = git@github.com:magenta-aps/datafordeler-plugin-cpr.git
+	url = https://github.com/magenta-aps/datafordeler-plugin-cpr.git
 [submodule "plugin/cvr"]
 	path = plugin/cvr
-	url = git@github.com:magenta-aps/datafordeler-plugin-cvr.git
+	url = https://github.com/magenta-aps/datafordeler-plugin-cvr.git
 [submodule "plugin/gladdrreg"]
 	path = plugin/gladdrreg
-	url = git@github.com:magenta-aps/datafordeler-plugin-gladdrreg.git
+	url = https://github.com/magenta-aps/datafordeler-plugin-gladdrreg.git
 [submodule "admin"]
 	path = admin
-	url = git@github.com:magenta-aps/datafordeler-admin.git
+	url = https://github.com/magenta-aps/datafordeler-admin.git
 [submodule "core"]
 	path = core
 	url = https://github.com/magenta-aps/datafordeler-core.git
 [submodule "sts"]
 	path = sts
-	url = git@github.com:magenta-aps/datafordeler-sts.git
+	url = https://github.com/magenta-aps/datafordeler-sts.git
 [submodule "log"]
 	path = log
-	url = git@github.com:magenta-aps/datafordeler-log.git
+	url = https://github.com/magenta-aps/datafordeler-log.git
 [submodule "vagrant"]
 	path = vagrant
-	url = git@github.com:magenta-aps/vagrant.git
+	url = https://github.com/magenta-aps/vagrant.git
 [submodule "ansible/roles/vim"]
 	path = ansible/roles/vim
-	url = git@github.com:magenta-aps/ansible-role-vim.git
+	url = https://github.com/magenta-aps/ansible-role-vim.git
+[submodule "plugin/prisme"]
+	path = plugin/prisme
+	url = https://github.com/magenta-aps/datafordeler-plugin-prisme
