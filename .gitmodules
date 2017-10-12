@@ -30,4 +30,4 @@
 	url = https://github.com/magenta-aps/ansible-role-vim.git
 [submodule "plugin/prisme"]
 	path = plugin/prisme
-	url = https://github.com/magenta-aps/datafordeler-plugin-prisme
+	url = https://github.com/magenta-aps/datafordeler-plugin-prisme.git
