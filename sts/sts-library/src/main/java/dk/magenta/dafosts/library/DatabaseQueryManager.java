@@ -212,7 +212,10 @@ public class DatabaseQueryManager {
                             "   [dafousers_accessaccount] ON (" +
                             "       [dafousers_identityprovideraccount].[accessaccount_ptr_id] =" +
                             "        [dafousers_accessaccount].[id]" +
-                            "   )"
+                            "   )" +
+                            "WHERE " +
+                            "   [dafousers_accessaccount].[status] = ?",
+                new Object[] {ACCESS_ACCOUNT_STATUS_ACTIVE}
         );
         while(rows.next()) {
             results.put(rows.getString(2), rows.getTimestamp(1).toLocalDateTime());
