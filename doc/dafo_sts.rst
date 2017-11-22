@@ -92,9 +92,7 @@ Der findes følgende services:
     med enten HTTP POST eller HTTP GET.
     Det er også muligt at anvende service ved at angive brugernavn
     og password med
-    `HTTP Basic Authentification
-      <https://en.wikipedia.org/wiki/Basic_access_authentication>`_.
-
+    `HTTP Basic Authentification <https://en.wikipedia.org/wiki/Basic_access_authentication>`_.
 
   **Output**:
     En base64-encoded og deflated SAML2 token udstedt af STS'en.
