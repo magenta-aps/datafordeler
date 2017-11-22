@@ -1,0 +1,22 @@
+{#
+    dafo_docs_theme/relations.html
+    ~~~~~~~~~~~~~~~~~~~
+
+    Sphinx sidebar template: relation links created by Magenta ApS.
+
+    :license: GPL-3.0
+#}
+<div class="relationswrapper">
+    {%- if prev %}
+        <h4>{{ _('Previous topic') }}</h4>
+        <a href="{{ prev.link|e }}" title="{{ _('previous chapter') }}" class="prevtopic">
+            {{ prev.title }}
+        </a>
+    {%- endif %}
+    {%- if next %}
+        <h4>{{ _('Next topic') }}</h4>
+        <a href="{{ next.link|e }}" title="{{ _('next chapter') }}" class="nexttopic">
+            {{ next.title }}
+        </a>
+    {%- endif %}
+</div>

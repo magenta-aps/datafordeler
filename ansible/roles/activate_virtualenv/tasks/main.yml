@@ -1,0 +1,17 @@
+---
+
+  - name: List pip packages
+    shell: bash -c 'source /home/vagrant/venv/bin/activate; pip list'
+    register: result
+
+  - name: Print pip packages
+    debug:
+      var: result
+      verbosity: 2
+
+  - name: Install .bash_profile
+    copy:
+      src: bash_profile
+      dest: /home/vagrant/.bash_profile
+
+...

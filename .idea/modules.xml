@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/core/datafordeler-core.iml" filepath="$PROJECT_DIR$/core/datafordeler-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/engine/datafordeler-engine.iml" filepath="$PROJECT_DIR$/engine/datafordeler-engine.iml" />
-    </modules>
-  </component>
-</project>

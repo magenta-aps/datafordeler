@@ -1,27 +1,33 @@
+[submodule "performance/monitor"]
+	path = performance/monitor
+	url = https://github.com/magenta-aps/datafordeler-performance-monitor.git
+[submodule "plugin/cpr"]
+	path = plugin/cpr
+	url = https://github.com/magenta-aps/datafordeler-plugin-cpr.git
+[submodule "plugin/cvr"]
+	path = plugin/cvr
+	url = https://github.com/magenta-aps/datafordeler-plugin-cvr.git
+[submodule "plugin/gladdrreg"]
+	path = plugin/gladdrreg
+	url = https://github.com/magenta-aps/datafordeler-plugin-gladdrreg.git
+[submodule "admin"]
+	path = admin
+	url = https://github.com/magenta-aps/datafordeler-admin.git
 [submodule "core"]
 	path = core
 	url = https://github.com/magenta-aps/datafordeler-core.git
-	branch = master
-[submodule "engine"]
-	path = engine
-	url = https://github.com/magenta-aps/datafordeler-engine.git
-	branch = master
 [submodule "sts"]
 	path = sts
 	url = https://github.com/magenta-aps/datafordeler-sts.git
 [submodule "log"]
 	path = log
 	url = https://github.com/magenta-aps/datafordeler-log.git
-[submodule "admin"]
-	path = admin
-	url = https://github.com/magenta-aps/datafordeler-admin.git
-[submodule "plugins/GladdregPlugin"]
-	path = plugins/GladdregPlugin
-	url = https://github.com/magenta-aps/datafordeler-plugin-gladdrreg.git
-
-[submodule "plugins/CvrPlugin"]
-	path = plugins/CvrPlugin
-	url = https://github.com/magenta-aps/datafordeler-plugin-cvr.git
-[submodule "plugins/CprPlugin"]
-	path = plugins/CprPlugin
-	url = https://github.com/magenta-aps/datafordeler-plugin-cpr.git
+[submodule "vagrant"]
+	path = vagrant
+	url = https://github.com/magenta-aps/vagrant.git
+[submodule "ansible/roles/vim"]
+	path = ansible/roles/vim
+	url = https://github.com/magenta-aps/ansible-role-vim.git
+[submodule "plugin/prisme"]
+	path = plugin/prisme
+	url = https://github.com/magenta-aps/datafordeler-plugin-prisme.git
