@@ -88,7 +88,13 @@ Der findes følgende services:
       Admin.
 
     Servicen kan anvendes enten ved at angive ``username`` og
-    ``password`` eller ved at angive en valid ``token``.
+    ``password`` via HTTP POST eller ved at angive en valid ``token``
+    med enten HTTP POST eller HTTP GET.
+    Det er også muligt at anvende service ved at angive brugernavn
+    og password med
+    `HTTP Basic Authentification
+      <https://en.wikipedia.org/wiki/Basic_access_authentication>`_.
+
 
   **Output**:
     En base64-encoded og deflated SAML2 token udstedt af STS'en.
