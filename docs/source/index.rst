@@ -29,6 +29,7 @@ Indholdsfortegnelse
    autopulled-docs/index
    autogen-api/javadoc
    wordlist
+   autopulled-codes/index
 
 .. only:: html
 
