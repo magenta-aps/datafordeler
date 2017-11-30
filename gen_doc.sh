@@ -93,7 +93,7 @@ echo "-----------------------------"  >> $LOG
 
 # Output folder
 OUTPUT_FOLDER=docs/output/
-SPHINX_SOURCE=docs/source
+SPHINX_SOURCE=docs/source/
 
 title "Setup"
 function submodule_setup
@@ -117,7 +117,7 @@ function generate_java_api_doc
     EMPTY_FOLDER=$(mktemp -d)
     mkdir -p $SPHINX_SOURCE/autogen-api
     cp $SPHINX_SOURCE/javadoc.in $SPHINX_SOURCE/autogen-api/javadoc.rst
-    javasphinx-apidoc -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api -v \
+    javasphinx-apidoc -f -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api -v \
         $SUBMODULE_INCLUDES $EMPTY_FOLDER
 }
 task "Generating java-api documentation..." generate_java_api_doc
@@ -197,3 +197,19 @@ function generate_pdf_documentation
     done
 }
 task "Generating pdf documentation..." generate_pdf_documentation
+
+function generate_release_zip
+{
+    TMP=$(mktemp -d)
+    cp -r $OUTPUT_FOLDER/html/ $TMP
+    cp -r $OUTPUT_FOLDER/latex/main.pdf $TMP/html/
+    ls $TMP/html
+    CWD=$PWD
+    cd $TMP
+    zip -r docs.zip html
+    cd $CWD
+    cp $TMP/docs.zip .
+}
+task "Generating release zip documentation..." generate_release_zip
+
+
