@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:58
+msgid "ListChecksumTest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:65
+msgid "Created by lars on 03-04-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:68
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:70
+msgid "port"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:76
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:78
+msgid "after"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:84
+msgid "before"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:90
+msgid "listAllChecksumsTest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/ListChecksumTest.rst:96
+msgid "listChecksumsByTimestampTest"
+msgstr ""
+

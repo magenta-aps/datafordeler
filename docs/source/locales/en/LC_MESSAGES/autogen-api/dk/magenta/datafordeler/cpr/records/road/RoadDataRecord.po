@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:14
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:52
+msgid "RoadDataRecord"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:21
+msgid "Created by lars on 22-06-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:24
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:26
+msgid "RECORDTYPE_ROAD"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:32
+msgid "RECORDTYPE_ROADCITY"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:38
+msgid "RECORDTYPE_ROADMEMO"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:44
+msgid "RECORDTYPE_ROADPOSTCODE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:50
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:58
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:60
+msgid "createEffect"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:66
+msgid "createEmptyBaseData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:72
+msgid "getMunicipalityCode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:78
+msgid "getRegistrationTimestamps"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/road/RoadDataRecord.rst:84
+msgid "getRoadCode"
+msgstr ""
+

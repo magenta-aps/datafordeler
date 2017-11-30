@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:22
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:54
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:60
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:66
+msgid "CompanyEntity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:29
+msgid "Created by lars on 16-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:32
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:34
+msgid "DB_FIELD_CVR"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:40
+msgid "IO_FIELD_CVR"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:46
+msgid "schema"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:52
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:72
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:74
+msgid "createEmptyRegistration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:80
+msgid "generateUUID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:86
+msgid "getCvrNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/company/CompanyEntity.rst:92
+msgid "setCvrNumber"
+msgstr ""
+

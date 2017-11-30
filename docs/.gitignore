@@ -2,3 +2,4 @@ source/autogen-api
 source/autopulled-docs
 source/autopulled-codes
 output/
+.doctree

@@ -1,0 +1,57 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autopulled-docs/core/file-handling.rst:2
+msgid "Filhåndtering"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/file-handling.rst:4
+msgid ""
+"Data fordeleren tilbyder grundlæggende funktionalitet til filhåndtering. "
+"Hver nat klokken to foretages et udtræk fra databasen, og de vises på::"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/file-handling.rst:10
+msgid ""
+"Alle datatyper fra alle plugins gemmes automatisk. Det er muligt at "
+"begrænse rettighederne, så udtræk ikke er tilgængelige for alle brugere. "
+"Udtræk gemmes i følgende formater:"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/file-handling.rst:14
+msgid "JSON"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/file-handling.rst:15
+msgid "XML"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/file-handling.rst:16
+msgid "CSV, eller kommasepareret liste."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/file-handling.rst:17
+msgid "TSV, eller tabsepareret liste."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/file-handling.rst:19
+msgid "Vi gemmer indtil videre kun det seneste udtræk."
+msgstr ""
+

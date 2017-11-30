@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:14
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:26
+msgid "CvrRecord"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:21
+msgid ""
+"Created by lars on 26-06-17. A CVR record is the object representation of"
+" a node in our input data, holding at least some bitemporality, and (in "
+"subclasses) some data that take effect within this bitemporality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:24
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:32
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:34
+msgid "compareTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:39
+msgid ""
+"For sorting purposes; we implement the Comparable interface, so we should"
+" provide a comparison method. Here, we sort CvrRecord objects by "
+"registrationFrom, with nulls first"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:42
+msgid "getLastUpdated"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:48
+msgid "getRegistrationFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:54
+msgid "getRegistrationTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:60
+msgid "getValidFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:66
+msgid "getValidTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:72
+msgid "getValidity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:78
+msgid "setLastUpdated"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:84
+msgid "setRegistrationTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:90
+msgid "setValidity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:96
+msgid "sortIntoGroups"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CvrRecord.rst:101
+msgid ""
+"Given a Collection of CvrRecord objects, group them into buckets that "
+"share bitemporality. That way, we can treat all records in a bucket the "
+"same way, thus we won’t have to look up the appropriate "
+"Registration/Effect more than once"
+msgstr ""
+
