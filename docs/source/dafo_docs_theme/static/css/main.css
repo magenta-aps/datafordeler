@@ -95,7 +95,7 @@ h6 {
 .document a,
 .document a:link,
 .document a:visited {
-    color: #79b6e5;
+    color: #5899CC;
     text-decoration: none;
     border-bottom: solid 1px #79b6e5;
 }
@@ -129,7 +129,6 @@ h6 {
 }
 
 .navbar-toc > ul {
-    border-bottom: solid 1px #fff;
     margin-bottom: 1rem;
     padding: 0;
     font-size: medium;
@@ -142,7 +141,7 @@ h6 {
 }
 
 .navbar-toc li > ul > li {
-    border-top: solid 1px #fff;
+    border-top: solid 1px #ddd;
 }
 
 .navigationwrapper h3,
@@ -529,6 +528,43 @@ a.headerlink {
 .topless {
     margin: 0;
     padding: 0;
+}
+
+.langselect {
+    padding: .5rem 1rem;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.langselect li {
+    display: inline-block;
+    padding: 0 .25rem 0 0;
+}
+
+.lang {
+    background: url('../img/gl.png') no-repeat center center rgba(255,255,255,.25);
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    text-indent: -1000em;
+    padding: 0 !important;
+    border-radius: .25rem;
+}
+
+.lang:hover,
+.lang:active,
+.lang.active {
+    background-color: #fff;
+}
+
+.lang-da {
+    background-image: url('../img/dk.png');
+}
+
+.lang-en {
+    background-image: url('../img/us.png');
 }
 
 .frontpage-image {

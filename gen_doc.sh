@@ -156,11 +156,17 @@ function template_module_index
 }
 task "Templating module index page..." template_module_index
 
+declare -a langs=("da" "kl" "en")
+
 title "Running sphinx-build to generate documentation"
 function generate_html_documentation
 {
-    mkdir -p $OUTPUT_FOLDER
-    sphinx-build -M html $SPHINX_SOURCE $OUTPUT_FOLDER
+    for lang in "${langs[@]}"
+    do
+       subtitle "Generating: $lang"
+       mkdir -p $OUTPUT_FOLDER/html/$lang/
+       sphinx-build -D language="$lang" -b html $SPHINX_SOURCE $OUTPUT_FOLDER/html/$lang/
+    done
 }
 task "Generating html documentation..." generate_html_documentation
 
@@ -173,8 +179,22 @@ function generate_pdf_documentation
         echoerr -e "${NORMAL}\c"
         exit 1
     fi
-    mkdir -p $OUTPUT_FOLDER
-    sphinx-build -M latexpdf $SPHINX_SOURCE $OUTPUT_FOLDER
+
+    for lang in "${langs[@]}"
+    do
+        subtitle "Generating: $lang"
+        mkdir -p $OUTPUT_FOLDER/latex/$lang/
+        sphinx-build -b latex -D language="$lang" $SPHINX_SOURCE $OUTPUT_FOLDER/latex/$lang/
+    done
+    
+    CWD=$PWD
+    for lang in "${langs[@]}"
+    do
+        subtitle "Making: $lang"
+        cd $OUTPUT_FOLDER/latex/$lang/
+        make
+        cd $CWD
+    done
 }
 task "Generating pdf documentation..." generate_pdf_documentation
 
