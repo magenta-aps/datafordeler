@@ -37,7 +37,6 @@ public class DatabaseQueryManager {
 
         while(rows.next()) {
             result.add(rows.getString(1));
-            System.out.println(rows.getString(1));
         }
 
         return result;
