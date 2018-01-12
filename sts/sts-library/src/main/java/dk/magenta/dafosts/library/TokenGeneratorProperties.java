@@ -17,6 +17,13 @@ public class TokenGeneratorProperties {
      */
     String publicKeyPemLocation = "classpath:/saml/dafo_sts.pem";;
 
+    /**
+     * The lifetime of issued tokens used for NotOnOrAfter in the generated token.
+     * Default is 12 hours.
+     */
+    int tokenLifetimeInSeconds = 12 * 60 * 60;
+
+
     public String getPrivateKeyDerLocation() {
         return privateKeyDerLocation;
     }
@@ -31,5 +38,13 @@ public class TokenGeneratorProperties {
 
     public void setPublicKeyPemLocation(String publicKeyPemLocation) {
         this.publicKeyPemLocation = publicKeyPemLocation;
+    }
+
+    public int getTokenLifetimeInSeconds() {
+        return tokenLifetimeInSeconds;
+    }
+
+    public void setTokenLifetimeInSeconds(int tokenLifetimeInSeconds) {
+        this.tokenLifetimeInSeconds = tokenLifetimeInSeconds;
     }
 }

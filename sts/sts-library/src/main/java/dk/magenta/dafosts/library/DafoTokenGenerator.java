@@ -151,7 +151,7 @@ public class DafoTokenGenerator {
         SubjectConfirmationData confirmationMethod = (SubjectConfirmationData) builder.buildObject();
         // NotBefore is not allowed for BEARER tokens
         // confirmationMethod.setNotBefore(now);
-        confirmationMethod.setNotOnOrAfter(now.plusMinutes(10));
+        confirmationMethod.setNotOnOrAfter(now.plusSeconds(properties.getTokenLifetimeInSeconds()));
 
         return confirmationMethod;
     }
@@ -302,7 +302,7 @@ public class DafoTokenGenerator {
         Conditions conditions = (Conditions) conditionsBuilder.buildObject();
 
         conditions.setNotBefore(now);
-        conditions.setNotOnOrAfter(now.plusMinutes(10));
+        conditions.setNotOnOrAfter(now.plusSeconds(properties.getTokenLifetimeInSeconds()));
 
         conditions.getConditions().add(buildAudienceRestrictionCondition());
 
