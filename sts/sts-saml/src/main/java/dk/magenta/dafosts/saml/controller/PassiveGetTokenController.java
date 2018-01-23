@@ -5,6 +5,7 @@ import dk.magenta.dafosts.library.DafoTokenGenerator;
 import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.library.LogRequestWrapper;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
+import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.Assertion;
@@ -38,6 +39,8 @@ public class PassiveGetTokenController {
     DatabaseQueryManager databaseQueryManager;
     @Autowired
     DafoTokenGenerator dafoTokenGenerator;
+    @Autowired
+    DafoCachingMetadataManager dafoCachingMetadataManager;
 
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -235,6 +238,10 @@ public class PassiveGetTokenController {
             throws Exception {
 
         logRequestWrapper.info("Trying authentication using bootstrap token");
+
+        // Make sure we have up-to-date information about IdPs
+        dafoCachingMetadataManager.updateDafoMetadataProviders();
+
         Assertion assertion = dafoAssertionVerifier.verifyAssertion(bootstrap_token, request, response);
 
         if (assertion == null) {
