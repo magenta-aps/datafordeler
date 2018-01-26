@@ -118,13 +118,12 @@ public class PassiveGetTokenController {
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
 
-        Assertion assertion = dafoTokenGenerator.buildAssertion(user);
-
+        Assertion assertion = dafoTokenGenerator.buildAssertion(user, logWrapper.getRequest());
         logWrapper.logIssuedToken(assertion);
         dafoTokenGenerator.signAssertion(assertion);
 
         return new ResponseEntity<>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),
+                dafoTokenGenerator.saveGeneratedToken(assertion),
                 httpHeaders,
                 HttpStatus.OK
         );
@@ -271,18 +270,6 @@ public class PassiveGetTokenController {
             throw new NoAccessException("The specified user is not active");
         }
 
-        final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.TEXT_PLAIN);
-
-        Assertion outgoingToken = dafoTokenGenerator.buildAssertion(user);
-
-        logRequestWrapper.logIssuedToken(outgoingToken);
-        dafoTokenGenerator.signAssertion(outgoingToken);
-
-        return new ResponseEntity<>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(outgoingToken)),
-                httpHeaders,
-                HttpStatus.OK
-        );
+        return generateTokenResponseFromUser(user, logRequestWrapper);
     }
 }

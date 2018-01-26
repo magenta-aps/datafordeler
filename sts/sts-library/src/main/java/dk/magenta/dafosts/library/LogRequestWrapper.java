@@ -5,12 +5,15 @@ import org.opensaml.saml2.core.Attribute;
 import org.opensaml.saml2.core.AttributeStatement;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.schema.XSAny;
+import org.opensaml.xml.schema.XSInteger;
 import org.opensaml.xml.schema.XSString;
 import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static dk.magenta.dafosts.library.DafoTokenGenerator.ON_BEHALF_OF_CLAIM_URL;
+import static dk.magenta.dafosts.library.DafoTokenGenerator.TOKEN_ID_CLAIM_URL;
+import static dk.magenta.dafosts.library.DatabaseQueryManager.INVALID_TOKEN_ID;
 
 /**
  * A wrapper that prefixes log messages with information about the request's remote address and the principal.
@@ -71,7 +74,7 @@ public class LogRequestWrapper {
         );
     }
 
-    private static String getOnBehalfOfStringFromToken(Assertion assertion) {
+    public static String getOnBehalfOfStringFromToken(Assertion assertion) {
         for(AttributeStatement attributeStatement : assertion.getAttributeStatements()) {
             for(Attribute attribute : attributeStatement.getAttributes()) {
                 if(attribute.getName().equals(ON_BEHALF_OF_CLAIM_URL)) {
@@ -86,6 +89,23 @@ public class LogRequestWrapper {
             }
         }
         return null;
+    }
+
+    public static int getTokenIdFromToken(Assertion assertion) {
+        for(AttributeStatement attributeStatement : assertion.getAttributeStatements()) {
+            for(Attribute attribute : attributeStatement.getAttributes()) {
+                if(attribute.getName().equals(TOKEN_ID_CLAIM_URL)) {
+                    for(XMLObject value : attribute.getAttributeValues()) {
+                        if (value instanceof XSInteger) {
+                            return ((XSInteger) value).getValue();
+                        } else {
+                            return INVALID_TOKEN_ID;
+                        }
+                    }
+                }
+            }
+        }
+        return INVALID_TOKEN_ID;
     }
 
     public void logIssuedToken(Assertion assertion) {
