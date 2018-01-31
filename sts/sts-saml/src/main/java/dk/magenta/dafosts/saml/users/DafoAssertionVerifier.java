@@ -3,8 +3,11 @@ package dk.magenta.dafosts.saml.users;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.SAMLConfigurerBean;
 import dk.magenta.dafosts.saml.config.DafoWebSSOProfileConsumer;
 import dk.magenta.dafosts.saml.config.SamlWebSecurityConfig;
+import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
+import dk.magenta.dafosts.saml.metadata.DafoMetadataProvider;
 import org.opensaml.common.SAMLException;
 import org.opensaml.saml2.core.*;
+import org.opensaml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.Configuration;
@@ -48,14 +51,8 @@ public class DafoAssertionVerifier {
     @Autowired
     SAMLConfigurerBean samlConfigurerBean;
 
-    MetadataManager metadataManager;
-
-    MetadataManager getMetadataManager() {
-        if(metadataManager == null) {
-            metadataManager = samlConfigurerBean.serviceProvider().getSharedObject(MetadataManager.class);
-        }
-        return metadataManager;
-    }
+    @Autowired
+    DafoCachingMetadataManager metadataManager;
 
     public Assertion parseAssertion(String fromString) {
         try {
@@ -102,20 +99,15 @@ public class DafoAssertionVerifier {
             e.printStackTrace();
             return null;
         }
-        MetadataManager metadataManager = getMetadataManager();
 
-        // TODO: This should handle multiple IdPs and identify the correct one
-        // Seems that WSO2 will provide another NameID for passive tokens, so have to configure some sort of
-        // alias setup.
-        for(String idpName : metadataManager.getIDPEntityNames()) {
-            try {
-                context.setPeerEntityMetadata(metadataManager.getEntityDescriptor(idpName));
-                context.setPeerExtendedMetadata(metadataManager.getExtendedMetadata(idpName));
-                break;
-            }
-            catch(MetadataProviderException e) {
-                e.printStackTrace();
-            }
+        String remoteEntityID = assertion.getIssuer().getValue();
+        try {
+            DafoMetadataProvider dafoMetadataProvider = metadataManager.getDafoMetadataProvider(remoteEntityID);
+            context.setPeerEntityMetadata(dafoMetadataProvider.getEntityDescriptor(remoteEntityID));
+            context.setPeerExtendedMetadata(metadataManager.getExtendedMetadata(remoteEntityID));
+        }
+        catch(MetadataProviderException e) {
+            e.printStackTrace();
         }
 
         try {

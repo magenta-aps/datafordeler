@@ -5,8 +5,10 @@ import dk.magenta.dafosts.library.DafoTokenGenerator;
 import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.library.LogRequestWrapper;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
+import dk.magenta.dafosts.library.users.DafoUserData;
 import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
+import dk.magenta.dafosts.saml.users.DafoSAMLUserDetails;
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.Assertion;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.saml.SAMLCredential;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,7 +44,6 @@ public class PassiveGetTokenController {
     DafoTokenGenerator dafoTokenGenerator;
     @Autowired
     DafoCachingMetadataManager dafoCachingMetadataManager;
-
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public class InvalidCredentialsException extends Exception {
@@ -113,7 +115,7 @@ public class PassiveGetTokenController {
      * @throws Exception
      */
     private ResponseEntity<String> generateTokenResponseFromUser(
-            DafoPasswordUserDetails user, LogRequestWrapper logWrapper
+            DafoUserData user, LogRequestWrapper logWrapper
     ) throws Exception {
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
@@ -242,47 +244,36 @@ public class PassiveGetTokenController {
         // Make sure we have up-to-date information about IdPs
         dafoCachingMetadataManager.updateDafoMetadataProviders();
 
-        Assertion assertion = dafoAssertionVerifier.verifyAssertion(bootstrap_token, request, response);
+        Assertion bootstrapAssertion = dafoAssertionVerifier.verifyAssertion(bootstrap_token, request, response);
 
-        if (assertion == null) {
+        if (bootstrapAssertion == null) {
             logRequestWrapper.info("Invalid bootstrap token");
             throw new InvalidCredentialsException("Failed to authenticate user");
         }
 
-        String username = assertion.getSubject().getNameID().getValue();
+        // Create a SAML credential from the assertion
+        SAMLCredential samlCredential = new SAMLCredential(
+                bootstrapAssertion.getSubject().getNameID(),
+                bootstrapAssertion,
+                bootstrapAssertion.getIssuer().getValue(),
+                request.getRequestURL().toString()
+        );
 
-        // WSO2 will provide a tenant prefix before the actual username, which has to be removed
-        if (username.indexOf('/') >= 0 && username.indexOf('@') >= 0 &&
-                username.indexOf('/') < username.indexOf('@')) {
-            username = username.substring(username.indexOf('/') + 1);
-        }
+        // Create a user from the bootstrapped credential
+        DafoSAMLUserDetails user = new DafoSAMLUserDetails(samlCredential, dafoCachingMetadataManager);
 
-        logRequestWrapper.setUserName(username);
-        logRequestWrapper.info("Got valid bootstrap token for " + username);
 
-        DafoPasswordUserDetails user = databaseQueryManager.getDafoPasswordUserByUsername(username);
         if (user == null) {
             logRequestWrapper.info("Unknown bootstrap user, denying access");
             throw new InvalidCredentialsException("User identified by bootstrap token was not found");
         }
 
-        if (!user.isActive()) {
-            logRequestWrapper.info("User is not active, denying access");
-            throw new NoAccessException("The specified user is not active");
-        }
-
-        final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.TEXT_PLAIN);
-
-        Assertion outgoingToken = dafoTokenGenerator.buildAssertion(user);
-
-        logRequestWrapper.logIssuedToken(outgoingToken);
-        dafoTokenGenerator.signAssertion(outgoingToken);
-
-        return new ResponseEntity<>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(outgoingToken)),
-                httpHeaders,
-                HttpStatus.OK
+        String username = samlCredential.getNameID().getValue();
+        logRequestWrapper.setUserName(username);
+        logRequestWrapper.info(
+                "Got valid bootstrap token for " + username + " from " + samlCredential.getRemoteEntityID()
         );
+
+        return generateTokenResponseFromUser(user, logRequestWrapper);
     }
 }
