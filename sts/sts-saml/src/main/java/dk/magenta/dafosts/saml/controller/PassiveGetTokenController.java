@@ -11,6 +11,8 @@ import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetails;
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml2.core.Attribute;
+import org.opensaml.saml2.core.AttributeStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller that allow users to passively get tokens from the STS.
@@ -251,11 +255,17 @@ public class PassiveGetTokenController {
             throw new InvalidCredentialsException("Failed to authenticate user");
         }
 
+        List<Attribute> bootstrapAttributes = new ArrayList<>();
+        for(AttributeStatement stmt : bootstrapAssertion.getAttributeStatements()) {
+            bootstrapAttributes.addAll(stmt.getAttributes());
+        }
+
         // Create a SAML credential from the assertion
         SAMLCredential samlCredential = new SAMLCredential(
                 bootstrapAssertion.getSubject().getNameID(),
                 bootstrapAssertion,
                 bootstrapAssertion.getIssuer().getValue(),
+                bootstrapAttributes,
                 request.getRequestURL().toString()
         );
 

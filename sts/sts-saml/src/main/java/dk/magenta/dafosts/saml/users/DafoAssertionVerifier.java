@@ -11,6 +11,7 @@ import org.opensaml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.Configuration;
+import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.encryption.DecryptionException;
 import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallerFactory;
@@ -61,21 +62,33 @@ public class DafoAssertionVerifier {
                 throw new MessageDecodingException("Unable to Base64 decode incoming message");
             }
 
-            Inflater inflater = new Inflater(true);
-            ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
-            InflaterInputStream in = new InflaterInputStream(bytesIn, new Inflater(true));
-
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
+            ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
 
-            Document document = docBuilder.parse(in);
+
+            Document document;
+            // If input starts with < it is probably raw XML and does not need to be inflated
+            if(decodedBytes[0] == '<') {
+                document = docBuilder.parse(bytesIn);
+            } else {
+                Inflater inflater = new Inflater(true);
+                InflaterInputStream in = new InflaterInputStream(bytesIn, inflater);
+                document = docBuilder.parse(in);
+            }
             Element element = document.getDocumentElement();
 
             UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
 
-            return (Assertion) unmarshaller.unmarshall(element);
+            XMLObject result = unmarshaller.unmarshall(element);
+            if(result instanceof Assertion) {
+                return (Assertion) result;
+            } else if(result instanceof Response) {
+                Response response = (Response) result;
+                return response.getAssertions().get(0);
+            }
         }
         catch (IOException|ParserConfigurationException|SAXException|UnmarshallingException|
                 MessageDecodingException e) {
@@ -93,7 +106,9 @@ public class DafoAssertionVerifier {
         }
         SAMLMessageContext context;
         try {
-            context = samlConfigurerBean.serviceProvider().getSharedObject(SAMLContextProvider.class).getLocalEntity(request, response);
+            context = samlConfigurerBean.serviceProvider().getSharedObject(
+                    SAMLContextProvider.class
+            ).getLocalEntity(request, response);
         }
         catch(MetadataProviderException e) {
             e.printStackTrace();
