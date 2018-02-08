@@ -31,3 +31,7 @@
 [submodule "plugin/prisme"]
 	path = plugin/prisme
 	url = https://github.com/magenta-aps/datafordeler-plugin-prisme.git
+[submodule "plugin/adresseservice"]
+	path = plugin/adresseservice
+	url = https://github.com/magenta-aps/datafordeler-plugin-adresse
+	branch = master
