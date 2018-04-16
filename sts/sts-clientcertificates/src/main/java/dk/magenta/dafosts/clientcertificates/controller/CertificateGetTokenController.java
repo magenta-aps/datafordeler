@@ -2,7 +2,9 @@ package dk.magenta.dafosts.clientcertificates.controller;
 
 import dk.magenta.dafosts.library.DafoTokenGenerator;
 import dk.magenta.dafosts.clientcertificates.users.DafoCertificateUserDetailsImpl;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.library.LogRequestWrapper;
+import dk.magenta.dafosts.library.exceptions.InactiveAccessAccountException;
 import org.opensaml.saml2.core.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,9 @@ import static dk.magenta.dafosts.library.DatabaseQueryManager.IDENTIFICATION_MOD
 @Controller
 public class CertificateGetTokenController {
     private static final Logger logger = LoggerFactory.getLogger(CertificateGetTokenController.class);
+
+    @Autowired
+    DatabaseQueryManager databaseQueryManager;
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public class MissingOnBehalfOfException extends Exception {
@@ -56,6 +61,12 @@ public class CertificateGetTokenController {
         logWrapper.info("Incoming token request");
         PreAuthenticatedAuthenticationToken preAuthToken = (PreAuthenticatedAuthenticationToken)principal;
         DafoCertificateUserDetailsImpl userDetails = (DafoCertificateUserDetailsImpl)preAuthToken.getPrincipal();
+
+        if(!databaseQueryManager.isAccessAccountActive(userDetails.getAccessAccountId())) {
+            throw new InactiveAccessAccountException(
+                    "User '" + userDetails.getUsername() + "' is not active"
+            );
+        }
 
         // We now know the user, add them to the log wrapper
         logWrapper.setUserName(principal.getName());
