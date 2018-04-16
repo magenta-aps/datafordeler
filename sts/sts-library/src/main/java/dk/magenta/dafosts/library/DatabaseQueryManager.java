@@ -91,15 +91,39 @@ public class DatabaseQueryManager {
                                 "[dafousers_certificate].[id]",
 	                    "   )",
                         "WHERE (",
-                        "   [dafousers_accessaccount].[status] = ?",
-                        "   AND",
                         "   [dafousers_certificate].[fingerprint] = ?",
                         ")"
                 ),
-                new Object[] {ACCESS_ACCOUNT_STATUS_ACTIVE, fingerprint}
+                new Object[] {fingerprint}
         );
         if(rows.next()) {
             result = rows.getInt(1);
+        }
+
+        return result;
+    }
+
+    public boolean isAccessAccountActive(int accessAccountId) {
+        boolean result = false;
+
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                String.join("\n",
+                        "SELECT",
+                        "   [dafousers_accessaccount].[id]",
+                        "FROM",
+                        "   [dafousers_accessaccount] ",
+                        "WHERE (",
+                        "   [dafousers_accessaccount].[id] = ? ",
+                        "   AND ",
+                        "   [dafousers_accessaccount].[status] = ?",
+                        ")"
+                ),
+                new Object[] {accessAccountId, ACCESS_ACCOUNT_STATUS_ACTIVE}
+        );
+        if(rows.next()) {
+            if(rows.getInt(1) == accessAccountId) {
+                result = true;
+            }
         }
 
         return result;
