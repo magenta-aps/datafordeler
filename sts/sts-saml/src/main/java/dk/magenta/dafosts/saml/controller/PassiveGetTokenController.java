@@ -4,8 +4,10 @@ import com.sun.jersey.core.util.Base64;
 import dk.magenta.dafosts.library.DafoTokenGenerator;
 import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.library.LogRequestWrapper;
+import dk.magenta.dafosts.library.exceptions.InactiveAccessAccountException;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
 import dk.magenta.dafosts.library.users.DafoUserData;
+import dk.magenta.dafosts.saml.DafoStsBySamlConfiguration;
 import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetails;
@@ -42,6 +44,8 @@ public class PassiveGetTokenController {
 
     private final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 
+    @Autowired
+    DafoStsBySamlConfiguration config;
     @Autowired
     DatabaseQueryManager databaseQueryManager;
     @Autowired
@@ -271,10 +275,15 @@ public class PassiveGetTokenController {
         // Create a user from the bootstrapped credential
         DafoSAMLUserDetails user = new DafoSAMLUserDetails(samlCredential, dafoCachingMetadataManager);
 
-
         if (user == null) {
             logRequestWrapper.info("Unknown bootstrap user, denying access");
             throw new InvalidCredentialsException("User identified by bootstrap token was not found");
+        }
+
+        if(!databaseQueryManager.isAccessAccountActive(user.getAccessAccountId())) {
+            throw new InactiveAccessAccountException(
+                    "User '" + user.getUsername() + "' is not active"
+            );
         }
 
         String username = samlCredential.getNameID().getValue();

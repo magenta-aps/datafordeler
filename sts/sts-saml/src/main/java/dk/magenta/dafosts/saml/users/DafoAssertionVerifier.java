@@ -58,6 +58,7 @@ public class DafoAssertionVerifier {
     public Assertion parseAssertion(String fromString) {
         try {
             byte[] decodedBytes = Base64.decode(fromString);
+
             if(decodedBytes == null){
                 throw new MessageDecodingException("Unable to Base64 decode incoming message");
             }
