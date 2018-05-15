@@ -248,6 +248,7 @@ public class PassiveGetTokenController {
         // Make sure we have up-to-date information about IdPs
         dafoCachingMetadataManager.updateDafoMetadataProviders();
 
+        // Verify that the bootstrap token is valid and from an IdP we trust
         Assertion assertion = dafoAssertionVerifier.verifyAssertion(bootstrap_token, request, response);
 
         if (assertion == null) {
@@ -255,24 +256,14 @@ public class PassiveGetTokenController {
             throw new InvalidCredentialsException("Failed to authenticate user");
         }
 
-//        String username = assertion.getSubject().getNameID().getValue();
-
-
-        // WSO2 will provide a tenant prefix before the actual username, which has to be removed
-        /*if (username.indexOf('/') >= 0 && username.indexOf('@') >= 0 &&
-                username.indexOf('/') < username.indexOf('@')) {
-            username = username.substring(username.indexOf('/') + 1);
-        }*/
-        //String remoteEntityID, String localEntityID
-
         DafoSAMLUserDetails user;
         user = new DafoSAMLUserDetails(
-                 new SAMLCredential(
-                    assertion.getSubject().getNameID(),
-                    assertion,
-                    assertion.getIssuer().getValue(),
-                    config.getIdentityId()
-                    ),
+                new SAMLCredential(
+                        assertion.getSubject().getNameID(),
+                        assertion,
+                        assertion.getIssuer().getValue(),
+                        config.getIdentityId()
+                ),
                 dafoCachingMetadataManager
         );
         if (user == null) {
@@ -280,25 +271,14 @@ public class PassiveGetTokenController {
             throw new InvalidCredentialsException("User identified by bootstrap token was not found");
         }
 
-      //  logRequestWrapper.setUserName(username);
-      //  logRequestWrapper.info("Got valid bootstrap token for " + username);
-
         logRequestWrapper.setUserName(user.getUsername());
         logRequestWrapper.info("Got valid bootstrap token for " + user.getUsername());
-
-
-       // DafoPasswordUserDetails user = databaseQueryManager.getDafoPasswordUserByUsername(username);
-
 
         if(!databaseQueryManager.isAccessAccountActive(user.getAccessAccountId())) {
             throw new InactiveAccessAccountException(
                     "User '" + user.getUsername() + "' is not active"
             );
         }
-        /*if (!user.isActive()) {
-            logRequestWrapper.info("User is not active, denying access");
-            throw new NoAccessException("The specified user is not active");
-        }*/
 
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
