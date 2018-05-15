@@ -4,9 +4,12 @@ import com.sun.jersey.core.util.Base64;
 import dk.magenta.dafosts.library.DafoTokenGenerator;
 import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.library.LogRequestWrapper;
+import dk.magenta.dafosts.library.exceptions.InactiveAccessAccountException;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
+import dk.magenta.dafosts.saml.DafoStsBySamlConfiguration;
 import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
+import dk.magenta.dafosts.saml.users.DafoSAMLUserDetails;
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.Assertion;
 import org.slf4j.Logger;
@@ -16,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.saml.SAMLCredential;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +39,8 @@ public class PassiveGetTokenController {
 
     private final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 
+    @Autowired
+    DafoStsBySamlConfiguration config;
     @Autowired
     DatabaseQueryManager databaseQueryManager;
     @Autowired
@@ -249,27 +255,50 @@ public class PassiveGetTokenController {
             throw new InvalidCredentialsException("Failed to authenticate user");
         }
 
-        String username = assertion.getSubject().getNameID().getValue();
+//        String username = assertion.getSubject().getNameID().getValue();
+
 
         // WSO2 will provide a tenant prefix before the actual username, which has to be removed
-        if (username.indexOf('/') >= 0 && username.indexOf('@') >= 0 &&
+        /*if (username.indexOf('/') >= 0 && username.indexOf('@') >= 0 &&
                 username.indexOf('/') < username.indexOf('@')) {
             username = username.substring(username.indexOf('/') + 1);
-        }
+        }*/
+        //String remoteEntityID, String localEntityID
 
-        logRequestWrapper.setUserName(username);
-        logRequestWrapper.info("Got valid bootstrap token for " + username);
-
-        DafoPasswordUserDetails user = databaseQueryManager.getDafoPasswordUserByUsername(username);
+        DafoSAMLUserDetails user;
+        user = new DafoSAMLUserDetails(
+                 new SAMLCredential(
+                    assertion.getSubject().getNameID(),
+                    assertion,
+                    assertion.getIssuer().getValue(),
+                    config.getIdentityId()
+                    ),
+                dafoCachingMetadataManager
+        );
         if (user == null) {
             logRequestWrapper.info("Unknown bootstrap user, denying access");
             throw new InvalidCredentialsException("User identified by bootstrap token was not found");
         }
 
-        if (!user.isActive()) {
+      //  logRequestWrapper.setUserName(username);
+      //  logRequestWrapper.info("Got valid bootstrap token for " + username);
+
+        logRequestWrapper.setUserName(user.getUsername());
+        logRequestWrapper.info("Got valid bootstrap token for " + user.getUsername());
+
+
+       // DafoPasswordUserDetails user = databaseQueryManager.getDafoPasswordUserByUsername(username);
+
+
+        if(!databaseQueryManager.isAccessAccountActive(user.getAccessAccountId())) {
+            throw new InactiveAccessAccountException(
+                    "User '" + user.getUsername() + "' is not active"
+            );
+        }
+        /*if (!user.isActive()) {
             logRequestWrapper.info("User is not active, denying access");
             throw new NoAccessException("The specified user is not active");
-        }
+        }*/
 
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
