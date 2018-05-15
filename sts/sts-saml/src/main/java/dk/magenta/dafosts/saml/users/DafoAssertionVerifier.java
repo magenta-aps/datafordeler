@@ -8,6 +8,7 @@ import org.opensaml.saml2.core.*;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.Configuration;
+import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.encryption.DecryptionException;
 import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallerFactory;
@@ -60,13 +61,20 @@ public class DafoAssertionVerifier {
     public Assertion parseAssertion(String fromString) {
         try {
             byte[] decodedBytes = Base64.decode(fromString);
+
             if(decodedBytes == null){
                 throw new MessageDecodingException("Unable to Base64 decode incoming message");
             }
 
-            Inflater inflater = new Inflater(true);
+            InputStream in;
+
             ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
-            InflaterInputStream in = new InflaterInputStream(bytesIn, new Inflater(true));
+            // Try to detect non-deflated token
+            if(decodedBytes[0] == '<' || decodedBytes[0] == ' ') {
+                in = bytesIn;
+            } else {
+                in = new InflaterInputStream(bytesIn, new Inflater(true));
+            }
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
@@ -78,7 +86,20 @@ public class DafoAssertionVerifier {
             UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
 
-            return (Assertion) unmarshaller.unmarshall(element);
+            XMLObject xmlObject = unmarshaller.unmarshall(element);
+            String localPart = xmlObject.getElementQName().getLocalPart();
+            if(localPart.equals("Assertion")) {
+                return (Assertion) xmlObject;
+            } else if(localPart.equals("Response")) {
+                return ((Response) xmlObject).getAssertions().get(0);
+            } else {
+                throw new UnmarshallingException(
+                        "Do not know how to extract assertion from a " +
+                                xmlObject.getElementQName() +
+                                " xml object"
+                );
+            }
+
         }
         catch (IOException|ParserConfigurationException|SAXException|UnmarshallingException|
                 MessageDecodingException e) {
