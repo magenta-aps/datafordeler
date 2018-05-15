@@ -6,12 +6,15 @@ import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.library.LogRequestWrapper;
 import dk.magenta.dafosts.library.exceptions.InactiveAccessAccountException;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
+import dk.magenta.dafosts.library.users.DafoUserData;
 import dk.magenta.dafosts.saml.DafoStsBySamlConfiguration;
 import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
 import dk.magenta.dafosts.saml.users.DafoAssertionVerifier;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetails;
 import org.apache.commons.lang.StringUtils;
 import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml2.core.Attribute;
+import org.opensaml.saml2.core.AttributeStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller that allow users to passively get tokens from the STS.
@@ -47,7 +52,6 @@ public class PassiveGetTokenController {
     DafoTokenGenerator dafoTokenGenerator;
     @Autowired
     DafoCachingMetadataManager dafoCachingMetadataManager;
-
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public class InvalidCredentialsException extends Exception {
@@ -119,7 +123,7 @@ public class PassiveGetTokenController {
      * @throws Exception
      */
     private ResponseEntity<String> generateTokenResponseFromUser(
-            DafoPasswordUserDetails user, LogRequestWrapper logWrapper
+            DafoUserData user, LogRequestWrapper logWrapper
     ) throws Exception {
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
@@ -248,31 +252,34 @@ public class PassiveGetTokenController {
         // Make sure we have up-to-date information about IdPs
         dafoCachingMetadataManager.updateDafoMetadataProviders();
 
-        // Verify that the bootstrap token is valid and from an IdP we trust
-        Assertion assertion = dafoAssertionVerifier.verifyAssertion(bootstrap_token, request, response);
+        Assertion bootstrapAssertion = dafoAssertionVerifier.verifyAssertion(bootstrap_token, request, response);
 
-        if (assertion == null) {
+        if (bootstrapAssertion == null) {
             logRequestWrapper.info("Invalid bootstrap token");
             throw new InvalidCredentialsException("Failed to authenticate user");
         }
 
-        DafoSAMLUserDetails user;
-        user = new DafoSAMLUserDetails(
-                new SAMLCredential(
-                        assertion.getSubject().getNameID(),
-                        assertion,
-                        assertion.getIssuer().getValue(),
-                        config.getIdentityId()
-                ),
-                dafoCachingMetadataManager
+        List<Attribute> bootstrapAttributes = new ArrayList<>();
+        for(AttributeStatement stmt : bootstrapAssertion.getAttributeStatements()) {
+            bootstrapAttributes.addAll(stmt.getAttributes());
+        }
+
+        // Create a SAML credential from the assertion
+        SAMLCredential samlCredential = new SAMLCredential(
+                bootstrapAssertion.getSubject().getNameID(),
+                bootstrapAssertion,
+                bootstrapAssertion.getIssuer().getValue(),
+                bootstrapAttributes,
+                request.getRequestURL().toString()
         );
+
+        // Create a user from the bootstrapped credential
+        DafoSAMLUserDetails user = new DafoSAMLUserDetails(samlCredential, dafoCachingMetadataManager);
+
         if (user == null) {
             logRequestWrapper.info("Unknown bootstrap user, denying access");
             throw new InvalidCredentialsException("User identified by bootstrap token was not found");
         }
-
-        logRequestWrapper.setUserName(user.getUsername());
-        logRequestWrapper.info("Got valid bootstrap token for " + user.getUsername());
 
         if(!databaseQueryManager.isAccessAccountActive(user.getAccessAccountId())) {
             throw new InactiveAccessAccountException(
@@ -280,18 +287,12 @@ public class PassiveGetTokenController {
             );
         }
 
-        final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.TEXT_PLAIN);
-
-        Assertion outgoingToken = dafoTokenGenerator.buildAssertion(user);
-
-        logRequestWrapper.logIssuedToken(outgoingToken);
-        dafoTokenGenerator.signAssertion(outgoingToken);
-
-        return new ResponseEntity<>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(outgoingToken)),
-                httpHeaders,
-                HttpStatus.OK
+        String username = samlCredential.getNameID().getValue();
+        logRequestWrapper.setUserName(username);
+        logRequestWrapper.info(
+                "Got valid bootstrap token for " + username + " from " + samlCredential.getRemoteEntityID()
         );
+
+        return generateTokenResponseFromUser(user, logRequestWrapper);
     }
 }

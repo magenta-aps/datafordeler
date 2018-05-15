@@ -3,8 +3,11 @@ package dk.magenta.dafosts.saml.users;
 import com.github.ulisesbocchio.spring.boot.security.saml.bean.SAMLConfigurerBean;
 import dk.magenta.dafosts.saml.config.DafoWebSSOProfileConsumer;
 import dk.magenta.dafosts.saml.config.SamlWebSecurityConfig;
+import dk.magenta.dafosts.saml.metadata.DafoCachingMetadataManager;
+import dk.magenta.dafosts.saml.metadata.DafoMetadataProvider;
 import org.opensaml.common.SAMLException;
 import org.opensaml.saml2.core.*;
+import org.opensaml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.xml.Configuration;
@@ -49,14 +52,8 @@ public class DafoAssertionVerifier {
     @Autowired
     SAMLConfigurerBean samlConfigurerBean;
 
-    MetadataManager metadataManager;
-
-    MetadataManager getMetadataManager() {
-        if(metadataManager == null) {
-            metadataManager = samlConfigurerBean.serviceProvider().getSharedObject(MetadataManager.class);
-        }
-        return metadataManager;
-    }
+    @Autowired
+    DafoCachingMetadataManager metadataManager;
 
     public Assertion parseAssertion(String fromString) {
         try {
@@ -66,40 +63,33 @@ public class DafoAssertionVerifier {
                 throw new MessageDecodingException("Unable to Base64 decode incoming message");
             }
 
-            InputStream in;
-
-            ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
-            // Try to detect non-deflated token
-            if(decodedBytes[0] == '<' || decodedBytes[0] == ' ') {
-                in = bytesIn;
-            } else {
-                in = new InflaterInputStream(bytesIn, new Inflater(true));
-            }
-
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
+            ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
 
-            Document document = docBuilder.parse(in);
+
+            Document document;
+            // If input starts with < it is probably raw XML and does not need to be inflated
+            if(decodedBytes[0] == '<') {
+                document = docBuilder.parse(bytesIn);
+            } else {
+                Inflater inflater = new Inflater(true);
+                InflaterInputStream in = new InflaterInputStream(bytesIn, inflater);
+                document = docBuilder.parse(in);
+            }
             Element element = document.getDocumentElement();
 
             UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
 
-            XMLObject xmlObject = unmarshaller.unmarshall(element);
-            String localPart = xmlObject.getElementQName().getLocalPart();
-            if(localPart.equals("Assertion")) {
-                return (Assertion) xmlObject;
-            } else if(localPart.equals("Response")) {
-                return ((Response) xmlObject).getAssertions().get(0);
-            } else {
-                throw new UnmarshallingException(
-                        "Do not know how to extract assertion from a " +
-                                xmlObject.getElementQName() +
-                                " xml object"
-                );
+            XMLObject result = unmarshaller.unmarshall(element);
+            if(result instanceof Assertion) {
+                return (Assertion) result;
+            } else if(result instanceof Response) {
+                Response response = (Response) result;
+                return response.getAssertions().get(0);
             }
-
         }
         catch (IOException|ParserConfigurationException|SAXException|UnmarshallingException|
                 MessageDecodingException e) {
@@ -117,26 +107,23 @@ public class DafoAssertionVerifier {
         }
         SAMLMessageContext context;
         try {
-            context = samlConfigurerBean.serviceProvider().getSharedObject(SAMLContextProvider.class).getLocalEntity(request, response);
+            context = samlConfigurerBean.serviceProvider().getSharedObject(
+                    SAMLContextProvider.class
+            ).getLocalEntity(request, response);
         }
         catch(MetadataProviderException e) {
             e.printStackTrace();
             return null;
         }
-        MetadataManager metadataManager = getMetadataManager();
 
-        // TODO: This should handle multiple IdPs and identify the correct one
-        // Seems that WSO2 will provide another NameID for passive tokens, so have to configure some sort of
-        // alias setup.
-        for(String idpName : metadataManager.getIDPEntityNames()) {
-            try {
-                context.setPeerEntityMetadata(metadataManager.getEntityDescriptor(idpName));
-                context.setPeerExtendedMetadata(metadataManager.getExtendedMetadata(idpName));
-                break;
-            }
-            catch(MetadataProviderException e) {
-                e.printStackTrace();
-            }
+        String remoteEntityID = assertion.getIssuer().getValue();
+        try {
+            DafoMetadataProvider dafoMetadataProvider = metadataManager.getDafoMetadataProvider(remoteEntityID);
+            context.setPeerEntityMetadata(dafoMetadataProvider.getEntityDescriptor(remoteEntityID));
+            context.setPeerExtendedMetadata(metadataManager.getExtendedMetadata(remoteEntityID));
+        }
+        catch(MetadataProviderException e) {
+            e.printStackTrace();
         }
 
         try {
