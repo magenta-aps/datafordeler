@@ -5,11 +5,13 @@ API forbindelse
 
 Datafordeleren udstiller data til andre systemer via https://test.data.gl, hvorfra anvender-systemer bruger disse data. Denne vejledning viser hvordan et system taler med datafordeleren. Det forudsættes at læseren er bekendt med skrivning og afsendelse af HTML samt læsning i JSON.
 
+Adgang til CPR- og CVR-data kræver autorisation og autenficering med :ref:`STS Secure Token Service, <sts-secure-token-service>` og det er kun muligt for myndigheder efter forudgående aftale med Den Grønlandske Digitaliseringsstyrelse.
+
 
 Anvendelse uden autorisering og autentificering
 -----------------------------------------------
 
-Som eksempel vil et anvendersystem gerne have en liste med alle aktive byer og bygder i Grønland. Det er ikke personfølsomme data og vil være tilgængelig for alle systemer på internettet.
+Som eksempel vil et anvendersystem gerne have en liste med alle lokaliteter i Grønland. Det er ikke personfølsomme data og vil være tilgængelig for alle systemer på internettet.
 
 Hvilke kommandoer, der kan anvendes på et API, findes på :ref:`API-deklarationer, <api-declarations>` hvor det ses hvad man skriver for at finde bestemte data.
 
@@ -17,8 +19,9 @@ Hvilke kommandoer, der kan anvendes på et API, findes på :ref:`API-deklaration
 Her er trinene i at få offentlige data hjem uden autorisation og autentificering:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. Systemet sender en besked med de søgte oplysninger - for eksempel ``https://data.gl/najugaq/municipality/1/search?lokaliteter=*``
+1. Systemet sender en besked med de søgte oplysninger - for eksempel ``https://data.gl/gladdrreg/locality/1/rest/search?lokalitetskode=*&pageSize=100000``
 2. Resultatet kommer tilbage i et :ref:`JSON-format. <json-results>` Herfra kan anvender-systemet læse og bruge de ønskede oplysninger i henhold til :ref:`betingelser <agreements>` for både datafordeler og det aktuelle register.
+3. Bemærk at eksemplet sætter resultatafgrænsningen til 100000. Søgningen er pagineret, og standardstørrelsen er 10 resultater.
 
 
 Anvendelse med autorisering og autentificering
@@ -26,7 +29,7 @@ Anvendelse med autorisering og autentificering
 
 Et eksempel er et anvendersystem, der gerne vil kende navn og adresse for et CPR-nummer. CPR-numre er personfølsomme data, så anvender-systemet skal dokumentere sin ret og lovhjemmel til disse data, oplyse de korrekte personlige oplysninger for brugeren, der efterspørger data. Datafordeleren logger alle disse oplysninger af hensyn til sikkerhed og lovgivning. Hvordan den sikre tilgang virker, er beskrevet i :ref:`STS og hvordan datafordeleren anvender det. <sts-and-how-it-is-used>`
 
-I dette eksempel kaldes personnummeret ``ddmmåååå-nnnn``, og det er i virkeligheden selvfølgelig en række af tallene fra 0 til 9. 
+I dette eksempel kaldes personnummeret ``ddmmåååånnnn``, og det er i virkeligheden en række af tallene fra 0 til 9. 
 
 
 Forhåndsbetingelserne for adgang til fortrolige data er:
@@ -45,7 +48,7 @@ Forhåndsbetingelser fra forrige afsnit skal være opfyldt:
 1. Systemet klargør og sender nu en besked med følgende komponenter:
 
     * Certifikatet  indsættes i header som attribut.
-    * De søgte oplysninger skrives i URL'en: ``https://test.data.gl/cpr/najugaq/1/rest/search?Personnummer=*``
+    * De søgte oplysninger skrives i URL'en: ``https://data.gl/cpr/person/1/rest/search?personnummer=*``
 
 2. Datafordeleren veksler certifikat til en token, hvis ikke der medfølger en gyldig token, og iværksætter søgningen tilpasset rettighederne i token.
 

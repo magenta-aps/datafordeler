@@ -15,13 +15,13 @@ I dette afsnit er eksempler på API-forespørgsler, hvor der er succes med at f�
 200 - OK - En succesfuld forespørgsel med svar
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-URL: https://test.data.gl/cpr/1/rest/search?cpr=˽˽˽˽˽˽˽˽˽˽
+URL: https://data.gl/cpr/1/rest/search?cpr=˽˽˽˽˽˽˽˽˽˽
 
 Kendetegnet for en velykket søgning med resultat er indhold i feltet ``"results": [ _indhold_ ]``. Datafordeleren sætter ikke statuskode på resultatet.::
 
     {
         "path": "/cpr/person/1/rest/search",
-        "terms": "https://doc.test.data.gl/terms",
+        "terms": "https://doc.data.gl/terms",
         "requestTimestamp": "2017-07-07T05:01:10.141-02:00",
         "responseTimestamp": "2017-07-07T05:01:12.266-02:00",
         "username": "[c˽˽˽r@m˽˽˽k]@[˽˽˽]",
@@ -42,13 +42,13 @@ Kendetegnet for en velykket søgning med resultat er indhold i feltet ``"results
 204 - No content - En succesfuld forespørgsel med et tomt resultat
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-URL: https://test.data.gl/cpr/person/1/rest/search?lastName=Jansson
+URL: https://data.gl/cpr/person/1/rest/search?lastName=Jansson
 
-Kendetegnet for en vellykket søgning uden resultat er linjen ``"results": []``. Forventes der et indhold, skal man efterse parametrene og det søgte mønster.  Datafordeleren sætter ikke statuskode på resultatet.::
+Kendetegnet for en vellykket søgning uden resultat er linjen ``"results": []``. Forventes der et indhold, skal man efterse parametrene og det søgte mønster. Datafordeleren sætter ikke statuskode på resultatet.::
 
     {
         "path": "/cpr/person/1/rest/search",
-        "terms": "https://doc.test.data.gl/terms",
+        "terms": "https://doc.data.gl/terms",
         "requestTimestamp": "2017-07-07T05:02:10.056-02:00",
         "responseTimestamp": "2017-07-07T05:02:10.087-02:00",
         "username": "[c̺˽˽˽r@m˽˽˽k]@[˽˽˽]",
@@ -76,7 +76,7 @@ Forespørgslen indeholder parametre eller mønstre som API ikke kan genkende. Ef
         "path": "/cpr/person/1/rest/find=Finn"
     }
 
-URL'en https://test.data.gl/cpr/person/1/rest/find=Finn giver fejl, da 'find' ikke er et kendt navn på API'et. 
+URL'en https://data.gl/cpr/person/1/rest/find=Finn giver fejl, da 'find' ikke er et kendt navn på API'et. Faktisk svarer https://data.gl/cpr/person/1/rest/find til et opslag efter UUID, hvor dette UUID er "Finn", hvilket ikke er gyldigt.
 
 
 403 - Forbidden - Ingen adgang til API
@@ -109,8 +109,8 @@ Token er ikke gyldig. Anvender-systemet skal efterse at aftale er på plads om s
     }
 
 
-401 - Unauthorized - Token is older than 3600 seconds
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+401 - Unauthorized - Token is older than 43200 seconds
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Tiden er udløbet, så forbindelsen skal fornys. I de fleste anvender-systemer skal bruger blot gentage sin forespørgsel og så sørger anvender-systemet for at forny brugers token.::
 
@@ -119,7 +119,7 @@ Tiden er udløbet, så forbindelsen skal fornys. I de fleste anvender-systemer s
         "status": 401,
         "error": "Unauthorized",
         "exception": "dk.magenta.datafordeler.core.exception.InvalidTokenException",
-        "message": "Token is older than 3600 seconds",
+        "message": "Token is older than 43200 seconds",
         "path": "/cpr/person/1/rest/search"
     }
 
