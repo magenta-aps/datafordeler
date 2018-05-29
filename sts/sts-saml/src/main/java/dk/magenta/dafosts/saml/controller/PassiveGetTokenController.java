@@ -128,13 +128,12 @@ public class PassiveGetTokenController {
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
 
-        Assertion assertion = dafoTokenGenerator.buildAssertion(user);
-
+        Assertion assertion = dafoTokenGenerator.buildAssertion(user, logWrapper.getRequest());
         logWrapper.logIssuedToken(assertion);
         dafoTokenGenerator.signAssertion(assertion);
 
         return new ResponseEntity<>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),
+                dafoTokenGenerator.saveGeneratedToken(assertion),
                 httpHeaders,
                 HttpStatus.OK
         );

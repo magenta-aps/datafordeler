@@ -2,6 +2,7 @@ package dk.magenta.dafosts.saml.controller;
 
 import com.github.ulisesbocchio.spring.boot.security.saml.annotation.SAMLUser;
 import dk.magenta.dafosts.library.DafoTokenGenerator;
+import dk.magenta.dafosts.library.DatabaseQueryManager;
 import dk.magenta.dafosts.library.LogRequestWrapper;
 import dk.magenta.dafosts.saml.stereotypes.DafoSAMLUser;
 import dk.magenta.dafosts.saml.users.DafoSAMLUserDetails;
@@ -46,15 +47,14 @@ public class SamlGetTokenController {
 
         ModelAndView getTokenView = new ModelAndView("by_saml_sso/get_token");
 
-        Assertion assertion = dafoTokenGenerator.buildAssertion(user);
+        Assertion assertion = dafoTokenGenerator.buildAssertion(user, request);
         logRequestWrapper.logIssuedToken(assertion);
         dafoTokenGenerator.signAssertion(assertion);
-        String xmlString = dafoTokenGenerator.getTokenXml(user);
 
         getTokenView.addObject("userId", user.getUsername());
         getTokenView.addObject(
                 "compressed_and_encoded_token",
-                dafoTokenGenerator.deflateAndEncode(xmlString)
+                dafoTokenGenerator.saveGeneratedToken(assertion)
         );
         // If session contains info from sso_proxy landing page, add them to the model.
         String returnURL = (String)httpSession.getAttribute(SSO_RETURN_URL);
@@ -80,16 +80,15 @@ public class SamlGetTokenController {
     ) throws Exception {
         LogRequestWrapper logRequestWrapper = new LogRequestWrapper(logger, request, user.getUsername());
 
-
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
 
-        Assertion assertion = dafoTokenGenerator.buildAssertion(user);
+        Assertion assertion = dafoTokenGenerator.buildAssertion(user, request);
         logRequestWrapper.logIssuedToken(assertion);
         dafoTokenGenerator.signAssertion(assertion);
 
         return new ResponseEntity<String>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),
+                dafoTokenGenerator.saveGeneratedToken(assertion),
                 httpHeaders,
                 HttpStatus.OK
         );

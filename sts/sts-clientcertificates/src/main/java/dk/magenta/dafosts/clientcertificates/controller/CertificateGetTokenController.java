@@ -93,14 +93,14 @@ public class CertificateGetTokenController {
         httpHeaders.setContentType(MediaType.TEXT_PLAIN);
 
 
-        Assertion assertion = dafoTokenGenerator.buildAssertion(userDetails);
+        Assertion assertion = dafoTokenGenerator.buildAssertion(userDetails, request);
         dafoTokenGenerator.signAssertion(assertion);
 
         logWrapper.logIssuedToken(assertion);
         dafoTokenGenerator.signAssertion(assertion);
 
         return new ResponseEntity<String>(
-                dafoTokenGenerator.deflateAndEncode(dafoTokenGenerator.getTokenXml(assertion)),
+                dafoTokenGenerator.saveGeneratedToken(assertion),
                 httpHeaders,
                 HttpStatus.OK
         );
