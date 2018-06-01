@@ -32,7 +32,7 @@ Kendetegnet for en velykket søgning med resultat er indhold i feltet ``"results
     ...
     _indhold_
     ...
-                "cprNumber": "˽˽˽˽˽˽˽˽˽˽",
+                "personnummer": "˽˽˽˽˽˽˽˽˽˽",
                 "domain": "cpr",
                 "uuid": "c67aee2b-98fb-4829-b2d1-38de331b167b"
             }
