@@ -37,3 +37,6 @@
 [submodule "plugin/statistik"]
 	path = plugin/statistik
 	url = https://github.com/magenta-aps/datafordeler-plugin-statistik
+[submodule "plugin/geo"]
+	path = plugin/geo
+	url = https://github.com/magenta-aps/datafordeler-plugin-geo.git
