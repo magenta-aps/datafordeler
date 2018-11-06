@@ -41,3 +41,6 @@
 	path = plugin/geo
 	url = https://github.com/magenta-aps/datafordeler-plugin-geo.git
 
+[submodule "plugin/ger"]
+	path = plugin/ger
+	url = https://github.com/magenta-aps/datafordeler-plugin-ger.git
