@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/eboks/idLookup/1")
+@RequestMapping("/eboks/recipient")
 public class EboksRecieveLookupService {
 
     @Autowired
@@ -68,11 +68,11 @@ public class EboksRecieveLookupService {
 
     @PostConstruct
     public void init() {
-        this.monitorService.addAccessCheckPoint("/eboks/idLookup/1");
+        this.monitorService.addAccessCheckPoint("/eboks/recipient");
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{ids}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@RequestParam(value="cpr") List<String> cprs, @RequestParam(value="cvr") List<String> cvrs, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
@@ -159,13 +159,11 @@ public class EboksRecieveLookupService {
                    failedCpr.add(k);
                });
 
-
                invalidValues.set("cpr", failedCpr);
                invalidValues.set("cvr", failedCvr);
 
                returnValue.set("valid", validValues);
                returnValue.set("invalid", invalidValues);
-
 
             if (returnValue != null) {
                 return objectMapper.writeValueAsString(returnValue);

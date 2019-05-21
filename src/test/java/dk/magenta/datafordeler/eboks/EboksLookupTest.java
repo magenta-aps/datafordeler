@@ -207,20 +207,12 @@ public class EboksLookupTest {
 
 
             ResponseEntity<String> response = restTemplate.exchange(
-                    "/eboks/idLookup/1/ids?cpr="+"{cprs}"+"&cvr={cvrs}",
+                    "/eboks/recipient/lookup?cpr="+"{cprs}"+"&cvr={cvrs}",
                     HttpMethod.GET,
                     httpEntity,
                     String.class, cprs, cvrs
             );
-
-
-
             System.out.println(response.getBody());
-
-
-
-
-
 
             Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
