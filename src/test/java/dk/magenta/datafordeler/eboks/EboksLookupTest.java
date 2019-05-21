@@ -2,6 +2,8 @@ package dk.magenta.datafordeler.eboks;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -10,6 +12,7 @@ import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
@@ -34,7 +37,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.StringJoiner;
+
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,6 +53,9 @@ public class EboksLookupTest {
 
     @Autowired
     private CompanyEntityManager companyEntityManager;
+
+    @Autowired
+    private PersonEntityManager personEntityManager;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -70,6 +79,32 @@ public class EboksLookupTest {
     private EboksRecieveLookupService eboksRecieveLookupService;
 
     HashSet<Entity> createdEntities = new HashSet<>();
+
+
+
+    public void loadManyPersons(int count, int start) throws Exception {
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        String testData = InputStreamReader.readInputStream(EboksLookupTest.class.getResourceAsStream("/person.txt"));
+        String[] lines = testData.split("\n");
+        for (int i = start; i < count + start; i++) {
+            StringJoiner sb = new StringJoiner("\n");
+            String newCpr = String.format("%010d", i);
+            for (int j = 0; j < lines.length; j++) {
+                String line = lines[j];
+                line = line.substring(0, 3) + newCpr + line.substring(13);
+                sb.add(line);
+            }
+            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+            personEntityManager.parseData(bais, importMetadata);
+            bais.close();
+        }
+        transaction.commit();
+        session.close();
+    }
 
 
     private void loadCompany() throws IOException, DataFordelerException {
@@ -136,64 +171,62 @@ public class EboksLookupTest {
         loadCompany();
 
         try {
+            loadManyPersons(5, 0);
 
             TestUserDetails testUserDetails = new TestUserDetails();
 
 
             HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "/eboks/cvr/1/" + 25052943,
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+            ObjectNode body = objectMapper.createObjectNode();
+            ArrayList cprList = new ArrayList();
+            ArrayList cvrList = new ArrayList();
+            cprList.add("0000000000");
+            cprList.add("0000000001");
+            cprList.add("0000000002");
+            cprList.add("0000000003");
+            cprList.add("0000000004");
+            cprList.add("0000000005");
+            cprList.add("0000000006");
+            cvrList.add("0000000007");
+            cvrList.add("0000000008");
+            cvrList.add("0000000009");
+
+
+
+
+            httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+            String cprs = String.join(",",cprList);
+            String cvrs = String.join(",",cvrList);
 
 
             testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-            this.applyAccess(testUserDetails);
-            response = restTemplate.exchange(
-                    "/eboks/cvr/1/" + 25052943,
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-
-
-            testUserDetails.giveAccess(
-                    cvrPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
-                            CvrAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER
-                    ).getRestriction(
-                            CvrAreaRestrictionDefinition.RESTRICTION_KOMMUNE_SERMERSOOQ
-                    )
-            );
-            this.applyAccess(testUserDetails);
-            response = restTemplate.exchange(
-                    "/eboks/cvr/1/" + 25052943,
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-
-
-            testUserDetails.giveAccess(
-                    cvrPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
-                            CvrAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER
-                    ).getRestriction(
-                            CvrAreaRestrictionDefinition.RESTRICTION_KOMMUNE_KUJALLEQ
-                    )
-            );
             testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
             this.applyAccess(testUserDetails);
-            response = restTemplate.exchange(
-                    "/eboks/cvr/1/" + 25052943 + "?returnParticipantDetails=1",
+
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    "/eboks/idLookup/1/ids?cpr="+"{cprs}"+"&cvr={cvrs}",
                     HttpMethod.GET,
                     httpEntity,
-                    String.class
+                    String.class, cprs, cvrs
             );
+
+
+
+            System.out.println(response.getBody());
+
+
+
+
+
+
             Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+
+        } catch(Exception e) {
+            e.printStackTrace();
         } finally {
             cleanup();
         }
