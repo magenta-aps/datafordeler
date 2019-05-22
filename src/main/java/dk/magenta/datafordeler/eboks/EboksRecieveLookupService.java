@@ -1,17 +1,13 @@
 package dk.magenta.datafordeler.eboks;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
-import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
-import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
-import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
@@ -20,10 +16,10 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.DirectLookup;
-import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.eboks.utils.FilterUtilities;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,9 +32,11 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+/**
+ * Webservice for finding out if a cpr- or cvr- number is allowed to recieve e-post
+ */
 @RestController
 @RequestMapping("/eboks/recipient")
 public class EboksRecieveLookupService {
@@ -100,15 +98,19 @@ public class EboksRecieveLookupService {
         personQuery.setEffectFromBefore(now);
         personQuery.setEffectToAfter(now);
 
+        ArrayList<FailResult> failedCprs = new ArrayList<FailResult>();
+        ArrayList<FailResult> failedCvrs = new ArrayList<FailResult>();
 
            try(Session session = sessionManager.getSessionFactory().openSession()) {
-
                personQuery.applyFilters(session);
-
                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
-               ArrayNode cprList = objectMapper.createArrayNode();
+               ArrayNode validCprList = objectMapper.createArrayNode();
                personEntities.forEach((k)->{
-                   cprList.add(k.getPersonnummer());
+                   if(FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() >= 950) {
+                       validCprList.add(k.getPersonnummer());
+                   } else {
+                       failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
+                   }
                    cprs.remove(k.getPersonnummer());
                });
 
@@ -119,13 +121,15 @@ public class EboksRecieveLookupService {
                if (!cvrs.isEmpty()) {
                    Collection<CompanyEntity> companyEntities = gerCompanyLookup.lookup(session, cvrs);
                    if (!companyEntities.isEmpty()) {
-                       Iterator<CompanyEntity> companyEntityIterator = companyEntities.iterator();
-                       while(companyEntityIterator.hasNext()) {
-                           CompanyEntity companyEntity = companyEntityIterator.next();
-                           String gerNo = Integer.toString(companyEntity.getGerNr());
-                           cvrList.add(gerNo);
+                       companyEntities.forEach((k) -> {
+                           String gerNo = Integer.toString(k.getGerNr());
+                           if(k.getMunicipalityCode() >= 950) {
+                               cvrList.add(gerNo);
+                           } else {
+                               failedCvrs.add(new FailResult(gerNo, FailStrate.NOTFROMGREENLAND));
+                           }
                            cvrs.remove(gerNo);
-                       }
+                       });
                    }
                }
 
@@ -134,16 +138,21 @@ public class EboksRecieveLookupService {
                    query.setCvrNumre(cvrs);
                    Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
 
-                   companyEntities.forEach((k)->{
-                       cvrList.add(k.getCvrNumber());
-                       cvrs.remove(k.getCvrNumber());
+                   companyEntities.forEach((k) -> {
+                       String cvrNumber = Integer.toString(k.getCvrNumber());
+                       if(FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress()).getMunicipality().getMunicipalityCode() >= 950) {
+                           cvrList.add(cvrNumber);
+                       } else {
+                           failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));
+                       }
+                       cvrs.remove(cvrNumber);
                    });
                }
 
 
                ObjectNode returnValue = objectMapper.createObjectNode();
                ObjectNode validValues = objectMapper.createObjectNode();
-               validValues.set("cpr", cprList);
+               validValues.set("cpr", validCprList);
                validValues.set("cvr", cvrList);
 
                ObjectNode invalidValues = objectMapper.createObjectNode();
@@ -151,12 +160,34 @@ public class EboksRecieveLookupService {
                ArrayNode failedCvr = objectMapper.createArrayNode();
                ArrayNode failedCpr = objectMapper.createArrayNode();
 
-               cvrs.stream().forEach((k)->{
-                   failedCvr.add(k);
+               cprs.stream().forEach((item)->{
+                   ObjectNode node = objectMapper.createObjectNode();
+                   node.put("nr", item);
+                   node.put("reason", FailStrate.MISSING.readableFailString);
+                   failedCpr.add(node);
                });
 
-               cprs.stream().forEach((k)->{
-                   failedCpr.add(k);
+               failedCprs.stream().forEach((item)->{
+
+                   ObjectNode node = objectMapper.createObjectNode();
+                   node.put("nr", item.id);
+                   node.put("reason", item.fail.readableFailString);
+                   failedCpr.add(node);
+               });
+
+
+               cvrs.stream().forEach((item)->{
+                   ObjectNode node = objectMapper.createObjectNode();
+                   node.put("nr", item);
+                   node.put("reason", FailStrate.MISSING.readableFailString);
+                   failedCvr.add(node);
+               });
+
+               failedCvrs.stream().forEach((item)->{
+                   ObjectNode node = objectMapper.createObjectNode();
+                   node.put("nr", item.id);
+                   node.put("reason", item.fail.readableFailString);
+                   failedCvr.add(node);
                });
 
                invalidValues.set("cpr", failedCpr);
@@ -172,18 +203,6 @@ public class EboksRecieveLookupService {
            return null;
     }
 
-    protected Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers, DafoUserDetails user) throws DataFordelerException {
-        CompanyRecordQuery query = new CompanyRecordQuery();
-        query.setCvrNumre(cvrNumbers);
-        this.applyAreaRestrictionsToQuery(query, user);
-        return QueryManager.getAllEntities(session, query, CompanyRecord.class);
-    }
-
-    protected static final byte[] START_OBJECT = "{".getBytes();
-    protected static final byte[] END_OBJECT = "}".getBytes();
-    protected static final byte[] OBJECT_SEPARATOR = ",\n".getBytes();
-
-
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
@@ -195,30 +214,29 @@ public class EboksRecieveLookupService {
         }
     }
 
-    private static Pattern nonDigits = Pattern.compile("[^\\d]");
-    protected List<String> getCvrNumber(JsonNode node) {
-        ArrayList<String> cvrNumbers = new ArrayList<>();
-        if (node.isArray()) {
-            for (JsonNode item : (ArrayNode) node) {
-                cvrNumbers.addAll(this.getCvrNumber(item));
-            }
-        } else if (node.isTextual()) {
-            cvrNumbers.add(nonDigits.matcher(node.asText()).replaceAll(""));
-        } else if (node.isNumber()) {
-            cvrNumbers.add(String.format("%08d", node.asInt()));
+    /**
+     * Enumerations for indicating the reason for not accepting e-post
+     */
+    public enum FailStrate {
+
+        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland");
+
+        private String readableFailString;
+
+        FailStrate(String readableFailString) {
+            this.readableFailString = readableFailString;
         }
-        return cvrNumbers;
     }
 
 
-    protected void applyAreaRestrictionsToQuery(CompanyRecordQuery query, DafoUserDetails user) throws InvalidClientInputException {
-        Collection<AreaRestriction> restrictions = user.getAreaRestrictionsForRole(CvrRolesDefinition.READ_CVR_ROLE);
-        AreaRestrictionDefinition areaRestrictionDefinition = this.cvrPlugin.getAreaRestrictionDefinition();
-        AreaRestrictionType municipalityType = areaRestrictionDefinition.getAreaRestrictionTypeByName(CvrAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER);
-        for (AreaRestriction restriction : restrictions) {
-            if (restriction.getType() == municipalityType) {
-                query.addKommunekodeRestriction(restriction.getValue());
-            }
+    private class FailResult {
+
+        private String id = "";
+        private FailStrate fail = FailStrate.UNDEFINED;
+
+        public FailResult(String id, FailStrate fail) {
+            this.id = id;
+            this.fail = fail;
         }
     }
 }
