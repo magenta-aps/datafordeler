@@ -12,18 +12,17 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.ger.GerPlugin;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntity;
-import dk.magenta.datafordeler.gladdrreg.GladdrregPlugin;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -35,6 +34,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.StringJoiner;
@@ -47,37 +47,20 @@ import static org.mockito.Mockito.when;
 public class EboksLookupTest {
 
     @Autowired
+    TestRestTemplate restTemplate;
+    HashSet<Entity> createdEntities = new HashSet<>();
+    @Autowired
     private SessionManager sessionManager;
-
     @Autowired
     private CompanyEntityManager companyEntityManager;
-
     @Autowired
     private PersonEntityManager personEntityManager;
-
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private GladdrregPlugin gladdrregPlugin;
-
-    @Autowired
-    TestRestTemplate restTemplate;
-
     @SpyBean
     private DafoUserManager dafoUserManager;
-
-    @Autowired
-    private CvrPlugin cvrPlugin;
-
     @Autowired
     private GerPlugin gerPlugin;
-
-    @Autowired
-    private EboksRecieveLookupService eboksRecieveLookupService;
-
-    HashSet<Entity> createdEntities = new HashSet<>();
-
 
     public void loadDkPerson() throws Exception {
         InputStream testData = EboksLookupTest.class.getResourceAsStream("/personDK.txt");
@@ -108,7 +91,7 @@ public class EboksLookupTest {
                 line = line.substring(0, 3) + newCpr + line.substring(13);
                 sb.add(line);
             }
-            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8));
             personEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
@@ -126,7 +109,7 @@ public class EboksLookupTest {
         ImportMetadata importMetadata = new ImportMetadata();
         for (JsonNode item : itemList) {
             String source = objectMapper.writeValueAsString(item.get("_source").get("Vrvirksomhed"));
-            ByteArrayInputStream bais = new ByteArrayInputStream(source.getBytes("UTF-8"));
+            ByteArrayInputStream bais = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
             companyEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
@@ -169,7 +152,7 @@ public class EboksLookupTest {
         String testData = InputStreamReader.readInputStream(EboksLookupTest.class.getResourceAsStream("/company_in.json"));
         for (int i = start; i < count + start; i++) {
             String altered = testData.replaceAll("25052943", "1" + String.format("%07d", i)).replaceAll("\n", "");
-            ByteArrayInputStream bais = new ByteArrayInputStream(altered.getBytes("UTF-8"));
+            ByteArrayInputStream bais = new ByteArrayInputStream(altered.getBytes(StandardCharsets.UTF_8));
             companyEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
@@ -177,80 +160,64 @@ public class EboksLookupTest {
 
 
     @Test
-    public void testCompanyAndCprLookupPrisme() throws IOException, DataFordelerException {
+    public void testCompanyAndCprLookupPrisme() throws Exception {
         loadCompany();
+        loadGerCompany();
+        loadDkPerson();
+        loadManyPersons(5, 0);
 
-        try {
-            loadDkPerson();
-            loadManyPersons(5, 0);
-
-
-            TestUserDetails testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
 
 
-            HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
-            ObjectNode body = objectMapper.createObjectNode();
-            ArrayList cprList = new ArrayList();
-            cprList.add("0000000000");
-            cprList.add("0000000001");
-            cprList.add("0000000002");
-            cprList.add("0000000003");
-            cprList.add("0101001234");
-            cprList.add("0000000004");
-            cprList.add("0000000005");
-            cprList.add("0000000006");
+        ObjectNode body = objectMapper.createObjectNode();
+        ArrayList cprList = new ArrayList();
+        cprList.add("0000000000");
+        cprList.add("0000000001");
+        cprList.add("0000000002");
+        cprList.add("0000000003");
+        cprList.add("0101001234");
+        cprList.add("0000000004");
+        cprList.add("0000000005");
+        cprList.add("0000000006");
 
-            ArrayList cvrList = new ArrayList();
-            cvrList.add("25052943");
-            cvrList.add("0000000007");
-            cvrList.add("0000000008");
-            cvrList.add("12345678");
-            cvrList.add("0000000009");
+        ArrayList cvrList = new ArrayList();
+        cvrList.add("25052943");
+        cvrList.add("0000000007");
+        cvrList.add("0000000008");
+        cvrList.add("12345678");
+        cvrList.add("0000000009");
 
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
 
-            httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        String cprs = String.join(",", cprList);
+        String cvrs = String.join(",", cvrList);
 
-            String cprs = String.join(",",cprList);
-            String cvrs = String.join(",",cvrList);
-
-
-
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "/eboks/recipient/lookup?cpr="+"{cprs}"+"&cvr={cvrs}",
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class, cprs, cvrs
-            );
-            System.out.println(response.getBody());
-
-            Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
 
-
-            testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-            testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-            this.applyAccess(testUserDetails);
-
-
-            response = restTemplate.exchange(
-                    "/eboks/recipient/lookup?cpr="+"{cprs}"+"&cvr={cvrs}",
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class, cprs, cvrs
-            );
-            System.out.println(response.getBody());
-
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
 
 
+        response = restTemplate.exchange(
+                "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
 
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            cleanup();
-        }
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0000000004\",\"0000000000\",\"0000000001\",\"0000000002\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0000000005\",\"reason\":\"Missing\"},{\"nr\":\"0000000006\",\"reason\":\"Missing\"},{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
     }
 
 
@@ -265,7 +232,8 @@ public class EboksLookupTest {
             for (Entity entity : createdEntities) {
                 try {
                     session.delete(entity);
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
             createdEntities.clear();
         } finally {

@@ -21,10 +21,10 @@ public class FilterUtilities {
             .thenComparing(CvrBitemporalRecord::getId, Comparator.nullsLast(naturalOrder()));
 
 
-
     /**
      * Find the newest unclosed record from the list of records
      * Records with a missing OriginDate is also removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return
@@ -37,6 +37,7 @@ public class FilterUtilities {
     /**
      * Find the newest unclosed record from the list of records
      * Records with a missing OriginDate is also removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return
@@ -47,12 +48,9 @@ public class FilterUtilities {
     }
 
 
-
     public static CprBitemporality getCprBitemporality(CprBitemporalRecord record) {
         return record.getBitemporality();
     }
-
-
 
 
     public static Bitemporality getCvrBitemporality(CvrBitemporalDataMetaRecord record) {

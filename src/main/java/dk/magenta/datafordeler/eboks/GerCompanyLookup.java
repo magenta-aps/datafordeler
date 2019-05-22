@@ -6,7 +6,9 @@ import dk.magenta.datafordeler.ger.data.company.CompanyQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 @Component
 public class GerCompanyLookup {
