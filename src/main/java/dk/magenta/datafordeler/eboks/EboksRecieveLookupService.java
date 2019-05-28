@@ -22,6 +22,7 @@ import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.eboks.utils.FilterUtilities;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
+import dk.magenta.datafordeler.ger.data.company.CompanyQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -61,8 +63,6 @@ public class EboksRecieveLookupService {
 
     private Logger log = LogManager.getLogger(EboksRecieveLookupService.class.getCanonicalName());
 
-    @Autowired
-    private GerCompanyLookup gerCompanyLookup;
 
     @PostConstruct
     public void init() {
@@ -119,7 +119,7 @@ public class EboksRecieveLookupService {
 
             //First find out if the company exists as a ger company
             if (!cvrs.isEmpty()) {
-                Collection<CompanyEntity> companyEntities = gerCompanyLookup.lookup(session, cvrs);
+                Collection<CompanyEntity> companyEntities = gerCompanyLookup(session, cvrs);
                 if (!companyEntities.isEmpty()) {
                     companyEntities.forEach((k) -> {
                         String gerNo = Integer.toString(k.getGerNr());
@@ -201,6 +201,16 @@ public class EboksRecieveLookupService {
             }
         }
         return null;
+    }
+
+
+    public HashSet<CompanyEntity> gerCompanyLookup(Session session, Collection<String> cvrNumbers) {
+        CompanyQuery query = new CompanyQuery();
+        for (String cvrNumber : cvrNumbers) {
+            query.addGerNr(cvrNumber);
+        }
+        List<CompanyEntity> companyEntities = QueryManager.getAllEntities(session, query, CompanyEntity.class);
+        return new HashSet<>(companyEntities);
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
