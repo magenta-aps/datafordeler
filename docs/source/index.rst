@@ -27,7 +27,11 @@ Indholdsfortegnelse
    agreements
    overview
    autopulled-docs/index
-   autogen-api/javadoc
+   autogen-api-cvr/cvr-javadoc
+   autogen-api-geo/javadoc-geo
+   autogen-api-prisme/javadoc-prisme
+   autogen-api-statistik/javadoc-statistik
+
    wordlist
 
 .. only:: html
