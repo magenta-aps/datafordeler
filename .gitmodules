@@ -58,3 +58,7 @@
 	path = plugin/ger
 	url = https://github.com/magenta-aps/datafordeler-plugin-ger.git
 	branch = .
+[submodule "plugin/eboks"]
+	path = plugin/eboks
+	url = https://github.com/magenta-aps/datafordeler-plugin-eboks.git
+	branch = .
