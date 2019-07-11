@@ -66,7 +66,7 @@ public class EboksRecieveLookupService {
 
     @PostConstruct
     public void init() {
-        this.monitorService.addAccessCheckPoint("/eboks/recipient");
+        this.monitorService.addAccessCheckPoint("/eboks/recipient/lookup?cpr=1111&cvr=1111");
 
     }
 
