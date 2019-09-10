@@ -158,6 +158,21 @@ public class EboksLookupTest {
         }
     }
 
+    @Test
+    public void testSurveilence() throws Exception {
+
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, "1111", "1111"
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+    }
+
 
     @Test
     public void testCompanyAndCprLookupPrisme() throws Exception {
