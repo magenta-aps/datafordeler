@@ -106,10 +106,13 @@ public class EboksRecieveLookupService {
             Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
             ArrayNode validCprList = objectMapper.createArrayNode();
             personEntities.forEach((k) -> {
-                if (FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() >= 950) {
-                    validCprList.add(k.getPersonnummer());
-                } else {
+
+                if(FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
                     failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
+                } else if(FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus()==90) {
+                    failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
+                } else {
+                    validCprList.add(k.getPersonnummer());
                 }
                 cprs.remove(k.getPersonnummer());
             });
@@ -228,8 +231,7 @@ public class EboksRecieveLookupService {
      */
     public enum FailStrate {
 
-        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland");
-
+        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead");
         private String readableFailString;
 
         FailStrate(String readableFailString) {
