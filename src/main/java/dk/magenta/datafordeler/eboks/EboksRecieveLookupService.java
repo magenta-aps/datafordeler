@@ -17,7 +17,7 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -72,9 +73,8 @@ public class EboksRecieveLookupService {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String getSingle(@RequestParam(value = "cpr") List<String> cprs, @RequestParam(value = "cvr") List<String> cvrs, HttpServletRequest request)
+    public String getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "{}") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
-
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -107,8 +107,11 @@ public class EboksRecieveLookupService {
             Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
             ArrayNode validCprList = objectMapper.createArrayNode();
             personEntities.forEach((k) -> {
-                AddressDataRecord address = FilterUtilities.findNewestUnclosedCpr(k.getAddress());
-                if(FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus()==90) {
+                BirthTimeDataRecord birthtime = FilterUtilities.findNewestUnclosedCpr(k.getBirthTime());
+                LocalDateTime fifteenYearsAgo = LocalDateTime.now().minusYears(15);
+                if(fifteenYearsAgo.isBefore(birthtime.getBirthDatetime())) {
+                    failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
+                } else if(FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus()==90) {
                     failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
                 } else if(FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
                     failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
@@ -232,7 +235,7 @@ public class EboksRecieveLookupService {
      */
     public enum FailStrate {
 
-        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead");
+        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead"), MINOR("Minor");
         private String readableFailString;
 
         FailStrate(String readableFailString) {
