@@ -73,9 +73,8 @@ public class EboksRecieveLookupService {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String getSingle(@RequestParam(value = "cpr") List<String> cprs, @RequestParam(value = "cvr") List<String> cvrs, HttpServletRequest request)
+    public String getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "{}") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
-
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
