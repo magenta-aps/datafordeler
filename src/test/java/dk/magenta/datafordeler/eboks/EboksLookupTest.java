@@ -62,8 +62,8 @@ public class EboksLookupTest {
     @Autowired
     private GerPlugin gerPlugin;
 
-    public void loadDkPerson() throws Exception {
-        InputStream testData = EboksLookupTest.class.getResourceAsStream("/personDK.txt");
+    public void loadPerson(String personFile) throws Exception {
+        InputStream testData = EboksLookupTest.class.getResourceAsStream(personFile);
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
         importMetadata.setSession(session);
@@ -158,12 +158,28 @@ public class EboksLookupTest {
         }
     }
 
+    @Test
+    public void testSurveilence() throws Exception {
+
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, "1111", "1111"
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+    }
+
 
     @Test
-    public void testCompanyAndCprLookupPrisme() throws Exception {
+    public void testCompanyAndCprLookup() throws Exception {
         loadCompany();
         loadGerCompany();
-        loadDkPerson();
+        loadPerson("/personDK.txt");
+        loadPerson("/personDead.txt");
         loadManyPersons(5, 0);
 
         TestUserDetails testUserDetails = new TestUserDetails();
@@ -178,6 +194,7 @@ public class EboksLookupTest {
         cprList.add("0000000002");
         cprList.add("0000000003");
         cprList.add("0101001234");
+        cprList.add("0101003456");
         cprList.add("0000000004");
         cprList.add("0000000005");
         cprList.add("0000000006");
@@ -217,7 +234,8 @@ public class EboksLookupTest {
 
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0000000004\",\"0000000000\",\"0000000001\",\"0000000002\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0000000005\",\"reason\":\"Missing\"},{\"nr\":\"0000000006\",\"reason\":\"Missing\"},{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0000000004\",\"0000000000\",\"0000000001\",\"0000000002\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0000000005\",\"reason\":\"Missing\"},{\"nr\":\"0000000006\",\"reason\":\"Missing\"},{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"},{\"nr\":\"0101003456\",\"reason\":\"Dead\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
+
     }
 
 

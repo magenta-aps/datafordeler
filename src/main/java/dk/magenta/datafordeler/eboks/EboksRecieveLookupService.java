@@ -17,6 +17,7 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -66,7 +67,7 @@ public class EboksRecieveLookupService {
 
     @PostConstruct
     public void init() {
-        this.monitorService.addAccessCheckPoint("/eboks/recipient");
+        this.monitorService.addAccessCheckPoint("/eboks/recipient/lookup?cpr=1111&cvr=1111");
 
     }
 
@@ -106,10 +107,13 @@ public class EboksRecieveLookupService {
             Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
             ArrayNode validCprList = objectMapper.createArrayNode();
             personEntities.forEach((k) -> {
-                if (FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() >= 950) {
-                    validCprList.add(k.getPersonnummer());
-                } else {
+                AddressDataRecord address = FilterUtilities.findNewestUnclosedCpr(k.getAddress());
+                if(FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus()==90) {
+                    failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
+                } else if(FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
                     failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
+                } else {
+                    validCprList.add(k.getPersonnummer());
                 }
                 cprs.remove(k.getPersonnummer());
             });
@@ -228,8 +232,7 @@ public class EboksRecieveLookupService {
      */
     public enum FailStrate {
 
-        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland");
-
+        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead");
         private String readableFailString;
 
         FailStrate(String readableFailString) {
