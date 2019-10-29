@@ -201,6 +201,15 @@ public class EboksLookupTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/eboks/recipient/lookup",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
     }
 
 

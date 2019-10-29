@@ -83,46 +83,48 @@ public class EboksRecieveLookupService {
         PersonRecordQuery personQuery = new PersonRecordQuery();
         personQuery.setPageSize(Integer.MAX_VALUE);
 
-
-        if (cprs != null) {
-            for (String cprNumber : cprs) {
-                personQuery.addPersonnummer(cprNumber);
-            }
-        }
-
-        OffsetDateTime now = OffsetDateTime.now();
-        personQuery.setRegistrationFromBefore(now);
-        personQuery.setRegistrationToAfter(now);
-        personQuery.setEffectFromBefore(now);
-        personQuery.setEffectToAfter(now);
-
-        ArrayList<FailResult> failedCprs = new ArrayList<FailResult>();
-        ArrayList<FailResult> failedCvrs = new ArrayList<FailResult>();
-
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            personQuery.applyFilters(session);
-            Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
+
+            ArrayList<FailResult> failedCprs = new ArrayList<FailResult>();
+            ArrayList<FailResult> failedCvrs = new ArrayList<FailResult>();
             ArrayNode validCprList = objectMapper.createArrayNode();
-            personEntities.forEach((k) -> {
-                BirthTimeDataRecord birthtime = FilterUtilities.findNewestUnclosedCpr(k.getBirthTime());
-                LocalDateTime fifteenYearsAgo = LocalDateTime.now().minusYears(15);
-                if(fifteenYearsAgo.isBefore(birthtime.getBirthDatetime())) {
-                    failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
-                } else if(FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus()==90) {
-                    failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
-                } else if(FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
-                    failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
-                } else {
-                    validCprList.add(k.getPersonnummer());
+
+            if (cprs != null && !cprs.isEmpty()) {
+                for (String cprNumber : cprs) {
+                    personQuery.addPersonnummer(cprNumber);
                 }
-                cprs.remove(k.getPersonnummer());
-            });
+
+                OffsetDateTime now = OffsetDateTime.now();
+                personQuery.setRegistrationFromBefore(now);
+                personQuery.setRegistrationToAfter(now);
+                personQuery.setEffectFromBefore(now);
+                personQuery.setEffectToAfter(now);
+
+                personQuery.applyFilters(session);
+                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
+
+                personEntities.forEach((k) -> {
+                    BirthTimeDataRecord birthtime = FilterUtilities.findNewestUnclosedCpr(k.getBirthTime());
+                    LocalDateTime fifteenYearsAgo = LocalDateTime.now().minusYears(15);
+                    if (fifteenYearsAgo.isBefore(birthtime.getBirthDatetime())) {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
+                    } else if (FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus() == 90) {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
+                    } else if (FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
+                    } else {
+                        validCprList.add(k.getPersonnummer());
+                    }
+                    cprs.remove(k.getPersonnummer());
+                });
+            }
+
 
             ArrayNode cvrList = objectMapper.createArrayNode();
 
 
             //First find out if the company exists as a ger company
-            if (!cvrs.isEmpty()) {
+            if (cvrs != null &&!cvrs.isEmpty()) {
                 Collection<CompanyEntity> companyEntities = gerCompanyLookup(session, cvrs);
                 if (!companyEntities.isEmpty()) {
                     companyEntities.forEach((k) -> {
