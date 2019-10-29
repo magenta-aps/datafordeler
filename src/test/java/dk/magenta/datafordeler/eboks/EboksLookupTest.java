@@ -175,6 +175,36 @@ public class EboksLookupTest {
 
 
     @Test
+    public void testCallForEmptyList() throws Exception {
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        ArrayList cprList = new ArrayList();
+        ArrayList cvrList = new ArrayList();
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        String cprs = String.join(",", cprList);
+        String cvrs = String.join(",", cvrList);
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
+    }
+
+
+    @Test
     public void testCompanyAndCprLookup() throws Exception {
         loadCompany();
         loadGerCompany();
