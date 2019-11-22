@@ -17,7 +17,7 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -72,9 +73,8 @@ public class EboksRecieveLookupService {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String getSingle(@RequestParam(value = "cpr") List<String> cprs, @RequestParam(value = "cvr") List<String> cvrs, HttpServletRequest request)
+    public String getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
-
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -83,46 +83,48 @@ public class EboksRecieveLookupService {
         PersonRecordQuery personQuery = new PersonRecordQuery();
         personQuery.setPageSize(Integer.MAX_VALUE);
 
-
-        if (cprs != null) {
-            for (String cprNumber : cprs) {
-                personQuery.addPersonnummer(cprNumber);
-            }
-        }
-        if (cprs.isEmpty() && cvrs.isEmpty()) {
-            throw new InvalidClientInputException("Please specify at least one CPR/CVR number");
-        }
-
-        OffsetDateTime now = OffsetDateTime.now();
-        personQuery.setRegistrationFromBefore(now);
-        personQuery.setRegistrationToAfter(now);
-        personQuery.setEffectFromBefore(now);
-        personQuery.setEffectToAfter(now);
-
-        ArrayList<FailResult> failedCprs = new ArrayList<FailResult>();
-        ArrayList<FailResult> failedCvrs = new ArrayList<FailResult>();
-
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            personQuery.applyFilters(session);
-            Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
+
+            ArrayList<FailResult> failedCprs = new ArrayList<FailResult>();
+            ArrayList<FailResult> failedCvrs = new ArrayList<FailResult>();
             ArrayNode validCprList = objectMapper.createArrayNode();
-            personEntities.forEach((k) -> {
-                AddressDataRecord address = FilterUtilities.findNewestUnclosedCpr(k.getAddress());
-                if(FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus()==90) {
-                    failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
-                } else if(FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
-                    failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
-                } else {
-                    validCprList.add(k.getPersonnummer());
+
+            if (cprs != null && !cprs.isEmpty()) {
+                for (String cprNumber : cprs) {
+                    personQuery.addPersonnummer(cprNumber);
                 }
-                cprs.remove(k.getPersonnummer());
-            });
+
+                OffsetDateTime now = OffsetDateTime.now();
+                personQuery.setRegistrationFromBefore(now);
+                personQuery.setRegistrationToAfter(now);
+                personQuery.setEffectFromBefore(now);
+                personQuery.setEffectToAfter(now);
+
+                personQuery.applyFilters(session);
+                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
+
+                personEntities.forEach((k) -> {
+                    BirthTimeDataRecord birthtime = FilterUtilities.findNewestUnclosedCpr(k.getBirthTime());
+                    LocalDateTime fifteenYearsAgo = LocalDateTime.now().minusYears(15);
+                    if (fifteenYearsAgo.isBefore(birthtime.getBirthDatetime())) {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
+                    } else if (FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus() == 90) {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
+                    } else if (FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
+                    } else {
+                        validCprList.add(k.getPersonnummer());
+                    }
+                    cprs.remove(k.getPersonnummer());
+                });
+            }
+
 
             ArrayNode cvrList = objectMapper.createArrayNode();
 
 
             //First find out if the company exists as a ger company
-            if (!cvrs.isEmpty()) {
+            if (cvrs != null &&!cvrs.isEmpty()) {
                 Collection<CompanyEntity> companyEntities = gerCompanyLookup(session, cvrs);
                 if (!companyEntities.isEmpty()) {
                     companyEntities.forEach((k) -> {
@@ -232,7 +234,7 @@ public class EboksRecieveLookupService {
      */
     public enum FailStrate {
 
-        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead");
+        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead"), MINOR("Minor");
         private String readableFailString;
 
         FailStrate(String readableFailString) {
