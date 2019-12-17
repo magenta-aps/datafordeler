@@ -175,11 +175,52 @@ public class EboksLookupTest {
 
 
     @Test
+    public void testCallForEmptyList() throws Exception {
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        ArrayList cprList = new ArrayList();
+        ArrayList cvrList = new ArrayList();
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        String cprs = String.join(",", cprList);
+        String cvrs = String.join(",", cvrList);
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/eboks/recipient/lookup",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
+    }
+
+
+    @Test
     public void testCompanyAndCprLookup() throws Exception {
         loadCompany();
         loadGerCompany();
         loadPerson("/personDK.txt");
         loadPerson("/personDead.txt");
+        loadPerson("/personGL.txt");
+        loadPerson("/personMinor.txt");
         loadManyPersons(5, 0);
 
         TestUserDetails testUserDetails = new TestUserDetails();
@@ -189,15 +230,14 @@ public class EboksLookupTest {
 
         ObjectNode body = objectMapper.createObjectNode();
         ArrayList cprList = new ArrayList();
-        cprList.add("0000000000");
-        cprList.add("0000000001");
-        cprList.add("0000000002");
-        cprList.add("0000000003");
-        cprList.add("0101001234");
-        cprList.add("0101003456");
-        cprList.add("0000000004");
-        cprList.add("0000000005");
-        cprList.add("0000000006");
+        cprList.add("0000000000");//From GL
+        cprList.add("0000000001");//From GL
+        cprList.add("0000000002");//From GL
+        cprList.add("0000000003");//From GL
+        cprList.add("0101001234");//From DK
+        cprList.add("0101003456");//Dead
+        cprList.add("0101001235");//From GL
+        cprList.add("0101003457");//Minor
 
         ArrayList cvrList = new ArrayList();
         cvrList.add("25052943");
@@ -234,7 +274,7 @@ public class EboksLookupTest {
 
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0000000004\",\"0000000000\",\"0000000001\",\"0000000002\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0000000005\",\"reason\":\"Missing\"},{\"nr\":\"0000000006\",\"reason\":\"Missing\"},{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"},{\"nr\":\"0101003456\",\"reason\":\"Dead\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0101001235\",\"0000000000\",\"0000000001\",\"0000000002\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"},{\"nr\":\"0101003457\",\"reason\":\"Minor\"},{\"nr\":\"0101003456\",\"reason\":\"Dead\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
 
     }
 
