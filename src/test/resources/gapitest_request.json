@@ -1,0 +1,11 @@
+{
+  "beskedVersion":"1.0",
+  "eventID":"abekat",
+  "beskedData":{
+    "Objektdata":{
+      "dataskema":"Postnummer",
+      "objektdata":"{\"sekvensnummer\":1,\"checksum\":\"E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855\",\"registerFra\":\"2017-03-29T09:18:46.818+02:00\",\"registerTil\":null,\"entity\":{\"uuid\":\"e3b59524-e577-4d1c-944c-f81b826a7bfd\",\"domaene\":\"testing\"},\"virkninger\":[{\"virkningFra\":\"2017-01-01T00:00:00Z\",\"virkningTil\":\"2017-07-01T00:00:00Z\",\"data\":[{\"nummer\":8000,\"bynavn\":\"Aarhus C\"}]}]}"
+    }
+  }
+}
+

@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "type": "Postnummer",
+      "objectID": "2eed5323-f94f-5a9f-9607-39739c3585b5",
+      "registreringer": [
+        {
+        "sekvensnummer": 1,
+        "checksum": "2a2ef17de084b10fe30ca726e2168c2e"
+        }
+      ]
+    },
+    {
+      "type": "Postnummer",
+      "objectID": "2eed5323-f94f-5a9f-9607-39739c3585b6",
+      "registreringer": [
+        {
+          "sekvensnummer": 2,
+          "checksum": "2a2ef17de084b10fe30ca726e2168c2f"
+        }
+      ]
+    }
+  ]
+}

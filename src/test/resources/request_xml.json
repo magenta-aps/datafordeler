@@ -1,0 +1,6 @@
+{
+  "@odata.type":"#DataDistributor.Event",
+  "Body":"<?xml version=\"1.0\" encoding=\"UTF-8\" ?><Hændelsesbesked><beskedversion>1.0</beskedversion><beskedId /><Beskedkuvert><Filtreringsdata><beskedtype>MatrikulaerSagCreate</beskedtype><beskedansvarligAktør /><tilladtModtager /><RelateretObjekt /><Objektregistrering><registreringsaktør>Peter West-Nielsen</registreringsaktør><registreringstid /><status>Afsluttet</status><objektansvarligAktør>Geodatastyrelsen</objektansvarligAktør><objektID>ID20165</objektID><objekttype>MatrikulaerSag</objekttype><objekthandling /><opgaveemne>52.20.05</opgaveemne><registreringsID>5,0001-01-01T00:00:00.0000000</registreringsID><Stedbestemmelse /></Objektregistrering><tværgåendeProces>Diverse</tværgåendeProces></Filtreringsdata><Leveranceinformation><dannelsestidspunkt /><transaktionsID /><kildesystem /><kildesystemIPAdresse /><kildesystemAkkreditiver /><sikkerhedsklassificering>Ikke fortrolige data</sikkerhedsklassificering><Leverancerute /></Leveranceinformation><Modtagerhandling /></Beskedkuvert><Beskeddata><Objektreference><objektreference>ID20165</objektreference></Objektreference><Objektdata /></Beskeddata></Hændelsesbesked>",
+  "Format":"XML",
+  "Id":1
+}

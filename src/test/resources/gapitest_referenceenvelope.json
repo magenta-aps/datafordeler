@@ -1,0 +1,10 @@
+{
+  "beskedVersion":"1.0",
+  "eventID":"msgid",
+  "beskedData":{
+    "Objektreference":{
+      "objektreference":"%{reference}"
+    }
+  }
+}
+

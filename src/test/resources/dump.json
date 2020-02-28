@@ -1,0 +1,36 @@
+{
+  "path" : "",
+  "terms" : "https://doc.test.data.gl/terms",
+  "requestTimestamp" : null,
+  "responseTimestamp" : null,
+  "username" : "[DUMP]@[INTERNAL]",
+  "page" : 1,
+  "pageSize" : 10,
+  "results" : [ {
+    "uuid" : "00000000-0000-0000-0000-000000003900",
+    "domain" : "http://example.com",
+    "postnr" : 3900,
+    "registreringer" : [ {
+      "registreringFra" : XXX,
+      "registreringTil" : null,
+      "virkninger" : [ {
+        "virkningFra" : XXX,
+        "virkningTil" : null,
+        "bynavn" : "Nuuk"
+      } ]
+    } ]
+  }, {
+    "uuid" : "00000000-0000-0000-0000-000000003992",
+    "domain" : "http://example.com",
+    "postnr" : 3992,
+    "registreringer" : [ {
+      "registreringFra" : XXX,
+      "registreringTil" : null,
+      "virkninger" : [ {
+        "virkningFra" : XXX,
+        "virkningTil" : null,
+        "bynavn" : "Siriuspatruljen"
+      } ]
+    } ]
+  } ]
+}

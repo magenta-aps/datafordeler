@@ -1,0 +1,11 @@
+{
+  "beskedVersion":"1.0",
+  "eventID":"msgid",
+  "beskedData":{
+    "Objektdata":{
+      "dataskema":"%{skema}",
+      "objektdata":"%{data}"
+    }
+  }
+}
+

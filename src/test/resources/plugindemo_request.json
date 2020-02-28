@@ -1,0 +1,6 @@
+{
+  "@odata.type":"#DataDistributor.Event",
+  "Body":"{\"Hændelsesbesked\":{\"beskedversion\":\"1.0\",\"eventID\":null,\"Beskedkuvert\":{\"Filtreringsdata\":{\"beskedtype\":\"DemoObjectCreate\",\"beskedansvarligAktør\":null,\"tilladtModtager\":null,\"RelateretObjekt\":null,\"Objektregistrering\":[{\"registreringsaktør\":\"Lars Peter Thomsen\",\"registreringstid\":null,\"status\":\"Afsluttet\",\"objektansvarligAktør\":\"Magenta ApS\",\"objektID\":\"12345\",\"objekttype\":\"DemoObjekt\",\"objekthandling\":null,\"opgaveemne\":\"01.01.01\",\"registreringsID\":\"5,0001-01-01T00:00:00.0000000\",\"Stedbestemmelse\":null}],\"tværgåendeProces\":\"Diverse\"},\"Leveranceinformation\":{\"dannelsestidspunkt\":null,\"transaktionsID\":null,\"kildesystem\":null,\"kildesystemIPAdresse\":null,\"kildesystemAkkreditiver\":null,\"sikkerhedsklassificering\":\"Ikke fortrolige data\",\"Leverancerute\":null},\"Modtagerhandling\":null},\"Beskeddata\":[{\"Objektreference\":{\"objektreference\":\"12345\"},\"Objektdata\":\"Her er objektdata\"}]}}",
+  "Format":"JSON",
+  "Id":1
+}

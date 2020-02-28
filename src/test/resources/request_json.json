@@ -1,0 +1,6 @@
+{
+  "@odata.type":"#DataDistributor.Event",
+  "Body":"{\"Hændelsesbesked\":{\"beskedversion\":\"1.0\",\"beskedId\":null,\"Beskedkuvert\":{\"Filtreringsdata\":{\"beskedtype\":\"MatrikulaerSagCreate\",\"beskedansvarligAktør\":null,\"tilladtModtager\":null,\"RelateretObjekt\":null,\"Objektregistrering\":[{\"registreringsaktør\":\"Peter West-Nielsen\",\"registreringstid\":null,\"status\":\"Afsluttet\",\"objektansvarligAktør\":\"Geodatastyrelsen\",\"objektID\":\"ID20165\",\"objekttype\":\"MatrikulaerSag\",\"objekthandling\":null,\"opgaveemne\":\"52.20.05\",\"registreringsID\":\"5,0001-01-01T00:00:00.0000000\",\"Stedbestemmelse\":null}],\"tværgåendeProces\":\"Diverse\"},\"Leveranceinformation\":{\"dannelsestidspunkt\":null,\"transaktionsID\":null,\"kildesystem\":null,\"kildesystemIPAdresse\":null,\"kildesystemAkkreditiver\":null,\"sikkerhedsklassificering\":\"Ikke fortrolige data\",\"Leverancerute\":null},\"Modtagerhandling\":null},\"Beskeddata\":[{\"Objektreference\":{\"objektreference\":\"ID20165\"},\"Objektdata\":null}]}}",
+  "Format":"JSON",
+  "Id":1
+}

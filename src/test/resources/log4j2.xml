@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="PID">????</Property>
+
+        <!-- Location of the error file for monitoring. The value *must* match the "dafo.error_file" property in application.properties -->
+        <Property name="monitorfile">cache/log/${sys:PID}.err</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%logger{36}] %-5level: %msg%n"/>
+        </Console>
+        <File name="MonitorFile" fileName="${monitorfile}" immediateFlush="true" append="true">
+            <PatternLayout pattern="%-5p %m%n" />
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="dk.magenta.datafordeler" level="info"/>
+        <Logger name="dk.magenta.datafordeler" level="error">
+            <AppenderRef ref="MonitorFile" />
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
