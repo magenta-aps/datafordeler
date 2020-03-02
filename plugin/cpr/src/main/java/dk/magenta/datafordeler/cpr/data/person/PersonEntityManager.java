@@ -402,7 +402,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         if (this.directPasswordChangeEnabled) {
             try {
                 Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-                ScheduleBuilder scheduleBuilder = CronScheduleBuilder.monthlyOnDayAndHourAndMinute(12, 0, 0);
+                ScheduleBuilder scheduleBuilder = CronScheduleBuilder.monthlyOnDayAndHourAndMinute(1, 8, 0);
                 TriggerKey triggerKey = TriggerKey.triggerKey("directPasswordChangeTrigger");
                 Trigger trigger = TriggerBuilder.newTrigger()
                         .withIdentity(triggerKey)
@@ -412,6 +412,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 jobData.put(CprDirectPasswordUpdate.Task.DATA_DIRECTLOOKUP, this.directLookup);
                 JobDetail job = JobBuilder.newJob(CprDirectPasswordUpdate.Task.class).setJobData(jobData).build();
                 scheduler.scheduleJob(job, Collections.singleton(trigger), true);
+                scheduler.start();
             } catch (SchedulerException e) {
                 log.error(e);
             }
