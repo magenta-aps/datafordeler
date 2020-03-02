@@ -1,0 +1,338 @@
+{
+  "took": 12,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "failed": 0
+  },
+  "hits": {
+    "total": 1983849,
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4006331794",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [
+              {
+                "sekvensnr": 0,
+                "type": "TESTATTRIBUT",
+                "vaerditype": "integer",
+                "vaerdier": [
+                  {
+                    "vaerdi": "42",
+                    "periode": {
+                      "gyldigFra": "2015-06-17",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-06-17T21:27:19.000+02:00"
+                  }
+                ]
+              }
+            ],
+            "sidstIndlaest": "2017-01-29T13:08:33.726+01:00",
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "jointo@outlook.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-30T13:06:04.000+01:00"
+              }
+            ],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 36238208,
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              }
+            ],
+            "sidstOpdateret": "2017-01-29T13:06:04.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "855900",
+                "branchetekst": "Anden undervisning i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              },
+              {
+                "branchekode": "855900",
+                "branchetekst": "Anden undervisning i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-06-01T00:00:00.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [
+              {
+                "adresseId": "55a42f3a-0bad-4d9a-9ab3-d14feccbc58a",
+                "conavn": null,
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00",
+                "sidstValideret": "2017-01-29T13:08:33.542+01:00",
+                "postboks": null,
+                "vejnavn": "Martine Christoffersens Vej",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "postnummer": 7000,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 5765,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 607,
+                  "kommuneNavn": "FREDERICIA",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 67,
+                "postdistrikt": "Fredericia",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 36238208,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [
+                "jointo@outlook.dk"
+              ],
+              "nyesteBibranche1": {
+                "branchekode": "855900",
+                "branchetekst": "Anden undervisning i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2018-01-29T13:06:04.000+01:00"
+              },
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "Jointo",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2018-01-29T13:06:04.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteHovedbranche": {
+                "branchekode": "855900",
+                "branchetekst": "Anden undervisning i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2018-01-29T13:06:04.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": "55a42f3a-0bad-4d9a-9ab3-d14feccbc58a",
+                "conavn": null,
+                "sidstOpdateret": "2018-01-29T13:06:04.000+01:00",
+                "sidstValideret": "2018-01-29T13:08:33.542+01:00",
+                "postboks": null,
+                "vejnavn": "Martine Christoffersens Vej",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "postnummer": 7000,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 5765,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 607,
+                  "kommuneNavn": "FREDERICIA",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 67,
+                "postdistrikt": "Fredericia",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4006331794,
+            "bibranche1": [{
+              "branchekode": "855900",
+              "branchetekst": "Anden undervisning i.a.n.",
+              "periode": {
+                "gyldigFra": "2015-11-13",
+                "gyldigTil": null
+              },
+              "sidstOpdateret": "2017-06-01T00:00:00.000+01:00"
+            }],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2017-02-01"
+                },
+                "sidstOpdateret": "2017-02-01T13:06:04.000+01:00"
+              }
+            ],
+            "reklamebeskyttet": false,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": "55a42f3a-0bad-4d9a-9ab3-d14feccbc58a",
+                "conavn": null,
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00",
+                "sidstValideret": "2017-01-29T13:08:33.542+01:00",
+                "postboks": null,
+                "vejnavn": "Martine Christoffersens Vej",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "postnummer": 7000,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 5765,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 607,
+                  "kommuneNavn": "FREDERICIA",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2016-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 67,
+                "postdistrikt": "Fredericia",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [
+              {
+                "aar": 2017,
+                "antalInklusivEjere": null,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2017-12-15T14:15:15.714+01:00",
+                "intervalKodeAntalInklusivEjere": "ANTAL_10_19",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_10_19"
+              }
+            ],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [
+              {
+                "aar": 2017,
+                "kvartal": 1,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2016-12-15T14:15:55.983+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_20_49"
+              },
+              {
+                "aar": 2017,
+                "kvartal": 2,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2016-12-15T14:15:57.494+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_20_49"
+              },
+              {
+                "aar": 2017,
+                "kvartal": 3,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2017-03-03T16:29:43.402+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_20_49"
+              },
+              {
+                "aar": 2017,
+                "kvartal": 4,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2017-03-03T16:29:43.402+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_20_49"
+              }
+            ],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [
+              {
+              "kontaktoplysning": "12345678",
+              "hemmelig": false,
+              "periode": {
+                "gyldigFra": "2016-08-23",
+                "gyldigTil": "2017-01-30"
+              },
+              "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+            }
+            ],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "Jointo",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              },
+              {
+                "navn": "Jointo Beta",
+                "periode": {
+                  "gyldigFra": "2016-12-31",
+                  "gyldigTil": "2017-02-01"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              }
+            ],
+            "samtId": 2,
+            "pNummer": 1020895337
+          }
+        }
+      }
+    ]
+  }
+}
