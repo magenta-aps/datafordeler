@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG">
+    <Properties>
+        <Property name="PID">????</Property>
+
+        <!-- Location of the error file for monitoring. The value *must* match the "dafo.error_file" property in application.properties -->
+        <Property name="monitorfile">cache/log/${sys:PID}.err</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%logger{36}] %-5level: %msg%n"/>
+        </Console>
+        <File name="MonitorFile" fileName="${monitorfile}" immediateFlush="true" append="true">
+            <PatternLayout pattern="%-5p %m%n" />
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.apache.catalina.startup.DigesterFactory" level="error" />
+        <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
+        <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+        <logger name="org.apache.sshd.common.util.SecurityUtils" level="warn"/>
+        <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+        <Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
+        <Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
+        <Logger name="org.hibernate.stat" level="debug" />
+        <logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
+        <logger name="org.hibernate.event.internal.DefaultDeleteEventListener" level="error"/>
+        <logger name="org.opensaml" level="warn"/>
+        <Logger name="dk.magenta.datafordeler.cpr.parsers.PersonParser" level="debug">
+            <AppenderRef ref="Console" />
+        </Logger>
+        <!--<Root level="debug">
+            <AppenderRef ref="Console"/>
+        </Root>-->
+    </Loggers>
+</Configuration>
