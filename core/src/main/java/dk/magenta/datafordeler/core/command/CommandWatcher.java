@@ -88,6 +88,7 @@ public class CommandWatcher {
         if (commands != null && !commands.isEmpty()) {
             this.log.info("Found " + commands.size() + " commands");
             for (Command command : commands) {
+				log.info("Command status: "+command.getStatus());
                 switch (command.getStatus()) {
                     case QUEUED:
                         this.startCommand(command);
@@ -95,6 +96,7 @@ public class CommandWatcher {
                     case CANCEL:
                         this.cancelCommand(command);
                         break;
+					default:
                 }
             }
         }
@@ -138,7 +140,9 @@ public class CommandWatcher {
             } catch (DataFordelerException e) {
                 e.printStackTrace();
             }
-        }
+        } else {
+			log.info("CommandHandler "+commandHandler.getClass().getCanonicalName()+" did not accept command");
+		}
     }
 
     private void commandComplete(Command command) {

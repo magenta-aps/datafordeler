@@ -301,6 +301,9 @@ public abstract class RegisterManager {
             importMetadata.setTransactionInProgress(false);
         }
     }
+	
+	public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) {
+    }
 
     public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) {
         // Override in subclasses

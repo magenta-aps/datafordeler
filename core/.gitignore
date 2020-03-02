@@ -23,3 +23,15 @@ hs_err_pid*
 /local
 
 lib/
+
+# Gitignore from production 2019-04-02
+/cache
+/statistik
+/*.log
+
+/src/main/resources/*.dll
+/src/main/resources/log4j2.xml
+/src/main/resources/log4j2.dafo*.xml
+
+/yajsw
+/yajsw*.zip
