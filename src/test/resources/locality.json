@@ -1,0 +1,58 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 17,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -51.753789267999935,
+              64.128045732000032
+            ],
+            [
+              -51.573056784999949,
+              64.128868457000067
+            ],
+            [
+              -51.574911854999982,
+              64.218602015000045
+            ],
+            [
+              -51.756229276999932,
+              64.217776012000058
+            ],
+            [
+              -51.753789267999935,
+              64.128045732000032
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "OBJECTID": 17,
+        "Lokalitetsnavn": "Nuuk",
+        "Creator": "GREENADMIN",
+        "CreationDate": 1533816004000,
+        "Editor": "GREENADMIN",
+        "EditDate": 1533820302000,
+        "Lokalitetskode": "0600",
+        "Kommunekode": 956,
+        "LokalitetSumiffik": "4F46D110-E6AD-46D1-B403-B12063152564",
+        "Lokalitetsnavn_forkortelse": "NUK",
+        "Location_type": 1,
+        "GlobalID": "{F0966470-F09F-474D-A820-E8A46ED6FCC7}",
+        "SHAPE.STArea()": 0.016245486728621472,
+        "SHAPE.STLength()": 0.54156983908556178
+      }
+    }
+  ]
+}
