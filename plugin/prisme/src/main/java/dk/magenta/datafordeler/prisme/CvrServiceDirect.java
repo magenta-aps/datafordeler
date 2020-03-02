@@ -146,7 +146,7 @@ public class CvrServiceDirect extends CvrRecordService {
             public void writeTo(OutputStream outputStream) throws IOException {
 
                 final Session lookupSession = sessionManager.getSessionFactory().openSession();
-                GeoLookupService lookupService = new GeoLookupService(lookupSession);
+                GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
                 HashSet<CompanyRecord> records = companyEntityManager.directLookup(cvr, updatedSince, CvrServiceDirect.this.getMunicipalityRestrictions(user));
                 Stream<ObjectNode> cvrFormattedOutput = records.stream().map(

@@ -82,7 +82,7 @@ public class SameAddressService {
 
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            GeoLookupService lookupService = new GeoLookupService(session);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setPersonnummer(cprNummer);

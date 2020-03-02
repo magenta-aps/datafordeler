@@ -88,7 +88,7 @@ public class CprService {
         this.checkAndLogAccess(loggerHelper);
 
         try(final Session session = sessionManager.getSessionFactory().openSession();) {
-            GeoLookupService lookupService = new GeoLookupService(session);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
@@ -172,8 +172,7 @@ public class CprService {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
 
-                final Session lookupSession = sessionManager.getSessionFactory().openSession();
-                GeoLookupService lookupService = new GeoLookupService(lookupSession);
+                GeoLookupService lookupService = new GeoLookupService(sessionManager);
                 personOutputWrapper.setLookupService(lookupService);
 
                 final Session entitySession = sessionManager.getSessionFactory().openSession();
@@ -214,7 +213,6 @@ public class CprService {
                     e.printStackTrace();
                 } finally {
                     entitySession.close();
-                    lookupSession.close();
                 }
             }
         };

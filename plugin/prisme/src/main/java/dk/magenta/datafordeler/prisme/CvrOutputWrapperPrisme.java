@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntity;
 import dk.magenta.datafordeler.ger.data.responsible.ResponsibleQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -217,23 +218,25 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
         if (returnParticipantDetails) {
             ResponsibleQuery responsibleQuery = new ResponsibleQuery();
             responsibleQuery.setGerNr(entity.getGerNr());
-            List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(lookupService.getSession(), responsibleQuery, ResponsibleEntity.class);
-            if (!responsibleEntities.isEmpty()) {
-                ArrayNode participantsNode = objectMapper.createArrayNode();
-                for (ResponsibleEntity responsibleEntity : responsibleEntities) {
-                    ObjectNode responsibleNode = objectMapper.createObjectNode();
-                    if (responsibleEntity.getCprNumber() != null) {
-                        responsibleNode.put("deltagerPnr", responsibleEntity.getCprNumberString());
+            try(Session session = lookupService.getSessionManager().getSessionFactory().openSession()) {
+                List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(session, responsibleQuery, ResponsibleEntity.class);
+                if (!responsibleEntities.isEmpty()) {
+                    ArrayNode participantsNode = objectMapper.createArrayNode();
+                    for (ResponsibleEntity responsibleEntity : responsibleEntities) {
+                        ObjectNode responsibleNode = objectMapper.createObjectNode();
+                        if (responsibleEntity.getCprNumber() != null) {
+                            responsibleNode.put("deltagerPnr", responsibleEntity.getCprNumberString());
+                        }
+                        if (responsibleEntity.getCvrNumber() != null) {
+                            responsibleNode.put("deltagerCvrNr", responsibleEntity.getCvrNumber().toString());
+                        }
+                        if (responsibleEntity.getName() != null) {
+                            responsibleNode.put("deltagerNavn", responsibleEntity.getName());
+                        }
+                        participantsNode.add(responsibleNode);
                     }
-                    if (responsibleEntity.getCvrNumber() != null) {
-                        responsibleNode.put("deltagerCvrNr", responsibleEntity.getCvrNumber().toString());
-                    }
-                    if (responsibleEntity.getName() != null) {
-                        responsibleNode.put("deltagerNavn", responsibleEntity.getName());
-                    }
-                    participantsNode.add(responsibleNode);
+                    root.set("deltagere", participantsNode);
                 }
-                root.set("deltagere", participantsNode);
             }
         }
 
@@ -413,13 +416,15 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
                     participantOutput.put("enhedsNummer", unitNumber);
                     try {
                         //It is expected to find only one participant
-                        ParticipantRecord participantRecord = directLookup.participantLookup(lookupService.getSession(), Arrays.asList(Long.toString(unitNumber, 10))).iterator().next();
-                        if (participantRecord != null) {
-                            Long businessKey = participantRecord.getBusinessKey();
-                            if (Objects.equals(businessKey, unitNumber)) {
-                                // Foreigner
-                            } else {
-                                participantOutput.put("deltagerPnr", String.format("%010d", businessKey));
+                        try(Session session = lookupService.getSessionManager().getSessionFactory().openSession()) {
+                            ParticipantRecord participantRecord = directLookup.participantLookup(session, Arrays.asList(Long.toString(unitNumber, 10))).iterator().next();
+                            if (participantRecord != null) {
+                                Long businessKey = participantRecord.getBusinessKey();
+                                if (Objects.equals(businessKey, unitNumber)) {
+                                    // Foreigner
+                                } else {
+                                    participantOutput.put("deltagerPnr", String.format("%010d", businessKey));
+                                }
                             }
                         }
                     } catch (Exception e) {

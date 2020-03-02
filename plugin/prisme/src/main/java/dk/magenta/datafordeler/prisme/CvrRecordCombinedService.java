@@ -162,7 +162,7 @@ public class CvrRecordCombinedService {
 
     private ObjectNode getJSONFromCvrList(List<String> cvrNumbers, boolean returnParticipantDetails, boolean asList) throws DataFordelerException, JsonProcessingException {
         Session session = sessionManager.getSessionFactory().openSession();
-        GeoLookupService service = new GeoLookupService(session);
+        GeoLookupService service = new GeoLookupService(sessionManager);
         try {
 
             ObjectNode formattedRecord = objectMapper.createObjectNode();

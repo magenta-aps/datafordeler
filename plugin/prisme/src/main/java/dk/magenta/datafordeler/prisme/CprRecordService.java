@@ -89,7 +89,7 @@ public class CprRecordService {
 
         final Session session = sessionManager.getSessionFactory().openSession();
         try {
-            GeoLookupService lookupService = new GeoLookupService(session);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
@@ -174,7 +174,7 @@ public class CprRecordService {
         return outputStream -> {
 
             final Session lookupSession = sessionManager.getSessionFactory().openSession();
-            GeoLookupService lookupService = new GeoLookupService(lookupSession);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
             final Session entitySession = sessionManager.getSessionFactory().openSession();
