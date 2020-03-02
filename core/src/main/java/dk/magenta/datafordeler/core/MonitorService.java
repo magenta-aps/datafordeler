@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.user.UserQueryManager;
 import dk.magenta.datafordeler.core.util.CronUtil;
+import dk.magenta.datafordeler.core.util.LoggerHelper;
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -18,6 +19,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.ssl.SSLContexts;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.quartz.CronExpression;
@@ -61,6 +64,8 @@ public class MonitorService {
     @Autowired
     UserQueryManager userQueryManager;
 
+    private Logger log = LogManager.getLogger(MonitorService.class.getName());
+
     @RequestMapping(path="/database")
     public void checkDatabaseConnections(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = sessionManager.getSessionFactory().openSession();
@@ -83,6 +88,9 @@ public class MonitorService {
 
     @RequestMapping(path="/pull")
     public void checkPulls(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException, DataFordelerException {
+        LoggerHelper loggerHelper = new LoggerHelper(log, request);
+        loggerHelper.urlInvokePersistablelogs("checkPulls");
+
         Session session = sessionManager.getSessionFactory().openSession();
         PrintWriter output = response.getWriter();
         for (Plugin plugin : pluginManager.getPlugins()) {
@@ -122,6 +130,7 @@ public class MonitorService {
                 }
             }
         }
+        loggerHelper.urlResponsePersistablelogs(response.getStatus(), "Done checkPulls");
     }
 
     @Value("${dafo.error_file:cache/log/${PID}.err}")
@@ -129,6 +138,9 @@ public class MonitorService {
 
     @RequestMapping(path="/errors")
     public void checkErrors(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        LoggerHelper loggerHelper = new LoggerHelper(log, request);
+        loggerHelper.urlInvokePersistablelogs("checkErrors");
+
         PrintWriter output = response.getWriter();
         String errorFilePath = this.errorFileConfig.replace("${PID}", new ApplicationPid().toString());
         File errorFile = new File(errorFilePath);
@@ -155,6 +167,7 @@ public class MonitorService {
             response.setStatus(200);
         }
         output.close();
+        loggerHelper.urlResponsePersistablelogs(response.getStatus(), "Done checkErrors");
     }
 
     @Autowired
@@ -188,6 +201,9 @@ public class MonitorService {
 
     @RequestMapping(path="/access")
     public void checkAccess(HttpServletRequest request, HttpServletResponse response) throws IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+        LoggerHelper loggerHelper = new LoggerHelper(log, request);
+        loggerHelper.urlInvokePersistablelogs("checkAccess");
+
         int port = Integer.parseInt(environment.getProperty("local.server.port"));
         StringJoiner successes = new StringJoiner("\n");
         StringJoiner failures = new StringJoiner("\n");
@@ -226,6 +242,7 @@ public class MonitorService {
             response.setStatus(200);
             response.getWriter().append(successes.toString());
         }
+        loggerHelper.urlResponsePersistablelogs(response.getStatus(), "Done checkAccess");
     }
 
     // Because org.quartz.CronExpression does not have getTimeBefore implemented
