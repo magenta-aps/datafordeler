@@ -29,3 +29,12 @@ For information on the Vagrantfile, and Ansible, please check:
 bridged network interface. Select the interface that is being used to connect
 to the internet.*
 
+
+## Generate documentation
+
+Use the vagrant image:
+box_image=(ENV['BOX_NAME'] || 'ubuntu/bionic64')
+box_version=(ENV['BOX_VERSION'] || '>=0')
+
+
+
