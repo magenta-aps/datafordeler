@@ -1,0 +1,2 @@
+javasphinx==0.9.15
+Sphinx==1.5.3

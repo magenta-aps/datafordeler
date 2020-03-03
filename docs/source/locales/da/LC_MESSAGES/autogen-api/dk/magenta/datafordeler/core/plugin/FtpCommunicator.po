@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:28
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:72
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:78
+msgid "FtpCommunicator"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:35
+msgid ""
+"Created by lars on 08-06-17. En klasse til at hente filer vha. FTP Efter "
+"filer er hentet markeres de også med en filendelse, så de ikke hentes "
+"næste gang."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:38
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:40
+msgid "DONE_FILE_ENDING"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:46
+msgid "password"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:52
+msgid "proxyString"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:58
+msgid "useFtps"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:64
+msgid "username"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:70
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:84
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:86
+msgid "buildChainedInputStream"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:92
+msgid "fetch"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:97
+msgid ""
+"Fetches all yet-unfetched files from the folder denoted by the uri, and "
+"marks the fetched files as fetched when the returned InputStream is "
+"closed."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:100
+msgid "filterFilesToDownload"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:106
+msgid "getLocalFilenameList"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:112
+msgid "onBeforeBuildStream"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:118
+msgid "onStreamClose"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:124
+msgid "performConnect"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:130
+msgid "send"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:136
+msgid "setSslSocketFactory"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/FtpCommunicator.rst:142
+msgid "setupProxy"
+msgstr ""
+

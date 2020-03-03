@@ -1,0 +1,105 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Filhåndtering
+{% endblock %}
+
+{% block head_extra %}
+    <link href="{% static 'resources/css/dafoconfig_style.css' %}"
+          type="text/css"
+          rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <form id="list_form" action="" method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="title">Opsætninger til filhåndtering</div>
+        </div>
+
+        <div class="row">
+            <a class="button filter_field blue"
+               href="{% url 'dafoconfig:dump-add' %}">
+                <div class="flex-left">
+                    <img src="{% static 'resources/images/check-white.png' %}">
+                </div>
+                <div class="flex-center">
+                    Tilføj ny opsætning
+                </div>
+            </a>
+            <div class="filter_field" style="padding: 7px 35px 7px 50px;">
+                Antal opsætninger i alt: <b>{{ object_list|length }}</b>
+            </div>
+        </div>
+
+        <div class="update_dump_queryset_body">
+            <table>
+                <tr>
+                    <td>
+                        <div>Navn</div>
+                    </td>
+                    <td>
+                        <div>Sti</div>
+                    </td>
+                    <td>
+                        <div>Destination</div>
+                    </td>
+                    <td>
+                        <div>Format</div>
+                    </td>
+                    <td>
+                        <div>Kodning</div>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+
+                {% for dump_config in object_list %}
+                    <tr>
+                        <td class="txtdata">
+                            <a href="{% url 'dafoconfig:dump-edit' dump_config.pk %}">
+                                {{ dump_config.name }}
+                            </a>
+                        </td>
+                        <td class="txtdata">
+                            <a href="{% url 'dafoconfig:dump-edit' dump_config.pk %}">
+                                {{ dump_config.requestPath }}
+                            </a>
+                        </td>
+                        <td class="txtdata">
+                            <a href="{% url 'dafoconfig:dump-edit' dump_config.pk %}">
+                                {{ dump_config.destinationURI }}
+                            </a>
+                        </td>
+                        <td class="txtdata">
+                            <a href="{% url 'dafoconfig:dump-edit' dump_config.pk %}">
+                                {{ dump_config.get_format_display }}
+                            </a>
+                        </td>
+                        <td class="txtdata">
+                            <a href="{% url 'dafoconfig:dump-edit' dump_config.pk %}">
+                                {{ dump_config.get_charset_display }}
+                            </a>
+                        </td>
+                        <td class="txtdata">
+                            <a href="{% url 'dafoconfig:dump-delete' dump_config.pk %}">
+                                <img src="{% static "admin/img/icon-deletelink.svg"%}" >
+                                Fjern
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <input style="display:none;" id="order" value="{{ order }}">
+        <input style="display:none;" id="filter" value="">
+        <input style="display:none;" id="object_type" value="plugin">
+        <input style="display:none;" id="form_submit" name="action" value="">
+        <div id="lightbox"></div>
+
+    </form>
+
+{% endblock %}

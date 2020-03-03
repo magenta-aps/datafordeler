@@ -3,18 +3,25 @@ package dk.magenta.datafordeler.core.util;
 import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 /**
  * A logger helper that helps outputting request and user information with log messages.
  */
 public class LoggerHelper {
+
+  final Level URLINVOKE = Level.forName("URLINVOKE", 250);
+  final Level URLRESPONSE = Level.forName("URLRESPONSE", 251);
+
   private Logger logger;
   private HttpServletRequest request;
   private DafoUserDetails user;
   private String prefix = "";
+  private String urlInvokePrefix = "";
 
   public LoggerHelper(Logger logger, HttpServletRequest request, DafoUserDetails user) {
     this.logger = logger;
@@ -46,6 +53,15 @@ public class LoggerHelper {
         remoteAddr,
         user == null ? "<unknown>" : user.toString()
     );
+    urlInvokePrefix = "["+request.getMethod()+"]";
+    urlInvokePrefix += "["+request.getRequestURI()+"]";
+    urlInvokePrefix += "[";
+    Enumeration<String> params = request.getParameterNames();
+    while(params.hasMoreElements()){
+      String paramName = params.nextElement();
+      urlInvokePrefix += paramName + "," + request.getParameter(paramName)+";";
+    }
+    urlInvokePrefix += "]";
   }
 
   public <E extends Entity> void logResult(Envelope result) {
@@ -58,6 +74,18 @@ public class LoggerHelper {
 
   public void trace(String msg, Object... args) {
     logger.trace(prefix + msg, args);
+  }
+
+  public void urlInvokePersistablelogs(String msg) {
+    logger.log(URLINVOKE, prefix + urlInvokePrefix + "["+msg+"]");
+  }
+
+  public void urlResponsePersistablelogs(int statusCode,String msg) {
+    logger.log(URLRESPONSE, prefix + urlInvokePrefix + "["+statusCode+"]" + "["+msg+"]");
+  }
+
+  public void urlResponsePersistablelogs(String msg) {
+    logger.log(URLRESPONSE, prefix + urlInvokePrefix + "[]" + "["+msg+"]");
   }
 
   public void debug(String msg, Object... args) {

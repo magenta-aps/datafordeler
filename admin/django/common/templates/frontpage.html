@@ -1,0 +1,131 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+
+{% block title %}DAFO - Den grønlandske datafordeler - Forside{% endblock %}
+
+{% block content %}
+
+    <div class="frontpage">
+        <div class="block">
+            <div class="block-title">
+                <img src="{% static 'resources/images/access.png' %}">
+                <div>ADGANG</div>
+            </div>
+            <div class="block-content">
+                <div class="block-row">
+                    <a href="{% url 'dafousers:identityprovideraccount-add' %}" id="create_identityprovider_account" class="block-link blue">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-add-organisation"></div>
+                        </div>
+                        <div class="block-link-title">OPRET ORGANISATION</div>
+                    </a>
+
+                    <a href="{% url 'dafousers:passworduser-add' %}" id="create_password_user" class="block-link light-blue">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-add-user"></div>
+                        </div>
+                        <div class="block-link-title">OPRET BRUGER</div>
+                    </a>
+
+                    <a href="{% url 'dafousers:certificateuser-add' %}" id="create_certificate_user" class="block-link beige">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-add-system"></div>
+                        </div>
+                        <div class="block-link-title">OPRET SYSTEM</div>
+                    </a>
+                </div>
+
+                <div class="block-search">
+                    <p>Søg og ret oplysninger på organisation, bruger eller system</p>
+                    <div class="search-bar">
+                        <input id="search_org_user_system" class="search-term"
+                               placeholder="Skriv navn på organisation, bruger (evt. email) eller system">
+                        <div class="search-button"></div>
+                    </div>
+                    <div id="search_org_user_system_results"
+                         class="search_org_user_system_body dropdown-content scroll white">
+                        {% include 'search-autocomplete.html' %}
+                    </div>
+                    <p>Eller vælg fra en af nedenstående lister</p>
+                </div>
+
+                <div class="block-row">
+                    <a id="identity_provider_account_list"
+                       href="{% url 'dafousers:identityprovideraccount-list' %}" class="block-link beige">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-list-organisation"></div>
+                        </div>
+                        <div class="block-link-title">LISTE OVER ORGANISATIONER</div>
+                    </a>
+                    <a id="password_user_list"
+                       href="{% url 'dafousers:passworduser-list' %}" class="block-link blue">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-list-user"></div>
+                        </div>
+                        <div class="block-link-title">LISTE OVER BRUGERE</div>
+                    </a>
+                    <a id="certificate_user_list"
+                       href="{% url 'dafousers:certificateuser-list' %}" class="block-link light-blue">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-list-system"></div>
+                        </div>
+                        <div class="block-link-title">LISTE OVER SYSTEMER</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="block">
+            <div class="block-title">
+                <img src="{% static 'resources/images/configuration.png' %}">
+                <div>KONFIGURATION</div>
+            </div>
+            <div class="block-content">
+                <div class="block-row">
+                    <a href="{% url 'dafoconfig:plugin-list' %}" class="block-link blue">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-administer-registers"></div>
+                        </div>
+                        <div class="block-link-title">ADMINISTRÉR REGISTRE</div>
+                    </a>
+                </div>
+
+
+                <div class="block-search">
+                    <p>Søg og ret oplysninger på brugerprofiler</p>
+                    <div class="search-bar">
+                        <input id="search_user_profile" class="search-term"
+                               placeholder="Skriv navn på brugerprofil">
+                        <div class="search-button"></div>
+                    </div>
+                    <div id="search_user_profile_results"
+                         class="search_user_profile_body dropdown-content scroll white">
+                        {% include 'search-autocomplete.html' %}
+                    </div>
+                    <p>Eller vælg fra en af nedenstående lister</p>
+                </div>
+
+                <div class="block-row">
+                    <a id="user_profile_list"
+                       href="{% url 'dafousers:userprofile-list' %}" class="block-link light-blue">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-list-user-profile"></div>
+                        </div>
+                        <div class="block-link-title">LISTE OVER BRUGERPROFILER</div>
+                    </a>
+                    <a id="create_user_profile"
+                       href="{% url 'dafousers:userprofile-add' %}" class="block-link beige">
+                        <div class="block-link-content">
+                            <div class="block-link-icon icon-add-user-profile"></div>
+                        </div>
+                        <div class="block-link-title">OPRET BRUGERPROFIL</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

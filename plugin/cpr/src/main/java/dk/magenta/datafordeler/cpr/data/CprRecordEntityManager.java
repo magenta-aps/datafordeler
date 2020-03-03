@@ -170,6 +170,7 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
 
     @Override
     public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+        //String charset = "UTF8";//this.getConfiguration().getRegisterCharset(this);
         String charset = this.getConfiguration().getRegisterCharset(this);
         CprSubParser<T> parser = this.getParser();
         Session session = importMetadata.getSession();

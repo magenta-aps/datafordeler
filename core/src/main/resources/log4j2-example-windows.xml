@@ -8,17 +8,21 @@
         <Property name="FILE_LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN} ${sys:PID} --- [%t] %-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
 
         <!-- Message file location -->
-        <Property name="dllfile">C:\Users\jubk\Documents\Java projects\datafordeler\engine\src\main\resources\Win32EventLogAppender.dll</Property>
+        <Property name="dllfile">D:\datafordeler\datafordeler\core\src\main\resources\Win32EventLogAppender.dll</Property>
 
         <!-- Location of the error file for monitoring. The value *must* match the "dafo.error_file" property in application.properties -->
         <Property name="monitorfile">D:\datafordeler\datafordeler\core\cache\log\${sys:PID}.err</Property>
     </Properties>
+    <CustomLevels>
+        <CustomLevel name="URLINVOKE" intLevel="250" />
+        <CustomLevel name="URLRESPONSE" intLevel="251" />
+    </CustomLevels>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" />
         </Console>
         <Win32EventLog name="Win32EventLog" source="Dafo" application="Dafo"
-          eventMessageFile="${dllfile}" categoryMessageFile="${dllfile}">
+                       eventMessageFile="${dllfile}" categoryMessageFile="${dllfile}">
             <PatternLayout pattern="%-5p [%t] %m%n" />
         </Win32EventLog>
         <File name="MonitorFile" fileName="${monitorfile}" immediateFlush="true" append="true">
@@ -36,9 +40,11 @@
         <logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
         <logger name="org.hibernate.event.internal.DefaultDeleteEventListener" level="warn"/>
         <logger name="org.opensaml" level="warn"/>
-        <Logger name="dk.magenta.datafordeler">
-            <AppenderRef ref="Console" level="info" />
+        <Logger name="dk.magenta.datafordeler" additivity="false">
             <AppenderRef ref="Win32EventLog" level="info" />
+            <AppenderRef ref="Console" level="info" />
+            <AppenderRef ref="Console" level="urlinvoke" />
+            <AppenderRef ref="Console" level="urlresponse" />
             <AppenderRef ref="MonitorFile" level="error" />
         </Logger>
         <Root level="info">
