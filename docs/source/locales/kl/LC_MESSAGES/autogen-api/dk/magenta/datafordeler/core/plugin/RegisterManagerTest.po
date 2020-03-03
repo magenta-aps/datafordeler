@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:62
+msgid "RegisterManagerTest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:69
+msgid "Created by lars on 15-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:72
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:74
+msgid "callbackController"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:80
+msgid "exception"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:86
+msgid "restTemplate"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:92
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:94
+msgid "after"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:100
+msgid "before"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:106
+msgid "listChecksumsByTimestampTest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:112
+msgid "listChecksumsByTimestampTest2"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:118
+msgid "testExpandBaseUri"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:124
+msgid "testGetHandledURISubstrings"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:130
+msgid "testHandlesSchema"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:136
+msgid "testLinks"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/RegisterManagerTest.rst:142
+msgid "testPullEvents"
+msgstr ""
+

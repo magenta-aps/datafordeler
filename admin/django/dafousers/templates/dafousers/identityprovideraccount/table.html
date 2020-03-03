@@ -1,0 +1,43 @@
+<table>
+    <tr>
+        <td>
+            <input class="checkbox" type="checkbox" id="checkbox_all">
+        </td>
+
+        <td class="ordering">
+            <div id="order-name">Navn</div>
+        </td>
+        <td class="ordering">
+            <div id="order-contact_name">Navn på kontaktperson</div>
+        </td>
+        <td class="ordering">
+            <div id="order-contact_email">E-mailadresse på kontaktperson</div>
+        </td>
+        <td class="ordering">
+            <div id="order-idp_type">IdP type</div>
+        </td>
+        <td class="ordering">
+            <div id="order-idp_entity_id">IdP Entity ID</div>
+        </td>
+        <td class="ordering">
+            <div id="order-status">Status</div>
+        </td>
+    </tr>
+    {% for organisation in object_list %}
+        <tr>
+            <td class="checkbox">
+                <input class="checkbox" name="user_id" type="checkbox" id="checkbox_{{ organisation.id }}"
+                       value="{{ organisation.id }}">
+            </td>
+            <td class="txtdata">
+                <a href="{% url 'dafousers:identityprovideraccount-edit' organisation.id %}">
+                {{ organisation.name }}</a>
+            </td>
+            <td class="txtdata">{{ organisation.contact_name }}</td>
+            <td class="txtdata">{{ organisation.contact_email }}</td>
+            <td class="txtdata">{{ organisation.get_idp_type_display }}</td>
+            <td class="txtdata">{{ organisation.idp_entity_id }}</td>
+            <td class="txtdata">{{ organisation.get_status_display }}</td>
+        </tr>
+    {% endfor %}
+</table>

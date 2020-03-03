@@ -46,7 +46,7 @@ public class CvrConfiguration implements Configuration {
 
     @Column
     @Enumerated(EnumType.ORDINAL)
-    private RegisterType companyRegisterType = RegisterType.REMOTE_HTTP;
+    private RegisterType companyRegisterType = RegisterType.LOCAL_FILE;
 
     @Column
     private String companyRegisterStartAddress = "http://distribution.virk.dk/cvr-permanent/virksomhed/_search";

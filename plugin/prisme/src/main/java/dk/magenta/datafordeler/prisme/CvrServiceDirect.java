@@ -126,6 +126,7 @@ public class CvrServiceDirect extends CvrRecordService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrServiceDirect");
 
         HashSet<String> cvr = new HashSet<>();
 
@@ -141,6 +142,7 @@ public class CvrServiceDirect extends CvrRecordService {
             throw new InvalidClientInputException("Please specify at least one CVR number");
         }
 
+        loggerHelper.urlResponsePersistablelogs("CvrServiceDirect");
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {

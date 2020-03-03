@@ -34,6 +34,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,6 +123,7 @@ public class CvrRecordService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrRecordService");
 
         HashSet<String> cvrNumbers = new HashSet<>();
         cvrNumbers.add(cvrNummer);
@@ -148,11 +150,13 @@ public class CvrRecordService {
             }
 
             if (formattedRecord != null) {
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprService done");
                 return objectMapper.writeValueAsString(formattedRecord);
             }
         } finally {
             session.close();
         }
+        loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CprService done");
         throw new HttpNotFoundException("No entity with CVR number " + cvrNummer + " was found");
     }
 
@@ -196,6 +200,7 @@ public class CvrRecordService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrRecordService");
 
         HashSet<String> cvr = new HashSet<>();
 
@@ -216,6 +221,7 @@ public class CvrRecordService {
         query.setRecordAfter(updatedSince);
         this.applyAreaRestrictionsToQuery(query, user);
 
+        loggerHelper.urlResponsePersistablelogs("CvrRecordService");
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {

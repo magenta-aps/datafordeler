@@ -1,0 +1,186 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:62
+msgid "Engine"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:70
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:72
+msgid "configurationSessionManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:78
+msgid "log"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:84
+msgid "pluginManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:90
+msgid "sessionManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:96
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:98
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:106
+msgid "handleEvent"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:103
+msgid "Push *"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:111
+msgid ""
+"Entry point for incoming events from the GAPI. A registrationreference in"
+" the incoming event will be parsed, and the corresponding registration "
+"fetched When a registration is at hand, it is saved and a receipt is sent"
+" to the entitymanager that handles the registration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:113
+msgid "Event to be handled"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:116
+msgid "handleRequest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:122
+msgid "init"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:127
+msgid "Run bean initialization"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:130
+msgid "isDumpEnabled"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:136
+msgid "isPullEnabled"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:142
+msgid "setupDumpSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:147
+msgid "Sets the schedule for dumps"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:149
+msgid "The dump configuration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:150
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:168
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:180
+msgid "For test purposes. If false, no pull will actually be run."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:153
+msgid "setupDumpSchedules"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:159
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:171
+msgid "setupPullSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:164
+msgid "Sets the schedule for the registerManager, given a cron string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:166
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:178
+msgid "Registermanager to run pull jobs on"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:167
+msgid "A valid cron schedule, six items, space-separated"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:176
+msgid "Sets the schedule for the registerManager, given a schedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:179
+msgid "The schedule to use"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:183
+msgid "setupPullSchedules"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:188
+msgid ""
+"Sets the schedule for the registerManager, based on the schedule defined "
+"in same"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:191
+msgid "synchronize"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:196
+msgid ""
+"Synchronizes with the register, pulling a list of registration checksums "
+"and comparing it with what we already have. For each registration we "
+"haven't seen before, pull the whole registration and store it in DB"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:198
+msgid "A database session to work on"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:199
+msgid "The plugin whose registermanager we interface with"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:200
+msgid "Optional date; only pull registration checksums after this date"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst
+msgid "Kaster"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst
+msgid "Returnerer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/Engine.rst:202
+msgid "New registrations added by this process"
+msgstr ""
+

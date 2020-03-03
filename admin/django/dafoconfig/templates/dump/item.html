@@ -1,0 +1,45 @@
+<div class="row row_title">
+    <div class="row_field">Navn</div>
+</div>
+
+<div class="row">
+    <div class="row_field">{{ form.name }}</div>
+</div>
+
+<div class="row row_title">
+    <div class="row_field ">Forespørgsel</div>
+    <div class="row_field ">Destination</div>
+</div>
+<div class="row">
+    <div class="row_field">
+        {{ form.requestPath }}
+    </div>
+    <div class="row_field">
+        {{ form.destinationURI }}
+    </div>
+</div>
+
+<div class="row row_title">
+    <div class="row_field">Format</div>
+    <div class="row_field">Kodning</div>
+    <div class="right small-label">(ikke anvendt endnu)</div>
+</div>
+
+<div class="row">
+    <div class="row_field">{{ form.format }}</div>
+    <div class="row_field">{{ form.charset }}</div>
+</div>
+
+<div class="row row_title">
+    <div class="double-column">Noter</div>
+</div>
+<div class="row">
+    <div class="double-column">{{ form.notes }}</div>
+</div>
+
+<div class="row row_title">
+    <div class="row_field">Periode</div>
+</div>
+<div class="row">
+    <div class="double-column">{{ form.schedule }}</div>
+</div>

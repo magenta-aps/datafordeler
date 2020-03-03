@@ -1,0 +1,84 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{%block head_extra %}
+
+{{ form.media }}
+
+{% endblock %}
+
+{% block title %}
+    Opret brugerprofil
+{% endblock %}
+
+{% block content %}
+    <form id="certificateuser_form" enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Opret brugerprofil</div>
+
+                <div class="back">
+                    <a id="go_back"
+                       href="{% url 'dafousers:userprofile-list' %}">
+                        Gå til brugerprofiloversigten
+                    </a>
+                </div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Navn</div>
+                <div class="row_field"></div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.name }}</div>
+                <div class="row_field"></div>
+            </div>
+
+            <h3>Systemroller</h3>
+            <div class="row row_title">
+                <div class="row_field">Tilgængelige systemroller</div>
+                <div class="row_field">Tildelte systemroller</div>
+            </div>
+            <div class="row">
+                <div class="double-column filtered-select-multiple">{{ form.system_roles }}</div>
+                <div class="row_field small-label">Hold "Ctrl" nede for at vælge mere end en</div>
+            </div>
+
+            <h3>Områdeafgrænsninger</h3>
+            <div class="row row_title">
+                <div class="row_field">Tilgængelige områdeafgrænsninger</div>
+                <div class="row_field">Tildelte områdeafgrænsninger</div>
+            </div>
+            <div class="row">
+                <div class="double-column filtered-select-multiple">{{ form.area_restrictions }}</div>
+                <div class="row_field small-label">Hold "Ctrl" nede for at vælge mere end en</div>
+            </div>
+
+            <div class="row">
+                <button id="submit_save"
+                        class="row_field button blue"
+                        onclick="submitForm('form_submit', '_save')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/check-white.png' %}">
+                    </div>
+                    <div class="flex-center">OPRET NY BRUGERPROFIL</div>
+                </button>
+
+                <button id="submit_addanother"
+                        class="row_field button blue"
+                        onclick="submitForm('form_submit', '_addanother')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/plus-white.png' %}">
+                    </div>
+                    <div class="flex-center">OPRET OG TILFØJ ENDNU EN</div>
+                </button>
+            </div>
+        </div>
+
+    <input style="display:none;" id="form_submit" name="action" value="" >
+
+    </form>
+{% endblock %}

@@ -49,7 +49,8 @@ public class CprConfiguration implements Configuration {
     public enum RegisterType {
         DISABLED(0),
         LOCAL_FILE(1),
-        REMOTE_FTP(2);
+        REMOTE_FTP(2),
+        TEST_LOCAL_FILE(3);
 
         private int value;
         RegisterType(int value) {
@@ -560,6 +561,12 @@ public class CprConfiguration implements Configuration {
             } catch (URISyntaxException|NullPointerException e) {
                 throw new ConfigurationException("Invalid FTP address configured: " + ftpAddress);
             }
+        } else if (registerType == RegisterType.TEST_LOCAL_FILE) {
+            File file = new File(personRegisterLocalFile);
+            if (!file.exists()) {
+                throw new ConfigurationException("Configured file not found: " + personRegisterLocalFile);
+            }
+            return file.toURI();
         }
         return null;
     }

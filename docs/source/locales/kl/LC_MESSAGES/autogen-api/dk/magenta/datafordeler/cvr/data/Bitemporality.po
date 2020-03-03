@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:10
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:46
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:52
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:58
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:64
+msgid "Bitemporality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:18
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:20
+msgid "effectFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:26
+msgid "effectTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:32
+msgid "registrationFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:38
+msgid "registrationTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:44
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:70
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:72
+msgid "equals"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:78
+msgid "hashCode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:84
+msgid "matches"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/Bitemporality.rst:90
+msgid "toString"
+msgstr ""
+

@@ -38,8 +38,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
     @Test
     public void testLookupService() throws IOException {
 
-        Session session = sessionManager.getSessionFactory().openSession();
-        GeoLookupService lookupService = new GeoLookupService(session);
+        GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
         GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "3197");
 
@@ -59,8 +58,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
     @Test
     public void testLookupInHardcodedList() throws IOException {
 
-        Session session = sessionManager.getSessionFactory().openSession();
-        GeoLookupService lookupService = new GeoLookupService(session);
+        GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
         GeoLookupDTO geoLookupDTO = lookupService.doLookup(957, 9908, "18", "3197");
         Assert.assertEquals("Qeqqata Kommunia", geoLookupDTO.getMunicipalityName());
@@ -78,7 +76,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
         MunicipalityQuery query = new MunicipalityQuery();
         query.addKommunekodeRestriction("1234");
         List<GeoMunicipalityEntity> localities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
-        GeoLookupService lookupService = new GeoLookupService(session);
+        GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
         GeoLookupDTO geoLookupDTO = lookupService.doLookup(730, 1, "18");
 

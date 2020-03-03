@@ -1,0 +1,80 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autopulled-docs/localdocs/json.rst:4
+msgid "Resultater af forespørgsler"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:6
+msgid ""
+"JSON er et almindeligt tekstformat med forud-bestemte definitioner. Det "
+"er et format som er nemt for systemer at :ref:`parse` og udtrække de "
+"netop oplysninger, som brugeren skal anvende."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:8
+msgid "Resultatet af en forespørgsel er en JSON-tekst, der ser ud som følger::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:21
+msgid ""
+"\"path\": fortæller kilden til informationerne og dermed  kender man også"
+" søgetypen, der har været anvendt."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:22
+msgid ""
+"\"terms\": er link til de betingelser og regler, der gælder for data fra "
+"datafordeleren. De ses også på siden med :ref:`Betingelser. <agreements>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:23
+msgid "\"requestTimestamp\": er tidspunktet for hvornår serveren fik henvendelsen"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:24
+msgid ""
+"\"responseTimestamp\": er tidspunktet for hvornår serveren afleverede "
+"resultatet"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:25
+msgid ""
+"\"username\": er identifikationen for den anvender, som har bedt om data."
+" Det vil være tomt, hvis brugernavn ikke er anvendt."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:26
+msgid ""
+"... Listen fortsætter med flere oplysninger om forespørgselen og her kan "
+"også findes fejlbeskeder."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:27
+msgid "\"results:\" starter resultaterne for søgningen."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/json.rst:28
+msgid ""
+"... Indholdet og nøgleord vil variere efter søgningerne, der har været "
+"anvendt. Søgemulighederne er beskrevet i den fælles deklaration for "
+"API'ere på :ref:`API-deklarationer. <api-declarations>`"
+msgstr ""
+

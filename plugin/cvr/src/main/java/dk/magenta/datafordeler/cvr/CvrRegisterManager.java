@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -48,10 +49,18 @@ public class CvrRegisterManager extends RegisterManager {
     @Autowired
     private SessionManager sessionManager;
 
+    @Value("${dafo.cpr.demoCompanyFile}")
+    private String cvrDemoFile;
+
+
     private Logger log = LogManager.getLogger("CvrRegisterManager");
 
     public CvrRegisterManager() {
 
+    }
+
+    public void setCvrDemoFile(String cvrDemoFile) {
+        this.cvrDemoFile = cvrDemoFile;
     }
 
     /**
@@ -160,6 +169,19 @@ public class CvrRegisterManager extends RegisterManager {
         }
         switch (registerType) {
             case DISABLED:
+                break;
+            case LOCAL_FILE:
+                try {
+                    URI uri = new URI(cvrDemoFile);
+                    File demoCompanyFile = new File(uri);
+                    FileInputStream demoCompanyFileInputStream = new FileInputStream(demoCompanyFile);
+                    String content = new String(demoCompanyFileInputStream.readAllBytes());
+                    String noLineContent =content.replace("\n", "").replace("\r", "");
+                    InputStream stream = new ByteArrayInputStream(noLineContent.getBytes(StandardCharsets.UTF_8));
+                    return new ImportInputStream(stream, demoCompanyFile);
+                } catch (Exception e) {
+                    log.error("Failed loading demodata", e);
+                }
                 break;
             case REMOTE_HTTP:
                 final ArrayList<Throwable> errors = new ArrayList<>();

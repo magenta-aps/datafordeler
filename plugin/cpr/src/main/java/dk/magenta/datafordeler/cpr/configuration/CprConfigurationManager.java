@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.GeneralSecurityException;
+import java.util.UUID;
 
 @Component
 public class CprConfigurationManager extends ConfigurationManager<CprConfiguration> {
@@ -25,7 +26,7 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
     @Value("${cpr.encryption.keyfile:local/cpr/keyfile.json}")
     private String encryptionKeyFileName;
 
-    @Value("${cpr.encryption.keyfile:local/cpr/encryptedpassword.bin}")
+    @Value("${cpr.encryption.keyfile:local/cpr/encryptedpassword}")
     private String encryptedPassword;
 
     private Logger log = LogManager.getLogger("CprConfigurationManager");
@@ -76,15 +77,20 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
             CprConfiguration cprConfiguration = session.createQuery("select c from " + CprConfiguration.class.getCanonicalName() + " c", CprConfiguration.class).getSingleResult();
             cprConfiguration.setDirectPasswordPasswordEncryptionFile(new File(this.encryptionKeyFileName));
             cprConfiguration.setDirectPassword(password);
-            CprConfiguration configuration = super.getConfiguration();
-            transaction.commit();
-            Files.write(new File(encryptedPassword).toPath(), configuration.getEncryptedDirectPassword());
             session.saveOrUpdate(cprConfiguration);
+            transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
             throw e;
         } finally {
             session.close();
+        }
+
+        try {
+            CprConfiguration configuration = super.getConfiguration();
+            Files.write(new File(encryptedPassword + UUID.randomUUID()).toPath(), configuration.getEncryptedDirectPassword());
+        } catch (Exception e) {
+            log.error("Exception", e);
         }
     }
 
@@ -93,8 +99,8 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
         try {
             CprConfiguration configuration = super.getConfiguration();
             File encryptedPasswordFile = new File(encryptedPassword);
-            if(encryptedPasswordFile.getParentFile().isDirectory()) {
-                Files.write(new File(encryptedPassword).toPath(), configuration.getEncryptedDirectPassword());
+            if(encryptedPasswordFile.getParentFile().isDirectory() && encryptedPassword!=null && configuration.getEncryptedDirectPassword()!=null) {
+                Files.write(new File(encryptedPassword + UUID.randomUUID()).toPath(), configuration.getEncryptedDirectPassword());
             }
         } catch(Exception ioe) {
             log.error("Exception", ioe);

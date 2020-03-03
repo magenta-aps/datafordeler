@@ -1,0 +1,103 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{%block head_extra %}
+
+    {{ form.media }}
+
+{% endblock %}
+
+{% block title %}
+    Historik
+{% endblock %}
+
+{% block content %}
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Historik</div>
+                <div class="back">
+                    <a id="go_back"
+                       href="{% url 'dafousers:identityprovideraccount-edit' identityprovider_account_id %}">
+                        Gå tilbage til valgt organisation
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+            {% for entry in history %}
+                    <div class="history-entry">
+                        <div class="history-entry-top">
+                            Opdateret d. <b>{{ entry.updated }}</b> af <b>{{ entry.changed_by }}</b>
+                        </div>
+                        <div class="history-entry-content">
+
+                            <div class="row row_title">
+                                <div class="row_field">Navn</div>
+                                <div class="row_field">{{ entry.name }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">IdP-id</div>
+                                <div class="row_field">{{ entry.idp_entity_id }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">IdP-type</div>
+                                <div class="row_field">{{ entry.get_idp_type_display }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">Navn på kontaktperson</div>
+                                <div class="row_field">{{ entry.contact_name }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">E-mailadresse på kontaktperson</div>
+                                <div class="row_field">{{ entry.contact_email }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">Metadata XML</div>
+                                <div class="row_field">{{ entry.metadata_xml }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">SAML-attribut der indeholder brugerprofiler</div>
+                                <div class="row_field">{{ entry.userprofile_attribute }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                            <div class="row_field">Format for brugerprofil attribut</div>
+                            <div class="row_field">{{ entry.get_userprofile_attribute_format_display }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">Tilpasninger til brugerprofil værdier</div>
+                                <div class="row_field">{{ entry.get_userprofile_adjustment_filter_type_display }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">Værdi brugt ved tilpasning af brugerprofiler</div>
+                                <div class="row_field">{{ entry.userprofile_adjustment_filter_value }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">Tildelte brugerprofiler</div>
+                                <div class="row_field">
+                                        {% for user_profile in entry.user_profiles.all %}
+                                            <div>{{ user_profile }}</div>
+                                        {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">Status</div>
+                                <div class="row_field">{{ entry.get_status_display }}</div>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+            </div>
+        </div>
+{% endblock %}

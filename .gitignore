@@ -1,0 +1,12 @@
+/.idea
+/.java_sphinx_cache
+/gen_doc.log
+.doctrees/*
+*.mo
+/docs.zip
+*.retry
+*.swp
+
+# MacOS system files
+.DS_Store
+._.DS_Store

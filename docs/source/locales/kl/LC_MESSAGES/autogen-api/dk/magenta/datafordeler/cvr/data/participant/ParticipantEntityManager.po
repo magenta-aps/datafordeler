@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:28
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:48
+msgid "ParticipantEntityManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:35
+msgid "Created by lars on 16-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:38
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:40
+msgid "MIN_SQL_SERVER_DATETIME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:46
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:54
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:56
+msgid "createBasicEntity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:62
+msgid "createDataItem"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:68
+msgid "createRegistrationReference"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:74
+msgid "generateUUID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:80
+msgid "getBaseName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:86
+msgid "getEntityClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:92
+msgid "getEntityService"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:98
+msgid "getJsonTypeName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:104
+msgid "getRecordClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:110
+msgid "getSchema"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantEntityManager.rst:116
+msgid "getSessionManager"
+msgstr ""
+
