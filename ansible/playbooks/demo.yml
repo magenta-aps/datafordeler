@@ -1,0 +1,28 @@
+# Demo playbook.
+#
+# Should configure a demo setup, such that the demo starts running automatically
+# when the server is started. This will usually involve installing a @reboot
+# cronjob.
+#
+# For Django projects, this means configured such that `python manage.py runserver`
+# is run after every reboot, or similar with an apache based WSGI setup.
+
+---
+
+- hosts: all
+
+  remote_user: vagrant
+  become: true
+  become_method: sudo
+  become_user: root
+
+  roles:
+  - vim
+  - git
+  - python
+  - pip_dependencies
+  - texlive
+  - activate_virtualenv
+  - demo
+
+...
