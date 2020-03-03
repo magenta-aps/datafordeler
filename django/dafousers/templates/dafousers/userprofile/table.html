@@ -1,0 +1,23 @@
+<table>
+    <tr>
+        <td>
+            <input class="checkbox" type="checkbox" id="checkbox_all">
+        </td>
+
+        <td class="ordering">
+            <div id="order-name">Navn</div>
+        </td>
+    </tr>
+    {% for user_profile in object_list %}
+        <tr>
+            <td class="checkbox">
+                <input name="user_id" type="checkbox" id="checkbox_{{ user_profile.id }}"
+                       value="{{ user_profile.id }}">
+            </td>
+            <td class="txtdata">
+                <a href="{% url 'dafousers:userprofile-edit' user_profile.id %}">
+                {{ user_profile.name }}</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

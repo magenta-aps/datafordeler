@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{%block head_extra %}
+
+    {{ form.media }}
+
+{% endblock %}
+
+{% block title %}
+    Historik
+{% endblock %}
+
+{% block content %}
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Historik</div>
+                <div class="back">
+                    <a id="go_back"
+                       href="{% url 'dafousers:userprofile-edit' user_profile_id %}">
+                        Gå tilbage til valgt brugerprofil
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+            {% for entry in history %}
+                    <div class="history-entry">
+                        <div class="history-entry-top">
+                            Opdateret d. <b>{{ entry.updated }}</b> af <b>{{ entry.changed_by }}</b>
+                        </div>
+                        <div class="history-entry-content">
+                            <div class="row row_title">
+                                <div class="row_field">Navn</div>
+                                <div class="row_field">{{ entry.name }}</div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">Tildelte systemroller</div>
+                                <div class="row_field">
+                                        {% for system_roles in entry.system_roles.all %}
+                                            <div>{{ system_roles }}</div>
+                                        {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="row row_title">
+                                <div class="row_field">Tildelte områdeafgrænsninger</div>
+                                <div class="row_field">
+                                    {% for area_restriction in entry.area_restrictions.all %}
+                                        <div>{{ area_restriction }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+            </div>
+        </div>
+{% endblock %}

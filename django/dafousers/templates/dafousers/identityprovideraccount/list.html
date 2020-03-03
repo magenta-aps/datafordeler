@@ -1,0 +1,141 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Organisationsoversigt
+{% endblock %}
+
+{% block content %}
+
+    <form id="list_form" action="" method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="title">Organisationsoversigt</div>
+        </div>
+
+        <div class="table-filter">
+
+            <a id="goto_add"
+               class="button filter_field blue"
+               href="{% url 'dafousers:identityprovideraccount-add' %}">
+                <div class="flex-left">
+                    <img src="{% static 'resources/images/check-white.png' %}">
+                </div>
+                <div class="flex-center">
+                    OPRET NY ORGANISATION
+                </div>
+            </a>
+
+            <div class="filter_field" style="display: inline-block;">
+                <div id="change_status"
+                     class="button dropbtn gray"
+                     onclick="toggleMenu('#status')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/change.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        SKIFT STATUS
+                    </div>
+                    <div class="flex-right">
+                        <img src="{% static 'resources/images/dropdown-arrow.png' %}">
+                    </div>
+                </div>
+                <span id="status" class="dropdown-content slider white">
+                    <button id="submit_status_1"
+                            class="button"
+                            onclick="submitForm('form_submit', '_status_1')">
+                        Aktiv
+                    </button>
+                    <button id="submit_status_2"
+                            class="button"
+                            onclick="submitForm('form_submit', '_status_2')">
+                        Blokeret
+                    </button>
+                    <button id="submit_status_3"
+                            class="button"
+                            onclick="submitForm('form_submit', '_status_3')">
+                        Deaktiveret
+                    </button>
+                </span>
+            </div>
+
+            <div id="add_user_profiles"
+                 class="button filter_field gray"
+                 onclick="showPopup('permissions-popup')">
+                <div class="flex-left">
+                    <img src="{% static 'resources/images/check-black.png' %}">
+                </div>
+                <div class="flex-center">
+                    TILDEL RETTIGHEDER
+                </div>
+            </div>
+
+            <div class="filter_field" style="padding: 7px 35px 7px 50px;">
+                Antal organisationer i alt: <b>{{ object_list|length }}</b>
+            </div>
+
+            <select class="filter_field" id="filter">
+
+                <option {% if filter == '' %}selected=""{% endif %}
+                        value="*">Vis alle organisationer</option>
+
+                <option {% if filter == '1' %}selected=""{% endif %}
+                        value="1">Vis aktive organisationer</option>
+
+                <option {% if filter == '2' %}selected=""{% endif %}
+                        value="2">Vis blokerede organisationer</option>
+
+                <option {% if filter == '3' %}selected=""{% endif %}
+                        value="3">Vis deaktiverede organisationer</option>
+
+            </select>
+
+            <div class="popup" id="permissions-popup">
+
+                <div class="popup-title">Tildel rettigheder</div>
+
+                <div class="popup-content">
+                    <p class="label">Vælg brugerprofil</p>
+
+                    <div>
+                        <select id="user_profiles" name="user_profiles" multiple="" rows="6">
+                            {% for user_profile in user_profiles %}
+                                <option value="{{ user_profile.id }}">{{ user_profile }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="small-label">Hold "Ctrl" nede for at vælge mere end en</div>
+                    </div>
+
+                    <div class="popup-buttons">
+                        <button id="submit_user_profiles_popup"
+                                class="button small-button blue"
+                                onclick="submitForm('form_submit', '_add_user_profiles'); closePopups();">
+                            <div class="flex-center">TILDEL</div>
+                        </button>
+
+                        <div id="cancel_user_profiles_popup"
+                             class="button small-button gray"
+                             onclick="closePopups()">
+                            <div class="flex-center">FORTRYD</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="update_identityprovideraccount_queryset_body">
+            {% include 'dafousers/identityprovideraccount/table.html' %}
+        </div>
+
+        <input style="display:none;" id="order" value="{{ order }}" >
+        <input style="display:none;" id="filter" value="{{ filter }}" >
+        <input style="display:none;" id="object_type" value="identityprovideraccount" >
+        <input style="display:none;" id="form_submit" name="action" value="" >
+        <div id="lightbox"></div>
+
+    </form>
+
+{% endblock %}

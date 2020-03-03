@@ -1,0 +1,43 @@
+<table>
+    <tr>
+        <td>
+            <input class="checkbox" type="checkbox" id="checkbox_all">
+        </td>
+
+        <td class="ordering">
+            <div id="order-name">Navn</div>
+        </td>
+        <td class="ordering">
+            <div id="order-next_expiration">Næste udløbsdato</div>
+        </td>
+        <td class="ordering">
+            <div id="order-identification_mode">Identifikationsmetode</div>
+        </td>
+        <td class="ordering">
+            <div id="order-contact_name">Navn på kontaktperson</div>
+        </td>
+        <td class="ordering">
+            <div id="order-contact_email">E-mailadresse på kontaktperson</div>
+        </td>
+        <td class="ordering">
+            <div id="order-status">Status</div>
+        </td>
+    </tr>
+    {% for system in object_list %}
+        <tr>
+            <td class="checkbox">
+                <input class="checkbox" name="user_id" type="checkbox" id="checkbox_{{ system.id }}"
+                       value="{{ system.id }}">
+            </td>
+            <td class="txtdata">
+                <a href="{% url 'dafousers:certificateuser-edit' system.id %}">
+                {{ system.name }}</a>
+            </td>
+            <td class="txtdata">{{ system.latest_certificate }}</td>
+            <td class="txtdata">{{ system.get_identification_mode_display }}</td>
+            <td class="txtdata">{{ system.contact_name }}</td>
+            <td class="txtdata">{{ system.contact_email }}</td>
+            <td class="txtdata">{{ system.get_status_display }}</td>
+        </tr>
+    {% endfor %}
+</table>
