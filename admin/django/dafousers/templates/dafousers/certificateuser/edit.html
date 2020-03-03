@@ -1,0 +1,133 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{%block head_extra %}
+    {{ form.media }}
+{% endblock %}
+
+{% block title %}
+    Ret system
+{% endblock %}
+
+{% block content %}
+    <form id="certificateuser_form" enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Ret system</div>
+                <div class="back">
+                    <a id="go_back"
+                       href="{% url 'dafousers:certificateuser-list' %}">
+                        Gå til systemoversigten
+                    </a>
+                </div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Navn</div>
+                <div class="row_field">Identifikationsmetode</div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.name }}</div>
+                <div class="row_field">{{ form.identification_mode }}</div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Navn på kontaktperson</div>
+                <div class="row_field">E-mailadresse på kontaktperson</div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.contact_name }}</div>
+                <div class="row_field">{{ form.contact_email }}</div>
+            </div>
+
+            <h3>Certifikater</h3>
+            <div class="row">
+                <div id="certificates">{{ form.certificates }}
+                </div>
+                <div class="row_field">Opret nyt certifikat</div>
+                {{ form.create_new_certificate }}
+                <input type="checkbox" id="create_new_certificate" name="create_new_certificate">
+
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Information om brugerens organisation</div>
+                <div class="row_field">Kommentar/noter</div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.organisation }}</div>
+                <div class="row_field">{{ form.comment }}</div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Status</div>
+                <div class="row_field"></div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.status }}</div>
+                <div class="row_field"></div>
+            </div>
+
+            <h3>Brugerprofiler</h3>
+            <div class="row row_title">
+                <div class="row_field">Tilgængelige brugerprofiler</div>
+                <div class="row_field">Tildelte brugerprofiler</div>
+            </div>
+            <div class="row">
+                <div class="double-column filtered-select-multiple">{{ form.user_profiles }}</div>
+                <div class="row_field small-label">Hold "Ctrl" nede for at vælge mere end en</div>
+            </div>
+
+            <div class="row">
+
+                <button id="submit_save"
+                        class="row_field button blue"
+                        onclick="submitForm('form_submit', '_save')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/check-white.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        GEM ÆNDRINGER
+                    </div>
+                </button>
+                <a id="goto_history"
+                   class="row_field button gray"
+                   href="{% url 'dafousers:certificateuser-history' form.instance.pk %}">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/history.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        SE HISTORIK
+                    </div>
+                </a>
+
+            </div>
+        </div>
+        <div class="column">
+
+            <div id="new-certificate-box" class="new-password-box">
+                <div class="new-password-content">
+                    <div class="new-password-left">
+                        <img class="img " src="{% static 'resources/images/exclamation-mark-round.png' %}">
+                    </div>
+
+                    <div class="new-password-right">
+                        <p>Et nyt certifikat vil blive oprettet, når du trykker på gem ændringer.</p>
+                        <p>Det nye certifikat får en gyldighedsperiode på
+                            {{ form.certificate_years_valid }}
+                        </p>
+                        <p>Tryk på checkboxen under 'Opret nyt certifikat' igen for at fortryde oprettelsen af et nyt certifikat.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <input style="display:none;" id="form_submit" name="action" value="" >
+        {{ form.current_time }}
+
+    </form>
+{% endblock %}

@@ -36,4 +36,3 @@ Use the vagrant image:
 box_image=(ENV['BOX_NAME'] || 'ubuntu/bionic64')
 box_version=(ENV['BOX_VERSION'] || '>=0')
 
-

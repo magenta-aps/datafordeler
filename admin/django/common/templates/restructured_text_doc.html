@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+{% load markup_tags %}
+
+{% block title %}DAFO dokumentation{% endblock %}
+
+{% block content %}
+<div id="rst-documentation">
+{{ rst_content|apply_markup:"restructuredtext" }}
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block head_extra %}
+
+    {{ form.media }}
+
+{% endblock %}
+
+{% block title %}
+    Tilføj ny udtræksopsætning
+{% endblock %}
+
+{% block content %}
+    <form id="dump_form" enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Tilføj ny dataudtræksopsætning</div>
+                <div class="back">
+                    <a href="{% url 'dafoconfig:dump-list' %}">Gå til
+                        oversigten</a>
+                </div>
+            </div>
+
+            {% include 'dump/item.html' %}
+
+            <div class="row">
+                <button class="row_field button blue"
+                        onclick="submitForm('form_submit', '_save')">
+                    <div class="flex-left">
+                        <img
+                            src="{% static 'resources/images/check-white.png' %}">
+                    </div>
+                    <div class="flex-center">Opret</div>
+                </button>
+
+                <button class="row_field button blue"
+                        onclick="submitForm('form_submit', '_addanother')">
+                    <div class="flex-left">
+                        <img
+                            src="{% static 'resources/images/plus-white.png' %}">
+                    </div>
+                    <div class="flex-center">Opret og tilføj endnu et</div>
+                </button>
+            </div>
+        </div>
+
+        <input style="display:none;" id="form_submit" name="action" value="">
+
+    </form>
+{% endblock %}

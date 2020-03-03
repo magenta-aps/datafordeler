@@ -1,0 +1,101 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block title %}Log ind i DAFO admin{% endblock %}
+
+{% block body_class %}dafologin{% endblock %}
+
+{% block top_menus %}{% endblock %}
+{% block top_links %}{% endblock %}
+
+{% block buttons %}
+<div class="buttons">
+    <a href="{% url 'common:frontpage' %}">
+        <img src="{% static 'resources/images/home.png' %}">
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="dafologin">
+    <div class="logintopbar">
+        <div class="label">
+            <h3>Log på med:</h3>
+        </div>
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#username_and_password">Brugernavn og kodeord</a>
+          </li>
+          <li>
+            <a href="#organisation">Organisation login</a>
+          </li>
+          <li>
+            <a href="#i_tvivl">Er du i tvivl hvordan ?</a>
+          </li>
+        </ul>
+    </div>
+    <div class="logincontent">
+        <div class="tab-content">
+          <div id="username_and_password" class="tab-pane active">
+            <form name="loginform" id="loginform" action="" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input id="submitbutton" name="submitbutton"
+                       class="submitbutton"
+                       type="submit" value="Log ind"/>
+            </form>
+          </div>
+          <div id="organisation" class="tab-pane">
+            <h3>Organisation login</h3>
+            <p>Vælg den organisation du vil bruge til at logge ind med:</p>
+            <form name="idpform" id="idpform" action="" method="POST">
+                {% csrf_token %}
+                <p>
+                    <select name="idp" id="idpselect">
+                    {% for idp in idps %}
+                        <option value="{{ idp.pk }}">{{ idp.name }}</option>
+                    {% endfor %}
+                    </select>
+                </p>
+                <input id="idpsubmitbutton" name="idpsubmitbutton"
+                       class="submitbutton"
+                       type="submit" value="Log ind"/>
+            </form>
+          </div>
+          <div id="i_tvivl" class="tab-pane">
+            <p>
+                Hvis du er medlem af en organisation der har en aftale
+                om externt login i datafordeleren kan du logge ind via din
+                organisations single-sign-on løsning.
+            </p>
+            <p>
+                For at påbegynde et sådant login skal du klikke på
+                "Organisation login".
+            </p>
+            <p>
+                Hvis du ikke er i en organistaion med integreret single-sign-on
+                løsning skal du have et brugernavn og kodeord for at logge på.
+            </p>
+            <p>
+                Klik på "Brugernavn og kodeord" for at logge på med brugernavn
+                og kodeord.
+            </p>
+          </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{% block bottom_bar %}{%endblock%}
+{% block extra_scripts %}
+<script type="text/javascript"><!--
+(function($) {
+    $('ul.nav-tabs li').on('click', function() {
+        var $this = $(this),
+            $target = $($this.find("a").attr("href"));
+        $this.addClass('active').siblings().removeClass('active');
+        $target.addClass('active').siblings().removeClass('active');
+        return false;
+    });
+})(jQuery);
+//--></script>
+{% endblock %}

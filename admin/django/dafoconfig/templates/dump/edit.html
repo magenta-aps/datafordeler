@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock %}
+
+{% block title %}
+    Ret udtræksopsætning
+{% endblock %}
+
+{% block content %}
+    <form id="passworduser_form" enctype="multipart/form-data" action=""
+          method="post">
+        {% csrf_token %}
+
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Ret dataudtræksopsætning</div>
+                <div class="back">
+                    <a href="{% url 'dafoconfig:dump-list' %}">Gå til
+                        oversigten</a>
+                </div>
+            </div>
+
+            {% include 'dump/item.html' %}
+
+            <div class="row">
+                <button class="row_field button blue"
+                        onclick="submitForm('form_submit', '_save')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/check-white.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        Gem ændringer
+                    </div>
+                </button>
+            </div>
+
+        </div>
+
+        <input style="display:none;" id="form_submit" name="action" value="">
+
+    </form>
+{% endblock %}
