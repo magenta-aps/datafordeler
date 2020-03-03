@@ -107,18 +107,40 @@ function cleanup_old_documentation
 {
     rm -rf $SPHINX_SOURCE/autogen-docs
     rm -rf $SPHINX_SOURCE/autogen-api
+    rm -rf $SPHINX_SOURCE/autogen-api-cvr
+    rm -rf $SPHINX_SOURCE/autogen-api-geo
+    rm -rf $SPHINX_SOURCE/autogen-api-prisme
+    rm -rf $SPHINX_SOURCE/autogen-api-statistik
     rm -rf .java_sphinx_cache
 }
 task "Cleaning up old documentation..." cleanup_old_documentation
 
-title "Building reST files from Java API"
+title "Building doc files from Java API"
 function generate_java_api_doc
 {
     EMPTY_FOLDER=$(mktemp -d)
     mkdir -p $SPHINX_SOURCE/autogen-api
-    cp $SPHINX_SOURCE/javadoc.in $SPHINX_SOURCE/autogen-api/javadoc.rst
-    javasphinx-apidoc -f -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api -v \
-        $SUBMODULE_INCLUDES $EMPTY_FOLDER
+    mkdir -p $SPHINX_SOURCE/autogen-api-cvr
+    mkdir -p $SPHINX_SOURCE/autogen-api-geo
+    mkdir -p $SPHINX_SOURCE/autogen-api-prisme
+    mkdir -p $SPHINX_SOURCE/autogen-api-statistik
+    cp $SPHINX_SOURCE/javadoc-cvr.in $SPHINX_SOURCE/autogen-api-cvr/cvr-javadoc.rst
+    cp $SPHINX_SOURCE/javadoc-geo.in $SPHINX_SOURCE/autogen-api-geo/javadoc-geo.rst
+    cp $SPHINX_SOURCE/javadoc-prisme.in $SPHINX_SOURCE/autogen-api-prisme/javadoc-prisme.rst
+    cp $SPHINX_SOURCE/javadoc-statistik.in $SPHINX_SOURCE/autogen-api-statistik/javadoc-statistik.rst
+
+    javasphinx-apidoc -f -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api-cvr -v \
+        '/vagrant/plugin/cvr/src/main/java/dk/magenta/datafordeler/cvr/service' $EMPTY_FOLDER
+
+    javasphinx-apidoc -f -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api-geo -v \
+        '/vagrant/plugin/geo/src/main/java/dk/magenta/datafordeler/geo' $EMPTY_FOLDER
+
+    javasphinx-apidoc -f -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api-prisme -v \
+        '/vagrant/plugin/prisme/src/main/java/dk/magenta/datafordeler/prisme' $EMPTY_FOLDER
+
+    javasphinx-apidoc -f -c .java_sphinx_cache -o $SPHINX_SOURCE/autogen-api-statistik -v \
+        '/vagrant/plugin/statistik/src/main/java/dk/magenta/datafordeler/statistik/services' $EMPTY_FOLDER
+
 }
 task "Generating java-api documentation..." generate_java_api_doc
 

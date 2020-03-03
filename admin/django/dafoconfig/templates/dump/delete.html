@@ -1,0 +1,87 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block head_extra %}
+
+    {{ object.media }}
+
+{% endblock %}
+
+{% block title %}
+    Slet dataudtræksopsætning?
+{% endblock %}
+
+{% block content %}
+    <form id="dump_form" enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Slet dataudtræksopsætning?</div>
+                <div class="back">
+                    <a href="{% url 'dafoconfig:dump-list' %}">
+                        Gå til oversigten
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="double-column">
+                    Er du sikker på at du ønsker at slette denne
+                    dataudtræksopsætning? Hvis du sletter den, vil det
+                    pågældende udtræk ikke foretages fremover.
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_field row_title">Navn</div>
+                <div class="row_field">
+                    {{ object.name }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_field row_title">Sti</div>
+                <div class="row_field">
+                    {{ object.requestPath }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_field">Format</div>
+                <div class="row_field">{{ object.get_format_display }}</div>
+            </div>
+
+            <div class="row">
+                <div class="row_field">Kodning</div>
+                <div class="row_field">{{ object.get_charset_display }}</div>
+            </div>
+
+            <div class="row">
+                <div class="row_field">Destination</div>
+                <div class="row_field">{{ object.destination }}</div>
+            </div>
+
+            <div class="row">
+                <div class="row_field">Periode</div>
+                <div class="row-field">{{ object.schedule }}</div>
+            </div>
+
+            <div class="row">
+                <div class="row_field">Noter</div>
+                <div class="row-field">{{ object.notes }}</div>
+            </div>
+
+
+            <div class="row">
+                <button class="row_field button red">
+                    <div class="flex-center">Bekræft sletning</div>
+                </button>
+            </div>
+
+            <input style="display:none;" id="form_submit" name="action"
+                   value="Confirm">
+
+    </form>
+{% endblock %}

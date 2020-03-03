@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block title %}Fejl{% endblock %}
+
+{% block body_class %}errorbody{% endblock %}
+
+{% block top_menus %}{% endblock %}
+{% block top_links %}{% endblock %}
+
+{% block buttons %}
+    <div class="buttons">
+        <a href="{% url 'common:frontpage' %}">
+            <img src="{% static 'resources/images/home.png' %}">
+        </a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="error">
+        <div>
+            <div class="label">
+                <h3>Fejl</h3>
+            </div>
+        </div>
+        <div class="tab-content">
+            <p>
+                Der skete en fejl:
+            </p>
+            <p>
+                {{  exception.message }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

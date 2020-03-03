@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Pluginoversigt
+{% endblock %}
+
+{% block head_extra %}
+    <link href="{% static 'resources/css/dafoconfig_style.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <form id="list_form" action="" method="post">
+
+        <div class="row">
+            <div class="title">Pluginoversigt</div>
+        </div>
+
+        <div class="update_plugin_queryset_body">
+            {% include 'table.html' %}
+        </div>
+
+        <input style="display:none;" id="order" value="{{ order }}" >
+        <input style="display:none;" id="filter" value="" >
+        <input style="display:none;" id="object_type" value="plugin" >
+        <input style="display:none;" id="form_submit" name="action" value="" >
+        <div id="lightbox"></div>
+
+    </form>
+
+{% endblock %}

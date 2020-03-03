@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}DAFO - Logget ud{% endblock %}
+
+
+{% block content %}
+<div class="logout-container">
+    <div class="spotbox spotbox-left">
+        <div class="spotbox-image">
+            <img src="{% static 'resources/images/start_spot1.jpg' %}" />
+            <h1>{% trans 'Logget ud' %}</h1>
+        </div>
+        <div class="spotbox-content">
+            <h1>{% trans 'Logget ud' %}</h1>
+            <p>
+                {% trans 'Du er nu logget ud' %}.
+            </p>
+            <p><a href="{% url 'common:login' %}">{% trans 'Klik her for at logge ind igen' %}</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

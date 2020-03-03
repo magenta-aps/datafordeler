@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{%block head_extra %}
+    {{ form.media }}
+    <link href="{% static 'resources/css/dafoconfig_style.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+{% block title %}
+    Ret konfiguration
+{% endblock %}
+
+
+{% block content %}
+    <form id="pluginconfig_form" enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="header column">
+                <div class="title">Konfiguration for {{ plugin_name }}-plugin</div>
+                <div class="back">
+                    <a href="{% url 'dafoconfig:plugin-list' %}">Gå til pluginoversigten</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for section in sections %}
+                <div class="column">
+                {% if section.name %}
+                    <h4>{{ section.name }}</h4>
+                {% endif %}
+                {% for field in section.items %}
+                    <div class="row row_title">
+                        <div class="row_field">{{ field.label }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="row_field">{{ field }}</div>
+                    </div>
+                {% endfor %}
+                {% if not forloop.last %}
+                    <hr/>
+                {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="row">
+            <button class="row_field button blue" type="submit">
+                <div class="flex-left">
+                    <img src="{% static 'resources/images/konfiguration/check-white.png' %}">
+                </div>
+                <div class="flex-center">
+                    GEM ÆNDRINGER
+                </div>
+            </button>
+        </div>
+
+    </form>
+{% endblock %}
