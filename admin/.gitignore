@@ -1,0 +1,15 @@
+# General ignores
+.idea
+sqlite3.dll
+sqlite3_x64.dll
+
+.komodotools
+*.komodoproject
+*.pyc
+
+# Folder-specific ignores
+/keystores
+/python-env
+/local
+
+/VCForPython27.msi
