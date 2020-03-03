@@ -1,0 +1,269 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:4
+msgid "STS og hvordan datafordeleren anvender det"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:6
+msgid ""
+"Her finder du et overblik over :ref:`Security Token Service (STS) "
+"<security-token-service>` og bruger/profil/rolle systemet for Grønlands "
+"Datafordeler."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:8
+msgid ""
+"Dokumentet beskriver datamodellen der ligger til grund for "
+"adgangsbegrænsning og login i datafordeleren samt hvordan adgangsdata "
+"opdateres og hvordan de anvendes ved udstedelse af datafordelertokens fra"
+" STS’en. :ref:`Ordlisten <wordlist>` kan være en hjælp, hvis det er "
+"ukendt teknik."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:10
+msgid ""
+"Når man arbejder med personfølsomme data og lignende, skal autorisation "
+"(hvad må anvender) og autentifikation (hvem er anvender) være korrekt."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:14
+msgid "Introduktion"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:16
+msgid ""
+"Dette dokument giver et overblik over STS og bruger/profil/rolle systemet"
+" for den Grønlands Datafordeler. Dokumentet beskriver datamodellen der "
+"ligger til grund for adgangsbegrænsning og login i datafordeleren samt "
+"hvordan adgangsdata opdateres og hvordan de anvendes ved udstedelse af "
+"datafordelertokens fra STS’en."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:18
+msgid "De enkelte komponenter og processer er illustreret nedenfor."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:22
+msgid "Klientcertifikat er en forudsætning for nogle typer forespørgsler"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:24
+msgid ""
+"Nogle typer af forespørgsler kræver ikke certifikater for login, f.eks. "
+"en liste over alle byer og bygder. Hvis du er i tvivl om du skal "
+"godkendes, kan du prøve at stille en forespørgsel og resultatet vil være "
+"svaret eller en afvisning."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:26
+msgid ""
+"Klientcertifikat kræves for at kunne spørge efter udvalgte fortrolige "
+"oplysninger. Klientcertifikater er bevis for at man nu også er den som "
+"man giver sig ud for at være. Certifikater udstedes af autoriteter, som "
+"står inden for at personen eller virksomheden nu også er de rigtige. Du "
+"kan se mere i ordlisten om :ref:`Certificat <certificat>` og :ref"
+":`Certificat-typer. <certificat-typer>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:28
+msgid ""
+"Hvordan man får et certifikat, installerer det og anvender det, er meget "
+"forskelligt. Den opgave ligger uden for denne vejledning."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:32
+msgid "Adgang til datafordeleren via STS"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:34
+msgid ""
+"STS’ens opgave er at udstede SAML2 tokens der identificerer en bruger og "
+"angiver hvilke adgange brugeren har til den ønskede service. Forløbet vil"
+" typisk være som følger (og illustreret nedenfor):"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:38
+msgid "1. En anvender laver en forespørgsel til datafordeleren"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:40
+msgid "*TODO* EKSEMPEL PÅ FIKTIV PERSONSØGNING MED CERTIFIKAT"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:44
+msgid "2. Datafordeleren undersøger om bruger allerede har en sikker session"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:46
+msgid ""
+"Datafordeleren ser at brugeren ikke har nogen aktiv session og at den "
+"ønskede service kræver specielle rettigheder. Den viderestiller derfor "
+"brugeren til STS’en for at få udstedt en datafordelertoken."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:48
+msgid "Hvis bruger har en aktiv session, sendes brugeren direkte til trin 8."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:52
+msgid "3. Brugeren identificeres nu ved hjælp af sit certifikat"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:54
+msgid ""
+"Afhængigt af brugerens adgangsmetode sker der nu en af tre ting, "
+"afhængigt af brugerens type:"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:58
+msgid ""
+"Hvis brugeren har et FOCES klientcertifikat identificerer STS’en brugeren"
+" via dette."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:60
+msgid ""
+"Hvis brugeren er registreret i datafordelerens egen brugerdatabase, "
+"viderestilles til datafordelerens egen identity provider, der ved korrekt"
+" login udsteder en SAML token, der identificerer brugeren og sender denne"
+" tilbage til STS’en."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:62
+msgid ""
+"Hvis brugeren er tilknyttet en organisation, der har en godkendt SAML "
+"identity provider registreret i datafordeleren, viderestilles brugeren "
+"til denne for at logge ind."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:64
+msgid ""
+"Ved korrekt login returnerer identity provideren en token der "
+"identificerer brugeren og indeholder claims, der angiver brugerens "
+"brugerprofiler."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:68
+msgid ""
+"4. STS’en identificerer nu hvilke brugerprofiler, der matcher den "
+"pågældende bruger"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:70
+msgid ""
+"Afhængigt af om brugeren er identificeret via en ekstern identity "
+"provider, sker dette på en af to måder:"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:73
+msgid ""
+"Hvis der identificeres via en ekstern identity provider, slår "
+"datafordeleren op hvilke brugerprofiler den eksterne identity provider "
+"har lov til at udstede. Det bliver brugt som en white-list for de "
+"brugerprofiler, der blev angivet i tokenet fra identity provideren. "
+"Tilladte brugerprofiler videreføres og bruges til at udstede "
+"datafordelertoken med."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:75
+msgid ""
+"Ved lokal IdP login eller FOCES login slår datafordeleren op hvilke "
+"brugerprofiler der er tilknyttet til den identificerede bruger / "
+"systemadgangsbruger og bruger disse til at udstede datafordelertoken med."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:79
+msgid "5. STS’en udsteder en datafordelertoken, der identificerer brugeren"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:81
+msgid ""
+"Token angiver hvilke brugerprofiler vedkommende har, og sender denne "
+"token tilbage til datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:85
+msgid "6. Datafordeleren verificerer at tokenet kommer fra STS’en"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:87
+msgid ""
+"Datafordeleren bruger de angivne brugerprofiler til at afgøre om "
+"anvenderens forespørgsel kan gennemføres."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:91
+msgid "7. Datafordeleren veksler profiler til roller"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:93
+msgid ""
+"Datafordeleren laver nu et opslag der veksler brugerprofilerne til "
+"systemroller og områdeafgrænsninger."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:97
+msgid "8. Brugeren forsynes med en session"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:99
+msgid ""
+"Sessionen kan kan bruges til yderligere opslag til den samme service "
+"inden for et kortere tidsrum."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:103
+msgid "9. Efter autentificering og autorisation udføres forespørgslen"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:105
+msgid ""
+"Den modtagne forespørgsel bliver nu håndteret i datafordeleren, logget "
+"med brugers oplysninger og anvenderen modtager svar eller en afvisning."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:109
+msgid "Scenariet"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:111
+msgid ""
+"Ovenstående beskriver et scenarie der svarer til OIO Identity-based Web "
+"Services2, sådan som det er fastlagt i kontrakten."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:113
+msgid ""
+"Ved system-til-system adgang vil der dog ofte være tale om at "
+"anvendersystemet selv beder STS’en om at udstedeen token før der rettes "
+"henvendelse til datafordeleren. En illustration af komponenterne i "
+"STSløsningen og hvordan de interagerer i ovenstående scenarie, kan ses i "
+"Illustrationen herunder"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:117
+msgid "Overblik over STS-komponenter"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/sts-usage.rst:119
+msgid "Numrene henviser til numrene i afsnittet ovenfor."
+msgstr ""
+

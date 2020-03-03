@@ -1,0 +1,80 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:12
+msgid "UserQueryManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:19
+msgid "Gives access to data in the DAFO user database."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:22
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:24
+msgid "INVALID_USERPROFILE_ID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:30
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:32
+msgid "getAllAreaRestrictionLookupNames"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:38
+msgid "getAllAreaRestrictionTypeLookupNames"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:44
+msgid "getAllStoredSystemRoleNames"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:50
+msgid "getAreaRestrictionsByUserProfileId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:56
+msgid "getSystemRoleNamesByUserProfileId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:62
+msgid "getUserProfileByName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:68
+msgid "getUserProfileIdByName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:74
+msgid "insertAreaRestriction"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:80
+msgid "insertAreaRestrictionType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserQueryManager.rst:86
+msgid "insertSystemRole"
+msgstr ""
+

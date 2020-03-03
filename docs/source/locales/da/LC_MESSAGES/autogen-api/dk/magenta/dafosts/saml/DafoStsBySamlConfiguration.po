@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:14
+msgid "DafoStsBySamlConfiguration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:21
+msgid "Specification of external configuration for the dafo-sts-saml application."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:23
+msgid ""
+"This file contains all the application specific properties that can be "
+"configured using \\ ``application.properties``\\  or \\ "
+"``application.yml``\\  files."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:26
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:28
+msgid "getIdentityId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:33
+msgid ""
+"The SAML identity id used by the STS when acting as an IdP and issuing "
+"tokens. This IdentityID is also used when acting as a service provider in"
+" regards to single-sign-on with external IdPs."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:35
+msgid "Configuration property: \\ ``dafo.sts.identity-id``\\"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:37
+msgid "Default value: \"dafo-sts-default-entity-id\""
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst
+msgid "Returnerer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:39
+msgid "The value configured by the \\ ``dafo.sts.identity-id``\\  property"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:42
+msgid "getIdpMetadataLocation"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:47
+msgid "The location of the metadata for the default primary IdP."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:49
+msgid "Configuration property: \\ ``dafo.sts.idp-metadata-location``\\"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:51
+msgid "Default value: \"classpath:/saml/dafo-idp.xml\""
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:53
+msgid ""
+"The value configured by the \\ ``dafo.sts.idp-metadata-location``\\  "
+"property"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:56
+msgid "getServerRootURL"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:61
+msgid "The root URL of the server that can be used to access it from the outside."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:63
+msgid "Configuration property: \\ ``dafo.sts.server-root-url``\\"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:65
+msgid "Default value: \"https://localhost:7443\""
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:67
+msgid ""
+"If the server is running behind a reverse proxy the URL of that reverse "
+"proxy should be specified here. The URL should be specified without an "
+"ending slash."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:69
+msgid "The value configured by the \\ ``dafo.sts.server-root-url``\\  property"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:72
+msgid "getTokenGeneratorProperties"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:77
+msgid "The configuration used when issuing tokens from the STS."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:79
+msgid ""
+"Configurations values for token generation are documented in the \\ "
+":java:ref:`dk.magenta.dafosts.library.TokenGeneratorProperties`\\  class."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:81
+msgid ""
+"A configured instance of \\ "
+":java:ref:`dk.magenta.dafosts.library.TokenGeneratorProperties`\\ ."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:84
+msgid "setIdentityId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:90
+msgid "setIdpMetadataLocation"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/DafoStsBySamlConfiguration.rst:96
+msgid "setServerRootURL"
+msgstr ""
+
