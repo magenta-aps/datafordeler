@@ -1,0 +1,21 @@
+# Production playbook.
+#
+# Should configure a production setup to the point where a server is
+# automatically started, configured to interact with remote services, setup
+# with Nagios monitoring, etc.
+#
+# For Django projects, this means configured to use a WSGI apache server, a
+# postgres database server, automatically starting everything on reboot, etc.
+---
+
+- hosts: all
+
+  remote_user: vagrant
+  become: true
+  become_method: sudo
+  become_user: root
+
+  roles:
+  - vim
+
+...

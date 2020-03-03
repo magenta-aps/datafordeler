@@ -1,0 +1,17 @@
+---
+# tasks file for vim
+  - name: Install git
+    apt:
+      name: git
+      update_cache: yes
+      state: present
+    become: yes
+
+  - name: Install git-flow
+    apt:
+      name: git-flow
+      update_cache: yes
+      state: present
+    become: yes
+
+...
