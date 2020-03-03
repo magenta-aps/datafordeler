@@ -1,0 +1,16 @@
+#pluginconfig_form .column {
+    width: 25%;
+}
+
+#pluginconfig_form .header.column {
+    width: 37%;
+}
+
+#pluginconfig_form .cronfield {
+    line-height: 2em;
+}
+
+#pluginconfig_form .cronfield .gentleselect-label {
+    padding: 2px 5px 2px 5px;
+    background-image: none;
+}

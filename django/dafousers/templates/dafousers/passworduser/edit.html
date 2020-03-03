@@ -1,0 +1,125 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{%block head_extra %}
+    {{ form.media }}
+{% endblock %}
+
+{% block title %}
+    Ret bruger
+{% endblock %}
+
+{% block content %}
+    <form id="passworduser_form" enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Ret bruger</div>
+                <div class="back">
+                    <a id="go_back"
+                       href="{% url 'dafousers:passworduser-list' %}">
+                        Gå til brugeroversigten
+                    </a>
+                </div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Fornavn</div>
+                <div class="row_field">Efternavn</div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.givenname }}</div>
+                <div class="row_field">{{ form.lastname }}</div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Email</div>
+                <div class="row_field">
+                    <div class="left">Arbejdssted</div>
+                    <div class="right small-label">(Valgfrit)</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.email }}</div>
+                <div class="row_field">{{ form.organisation }}</div>
+            </div>
+
+            <div class="row">
+                <div class="row_field">
+                    Status
+                    {{ form.status }}
+                </div>
+                <div class="row_field button gray" onclick="newPassword(); show('new-password-box');">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/password-key.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        NYT KODEORD
+                    </div>
+                </div>
+            </div>
+
+            <h3>Brugerprofiler</h3>
+            <div class="row row_title">
+                <div class="row_field">Tilgængelige brugerprofiler</div>
+                <div class="row_field">Tildelte brugerprofiler</div>
+            </div>
+            <div class="row">
+                <div class="double-column filtered-select-multiple">{{ form.user_profiles }}</div>
+                <div class="row_field small-label">Hold "Ctrl" nede for at vælge mere end en</div>
+            </div>
+
+            <div class="row">
+
+                <button id="submit_save"
+                        class="row_field button blue"
+                        onclick="submitForm('form_submit', '_save')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/check-white.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        GEM ÆNDRINGER
+                    </div>
+                </button>
+                <a id="goto_history"
+                   class="row_field button gray"
+                   href="{% url 'dafousers:passworduser-history' form.instance.pk %}">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/history.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        SE HISTORIK
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="column">
+
+            <div id="new-password-box" class="new-password-box">
+                <div class="new-password-top">
+                    {{ form.password }}
+                    <p>Nyt kodeord: <b id="password_display">{{ form.password.value }}</b></p>
+                </div>
+
+                <div class="new-password-content">
+                    <div class="new-password-left">
+                        <img class="img " src="{% static 'resources/images/exclamation-mark-round.png' %}">
+                    </div>
+
+                    <div class="new-password-right">
+                        <p>Du kan nu levere ovenstående kodeord til denne bruger. Kodeordet er gældende når du har gemt ændringer på denne side.</p>
+                        <p>Vær opmærksom på, at kodeordet ikke længere bliver vist når du har gemt ændringer på siden.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <input style="display:none;" id="form_submit" name="action" value="" >
+
+    </form>
+{% endblock %}

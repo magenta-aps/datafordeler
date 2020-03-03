@@ -1,0 +1,35 @@
+<table>
+    <tr>
+        <td>
+            <input class="checkbox" type="checkbox" id="checkbox_all">
+        </td>
+
+        <td class="ordering">
+            <div id="order-name">Bruger</div>
+        </td>
+        <td class="ordering">
+            <div id="order-email">Email</div>
+        </td>
+        <td class="ordering">
+            <div id="order-organisation">Arbejdssted</div>
+           </td>
+        <td class="ordering">
+            <div id="order-status">Status</div>
+        </td>
+    </tr>
+    {% for user in object_list %}
+        <tr>
+            <td class="checkbox">
+                <input class="checkbox" name="user_id" type="checkbox" id="checkbox_{{ user.id }}"
+                       value="{{ user.id }}">
+            </td>
+            <td class="txtdata">
+                <a href="{% url 'dafousers:passworduser-edit' user.id %}">
+                {{ user.givenname }} {{ user.lastname }}</a>
+            </td>
+            <td class="txtdata">{{ user.email }}</td>
+            <td class="txtdata">{{ user.organisation }}</td>
+            <td class="txtdata">{{ user.get_status_display }}</td>
+        </tr>
+    {% endfor %}
+</table>

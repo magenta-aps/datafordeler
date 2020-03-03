@@ -1,0 +1,20 @@
+pyopenssl==17.2.0
+pypiwin32==219; sys_platform == 'win32'
+cryptography==1.9
+Django==1.10.6
+django-markup==1.2
+django-mssql==1.8; sys_platform == 'win32'
+django-sqlserver==1.9; sys_platform != 'win32'
+django-windows-tools==0.2
+docutils==0.14
+flake8==3.3.0
+ipython==3.2.3
+Markdown==2.6.8
+pyjks==17.1.0
+pyreadline==2.1
+signxml==2.4.0
+sqlparse==0.2.3
+requests==2.21.0
+psycopg2==2.7.3.2; sys_platform != 'win32' and platform_python_implementation != 'PyPy'
+psycopg2cffi==2.7.6; platform_python_implementation == 'PyPy'
+django-fancy-cronfield==0.2
