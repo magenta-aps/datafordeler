@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/io/Event-MessageData.rst:10
+msgid "Event.MessageData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/io/Event-MessageData.rst:19
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/io/Event-MessageData.rst:21
+msgid "getDataskema"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/io/Event-MessageData.rst:27
+msgid "getObjektData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/io/Event-MessageData.rst:33
+msgid "getObjektReference"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/io/Event-MessageData.rst:39
+msgid "setDataskema"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/io/Event-MessageData.rst:45
+msgid "setObjektData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/io/Event-MessageData.rst:51
+msgid "setObjektReference"
+msgstr ""
+

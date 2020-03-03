@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:38
+msgid "DatabaseTest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:45
+msgid "Created by lars on 21-02-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:48
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:50
+msgid "sessionManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:56
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:58
+msgid "testDataItem"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:64
+msgid "testDedup"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:70
+msgid "testEffect"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:76
+msgid "testGetAllEntities"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/DatabaseTest.rst:82
+msgid "testRegistration"
+msgstr ""
+

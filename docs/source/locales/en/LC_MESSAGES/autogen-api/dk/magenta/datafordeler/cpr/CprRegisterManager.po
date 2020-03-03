@@ -1,0 +1,117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:50
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:62
+msgid "CprRegisterManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:57
+msgid "Created by lars on 16-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:60
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:68
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:70
+msgid "getBaseEndpoint"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:76
+msgid "getChecksumFetcher"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:82
+msgid "getEventFetcher"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:88
+msgid "getEventInterface"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:94
+msgid "getFtpCommunicator"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:100
+msgid "getListChecksumInterface"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:106
+msgid "getLog"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:112
+msgid "getObjectMapper"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:118
+msgid "getPlugin"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:124
+msgid "getPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:130
+msgid "getSessionManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:136
+msgid "init"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:141
+msgid ""
+"RegisterManager initialization; set up configuration and source fetcher. "
+"We store fetched data in a local cache, so create a random folder for "
+"that."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:144
+msgid "parseEventResponse"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:150
+msgid "pullRawData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:155
+msgid ""
+"Pull data from the data source denoted by eventInterface, using the "
+"mechanism appropriate for the source. For CPR, this is done using a "
+"LocalCopyFtpCommunicator, where we fetch all files in a remote folder "
+"(known to be text files). We then package chunks of lines into Events, "
+"and feed them into a stream for returning."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:158
+msgid "pullsEventsCommonly"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/CprRegisterManager.rst:164
+msgid "setProxyString"
+msgstr ""
+
