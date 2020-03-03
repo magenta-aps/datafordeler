@@ -1,0 +1,133 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{%block head_extra %}
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        newPassword();
+    }, false);
+</script>
+
+{{ form.media }}
+
+{% endblock %}
+
+{% block title %}
+    Opret bruger
+{% endblock %}
+
+{% block content %}
+    <form id="passworduser_form" enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Opret bruger</div>
+                <div class="back">
+                    <a id="go_back"
+                       href="{% url 'dafousers:passworduser-list' %}">
+                        Gå til brugeroversigten
+                    </a>
+                </div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Fornavn</div>
+                <div class="row_field">Efternavn</div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.givenname }}</div>
+                <div class="row_field">{{ form.lastname }}</div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Email</div>
+                <div class="row_field">
+                    <div class="left">Arbejdssted</div>
+                    <div class="right small-label">(Valgfrit)</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.email }}</div>
+                <div class="row_field">{{ form.organisation }}</div>
+            </div>
+
+            <div class="row">
+                <div class="row_field">
+                    Status
+                    {{ form.status }}
+                </div>
+                <div class="row_field">
+                    Kodeord
+                    {{ form.password }}
+                    <p id="password_display">{{ form.password.value }}</p>
+                </div>
+            </div>
+
+            <h3>Brugerprofiler</h3>
+            <div class="row row_title">
+                <div class="row_field">Tilgængelige brugerprofiler</div>
+                <div class="row_field">Tildelte brugerprofiler</div>
+            </div>
+            <div class="row">
+                <div class="double-column filtered-select-multiple">{{ form.user_profiles }}</div>
+                <div class="row_field small-label">Hold "Ctrl" nede for at vælge mere end en</div>
+            </div>
+
+            <div class="row">
+
+                <button id="submit_save"
+                        class="row_field button blue"
+                        onclick="submitForm('form_submit', '_save')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/check-white.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        OPRET NY BRUGER
+                    </div>
+                </button>
+
+                <button id="submit_addanother"
+                        class="row_field button blue"
+                        onclick="submitForm('form_submit', '_addanother')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/plus-white.png' %}">
+                    </div>
+                    <div class="flex-center">
+                        OPRET OG TILFØJ ENDNU EN
+                    </div>
+                </button>
+
+            </div>
+        </div>
+
+        <div class="column">
+
+            <div class="info-box" style="margin-top: 27%;">
+                <div class="text-box">
+
+                    <img class="img" src="{% static 'resources/images/exclamation-mark-round.png' %}">
+
+                    <p>Du kan levere dette kodeord til den oprettede bruger. Kodeordet er gældende når du har oprettet brugeren.</p>
+
+                    <p>Vær opmærksom på, at kodeordet ikke længere bliver vist når du har oprettet brugeren.</p>
+
+                    <div id="new_password" class="row_field button gray" onclick="newPassword()">
+                        <div class="flex-left">
+                            <img src="{% static 'resources/images/password-key.png' %}">
+                        </div>
+                        <div class="flex-center">
+                            NYT KODEORD
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    <input style="display:none;" id="form_submit" name="action" value="" >
+
+    </form>
+{% endblock %}

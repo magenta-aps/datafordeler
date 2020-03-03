@@ -1,0 +1,110 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{%block head_extra %}
+
+{{ form.media }}
+
+{% endblock %}
+
+{% block title %}
+    Opret system
+{% endblock %}
+
+{% block content %}
+    <form id="certificateuser_form" enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+
+        <div class="column">
+
+            <div class="row">
+                <div class="title">Opret system</div>
+
+                <div class="back">
+                    <a id="go_back"
+                       href="{% url 'dafousers:certificateuser-list' %}">
+                        Gå til systemoversigten
+                    </a>
+                </div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Navn</div>
+                <div class="row_field">Identifikationsmetode</div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.name }}</div>
+                <div class="row_field">{{ form.identification_mode }}</div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Navn på kontaktperson</div>
+                <div class="row_field">E-mailadresse på kontaktperson</div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.contact_name }}</div>
+                <div class="row_field">{{ form.contact_email }}</div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Gyldighedsperiode for genereret certifikat</div>
+                <div class="row_field"></div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.certificate_years_valid }}</div>
+                <div class="row_field"></div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Information om systemets organisation</div>
+                <div class="row_field">Kommentar/noter</div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.organisation }}</div>
+                <div class="row_field">{{ form.comment }}</div>
+            </div>
+
+            <div class="row row_title">
+                <div class="row_field">Status</div>
+                <div class="row_field"></div>
+            </div>
+            <div class="row">
+                <div class="row_field">{{ form.status }}</div>
+                <div class="row_field"></div>
+            </div>
+
+            <h3>Brugerprofiler</h3>
+            <div class="row row_title">
+                <div class="row_field">Tilgængelige brugerprofiler</div>
+                <div class="row_field">Tildelte brugerprofiler</div>
+            </div>
+            <div class="row">
+                <div class="double-column filtered-select-multiple">{{ form.user_profiles }}</div>
+                <div class="row_field small-label">Hold "Ctrl" nede for at vælge mere end en</div>
+            </div>
+
+            <div class="row">
+                <button id="submit_save"
+                        class="row_field button blue"
+                        onclick="submitForm('form_submit', '_save')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/check-white.png' %}">
+                    </div>
+                    <div class="flex-center">OPRET NYT SYSTEM</div>
+                </button>
+
+                <button id="submit_addanother"
+                        class="row_field button blue"
+                        onclick="submitForm('form_submit', '_addanother')">
+                    <div class="flex-left">
+                        <img src="{% static 'resources/images/plus-white.png' %}">
+                    </div>
+                    <div class="flex-center">OPRET OG TILFØJ ENDNU ET</div>
+                </button>
+            </div>
+        </div>
+
+    <input style="display:none;" id="form_submit" name="action" value="" >
+
+    </form>
+{% endblock %}

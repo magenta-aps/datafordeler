@@ -1,0 +1,43 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block title %}DAFO - Den grønlandske datafordeler{% endblock %}
+{% block body_class %}start{% endblock %}
+
+{% block content %}
+<div class="outer-container">
+    <div class="inner-container">
+        <div class="spotbox spotbox-left">
+            <div class="spotbox-image">
+                <img src="{% static 'resources/images/start_spot1.jpg' %}" />
+                <h1>Grønlands Datafordeler</h1>
+                <h2>Nem og sikker adgang til data</h2>
+            </div>
+            <div class="spotbox-content">
+                <h1>Overskrift</h1>
+                <p>
+                    Dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.
+                </p>
+                <p>
+                    Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate.
+                </p>
+            </div>
+        </div>
+        <div class="spotbox spotbox-right">
+            <div class="spotbox-image">
+                <img src="{% static 'resources/images/start_spot2.jpg' %}" class="portrait" />
+                <h1>Administration</h1>
+                <h2>Adgang til datafordeleren</h2>
+            </div>
+            <div class="spotbox-content">
+                <p>
+                    Dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.
+                </p>
+                <p>
+                    Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

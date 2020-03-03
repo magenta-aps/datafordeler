@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.prisme;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,6 +19,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscriptionAssignmentStatus;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.geo.GeoLookupService;
+import dk.magenta.datafordeler.geo.GeoPlugin;
 
 import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
@@ -705,28 +705,5 @@ public class CprTest extends TestBase {
         } finally {
             session.close();
         }
-    }
-
-
-    @Test
-    public void testMoveHistoryPrisme() throws Exception {
-        loadPerson("/adressChangeHistory.txt");
-        TestUserDetails testUserDetails = new TestUserDetails();
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        this.applyAccess(testUserDetails);
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/prisme/cpr/addresshistory/1/" + "0101011234",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        ObjectNode responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals("0101011234", responseObject.get("cprNummer").asText());
-        JsonNode adressList = responseObject.get("addresses");
-        Assert.assertEquals(19, adressList.size());
-        System.out.println(response.getBody());
     }
 }
