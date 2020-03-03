@@ -1,23 +1,13 @@
-/target
+/.idea
+/.java_sphinx_cache
+/gen_doc.log
+.doctrees/*
+*.mo
+/docs.zip
+*.retry
+*.swp
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
+# MacOS system files
+.DS_Store
+._.DS_Store
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
