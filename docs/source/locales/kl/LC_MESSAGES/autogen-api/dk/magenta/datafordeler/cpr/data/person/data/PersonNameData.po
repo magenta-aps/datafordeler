@@ -1,0 +1,180 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:10
+msgid "PersonNameData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:17
+msgid "Created by lars on 22-06-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:20
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:22
+msgid "DB_FIELD_ADDRESSING_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:28
+msgid "DB_FIELD_FIRST_NAMES"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:34
+msgid "DB_FIELD_FIRST_NAMES_MARKING"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:40
+msgid "DB_FIELD_LAST_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:46
+msgid "DB_FIELD_LAST_NAME_MARKING"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:52
+msgid "DB_FIELD_MIDDLE_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:58
+msgid "DB_FIELD_MIDDLE_NAME_MARKING"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:64
+msgid "IO_FIELD_ADDRESSING_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:70
+msgid "IO_FIELD_FIRST_NAMES"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:76
+msgid "IO_FIELD_FIRST_NAMES_MARKING"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:82
+msgid "IO_FIELD_LAST_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:88
+msgid "IO_FIELD_LAST_NAME_MARKING"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:94
+msgid "IO_FIELD_MIDDLE_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:100
+msgid "IO_FIELD_MIDDLE_NAME_MARKING"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:106
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:108
+msgid "asMap"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:114
+msgid "databaseFields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:120
+msgid "getAddressingName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:126
+msgid "getEgetEfternavn"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:132
+msgid "getFirstNames"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:138
+msgid "getLastName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:144
+msgid "getMiddleName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:150
+msgid "isEgetEfternavnMarkering"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:156
+msgid "isFirstNamesMarking"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:162
+msgid "isLastNameMarking"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:168
+msgid "isMiddleNameMarking"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:174
+msgid "isRapportnavne"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:180
+msgid "setAddressingName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:186
+msgid "setEgetEfternavn"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:192
+msgid "setEgetEfternavnMarkering"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:198
+msgid "setFirstNames"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:204
+msgid "setFirstNamesMarking"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:210
+msgid "setLastName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:216
+msgid "setLastNameMarking"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:222
+msgid "setMiddleName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:228
+msgid "setMiddleNameMarking"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonNameData.rst:234
+msgid "setRapportnavne"
+msgstr ""
+

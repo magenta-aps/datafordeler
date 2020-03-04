@@ -1,0 +1,278 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autopulled-docs/sts/services.rst:4
+msgid "Services i DAFO STS"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:6
+msgid ""
+"DAFO STS er en Secure Token Service der genererer tokens til brug i den "
+"grønlandske datafordeler."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:9
+msgid ""
+"Tokens udstedes ud fra data i en database administreret via `DAFO Admin "
+"<https://github.com/magenta-aps/datafordeler-admin>`_ og anvendes dels "
+"til at give adgang til den grønlandske `datafordeler <https://github.com"
+"/magenta-aps/datafordeler-core>`_ og dels til at logge ind i `DAFO Admin "
+"<https://github.com/magenta-aps/datafordeler-admin>`_ med."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:16
+msgid ""
+"Løsningen består af tre `Maven <https://maven.apache.org/>`_ projekter, "
+"``dafo-sts-library``, ``dafo-sts-clientcertificates`` og ``dafo-sts-"
+"saml``, samlet i det overordende Maven-projekt ``dafo-sts``."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:20
+msgid ""
+"**dafo-sts-library** indeholder klasser og interfaces der er fælles for "
+"de to andre underprojekter."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:23
+msgid ""
+"**dafo-sts-clientcertificates** er en `Spring Boot "
+"<https://projects.spring.io/spring-boot/>`_ løsning der gør det muligt at"
+" udstede tokens ud fra klient-certifikater udstedt fra `DAFO Admin "
+"<https://github.com/magenta-aps/datafordeler-admin>`_."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:29
+msgid ""
+"**dafo-sts-saml** er en `Spring Boot <https://projects.spring.io/spring-"
+"boot/>`_ løsning der gør det muligt at udstede tokens via brugernavn og "
+"password eller via bootstrap tokens fra en ekstern IdP konfigureret i "
+"`DAFO Admin <https://github.com/magenta-aps/datafordeler-admin>`_."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:36
+msgid "Webservices"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:37
+msgid ""
+"De to Spring Boot underprojekter udstiller en række webservices der "
+"facilitrer de forskellige måder at udstede tokens på."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:41
+msgid "Webservices i ``dafo-sts-cliencertificates``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:42
+msgid ""
+"Adgang til alle services i ``dafo-sts-cliencertificates`` kræver at "
+"klienten identificerer sig via et klient-certificat udstedt fra DAFO "
+"Admin."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:46
+#: ../../source/autopulled-docs/sts/services.rst:59
+msgid "Der findes følgende services:"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:50
+msgid "``/get_token``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:49
+msgid ""
+"Returnerer en DAFO token i response body'en hvis klienten identificerer "
+"sig selv via et certifikat udstedt fra DAFO Admin."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:53
+msgid "Webservices i ``dafo-sts-saml``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:54
+msgid ""
+"Alle services placeret under ``/by_saml_sso/`` på ``dafo-sts-saml`` "
+"serveren er beskyttet af en `SAML2 "
+"<https://en.wikipedia.org/wiki/SAML_2.0>`_ login-løsning der gør det "
+"muligt at logge ind via Identity Providuers der er defineret i DAFO-"
+"admin."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:68
+msgid "``/idpselection``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:62
+msgid ""
+"En interaktiv HTML-side der giver mulighed for at vælge hvilken "
+"IdentityProvider der skal anvendes i forbindelse med SAML2 SSO login. "
+"Sender automatisk brugeren videre til forvalgt IdP, hvis en sådan er "
+"blevet valgt ved brug af ``sso_proxy`` servicen."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:68
+#: ../../source/autopulled-docs/sts/services.rst:74
+#: ../../source/autopulled-docs/sts/services.rst:96
+#: ../../source/autopulled-docs/sts/services.rst:102
+#: ../../source/autopulled-docs/sts/services.rst:113
+msgid "**Output**:"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:68
+msgid "En HTML-side med en formular der giver mulighed for at vælge IdP."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:74
+msgid "``/get_metadata``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:71
+msgid "Giver mulighed for at hente Identity Provider metadata XML for STS'en."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:74
+msgid "En xml fil med metadata for STS'en som token issuer."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:96
+msgid "``/get_token_passive``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:77
+msgid ""
+"Giver mulighed for at udstede en token ved angivelse af brugernavn og "
+"password eller ved at angive en bootstrap token fra en registreret "
+"ekstern IdP."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:93
+#: ../../source/autopulled-docs/sts/services.rst:136
+msgid "**Parametre**:"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:83
+msgid "``username``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:83
+msgid ""
+"Brugernavn på en bruger opretter i DAFO Admin. Anvendes sammen med "
+"password."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:86
+msgid "``password``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:86
+msgid "Kodeord for en bruger oprettet i DAFO Admin. Andenves sammen med username."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:90
+msgid "``token``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:89
+msgid "Bootstrap token fra en ekstern IdP der er registreret i DAFO Admin."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:92
+msgid ""
+"Servicen kan anvendes enten ved at angive ``username`` og ``password`` "
+"eller ved at angive en valid ``token``."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:96
+#: ../../source/autopulled-docs/sts/services.rst:102
+msgid "En base64-encoded og deflated SAML2 token udstedt af STS'en."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:102
+msgid "``/by_saml_sso/get_token``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:99
+msgid "Udsteder en token til den bruger der er logget ind via SAML SSO."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:113
+msgid "``/by_saml_sso/get_token_for_service``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:105
+msgid ""
+"Udsteder en token til den bruger der er logget ind via SAML SSO og "
+"placerer den i en HTML-formular der sender den videre til en angivet URL "
+"via HTTP POST. Bruges som en del af ``/sso_proxy`` løsningen."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:111
+msgid ""
+"En HTML-side der sender en base64-encoded og deflated SAML2 token videre "
+"til en angivet URL."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:136
+msgid "``/sso_proxy``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:116
+msgid ""
+"Giver mulighed for at få udstedt en token via SAML SSO login og få den "
+"sendt til en angivet URL via HTTP POST. Bruges til login i DAFO Admin."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:120
+msgid ""
+"Fungerer ved at gemme oplysninger om ønsket destinationsURL, forvalgt IdP"
+" og retur query-parameter i brugerens session og viderestille til "
+"``/by_saml_sso/get_token_for_service`` der sørger for at udstede token og"
+" sende den tilbage til det angivne."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:127
+msgid "``dafo_ssoproxy_url``"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:128
+msgid "Den URL den udstedte token skal sendes til."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:132
+msgid "``dafo_ssoproxy_idp`` (valgfri)"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:130
+msgid ""
+"IdentityID på den IdP der ønskes anvendt i forbindelse med SAML login. "
+"Angives denne parameter ikke præsenteres brugeren for IdP-valg på "
+"``/idpselection`` som en del af login-processen."
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:136
+msgid "``dafo_ssoproxy_returnparam`` (valgfri)"
+msgstr ""
+
+#: ../../source/autopulled-docs/sts/services.rst:135
+msgid ""
+"Den HTTP POST parameter der bruges til at sende token tilbage til den "
+"angivne URL. Angives dette parameter ikke bruges værdien ``token``."
+msgstr ""
+

@@ -1,0 +1,109 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:20
+msgid "PersonQuery"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:27
+msgid "Created by lars on 19-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:30
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:32
+msgid "EFTERNAVN"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:38
+msgid "FORNAVNE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:44
+msgid "KOMMUNEKODE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:50
+msgid "PERSONNUMMER"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:56
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:58
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:64
+msgid "addKommunekode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:70
+msgid "addPersonnummer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:76
+msgid "getDataClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:82
+msgid "getEfternavn"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:88
+msgid "getEntityClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:94
+msgid "getFornavn"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:100
+msgid "getKommunekoder"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:106
+msgid "getLookupDefinition"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:112
+msgid "getPersonnumre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:118
+msgid "getSearchParameters"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:124
+msgid "setEfternavn"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:130
+msgid "setFornavn"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:136
+msgid "setFromParameters"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonQuery.rst:142
+msgid "setPersonnummer"
+msgstr ""
+

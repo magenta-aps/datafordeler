@@ -1,0 +1,207 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:50
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:70
+msgid "CvrEntityManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:57
+msgid "Created by lars on 29-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:60
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:62
+msgid "log"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:68
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:76
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:78
+msgid "createBasicEntity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:84
+msgid "createDataItem"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:90
+msgid "createRegistrationReference"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:96
+msgid "generateUUID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:102
+msgid "getBaseEndpoint"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:107
+msgid "Return the base endpoint, which points to the external source"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:110
+msgid "getBaseName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:116
+msgid "getEntityClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:122
+msgid "getHandledURISubstrings"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:127
+msgid "Return the URI substrings that are listened on in the service"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:130
+msgid "getJsonTypeName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:136
+msgid "getListChecksumInterface"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:142
+msgid "getLog"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:148
+msgid "getObjectMapper"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:154
+msgid "getReceiptEndpoint"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:160
+msgid "getReceiptSender"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:166
+msgid "getRecordClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:172
+msgid "getRegistrationFetcher"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:178
+msgid "getRegistrationInterface"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:183
+msgid ""
+"Returns the reference URI based on a RegistrationReference, basically "
+"unpacking it"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:186
+msgid "getSessionManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:192
+msgid "handlesOwnSaves"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:198
+msgid "parseChecksumResponse"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:204
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:212
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:220
+msgid "parseReference"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:209
+msgid "Parse a raw reference data stream into a RegistrationReference object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:217
+msgid "Parse a raw reference data string into a RegistrationReference object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:225
+msgid ""
+"Create a RegistrationReference object that encapsulates the given URI in "
+"the proper object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:228
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:234
+msgid "parseRegistration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:239
+msgid ""
+"Parse an incoming JsonNode into registrations (and save them) Must be "
+"idempotent: Running a second time with the same input should not result "
+"in new data"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:241
+msgid ""
+"JSON object containing one or more parseable entities from the CVR data "
+"source"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst
+msgid "Kaster"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst
+msgid "Returnerer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:243
+msgid "A list of registrations that have been saved to the database"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:246
+msgid "setRegisterManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:251
+msgid ""
+"Set the associated RegisterManager (called as part of Plugin "
+"initialization), setting up the service paths listened on in the process"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/CvrEntityManager.rst:254
+msgid "sortIntoGroups"
+msgstr ""
+

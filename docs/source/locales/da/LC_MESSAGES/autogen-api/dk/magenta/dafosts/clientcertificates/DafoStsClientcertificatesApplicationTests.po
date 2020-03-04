@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:52
+msgid "DafoStsClientcertificatesApplicationTests"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:60
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:62
+msgid "DUMMY_USER_PROFILES"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:68
+msgid "MOCK_USERID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:74
+msgid "trustStorePassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:80
+msgid "trustStorePath"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:86
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:88
+msgid "contextLoads"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:94
+msgid "getClientKeyStore"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:100
+msgid "getSSLConnectionSocketFactory"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:106
+msgid "issueTokenFromCertificate"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:112
+msgid "issueTokenOnBehalfOf"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:118
+msgid "postContruct"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:124
+msgid "rejectEmptyOnBehalfOf"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:130
+msgid "rejectOnBehalfOfForSingleUser"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:136
+msgid "rejectRequestWithoutCertificate"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/DafoStsClientcertificatesApplicationTests.rst:142
+msgid "setUp"
+msgstr ""
+
