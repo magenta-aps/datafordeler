@@ -94,6 +94,11 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
             }
         }
 
+        CitizenshipDataRecord citizenshipData = this.getLatest(input.getCitizenship());
+        if (citizenshipData != null) {
+            root.put("statsborgerskab", citizenshipData.getCountryCode());
+        }
+
         root.put("adressebeskyttelse", false);
         /*Collection<ProtectionDataRecord> personProtectionData = input.getProtection();
         if (personProtectionData != null && !personProtectionData.isEmpty()) {
