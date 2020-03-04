@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import static java.util.Comparator.naturalOrder;
 
@@ -71,14 +72,6 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
             }
         }
 
-        PersonStatusDataRecord personStatusData = FilterUtilities.findNewestUnclosed(input.getStatus());
-        if (personStatusData != null) {
-            root.put("statuskode", personStatusData.getStatus());
-            root.put("statuskodedato", PersonOutputWrapperPrisme.formatDate(
-                    personStatusData.getEffectFrom() != null ? personStatusData.getEffectFrom() : personStatusData.getRegistrationFrom()
-            ));
-        }
-
         CivilStatusDataRecord civilStatusData = FilterUtilities.findNewestUnclosed(input.getCivilstatus());
         if (civilStatusData != null) {
             root.put("civilstand", civilStatusData.getCivilStatus());
@@ -92,9 +85,13 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
 
         AtomicReference<OffsetDateTime> org = new AtomicReference<OffsetDateTime>();
         AtomicReference<adressSequenceProgress> progress = new AtomicReference<adressSequenceProgress>();
+        //AtomicReference<List<Long>> replaced = new AtomicReference<List<Long>>();
+        //replaced.set(new ArrayList<Long>());
         progress.set(adressSequenceProgress.INITIAL);
 
-        personAddressDataList.stream().filter(r -> r.getBitemporality().registrationTo == null).sorted(bitemporalComparator2).forEach(
+        personAddressDataList.stream().filter(r -> r.getBitemporality().registrationTo == null &&
+                !r.isUndone() && r.getCorrectors().size() == 0 &&
+                (r.getEffectTo()==null || r.getEffectFrom().isBefore(r.getEffectTo()))).sorted(bitemporalComparator2).forEach(
                 personAddressData -> {
                     AddressDataRecord adressRecord = (AddressDataRecord) personAddressData;
                     PersonAdressItem personAdress = new PersonAdressItem();
@@ -109,6 +106,7 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
                     } else {
                         //If this flag i s raised is means that the person has an unusual adresssequense, not necessarily wrong.
                         log.error("ADRESSES IS NOT SEQUENTIAL: " + input.getPersonnummer());
+                        log.info(adressRecord.getEffectFrom());
                     }
                     if(adressRecord.getEffectTo() != null) {
                         org.set(adressRecord.getEffectTo());
@@ -153,7 +151,7 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
                 }
         );
 
-        ArrayNode jsonAdressArray = mapper.valueToTree(personAdressItemList);
+        ArrayNode jsonAdressArray = mapper.valueToTree(personAdressItemList/*.stream().filter(d -> !replaced.get().contains(d.getId())).collect(Collectors.toList())*/);
         root.putArray("addresses", jsonAdressArray);
 
         return root.getNode();
