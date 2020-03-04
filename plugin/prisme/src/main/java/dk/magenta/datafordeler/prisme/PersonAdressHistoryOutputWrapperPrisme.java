@@ -91,7 +91,7 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
 
         personAddressDataList.stream().filter(r -> r.getBitemporality().registrationTo == null &&
                 !r.isUndone() && r.getCorrectors().size() == 0 &&
-        (r.getEffectTo()==null || r.getEffectFrom().isBefore(r.getEffectTo()))).sorted(bitemporalComparator2).forEach(
+                (r.getEffectTo()==null || r.getEffectFrom().isBefore(r.getEffectTo()))).sorted(bitemporalComparator2).forEach(
                 personAddressData -> {
                     AddressDataRecord adressRecord = (AddressDataRecord) personAddressData;
                     PersonAdressItem personAdress = new PersonAdressItem();
