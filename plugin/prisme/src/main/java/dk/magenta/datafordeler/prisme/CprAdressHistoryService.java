@@ -76,7 +76,7 @@ public class CprAdressHistoryService {
                 "Incoming REST request for PrismeCprService with cprNummer " + cprNummer
         );
         this.checkAndLogAccess(loggerHelper);
-        loggerHelper.urlInvokePersistablelogs("CprService");
+        loggerHelper.urlInvokePersistablelogs("CprAdressHistoryService");
 
         try(final Session session = sessionManager.getSessionFactory().openSession();) {
             GeoLookupService lookupService = new GeoLookupService(sessionManager);
@@ -92,10 +92,10 @@ public class CprAdressHistoryService {
 
             if (!personEntities.isEmpty()) {
                 PersonEntity personEntity = personEntities.get(0);
-                loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprService done");
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprAdressHistoryService done");
                 return objectMapper.writeValueAsString(personOutputWrapper.wrapRecordResult(personEntity, personQuery));
             }
-            loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CprService done");
+            loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CprAdressHistoryService done");
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
         }
     }
