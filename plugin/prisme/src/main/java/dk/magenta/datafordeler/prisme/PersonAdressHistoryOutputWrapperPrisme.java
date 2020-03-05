@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.BitemporalityComparator;
+import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
@@ -97,7 +98,7 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
                     PersonAdressItem personAdress = new PersonAdressItem();
                     if (progress.get().equals(adressSequenceProgress.INITIAL) && org.get() == null) {
                         progress.set(adressSequenceProgress.FIRSTFOUND);
-                    } else if ((progress.get().equals(adressSequenceProgress.FIRSTFOUND) || progress.get().equals(adressSequenceProgress.NEWFOUND)) && org.get().equals(adressRecord.getEffectFrom())) {
+                    } else if ((progress.get().equals(adressSequenceProgress.FIRSTFOUND) || progress.get().equals(adressSequenceProgress.NEWFOUND)) && Equality.cprDomainEqualDate(org.get(), adressRecord.getEffectFrom())) {
                         if(org.get().equals(adressRecord.getEffectFrom())) {
                             progress.set(adressSequenceProgress.NEWFOUND);
                         } else if(adressRecord.getEffectTo() == null) {
