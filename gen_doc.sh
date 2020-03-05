@@ -178,6 +178,45 @@ function template_module_index
 }
 task "Templating module index page..." template_module_index
 
+function printf_new() {
+    char=$1
+    num=$2
+    v=$(printf "%-${num}s")
+    echo "${v// /$char}"
+}
+
+function pull_in_error_codes
+{
+    mkdir -p $SPHINX_SOURCE/autopulled-codes
+
+    # TODO: The method of acquiring the error codes should be corrected.
+    # NOTE: Preferably error-code / error-message pairs
+    EXCEPTION_PATH=core/src/main/java/dk/magenta/datafordeler/core/exception/
+    CODES=$(grep -Pzo "getCode().*\{[\S\s]*?\}" -r $EXCEPTION_PATH |\
+            tr '\0' '\n' | grep 'return ".*";' |\
+            sed 's/.*return "\(.*\)";/\1/g' | sed "s/\r//g")
+    
+    ERROR_CODES=""
+    while read -r CODE; do
+        FILE="$CODE.rst"
+        FILE_PATH="$SPHINX_SOURCE/autopulled-codes/$FILE"
+        echo "Code: $CODE" > $FILE_PATH
+
+        TEXT_LENGTH=${#CODE}
+        SPACES=`expr 6 + $TEXT_LENGTH`
+        printf_new "=" ${SPACES} >> $FILE_PATH
+
+        # TODO: Pull non-translated error message
+        echo "Denne fejlbesked betyder..." >> $FILE_PATH
+
+        ERROR_CODES+="\n   $FILE"
+
+    done <<< "$CODES"
+
+    sed "s#{{ CODES }}#${ERROR_CODES}#g" $SPHINX_SOURCE/autopulled-codes.in > $SPHINX_SOURCE/autopulled-codes/index.rst
+}
+task "Pulling in error codes..." pull_in_error_codes
+
 declare -a langs=("da" "kl" "en")
 
 title "Running sphinx-build to generate documentation"
@@ -218,7 +257,7 @@ function generate_pdf_documentation
         cd $CWD
     done
 }
-task "Generating pdf documentation..." generate_pdf_documentation
+#task "Generating pdf documentation..." generate_pdf_documentation
 
 function generate_release_zip
 {
@@ -232,6 +271,4 @@ function generate_release_zip
     cd $CWD
     cp $TMP/docs.zip .
 }
-task "Generating release zip documentation..." generate_release_zip
-
-
+#task "Generating release zip documentation..." generate_release_zip

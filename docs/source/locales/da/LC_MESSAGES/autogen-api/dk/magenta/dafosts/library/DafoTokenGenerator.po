@@ -1,0 +1,442 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:102
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:138
+msgid "DafoTokenGenerator"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:110
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:112
+msgid "ON_BEHALF_OF_CLAIM_URL"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:118
+msgid "USERPROFILE_CLAIM_URL"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:124
+msgid "properties"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:130
+msgid "signingCredential"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:136
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:144
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:146
+msgid "buildAssertion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:151
+msgid "Builds a SAML2 Assertion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:153
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:292
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:375
+msgid "- The user identified by the bootstrap token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:153
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:292
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:375
+msgid "The user identified by the bootstrap token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst
+msgid "Kaster"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst
+msgid "Returnerer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:155
+msgid "A populated Assertion object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:158
+msgid "buildAttributeStatement"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:163
+msgid "Builds the AttributeStatement part of a token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:165
+msgid "- The user identified by the bootstrap token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:165
+msgid "The user identified by the bootstrap token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:166
+msgid "A populated AttributeStatement object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:169
+msgid "buildAudience"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:174
+msgid "Builds an Audience part of a token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:176
+msgid "A populated Audience object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:179
+msgid "buildAudienceRestrictionCondition"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:184
+msgid "Builds an AudienceRestriction condition for a token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:186
+msgid "A populated AudienceRestriction object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:189
+msgid "buildAuthnContext"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:194
+msgid "Builds the AuthnContext part of a token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:197
+msgid "A populated AuthnContext object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:200
+msgid "buildAuthnContextClassRef"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:205
+msgid "Builds the AuthnContextClassRef part of a token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:207
+msgid "A populated AuthnContextClassRef object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:210
+msgid "buildAuthnStatement"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:215
+msgid "Builds the AuthnStatement part of a token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:217
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:229
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:293
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:305
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:316
+msgid "- The time at which the token is generated"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:217
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:229
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:293
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:305
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:316
+msgid "The time at which the token is generated"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:219
+msgid "A populated AuthnStatement object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:222
+msgid "buildConditions"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:227
+msgid "Builds the Conditions part of a token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:230
+msgid "A populated Conditions object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:233
+msgid "buildIssuser"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:238
+msgid "Builds the Issuer part of a token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:240
+msgid "A populated Issuer object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:243
+msgid "buildMetadata"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:249
+msgid "buildNameId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:254
+msgid "Builds the NameId part of a token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:256
+msgid "- The user identified by the bootstrap SAML token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:256
+msgid "The user identified by the bootstrap SAML token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:258
+msgid "A populated SAML NameID object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:261
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:273
+msgid "buildStringAttribute"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:266
+msgid "Builds a representation of an Attribute for a token with a single value."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:268
+msgid "- The claim name"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:268
+msgid "The claim name"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:269
+msgid "- The value of the claim"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:269
+msgid "The value of the claim"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:270
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:282
+msgid "A populated Attribute object."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:278
+msgid ""
+"Builds a representation of an Attribute for a token with one or more "
+"values."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:280
+msgid "- The claim name for the token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:280
+msgid "The claim name for the token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:281
+msgid "- A list of values"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:281
+msgid "A list of values"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:285
+msgid "buildSubject"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:290
+msgid "Builds the Subject part of a token"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:295
+msgid "A populated Subject object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:298
+msgid "buildSubjectConfirmation"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:303
+msgid "Builds the SubjectConfirmation part of a token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:306
+msgid "A populated SubjectConfirmation object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:309
+msgid "buildSubjectConfirmationData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:314
+msgid "Builds the SubjectConfirmationData part of a token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:317
+msgid "A populated SubjectConfirmationData object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:320
+msgid "decodeAndInflate"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:325
+msgid "Base64 decodes and inflates the input string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:327
+msgid "- A base64 and deflated string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:327
+msgid "A base64 and deflated string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:329
+msgid "decoded and inflated string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:332
+msgid "deflateAndEncode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:337
+msgid "Deflates and Base64-encodes the input string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:339
+msgid "- The string to be deflated and Base64-encoded"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:339
+msgid "The string to be deflated and Base64-encoded"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:341
+msgid "- The deflated and encoded string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:341
+msgid "The deflated and encoded string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:344
+msgid "getInputStreamFromConfigLocation"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:350
+msgid "getMetadataXmlString"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:356
+msgid "getObjectBuilder"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:361
+msgid "Shortcut method for generating SAML Object builders."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:363
+msgid ""
+"- Specifies the type of builder to get, typically specified as "
+"SamlClass.DEFAULT_ELEMENT_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:363
+msgid ""
+"Specifies the type of builder to get, typically specified as "
+"SamlClass.DEFAULT_ELEMENT_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:364
+msgid "- The type you want the builder returned as"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:364
+msgid "The type you want the builder returned as"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:365
+msgid "A builder of type T"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:368
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:380
+msgid "getTokenXml"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:373
+msgid "Generates the XML for a signed SAML2 Assertion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:377
+msgid "A valid signed SAML2 assertion as an XML string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:385
+msgid "Convert an assertion to an XML string."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:387
+msgid "the assertion to output as string"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:391
+msgid "signAssertion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:396
+msgid "Signs the specified Assertion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:398
+msgid "- The Assertion to sign"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoTokenGenerator.rst:398
+msgid "The Assertion to sign"
+msgstr ""
+

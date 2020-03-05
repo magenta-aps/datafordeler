@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:32
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:44
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:50
+msgid "HttpCommunicator"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:39
+msgid ""
+"Created by lars on 13-03-17. Very basic Communicator that fetches a "
+"resource over HTTP, and/or sends a payload on a POST request. Takes "
+"optional username and password for authentication, and holds cookies "
+"between requests."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:42
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:56
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:58
+msgid "buildClient"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:64
+msgid "fetch"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:70
+msgid "send"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:76
+msgid "setPassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/plugin/HttpCommunicator.rst:82
+msgid "setUsername"
+msgstr ""
+

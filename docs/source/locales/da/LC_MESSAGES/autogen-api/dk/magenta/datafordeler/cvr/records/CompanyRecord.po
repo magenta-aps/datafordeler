@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:20
+msgid "CompanyRecord"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:27
+msgid "Created by lars on 26-06-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:30
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:32
+msgid "generateUUID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:38
+msgid "getAll"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:44
+msgid "getCompanyStatus"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:50
+msgid "getCvrNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:56
+msgid "getLocationAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:62
+msgid "getNames"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:68
+msgid "getPostalAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:74
+msgid "getPrimaryIndustry"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:80
+msgid "populateBaseData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:86
+msgid "setEmailAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:92
+msgid "setFaxNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:98
+msgid "setHomepage"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:104
+msgid "setLocationAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:110
+msgid "setMandatoryEmailAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:116
+msgid "setPhoneNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:122
+msgid "setPostalAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:128
+msgid "setPrimaryIndustry"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:134
+msgid "setSecondaryIndustry1"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:140
+msgid "setSecondaryIndustry2"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyRecord.rst:146
+msgid "setSecondaryIndustry3"
+msgstr ""
+

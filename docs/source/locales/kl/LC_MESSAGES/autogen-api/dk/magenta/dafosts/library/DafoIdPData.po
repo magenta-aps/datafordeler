@@ -1,0 +1,129 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:6
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:24
+msgid "DafoIdPData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:14
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:16
+msgid "entityId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:22
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:30
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:32
+msgid "getDatabaseId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:38
+msgid "getEntityId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:44
+msgid "getIdpType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:50
+msgid "getMetadataXml"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:56
+msgid "getName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:62
+msgid "getStatus"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:68
+msgid "getUpdated"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:74
+msgid "getUserprofileAdjustmentFilterType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:80
+msgid "getUserprofileAdjustmentFilterValue"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:86
+msgid "getUserprofileAttribute"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:92
+msgid "getUserprofileAttributeFormat"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:98
+msgid "setDatabaseId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:104
+msgid "setEntityId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:110
+msgid "setIdpType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:116
+msgid "setMetadataXml"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:122
+msgid "setName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:128
+msgid "setStatus"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:134
+msgid "setUpdated"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:140
+msgid "setUserprofileAdjustmentFilterType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:146
+msgid "setUserprofileAdjustmentFilterValue"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:152
+msgid "setUserprofileAttribute"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/DafoIdPData.rst:158
+msgid "setUserprofileAttributeFormat"
+msgstr ""
+

@@ -1,0 +1,75 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:10
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:30
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:36
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:42
+msgid "UserProfile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:17
+msgid "Created by jubk on 20-06-2017."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:20
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:22
+msgid "INVALID_DATABASE_ID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:28
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:48
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:50
+msgid "addAreaRestrictions"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:56
+msgid "addSystemRoles"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:62
+msgid "getAreaRestrictions"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:68
+msgid "getDatabaseId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:74
+msgid "getName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:80
+msgid "getSystemRoles"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/UserProfile.rst:86
+msgid "setDatabaseId"
+msgstr ""
+
