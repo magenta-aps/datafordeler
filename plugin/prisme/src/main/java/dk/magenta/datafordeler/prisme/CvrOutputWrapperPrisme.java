@@ -143,7 +143,7 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
 
         Integer countryCode = entity.getCountryCode();
         if (countryCode != null && countryCode != 0) {
-            root.put("landekode", countryCode);
+            root.put("landekode", HardcodedCountrycodeForGERCompany.countrycodes.get(countryCode));
         }
 
         if (countryCode == 8 || countryCode == 406) { // Denmark or Greenland
