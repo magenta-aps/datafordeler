@@ -1,9 +1,14 @@
 package dk.magenta.datafordeler.prisme;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Class for containing a single adressentry for serializing to webservice
  */
 public class PersonAdressItem {
+
+    @JsonIgnore
+    private long id;
 
     private int myndighedskode;
     private int vejkode;
@@ -16,6 +21,13 @@ public class PersonAdressItem {
     private String startdato;
     private String slutdato;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public int getMyndighedskode() {
         return myndighedskode;
