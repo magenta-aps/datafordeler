@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.geo.data.road;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.database.ForcedJoinDefinition;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -152,6 +153,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     @Override
     public BaseLookupDefinition getLookupDefinition() {
         BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
+        String path;
         if (this.code != null && !this.code.isEmpty()) {
             lookupDefinition.put(GeoRoadEntity.DB_FIELD_CODE, this.code, Integer.class);
         }
@@ -183,12 +185,12 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
                     UUID.class
             );
         }
+
+        path = GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE;
         if (this.municipality != null && !this.municipality.isEmpty()) {
-            lookupDefinition.put(
-                    GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE,
-                    this.municipality,
-                    Integer.class
-            );
+            lookupDefinition.put(path, this.municipality, Integer.class);
+        } else if (this.forcedJoins.contains(MUNICIPALITY)) {
+            lookupDefinition.putForcedJoin(path);
         }
         return lookupDefinition;
     }

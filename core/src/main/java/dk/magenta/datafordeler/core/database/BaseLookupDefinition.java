@@ -142,6 +142,10 @@ public class BaseLookupDefinition {
         }
     }
 
+    public void putForcedJoin(String path) {
+        this.put(new ForcedJoinDefinition(path));
+    }
+
     public void setMatchNulls(boolean matchNulls) {
         this.matchNulls = matchNulls;
     }
@@ -226,7 +230,10 @@ public class BaseLookupDefinition {
     public String getHqlWhereString(String dataItemKey, String entityKey, String prefix) {
         StringJoiner extraWhere = new StringJoiner(" AND ");
         for (FieldDefinition fieldDefinition : this.fieldDefinitions) {
-            extraWhere.add("(" + this.getHqlWherePart(dataItemKey, entityKey, fieldDefinition, true) + ")");
+            String part = this.getHqlWherePart(dataItemKey, entityKey, fieldDefinition, true);
+            if (part != null) {
+                extraWhere.add("(" + part + ")");
+            }
         }
         if (extraWhere.length() > 0) {
             return prefix + " " + extraWhere.toString();
@@ -249,6 +256,10 @@ public class BaseLookupDefinition {
     }
 
     protected String getHqlWherePart(String rootKey, String entityKey, FieldDefinition fieldDefinition, boolean joinedTable) {
+        if (fieldDefinition instanceof ForcedJoinDefinition) {
+            // Forced joins are basically joins on our query that don't add any WHERE conditions
+            return null;
+        }
         String where = null;
         String path = fieldDefinition.path;
         String parameterPath = BaseLookupDefinition.getParameterPath(rootKey, entityKey, path) + "_" + fieldDefinition.id;

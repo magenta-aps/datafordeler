@@ -1,11 +1,13 @@
 package dk.magenta.datafordeler.geo.data.road;
 
+import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.util.*;
 
 @Component("GeoRoadEntityManager")
 public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawData> {
@@ -57,4 +59,24 @@ public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawDa
         return new GeoRoadEntity(record);
     }
 
+    @Override
+    public Set<String> getJoinFields() {
+        return Set.of("municipalitycode", "roadcode");
+    }
+
+    @Override
+    public BaseQuery getJoinQuery(Map<String, String> fieldMap, String entityIdentifier) {
+        StringJoiner buffer = new StringJoiner(" AND ");
+        RoadQuery query = new RoadQuery();
+        query.setEntityClassname(GeoRoadEntity.class);
+        if (fieldMap.containsKey("municipalitycode")) {
+            buffer.add(BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, GeoRoadEntity.DB_FIELD_MUNICIPALITY) + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE + " = " + fieldMap.get("municipalitycode"));
+            query.addForcedJoin("kommunekode");
+        }
+        if (fieldMap.containsKey("roadcode")) {
+            buffer.add(entityIdentifier + BaseLookupDefinition.separator + GeoRoadEntity.DB_FIELD_CODE + " = " + fieldMap.get("roadcode"));
+        }
+        query.setJoinString(buffer.toString());
+        return query;
+    }
 }

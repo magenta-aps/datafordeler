@@ -85,6 +85,12 @@ public abstract class BaseQuery {
 
     private OutputWrapper.Mode mode = null;
 
+    protected HashSet<String> forcedJoins = new HashSet<>();
+
+    private String entityClassname;
+
+    private String joinString;
+
     public BaseQuery() {
     }
 
@@ -494,13 +500,6 @@ public abstract class BaseQuery {
     }
 
 
-
-
-
-
-
-
-
     public OffsetDateTime getRecordAfter() {
         return this.recordAfter;
     }
@@ -817,5 +816,28 @@ public abstract class BaseQuery {
 
     protected Object castFilterParam(Object input, String filter) {
         return input;
+    }
+
+    public void addForcedJoin(String field) {
+        this.forcedJoins.add(field);
+    }
+
+    public String getEntityClassname() {
+        return this.entityClassname;
+    }
+
+    public void setEntityClassname(String entityClassname) {
+        this.entityClassname = entityClassname;
+    }
+    public void setEntityClassname(Class entityClass) {
+        this.entityClassname = entityClass.getCanonicalName();
+    }
+
+    public String getJoinString() {
+        return this.joinString;
+    }
+
+    public void setJoinString(String joinString) {
+        this.joinString = joinString;
     }
 }

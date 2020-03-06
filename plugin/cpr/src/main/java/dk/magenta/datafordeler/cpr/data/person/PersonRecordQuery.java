@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.database.ForcedJoinDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -209,21 +210,40 @@ public class PersonRecordQuery extends BaseQuery {
     @Override
     public BaseLookupDefinition getLookupDefinition() {
         BaseLookupDefinition lookupDefinition = new BaseLookupDefinition();
+        String path;
+
         if (!this.getPersonnumre().isEmpty()) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_CPR_NUMBER, this.getPersonnumre(), String.class);
         }
+
         if (this.getFornavn() != null) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_NAME + LookupDefinition.separator + NameDataRecord.DB_FIELD_FIRST_NAMES, this.getFornavn(), String.class);
         }
         if (this.getEfternavn() != null) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_NAME + LookupDefinition.separator + NameDataRecord.DB_FIELD_LAST_NAME, this.getEfternavn(), String.class);
         }
+
+        path = LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE;
+        boolean hasMunicipality = false;
         if (!this.getKommunekoder().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE, this.getKommunekoder(), Integer.class);
+            lookupDefinition.put(path, this.getKommunekoder(), Integer.class);
+            hasMunicipality = true;
         }
+        if (!this.getKommunekodeRestriction().isEmpty()) {
+            lookupDefinition.put(path, this.getKommunekodeRestriction(), Integer.class);
+            hasMunicipality = true;
+        }
+        if (!hasMunicipality && this.forcedJoins.contains(KOMMUNEKODE)) {
+            lookupDefinition.put(new ForcedJoinDefinition(path));
+        }
+
+        path = LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_ROAD_CODE;
         if (!this.getVejkoder().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_ROAD_CODE, this.getVejkoder(), Integer.class);
+            lookupDefinition.put(path, this.getVejkoder(), Integer.class);
+        } else if (this.forcedJoins.contains(VEJKODE)) {
+            lookupDefinition.putForcedJoin(path);
         }
+
         if (!this.getDoors().isEmpty()) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR, this.getDoors(), String.class);
         }
@@ -236,9 +256,7 @@ public class PersonRecordQuery extends BaseQuery {
         if (!this.getBuildingNos().isEmpty()) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER, this.getBuildingNos(), String.class);
         }
-        if (!this.getKommunekodeRestriction().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE, this.getKommunekodeRestriction(), Integer.class);
-        }
+
         return lookupDefinition;
     }
 

@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.FailedReferenceException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
 import dk.magenta.datafordeler.core.exception.WrongSubclassException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.FapiService;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
@@ -27,6 +28,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
 
 /**
  * Entity (and associates) specific manager. Subclass in plugins
@@ -345,5 +348,24 @@ public abstract class EntityManager {
      */
     public boolean pullEnabled() {
         return false;
+    }
+
+    /*
+    * Returns a list of fields that are eligible to join with.
+    * They need not map to DB fields, but should be recognized as input to the function returned by getJoinFunction
+    * Override in subclasses
+    * */
+    public Set<String> getJoinFields() {
+        return Collections.emptySet();
+    }
+
+    /**
+     * Accepts a map of DB fields, where the keys correspond to a subset of what's returned by getJoinFields
+     * and values represent the caller's DB fields. Returns a HQL query part to be inserted in a query on the callers side.
+     * @param fieldMap Mapping between our known fields (as returned by getJoinFields) and the caller's DB fields
+     * @return HQL fragment
+     */
+    public BaseQuery getJoinQuery(Map<String, String> fieldMap, String entityIdentifier) {
+        return null;
     }
 }

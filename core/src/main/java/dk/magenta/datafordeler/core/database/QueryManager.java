@@ -2,9 +2,11 @@ package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.MultiClassLookupDefinition;
 import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
 import dk.magenta.datafordeler.core.util.ListHashMap;
+import dk.magenta.datafordeler.core.fapi.MultiClassQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.NonUniqueResultException;
@@ -186,6 +188,56 @@ public abstract class QueryManager {
     }
 
     private static final boolean logQuery = false;
+
+    public static org.hibernate.query.Query getQuery(Session session, MultiClassQuery query) {
+        // String queryString = "SELECT DISTINCT a, b FROM classA, classB WHERE ... AND a.x = b.x";
+        MultiClassLookupDefinition lookupDefinition = query.getLookupDefinition();
+
+        StringJoiner queryString = new StringJoiner(" ");
+        queryString.add("SELECT DISTINCT");
+        queryString.add(lookupDefinition.getIdents()+" FROM " + lookupDefinition.getTables());
+        queryString.add(lookupDefinition.getHqlJoinString(ENTITY, ENTITY));
+        queryString.add("WHERE");
+        queryString.add(lookupDefinition.getHqlWhereString(ENTITY, ENTITY));
+
+        StringJoiner stringJoiner = null;
+        if (logQuery) {
+            stringJoiner = new StringJoiner("\n");
+            stringJoiner.add(queryString.toString());
+        }
+
+        // Build query
+        org.hibernate.query.Query databaseQuery = session.createQuery(queryString.toString());
+
+        // Insert parameters, casting as necessary
+        HashMap<String, Object> extraParameters = lookupDefinition.getHqlParameters(ENTITY, ENTITY);
+
+        for (String key : extraParameters.keySet()) {
+            Object value = extraParameters.get(key);
+            if (logQuery) {
+                stringJoiner.add(key+" = "+value);
+            }
+            if (value instanceof Collection) {
+                databaseQuery.setParameterList(key, (Collection) value);
+            } else {
+                databaseQuery.setParameter(key, value);
+            }
+        }
+
+        if (logQuery) {
+            log.info(stringJoiner.toString());
+        }
+
+        // Offset & limit
+        if (query.getOffset() > 0) {
+            databaseQuery.setFirstResult(query.getOffset());
+        }
+        if (query.getCount() < Integer.MAX_VALUE) {
+            databaseQuery.setMaxResults(query.getCount());
+        }
+        return databaseQuery;
+    }
+
 
     private static <E extends IdentifiedEntity> org.hibernate.query.Query<E> getQuery(Session session, BaseQuery query, Class<E> eClass) {
         BaseLookupDefinition lookupDefinition = query.getLookupDefinition();
