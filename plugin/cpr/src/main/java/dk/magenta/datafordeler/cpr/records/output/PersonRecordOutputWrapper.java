@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr.records.output;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.util.Bitemporality;
@@ -49,6 +50,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
 
     @Override
     public ObjectMapper getObjectMapper() {
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         return this.objectMapper;
     }
 
