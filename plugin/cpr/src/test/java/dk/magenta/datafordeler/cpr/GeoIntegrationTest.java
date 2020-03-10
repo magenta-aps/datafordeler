@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import org.hibernate.Session;
@@ -48,6 +49,9 @@ public class GeoIntegrationTest {
     @Autowired
     private SessionManager sessionManager;
 
+    @Autowired
+    private PersonEntityManager entityManager;
+
     //@Before
     public void importData() {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
@@ -75,10 +79,7 @@ public class GeoIntegrationTest {
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         EntityManager roadManager = geoPlugin.getEntityManager("Road");
         if (roadManager != null) {
-            HashMap<String, String> fieldMap = new HashMap<>();
-            fieldMap.put("municipalitycode", BaseLookupDefinition.getParameterPath(personRoot, personRoot, PersonEntity.DB_FIELD_ADDRESS) + BaseLookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE);
-            fieldMap.put("roadcode", BaseLookupDefinition.getParameterPath(personRoot, personRoot, PersonEntity.DB_FIELD_ADDRESS) + BaseLookupDefinition.separator + AddressDataRecord.DB_FIELD_ROAD_CODE);
-            m.add(roadManager.getJoinQuery(fieldMap, roadRoot), roadRoot);
+            m.add(roadManager.getJoinQuery(entityManager.getJoinHandles(personRoot), roadRoot), roadRoot);
             Session session = sessionManager.getSessionFactory().openSession();
             System.out.println(QueryManager.getQuery(session, m));
 

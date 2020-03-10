@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
@@ -13,8 +14,13 @@ import dk.magenta.datafordeler.core.plugin.ScanScrollCommunicator;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
+import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
+import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +36,7 @@ import java.security.GeneralSecurityException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Company-specific EntityManager, specifying various settings that methods in the superclass
@@ -198,5 +201,25 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             e.printStackTrace();
         }
         return records;
+    }
+
+
+
+    @Override
+    public Map<String, String> getJoinHandles(String entityIdentifier) {
+        HashMap<String, String> handles = new HashMap<>();
+        final String sep = BaseLookupDefinition.separator;
+        handles.put(
+                "municipalitycode",
+                BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, CompanyRecord.DB_FIELD_LOCATION_ADDRESS + sep + AddressRecord.DB_FIELD_MUNICIPALITY) + sep +
+                        AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + sep +
+                        Municipality.DB_FIELD_CODE
+        );
+        handles.put(
+                "roadcode",
+                        BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, CompanyRecord.DB_FIELD_LOCATION_ADDRESS) + sep +
+                        AddressRecord.DB_FIELD_ROADCODE
+        );
+        return handles;
     }
 }

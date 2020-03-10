@@ -200,6 +200,8 @@ public abstract class QueryManager {
         queryString.add("WHERE");
         queryString.add(lookupDefinition.getHqlWhereString(ENTITY, ENTITY));
 
+        System.out.println(queryString.toString());
+
         StringJoiner stringJoiner = null;
         if (logQuery) {
             stringJoiner = new StringJoiner("\n");
@@ -207,6 +209,7 @@ public abstract class QueryManager {
         }
 
         // Build query
+        System.out.println(session);
         org.hibernate.query.Query databaseQuery = session.createQuery(queryString.toString());
 
         // Insert parameters, casting as necessary

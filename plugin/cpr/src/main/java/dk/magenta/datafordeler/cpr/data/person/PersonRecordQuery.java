@@ -210,7 +210,6 @@ public class PersonRecordQuery extends BaseQuery {
     @Override
     public BaseLookupDefinition getLookupDefinition() {
         BaseLookupDefinition lookupDefinition = new BaseLookupDefinition();
-        String path;
 
         if (!this.getPersonnumre().isEmpty()) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_CPR_NUMBER, this.getPersonnumre(), String.class);
@@ -223,38 +222,42 @@ public class PersonRecordQuery extends BaseQuery {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_NAME + LookupDefinition.separator + NameDataRecord.DB_FIELD_LAST_NAME, this.getEfternavn(), String.class);
         }
 
-        path = LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE;
-        boolean hasMunicipality = false;
+        String addressPath = LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS;
+        boolean joinedAddress = false;
+        
         if (!this.getKommunekoder().isEmpty()) {
-            lookupDefinition.put(path, this.getKommunekoder(), Integer.class);
-            hasMunicipality = true;
+            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE, this.getKommunekoder(), Integer.class);
+            joinedAddress = true;
         }
         if (!this.getKommunekodeRestriction().isEmpty()) {
-            lookupDefinition.put(path, this.getKommunekodeRestriction(), Integer.class);
-            hasMunicipality = true;
-        }
-        if (!hasMunicipality && this.forcedJoins.contains(KOMMUNEKODE)) {
-            lookupDefinition.put(new ForcedJoinDefinition(path));
+            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE, this.getKommunekodeRestriction(), Integer.class);
+            joinedAddress = true;
         }
 
-        path = LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_ROAD_CODE;
         if (!this.getVejkoder().isEmpty()) {
-            lookupDefinition.put(path, this.getVejkoder(), Integer.class);
-        } else if (this.forcedJoins.contains(VEJKODE)) {
-            lookupDefinition.putForcedJoin(path);
+            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_ROAD_CODE, this.getVejkoder(), Integer.class);
+            joinedAddress = true;
         }
 
         if (!this.getDoors().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR, this.getDoors(), String.class);
+            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR, this.getDoors(), String.class);
+            joinedAddress = true;
         }
         if (!this.getFloors().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_FLOOR, this.getFloors(), String.class);
+            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_FLOOR, this.getFloors(), String.class);
+            joinedAddress = true;
         }
         if (!this.getHouseNos().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER, this.getHouseNos(), String.class);
+            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER, this.getHouseNos(), String.class);
+            joinedAddress = true;
         }
         if (!this.getBuildingNos().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER, this.getBuildingNos(), String.class);
+            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER, this.getBuildingNos(), String.class);
+            joinedAddress = true;
+        }
+
+        if (!joinedAddress && (this.forcedJoins.contains(KOMMUNEKODE) || this.forcedJoins.contains(VEJKODE) || this.forcedJoins.contains(DOOR) || this.forcedJoins.contains(FLOOR) || this.forcedJoins.contains(HOUSENO) || this.forcedJoins.contains(BUILDINGNO))) {
+            lookupDefinition.putForcedJoin(addressPath);
         }
 
         return lookupDefinition;

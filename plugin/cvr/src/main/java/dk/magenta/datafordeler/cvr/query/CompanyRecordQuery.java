@@ -355,24 +355,27 @@ public class CompanyRecordQuery extends BaseQuery {
         if (this.getEmailadresse() != null && !this.getEmailadresse().isEmpty()) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyRecord.DB_FIELD_EMAIL + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA, this.getEmailadresse(), String.class);
         }
+
+        String addressMunicipalityPath =
+                LookupDefinition.entityref + LookupDefinition.separator +
+                CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator +
+                AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator +
+                AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY;
+        boolean joinedAddress = false;
+
         if (this.getKommuneKode() != null && !this.getKommuneKode().isEmpty()) {
-            StringJoiner sj = new StringJoiner(LookupDefinition.separator);
-            sj.add(LookupDefinition.entityref);
-            sj.add(CompanyRecord.DB_FIELD_LOCATION_ADDRESS);
-            sj.add(AddressRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(Municipality.DB_FIELD_CODE);
-            lookupDefinition.put(sj.toString(), this.getKommuneKode(), Integer.class);
+            lookupDefinition.put(addressMunicipalityPath + LookupDefinition.separator + Municipality.DB_FIELD_CODE, this.getKommuneKode(), Integer.class);
+            joinedAddress = true;
         }
         if (this.getKommunekodeRestriction() != null && !this.getKommunekodeRestriction().isEmpty()) {
-            StringJoiner sj = new StringJoiner(LookupDefinition.separator);
-            sj.add(LookupDefinition.entityref);
-            sj.add(CompanyRecord.DB_FIELD_LOCATION_ADDRESS);
-            sj.add(AddressRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(Municipality.DB_FIELD_CODE);
-            lookupDefinition.put(sj.toString(), this.getKommunekodeRestriction(), Integer.class);
+            lookupDefinition.put(addressMunicipalityPath + LookupDefinition.separator + Municipality.DB_FIELD_CODE, this.getKommunekodeRestriction(), Integer.class);
+            joinedAddress = true;
         }
+
+        if (!joinedAddress && (this.forcedJoins.contains(KOMMUNEKODE))) {
+            lookupDefinition.putForcedJoin(addressMunicipalityPath);
+        }
+
         return lookupDefinition;
     }
 

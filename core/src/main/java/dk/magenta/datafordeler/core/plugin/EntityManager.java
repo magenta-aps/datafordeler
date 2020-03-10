@@ -356,8 +356,8 @@ public abstract class EntityManager {
     * They need not map to DB fields, but should be recognized as input to the function returned by getJoinFunction
     * Override in subclasses
     * */
-    public Set<String> getJoinFields() {
-        return Collections.emptySet();
+    public Map<String, String> getJoinHandles(String entityIdentifier) {
+        return Collections.emptyMap();
     }
 
     /**

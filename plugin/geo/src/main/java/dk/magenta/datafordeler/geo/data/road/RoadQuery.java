@@ -153,7 +153,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     @Override
     public BaseLookupDefinition getLookupDefinition() {
         BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        String path;
+
         if (this.code != null && !this.code.isEmpty()) {
             lookupDefinition.put(GeoRoadEntity.DB_FIELD_CODE, this.code, Integer.class);
         }
@@ -186,11 +186,11 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
             );
         }
 
-        path = GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE;
         if (this.municipality != null && !this.municipality.isEmpty()) {
-            lookupDefinition.put(path, this.municipality, Integer.class);
+            lookupDefinition.put(GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
         } else if (this.forcedJoins.contains(MUNICIPALITY)) {
-            lookupDefinition.putForcedJoin(path);
+            System.out.println("ADDING FORCED JOIN "+GeoRoadEntity.DB_FIELD_MUNICIPALITY);
+            lookupDefinition.putForcedJoin(GeoRoadEntity.DB_FIELD_MUNICIPALITY);
         }
         return lookupDefinition;
     }

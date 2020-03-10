@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -14,6 +15,7 @@ import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.parsers.PersonParser;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.*;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
@@ -452,5 +454,27 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             }
         }
     }
+
+
+
+
+    @Override
+    public Map<String, String> getJoinHandles(String entityIdentifier) {
+        HashMap<String, String> handles = new HashMap<>();
+        final String sep = BaseLookupDefinition.separator;
+        handles.put(
+                "municipalitycode",
+                BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, PersonEntity.DB_FIELD_ADDRESS) + sep +
+                        AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE
+        );
+        handles.put(
+                "roadcode",
+                BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, PersonEntity.DB_FIELD_ADDRESS) + sep +
+                        AddressDataRecord.DB_FIELD_ROAD_CODE
+        );
+        return handles;
+    }
+
+
 
 }

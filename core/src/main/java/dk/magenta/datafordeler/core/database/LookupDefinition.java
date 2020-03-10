@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -106,7 +107,7 @@ public class LookupDefinition extends BaseLookupDefinition {
             } else if (fieldDefinition.onEntity()) {
                 extraWhere.add("(" + (fieldDefinition.inverted ? "NOT ":"") + this.getHqlWherePart(dataItemKey, entityKey, fieldDefinition, true) + ")");
             } else {
-                Set<String> joins = this.getHqlJoinParts(dataItemKey, fieldDefinition);
+                List<String> joins = this.getHqlJoinParts(dataItemKey, fieldDefinition);
                 String join = "";
                 if (joins != null && !joins.isEmpty()) {
                     StringJoiner sj = new StringJoiner(" JOIN ", " JOIN ", "");
