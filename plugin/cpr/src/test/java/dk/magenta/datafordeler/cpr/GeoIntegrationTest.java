@@ -4,19 +4,19 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.Pull;
-import dk.magenta.datafordeler.core.database.*;
-import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.MultiClassQuery;
+import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.person.AddressRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import org.hibernate.Session;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.mockito.Mockito.when;
 
@@ -76,19 +75,16 @@ public class GeoIntegrationTest {
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         EntityManager roadManager = geoPlugin.getEntityManager("Road");
         if (roadManager != null) {
-
             HashMap<String, String> fieldMap = new HashMap<>();
             fieldMap.put("municipalitycode", BaseLookupDefinition.getParameterPath(personRoot, personRoot, PersonEntity.DB_FIELD_ADDRESS) + BaseLookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE);
             fieldMap.put("roadcode", BaseLookupDefinition.getParameterPath(personRoot, personRoot, PersonEntity.DB_FIELD_ADDRESS) + BaseLookupDefinition.separator + AddressDataRecord.DB_FIELD_ROAD_CODE);
-            BaseQuery roadQuery = roadManager.getJoinQuery(fieldMap, roadRoot);
-
-            m.add(roadQuery, roadRoot);
-
+            m.add(roadManager.getJoinQuery(fieldMap, roadRoot), roadRoot);
             Session session = sessionManager.getSessionFactory().openSession();
             System.out.println(QueryManager.getQuery(session, m));
+
+            OutputWrapper outputWrapper = roadManager.getOutputWrapper();
+            System.out.println(outputWrapper);
         }
-
     }
-
 
 }

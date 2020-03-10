@@ -121,7 +121,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
 
 
-    protected OutputWrapper<E> getOutputWrapper() {
+    public OutputWrapper<E> getOutputWrapper() {
         return outputWrapper;
     }
 

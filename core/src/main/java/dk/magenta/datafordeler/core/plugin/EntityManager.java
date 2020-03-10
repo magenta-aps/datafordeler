@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.exception.WrongSubclassException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.FapiService;
+import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.PluginSourceData;
 import dk.magenta.datafordeler.core.io.Receipt;
@@ -367,5 +368,9 @@ public abstract class EntityManager {
      */
     public BaseQuery getJoinQuery(Map<String, String> fieldMap, String entityIdentifier) {
         return null;
+    }
+
+    public OutputWrapper getOutputWrapper() {
+        return this.getEntityService().getOutputWrapper();
     }
 }
