@@ -11,6 +11,7 @@ public abstract class CprRecordOutputWrapper<E extends CprRecordEntity> extends 
 
     private static final Set<String> dataonlyNodeRemoveFields = new HashSet<>(Arrays.asList(
             "undo",
+            "sameAs",
             "correctors",
             "replacesId",
             "replacedById",
