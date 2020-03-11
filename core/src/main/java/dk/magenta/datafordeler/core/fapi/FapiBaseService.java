@@ -210,7 +210,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addUserData(user);
             envelope.addRequestData(request);
             try {
-                List<E> results = this.searchByQuery(query, session);
+                List<ResultSet<E>> results = this.searchByQuery(query, session);
                 if (this.getOutputWrapper() != null) {
                     envelope.setResults(this.getOutputWrapper().wrapResults(results, query, this.getDefaultMode()));
                 } else {
@@ -293,6 +293,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @return Found Entity, or null if none found.
      */
     // TODO: How to use DafoUserDetails with SOAP requests?
+    /*
     @WebMethod(operationName = "get")
     public Envelope getSoap(@WebParam(name="id") @XmlElement(required=true) String id,
                      @WebParam(name="registeringFra") @XmlElement(required = false) String registeringFra,
@@ -341,7 +342,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             session.close();
         }
         return envelope;
-    }
+    }*/
 
 
     /**
@@ -381,7 +382,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addQueryData(query);
             envelope.addUserData(user);
             envelope.addRequestData(request);
-            List<E> results = this.searchByQuery(query, session);
+            List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
                 envelope.setResults(this.getOutputWrapper().wrapResults(results, query, query.getMode(this.getDefaultMode())));
             } else {
@@ -467,7 +468,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addQueryData(query);
             envelope.addUserData(user);
             envelope.addRequestData(request);
-            List<E> results = this.searchByQuery(query, session);
+            List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
                 envelope.setResult(this.getOutputWrapper().wrapResults(results, query, query.getMode(this.getDefaultMode())));
             } else {
@@ -519,12 +520,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     //@WebMethod(exclude = true)
     //protected abstract Set<E> searchByQuery(Q query);
     @WebMethod(exclude = true) // Non-soap methods must have this
-    protected List<E> searchByQuery(Q query, Session session) {
+    protected List<ResultSet<E>> searchByQuery(Q query, Session session) {
         query.applyFilters(session);
-        return QueryManager.getAllEntities(
-                session, query,
-                this.getEntityClass()
-        );
+        return QueryManager.getAllEntities(session, query, this.getEntityClass());
     }
 
     /**

@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +45,26 @@ public class QueryTest {
 
         @Override
         public void setFromParameters(ParameterMap parameters) {
+        }
+
+        @Override
+        public String getEntityClassname() {
+            return Entity.class.getCanonicalName();
+        }
+
+        @Override
+        public String getEntityIdentifier() {
+            return "entity";
+        }
+
+        @Override
+        protected Map<String, String> joinHandles() {
+            return Collections.emptyMap();
+        }
+
+        @Override
+        protected void setupConditions() {
+
         }
 
         @Override

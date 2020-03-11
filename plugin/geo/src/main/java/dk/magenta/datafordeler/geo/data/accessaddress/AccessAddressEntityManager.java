@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.geo.data.accessaddress;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class AccessAddressEntityManager extends GeoEntityManager<AccessAddressEn
     @Override
     public String getSchema() {
         return AccessAddressEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new AccessAddressQuery();
     }
 
     @Override

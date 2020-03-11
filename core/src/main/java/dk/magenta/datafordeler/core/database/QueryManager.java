@@ -2,11 +2,9 @@ package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.fapi.MultiClassLookupDefinition;
-import dk.magenta.datafordeler.core.fapi.Query;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
 import dk.magenta.datafordeler.core.util.ListHashMap;
-import dk.magenta.datafordeler.core.fapi.MultiClassQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.NonUniqueResultException;
@@ -14,7 +12,6 @@ import org.hibernate.Session;
 
 import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
-import javax.persistence.Parameter;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -189,18 +186,11 @@ public abstract class QueryManager {
 
     private static final boolean logQuery = false;
 
-    public static org.hibernate.query.Query getQuery(Session session, MultiClassQuery query) {
-        // String queryString = "SELECT DISTINCT a, b FROM classA, classB WHERE ... AND a.x = b.x";
-        MultiClassLookupDefinition lookupDefinition = query.getLookupDefinition();
+    public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
 
-        StringJoiner queryString = new StringJoiner(" ");
-        queryString.add("SELECT DISTINCT");
-        queryString.add(lookupDefinition.getIdents()+" FROM " + lookupDefinition.getTables());
-        queryString.add(lookupDefinition.getHqlJoinString(ENTITY, ENTITY));
-        queryString.add("WHERE");
-        queryString.add(lookupDefinition.getHqlWhereString(ENTITY, ENTITY));
+        String queryString = query.toHql();
 
-        System.out.println(queryString.toString());
+        System.out.println(queryString);
 
         StringJoiner stringJoiner = null;
         if (logQuery) {
@@ -210,10 +200,10 @@ public abstract class QueryManager {
 
         // Build query
         System.out.println(session);
-        org.hibernate.query.Query databaseQuery = session.createQuery(queryString.toString());
+        org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
 
         // Insert parameters, casting as necessary
-        HashMap<String, Object> extraParameters = lookupDefinition.getHqlParameters(ENTITY, ENTITY);
+        Map<String, Object> extraParameters = query.getParameters();
 
         for (String key : extraParameters.keySet()) {
             Object value = extraParameters.get(key);
@@ -298,17 +288,26 @@ public abstract class QueryManager {
      * Get all Entities of a specific class, that match the given parameters
      * @param session Database session to work from
      * @param query Query object defining search parameters
-     * @param eClass Entity subclass
      * @return
      */
-    public static <E extends IdentifiedEntity> List<E> getAllEntities(Session session, BaseQuery query, Class<E> eClass) {
-        log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query<E> databaseQuery = QueryManager.getQuery(session, query, eClass);
+    public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntities(Session session, BaseQuery query, Class<E> eClass) {
+        LinkedList<ResultSet<E>> identitySetList = new LinkedList<>();
+        log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
+        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
-        List<E> results = databaseQuery.getResultList();
+
+        List<String> classNames = query.getEntityClassnameStrings();
+        try {
+            for (Object[] row : (List<Object[]>) databaseQuery.list()) {
+                identitySetList.add(new ResultSet<E>(row, classNames));
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
-        return results;
+        return identitySetList;
     }
 
     /**

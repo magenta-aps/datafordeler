@@ -162,4 +162,24 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         //this.setRoad(parameters.getFirst(ROAD));
     }
 
+    @Override
+    public String getEntityClassname() {
+        return UnitAddressEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_unitaddress";
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return null;
+    }
+
+    @Override
+    protected void setupConditions() {
+
+    }
+
 }

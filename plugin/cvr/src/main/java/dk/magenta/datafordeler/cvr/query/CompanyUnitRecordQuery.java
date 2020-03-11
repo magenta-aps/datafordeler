@@ -218,4 +218,37 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     protected Object castFilterParam(Object input, String filter) {
         return super.castFilterParam(input, filter);
     }
+
+    @Override
+    public String getEntityClassname() {
+        return CompanyUnitRecord.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "cvr_companyunit";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("pnr", CompanyUnitRecord.DB_FIELD_P_NUMBER);
+        joinHandles.put("cvr", CompanyUnitRecord.DB_FIELD_COMPANY_LINK + LookupDefinition.separator + CompanyLinkRecord.DB_FIELD_CVRNUMBER);
+        joinHandles.put("primaryindustrycode", CompanyUnitRecord.DB_FIELD_PRIMARY_INDUSTRY + LookupDefinition.separator + CompanyIndustryRecord.DB_FIELD_CODE);
+        joinHandles.put("municipalitycode", CompanyUnitRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
+        joinHandles.put("roadcode", CompanyUnitRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    protected void setupConditions() throws Exception {
+        this.addCondition("pnr", this.pNummer);
+        this.addCondition("cvr", this.associatedCompanyCvrNumber);
+        this.addCondition("primaryindustrycode", this.primaryIndustry);
+        this.addCondition("municipalitycode", this.kommunekode);
+        //this.addCondition("roadcode", this.);
+    }
 }

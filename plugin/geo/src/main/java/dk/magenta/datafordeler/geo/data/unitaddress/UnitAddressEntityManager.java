@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.geo.data.unitaddress;
 
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
 import org.hibernate.Session;
@@ -39,6 +40,11 @@ public class UnitAddressEntityManager extends GeoEntityManager<UnitAddressEntity
     @Override
     public String getSchema() {
         return UnitAddressEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new UnitAddressQuery();
     }
 
     @Override

@@ -60,27 +60,7 @@ public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawDa
     }
 
     @Override
-    public Map<String, String> getJoinHandles(String entityIdentifier) {
-        HashMap<String, String> handles = new HashMap<>();
-        handles.put("municipalitycode", BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, GeoRoadEntity.DB_FIELD_MUNICIPALITY) + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE);
-        handles.put("roadcode", entityIdentifier + BaseLookupDefinition.separator + GeoRoadEntity.DB_FIELD_CODE);
-        return handles;
-    }
-
-    @Override
-    public BaseQuery getJoinQuery(Map<String, String> theirJoinHandles, String entityIdentifier) {
-        StringJoiner buffer = new StringJoiner(" AND ");
-        RoadQuery query = new RoadQuery();
-        query.setEntityClassname(GeoRoadEntity.class);
-        Map<String, String> ourJoinHandles = this.getJoinHandles(entityIdentifier);
-        if (theirJoinHandles.containsKey("municipalitycode")) {
-            buffer.add(ourJoinHandles.get("municipalitycode") + " = " + theirJoinHandles.get("municipalitycode"));
-            query.addForcedJoin(RoadQuery.MUNICIPALITY);
-        }
-        if (theirJoinHandles.containsKey("roadcode")) {
-            buffer.add(ourJoinHandles.get("roadcode") + " = " + theirJoinHandles.get("roadcode"));
-        }
-        query.setJoinString(buffer.toString());
-        return query;
+    public BaseQuery getQuery() {
+        return new RoadQuery();
     }
 }

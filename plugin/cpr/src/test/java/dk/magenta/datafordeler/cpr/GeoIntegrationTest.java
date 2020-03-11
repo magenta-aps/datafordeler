@@ -4,20 +4,14 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.Pull;
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.fapi.MultiClassQuery;
-import dk.magenta.datafordeler.core.fapi.OutputWrapper;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import org.hibernate.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,12 +60,36 @@ public class GeoIntegrationTest {
     }
 
     @Test
-    public void testLookup() {
+    public void testLookup2() throws Exception {
         PersonRecordQuery personRecordQuery = new PersonRecordQuery();
-        personRecordQuery.setPersonnummer("0101000000");
-        personRecordQuery.addForcedJoin(PersonRecordQuery.KOMMUNEKODE);
+        personRecordQuery.addPersonnummer("0101000000");
+        personRecordQuery.addPersonnummer("020200*");
 
-        MultiClassQuery m = new MultiClassQuery();
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        EntityManager roadManager = geoPlugin.getEntityManager("Road");
+        if (roadManager != null) {
+            BaseQuery roadQuery = roadManager.getQuery();
+
+            HashMap<String, String> joinHandles = new HashMap<>();
+            joinHandles.put("kommunekode", "municipalitycode");
+            joinHandles.put("vejkode", "code");
+            personRecordQuery.addRelated(roadQuery, joinHandles);
+
+
+            System.out.println("personQuery:");
+            System.out.println(personRecordQuery.toHql());
+            System.out.println(personRecordQuery.getParameters());
+            //m.add(roadManager.getJoinQuery(entityManager.getJoinHandles(personRoot), roadRoot), roadRoot);
+            //Session session = sessionManager.getSessionFactory().openSession();
+            //System.out.println(QueryManager.getQuery(session, m));
+
+            //OutputWrapper outputWrapper = roadManager.getOutputWrapper();
+            //System.out.println(outputWrapper);
+        }
+
+
+        //personRecordQuery.addForcedJoin(PersonRecordQuery.KOMMUNEKODE);
+/*
         String personRoot = "person";
         String roadRoot = "road";
         m.add(personRecordQuery, PersonEntity.class.getCanonicalName(), personRoot, "");
@@ -85,7 +103,7 @@ public class GeoIntegrationTest {
 
             OutputWrapper outputWrapper = roadManager.getOutputWrapper();
             System.out.println(outputWrapper);
-        }
+        }*/
     }
 
 }

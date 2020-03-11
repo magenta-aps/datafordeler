@@ -29,7 +29,7 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
     }
 
     public final List<Object> wrapResults(Collection<E> input, BaseQuery query, Mode mode) {
-            ArrayList<Object> result = new ArrayList<>();
+        ArrayList<Object> result = new ArrayList<>();
         for (E item : input) {
             if (item != null) {
                 result.add(this.wrapResult(item, query, mode));

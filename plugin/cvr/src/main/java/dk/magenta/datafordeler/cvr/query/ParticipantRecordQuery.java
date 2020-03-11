@@ -5,7 +5,10 @@ import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
-import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
+import dk.magenta.datafordeler.cvr.records.SecNameRecord;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
 import java.util.*;
@@ -181,5 +184,35 @@ public class ParticipantRecordQuery extends BaseQuery {
     @Override
     protected Object castFilterParam(Object input, String filter) {
         return super.castFilterParam(input, filter);
+    }
+
+    @Override
+    public String getEntityClassname() {
+        return ParticipantRecord.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "cvr_participant";
+    }
+
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("unit", ParticipantRecord.DB_FIELD_UNIT_NUMBER);
+        joinHandles.put("name", ParticipantRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME);
+        joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    protected void setupConditions() throws Exception {
+        this.addCondition("unit", this.enhedsNummer);
+        this.addCondition("name", this.navn);
+        this.addCondition("municipalitycode", this.kommunekode);
     }
 }

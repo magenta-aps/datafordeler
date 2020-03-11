@@ -9,11 +9,13 @@ import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.plugin.ScanScrollCommunicator;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
+import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
 import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -221,5 +223,10 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
                         AddressRecord.DB_FIELD_ROADCODE
         );
         return handles;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new CompanyRecordQuery();
     }
 }

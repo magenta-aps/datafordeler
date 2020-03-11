@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.geo.data.road;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.ForcedJoinDefinition;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -9,6 +8,7 @@ import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by lars on 19-05-17.
@@ -20,6 +20,9 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     public static final String ADDRESSING_NAME = RoadNameRecord.IO_FIELD_ADDRESSING_NAME;
     public static final String MUNICIPALITY = RoadMunicipalityRecord.IO_FIELD_CODE;
     public static final String LOCALITY = RoadLocalityRecord.IO_FIELD_CODE;
+
+    public RoadQuery() {
+    }
 
     @QueryField(type = QueryField.FieldType.INT, queryName = CODE)
     private List<String> code = new ArrayList<>();
@@ -188,9 +191,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
         if (this.municipality != null && !this.municipality.isEmpty()) {
             lookupDefinition.put(GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
-        } else if (this.forcedJoins.contains(MUNICIPALITY)) {
-            System.out.println("ADDING FORCED JOIN "+GeoRoadEntity.DB_FIELD_MUNICIPALITY);
-            lookupDefinition.putForcedJoin(GeoRoadEntity.DB_FIELD_MUNICIPALITY);
         }
         return lookupDefinition;
     }
@@ -205,4 +205,48 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         this.setMunicipality(parameters.getFirst(MUNICIPALITY));
     }
 
+    @Override
+    public String getEntityClassname() {
+        return GeoRoadEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_road";
+    }
+
+
+
+
+    @Override
+    public Set<String> getJoinHandles() {
+        return super.getJoinHandles();
+    }
+
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("code", GeoRoadEntity.DB_FIELD_CODE);
+        joinHandles.put("name", GeoRoadEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + RoadNameRecord.DB_FIELD_NAME);
+        joinHandles.put("addressingname", GeoRoadEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + RoadNameRecord.DB_FIELD_ADDRESSING_NAME);
+        joinHandles.put("localitycode", GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_CODE);
+        joinHandles.put("localityuuid", GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_REFERENCE + BaseLookupDefinition.separator + Identification.DB_FIELD_UUID);
+        joinHandles.put("municipalitycode", GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("code", this.code);
+        this.addCondition("name", this.name);
+        this.addCondition("addressingname", this.addressingName);
+        this.addCondition("localitycode", this.locality);
+        this.addCondition("localityuuid", this.localityUUID.stream().map(UUID::toString).collect(Collectors.toList()), UUID.class);
+        this.addCondition("municipalitycode", this.municipality);
+    }
 }

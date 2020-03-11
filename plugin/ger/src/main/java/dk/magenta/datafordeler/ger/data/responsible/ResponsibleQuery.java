@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.ger.data.GerQuery;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
 
@@ -118,6 +119,37 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
         this.setName(parameters.getFirst(NAME));
         this.setGerNr(parameters.getFirst(GERNR));
         this.setCvrGuid(parameters.getFirst(CVR_GUID));
+    }
+
+    @Override
+    public String getEntityClassname() {
+        return ResponsibleEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "ger_responsible";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("name", ResponsibleEntity.DB_FIELD_NAME);
+        joinHandles.put("gernr", ResponsibleEntity.DB_FIELD_GERNR);
+        joinHandles.put("guid", ResponsibleEntity.DB_FIELD_CVR_PARTICIPANT_GUID);
+        joinHandles.put("lastUpdated", ResponsibleEntity.DB_FIELD_LAST_UPDATED);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("name", this.name);
+        this.addCondition("gernr", this.gerNr, Integer.class);
+        this.addCondition("guid", this.cvrGuid, UUID.class);
     }
 
 }

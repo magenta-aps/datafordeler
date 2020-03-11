@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.geo.data.locality;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class LocalityEntityManager extends GeoEntityManager<GeoLocalityEntity, L
     @Override
     public String getSchema() {
         return GeoLocalityEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new LocalityQuery();
     }
 
     @Override

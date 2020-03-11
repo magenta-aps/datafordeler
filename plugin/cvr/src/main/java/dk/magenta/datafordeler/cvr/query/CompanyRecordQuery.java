@@ -372,16 +372,53 @@ public class CompanyRecordQuery extends BaseQuery {
             joinedAddress = true;
         }
 
-        if (!joinedAddress && (this.forcedJoins.contains(KOMMUNEKODE))) {
-            lookupDefinition.putForcedJoin(addressMunicipalityPath);
-        }
-
         return lookupDefinition;
     }
 
     @Override
     protected Object castFilterParam(Object input, String filter) {
         return super.castFilterParam(input, filter);
+    }
+
+    @Override
+    public String getEntityClassname() {
+        return CompanyRecord.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "cvr_company";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("cvr", CompanyRecord.DB_FIELD_CVR_NUMBER);
+        joinHandles.put("formcode", CompanyRecord.DB_FIELD_FORM + LookupDefinition.separator + FormRecord.DB_FIELD_FORM + LookupDefinition.separator + CompanyForm.DB_FIELD_CODE);
+        joinHandles.put("advertprotection", CompanyRecord.DB_FIELD_ADVERTPROTECTION);
+        joinHandles.put("name", CompanyRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME);
+        joinHandles.put("phone", CompanyRecord.DB_FIELD_PHONE + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("fax", CompanyRecord.DB_FIELD_FAX + LookupDefinition.separator +ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("email", CompanyRecord.DB_FIELD_EMAIL + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("municipalitycode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
+        joinHandles.put("roadcode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
+
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    protected void setupConditions() throws Exception {
+        this.addCondition("cvr", this.cvrNumre);
+        this.addCondition("formcode", this.virksomhedsform);
+        this.addCondition("advertprotection", this.reklamebeskyttelse != null ? Collections.singletonList(this.reklamebeskyttelse) : Collections.emptyList(), Boolean.class);
+        this.addCondition("name", this.virksomhedsnavn);
+        this.addCondition("phone", this.telefonnummer);
+        this.addCondition("fax", this.telefaxnummer);
+        this.addCondition("email", this.emailadresse);
+        this.addCondition("municipalitycode", this.kommunekode);
     }
 
 

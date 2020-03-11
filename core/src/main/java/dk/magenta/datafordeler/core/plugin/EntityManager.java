@@ -351,26 +351,9 @@ public abstract class EntityManager {
         return false;
     }
 
-    /*
-    * Returns a list of fields that are eligible to join with.
-    * They need not map to DB fields, but should be recognized as input to the function returned by getJoinFunction
-    * Override in subclasses
-    * */
-    public Map<String, String> getJoinHandles(String entityIdentifier) {
-        return Collections.emptyMap();
-    }
-
-    /**
-     * Accepts a map of DB fields, where the keys correspond to a subset of what's returned by getJoinFields
-     * and values represent the caller's DB fields. Returns a HQL query part to be inserted in a query on the callers side.
-     * @param fieldMap Mapping between our known fields (as returned by getJoinFields) and the caller's DB fields
-     * @return HQL fragment
-     */
-    public BaseQuery getJoinQuery(Map<String, String> fieldMap, String entityIdentifier) {
-        return null;
-    }
-
     public OutputWrapper getOutputWrapper() {
         return this.getEntityService().getOutputWrapper();
     }
+
+    public abstract BaseQuery getQuery();
 }

@@ -176,7 +176,7 @@ public class PullTest {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setFornavn("Tester");
+            personQuery.addFornavn("Tester");
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             Assert.assertEquals(1, personEntities.size());
             Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());

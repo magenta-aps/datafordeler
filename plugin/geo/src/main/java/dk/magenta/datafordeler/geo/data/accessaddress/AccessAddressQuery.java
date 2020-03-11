@@ -233,4 +233,24 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         }
     }
 
+    @Override
+    public String getEntityClassname() {
+        return AccessAddressEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_accessaddress";
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return null;
+    }
+
+    @Override
+    protected void setupConditions() {
+
+    }
+
 }

@@ -5,6 +5,9 @@ import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadNameBitemporalRecord;
 
@@ -122,9 +125,37 @@ public class RoadRecordQuery extends BaseQuery {
         }
     }
 
+    @Override
+    public String getEntityClassname() {
+        return RoadEntity.class.getCanonicalName();
+    }
 
-        
-    
+    @Override
+    public String getEntityIdentifier() {
+        return "cpr_road";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("municipalitycode", RoadEntity.DB_FIELD_MUNIPALITY_CODE);
+        joinHandles.put("roadcode", RoadEntity.DB_FIELD_ROAD_CODE);
+        joinHandles.put("name", RoadEntity.DB_FIELD_NAME_CODE + LookupDefinition.separator + RoadNameBitemporalRecord.DB_FIELD_ROADNAME);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("municipalitycode", this.kommunekoder, Integer.class);
+        this.addCondition("roadcode", this.vejkoder, Integer.class);
+        this.addCondition("name", this.vejnavne);
+    }
+
+
     @Override
     public BaseLookupDefinition getLookupDefinition() {
         BaseLookupDefinition lookupDefinition = new BaseLookupDefinition();
