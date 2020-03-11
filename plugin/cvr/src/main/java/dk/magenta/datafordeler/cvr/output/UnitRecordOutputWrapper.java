@@ -49,7 +49,7 @@ public class UnitRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyUnitR
     }
 
     @Override
-    protected void fillContainer(OutputContainer oContainer, CompanyUnitRecord record) {
+    protected void fillContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode m) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         container.addNontemporal(CompanyUnitRecord.IO_FIELD_P_NUMBER, record.getpNumber());
@@ -88,7 +88,7 @@ public class UnitRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyUnitR
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, CompanyUnitRecord record) {
+    protected void fillMetadataContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode m) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         CompanyUnitMetadataRecord meta = record.getMetadata();

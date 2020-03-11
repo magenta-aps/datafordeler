@@ -55,7 +55,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         return Collections.emptySet();
     }
 
-    protected abstract void fillContainer(OutputContainer container, E item);
+    protected abstract void fillContainer(OutputContainer container, E item, Mode m);
 
     protected abstract ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, Bitemporality mustContain);
 
@@ -453,7 +453,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             root.put(Identification.IO_FIELD_DOMAIN, record.getIdentification().getDomain());
         }
         OutputContainer recordOutput = this.createOutputContainer();
-        this.fillContainer(recordOutput, record);
+        this.fillContainer(recordOutput, record, mode);
         root.setAll(recordOutput.getBase());
         switch (mode) {
             case RVD:

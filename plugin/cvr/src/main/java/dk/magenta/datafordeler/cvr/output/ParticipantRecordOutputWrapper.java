@@ -47,7 +47,7 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
     }
 
     @Override
-    protected void fillContainer(OutputContainer oContainer, ParticipantRecord record) {
+    protected void fillContainer(OutputContainer oContainer, ParticipantRecord record, Mode m) {
 
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
@@ -81,7 +81,7 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, ParticipantRecord record) {
+    protected void fillMetadataContainer(OutputContainer oContainer, ParticipantRecord record, Mode m) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         ParticipantMetadataRecord meta = record.getMetadata();
