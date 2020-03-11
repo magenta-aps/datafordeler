@@ -253,4 +253,45 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
     }
 
+    @Test
+    public void testPersonDataOnly() throws Exception {
+        whitelistLocalhost();
+        OffsetDateTime now = OffsetDateTime.now();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        loadPerson(importMetadata);
+        transaction.commit();
+        session.close();
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ParameterMap searchParameters = new ParameterMap();
+        searchParameters.add("fornavn", "Tester");
+
+        ResponseEntity<String> response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        JsonNode jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results = jsonBody.get("results");
+
+        JsonNode firstElement = results.get(0);
+        JsonNode registreringer = firstElement.get("registreringer");
+        Assert.assertNotNull(registreringer);
+
+        searchParameters.add("fmt", "dataonly");
+
+        response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        jsonBody = objectMapper.readTree(response.getBody());
+        results = jsonBody.get("results");
+
+        firstElement = results.get(0);
+        registreringer = firstElement.get("registreringer");
+        Assert.assertNull(registreringer);
+    }
+
 }
