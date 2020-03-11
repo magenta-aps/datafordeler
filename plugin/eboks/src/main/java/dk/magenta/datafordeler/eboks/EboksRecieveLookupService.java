@@ -110,7 +110,7 @@ public class EboksRecieveLookupService {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
                     } else if (FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus() == 90) {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
-                    } else if (FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
+                    } else if (k.getAddress().size()==0 || FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
                     } else {
                         validCprList.add(k.getPersonnummer());
@@ -146,7 +146,7 @@ public class EboksRecieveLookupService {
 
                 companyEntities.forEach((k) -> {
                     String cvrNumber = Integer.toString(k.getCvrNumber());
-                    if (FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress()).getMunicipality().getMunicipalityCode() >= 950) {
+                    if (FilterUtilities.findNewestUnclosedCvr(k.getPostalAddress()).getMunicipality().getMunicipalityCode() >= 950) {
                         cvrList.add(cvrNumber);
                     } else {
                         failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));
