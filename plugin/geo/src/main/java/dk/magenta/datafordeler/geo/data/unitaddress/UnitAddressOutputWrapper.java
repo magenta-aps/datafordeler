@@ -18,7 +18,7 @@ public class UnitAddressOutputWrapper extends GeoOutputWrapper<UnitAddressEntity
     }
     
     @Override
-    protected void fillContainer(OutputContainer container, UnitAddressEntity item) {
+    protected void fillContainer(OutputContainer container, UnitAddressEntity item, Mode mode) {
         container.addMonotemporal("dør", item.getDoor());
         container.addMonotemporal("etage", item.getFloor());
         container.addMonotemporal("anvendelse", item.getUsage());

@@ -18,7 +18,7 @@ public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEn
     }
 
     @Override
-    protected void fillContainer(OutputContainer container, AccessAddressEntity item) {
+    protected void fillContainer(OutputContainer container, AccessAddressEntity item, Mode mode) {
         container.addMonotemporal("husNummer", item.getHouseNumber());
         container.addNontemporal("bnr", item.getBnr());
         container.addMonotemporal("blokNavn", item.getBlockName());
