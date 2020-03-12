@@ -37,21 +37,6 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
             "registreringTil",
             "virkningFra",
             "virkningTil",
-            "intervalKodeAntalAnsatte",
-            "intervalKodeAntalAarsvaerk",
-            "intervalKodeAntalInklusivEjere",
-            "antalInklusivEjere",
-            "antalInklusivEjereMin",
-            "antalInklusivEjereMax",
-            "antalAarsvaerkMax",
-            "antalAarsvaerkMin",
-            "aar",
-            "kvartal",
-
-            "maanedsbeskaeftigelse",
-            "aarsbeskaeftigelse",
-            "kvartalsbeskaeftigelse",
-            "results"
     }));
 
 
