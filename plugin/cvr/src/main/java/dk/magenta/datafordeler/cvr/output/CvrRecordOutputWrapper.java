@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
+import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.*;
+
 public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends RecordOutputWrapper<E> {
 
     private final Set<String> removeFieldNames = new HashSet<>(Arrays.asList(new String[]{
@@ -26,8 +28,28 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
             CvrBitemporalRecord.IO_FIELD_DAFO_UPDATED
     }));
 
+    private final Set<String> removeDataOnlyFields = new HashSet<>(Arrays.asList(new String[]{
+            "antalAarsvaerk",
+            "antalAnsatte",
+            "antalAnsatteMin",
+            "antalAnsatteMax",
+            "registreringFra",
+            "registreringTil",
+            "virkningFra",
+            "virkningTil",
+    }));
+
+
+
     @Override
     public Set<String> getRemoveFieldNames(Mode mode) {
+        switch(mode) {
+            case DATAONLY:
+                removeFieldNames.addAll(removeDataOnlyFields);
+        }
+
+
+
         return this.removeFieldNames;
     }
 
@@ -43,14 +65,14 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
 
     @Override
     public ObjectNode getNode(E record, Bitemporality overlap, Mode mode) {
-        if (mode == Mode.LEGACY) {
+        if (mode == LEGACY) {
             return this.getObjectMapper().valueToTree(record);
         }
 
         ObjectNode root = super.getNode(record, overlap, mode);
 
         CvrOutputContainer metadataRecordOutput = new CvrOutputContainer();
-        this.fillMetadataContainer(metadataRecordOutput, record);
+        this.fillMetadataContainer(metadataRecordOutput, record, mode);
         ObjectNode metaNode = this.getObjectMapper().createObjectNode();
         root.set("metadata", metaNode);
         metaNode.setAll(metadataRecordOutput.getBase());
@@ -64,6 +86,9 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
             case DRV:
                 metaNode.setAll(metadataRecordOutput.getDRV(overlap));
                 break;
+            case DATAONLY:
+                metaNode.setAll(metadataRecordOutput.getDataOnly(overlap));
+                break;
             default:
                 metaNode.setAll(this.fallbackOutput(mode, metadataRecordOutput, overlap));
                 break;
@@ -75,7 +100,7 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
         return this.getObjectMapper().createObjectNode();
     }
 
-    protected abstract void fillMetadataContainer(OutputContainer container, E item);
+    protected abstract void fillMetadataContainer(OutputContainer container, E item, Mode m);
 
     protected JsonNode createAddressNode(AddressRecord record) {
         ObjectNode adresseNode = this.createItemNode(record);

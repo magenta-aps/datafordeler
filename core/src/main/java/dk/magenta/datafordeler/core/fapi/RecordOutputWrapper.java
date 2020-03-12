@@ -41,17 +41,21 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     ));
     private final Set<String> rdvNodeRemoveFields = rvdNodeRemoveFields;
 
+    private Set<String> dataonlyNodeRemoveFields = rvdNodeRemoveFields;
+
     public Set<String> getRemoveFieldNames(Mode mode) {
         switch (mode) {
             case RVD:
                 return this.rvdNodeRemoveFields;
             case RDV:
                 return this.rdvNodeRemoveFields;
+            case DATAONLY:
+                return this.dataonlyNodeRemoveFields;
         }
         return Collections.emptySet();
     }
 
-    protected abstract void fillContainer(OutputContainer container, E item);
+    protected abstract void fillContainer(OutputContainer container, E item, Mode m);
 
     protected abstract ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, Bitemporality mustContain);
 
@@ -375,6 +379,28 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             return objectNode;
         }
 
+        // DataOnly
+        public ObjectNode getDataOnly(Bitemporality mustOverlap) {
+            ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            for (Bitemporality bitemporality : this.bitemporalData.keySet()) {
+                if (bitemporality.overlaps(mustOverlap)) {
+                    HashMap<String, ArrayList<JsonNode>> data = this.bitemporalData.get(bitemporality);
+                    for (String key : data.keySet()) {
+                        ArrayNode arrayNode = (ArrayNode) objectNode.get(key);
+                        if (arrayNode == null) {
+                            arrayNode = objectMapper.createArrayNode();
+                            objectNode.set(key, arrayNode);
+                        }
+                        List<JsonNode> nodes = data.get(key);
+                        nodes = this.removeFields(nodes, Mode.DATAONLY);
+                        arrayNode.addAll(nodes);
+                    }
+                }
+            }
+            return objectNode;
+        }
+
         public ObjectNode getBase() {
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
             ObjectNode objectNode = objectMapper.createObjectNode();
@@ -427,7 +453,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             root.put(Identification.IO_FIELD_DOMAIN, record.getIdentification().getDomain());
         }
         OutputContainer recordOutput = this.createOutputContainer();
-        this.fillContainer(recordOutput, record);
+        this.fillContainer(recordOutput, record, mode);
         root.setAll(recordOutput.getBase());
         switch (mode) {
             case RVD:
@@ -438,6 +464,9 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                 break;
             case DRV:
                 root.setAll(recordOutput.getDRV(overlap));
+                break;
+            case DATAONLY:
+                root.setAll(recordOutput.getDataOnly(overlap));
                 break;
             default:
                 root.setAll(this.fallbackOutput(mode, recordOutput, overlap));

@@ -15,7 +15,8 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
         RVD,
         RDV,
         DRV,
-        LEGACY
+        LEGACY,
+        DATAONLY
     }
 
     // Override either of these

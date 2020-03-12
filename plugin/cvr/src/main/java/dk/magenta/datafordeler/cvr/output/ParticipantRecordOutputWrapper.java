@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.cvr.records.ParticipantMetadataRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
 
 /**
  * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
@@ -47,7 +48,7 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
     }
 
     @Override
-    protected void fillContainer(OutputContainer oContainer, ParticipantRecord record) {
+    protected void fillContainer(OutputContainer oContainer, ParticipantRecord record, Mode mode) {
 
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
@@ -81,7 +82,7 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, ParticipantRecord record) {
+    protected void fillMetadataContainer(OutputContainer oContainer, ParticipantRecord record, Mode m) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         ParticipantMetadataRecord meta = record.getMetadata();

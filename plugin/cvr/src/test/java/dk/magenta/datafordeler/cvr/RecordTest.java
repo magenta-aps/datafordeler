@@ -708,7 +708,7 @@ public class RecordTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
-        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943", HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
         JsonNode responseNode = objectMapper.readTree(resp.getBody());
 
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode));
