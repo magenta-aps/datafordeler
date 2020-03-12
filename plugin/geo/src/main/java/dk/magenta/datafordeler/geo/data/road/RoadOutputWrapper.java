@@ -18,7 +18,7 @@ public class RoadOutputWrapper extends GeoOutputWrapper<GeoRoadEntity> {
     }
 
     @Override
-    protected void fillContainer(OutputContainer container, GeoRoadEntity item) {
+    protected void fillContainer(OutputContainer container, GeoRoadEntity item, Mode mode) {
         container.addNontemporal("vejkode", item.getCode());
         container.addMonotemporal("navn", item.getName());
         container.addMonotemporal("lokalitet", item.getLocality());

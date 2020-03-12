@@ -18,7 +18,7 @@ public class LocalityOutputWrapper extends GeoOutputWrapper<GeoLocalityEntity> {
     }
 
     @Override
-    protected void fillContainer(OutputContainer container, GeoLocalityEntity item) {
+    protected void fillContainer(OutputContainer container, GeoLocalityEntity item, Mode mode) {
         container.addNontemporal("lokalitetskode", item.getCode());
         container.addMonotemporal("navn", item.getName());
         container.addMonotemporal("forkortelse", item.getAbbreviation());

@@ -18,7 +18,7 @@ public class PostcodeOutputWrapper extends GeoOutputWrapper<PostcodeEntity> {
     }
 
     @Override
-    protected void fillContainer(OutputContainer container, PostcodeEntity item) {
+    protected void fillContainer(OutputContainer container, PostcodeEntity item, Mode mode) {
         container.addNontemporal("postnummer", item.getCode());
         container.addNontemporal("postdistrikt", item.getName());
     }
