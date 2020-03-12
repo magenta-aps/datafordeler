@@ -343,6 +343,35 @@ public class RecordTest {
         Assert.assertEquals(200, resp.getStatusCodeValue());
     }
 
+    @Test
+    public void testDataOnlyRestCompany() throws IOException, DataFordelerException {
+        loadCompany("/company_in.json");
+        whitelistLocalhost();
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943", HttpMethod.GET, httpEntity, String.class);
+        Assert.assertEquals(200, resp.getStatusCodeValue());
+        JsonNode jsonBody = objectMapper.readTree(resp.getBody());
+        JsonNode results = jsonBody.get("results");
+
+        JsonNode firstElement = results.get(0);
+        JsonNode registreringer = firstElement.get("registreringer");;
+        Assert.assertNotNull(registreringer);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        String body = resp.getBody();
+        Assert.assertEquals(200, resp.getStatusCodeValue());
+        jsonBody = objectMapper.readTree(resp.getBody());
+        results = jsonBody.get("results");
+
+        firstElement = results.get(0);
+        registreringer = firstElement.get("registreringer");;
+        Assert.assertNull(registreringer);
+    }
+
     private HashMap<Integer, JsonNode> loadUnit(String resource) throws IOException, DataFordelerException {
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
