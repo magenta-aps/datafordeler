@@ -26,7 +26,7 @@ public class DemoRecordOutputWrapper extends RecordOutputWrapper<DemoEntityRecor
     }
 
     @Override
-    protected void fillContainer(RecordOutputWrapper<DemoEntityRecord>.OutputContainer container, DemoEntityRecord item) {
+    protected void fillContainer(RecordOutputWrapper<DemoEntityRecord>.OutputContainer container, DemoEntityRecord item, Mode m) {
         container.addNontemporal(DemoEntityRecord.IO_FIELD_ADDRESS_NUMBER, item.getPostnr());
         container.addBitemporal(DemoEntityRecord.IO_FIELD_NAME, item.getName(), true);
     }
@@ -67,7 +67,7 @@ public class DemoRecordOutputWrapper extends RecordOutputWrapper<DemoEntityRecor
         root.put(Entity.IO_FIELD_UUID, record.getIdentification().getUuid().toString());
         root.put(Entity.IO_FIELD_DOMAIN, record.getIdentification().getDomain());
         OutputContainer recordOutput = new OutputContainer();
-        this.fillContainer(recordOutput, record);
+        this.fillContainer(recordOutput, record, mode);
         root.setAll(recordOutput.getBase());
         switch (mode) {
             case RVD:
