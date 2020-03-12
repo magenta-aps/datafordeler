@@ -149,6 +149,13 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
         Assert.assertEquals("4ccc3b64-1779-38f2-a96c-458e541a010d", results.get(0).get("uuid").asText());
 
+        searchParameters.add("registrationFromBefore", "ALWAYS");
+        searchParameters.add("registrationToAfter", "ALWAYS");
+        searchParameters.add("effectFromBefore", "ALWAYS");
+        searchParameters.add("effectToAfter", "ALWAYS");
+        response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+
 
         testUserDetails.giveAccess(
                 plugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
