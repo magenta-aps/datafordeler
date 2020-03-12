@@ -105,37 +105,25 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         container.addBitemporal(PersonEntity.IO_FIELD_BIRTHPLACE, record.getBirthPlace());
         if(!Mode.DATAONLY.equals(mode)) {
             container.addBitemporal(PersonEntity.IO_FIELD_BIRTHPLACE_VERIFICATION, record.getBirthPlaceVerification(), true);
+            container.addBitemporal(PersonEntity.IO_FIELD_CHURCH_VERIFICATION, record.getChurchRelationVerification(), true);
+            container.addBitemporal(PersonEntity.IO_FIELD_CITIZENSHIP_VERIFICATION, record.getCitizenshipVerification(), true);
+            container.addBitemporal(PersonEntity.IO_FIELD_CIVILSTATUS_AUTHORITYTEXT, record.getCivilstatusAuthorityText());
+            container.addBitemporal(PersonEntity.IO_FIELD_CIVILSTATUS_VERIFICATION, record.getCivilstatusVerification());
+            container.addBitemporal(PersonEntity.IO_FIELD_NAME_AUTHORITY_TEXT, record.getNameAuthorityText());
+            container.addBitemporal(PersonEntity.IO_FIELD_NAME_VERIFICATION, record.getNameVerification());
+            container.addBitemporal(PersonEntity.IO_FIELD_MOTHER_VERIFICATION, record.getMotherVerification());
+            container.addBitemporal(PersonEntity.IO_FIELD_FATHER_VERIFICATION, record.getFatherVerification());
         }
         container.addBitemporal(PersonEntity.IO_FIELD_BIRTHTIME, record.getBirthTime());
         container.addBitemporal(PersonEntity.IO_FIELD_CHURCH, record.getChurchRelation(), true);
-        if(!Mode.DATAONLY.equals(mode)) {
-            container.addBitemporal(PersonEntity.IO_FIELD_CHURCH_VERIFICATION, record.getChurchRelationVerification(), true);
-        }
         container.addBitemporal(PersonEntity.IO_FIELD_CITIZENSHIP, record.getCitizenship(), true);
-        if(!Mode.DATAONLY.equals(mode)) {
-            container.addBitemporal(PersonEntity.IO_FIELD_CITIZENSHIP_VERIFICATION, record.getCitizenshipVerification(), true);
-        }
         container.addBitemporal(PersonEntity.IO_FIELD_CIVILSTATUS, record.getCivilstatus());
-        if(!Mode.DATAONLY.equals(mode)) {
-            container.addBitemporal(PersonEntity.IO_FIELD_CIVILSTATUS_AUTHORITYTEXT, record.getCivilstatusAuthorityText());
-            container.addBitemporal(PersonEntity.IO_FIELD_CIVILSTATUS_VERIFICATION, record.getCivilstatusVerification());
-        }
         container.addBitemporal(PersonEntity.IO_FIELD_FOREIGN_ADDRESS, record.getForeignAddress());
         container.addBitemporal(PersonEntity.IO_FIELD_FOREIGN_ADDRESS_EMIGRATION, record.getEmigration(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_MOVE_MUNICIPALITY, record.getMunicipalityMove());
         container.addBitemporal(PersonEntity.IO_FIELD_NAME, record.getName());
-        if(!Mode.DATAONLY.equals(mode)) {
-            container.addBitemporal(PersonEntity.IO_FIELD_NAME_AUTHORITY_TEXT, record.getNameAuthorityText());
-            container.addBitemporal(PersonEntity.IO_FIELD_NAME_VERIFICATION, record.getNameVerification());
-        }
         container.addBitemporal(PersonEntity.IO_FIELD_MOTHER, record.getMother());
-        if(!Mode.DATAONLY.equals(mode)) {
-            container.addBitemporal(PersonEntity.IO_FIELD_MOTHER_VERIFICATION, record.getMotherVerification());
-        }
         container.addBitemporal(PersonEntity.IO_FIELD_FATHER, record.getFather());
-        if(!Mode.DATAONLY.equals(mode)) {
-            container.addBitemporal(PersonEntity.IO_FIELD_FATHER_VERIFICATION, record.getFatherVerification());
-        }
         container.addBitemporal(PersonEntity.IO_FIELD_CORE, record.getCore(),true);
         container.addBitemporal(PersonEntity.IO_FIELD_PNR, record.getPersonNumber(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_POSITION, record.getPosition(), true);
