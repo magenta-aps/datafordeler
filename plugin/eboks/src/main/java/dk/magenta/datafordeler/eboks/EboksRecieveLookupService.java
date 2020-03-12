@@ -20,6 +20,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.eboks.utils.FilterUtilities;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
@@ -146,7 +147,12 @@ public class EboksRecieveLookupService {
 
                 companyEntities.forEach((k) -> {
                     String cvrNumber = Integer.toString(k.getCvrNumber());
-                    if (FilterUtilities.findNewestUnclosedCvr(k.getPostalAddress()).getMunicipality().getMunicipalityCode() >= 950) {
+
+                    AddressRecord adress = FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress());
+                    if(adress==null) {
+                        adress = FilterUtilities.findNewestUnclosedCvr(k.getPostalAddress());
+                    }
+                    if (adress.getMunicipality().getMunicipalityCode() >= 950) {
                         cvrList.add(cvrNumber);
                     } else {
                         failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));
