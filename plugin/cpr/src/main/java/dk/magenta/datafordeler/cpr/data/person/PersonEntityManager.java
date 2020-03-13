@@ -456,26 +456,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         }
     }
 
-
-
-
-    @Override
-    public Map<String, String> getJoinHandles(String entityIdentifier) {
-        HashMap<String, String> handles = new HashMap<>();
-        final String sep = BaseLookupDefinition.separator;
-        handles.put(
-                "municipalitycode",
-                BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, PersonEntity.DB_FIELD_ADDRESS) + sep +
-                        AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE
-        );
-        handles.put(
-                "roadcode",
-                BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, PersonEntity.DB_FIELD_ADDRESS) + sep +
-                        AddressDataRecord.DB_FIELD_ROAD_CODE
-        );
-        return handles;
-    }
-
     @Override
     public BaseQuery getQuery() {
         return new PersonRecordQuery();

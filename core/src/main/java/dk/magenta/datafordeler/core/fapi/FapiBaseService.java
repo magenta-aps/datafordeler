@@ -212,7 +212,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             try {
                 List<ResultSet<E>> results = this.searchByQuery(query, session);
                 if (this.getOutputWrapper() != null) {
-                    envelope.setResults(this.getOutputWrapper().wrapResults(results, query, this.getDefaultMode()));
+                    envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, this.getDefaultMode()));
                 } else {
                     ArrayNode jacksonConverted = objectMapper.valueToTree(results);
                     ArrayList<Object> wrapper = new ArrayList<>();
@@ -384,7 +384,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addRequestData(request);
             List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
-                envelope.setResults(this.getOutputWrapper().wrapResults(results, query, query.getMode(this.getDefaultMode())));
+                envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
                 ArrayNode jacksonConverted = objectMapper.valueToTree(results);
                 ArrayList<Object> wrapper = new ArrayList<>();
@@ -470,7 +470,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addRequestData(request);
             List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
-                envelope.setResult(this.getOutputWrapper().wrapResults(results, query, query.getMode(this.getDefaultMode())));
+                envelope.setResult(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
                 envelope.setResults(results);
             }

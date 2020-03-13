@@ -28,6 +28,21 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
         return this.wrapResult(input, query);
     }
 
+    public Object wrapResultSet(ResultSet<E> input, BaseQuery query, Mode mode) {
+        // TODO: Somehow wrap the resultset
+        return null;
+    }
+
+    public final List<Object> wrapResultSets(Collection<ResultSet<E>> input, BaseQuery query, Mode mode) {
+        ArrayList<Object> result = new ArrayList<>();
+        for (ResultSet<E> item : input) {
+            if (item != null) {
+                result.add(this.wrapResultSet(item, query, mode));
+            }
+        }
+        return result;
+    }
+
     public final List<Object> wrapResults(Collection<E> input, BaseQuery query, Mode mode) {
         ArrayList<Object> result = new ArrayList<>();
         for (E item : input) {
