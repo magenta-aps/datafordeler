@@ -257,13 +257,12 @@ public class GeoIntegrationTest {
         // f.eks. hvis en person har haft flere adresser
 
         BaseQuery accessAddressQuery = accessAddressManager.getQuery("municipality", "road", "postcode", "locality");
-        //BaseQuery accessAddressQuery = accessAddressManager.getQuery("road");
-        //BaseQuery accessAddressQuery = accessAddressManager.getQuery();
         HashMap<String, String> joinHandles = new HashMap<>();
         joinHandles.put("municipalitycode", "municipalitycode");
         joinHandles.put("roadcode", "roadcode");
-        joinHandles.put("housenumber", "housenumber");
-        joinHandles.put("bnr", "bnr");
+        //joinHandles.put("housenumber", "housenumber");
+        //joinHandles.put("bnr", "bnr");
+        joinHandles.put("bnr_or_housenumber", "bnr_or_housenumber");
         query.addRelated(accessAddressQuery, joinHandles);
 
 

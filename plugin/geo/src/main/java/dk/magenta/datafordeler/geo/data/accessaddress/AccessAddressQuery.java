@@ -260,6 +260,8 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     static {
         joinHandles.put("bnr", AccessAddressEntity.DB_FIELD_BNR);
         joinHandles.put("housenumber", AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseLookupDefinition.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
+        // Comma-separation in value means that the handle should fit together with a counterpart with an equal number of commas. The separated paths with be ORed together with their counterparts
+        joinHandles.put("bnr_or_housenumber", AccessAddressEntity.DB_FIELD_BNR+","+AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseLookupDefinition.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
         joinHandles.put("roadcode", AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE);
         joinHandles.put("municipalitycode", AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE);
         joinHandles.put("localitycode", AccessAddressEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + AccessAddressLocalityRecord.DB_FIELD_CODE);

@@ -287,6 +287,8 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("door", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR);
         joinHandles.put("housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("bnr", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER);
+
+        joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
     }
 
     @Override

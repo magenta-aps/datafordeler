@@ -862,19 +862,20 @@ public abstract class BaseQuery {
         if (path == null) {
             throw new Exception("Invalid join handle "+handle+" for "+this.getEntityClassname());
         }
-        if (path != null) {
-            path = this.getEntityIdentifier() + "." + path;
-            List<Join> joins = Join.fromPath(path, true);
+        StringJoiner resolved = new StringJoiner(",");
+        for (String p : path.split(",")) {
+            p = this.getEntityIdentifier() + "." + p;
+            List<Join> joins = Join.fromPath(p, true);
             if (joins.isEmpty()) {
-                return path;
+                resolved.add(p);
             } else {
                 this.joins.addAll(joins);
                 Join lastJoin = joins.get(joins.size() - 1);
-                String lastMember = path.substring(path.lastIndexOf(".") + 1);
-                return lastJoin.getAlias() + "." + lastMember;
+                String lastMember = p.substring(p.lastIndexOf(".") + 1);
+                resolved.add(lastJoin.getAlias() + "." + lastMember);
             }
         }
-        return null;
+        return resolved.toString();
     }
 
     public String toHql() {
@@ -921,6 +922,7 @@ public abstract class BaseQuery {
     public Set<JoinedQuery> getRelated() {
         return this.related;
     }
+
 
     public void addRelated(BaseQuery query, Map<String, String> joinHandles) {
         try {

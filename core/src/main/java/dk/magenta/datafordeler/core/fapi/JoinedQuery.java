@@ -14,6 +14,7 @@ public class JoinedQuery extends Condition {
     Map<String, String> joinHandles;
 
     public JoinedQuery(BaseQuery base, BaseQuery joined, Map<String, String> joinHandleKeys, MultiCondition parentCondition) throws Exception {
+        // joinHandleKeys er map f.eks. muncode, roadcode, husnr, bnr
         super(parentCondition);
         this.base = base;
         this.joined = joined;
@@ -23,6 +24,8 @@ public class JoinedQuery extends Condition {
         // e.g. personQuery.useJoinHandle("roadCode") will add a join for the person address table (LEFT JOIN person.address person__address), returning the hql path for the handle (person__address.roadCode)
         for (String baseJoinHandle : joinHandleKeys.keySet()) {
             String remoteJoinHandle = joinHandleKeys.get(baseJoinHandle);
+
+
             this.joinHandles.put(this.base.useJoinHandle(baseJoinHandle), this.joined.useJoinHandle(remoteJoinHandle));
         }
     }
@@ -42,7 +45,22 @@ public class JoinedQuery extends Condition {
         StringJoiner s = new StringJoiner(" AND ");
         for (String baseJoinHandle : this.joinHandles.keySet()) {
             String remoteJoinHandle = this.joinHandles.get(baseJoinHandle);
-            s.add("(" + baseJoinHandle + " = " + remoteJoinHandle + ")");
+
+            if (baseJoinHandle.contains(",") || remoteJoinHandle.contains(",")) {
+                String[] baseJoinHandleItems = baseJoinHandle.split(",");
+                String[] remoteJoinHandleItems = remoteJoinHandle.split(",");
+                if (baseJoinHandleItems.length != remoteJoinHandleItems.length) {
+                    System.out.println("Error: csep mismatch in join: "+baseJoinHandle+" vs "+remoteJoinHandle);
+                } else {
+                    StringJoiner o = new StringJoiner(" OR ");
+                    for (int i=0; i<baseJoinHandleItems.length; i++) {
+                        o.add("(" + baseJoinHandleItems[i] + " = " + remoteJoinHandleItems[i] + ")");
+                    }
+                    s.add("(" + o.toString() + ")");
+                }
+            } else {
+                s.add("(" + baseJoinHandle + " = " + remoteJoinHandle + ")");
+            }
         }
         return s.toString();
     }
