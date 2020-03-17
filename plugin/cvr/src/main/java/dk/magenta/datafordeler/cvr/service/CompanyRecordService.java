@@ -1,8 +1,10 @@
 package dk.magenta.datafordeler.cvr.service;
 
 import dk.magenta.datafordeler.core.MonitorService;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
@@ -27,15 +29,15 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/cvr/company/1/rest")
 public class CompanyRecordService extends FapiBaseService<CompanyRecord, CompanyRecordQuery> {
+
+    @Autowired
+    private PluginManager pluginManager;
 
     @Autowired
     private CvrPlugin cvrPlugin;
@@ -95,7 +97,20 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
 
     @Override
     protected CompanyRecordQuery getEmptyQuery() {
-        return new CompanyRecordQuery();
+        CompanyRecordQuery query = new CompanyRecordQuery();
+        /*query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
+        query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality cvr_company__locationAddress__municipality");
+        query.addExtraJoin("LEFT JOIN cvr_company__locationAddress__municipality.municipality cvr_company__locationAddress__municipality__municipality");
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            HashMap<String, String> handles = new HashMap<>();
+            handles.put("municipalitycode", "cvr_company__locationAddress__municipality__municipality.code");
+            handles.put("roadcode", "cvr_company__locationAddress.roadCode");
+            query.addExtraJoin(geoPlugin.getJoinString(handles));
+            query.addExtraTables(geoPlugin.getJoinClassAliases());
+        }*/
+        return query;
     }
 
     protected void applyAreaRestrictionsToQuery(CompanyRecordQuery query, DafoUserDetails user) throws InvalidClientInputException {

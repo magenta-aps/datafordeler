@@ -243,6 +243,10 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         joinHandles.put("localitycode", GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_CODE);
         joinHandles.put("localityuuid", GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_REFERENCE + BaseLookupDefinition.separator + Identification.DB_FIELD_UUID);
         joinHandles.put("municipalitycode", GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE);
+
+
+        //RoadNameRecord.class, namealias, member
+        //        GeoRoadEntity.class namealias.entity
     }
 
     @Override

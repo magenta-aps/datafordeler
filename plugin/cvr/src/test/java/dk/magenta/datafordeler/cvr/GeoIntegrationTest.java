@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import org.hibernate.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,22 +47,28 @@ public class GeoIntegrationTest {
 
     @Test
     public void testLookup() {
-        CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-        companyRecordQuery.setKommuneKode(956);
+        CompanyRecordQuery query = new CompanyRecordQuery();
+        query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
+        query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality cvr_company__locationAddress__municipality");
+        query.addExtraJoin("LEFT JOIN cvr_company__locationAddress__municipality.municipality cvr_company__locationAddress__municipality__municipality");
+        query.setCvrNumre("12345678");
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
-        EntityManager roadManager = geoPlugin.getEntityManager("Road");
-        if (roadManager != null) {
-            System.out.println(roadManager);
-            BaseQuery roadQuery = roadManager.getQuery();
+        if (geoPlugin != null) {
+            
+            HashMap<String, String> handles = new HashMap<>();
+            handles.put("municipalitycode", "cvr_company__locationAddress__municipality__municipality.code");
+            handles.put("roadcode", "cvr_company__locationAddress.roadCode");
 
-            HashMap<String, String> joinHandles = new HashMap<>();
-            joinHandles.put("municipalitycode", "municipalitycode");
-            joinHandles.put("roadcode", "code");
-            companyRecordQuery.addRelated(roadQuery, joinHandles);
+            query.addExtraJoin(geoPlugin.getJoinString(handles));
+            query.addExtraTables(geoPlugin.getJoinClassAliases());
+
+            //query.addExtraJoin(cprPlugin.getJoinString(handles));
+            //query.addExtraTables(cprPlugin.getJoinClassAliases());
+
 
             Session session = sessionManager.getSessionFactory().openSession();
-            System.out.println(QueryManager.getQuery(session, companyRecordQuery));
+            System.out.println(QueryManager.getQuery(session, query));
         }
     }
 

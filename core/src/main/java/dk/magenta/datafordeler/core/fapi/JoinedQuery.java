@@ -13,6 +13,7 @@ public class JoinedQuery extends Condition {
     private BaseQuery joined;
     Map<String, String> joinHandles;
 
+
     public JoinedQuery(BaseQuery base, BaseQuery joined, Map<String, String> joinHandleKeys, MultiCondition parentCondition) throws Exception {
         // joinHandleKeys er map f.eks. muncode, roadcode, husnr, bnr
         super(parentCondition);
@@ -40,8 +41,21 @@ public class JoinedQuery extends Condition {
 
     @Override
     public String toHql() {
-        // Create a hql string representing this join, for insertion in a WHERE clause
+        // Create a hql string representing this join, for insertion in a JOIN clause
         // resolved join handles for each table are inserted in pairs
+
+        /*StringJoiner j = new StringJoiner(" \n");
+        for (String baseJoinHandle : this.joinHandles.keySet()) {
+            String remoteJoinHandle = this.joinHandles.get(baseJoinHandle);
+            j.add("LEFT JOIN remotesubclass remotesubalias on ourhandle = remotehandle")
+                    j.add("LEFT JOIN remotesubalias.entity remotealias")
+        }*/
+
+
+
+
+
+
         StringJoiner s = new StringJoiner(" AND ");
         for (String baseJoinHandle : this.joinHandles.keySet()) {
             String remoteJoinHandle = this.joinHandles.get(baseJoinHandle);

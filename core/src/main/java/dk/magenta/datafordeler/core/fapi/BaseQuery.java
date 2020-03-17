@@ -888,6 +888,9 @@ public abstract class BaseQuery {
         for (Join join : this.getAllJoins()) {
             s.add(join.toHql());
         }
+        for (String extraJoin : this.extraJoins) {
+            s.add(extraJoin);
+        }
         if (!this.condition.isEmpty()) {
             s.add("WHERE " + this.condition.toHql());
         }
@@ -940,6 +943,8 @@ public abstract class BaseQuery {
         for (JoinedQuery joinedQuery : this.related) {
             identifiers.addAll(joinedQuery.getJoined().getEntityIdentifiers());
         }
+        identifiers.addAll(this.extraTables);
+
         return identifiers;
     }
     protected List<String> getEntityClassnameStrings() {
@@ -965,5 +970,20 @@ public abstract class BaseQuery {
             joins.addAll(joinedQuery.getJoined().getAllJoins());
         }
         return joins;
+    }
+
+
+
+
+    // Quasi-temporary solution to join in associated data.
+    // Eventually we want a more elegant solution, but for now this works
+    private List<String> extraJoins = new ArrayList<>();
+    private List<String> extraTables = new ArrayList<>();
+
+    public void addExtraJoin(String hql) {
+        this.extraJoins.add(hql);
+    }
+    public void addExtraTables(List<String> tables) {
+        this.extraTables.addAll(tables);
     }
 }

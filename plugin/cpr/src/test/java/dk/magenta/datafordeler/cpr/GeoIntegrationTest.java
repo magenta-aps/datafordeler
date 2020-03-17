@@ -23,9 +23,11 @@ import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import dk.magenta.datafordeler.geo.data.road.RoadLocalityRecord;
 import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import dk.magenta.datafordeler.core.fapi.ResultSet;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
@@ -156,6 +162,11 @@ public class GeoIntegrationTest {
         localityNameRecord1.setEntity(localityEntity1);
         session.saveOrUpdate(localityNameRecord1);
 
+        RoadLocalityRecord roadLocalityRecord = new RoadLocalityRecord();
+        roadLocalityRecord.setCode("007");
+        roadLocalityRecord.setEntity(roadEntity1);
+        session.saveOrUpdate(roadLocalityRecord);
+
         GeoLocalityEntity localityEntity2 = new GeoLocalityEntity();
         localityEntity2.setCode("009");
         session.saveOrUpdate(localityEntity2);
@@ -226,28 +237,11 @@ public class GeoIntegrationTest {
         session.getTransaction().commit();
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
-        EntityManager roadManager = geoPlugin.getEntityManager("Road");
+        Plugin cprPlugin = pluginManager.getPluginByName("cpr");
         EntityManager accessAddressManager = geoPlugin.getEntityManager("AccessAddress");
 
         PersonRecordQuery query = new PersonRecordQuery();
         query.setPersonnummer("1234567890");
-
-/*
-        BaseQuery roadQuery = roadManager.getQuery();
-        HashMap<String, String> joinHandles = new HashMap<>();
-        joinHandles.put("municipalitycode", "municipalitycode");
-        joinHandles.put("roadcode", "code");
-        query.addRelated(roadQuery, joinHandles);
-
-
-        BaseQuery accessAddressQuery = accessAddressManager.getQuery();
-        joinHandles = new HashMap<>();
-        joinHandles.put("municipalitycode", "municipalitycode");
-        joinHandles.put("roadcode", "roadcode");
-        joinHandles.put("housenumber", "housenumber");
-        query.addRelated(accessAddressQuery, joinHandles);
-*/
-
 
 
         // vi bør kunne kalde ét endpoint i geoplugin for at joine alt på gennem en accessaddress,
@@ -256,6 +250,7 @@ public class GeoIntegrationTest {
         // outputwrappere skal kunne tage en entitet ud fra en pulje og indsætte efter behov
         // f.eks. hvis en person har haft flere adresser
 
+        /*
         BaseQuery accessAddressQuery = accessAddressManager.getQuery("municipality", "road", "postcode", "locality");
         HashMap<String, String> joinHandles = new HashMap<>();
         joinHandles.put("municipalitycode", "municipalitycode");
@@ -268,6 +263,76 @@ public class GeoIntegrationTest {
 
         List<ResultSet<PersonEntity>> personResults = personEntityRecordService.searchByQuery(query, session);
         System.out.println(personResults);
+
+*/
+        HashMap<String, String> handles = new HashMap<>();
+        handles.put("municipalitycode", "cpr_person__address.municipalityCode");
+        handles.put("roadcode", "cpr_person__address.roadCode");
+        handles.put("housenumber", "cpr_person__address.houseNumber");
+        handles.put("bnr", "cpr_person__address.buildingNumber");
+
+        ArrayList<String> classAliases = new ArrayList<>();
+        classAliases.add("cpr_person");
+        classAliases.addAll(geoPlugin.getJoinClassAliases());
+        classAliases.addAll(cprPlugin.getJoinClassAliases());
+
+        String hql = "SELECT DISTINCT "+classAliases.stream().collect(Collectors.joining(", ")) + " " +
+                "FROM "+PersonEntity.class.getCanonicalName() +" cpr_person " +
+                "LEFT JOIN cpr_person.address cpr_person__address "+ geoPlugin.getJoinString(handles) + " " + cprPlugin.getJoinString(handles) + " " +
+
+        "WHERE (cpr_person.personnummer IN :cpr_person__personnummer)";
+
+/*
+        String hql = "SELECT DISTINCT cpr_person, geo_accessaddress, geo_road, geo_road_locality, geo_municipality, geo_postcode "+
+        "FROM dk.magenta.datafordeler.cpr.data.person.PersonEntity cpr_person "+
+
+        "LEFT JOIN cpr_person.address cpr_person__address "+
+
+        // Join accessaddress
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressRoadRecord geo_accessaddress__road " +
+                "ON cpr_person__address.roadCode = geo_accessaddress__road.roadCode " +
+                "AND cpr_person__address.municipalityCode = geo_accessaddress__road.municipalityCode "+
+
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressHouseNumberRecord geo_accessaddress__housenumber " +
+                "ON geo_accessaddress__housenumber.number = cpr_person__address.houseNumber "+
+
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity geo_accessaddress " +
+                "ON geo_accessaddress__road.entity = geo_accessaddress " +
+                "AND (geo_accessaddress.bnr = cpr_person__address.buildingNumber OR geo_accessaddress__housenumber.entity = geo_accessaddress)"+
+
+        // Join road
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord geo_road_municipality " +
+                "ON geo_road_municipality.code = cpr_person__address.municipalityCode "+
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.road.GeoRoadEntity geo_road "+
+                "ON geo_road.code = cpr_person__address.roadCode " +
+                "AND geo_road_municipality.entity = geo_road "+
+
+        // Join locality
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.road.RoadLocalityRecord geo_road_locality " +
+                "ON geo_road_locality.entity = geo_road "+
+                "LEFT JOIN dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity geo_locality ON " +
+                "geo_locality.code = geo_road_locality.code "+
+
+        // Join municipality
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity geo_municipality "+
+                "ON geo_municipality.code = cpr_person__address.municipalityCode "+
+
+
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressPostcodeRecord geo_accessaddress_postcode "+
+                "ON geo_accessaddress_postcode.entity = geo_accessaddress "+
+        "LEFT JOIN dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity geo_postcode "+
+                "ON geo_postcode.code = geo_accessaddress_postcode.postcode "+
+
+        "WHERE (cpr_person.personnummer IN :cpr_person__personnummer)";*/
+
+        Query dbquery = session.createQuery(hql);
+        dbquery.setParameterList("cpr_person__personnummer", Collections.singletonList("1234567890"));
+        for (Object r : dbquery.list()) {
+            Object[] items = (Object[]) r;
+            for (int i=0; i<items.length; i++) {
+                System.out.println(items[i]);
+            }
+        }
 
     }
 
