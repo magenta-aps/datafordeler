@@ -20,6 +20,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public static final String ASSOCIATED_COMPANY_CVR = CompanyRecord.IO_FIELD_CVR_NUMBER;
     public static final String PRIMARYINDUSTRY = CompanyUnitRecord.IO_FIELD_PRIMARY_INDUSTRY;
     public static final String KOMMUNEKODE = Municipality.IO_FIELD_CODE;
+    public static final String VEJKODE = AddressRecord.IO_FIELD_ROADCODE;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = P_NUMBER)
     private List<String> pNummer = new ArrayList<>();
@@ -161,6 +162,48 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
 
 
+
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
+    private List<String> vejkode = new ArrayList<>();
+
+    public Collection<String> getVejkode() {
+        return vejkode;
+    }
+
+    public void addVejkode(String vejkode) {
+        if (vejkode != null) {
+            this.vejkode.add(vejkode);
+            this.increaseDataParamCount();
+        }
+    }
+
+    public void addVejkode(int vejkode) {
+        this.addVejkode(String.format("%03d", vejkode));
+    }
+
+    public void setVejkode(String vejkode) {
+        this.vejkode.clear();
+        this.addVejkode(vejkode);
+    }
+
+    public void setVejkode(Collection<String> vejkoder) {
+        this.vejkode.clear();
+        if (vejkoder != null) {
+            for (String vejkode : vejkoder) {
+                this.addVejkode(vejkode);
+            }
+        }
+    }
+
+    public void clearVejkode() {
+        this.vejkode.clear();
+    }
+
+
+
+
+
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
@@ -168,6 +211,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         map.put(ASSOCIATED_COMPANY_CVR, this.associatedCompanyCvrNumber);
         map.put(PRIMARYINDUSTRY, this.primaryIndustry);
         map.put(KOMMUNEKODE, this.kommunekode);
+        map.put(VEJKODE, this.vejkode);
         return map;
     }
 
@@ -177,6 +221,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         this.setAssociatedCompanyCvrNummer(parameters.getI(ASSOCIATED_COMPANY_CVR));
         this.setPrimaryIndustry(parameters.getFirst(PRIMARYINDUSTRY));
         this.setKommuneKode(parameters.getI(KOMMUNEKODE));
+        this.setVejkode(parameters.getI(VEJKODE));
     }
 
 
@@ -245,10 +290,10 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws Exception {
-        this.addCondition("pnr", this.pNummer);
-        this.addCondition("cvr", this.associatedCompanyCvrNumber);
+        this.addCondition("pnr", this.pNummer, Integer.class);
+        this.addCondition("cvr", this.associatedCompanyCvrNumber, Integer.class);
         this.addCondition("primaryindustrycode", this.primaryIndustry);
-        this.addCondition("municipalitycode", this.kommunekode);
-        //this.addCondition("roadcode", this.);
+        this.addCondition("municipalitycode", this.kommunekode, Integer.class);
+        this.addCondition("roadcode", this.vejkode, Integer.class);
     }
 }

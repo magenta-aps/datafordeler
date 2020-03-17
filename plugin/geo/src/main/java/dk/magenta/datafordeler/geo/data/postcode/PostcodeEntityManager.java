@@ -43,6 +43,11 @@ public class PostcodeEntityManager extends GeoEntityManager<PostcodeEntity, Post
     }
 
     @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
+    @Override
     protected Class<PostcodeEntity> getEntityClass() {
         return PostcodeEntity.class;
     }

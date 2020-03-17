@@ -48,6 +48,19 @@ public class UnitAddressEntityManager extends GeoEntityManager<UnitAddressEntity
     }
 
     @Override
+    public BaseQuery getQuery(String... strings) {
+        UnitAddressQuery unitAddressQuery = new UnitAddressQuery();
+        for (String join : strings) {
+            switch (join) {
+                case "accessaddress":
+                    unitAddressQuery.addRelatedAccessAddressQuery();
+                    break;
+            }
+        }
+        return unitAddressQuery;
+    }
+
+    @Override
     protected Class<UnitAddressEntity> getEntityClass() {
         return UnitAddressEntity.class;
     }

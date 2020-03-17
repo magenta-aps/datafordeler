@@ -43,6 +43,12 @@ public class MunicipalityEntityManager extends GeoEntityManager<GeoMunicipalityE
     }
 
     @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
+
+    @Override
     protected Class<GeoMunicipalityEntity> getEntityClass() {
         return GeoMunicipalityEntity.class;
     }

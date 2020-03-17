@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
+import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,14 +121,33 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         return "geo_locality";
     }
 
-    @Override
-    protected Map<String, String> joinHandles() {
-        return null;
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("code", GeoLocalityEntity.DB_FIELD_CODE);
+        joinHandles.put("name", GeoLocalityEntity.DB_FIELD_NAME);
+        joinHandles.put("municipalitycode", GeoLocalityEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + LocalityMunicipalityRecord.DB_FIELD_CODE);
     }
 
     @Override
-    protected void setupConditions() {
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
 
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("code", this.code);
+        this.addCondition("name", this.name);
+        this.addCondition("municipalitycode", this.municipality, Integer.class);
+    }
+
+
+    public MunicipalityQuery addRelatedMunicipalityQuery() {
+        MunicipalityQuery municipalityQuery = new MunicipalityQuery();
+        HashMap<String, String> joinHandles = new HashMap<>();
+        joinHandles.put("municipalitycode", "code");
+        this.addRelated(municipalityQuery, joinHandles);
+        return municipalityQuery;
     }
 
 }

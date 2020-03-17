@@ -99,14 +99,23 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
         return "geo_building";
     }
 
-    @Override
-    protected Map<String, String> joinHandles() {
-        return null;
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("anr", BuildingEntity.DB_FIELD_ANR);
+        joinHandles.put("bnr", BuildingEntity.DB_FIELD_BNR);
     }
 
     @Override
-    protected void setupConditions() {
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
 
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("anr", this.anr);
+        this.addCondition("bnr", this.bnr);
     }
 
 }

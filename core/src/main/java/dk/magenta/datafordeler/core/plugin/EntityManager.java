@@ -356,4 +356,6 @@ public abstract class EntityManager {
     }
 
     public abstract BaseQuery getQuery();
+
+    public abstract BaseQuery getQuery(String... joined);
 }

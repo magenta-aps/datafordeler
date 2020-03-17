@@ -461,5 +461,10 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         return new PersonRecordQuery();
     }
 
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
 
 }

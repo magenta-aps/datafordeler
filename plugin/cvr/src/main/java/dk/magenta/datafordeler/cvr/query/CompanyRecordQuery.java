@@ -411,14 +411,14 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws Exception {
-        this.addCondition("cvr", this.cvrNumre);
+        this.addCondition("cvr", this.cvrNumre, Integer.class);
         this.addCondition("formcode", this.virksomhedsform);
         this.addCondition("advertprotection", this.reklamebeskyttelse != null ? Collections.singletonList(this.reklamebeskyttelse) : Collections.emptyList(), Boolean.class);
         this.addCondition("name", this.virksomhedsnavn);
         this.addCondition("phone", this.telefonnummer);
         this.addCondition("fax", this.telefaxnummer);
         this.addCondition("email", this.emailadresse);
-        this.addCondition("municipalitycode", this.kommunekode);
+        this.addCondition("municipalitycode", this.kommunekode, Integer.class);
     }
 
 

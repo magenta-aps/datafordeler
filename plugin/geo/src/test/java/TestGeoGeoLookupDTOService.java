@@ -1,6 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
@@ -40,7 +41,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
         GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
-        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "3197");
+        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197");
 
         Assert.assertEquals("Kommuneqarfik Sermersooq", geoLookupDTO.getMunicipalityName());
         Assert.assertEquals("B-3197", geoLookupDTO.getbNumber());

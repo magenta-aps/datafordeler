@@ -63,4 +63,20 @@ public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawDa
     public BaseQuery getQuery() {
         return new RoadQuery();
     }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        RoadQuery roadQuery = new RoadQuery();
+        for (String join : strings) {
+            switch (join) {
+                case "municipality":
+                    roadQuery.addRelatedMunicipalityQuery();
+                    break;
+                case "locality":
+                    roadQuery.addRelatedLocalityQuery();
+                    break;
+            }
+        }
+        return roadQuery;
+    }
 }

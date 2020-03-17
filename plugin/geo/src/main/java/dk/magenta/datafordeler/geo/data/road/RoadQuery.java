@@ -6,6 +6,8 @@ import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
+import dk.magenta.datafordeler.geo.data.locality.LocalityQuery;
+import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,7 +42,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     private List<UUID> localityUUID = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = MUNICIPALITY)
-    private List<String> municipality = new ArrayList<>();
+    private List<String> municipalityCode = new ArrayList<>();
 
 
     public List<String> getCode() {
@@ -126,20 +128,28 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         }
     }
 
-    public List<String> getMunicipality() {
-        return municipality;
+    public List<String> getMunicipalityCode() {
+        return municipalityCode;
     }
 
-    public void setMunicipality(String municipality) {
-        this.municipality.clear();
-        this.addMunicipality(municipality);
+    public void setMunicipalityCode(String municipalityCode) {
+        this.municipalityCode.clear();
+        this.addMunicipalityCode(municipalityCode);
     }
 
-    public void addMunicipality(String municipality) {
-        if (municipality != null) {
-            this.municipality.add(municipality);
+    public void addMunicipalityCode(String municipalityCode) {
+        if (municipalityCode != null) {
+            this.municipalityCode.add(municipalityCode);
             this.increaseDataParamCount();
         }
+    }
+
+    public void setMunicipalityCode(int municipalityCode) {
+        this.setMunicipalityCode(Integer.toString(municipalityCode));
+    }
+
+    public void addMunicipalityCode(int municipalityCode) {
+        this.addMunicipalityCode(Integer.toString(municipalityCode));
     }
 
     @Override
@@ -149,7 +159,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         map.put(NAME, this.name);
         map.put(ADDRESSING_NAME, this.addressingName);
         map.put(LOCALITY, this.locality);
-        map.put(MUNICIPALITY, this.municipality);
+        map.put(MUNICIPALITY, this.municipalityCode);
         return map;
     }
 
@@ -189,8 +199,8 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
             );
         }
 
-        if (this.municipality != null && !this.municipality.isEmpty()) {
-            lookupDefinition.put(GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
+        if (this.municipalityCode != null && !this.municipalityCode.isEmpty()) {
+            lookupDefinition.put(GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE, this.municipalityCode, Integer.class);
         }
         return lookupDefinition;
     }
@@ -202,7 +212,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         this.setName(parameters.getFirst(NAME));
         this.setAddressingName(parameters.getFirst(ADDRESSING_NAME));
         this.setLocality(parameters.getFirst(LOCALITY));
-        this.setMunicipality(parameters.getFirst(MUNICIPALITY));
+        this.setMunicipalityCode(parameters.getFirst(MUNICIPALITY));
     }
 
     @Override
@@ -242,11 +252,27 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     @Override
     protected void setupConditions() throws Exception {
-        this.addCondition("code", this.code);
+        this.addCondition("code", this.code, Integer.class);
         this.addCondition("name", this.name);
         this.addCondition("addressingname", this.addressingName);
         this.addCondition("localitycode", this.locality);
         this.addCondition("localityuuid", this.localityUUID.stream().map(UUID::toString).collect(Collectors.toList()), UUID.class);
-        this.addCondition("municipalitycode", this.municipality);
+        this.addCondition("municipalitycode", this.municipalityCode, Integer.class);
+    }
+
+    public MunicipalityQuery addRelatedMunicipalityQuery() {
+        MunicipalityQuery municipalityQuery = new MunicipalityQuery();
+        HashMap<String, String> joinHandles = new HashMap<>();
+        joinHandles.put("municipalitycode", "code");
+        this.addRelated(municipalityQuery, joinHandles);
+        return municipalityQuery;
+    }
+
+    public LocalityQuery addRelatedLocalityQuery() {
+        LocalityQuery localityQuery = new LocalityQuery();
+        HashMap<String, String> joinHandles = new HashMap<>();
+        joinHandles.put("localitycode", "code");
+        this.addRelated(localityQuery, joinHandles);
+        return localityQuery;
     }
 }

@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.geo.data.municipality.MunicipalityEntityManager;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
 import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -125,4 +126,5 @@ public class GeoPlugin extends Plugin {
     public AreaRestrictionDefinition getAreaRestrictionDefinition() {
         return this.areaRestrictionDefinition;
     }
+
 }

@@ -879,19 +879,16 @@ public abstract class BaseQuery {
 
     public String toHql() {
         this.finalizeConditions();
-        StringJoiner s = new StringJoiner(" ");
+        StringJoiner s = new StringJoiner(" \n");
 
-        s.add("SELECT");
-        s.add(this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
-        s.add("FROM");
-        s.add(this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
+        s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
+        s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
 
         for (Join join : this.getAllJoins()) {
             s.add(join.toHql());
         }
         if (!this.condition.isEmpty()) {
-            s.add("WHERE");
-            s.add(this.condition.toHql());
+            s.add("WHERE " + this.condition.toHql());
         }
         return s.toString();
     }
@@ -943,11 +940,19 @@ public abstract class BaseQuery {
         }
         return identifiers;
     }
-    public List<String> getEntityClassnameStrings() {
+    protected List<String> getEntityClassnameStrings() {
         ArrayList<String> classnames = new ArrayList<>();
         classnames.add(this.getEntityClassname() + " " + this.getEntityIdentifier());
         for (JoinedQuery joinedQuery : this.related) {
             classnames.addAll(joinedQuery.getJoined().getEntityClassnameStrings());
+        }
+        return classnames;
+    }
+    public List<String> getEntityClassnames() {
+        ArrayList<String> classnames = new ArrayList<>();
+        classnames.add(this.getEntityClassname());
+        for (JoinedQuery joinedQuery : this.related) {
+            classnames.addAll(joinedQuery.getJoined().getEntityClassnames());
         }
         return classnames;
     }

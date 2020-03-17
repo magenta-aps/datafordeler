@@ -119,6 +119,11 @@ public class DemoEntityManager extends EntityManager {
         return new DemoRecordQuery();
     }
 
+    @Override
+    public BaseQuery getQuery(String... joined) {
+        return this.getQuery();
+    }
+
 
     /**
      * Get the base URI for the register; other EndPoint methods will call this to construct their own return values

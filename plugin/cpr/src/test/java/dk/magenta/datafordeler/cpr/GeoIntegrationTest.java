@@ -4,22 +4,40 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.Pull;
+import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.service.PersonEntityRecordService;
+import dk.magenta.datafordeler.geo.data.accessaddress.*;
+import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
+import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
+import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
+import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
+import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
+import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
+import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
+import org.hibernate.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -46,6 +64,9 @@ public class GeoIntegrationTest {
     @Autowired
     private PersonEntityManager entityManager;
 
+    @Autowired
+    private PersonEntityRecordService personEntityRecordService;
+
     //@Before
     public void importData() {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
@@ -71,8 +92,8 @@ public class GeoIntegrationTest {
             BaseQuery roadQuery = roadManager.getQuery();
 
             HashMap<String, String> joinHandles = new HashMap<>();
-            joinHandles.put("kommunekode", "municipalitycode");
-            joinHandles.put("vejkode", "code");
+            joinHandles.put("municipalitycode", "municipalitycode");
+            joinHandles.put("roadcode", "code");
             personRecordQuery.addRelated(roadQuery, joinHandles);
 
 
@@ -86,24 +107,169 @@ public class GeoIntegrationTest {
             //OutputWrapper outputWrapper = roadManager.getOutputWrapper();
             //System.out.println(outputWrapper);
         }
+    }
+
+    @Test
+    public void testLookup3() {
+
+        Session session = sessionManager.getSessionFactory().openSession();
+        session.beginTransaction();
+
+        GeoMunicipalityEntity municipalityEntity1 = new GeoMunicipalityEntity();
+        municipalityEntity1.setCode(955);
+        session.saveOrUpdate(municipalityEntity1);
+
+        GeoMunicipalityEntity municipalityEntity2 = new GeoMunicipalityEntity();
+        municipalityEntity2.setCode(956);
+        session.saveOrUpdate(municipalityEntity2);
+
+        GeoRoadEntity roadEntity1 = new GeoRoadEntity();
+        roadEntity1.setCode(123);
+        session.saveOrUpdate(roadEntity1);
+
+        RoadNameRecord roadNameRecord1 = new RoadNameRecord();
+        roadNameRecord1.setEntity(roadEntity1);
+        roadNameRecord1.setName("Testvej");
+        session.saveOrUpdate(roadNameRecord1);
+        RoadMunicipalityRecord roadMunicipalityRecord1 = new RoadMunicipalityRecord();
+        roadMunicipalityRecord1.setEntity(roadEntity1);
+        roadMunicipalityRecord1.setCode(955);
+        session.saveOrUpdate(roadMunicipalityRecord1);
+
+        GeoRoadEntity roadEntity2 = new GeoRoadEntity();
+        roadEntity2.setCode(456);
+        session.saveOrUpdate(roadEntity2);
+        RoadNameRecord roadNameRecord2 = new RoadNameRecord();
+        roadNameRecord2.setEntity(roadEntity2);
+        roadNameRecord2.setName("Prøvevej");
+        session.saveOrUpdate(roadNameRecord2);
+        RoadMunicipalityRecord roadMunicipalityRecord2 = new RoadMunicipalityRecord();
+        roadMunicipalityRecord2.setEntity(roadEntity2);
+        roadMunicipalityRecord2.setCode(956);
+        session.saveOrUpdate(roadMunicipalityRecord2);
+
+        GeoLocalityEntity localityEntity1 = new GeoLocalityEntity();
+        localityEntity1.setCode("007");
+        session.saveOrUpdate(localityEntity1);
+        LocalityNameRecord localityNameRecord1 = new LocalityNameRecord();
+        localityNameRecord1.setName("TestSted");
+        localityNameRecord1.setEntity(localityEntity1);
+        session.saveOrUpdate(localityNameRecord1);
+
+        GeoLocalityEntity localityEntity2 = new GeoLocalityEntity();
+        localityEntity2.setCode("009");
+        session.saveOrUpdate(localityEntity2);
+        LocalityNameRecord localityNameRecord2 = new LocalityNameRecord();
+        localityNameRecord2.setName("PrøveSted");
+        localityNameRecord2.setEntity(localityEntity2);
+        session.saveOrUpdate(localityNameRecord2);
 
 
-        //personRecordQuery.addForcedJoin(PersonRecordQuery.KOMMUNEKODE);
+        PostcodeEntity postcodeEntity = new PostcodeEntity();
+        postcodeEntity.setCode(1234);
+        session.saveOrUpdate(postcodeEntity);
+
+        PostcodeNameRecord postcodeNameRecord = new PostcodeNameRecord();
+        postcodeNameRecord.setName("TestSted");
+        postcodeNameRecord.setEntity(postcodeEntity);
+        session.saveOrUpdate(postcodeNameRecord);
+
+        AccessAddressEntity accessAddressEntity1 = new AccessAddressEntity();
+        accessAddressEntity1.setBnr("B-1234");
+        session.saveOrUpdate(accessAddressEntity1);
+        AccessAddressRoadRecord accessAddressRoadRecord1 = new AccessAddressRoadRecord();
+        accessAddressRoadRecord1.setEntity(accessAddressEntity1);
+        accessAddressRoadRecord1.setMunicipalityCode(955);
+        accessAddressRoadRecord1.setRoadCode(123);
+        session.saveOrUpdate(accessAddressRoadRecord1);
+        AccessAddressHouseNumberRecord accessAddressHouseNumberRecord = new AccessAddressHouseNumberRecord();
+        accessAddressHouseNumberRecord.setNumber("5");
+        accessAddressHouseNumberRecord.setEntity(accessAddressEntity1);
+        session.saveOrUpdate(accessAddressHouseNumberRecord);
+
+        AccessAddressLocalityRecord accessAddressLocalityRecord1 = new AccessAddressLocalityRecord();
+        accessAddressLocalityRecord1.setEntity(accessAddressEntity1);
+        accessAddressLocalityRecord1.setCode("007");
+        session.saveOrUpdate(accessAddressLocalityRecord1);
+
+        AccessAddressPostcodeRecord accessAddressPostcodeRecord = new AccessAddressPostcodeRecord();
+        accessAddressPostcodeRecord.setPostcode(1234);
+        accessAddressPostcodeRecord.setEntity(accessAddressEntity1);
+        session.saveOrUpdate(accessAddressPostcodeRecord);
+
+
+
+
+
+
+        PersonEntity personEntity = new PersonEntity();
+        personEntity.setPersonnummer("1234567890");
+        session.saveOrUpdate(personEntity);
+        AddressDataRecord personAddressRecord1 = new AddressDataRecord();
+        personAddressRecord1.setEntity(personEntity);
+        personAddressRecord1.setMunicipalityCode(955);
+        personAddressRecord1.setRoadCode(123);
+        personAddressRecord1.setBuildingNumber("B-1234");
+        personAddressRecord1.setHouseNumber("5");
+        session.saveOrUpdate(personAddressRecord1);
 /*
-        String personRoot = "person";
-        String roadRoot = "road";
-        m.add(personRecordQuery, PersonEntity.class.getCanonicalName(), personRoot, "");
+        AddressDataRecord personAddressRecord2 = new AddressDataRecord();
+        personAddressRecord2.setEntity(personEntity);
+        personAddressRecord2.setMunicipalityCode(956);
+        personAddressRecord2.setRoadCode(456);
+        personAddressRecord2.setBuildingNumber("B-1234");
+        session.saveOrUpdate(personAddressRecord2);
+*/
+
+
+
+        session.getTransaction().commit();
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         EntityManager roadManager = geoPlugin.getEntityManager("Road");
-        if (roadManager != null) {
-            m.add(roadManager.getJoinQuery(entityManager.getJoinHandles(personRoot), roadRoot), roadRoot);
-            Session session = sessionManager.getSessionFactory().openSession();
-            System.out.println(QueryManager.getQuery(session, m));
+        EntityManager accessAddressManager = geoPlugin.getEntityManager("AccessAddress");
 
-            OutputWrapper outputWrapper = roadManager.getOutputWrapper();
-            System.out.println(outputWrapper);
-        }*/
+        PersonRecordQuery query = new PersonRecordQuery();
+        query.setPersonnummer("1234567890");
+
+/*
+        BaseQuery roadQuery = roadManager.getQuery();
+        HashMap<String, String> joinHandles = new HashMap<>();
+        joinHandles.put("municipalitycode", "municipalitycode");
+        joinHandles.put("roadcode", "code");
+        query.addRelated(roadQuery, joinHandles);
+
+
+        BaseQuery accessAddressQuery = accessAddressManager.getQuery();
+        joinHandles = new HashMap<>();
+        joinHandles.put("municipalitycode", "municipalitycode");
+        joinHandles.put("roadcode", "roadcode");
+        joinHandles.put("housenumber", "housenumber");
+        query.addRelated(accessAddressQuery, joinHandles);
+*/
+
+
+
+        // vi bør kunne kalde ét endpoint i geoplugin for at joine alt på gennem en accessaddress,
+        // og få lokalitet, postnr, vej og kommune
+
+        // outputwrappere skal kunne tage en entitet ud fra en pulje og indsætte efter behov
+        // f.eks. hvis en person har haft flere adresser
+
+        BaseQuery accessAddressQuery = accessAddressManager.getQuery("municipality", "road", "postcode", "locality");
+        //BaseQuery accessAddressQuery = accessAddressManager.getQuery("road");
+        //BaseQuery accessAddressQuery = accessAddressManager.getQuery();
+        HashMap<String, String> joinHandles = new HashMap<>();
+        joinHandles.put("municipalitycode", "municipalitycode");
+        joinHandles.put("roadcode", "roadcode");
+        joinHandles.put("housenumber", "housenumber");
+        joinHandles.put("bnr", "bnr");
+        query.addRelated(accessAddressQuery, joinHandles);
+
+
+        List<ResultSet<PersonEntity>> personResults = personEntityRecordService.searchByQuery(query, session);
+        System.out.println(personResults);
+
     }
 
 }

@@ -43,6 +43,11 @@ public class BuildingEntityManager extends GeoEntityManager<BuildingEntity, Buil
     }
 
     @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
+    @Override
     protected Class<BuildingEntity> getEntityClass() {
         return BuildingEntity.class;
     }

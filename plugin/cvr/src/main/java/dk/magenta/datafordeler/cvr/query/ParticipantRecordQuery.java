@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.cvr.records.SecNameRecord;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
+import org.apache.commons.math3.analysis.function.Add;
 
 import java.util.*;
 
@@ -21,6 +22,7 @@ public class ParticipantRecordQuery extends BaseQuery {
     public static final String UNITNUMBER = ParticipantRecord.IO_FIELD_UNIT_NUMBER;
     public static final String NAVN = ParticipantRecord.IO_FIELD_NAMES;
     public static final String KOMMUNEKODE = Municipality.IO_FIELD_CODE;
+    public static final String VEJKODE = AddressRecord.IO_FIELD_ROADCODE;
 
 
 
@@ -96,6 +98,45 @@ public class ParticipantRecordQuery extends BaseQuery {
 
 
 
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
+    private List<String> vejkode = new ArrayList<>();
+
+    public Collection<String> getVejkode() {
+        return vejkode;
+    }
+
+    public void addVejkode(String vejkode) {
+        if (vejkode != null) {
+            this.vejkode.add(vejkode);
+            this.increaseDataParamCount();
+        }
+    }
+
+    public void addVejkode(int vejkode) {
+        this.addVejkode(String.format("%03d", vejkode));
+    }
+
+    public void setVejkode(String vejkode) {
+        this.vejkode.clear();
+        this.addVejkode(vejkode);
+    }
+
+    public void setVejkode(Collection<String> vejkoder) {
+        this.vejkode.clear();
+        if (vejkoder != null) {
+            for (String vejkode : vejkoder) {
+                this.addVejkode(vejkode);
+            }
+        }
+    }
+
+    public void clearVejkode() {
+        this.vejkode.clear();
+    }
+
+
+
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
     private List<String> navn = new ArrayList<>();
 
@@ -139,6 +180,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         map.put(UNITNUMBER, this.enhedsNummer);
         map.put(NAVN, this.navn);
         map.put(KOMMUNEKODE, this.kommunekode);
+        map.put(VEJKODE, this.vejkode);
         return map;
     }
 
@@ -203,6 +245,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("unit", ParticipantRecord.DB_FIELD_UNIT_NUMBER);
         joinHandles.put("name", ParticipantRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME);
         joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
+        joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
     }
 
     @Override
@@ -211,8 +254,9 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws Exception {
-        this.addCondition("unit", this.enhedsNummer);
+        this.addCondition("unit", this.enhedsNummer, Long.class);
         this.addCondition("name", this.navn);
-        this.addCondition("municipalitycode", this.kommunekode);
+        this.addCondition("municipalitycode", this.kommunekode, Integer.class);
+        this.addCondition("roadcode", this.vejkode, Integer.class);
     }
 }

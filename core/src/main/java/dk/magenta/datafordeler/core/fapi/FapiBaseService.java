@@ -520,9 +520,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     //@WebMethod(exclude = true)
     //protected abstract Set<E> searchByQuery(Q query);
     @WebMethod(exclude = true) // Non-soap methods must have this
-    protected List<ResultSet<E>> searchByQuery(Q query, Session session) {
+    public List<ResultSet<E>> searchByQuery(Q query, Session session) {
         query.applyFilters(session);
-        return QueryManager.getAllEntities(session, query, this.getEntityClass());
+        return QueryManager.getAllEntitySets(session, query, this.getEntityClass());
     }
 
     /**

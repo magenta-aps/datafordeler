@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -184,13 +185,12 @@ public abstract class QueryManager {
         return results;
     }
 
-    private static final boolean logQuery = false;
+    private static final boolean logQuery = true;
 
     public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
+        System.out.println("getQuery()");
 
         String queryString = query.toHql();
-
-        System.out.println(queryString);
 
         StringJoiner stringJoiner = null;
         if (logQuery) {
@@ -199,7 +199,6 @@ public abstract class QueryManager {
         }
 
         // Build query
-        System.out.println(session);
         org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
 
         // Insert parameters, casting as necessary
@@ -218,7 +217,8 @@ public abstract class QueryManager {
         }
 
         if (logQuery) {
-            log.info(stringJoiner.toString());
+            //log.info(stringJoiner.toString());
+            System.out.println(stringJoiner.toString());
         }
 
         // Offset & limit
@@ -290,33 +290,51 @@ public abstract class QueryManager {
      * @param query Query object defining search parameters
      * @return
      */
-    public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntities(Session session, BaseQuery query, Class<E> eClass) {
-        LinkedList<ResultSet<E>> identitySetList = new LinkedList<>();
+    public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass) {
+        System.out.println("getAllEntitySets()");
+        LinkedHashMap<E, ResultSet<E>> identitySetList = new LinkedHashMap<>();
         log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
         org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
 
-        List<String> classNames = query.getEntityClassnameStrings();
         try {
-            for (Object[] row : (List<Object[]>) databaseQuery.list()) {
-                identitySetList.add(new ResultSet<E>(row, classNames));
+            List<Object> results = databaseQuery.list();
+            if (query.getRelated().isEmpty()) {
+                for (Object row : results) {
+                    ResultSet<E> resultSet = new ResultSet<E>((E) row);
+                    identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
+                }
+            } else {
+                List<String> classNames = query.getEntityClassnames();
+                for (Object row : results) {
+                    ResultSet<E> resultSet = new ResultSet<E>(row, classNames);
+                    ResultSet<E> existing = identitySetList.get(resultSet.getPrimaryEntity());
+                    if (existing == null) {
+                        identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
+                    } else {
+                        existing.merge(resultSet);
+                    }
+                }
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
-        return identitySetList;
+        return new ArrayList<>(identitySetList.values());
+    }
+    public static <E extends IdentifiedEntity> List<E> getAllEntities(Session session, BaseQuery query, Class<E> eClass) {
+        return getAllEntitySets(session, query, eClass).stream().map(s -> s.getPrimaryEntity()).collect(Collectors.toList());
     }
 
-    /**
-     * Get all Entities of a specific class, that match the given parameters
-     * @param session Database session to work from
-     * @param query Query object defining search parameters
-     * @param eClass Entity subclass
-     * @return
-     */
+        /**
+         * Get all Entities of a specific class, that match the given parameters
+         * @param session Database session to work from
+         * @param query Query object defining search parameters
+         * @param eClass Entity subclass
+         * @return
+         */
     public static <E extends IdentifiedEntity, D extends DataItem> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
         org.hibernate.query.Query<E> databaseQuery = QueryManager.getQuery(session, query, eClass);
