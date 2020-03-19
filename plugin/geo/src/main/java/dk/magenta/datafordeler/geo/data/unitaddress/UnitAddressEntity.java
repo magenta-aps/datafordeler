@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import org.hibernate.annotations.Filter;
@@ -70,10 +71,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_FLOOR)
-    Set<UnitAddressFloorRecord> floor = new HashSet<>();
+    private Set<UnitAddressFloorRecord> floor = new HashSet<>();
 
-    public Set<UnitAddressFloorRecord> getFloor() {
-        return this.floor;
+    public MonotemporalSet<UnitAddressFloorRecord> getFloor() {
+        return new MonotemporalSet<>(this.floor);
     }
 
 
@@ -88,10 +89,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_DOOR)
-    Set<UnitAddressDoorRecord> door = new HashSet<>();
+    private Set<UnitAddressDoorRecord> door = new HashSet<>();
 
-    public Set<UnitAddressDoorRecord> getDoor() {
-        return this.door;
+    public MonotemporalSet<UnitAddressDoorRecord> getDoor() {
+        return new MonotemporalSet(this.door);
     }
 
 
@@ -106,10 +107,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_NUMBER)
-    Set<UnitAddressNumberRecord> number = new HashSet<>();
+    private Set<UnitAddressNumberRecord> number = new HashSet<>();
 
-    public Set<UnitAddressNumberRecord> getNumber() {
-        return this.number;
+    public MonotemporalSet<UnitAddressNumberRecord> getNumber() {
+        return new MonotemporalSet<>(this.number);
     }
 
 
@@ -124,10 +125,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_USAGE)
-    Set<UnitAddressUsageRecord> usage = new HashSet<>();
+    private Set<UnitAddressUsageRecord> usage = new HashSet<>();
 
-    public Set<UnitAddressUsageRecord> getUsage() {
-        return this.usage;
+    public MonotemporalSet<UnitAddressUsageRecord> getUsage() {
+        return new MonotemporalSet<>(this.usage);
     }
 
 
@@ -143,10 +144,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_STATUS)
-    Set<UnitAddressStatusRecord> status = new HashSet<>();
+    private Set<UnitAddressStatusRecord> status = new HashSet<>();
 
-    public Set<UnitAddressStatusRecord> getStatus() {
-        return this.status;
+    public MonotemporalSet<UnitAddressStatusRecord> getStatus() {
+        return new MonotemporalSet<>(this.status);
     }
 
 
@@ -161,10 +162,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SOURCE)
-    Set<UnitAddressSourceRecord> source = new HashSet<>();
+    private Set<UnitAddressSourceRecord> source = new HashSet<>();
 
-    public Set<UnitAddressSourceRecord> getSource() {
-        return this.source;
+    public MonotemporalSet<UnitAddressSourceRecord> getSource() {
+        return new MonotemporalSet<>(this.source);
     }
 
 

@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.geo.data.road;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class RoadOutputWrapper extends GeoOutputWrapper<GeoRoadEntity> {
     }
 
     @Override
-    protected JsonModifier getModifier(Collection<GeoRoadEntity> entries) {
-        return new RoadOutputJsonModifier(this, entries);
+    protected JsonModifier getModifier(ResultSet resultSet) {
+        return new RoadOutputJsonModifier(this, resultSet.get(GeoRoadEntity.class));
     }
 
     @Override

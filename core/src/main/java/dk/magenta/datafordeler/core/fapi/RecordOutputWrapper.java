@@ -29,7 +29,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
     public abstract ObjectMapper getObjectMapper();
 
-    protected JsonModifier getModifier(Collection<E> entities) { return null; }
+    protected JsonModifier getModifier(ResultSet resultSet) { return null; }
 
     private HashMap<String, JsonModifier> modifiers = new HashMap<>();
 
@@ -74,7 +74,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             if (wrapper instanceof RecordOutputWrapper) {
                 // Find any JsonModifiers from this outputwrapper of associated entityclass, and add them to our cache
                 RecordOutputWrapper recordOutputWrapper = (RecordOutputWrapper) wrapper;
-                JsonModifier modifier = recordOutputWrapper.getModifier(input.get(associatedEntityClass));
+                JsonModifier modifier = recordOutputWrapper.getModifier(input);
                 if (modifier != null) {
                     this.modifiers.put(modifier.getName(), modifier);
                 }

@@ -147,7 +147,9 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
     public Map<Class, List<String>> getEligibleModifierNames() {
         HashMap<Class, List<String>> map = new HashMap<>();
         ArrayList<String> addressModifiers = new ArrayList<>();
+        addressModifiers.add("geo_municipality");
         addressModifiers.add("geo_road");
+        addressModifiers.add("geo_accessaddress");
         map.put(AddressDataRecord.class, addressModifiers);
         return map;
     }

@@ -67,8 +67,8 @@ public class ResultSet<E extends IdentifiedEntity> {
         return this.primaryEntity;
     }
 
-    public Set<IdentifiedEntity> get(Class c) {
-        return this.associatedEntities.get(c);
+    public <C extends IdentifiedEntity> Set<C> get(Class<C> c) {
+        return (Set<C>) this.associatedEntities.get(c);
     }
 
     public Set<Class> getAssociatedEntityClasses() {

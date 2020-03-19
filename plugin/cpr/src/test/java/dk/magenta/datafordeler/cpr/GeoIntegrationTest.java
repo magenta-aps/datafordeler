@@ -22,6 +22,7 @@ import dk.magenta.datafordeler.geo.data.accessaddress.*;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
+import dk.magenta.datafordeler.geo.data.municipality.MunicipalityNameRecord;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
@@ -149,9 +150,19 @@ public class GeoIntegrationTest {
         municipalityEntity1.setCode(955);
         session.saveOrUpdate(municipalityEntity1);
 
+        MunicipalityNameRecord municipalityNameRecord1 = new MunicipalityNameRecord();
+        municipalityNameRecord1.setName("TestKommune");
+        municipalityNameRecord1.setEntity(municipalityEntity1);
+        session.saveOrUpdate(municipalityNameRecord1);
+
         GeoMunicipalityEntity municipalityEntity2 = new GeoMunicipalityEntity();
         municipalityEntity2.setCode(956);
         session.saveOrUpdate(municipalityEntity2);
+
+        MunicipalityNameRecord municipalityNameRecord2 = new MunicipalityNameRecord();
+        municipalityNameRecord2.setName("PrøveKommune");
+        municipalityNameRecord2.setEntity(municipalityEntity2);
+        session.saveOrUpdate(municipalityNameRecord2);
 
         GeoRoadEntity roadEntity1 = new GeoRoadEntity();
         roadEntity1.setCode(123);
@@ -205,7 +216,7 @@ public class GeoIntegrationTest {
         session.saveOrUpdate(postcodeEntity);
 
         PostcodeNameRecord postcodeNameRecord = new PostcodeNameRecord();
-        postcodeNameRecord.setName("TestSted");
+        postcodeNameRecord.setName("TestPostdistrikt");
         postcodeNameRecord.setEntity(postcodeEntity);
         session.saveOrUpdate(postcodeNameRecord);
 

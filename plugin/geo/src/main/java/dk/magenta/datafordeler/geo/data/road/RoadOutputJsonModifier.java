@@ -8,7 +8,7 @@ import dk.magenta.datafordeler.core.util.ListHashMap;
 import java.util.Collection;
 import java.util.List;
 
-public class RoadOutputJsonModifier extends JsonModifier<GeoRoadEntity> {
+public class RoadOutputJsonModifier extends JsonModifier {
 
     private RoadOutputWrapper outputWrapper;
     protected ListHashMap<String, GeoRoadEntity> entities = new ListHashMap<>();
@@ -32,9 +32,11 @@ public class RoadOutputJsonModifier extends JsonModifier<GeoRoadEntity> {
         JsonNode municipalityCode = node.get("kommunekode");
         if (roadCode != null && municipalityCode != null) {
             List<GeoRoadEntity> entities = this.entities.get(municipalityCode.asInt()+"|"+roadCode.asInt());
-            for (GeoRoadEntity entity : entities) {
-                String name = entity.getName().stream().findAny().get().getName(); // TODO: Find den rigtige vejnavnsrecord (nyeste?)
-                node.put("vejnavn", name);
+            if (entities != null) {
+                for (GeoRoadEntity entity : entities) {
+                    RoadNameRecord name = entity.getName().current(); // TODO: Find den rigtige vejnavnsrecord (nyeste?)
+                    node.put("vejnavn", name.getName());
+                }
             }
         }
     }

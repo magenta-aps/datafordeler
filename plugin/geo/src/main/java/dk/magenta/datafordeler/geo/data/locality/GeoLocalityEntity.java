@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.RawData;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
@@ -81,10 +82,10 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_NAME)
-    Set<LocalityNameRecord> name = new HashSet<>();
+    private Set<LocalityNameRecord> name = new HashSet<>();
 
-    public Set<LocalityNameRecord> getName() {
-        return this.name;
+    public MonotemporalSet<LocalityNameRecord> getName() {
+        return new MonotemporalSet<>(this.name);
     }
 
 
@@ -99,10 +100,10 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_ABBREVIATION)
-    Set<LocalityAbbreviationRecord> abbreviation = new HashSet<>();
+    private Set<LocalityAbbreviationRecord> abbreviation = new HashSet<>();
 
-    public Set<LocalityAbbreviationRecord> getAbbreviation() {
-        return this.abbreviation;
+    public MonotemporalSet<LocalityAbbreviationRecord> getAbbreviation() {
+        return new MonotemporalSet<>(this.abbreviation);
     }
 
 
@@ -117,10 +118,10 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_TYPE)
-    Set<LocalityTypeRecord> type = new HashSet<>();
+    private Set<LocalityTypeRecord> type = new HashSet<>();
 
-    public Set<LocalityTypeRecord> getType() {
-        return this.type;
+    public MonotemporalSet<LocalityTypeRecord> getType() {
+        return new MonotemporalSet<>(this.type);
     }
 
 
@@ -135,10 +136,10 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_MUNICIPALITY)
-    Set<LocalityMunicipalityRecord> municipality = new HashSet<>();
+    private Set<LocalityMunicipalityRecord> municipality = new HashSet<>();
 
-    public Set<LocalityMunicipalityRecord> getMunicipality() {
-        return this.municipality;
+    public MonotemporalSet<LocalityMunicipalityRecord> getMunicipality() {
+        return new MonotemporalSet<>(this.municipality);
     }
 
 
@@ -153,10 +154,10 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_LOCALITY_ROADCODE)
-    Set<LocalityRoadcodeRecord> localityRoadcode = new HashSet<>();
+    private Set<LocalityRoadcodeRecord> localityRoadcode = new HashSet<>();
 
-    public Set<LocalityRoadcodeRecord> getLocalityRoadcode() {
-        return this.localityRoadcode;
+    public MonotemporalSet<LocalityRoadcodeRecord> getLocalityRoadcode() {
+        return new MonotemporalSet<>(this.localityRoadcode);
     }
 
 
@@ -171,10 +172,10 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SHAPE)
-    Set<LocalityShapeRecord> shape = new HashSet<>();
+    private Set<LocalityShapeRecord> shape = new HashSet<>();
 
-    public Set<LocalityShapeRecord> getShape() {
-        return this.shape;
+    public MonotemporalSet<LocalityShapeRecord> getShape() {
+        return new MonotemporalSet<>(this.shape);
     }
 
 

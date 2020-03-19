@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.RawData;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
@@ -73,10 +74,10 @@ public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_NAME)
-    Set<RoadNameRecord> name = new HashSet<>();
+    private Set<RoadNameRecord> name = new HashSet<>();
 
-    public Set<RoadNameRecord> getName() {
-        return this.name;
+    public MonotemporalSet<RoadNameRecord> getName() {
+        return new MonotemporalSet<>(this.name);
     }
 
 
@@ -91,10 +92,10 @@ public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_LOCALITY)
-    Set<RoadLocalityRecord> locality = new HashSet<>();
+    private Set<RoadLocalityRecord> locality = new HashSet<>();
 
-    public Set<RoadLocalityRecord> getLocality() {
-        return this.locality;
+    public MonotemporalSet<RoadLocalityRecord> getLocality() {
+        return new MonotemporalSet<>(this.locality);
     }
 
 
@@ -109,10 +110,10 @@ public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_MUNICIPALITY)
-    Set<RoadMunicipalityRecord> municipality = new HashSet<>();
+    private Set<RoadMunicipalityRecord> municipality = new HashSet<>();
 
-    public Set<RoadMunicipalityRecord> getMunicipality() {
-        return this.municipality;
+    public MonotemporalSet<RoadMunicipalityRecord> getMunicipality() {
+        return new MonotemporalSet<>(this.municipality);
     }
 
 
@@ -127,10 +128,10 @@ public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SHAPE)
-    Set<RoadShapeRecord> shape = new HashSet<>();
+    private Set<RoadShapeRecord> shape = new HashSet<>();
 
-    public Set<RoadShapeRecord> getShape() {
-        return this.shape;
+    public MonotemporalSet<RoadShapeRecord> getShape() {
+        return new MonotemporalSet<>(this.shape);
     }
 
 
