@@ -7,8 +7,10 @@ import dk.magenta.datafordeler.core.Pull;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
+import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
@@ -31,7 +33,14 @@ import org.hibernate.query.Query;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.LinkedMultiValueMap;
@@ -39,21 +48,26 @@ import org.springframework.util.MultiValueMap;
 
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class GeoIntegrationTest {
 
 
     @Autowired
     private Engine engine;
+
+
+    @SpyBean
+    private DafoUserManager dafoUserManager;
+
 
     @SpyBean
     private CprConfigurationManager configurationManager;
@@ -72,6 +86,10 @@ public class GeoIntegrationTest {
 
     @Autowired
     private PersonEntityRecordService personEntityRecordService;
+
+
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     //@Before
     public void importData() {
@@ -117,6 +135,12 @@ public class GeoIntegrationTest {
 
     @Test
     public void testLookup3() {
+
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
 
         Session session = sessionManager.getSessionFactory().openSession();
         session.beginTransaction();
@@ -271,59 +295,16 @@ public class GeoIntegrationTest {
         handles.put("housenumber", "cpr_person__address.houseNumber");
         handles.put("bnr", "cpr_person__address.buildingNumber");
 
-        ArrayList<String> classAliases = new ArrayList<>();
-        classAliases.add("cpr_person");
-        classAliases.addAll(geoPlugin.getJoinClassAliases());
-        classAliases.addAll(cprPlugin.getJoinClassAliases());
-
-        String hql = "SELECT DISTINCT "+classAliases.stream().collect(Collectors.joining(", ")) + " " +
+        LinkedHashMap<String, Class> classAliases = new LinkedHashMap<>();
+        classAliases.put("cpr_person", PersonEntity.class);
+        classAliases.putAll(geoPlugin.getJoinClassAliases());
+        classAliases.putAll(cprPlugin.getJoinClassAliases());
+/*
+        String hql = "SELECT DISTINCT "+classAliases.keySet().stream().collect(Collectors.joining(", ")) + " " +
                 "FROM "+PersonEntity.class.getCanonicalName() +" cpr_person " +
                 "LEFT JOIN cpr_person.address cpr_person__address "+ geoPlugin.getJoinString(handles) + " " + cprPlugin.getJoinString(handles) + " " +
 
         "WHERE (cpr_person.personnummer IN :cpr_person__personnummer)";
-
-/*
-        String hql = "SELECT DISTINCT cpr_person, geo_accessaddress, geo_road, geo_road_locality, geo_municipality, geo_postcode "+
-        "FROM dk.magenta.datafordeler.cpr.data.person.PersonEntity cpr_person "+
-
-        "LEFT JOIN cpr_person.address cpr_person__address "+
-
-        // Join accessaddress
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressRoadRecord geo_accessaddress__road " +
-                "ON cpr_person__address.roadCode = geo_accessaddress__road.roadCode " +
-                "AND cpr_person__address.municipalityCode = geo_accessaddress__road.municipalityCode "+
-
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressHouseNumberRecord geo_accessaddress__housenumber " +
-                "ON geo_accessaddress__housenumber.number = cpr_person__address.houseNumber "+
-
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity geo_accessaddress " +
-                "ON geo_accessaddress__road.entity = geo_accessaddress " +
-                "AND (geo_accessaddress.bnr = cpr_person__address.buildingNumber OR geo_accessaddress__housenumber.entity = geo_accessaddress)"+
-
-        // Join road
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord geo_road_municipality " +
-                "ON geo_road_municipality.code = cpr_person__address.municipalityCode "+
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.road.GeoRoadEntity geo_road "+
-                "ON geo_road.code = cpr_person__address.roadCode " +
-                "AND geo_road_municipality.entity = geo_road "+
-
-        // Join locality
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.road.RoadLocalityRecord geo_road_locality " +
-                "ON geo_road_locality.entity = geo_road "+
-                "LEFT JOIN dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity geo_locality ON " +
-                "geo_locality.code = geo_road_locality.code "+
-
-        // Join municipality
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity geo_municipality "+
-                "ON geo_municipality.code = cpr_person__address.municipalityCode "+
-
-
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressPostcodeRecord geo_accessaddress_postcode "+
-                "ON geo_accessaddress_postcode.entity = geo_accessaddress "+
-        "LEFT JOIN dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity geo_postcode "+
-                "ON geo_postcode.code = geo_accessaddress_postcode.postcode "+
-
-        "WHERE (cpr_person.personnummer IN :cpr_person__personnummer)";*/
 
         Query dbquery = session.createQuery(hql);
         dbquery.setParameterList("cpr_person__personnummer", Collections.singletonList("1234567890"));
@@ -332,8 +313,26 @@ public class GeoIntegrationTest {
             for (int i=0; i<items.length; i++) {
                 System.out.println(items[i]);
             }
-        }
+        }*/
+        ParameterMap parameters = new ParameterMap();
+        parameters.add("personnummer", "1234567890");
 
+        ResponseEntity<String> response = this.restSearch(parameters, "person");
+        System.out.println(response.getBody());
+    }
+
+    private ResponseEntity<String> restSearch(ParameterMap parameters, String type) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
+        return this.restTemplate.exchange("/cpr/"+type+"/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
+    }
+
+    private void applyAccess(TestUserDetails testUserDetails) {
+        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
+    }
+    private void whitelistLocalhost() {
+        when(dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
     }
 
 }

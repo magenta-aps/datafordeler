@@ -5,12 +5,18 @@ import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class BuildingOutputWrapper extends GeoOutputWrapper<BuildingEntity> {
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    @PostConstruct
+    private void register() {
+        this.register(BuildingEntity.class);
+    }
 
     @Override
     public ObjectMapper getObjectMapper() {

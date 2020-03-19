@@ -24,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * Datafordeler Plugin to fetch, parse and serve Geo data (data on regions, localities, roads, addresses etc.)
@@ -176,15 +173,16 @@ public class GeoPlugin extends Plugin {
         return s.toString();
     }
 
-    public List<String> getJoinClassAliases() {
-        ArrayList<String> aliases = new ArrayList<>(5);
-        aliases.add("geo_accessaddress");
-        aliases.add("geo_road");
-        aliases.add("geo_road_locality");
-        aliases.add("geo_municipality");
-        aliases.add("geo_postcode");
+    public LinkedHashMap<String, Class> getJoinClassAliases() {
+        LinkedHashMap<String, Class> aliases = new LinkedHashMap<>();
+        aliases.put("geo_accessaddress", AccessAddressEntity.class);
+        aliases.put("geo_road", GeoRoadEntity.class);
+        aliases.put("geo_locality", GeoLocalityEntity.class);
+        aliases.put("geo_municipality", GeoMunicipalityEntity.class);
+        aliases.put("geo_postcode", PostcodeEntity.class);
         return aliases;
     }
+
 
 
 }

@@ -564,6 +564,7 @@ public abstract class BaseQuery {
      * @param parameterMap
      */
     public void fillFromParameters(ParameterMap parameterMap, boolean limitsOnly) throws InvalidClientInputException {
+        System.out.println(this.getClass().getCanonicalName()+".fillFromParameters("+parameterMap.toString()+")");
         this.setPage(parameterMap.getFirstOf(PARAM_PAGE));
         this.setPageSize(parameterMap.getFirstOf(PARAM_PAGESIZE));
         try {
@@ -943,7 +944,8 @@ public abstract class BaseQuery {
         for (JoinedQuery joinedQuery : this.related) {
             identifiers.addAll(joinedQuery.getJoined().getEntityIdentifiers());
         }
-        identifiers.addAll(this.extraTables);
+
+        identifiers.addAll(this.extraTables.keySet());
 
         return identifiers;
     }
@@ -961,6 +963,8 @@ public abstract class BaseQuery {
         for (JoinedQuery joinedQuery : this.related) {
             classnames.addAll(joinedQuery.getJoined().getEntityClassnames());
         }
+        classnames.addAll(this.extraTables.values().stream().map(Class::getCanonicalName).collect(Collectors.toList()));
+
         return classnames;
     }
     protected List<Join> getAllJoins() {
@@ -978,12 +982,13 @@ public abstract class BaseQuery {
     // Quasi-temporary solution to join in associated data.
     // Eventually we want a more elegant solution, but for now this works
     private List<String> extraJoins = new ArrayList<>();
-    private List<String> extraTables = new ArrayList<>();
+    private LinkedHashMap<String, Class> extraTables = new LinkedHashMap<>();
 
     public void addExtraJoin(String hql) {
         this.extraJoins.add(hql);
     }
-    public void addExtraTables(List<String> tables) {
-        this.extraTables.addAll(tables);
+    public void addExtraTables(LinkedHashMap<String, Class> tables) {
+        this.extraTables.putAll(tables);
+        System.out.println("Added to extratables. It is now: "+this.extraTables);
     }
 }

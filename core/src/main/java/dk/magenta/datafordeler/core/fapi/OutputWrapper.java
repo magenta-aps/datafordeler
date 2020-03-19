@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class OutputWrapper<E extends IdentifiedEntity> {
@@ -19,6 +20,12 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
         DATAONLY
     }
 
+    protected static HashMap<Class, OutputWrapper> wrapperMap = new HashMap<>();
+
+    protected void register(Class entityClass) {
+        wrapperMap.put(entityClass, this);
+    }
+
     // Override either of these
     public Object wrapResult(E input, BaseQuery query) {
         return null;
@@ -29,7 +36,6 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
     }
 
     public Object wrapResultSet(ResultSet<E> input, BaseQuery query, Mode mode) {
-        // TODO: Somehow wrap the resultset
         return null;
     }
 

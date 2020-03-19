@@ -188,7 +188,6 @@ public abstract class QueryManager {
     private static final boolean logQuery = true;
 
     public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
-        System.out.println("getQuery()");
 
         String queryString = query.toHql();
 
@@ -302,12 +301,12 @@ public abstract class QueryManager {
 
         try {
             List<Object> results = databaseQuery.list();
-            if (query.getRelated().isEmpty()) {
+            /*if (query.getRelated().isEmpty()) {
                 for (Object row : results) {
                     ResultSet<E> resultSet = new ResultSet<E>((E) row);
                     identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
                 }
-            } else {
+            } else {*/
                 List<String> classNames = query.getEntityClassnames();
                 for (Object row : results) {
                     ResultSet<E> resultSet = new ResultSet<E>(row, classNames);
@@ -318,7 +317,7 @@ public abstract class QueryManager {
                         existing.merge(resultSet);
                     }
                 }
-            }
+            //}
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

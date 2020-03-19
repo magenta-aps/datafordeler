@@ -133,7 +133,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     private Logger log = LogManager.getLogger(FapiBaseService.class.getCanonicalName());
 
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.RVD;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
 
@@ -377,6 +377,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                     "Incoming REST request for " + this.getServiceName() + " with query " + requestParams.toString()
             );
             this.checkAndLogAccess(loggerHelper);
+
             Q query = this.getQuery(requestParams, false);
             this.applyAreaRestrictionsToQuery(query, user);
             envelope.addQueryData(query);

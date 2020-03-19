@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,7 +62,7 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.LEGACY;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override
@@ -93,6 +94,8 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
     protected PersonRecordQuery getEmptyQuery() {
         //return new PersonRecordQuery();
         PersonRecordQuery query = new PersonRecordQuery();
+
+        query.addExtraJoin("LEFT JOIN cpr_person.address cpr_person__address");
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         EntityManager accessAddressManager = geoPlugin.getEntityManager("AccessAddress");

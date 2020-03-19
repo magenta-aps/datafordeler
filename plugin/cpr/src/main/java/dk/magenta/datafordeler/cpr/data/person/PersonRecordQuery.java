@@ -50,6 +50,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.personnumre.clear();
         if (personnumre != null) {
             this.personnumre.addAll(personnumre);
+            this.increaseDataParamCount();
         }
     }
 
@@ -75,6 +76,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.fornavn.clear();
         if (fornavne != null) {
             this.fornavn.addAll(fornavne);
+            this.increaseDataParamCount();
         }
     }
 
@@ -98,6 +100,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.efternavn.clear();
         if (efternavne != null) {
             this.efternavn.addAll(efternavne);
+            this.increaseDataParamCount();
         }
     }
 
@@ -124,6 +127,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.kommunekoder.clear();
         if (kommunekoder != null) {
             this.kommunekoder.addAll(kommunekoder);
+            this.increaseDataParamCount();
         }
     }
 

@@ -7,11 +7,16 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
@@ -47,6 +52,11 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @PostConstruct
+    private void register() {
+        this.register(PersonEntity.class);
+    }
 
     @Override
     public ObjectMapper getObjectMapper() {
@@ -132,6 +142,14 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         container.addBitemporal(PersonEntity.IO_FIELD_STATUS, record.getStatus(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_GUARDIAN, record.getGuardian(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_PROTECTION, record.getProtection());
+    }
+
+    public Map<Class, List<String>> getEligibleModifierNames() {
+        HashMap<Class, List<String>> map = new HashMap<>();
+        ArrayList<String> addressModifiers = new ArrayList<>();
+        addressModifiers.add("geo_road");
+        map.put(AddressDataRecord.class, addressModifiers);
+        return map;
     }
 
 }

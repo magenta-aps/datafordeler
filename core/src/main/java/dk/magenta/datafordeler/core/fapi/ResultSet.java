@@ -6,8 +6,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ResultSet<E extends IdentifiedEntity> {
-    E primaryEntity;
-    HashMap<Class, HashSet<IdentifiedEntity>> associatedEntities = new HashMap<>();
+    private E primaryEntity;
+    private HashMap<Class, HashSet<IdentifiedEntity>> associatedEntities = new HashMap<>();
 
     public ResultSet(E primaryEntity) {
         this.primaryEntity = primaryEntity;
@@ -30,11 +30,13 @@ public class ResultSet<E extends IdentifiedEntity> {
     }
 
     private void addAssociatedEntity(IdentifiedEntity entity) {
-        Class c = entity.getClass();
-        if (!this.associatedEntities.containsKey(c)) {
-            this.associatedEntities.put(c, new HashSet<>());
+        if (entity != null) {
+            Class c = entity.getClass();
+            if (!this.associatedEntities.containsKey(c)) {
+                this.associatedEntities.put(c, new HashSet<>());
+            }
+            this.associatedEntities.get(c).add(entity);
         }
-        this.associatedEntities.get(c).add(entity);
     }
 
     private void addAssociatedEntities(Collection<IdentifiedEntity> entities) {
@@ -54,8 +56,11 @@ public class ResultSet<E extends IdentifiedEntity> {
     }
 
     private static IdentifiedEntity cast(Object object, String className) throws ClassNotFoundException {
-        Class entityClass = Class.forName(className);
-        return (IdentifiedEntity) entityClass.cast(object);
+        if (object != null) {
+            Class entityClass = Class.forName(className);
+            return (IdentifiedEntity) entityClass.cast(object);
+        }
+        return null;
     }
 
     public E getPrimaryEntity() {
@@ -64,6 +69,10 @@ public class ResultSet<E extends IdentifiedEntity> {
 
     public Set<IdentifiedEntity> get(Class c) {
         return this.associatedEntities.get(c);
+    }
+
+    public Set<Class> getAssociatedEntityClasses() {
+        return this.associatedEntities.keySet();
     }
 
     public Set<IdentifiedEntity> get(Class c, boolean preferPrimary) {

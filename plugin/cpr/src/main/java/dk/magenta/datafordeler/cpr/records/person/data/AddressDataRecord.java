@@ -49,7 +49,7 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
 
 
     public static final String DB_FIELD_MUNICIPALITY_CODE = "municipalityCode";
-    public static final String IO_FIELD_MUNICIPALITY_CODE = "cprKommunekode";
+    public static final String IO_FIELD_MUNICIPALITY_CODE = "kommunekode";
     @Column(name = DB_FIELD_MUNICIPALITY_CODE)
     @JsonProperty(value = IO_FIELD_MUNICIPALITY_CODE)
     @XmlElement(name = IO_FIELD_MUNICIPALITY_CODE)
@@ -68,7 +68,7 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
 
 
     public static final String DB_FIELD_ROAD_CODE = "roadCode";
-    public static final String IO_FIELD_ROAD_CODE = "cprVejkode";
+    public static final String IO_FIELD_ROAD_CODE = "vejkode";
     @Column(name = DB_FIELD_ROAD_CODE)
     @JsonProperty(value = IO_FIELD_ROAD_CODE)
     @XmlElement(name = IO_FIELD_ROAD_CODE)
@@ -84,7 +84,7 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
 
 
     public static final String DB_FIELD_BUILDING_NUMBER = "buildingNumber";
-    public static final String IO_FIELD_BUILDING_NUMBER = "bygningsnummer";
+    public static final String IO_FIELD_BUILDING_NUMBER = "bnr";
     @Column(name = DB_FIELD_BUILDING_NUMBER)
     @JsonProperty(value = IO_FIELD_BUILDING_NUMBER)
     @XmlElement(name = IO_FIELD_BUILDING_NUMBER)

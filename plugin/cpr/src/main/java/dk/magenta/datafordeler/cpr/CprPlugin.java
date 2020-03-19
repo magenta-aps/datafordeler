@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * Datafordeler Plugin to fetch, parse and serve CPR data (data on people, roads and
@@ -129,10 +126,10 @@ public class CprPlugin extends Plugin {
         return s.toString();
     }
 
-    public List<String> getJoinClassAliases() {
-        ArrayList<String> aliases = new ArrayList<>(5);
-        aliases.add("cpr_road");
-        aliases.add("cpr_postalcode");
+    public LinkedHashMap<String, Class> getJoinClassAliases() {
+        LinkedHashMap<String, Class> aliases = new LinkedHashMap<>();
+        aliases.put("cpr_road", RoadEntity.class);
+        aliases.put("cpr_postalcode", RoadPostalcodeBitemporalRecord.class);
         return aliases;
     }
 
