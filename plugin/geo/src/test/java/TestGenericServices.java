@@ -49,6 +49,7 @@ public class TestGenericServices extends GeoTest {
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode munipialicity = (ObjectNode) responseContent.get("results").get(0);
         Assert.assertEquals("c8d54254-0086-3554-a4ce-424e4ebfd072", munipialicity.get("uuid").textValue());
+        Assert.assertNotNull(munipialicity.get("postdistrikt"));
         Assert.assertNull(munipialicity.get("registreringFra"));
     }
 
@@ -82,6 +83,15 @@ public class TestGenericServices extends GeoTest {
         Assert.assertEquals(200, response.getStatusCode().value());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode road = (ObjectNode) responseContent.get("results").get(0);
+        Assert.assertEquals("2e3776bf-05c2-433c-adb9-8a07df6b3e8f", road.get("uuid").textValue());
+        Assert.assertEquals("{69231C66-F37A-4F78-80C1-E379BFEE165D}", road.get("sumiffiik").textValue());
+        Assert.assertEquals("House of Testing!", road.get("blokNavn").get(0).textValue());
+        Assert.assertNull(road.get("registreringFra"));
+
+        response = this.lookup("/geo/accessaddress/1/rest/search?fmt=dataonly&vej=0254");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        road = (ObjectNode) responseContent.get("results").get(0);
         Assert.assertEquals("2e3776bf-05c2-433c-adb9-8a07df6b3e8f", road.get("uuid").textValue());
         Assert.assertEquals("{69231C66-F37A-4F78-80C1-E379BFEE165D}", road.get("sumiffiik").textValue());
         Assert.assertEquals("House of Testing!", road.get("blokNavn").get(0).textValue());
