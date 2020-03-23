@@ -38,6 +38,7 @@ public abstract class BaseQuery {
         PARAM_OUTPUT_WRAPPING_VALUEMAP.put("rdv", OutputWrapper.Mode.RDV);
         PARAM_OUTPUT_WRAPPING_VALUEMAP.put("drv", OutputWrapper.Mode.DRV);
         PARAM_OUTPUT_WRAPPING_VALUEMAP.put("legacy", OutputWrapper.Mode.LEGACY);
+        PARAM_OUTPUT_WRAPPING_VALUEMAP.put("dataonly", OutputWrapper.Mode.DATAONLY);
     }
 
     private static Logger log = LogManager.getLogger(BaseQuery.class.getCanonicalName());

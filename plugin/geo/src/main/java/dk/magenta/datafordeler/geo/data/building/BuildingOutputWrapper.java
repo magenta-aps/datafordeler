@@ -18,7 +18,7 @@ public class BuildingOutputWrapper extends GeoOutputWrapper<BuildingEntity> {
     }
 
     @Override
-    protected void fillContainer(OutputContainer container, BuildingEntity item) {
+    protected void fillContainer(OutputContainer container, BuildingEntity item, Mode mode) {
         container.addNontemporal("anr", item.getAnr());
         container.addNontemporal("bnr", item.getBnr());
         container.addMonotemporal("lokalitet", item.getLocality());
