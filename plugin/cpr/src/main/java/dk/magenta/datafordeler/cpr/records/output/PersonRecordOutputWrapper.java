@@ -7,11 +7,14 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
+import dk.magenta.datafordeler.cpr.records.person.GenericParentOutputDTO;
+import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
@@ -47,6 +50,10 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Value("${pitu.base.url}")
+    private String pituBaseUrl;
+
 
     @Override
     public ObjectMapper getObjectMapper() {
@@ -124,14 +131,27 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         container.addBitemporal(PersonEntity.IO_FIELD_FOREIGN_ADDRESS_EMIGRATION, record.getEmigration(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_MOVE_MUNICIPALITY, record.getMunicipalityMove());
         container.addBitemporal(PersonEntity.IO_FIELD_NAME, record.getName());
-        container.addBitemporal(PersonEntity.IO_FIELD_MOTHER, record.getMother());
-        container.addBitemporal(PersonEntity.IO_FIELD_FATHER, record.getFather());
+        container.addNontemporal(PersonEntity.IO_FIELD_MOTHER, getParentOutputDTO(record.getMother().iterator()));
+        container.addNontemporal(PersonEntity.IO_FIELD_FATHER, getParentOutputDTO(record.getFather().iterator()));
         container.addBitemporal(PersonEntity.IO_FIELD_CORE, record.getCore(),true);
         container.addBitemporal(PersonEntity.IO_FIELD_PNR, record.getPersonNumber(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_POSITION, record.getPosition(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_STATUS, record.getStatus(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_GUARDIAN, record.getGuardian(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_PROTECTION, record.getProtection());
+    }
+
+    public HashSet<GenericParentOutputDTO> getParentOutputDTO(Iterator<ParentDataRecord> parent) {
+        HashSet<GenericParentOutputDTO> parentList = new HashSet();
+        while(parent.hasNext()) {
+            GenericParentOutputDTO genericParentOutputDTO = new GenericParentOutputDTO();
+            ParentDataRecord p = parent.next();
+            genericParentOutputDTO.setCprNumber(p.getCprNumber());
+            genericParentOutputDTO.setMother(p.isMother());
+            genericParentOutputDTO.setPituBaseUrl(pituBaseUrl);
+            parentList.add(genericParentOutputDTO);
+        }
+        return parentList;
     }
 
 }
