@@ -51,11 +51,6 @@ public class JoinedQuery extends Condition {
                     j.add("LEFT JOIN remotesubalias.entity remotealias")
         }*/
 
-
-
-
-
-
         StringJoiner s = new StringJoiner(" AND ");
         for (String baseJoinHandle : this.joinHandles.keySet()) {
             String remoteJoinHandle = this.joinHandles.get(baseJoinHandle);

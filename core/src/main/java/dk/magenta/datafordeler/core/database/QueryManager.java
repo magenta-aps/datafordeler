@@ -292,7 +292,6 @@ public abstract class QueryManager {
      * @return
      */
     public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass) {
-        System.out.println("getAllEntitySets()");
         LinkedHashMap<E, ResultSet<E>> identitySetList = new LinkedHashMap<>();
         log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
         org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
@@ -301,23 +300,16 @@ public abstract class QueryManager {
 
         try {
             List<Object> results = databaseQuery.list();
-            /*if (query.getRelated().isEmpty()) {
-                for (Object row : results) {
-                    ResultSet<E> resultSet = new ResultSet<E>((E) row);
+            List<String> classNames = query.getEntityClassnames();
+            for (Object row : results) {
+                ResultSet<E> resultSet = new ResultSet<E>(row, classNames);
+                ResultSet<E> existing = identitySetList.get(resultSet.getPrimaryEntity());
+                if (existing == null) {
                     identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
+                } else {
+                    existing.merge(resultSet);
                 }
-            } else {*/
-                List<String> classNames = query.getEntityClassnames();
-                for (Object row : results) {
-                    ResultSet<E> resultSet = new ResultSet<E>(row, classNames);
-                    ResultSet<E> existing = identitySetList.get(resultSet.getPrimaryEntity());
-                    if (existing == null) {
-                        identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
-                    } else {
-                        existing.merge(resultSet);
-                    }
-                }
-            //}
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

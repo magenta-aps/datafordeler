@@ -66,9 +66,6 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
 
     public Object wrapResultSet(ResultSet<E> input, BaseQuery query, Mode mode) {
-        // TODO: Somehow wrap the resultset
-        System.out.println("Wrapping resultset "+input);
-
         for (Class associatedEntityClass : input.getAssociatedEntityClasses()) {
             OutputWrapper wrapper = wrapperMap.get(associatedEntityClass);
             if (wrapper instanceof RecordOutputWrapper) {
