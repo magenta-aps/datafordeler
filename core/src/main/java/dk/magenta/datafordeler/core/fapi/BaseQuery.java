@@ -989,6 +989,5 @@ public abstract class BaseQuery {
     }
     public void addExtraTables(LinkedHashMap<String, Class> tables) {
         this.extraTables.putAll(tables);
-        System.out.println("Added to extratables. It is now: "+this.extraTables);
     }
 }
