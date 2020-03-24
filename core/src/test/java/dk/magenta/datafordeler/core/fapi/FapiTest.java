@@ -321,7 +321,11 @@ public class FapiTest {
             headers.set("Accept", "text/csv");
             HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
             ResponseEntity<String> resp = this.restTemplate
-                    .exchange("/demo/postnummer/1/rest/" + uuid.toString(),
+                    .exchange("/demo/postnummer/1/rest/" + uuid.toString()
+                                    + "?registrationFromBefore=ALWAYS&"
+                                    + "registrationToAfter=ALWAYS&"
+                                    + "effectFromBefore=ALWAYS&"
+                                    + "effectToAfter=ALWAYS&",
                             HttpMethod.GET, httpEntity, String.class);
             Assert.assertEquals(200, resp.getStatusCode().value());
             Assert.assertEquals(new MediaType("text", "csv"),
@@ -353,7 +357,11 @@ public class FapiTest {
             headers.set("Accept", "text/tsv");
             HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
             ResponseEntity<String> resp = this.restTemplate.exchange(
-                    "/demo/postnummer/1/rest/" + uuid.toString(),
+                    "/demo/postnummer/1/rest/" + uuid.toString()
+                    + "?registrationFromBefore=ALWAYS&"
+                    + "registrationToAfter=ALWAYS&"
+                    + "effectFromBefore=ALWAYS&"
+                    + "effectToAfter=ALWAYS&",
                     HttpMethod.GET, httpEntity, String.class
             );
             Assert.assertEquals(200, resp.getStatusCode().value());

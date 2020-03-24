@@ -38,7 +38,10 @@ public abstract class BaseQuery {
         PARAM_OUTPUT_WRAPPING_VALUEMAP.put("rdv", OutputWrapper.Mode.RDV);
         PARAM_OUTPUT_WRAPPING_VALUEMAP.put("drv", OutputWrapper.Mode.DRV);
         PARAM_OUTPUT_WRAPPING_VALUEMAP.put("legacy", OutputWrapper.Mode.LEGACY);
+        PARAM_OUTPUT_WRAPPING_VALUEMAP.put("dataonly", OutputWrapper.Mode.DATAONLY);
     }
+
+    public static final String ALWAYSTIMEINTERVAL = "ALWAYS";
 
     private static Logger log = LogManager.getLogger(BaseQuery.class.getCanonicalName());
 
@@ -201,7 +204,11 @@ public abstract class BaseQuery {
     }
 
     public void setRegistrationFromBefore(String registrationFromBefore) {
-        this.setRegistrationFromBefore(registrationFromBefore, null);
+        if(ALWAYSTIMEINTERVAL.equals(registrationFromBefore)) {
+            this.registrationFromBefore = null;
+        } else {
+            this.setRegistrationFromBefore(registrationFromBefore, OffsetDateTime.now());
+        }
     }
 
     public void setRegistrationFromBefore(String registrationFromBefore, OffsetDateTime fallback) throws DateTimeParseException {
@@ -274,7 +281,11 @@ public abstract class BaseQuery {
     }
 
     public void setRegistrationToAfter(String registrationToAfter) {
-        this.setRegistrationToAfter(registrationToAfter, null);
+        if(ALWAYSTIMEINTERVAL.equals(registrationToAfter)) {
+            this.registrationToAfter = null;
+        } else {
+            this.setRegistrationToAfter(registrationToAfter, OffsetDateTime.now());
+        }
     }
 
     public void setRegistrationToAfter(String registrationToAfter, OffsetDateTime fallback) throws DateTimeParseException {
@@ -349,7 +360,11 @@ public abstract class BaseQuery {
     }
 
     public void setEffectFromBefore(String effectFromBefore) {
-        this.setEffectFromBefore(effectFromBefore, null);
+        if(ALWAYSTIMEINTERVAL.equals(effectFromBefore)) {
+            this.effectFromBefore = null;
+        } else {
+            this.setEffectFromBefore(effectFromBefore, OffsetDateTime.now());
+        }
     }
 
     public void setEffectFromBefore(String effectFromBefore, OffsetDateTime fallback) {
@@ -424,7 +439,11 @@ public abstract class BaseQuery {
     }
 
     public void setEffectToAfter(String effectToAfter) {
-        this.setEffectToAfter(effectToAfter, null);
+        if(ALWAYSTIMEINTERVAL.equals(effectToAfter)) {
+            this.effectToAfter = null;
+        } else {
+            this.setEffectToAfter(effectToAfter, OffsetDateTime.now());
+        }
     }
 
     public void setEffectToAfter(String effectToAfter, OffsetDateTime fallback) {

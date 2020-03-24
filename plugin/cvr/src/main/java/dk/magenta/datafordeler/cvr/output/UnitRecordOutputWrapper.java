@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
 
 /**
  * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
@@ -49,7 +50,7 @@ public class UnitRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyUnitR
     }
 
     @Override
-    protected void fillContainer(OutputContainer oContainer, CompanyUnitRecord record) {
+    protected void fillContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode mode) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         container.addNontemporal(CompanyUnitRecord.IO_FIELD_P_NUMBER, record.getpNumber());
@@ -88,7 +89,7 @@ public class UnitRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyUnitR
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, CompanyUnitRecord record) {
+    protected void fillMetadataContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode m) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         CompanyUnitMetadataRecord meta = record.getMetadata();

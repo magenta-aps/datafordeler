@@ -149,6 +149,13 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
         Assert.assertEquals("4ccc3b64-1779-38f2-a96c-458e541a010d", results.get(0).get("uuid").asText());
 
+        searchParameters.add("registrationFromBefore", "ALWAYS");
+        searchParameters.add("registrationToAfter", "ALWAYS");
+        searchParameters.add("effectFromBefore", "ALWAYS");
+        searchParameters.add("effectToAfter", "ALWAYS");
+        response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+
 
         testUserDetails.giveAccess(
                 plugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
@@ -251,6 +258,47 @@ public class QueryTest {
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(results));
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(1, results.size());
+    }
+
+    @Test
+    public void testPersonDataOnly() throws Exception {
+        whitelistLocalhost();
+        OffsetDateTime now = OffsetDateTime.now();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        loadPerson(importMetadata);
+        transaction.commit();
+        session.close();
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ParameterMap searchParameters = new ParameterMap();
+        searchParameters.add("fornavn", "Tester");
+
+        ResponseEntity<String> response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        JsonNode jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results = jsonBody.get("results");
+
+        JsonNode firstElement = results.get(0);
+        JsonNode registreringer = firstElement.get("registreringer");
+        Assert.assertNotNull(registreringer);
+
+        searchParameters.add("fmt", "dataonly");
+
+        response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        jsonBody = objectMapper.readTree(response.getBody());
+        results = jsonBody.get("results");
+
+        firstElement = results.get(0);
+        registreringer = firstElement.get("registreringer");
+        Assert.assertNull(registreringer);
     }
 
 }
