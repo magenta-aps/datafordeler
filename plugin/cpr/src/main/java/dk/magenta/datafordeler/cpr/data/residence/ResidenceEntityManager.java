@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr.data.residence;
 
 import dk.magenta.datafordeler.core.database.RegistrationReference;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.cpr.data.CprGeoEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRegistrationReference;
 import dk.magenta.datafordeler.cpr.data.residence.data.ResidenceBaseData;
@@ -51,6 +52,16 @@ public class ResidenceEntityManager extends CprGeoEntityManager<ResidenceRecord,
     @Override
     public String getSchema() {
         return ResidenceEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new ResidenceQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 
     @Override
