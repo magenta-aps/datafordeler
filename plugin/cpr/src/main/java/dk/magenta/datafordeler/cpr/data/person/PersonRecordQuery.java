@@ -84,6 +84,9 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addKommunekode(String kommunekode) {
         this.kommunekoder.add(kommunekode);
+        if (kommunekode != null) {
+            this.increaseDataParamCount();
+        }
     }
 
     public void addKommunekode(int kommunekode) {
@@ -104,6 +107,9 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addVejkode(String vejkode) {
         this.vejkoder.add(vejkode);
+        if (vejkode != null) {
+            this.increaseDataParamCount();
+        }
     }
 
     public void addVejkode(int vejkode) {
@@ -201,6 +207,11 @@ public class PersonRecordQuery extends BaseQuery {
         if (parameters.containsKey(KOMMUNEKODE)) {
             for (String kommunekode : parameters.get(KOMMUNEKODE)) {
                 this.addKommunekode(kommunekode);
+            }
+        }
+        if (parameters.containsKey(VEJKODE)) {
+            for (String vejkode : parameters.get(VEJKODE)) {
+                this.addVejkode(vejkode);
             }
         }
     }

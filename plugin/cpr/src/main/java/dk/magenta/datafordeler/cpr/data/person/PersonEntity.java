@@ -72,11 +72,11 @@ public class PersonEntity extends CprRecordEntity {
     public static final String schema = "Person";
 
     public static final String DB_FIELD_CPR_NUMBER = "personnummer";
-    public static final String IO_FIELD_CPR_NUMBER = "personnummer";
+    public static final String IO_FIELD_CPR_NUMBER = "pnr";
 
     @Column(name = DB_FIELD_CPR_NUMBER)
-    @JsonProperty("personnummer")
-    @XmlElement(name=("personnummer"))
+    @JsonProperty(IO_FIELD_CPR_NUMBER)
+    @XmlElement(name=(IO_FIELD_CPR_NUMBER))
     private String personnummer;
 
     public String getPersonnummer() {

@@ -301,4 +301,66 @@ public class QueryTest {
         Assert.assertNull(registreringer);
     }
 
+
+
+
+    @Test
+    public void testPersonGenericSearchParameters() throws Exception {
+        whitelistLocalhost();
+        OffsetDateTime now = OffsetDateTime.now();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        loadPerson(importMetadata);
+        transaction.commit();
+        session.close();
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ParameterMap searchParameters = new ParameterMap();
+        searchParameters.add("fmt", "dataonly");
+        searchParameters.add("pnr", "0101001234");
+
+        ResponseEntity<String> response = restSearch(searchParameters, "person");
+        JsonNode jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results1 = jsonBody.get("results");
+
+        searchParameters.remove("pnr");
+        searchParameters.add("fornavn", "Tester");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results2 = jsonBody.get("results");
+        Assert.assertEquals(results1, results2);
+
+        searchParameters.remove("fornavn");
+        searchParameters.add("efternavn", "Tystersen");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results3 = jsonBody.get("results");
+        Assert.assertEquals(results2, results3);
+
+        searchParameters.remove("efternavn");
+        searchParameters.add("cprKommunekode", "958");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results4 = jsonBody.get("results");
+        Assert.assertEquals(results3, results4);
+
+        searchParameters.remove("cprKommunekode");
+        searchParameters.add("cprVejkode", "111");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results5 = jsonBody.get("results");
+        Assert.assertEquals(results4, results5);
+
+
+
+
+
+    }
+
 }
