@@ -691,23 +691,23 @@ public abstract class BaseQuery {
     }
 
 
-                                               /**
-                                                * Convenience method for parsing a String as an OffsetDateTime
-                                                * A series of parsers will attempt to parse the input string, returning on the first success.
-                                                * The Parsers, in order, are:
-                                                *   DateTimeFormatter.ISO_OFFSET_DATE_TIME
-                                                *   DateTimeFormatter.ISO_ZONED_DATE_TIME
-                                                *   DateTimeFormatter.ISO_INSTANT
-                                                *   DateTimeFormatter.RFC_1123_DATE_TIME
-                                                *   DateTimeFormatter.ISO_OFFSET_DATE
-                                                *   DateTimeFormatter.ISO_DATE_TIME
-                                                *   DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                                                *   DateTimeFormatter.ISO_DATE
-                                                *   DateTimeFormatter.BASIC_ISO_DATE
-                                                * @param dateTime
-                                                * @return Parsed OffsetDateTime, or null if input was null
-                                                * @throws DateTimeParseException if no parser succeeded on a non-null input string
-                                                */
+   /**
+    * Convenience method for parsing a String as an OffsetDateTime
+    * A series of parsers will attempt to parse the input string, returning on the first success.
+    * The Parsers, in order, are:
+    *   DateTimeFormatter.ISO_OFFSET_DATE_TIME
+    *   DateTimeFormatter.ISO_ZONED_DATE_TIME
+    *   DateTimeFormatter.ISO_INSTANT
+    *   DateTimeFormatter.RFC_1123_DATE_TIME
+    *   DateTimeFormatter.ISO_OFFSET_DATE
+    *   DateTimeFormatter.ISO_DATE_TIME
+    *   DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    *   DateTimeFormatter.ISO_DATE
+    *   DateTimeFormatter.BASIC_ISO_DATE
+    * @param dateTime
+    * @return Parsed OffsetDateTime, or null if input was null
+    * @throws DateTimeParseException if no parser succeeded on a non-null input string
+    */
     public static OffsetDateTime parseDateTime(String dateTime, boolean urlDecode) throws DateTimeParseException {
         if (dateTime != null) {
             String decodedDateTime;
@@ -846,8 +846,8 @@ public abstract class BaseQuery {
         if (member != null && value != null && !value.isEmpty()) {
             try {
                 this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (QueryBuildException e) {
+                log.error(e);
             }
         }
     }
@@ -914,8 +914,8 @@ public abstract class BaseQuery {
             }
             try {
                 this.setupConditions();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (QueryBuildException e) {
+                log.error(e);
             }
             this.finalizedConditions = true;
         }
@@ -939,8 +939,8 @@ public abstract class BaseQuery {
             JoinedQuery joinedQuery = new JoinedQuery(this, query, joinHandles, this.condition);
             this.related.add(joinedQuery);
             this.condition.add(joinedQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (QueryBuildException e) {
+            log.error(e);
         }
     }
 
@@ -950,9 +950,7 @@ public abstract class BaseQuery {
         for (JoinedQuery joinedQuery : this.related) {
             identifiers.addAll(joinedQuery.getJoined().getEntityIdentifiers());
         }
-
         identifiers.addAll(this.extraTables.keySet());
-
         return identifiers;
     }
     protected List<String> getEntityClassnameStrings() {
@@ -970,7 +968,6 @@ public abstract class BaseQuery {
             classnames.addAll(joinedQuery.getJoined().getEntityClassnames());
         }
         classnames.addAll(this.extraTables.values().stream().map(Class::getCanonicalName).collect(Collectors.toList()));
-
         return classnames;
     }
     protected List<Join> getAllJoins() {
