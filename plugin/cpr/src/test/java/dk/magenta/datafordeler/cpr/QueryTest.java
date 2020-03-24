@@ -170,6 +170,7 @@ public class QueryTest {
         Assert.assertEquals(200, response.getStatusCode().value());
         jsonBody = objectMapper.readTree(response.getBody());
         results = jsonBody.get("results");
+        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(results));
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(0, results.size());
 
@@ -241,9 +242,8 @@ public class QueryTest {
         JsonNode results = jsonBody.get("results");
         Assert.assertTrue(results.isArray());
 
-        //System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(results));
         Assert.assertEquals(1, results.size());
-        Assert.assertEquals(4, results.get(0).size());
+        Assert.assertEquals(8, results.get(0).size());
 
         searchParameters = new ParameterMap();
         searchParameters.add("registreringFraFør", "2011-06-17T14:06:19.196");
@@ -279,6 +279,7 @@ public class QueryTest {
 
         ParameterMap searchParameters = new ParameterMap();
         searchParameters.add("fornavn", "Tester");
+        searchParameters.add("fmt", "rvd");
 
         ResponseEntity<String> response = restSearch(searchParameters, "person");
         Assert.assertEquals(200, response.getStatusCode().value());
@@ -289,7 +290,7 @@ public class QueryTest {
         JsonNode registreringer = firstElement.get("registreringer");
         Assert.assertNotNull(registreringer);
 
-        searchParameters.add("fmt", "dataonly");
+        searchParameters.replace("fmt", "dataonly");
 
         response = restSearch(searchParameters, "person");
         Assert.assertEquals(200, response.getStatusCode().value());

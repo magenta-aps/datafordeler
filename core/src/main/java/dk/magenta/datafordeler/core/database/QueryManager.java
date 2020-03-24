@@ -197,8 +197,6 @@ public abstract class QueryManager {
             stringJoiner.add(queryString.toString());
         }
 
-        System.out.println(queryString);
-
         // Build query
         org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
 
@@ -218,7 +216,7 @@ public abstract class QueryManager {
         }
 
         if (logQuery) {
-            //log.info(stringJoiner.toString());
+            log.info(stringJoiner.toString());
             System.out.println(stringJoiner.toString());
         }
 

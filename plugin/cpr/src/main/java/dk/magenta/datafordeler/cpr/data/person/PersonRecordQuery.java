@@ -38,12 +38,14 @@ public class PersonRecordQuery extends BaseQuery {
         this.personnumre.add(personnummer);
         if (personnummer != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
     public void setPersonnummer(String personnummer) {
         this.personnumre.clear();
         this.addPersonnummer(personnummer);
+        this.addParameter();
     }
 
     public void setPersonnumre(Collection<String> personnumre) {
@@ -51,6 +53,7 @@ public class PersonRecordQuery extends BaseQuery {
         if (personnumre != null) {
             this.personnumre.addAll(personnumre);
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -64,11 +67,13 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void clearFornavn() {
         this.fornavn.clear();
+        this.addParameter();
     }
     public void addFornavn(String fornavn) {
         this.fornavn.add(fornavn);
         if (fornavn != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -77,6 +82,7 @@ public class PersonRecordQuery extends BaseQuery {
         if (fornavne != null) {
             this.fornavn.addAll(fornavne);
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -88,12 +94,15 @@ public class PersonRecordQuery extends BaseQuery {
     }
     public void clearEfternavn() {
         this.efternavn.clear();
+        this.addParameter();
     }
 
     public void setEfternavn(String efternavn) {
+        this.efternavn.clear();
         this.efternavn.add(efternavn);
         if (efternavn != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
     public void setEfternavne(Collection<String> efternavne) {
@@ -101,6 +110,7 @@ public class PersonRecordQuery extends BaseQuery {
         if (efternavne != null) {
             this.efternavn.addAll(efternavne);
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -114,6 +124,7 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addKommunekode(String kommunekode) {
         this.kommunekoder.add(kommunekode);
+        this.addParameter();
     }
 
     public void addKommunekode(int kommunekode) {
@@ -122,12 +133,14 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void clearKommunekode() {
         this.kommunekoder.clear();
+        this.addParameter();
     }
     public void setKommunekoder(Collection<String> kommunekoder) {
         this.kommunekoder.clear();
         if (kommunekoder != null) {
             this.kommunekoder.addAll(kommunekoder);
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -141,6 +154,7 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addVejkode(String vejkode) {
         this.vejkoder.add(vejkode);
+        this.addParameter();
     }
 
     public void addVejkode(int vejkode) {
@@ -149,11 +163,13 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void clearVejkode() {
         this.vejkoder.clear();
+        this.addParameter();
     }
     public void setVejkoder(Collection<String> vejkoder) {
         this.vejkoder.clear();
         if (vejkoder != null) {
             this.vejkoder.addAll(vejkoder);
+            this.addParameter();
         }
     }
 
@@ -167,15 +183,18 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addDoor(String door) {
         this.doors.add(door);
+        this.addParameter();
     }
 
     public void clearDoor() {
         this.doors.clear();
+        this.addParameter();
     }
     public void setDoors(Collection<String> doors) {
         this.doors.clear();
         if (doors != null) {
             this.doors.addAll(doors);
+            this.addParameter();
         }
     }
 
@@ -190,15 +209,18 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addFloor(String floor) {
         this.floors.add(floor);
+        this.addParameter();
     }
 
     public void clearFloor() {
         this.floors.clear();
+        this.addParameter();
     }
     public void setFloors(Collection<String> floors) {
         this.floors.clear();
         if (floors != null) {
             this.floors.addAll(floors);
+            this.addParameter();
         }
     }
 
@@ -212,15 +234,18 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addHouseNo(String houseNo) {
         this.houseNos.add(houseNo);
+        this.addParameter();
     }
 
     public void clearHouseNo() {
         this.houseNos.clear();
+        this.addParameter();
     }
     public void setHouseNos(Collection<String> houseNos) {
         this.houseNos.clear();
         if (houseNos != null) {
             this.houseNos.addAll(houseNos);
+            this.addParameter();
         }
     }
 
@@ -234,15 +259,18 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addBuildingNo(String houseNo) {
         this.buildingNos.add(houseNo);
+        this.addParameter();
     }
 
     public void clearBuildingNo() {
         this.buildingNos.clear();
+        this.addParameter();
     }
     public void setBuildingNos(Collection<String> buildingNos) {
         this.buildingNos.clear();
         if (buildingNos != null) {
             this.buildingNos.addAll(buildingNos);
+            this.addParameter();
         }
     }
 
@@ -310,6 +338,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("door", this.doors);
         this.addCondition("housenumber", this.houseNos);
         this.addCondition("bnr", this.buildingNos);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 
 

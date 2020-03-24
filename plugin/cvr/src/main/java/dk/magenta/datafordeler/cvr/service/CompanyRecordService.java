@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
+import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
@@ -100,7 +101,10 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
     @Override
     protected CompanyRecordQuery getEmptyQuery() {
         CompanyRecordQuery query = new CompanyRecordQuery();
-        /*query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+
+        /*EntityManager accessAddressManager = geoPlugin.getEntityManager("AccessAddress");
+        query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality cvr_company__locationAddress__municipality");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress__municipality.municipality cvr_company__locationAddress__municipality__municipality");
 
@@ -112,6 +116,22 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
             query.addExtraJoin(geoPlugin.getJoinString(handles));
             query.addExtraTables(geoPlugin.getJoinClassAliases());
         }*/
+
+
+        query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
+
+
+        HashMap<String, String> handles = new HashMap<>();
+        handles.put("municipalitycode", "cvr_company__locationAddress.municipality.code");
+        handles.put("roadcode", "cvr_company__locationAddress.roadCode");
+        handles.put("housenumber", "cvr_company__locationAddress.houseNumberFrom");
+
+        query.addExtraJoin(geoPlugin.getJoinString(handles));
+        query.addExtraTables(geoPlugin.getJoinClassAliases());
+
+        //query.addExtraJoin(cprPlugin.getJoinString(handles));
+        //query.addExtraTables(cprPlugin.getJoinClassAliases());
+
         return query;
     }
 

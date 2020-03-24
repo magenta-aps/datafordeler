@@ -79,9 +79,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
 
     @Override
     protected void fillContainer(OutputContainer container, PersonEntity record, Mode mode) {
-
         container.addNontemporal(PersonEntity.IO_FIELD_CPR_NUMBER, record.getPersonnummer());
-
         container.addBitemporal(PersonEntity.IO_FIELD_ADDRESS_CONAME, record.getConame(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_ADDRESS, record.getAddress());
         container.addBitemporal(PersonEntity.IO_FIELD_ADDRESS_NAME, record.getAddressName());

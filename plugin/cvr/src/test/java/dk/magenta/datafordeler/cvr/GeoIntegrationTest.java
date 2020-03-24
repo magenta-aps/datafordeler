@@ -55,7 +55,7 @@ public class GeoIntegrationTest {
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {
-            
+
             HashMap<String, String> handles = new HashMap<>();
             handles.put("municipalitycode", "cvr_company__locationAddress__municipality__municipality.code");
             handles.put("roadcode", "cvr_company__locationAddress.roadCode");

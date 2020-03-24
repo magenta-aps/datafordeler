@@ -188,6 +188,7 @@ public class RoadTest extends TestBase {
         JsonNode results = jsonBody.get("results");
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(9, results.size());
+        System.out.println(this.getObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(results));
 
         for (int i=0; i<results.size(); i++) {
             ObjectNode roadNode = (ObjectNode) results.get(i);

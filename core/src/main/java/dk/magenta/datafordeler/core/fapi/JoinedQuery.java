@@ -1,5 +1,9 @@
 package dk.magenta.datafordeler.core.fapi;
 
+import dk.magenta.datafordeler.core.database.QueryManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 
 /**
@@ -12,6 +16,8 @@ public class JoinedQuery extends Condition {
     private BaseQuery base;
     private BaseQuery joined;
     Map<String, String> joinHandles;
+
+    private static Logger log = LogManager.getLogger(JoinedQuery.class.getCanonicalName());
 
 
     public JoinedQuery(BaseQuery base, BaseQuery joined, Map<String, String> joinHandleKeys, MultiCondition parentCondition) throws Exception {
@@ -43,14 +49,6 @@ public class JoinedQuery extends Condition {
     public String toHql() {
         // Create a hql string representing this join, for insertion in a JOIN clause
         // resolved join handles for each table are inserted in pairs
-
-        /*StringJoiner j = new StringJoiner(" \n");
-        for (String baseJoinHandle : this.joinHandles.keySet()) {
-            String remoteJoinHandle = this.joinHandles.get(baseJoinHandle);
-            j.add("LEFT JOIN remotesubclass remotesubalias on ourhandle = remotehandle")
-                    j.add("LEFT JOIN remotesubalias.entity remotealias")
-        }*/
-
         StringJoiner s = new StringJoiner(" AND ");
         for (String baseJoinHandle : this.joinHandles.keySet()) {
             String remoteJoinHandle = this.joinHandles.get(baseJoinHandle);
@@ -59,7 +57,7 @@ public class JoinedQuery extends Condition {
                 String[] baseJoinHandleItems = baseJoinHandle.split(",");
                 String[] remoteJoinHandleItems = remoteJoinHandle.split(",");
                 if (baseJoinHandleItems.length != remoteJoinHandleItems.length) {
-                    System.out.println("Error: csep mismatch in join: "+baseJoinHandle+" vs "+remoteJoinHandle);
+                    log.error("Error: csep mismatch in join: "+baseJoinHandle+" vs "+remoteJoinHandle);
                 } else {
                     StringJoiner o = new StringJoiner(" OR ");
                     for (int i=0; i<baseJoinHandleItems.length; i++) {

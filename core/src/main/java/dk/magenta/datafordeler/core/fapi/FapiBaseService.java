@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -387,7 +388,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             if (this.getOutputWrapper() != null) {
                 envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
-                ArrayNode jacksonConverted = objectMapper.valueToTree(results);
+                ArrayNode jacksonConverted = objectMapper.valueToTree(results.stream().map(resultset -> resultset.getPrimaryEntity()).collect(Collectors.toList()));
                 ArrayList<Object> wrapper = new ArrayList<>();
                 for (JsonNode node : jacksonConverted) {
                     wrapper.add(node);

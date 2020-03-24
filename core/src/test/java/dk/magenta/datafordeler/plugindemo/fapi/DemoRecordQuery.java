@@ -85,7 +85,7 @@ public class DemoRecordQuery extends BaseQuery {
 
     static {
         joinHandles.put("postnr", DemoEntityRecord.DB_FIELD_ADDRESS_NUMBER);
-        joinHandles.put("bynavn", DemoEntityRecord.DB_FIELD_NAME + BaseLookupDefinition.separator + DemoDataRecord.DB_FIELD_NAME);
+        joinHandles.put("bynavn", DemoEntityRecord.DB_FIELD_NAME + BaseQuery.separator + DemoDataRecord.DB_FIELD_NAME);
     }
 
     @Override

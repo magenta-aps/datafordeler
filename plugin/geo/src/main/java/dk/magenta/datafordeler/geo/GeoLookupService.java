@@ -63,10 +63,6 @@ public class GeoLookupService extends CprLookupService {
 
                 List<ResultSet<AccessAddressEntity>> results = QueryManager.getAllEntitySets(session, accessAddressQuery, AccessAddressEntity.class);
 
-
-                System.out.println(results);
-
-
                 GeoLookupDTO geoLookupDTO = new GeoLookupDTO(results.iterator().next());
 /*
 

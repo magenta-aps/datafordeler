@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  */
 public abstract class BaseQuery {
 
+    public static final String separator = ".";
     public static final String[] PARAM_PAGE = new String[] {"side", "page"};
     public static final String[] PARAM_PAGESIZE = new String[] {"sidestoerrelse", "pageSize"};
     public static final String[] PARAM_REGISTRATION_FROM_BEFORE = new String[] {"registreringFraFør", "registrationFromBefore"};
@@ -590,6 +591,7 @@ public abstract class BaseQuery {
         if (modeString != null) {
             this.mode = PARAM_OUTPUT_WRAPPING_VALUEMAP.get(modeString);
         }
+        this.addParameter();
     }
 
     private int dataParamCount = 0;
@@ -840,9 +842,8 @@ public abstract class BaseQuery {
         this.finalizedConditions = false;
         String member = this.useJoinHandle(handle);
         String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replace(".", "__");
-        if (member != null) {
+        if (member != null && value != null && !value.isEmpty()) {
             try {
-                System.out.println(value);
                 this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -917,6 +918,10 @@ public abstract class BaseQuery {
             }
             this.finalizedConditions = true;
         }
+    }
+
+    protected void addParameter() {
+        this.finalizedConditions = false;
     }
 
     protected abstract void setupConditions() throws Exception;

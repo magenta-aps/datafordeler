@@ -98,9 +98,9 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
         query.addExtraJoin("LEFT JOIN cpr_person.address cpr_person__address");
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
-        EntityManager accessAddressManager = geoPlugin.getEntityManager("AccessAddress");
 
         /*
+        EntityManager accessAddressManager = geoPlugin.getEntityManager("AccessAddress");
         // Get an accessaddressquery with joins on the entities we are interested in
         BaseQuery accessAddressQuery = accessAddressManager.getQuery("municipality", "road", "postcode", "locality");
         // Specify how we join with the accessaddressquery
@@ -110,7 +110,6 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
         joinHandles.put("bnr_or_housenumber", "bnr_or_housenumber");
         query.addRelated(accessAddressQuery, joinHandles);
         */
-
 
         HashMap<String, String> handles = new HashMap<>();
         handles.put("municipalitycode", "cpr_person__address.municipalityCode");

@@ -31,6 +31,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
         this.kommunekoder.add(kommunekode);
         if (kommunekode != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -49,6 +50,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
         this.vejkode = vejkode;
         if (vejkode != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -67,6 +69,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
         this.husnummer = husnummer;
         if (husnummer != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -81,6 +84,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
         this.etage = etage;
         if (etage != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
@@ -95,6 +99,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
         this.sideDoer = sideDoer;
         if (sideDoer != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 

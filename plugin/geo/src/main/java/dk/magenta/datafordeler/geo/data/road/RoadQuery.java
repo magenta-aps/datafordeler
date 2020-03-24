@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.geo.data.road;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -238,11 +239,11 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     static {
         joinHandles.put("code", GeoRoadEntity.DB_FIELD_CODE);
-        joinHandles.put("name", GeoRoadEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + RoadNameRecord.DB_FIELD_NAME);
-        joinHandles.put("addressingname", GeoRoadEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + RoadNameRecord.DB_FIELD_ADDRESSING_NAME);
-        joinHandles.put("localitycode", GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_CODE);
-        joinHandles.put("localityuuid", GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_REFERENCE + BaseLookupDefinition.separator + Identification.DB_FIELD_UUID);
-        joinHandles.put("municipalitycode", GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE);
+        joinHandles.put("name", GeoRoadEntity.DB_FIELD_NAME + BaseQuery.separator + RoadNameRecord.DB_FIELD_NAME);
+        joinHandles.put("addressingname", GeoRoadEntity.DB_FIELD_NAME + BaseQuery.separator + RoadNameRecord.DB_FIELD_ADDRESSING_NAME);
+        joinHandles.put("localitycode", GeoRoadEntity.DB_FIELD_LOCALITY + BaseQuery.separator + RoadLocalityRecord.DB_FIELD_CODE);
+        joinHandles.put("localityuuid", GeoRoadEntity.DB_FIELD_LOCALITY + BaseQuery.separator + RoadLocalityRecord.DB_FIELD_REFERENCE + BaseQuery.separator + Identification.DB_FIELD_UUID);
+        joinHandles.put("municipalitycode", GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseQuery.separator + RoadMunicipalityRecord.DB_FIELD_CODE);
 
 
         //RoadNameRecord.class, namealias, member

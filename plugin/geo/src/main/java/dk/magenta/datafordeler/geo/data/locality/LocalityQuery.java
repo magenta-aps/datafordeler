@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.locality;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -126,7 +127,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     static {
         joinHandles.put("code", GeoLocalityEntity.DB_FIELD_CODE);
         joinHandles.put("name", GeoLocalityEntity.DB_FIELD_NAME);
-        joinHandles.put("municipalitycode", GeoLocalityEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + LocalityMunicipalityRecord.DB_FIELD_CODE);
+        joinHandles.put("municipalitycode", GeoLocalityEntity.DB_FIELD_MUNICIPALITY + BaseQuery.separator + LocalityMunicipalityRecord.DB_FIELD_CODE);
     }
 
     @Override

@@ -27,6 +27,12 @@ public class ParameterMap extends ListHashMap<String, String> {
         return this;
     }
 
+    public ParameterMap replace(String key, String value) {
+        super.remove(key);
+        super.add(key, value);
+        return this;
+    }
+
     public String asUrlParams() {
         StringJoiner sj = new StringJoiner("&");
         for (String key : this.keySet()) {

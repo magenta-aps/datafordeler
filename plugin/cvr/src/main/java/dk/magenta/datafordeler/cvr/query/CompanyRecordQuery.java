@@ -394,14 +394,14 @@ public class CompanyRecordQuery extends BaseQuery {
 
     static {
         joinHandles.put("cvr", CompanyRecord.DB_FIELD_CVR_NUMBER);
-        joinHandles.put("formcode", CompanyRecord.DB_FIELD_FORM + LookupDefinition.separator + FormRecord.DB_FIELD_FORM + LookupDefinition.separator + CompanyForm.DB_FIELD_CODE);
+        joinHandles.put("formcode", CompanyRecord.DB_FIELD_FORM + BaseQuery.separator + FormRecord.DB_FIELD_FORM + BaseQuery.separator + CompanyForm.DB_FIELD_CODE);
         joinHandles.put("advertprotection", CompanyRecord.DB_FIELD_ADVERTPROTECTION);
-        joinHandles.put("name", CompanyRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME);
-        joinHandles.put("phone", CompanyRecord.DB_FIELD_PHONE + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA);
-        joinHandles.put("fax", CompanyRecord.DB_FIELD_FAX + LookupDefinition.separator +ContactRecord.DB_FIELD_DATA);
-        joinHandles.put("email", CompanyRecord.DB_FIELD_EMAIL + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA);
-        joinHandles.put("municipalitycode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
-        joinHandles.put("roadcode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
+        joinHandles.put("name", CompanyRecord.DB_FIELD_NAMES + BaseQuery.separator + SecNameRecord.DB_FIELD_NAME);
+        joinHandles.put("phone", CompanyRecord.DB_FIELD_PHONE + BaseQuery.separator + ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("fax", CompanyRecord.DB_FIELD_FAX + BaseQuery.separator +ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("email", CompanyRecord.DB_FIELD_EMAIL + BaseQuery.separator + ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("municipalitycode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
+        joinHandles.put("roadcode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
 
     }
 

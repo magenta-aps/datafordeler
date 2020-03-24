@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.postcode;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -103,7 +104,7 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
 
     static {
         joinHandles.put("code", PostcodeEntity.DB_FIELD_CODE);
-        joinHandles.put("name", PostcodeEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + PostcodeNameRecord.DB_FIELD_NAME);
+        joinHandles.put("name", PostcodeEntity.DB_FIELD_NAME + BaseQuery.separator + PostcodeNameRecord.DB_FIELD_NAME);
     }
 
     @Override

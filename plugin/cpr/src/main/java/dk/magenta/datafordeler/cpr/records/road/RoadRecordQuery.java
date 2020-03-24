@@ -34,11 +34,13 @@ public class RoadRecordQuery extends BaseQuery {
         this.vejkoder.add(vejkode);
         if (vejkode != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
     public void setVejkode(String vejkode) {
         this.vejkoder.clear();
+        this.addParameter();
         this.addVejkode(vejkode);
     }
 
@@ -60,11 +62,13 @@ public class RoadRecordQuery extends BaseQuery {
         this.vejnavne.add(vejnavn);
         if (vejnavn != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
     public void setVejnavn(String vejnavn) {
         this.vejnavne.clear();
+        this.addParameter();
         this.addVejnavn(vejnavn);
     }
 
@@ -82,11 +86,13 @@ public class RoadRecordQuery extends BaseQuery {
         this.kommunekoder.add(kommunekode);
         if (kommunekode != null) {
             this.increaseDataParamCount();
+            this.addParameter();
         }
     }
 
     public void setKommunekode(String kommunekode) {
         this.kommunekoder.clear();
+        this.addParameter();
         this.addKommunekode(kommunekode);
     }
 

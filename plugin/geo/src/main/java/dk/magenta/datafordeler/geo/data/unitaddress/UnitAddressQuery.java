@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.unitaddress;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -225,8 +226,8 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     private static HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
-        joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseLookupDefinition.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);
-        joinHandles.put("door", UnitAddressEntity.DB_FIELD_DOOR + BaseLookupDefinition.separator + UnitAddressDoorRecord.DB_FIELD_DOOR);
+        joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseQuery.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);
+        joinHandles.put("door", UnitAddressEntity.DB_FIELD_DOOR + BaseQuery.separator + UnitAddressDoorRecord.DB_FIELD_DOOR);
         joinHandles.put("accessaddress_id", UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS);
     }
 
