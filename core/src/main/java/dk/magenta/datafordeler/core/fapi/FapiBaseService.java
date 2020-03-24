@@ -603,7 +603,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
         List<MediaType> acceptedTypes = MediaType.parseMediaTypes(request.getHeader("Accept"));
 
-        Set<String> omitEntityKeys = Collections.singleton("domain");
+        Set<String> omitEntityKeys = new HashSet<>();
+        omitEntityKeys.add("domain");
+        omitEntityKeys.add("domæne");
         BaseQuery baseQuery = this.getEmptyQuery();
         Iterator<Map<String, String>> dataIter = entities.map(e -> {
             List<Map<String, String>> rows = new ArrayList<>();

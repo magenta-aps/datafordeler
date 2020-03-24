@@ -9,7 +9,7 @@
   <results>
     <results>
       <uuid>00000000-0000-0000-0000-000000003900</uuid>
-      <domain>http://example.com</domain>
+      <domæne>http://example.com</domæne>
       <postnr>3900</postnr>
       <registreringer>
         <registreringFra>XXX</registreringFra>
@@ -23,7 +23,7 @@
     </results>
     <results>
       <uuid>00000000-0000-0000-0000-000000003992</uuid>
-      <domain>http://example.com</domain>
+      <domæne>http://example.com</domæne>
       <postnr>3992</postnr>
       <registreringer>
         <registreringFra>XXX</registreringFra>

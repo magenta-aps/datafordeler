@@ -8,7 +8,7 @@
   "pageSize" : 10,
   "results" : [ {
     "uuid" : "00000000-0000-0000-0000-000000003900",
-    "domain" : "http://example.com",
+    "domæne" : "http://example.com",
     "postnr" : 3900,
     "registreringer" : [ {
       "registreringFra" : XXX,
@@ -21,7 +21,7 @@
     } ]
   }, {
     "uuid" : "00000000-0000-0000-0000-000000003992",
-    "domain" : "http://example.com",
+    "domæne" : "http://example.com",
     "postnr" : 3992,
     "registreringer" : [ {
       "registreringFra" : XXX,

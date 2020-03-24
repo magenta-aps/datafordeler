@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.plugindemo.model.DemoDataRecord;
 import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,33 +21,26 @@ public class DemoRecordQuery extends BaseQuery {
     public DemoRecordQuery(){}
 
     @QueryField(type = QueryField.FieldType.INT, queryName = POSTNR)
-    private String postnr;
+    private ArrayList<String> postnr = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = BYNAVN)
-    private String bynavn;
-
-    public String getPostnr() {
-        return postnr;
-    }
+    private ArrayList<String> bynavn = new ArrayList<>();
 
     public void setPostnr(int postnr) {
-        this.postnr = Integer.toString(postnr);
+        this.postnr.add(Integer.toString(postnr));
+        this.increaseDataParamCount();
     }
 
     public void setPostnr(String postnr) {
-        this.postnr = postnr;
         if (postnr != null) {
+            this.postnr.add(postnr);
             this.increaseDataParamCount();
         }
     }
 
-    public String getBynavn() {
-        return bynavn;
-    }
-
     public void setBynavn(String bynavn) {
-        this.bynavn = bynavn;
         if (bynavn != null) {
+            this.bynavn.add(bynavn);
             this.increaseDataParamCount();
         }
     }
@@ -79,7 +73,7 @@ public class DemoRecordQuery extends BaseQuery {
 
     @Override
     public String getEntityClassname() {
-        return Entity.class.getCanonicalName();
+        return DemoEntityRecord.class.getCanonicalName();
     }
 
     @Override
@@ -87,14 +81,22 @@ public class DemoRecordQuery extends BaseQuery {
         return "entity";
     }
 
-    @Override
-    protected Map<String, String> joinHandles() {
-        return Collections.emptyMap();
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("postnr", DemoEntityRecord.DB_FIELD_ADDRESS_NUMBER);
+        joinHandles.put("bynavn", DemoEntityRecord.DB_FIELD_NAME + BaseLookupDefinition.separator + DemoDataRecord.DB_FIELD_NAME);
     }
 
     @Override
-    protected void setupConditions() {
-        // this.addCondition();
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("postnr", this.postnr, Integer.class);
+        this.addCondition("bynavn", this.bynavn);
     }
 
 }

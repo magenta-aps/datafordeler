@@ -330,10 +330,17 @@ public abstract class QueryManager {
          */
     public static <E extends IdentifiedEntity, D extends DataItem> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query<E> databaseQuery = QueryManager.getQuery(session, query, eClass);
+        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setFetchSize(1000);
-        Stream<E> results = databaseQuery.stream();
+        Stream<E> results = databaseQuery.stream().map(object -> {
+            try {
+                return new ResultSet<E>(object, query.getEntityClassnames()).getPrimaryEntity();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
         return results;
     }
 

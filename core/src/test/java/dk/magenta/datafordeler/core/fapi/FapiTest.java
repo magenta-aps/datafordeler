@@ -686,7 +686,7 @@ public class FapiTest {
         ResponseEntity<String> resp = getRegistrationFilterRequest(urlBase,
                 null, registerOverlapEnd, registerOverlapStart, null,
                 null,effectOverlapEnd, effectOverlapStart, null,
-                MediaType.APPLICATION_JSON_VALUE);
+                MediaType.APPLICATION_JSON_VALUE, "rvd");
         JsonNode jsonBody = objectMapper.readTree(resp.getBody());
 
         ArrayNode list = (ArrayNode) jsonBody.get("results");
@@ -707,7 +707,7 @@ public class FapiTest {
             String urlBase,
             String registerFromAfter, String registerFromBefore, String registerToAfter, String registerToBefore,
             String effectFromAfter, String effectFromBefore, String effectToAfter, String effectToBefore,
-            String mediaType
+            String mediaType, String mode
     ) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", mediaType);
@@ -748,6 +748,9 @@ public class FapiTest {
             }
             if (effectToBefore != null) {
                 parameters.add(Query.PARAM_EFFECT_TO_BEFORE[0], effectToBefore);
+            }
+            if (mode != null) {
+                parameters.add(Query.PARAM_OUTPUT_WRAPPING[0], mode);
             }
             if (parameters.size() > 0) {
                 sb.append(urlBase.contains("?") ? "&" : "?");

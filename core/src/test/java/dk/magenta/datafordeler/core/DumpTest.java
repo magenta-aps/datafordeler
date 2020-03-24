@@ -345,7 +345,7 @@ public class DumpTest extends GapiTestBase {
             .stream(Format.values()).map(f ->
                 new DumpConfiguration(
                     "duuump-" + f.name(),
-                    "/demo/postnummer/1/rest/search?postnr=*",
+                    "/demo/postnummer/1/rest/search?postnr=*&fmt=rvd",
                     f,
                     Charsets.UTF_8,
                     "* * * * * *",
@@ -389,6 +389,7 @@ public class DumpTest extends GapiTestBase {
                 s -> s
                     .replace(localString, "XXX")
                     .replace("\"XXX\"", "XXX")
+                    .strip()
             ).map(DumpTest::unifyNewlines).toArray());
 
         session.close();

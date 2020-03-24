@@ -61,29 +61,4 @@ public class DemoRecordOutputWrapper extends RecordOutputWrapper<DemoEntityRecor
         }
     }
 
-
-    public final ObjectNode getNode(DemoEntityRecord record, Bitemporality overlap, Mode mode) {
-        ObjectNode root = this.objectMapper.createObjectNode();
-        root.put(Entity.IO_FIELD_UUID, record.getIdentification().getUuid().toString());
-        root.put(Entity.IO_FIELD_DOMAIN, record.getIdentification().getDomain());
-        OutputContainer recordOutput = new OutputContainer();
-        this.fillContainer(recordOutput, record, mode);
-        root.setAll(recordOutput.getBase());
-        switch (mode) {
-            case RVD:
-                root.setAll(recordOutput.getRVD(overlap));
-                break;
-            case RDV:
-                root.setAll(recordOutput.getRDV(overlap));
-                break;
-            case DRV:
-                root.setAll(recordOutput.getDRV(overlap));
-                break;
-            default:
-                root.setAll(this.fallbackOutput(mode, recordOutput, overlap));
-                break;
-        }
-        return root;
-    }
-
 }

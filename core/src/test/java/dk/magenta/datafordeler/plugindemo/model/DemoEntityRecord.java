@@ -80,7 +80,7 @@ public class DemoEntityRecord extends DatabaseEntry implements IdentifiedEntity 
     }
 
 
-    public static final String DB_FIELD_ADDRESS_NUMBER = "number";
+    public static final String DB_FIELD_ADDRESS_NUMBER = "postnr";
     public static final String IO_FIELD_ADDRESS_NUMBER = "postnr";
 
     @Column(name = DB_FIELD_ADDRESS_NUMBER)

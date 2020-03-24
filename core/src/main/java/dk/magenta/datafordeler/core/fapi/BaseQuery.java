@@ -564,7 +564,6 @@ public abstract class BaseQuery {
      * @param parameterMap
      */
     public void fillFromParameters(ParameterMap parameterMap, boolean limitsOnly) throws InvalidClientInputException {
-        System.out.println(this.getClass().getCanonicalName()+".fillFromParameters("+parameterMap.toString()+")");
         this.setPage(parameterMap.getFirstOf(PARAM_PAGE));
         this.setPageSize(parameterMap.getFirstOf(PARAM_PAGESIZE));
         try {
@@ -843,6 +842,7 @@ public abstract class BaseQuery {
         String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replace(".", "__");
         if (member != null) {
             try {
+                System.out.println(value);
                 this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
             } catch (Exception e) {
                 e.printStackTrace();
