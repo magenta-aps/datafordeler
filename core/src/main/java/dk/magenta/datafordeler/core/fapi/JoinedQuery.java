@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +21,7 @@ public class JoinedQuery extends Condition {
     private static Logger log = LogManager.getLogger(JoinedQuery.class.getCanonicalName());
 
 
-    public JoinedQuery(BaseQuery base, BaseQuery joined, Map<String, String> joinHandleKeys, MultiCondition parentCondition) throws Exception {
+    public JoinedQuery(BaseQuery base, BaseQuery joined, Map<String, String> joinHandleKeys, MultiCondition parentCondition) throws QueryBuildException {
         // joinHandleKeys er map f.eks. muncode, roadcode, husnr, bnr
         super(parentCondition);
         this.base = base;

@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -828,17 +829,17 @@ public abstract class BaseQuery {
         this.condition.add(condition);
     }
 
-    public void addCondition(String handle, List<String> value) throws Exception {
+    public void addCondition(String handle, List<String> value) throws QueryBuildException {
         this.addCondition(handle, value, String.class);
     }
 
-    public void addCondition(String handle, List<String> value, Class type) throws Exception {
+    public void addCondition(String handle, List<String> value, Class type) throws QueryBuildException {
         if (!value.isEmpty()) {
             this.addCondition(handle, Condition.Operator.EQ, value, type);
         }
     }
 
-    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws Exception {
+    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws QueryBuildException {
         this.finalizedConditions = false;
         String member = this.useJoinHandle(handle);
         String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replace(".", "__");
@@ -858,11 +859,11 @@ public abstract class BaseQuery {
 
     protected abstract Map<String, String> joinHandles();
 
-    public String useJoinHandle(String handle) throws Exception {
+    public String useJoinHandle(String handle) throws QueryBuildException {
         // Internally joins handle path
         String path = this.joinHandles().get(handle);
         if (path == null) {
-            throw new Exception("Invalid join handle "+handle+" for "+this.getEntityClassname());
+            throw new QueryBuildException("Invalid join handle "+handle+" for "+this.getEntityClassname());
         }
         StringJoiner resolved = new StringJoiner(",");
         for (String p : path.split(",")) {
@@ -924,7 +925,7 @@ public abstract class BaseQuery {
         this.finalizedConditions = false;
     }
 
-    protected abstract void setupConditions() throws Exception;
+    protected abstract void setupConditions() throws QueryBuildException;
 
     private Set<JoinedQuery> related = new HashSet<>();
 

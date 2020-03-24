@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr.data.residence;
 
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cpr.data.CprQuery;
@@ -143,7 +144,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
 
     }
 

@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.municipality;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -107,7 +108,7 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("code", this.code, Integer.class);
         this.addCondition("name", this.name);
     }

@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cvr.query;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -253,7 +254,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         return joinHandles;
     }
 
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("unit", this.enhedsNummer, Long.class);
         this.addCondition("name", this.navn);
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);

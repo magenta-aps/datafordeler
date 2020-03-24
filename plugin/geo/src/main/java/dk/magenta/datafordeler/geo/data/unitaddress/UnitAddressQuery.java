@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.unitaddress;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -237,7 +238,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("floor", this.floor);
         this.addCondition("door", this.door);
     }

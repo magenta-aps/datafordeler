@@ -295,9 +295,9 @@ public abstract class QueryManager {
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
 
+        List<Object> results = databaseQuery.list();
+        List<String> classNames = query.getEntityClassnames();
         try {
-            List<Object> results = databaseQuery.list();
-            List<String> classNames = query.getEntityClassnames();
             for (Object row : results) {
                 ResultSet<E> resultSet = new ResultSet<E>(row, classNames);
                 ResultSet<E> existing = identitySetList.get(resultSet.getPrimaryEntity());
@@ -308,7 +308,7 @@ public abstract class QueryManager {
                 }
             }
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("Failed casting for query classes "+classNames, e);
         }
 
         log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
@@ -318,23 +318,24 @@ public abstract class QueryManager {
         return getAllEntitySets(session, query, eClass).stream().map(s -> s.getPrimaryEntity()).collect(Collectors.toList());
     }
 
-        /**
-         * Get all Entities of a specific class, that match the given parameters
-         * @param session Database session to work from
-         * @param query Query object defining search parameters
-         * @param eClass Entity subclass
-         * @return
-         */
-    public static <E extends IdentifiedEntity, D extends DataItem> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
+    /**
+     * Get all Entities of a specific class, that match the given parameters
+     * @param session Database session to work from
+     * @param query Query object defining search parameters
+     * @param eClass Entity subclass
+     * @return
+     */
+    public static <E extends IdentifiedEntity> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
         org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setFetchSize(1000);
+        List<String> classNames = query.getEntityClassnames();
         Stream<E> results = databaseQuery.stream().map(object -> {
             try {
-                return new ResultSet<E>(object, query.getEntityClassnames()).getPrimaryEntity();
+                return new ResultSet<E>(object, classNames).getPrimaryEntity();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                log.error("Failed casting for query classes "+classNames, e);
             }
             return null;
         });

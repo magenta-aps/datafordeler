@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.building;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -113,7 +114,7 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("anr", this.anr);
         this.addCondition("bnr", this.bnr);
     }

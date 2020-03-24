@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -410,7 +411,7 @@ public class CompanyRecordQuery extends BaseQuery {
         return joinHandles;
     }
 
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("cvr", this.cvrNumre, Integer.class);
         this.addCondition("formcode", this.virksomhedsform);
         this.addCondition("advertprotection", this.reklamebeskyttelse != null ? Collections.singletonList(this.reklamebeskyttelse) : Collections.emptyList(), Boolean.class);

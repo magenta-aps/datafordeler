@@ -1,5 +1,7 @@
 package dk.magenta.datafordeler.core.fapi;
 
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,10 +18,10 @@ public class SingleCondition extends Condition {
     private String placeholder;
     private Class type;
 
-    public SingleCondition(Condition parent, String left, List<String> right, Operator operator, String placeholder, Class type) throws Exception {
+    public SingleCondition(Condition parent, String left, List<String> right, Operator operator, String placeholder, Class type) throws QueryBuildException {
         super(parent);
         if (right.isEmpty()) {
-            throw new Exception("No comparison value for "+left);
+            throw new QueryBuildException("No comparison value for "+left);
         }
         this.left = left;
         this.operator = operator;
