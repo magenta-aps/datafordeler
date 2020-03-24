@@ -1,6 +1,8 @@
 package dk.magenta.datafordeler.geo.data.locality;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.magenta.datafordeler.core.fapi.JsonModifier;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,11 @@ public class LocalityOutputWrapper extends GeoOutputWrapper<GeoLocalityEntity> {
     @Override
     public ObjectMapper getObjectMapper() {
         return this.objectMapper;
+    }
+
+    @Override
+    protected JsonModifier getModifier(ResultSet resultSet) {
+        return new LocalityOutputJsonModifier(this, resultSet);
     }
 
     @Override

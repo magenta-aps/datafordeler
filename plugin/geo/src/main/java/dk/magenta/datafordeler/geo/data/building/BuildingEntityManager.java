@@ -68,4 +68,16 @@ public class BuildingEntityManager extends GeoEntityManager<BuildingEntity, Buil
         return new BuildingEntity(record);
     }
 
+    public static String stripBnr(String bnr) {
+        if (bnr != null) {
+            bnr = bnr.toUpperCase();
+            if (bnr.startsWith("B-")) {
+                bnr = bnr.substring(2);
+            } else if (bnr.startsWith("B")) {
+                bnr = bnr.substring(1);
+            }
+        }
+        return bnr;
+    }
+
 }
