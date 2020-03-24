@@ -63,7 +63,7 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     }
 
     // Lige/ulige indikator
-    public static final String DB_FIELD_EVEN = "equalUnequal";
+    public static final String DB_FIELD_EVEN = "even";
     public static final String IO_FIELD_EVEN = "lige";
     @Column(name = DB_FIELD_EVEN)
     @JsonProperty(value = IO_FIELD_EVEN)
