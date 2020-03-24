@@ -316,9 +316,7 @@ public class PersonRecordQuery extends BaseQuery {
     @Override
     public BaseLookupDefinition getLookupDefinition() {
         BaseLookupDefinition lookupDefinition = new BaseLookupDefinition();
-
-        System.out.println(this.getPersonnumre());
-
+        
         if (!this.getPersonnumre().isEmpty()) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_CPR_NUMBER, this.getPersonnumre(), String.class);
         }

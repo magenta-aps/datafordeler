@@ -628,7 +628,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                                     output.putAll(objectNodeToFlatMap(effectNode, null));
                                     output.putAll(objectNodeToFlatMap(registrationNode, null));
                                     output.putAll(objectNodeToFlatMap(entityNode, omitEntityKeys));
-                                    System.out.println(output);
                                     rows.add(output);
                                 }
                             }
@@ -700,7 +699,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
         while (dataIter.hasNext()) {
             Map<String, String> data = dataIter.next();
-            System.out.println("data: "+data);
             writer.write(data);
         }
     }
