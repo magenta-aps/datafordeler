@@ -612,11 +612,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             List<Map<String, String>> rows = new ArrayList<>();
             Object wrapped = FapiBaseService.this.getOutputWrapper().wrapResult(e, baseQuery, OutputWrapper.Mode.RVD);
             ObjectNode entityNode = (ObjectNode) wrapped;
-            try {
-                System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entityNode));
-            } catch (JsonProcessingException e1) {
-                e1.printStackTrace();
-            }
             ArrayNode registrations = (ArrayNode) entityNode.get("registreringer");
             if (registrations != null) {
                 for (int i = 0; i < registrations.size(); i++) {

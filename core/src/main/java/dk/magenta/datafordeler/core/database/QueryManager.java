@@ -185,7 +185,7 @@ public abstract class QueryManager {
         return results;
     }
 
-    private static final boolean logQuery = true;
+    private static final boolean logQuery = false;
 
     public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
 
@@ -217,7 +217,6 @@ public abstract class QueryManager {
 
         if (logQuery) {
             log.info(stringJoiner.toString());
-            System.out.println(stringJoiner.toString());
         }
 
         // Offset & limit
