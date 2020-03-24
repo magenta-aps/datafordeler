@@ -70,4 +70,32 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
         this.setName(parameters.getFirst(NAME));
     }
 
+    @Override
+    public String getEntityClassname() {
+        return CompanyEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "ger_company";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("gernr", CompanyEntity.DB_FIELD_GERNR);
+        joinHandles.put("name", CompanyEntity.DB_FIELD_NAME);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("gernr", this.getGerNr(), Integer.class);
+        this.addCondition("name", this.name);
+    }
+
 }

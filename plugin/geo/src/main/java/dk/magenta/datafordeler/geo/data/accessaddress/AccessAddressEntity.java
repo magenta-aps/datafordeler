@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.RawData;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
@@ -73,10 +74,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_HOUSE_NUMBER)
-    Set<AccessAddressHouseNumberRecord> houseNumber = new HashSet<>();
+    private Set<AccessAddressHouseNumberRecord> houseNumber = new HashSet<>();
 
-    public Set<AccessAddressHouseNumberRecord> getHouseNumber() {
-        return this.houseNumber;
+    public MonotemporalSet<AccessAddressHouseNumberRecord> getHouseNumber() {
+        return new MonotemporalSet<>(this.houseNumber);
     }
 
 
@@ -92,8 +93,8 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     @JsonProperty(IO_FIELD_BLOCK_NAME)
     Set<AccessAddressBlockNameRecord> blockName = new HashSet<>();
 
-    public Set<AccessAddressBlockNameRecord> getBlockName() {
-        return this.blockName;
+    public MonotemporalSet<AccessAddressBlockNameRecord> getBlockName() {
+        return new MonotemporalSet<>(this.blockName);
     }
 
 
@@ -108,10 +109,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_ROAD)
-    Set<AccessAddressRoadRecord> road = new HashSet<>();
+    private Set<AccessAddressRoadRecord> road = new HashSet<>();
 
-    public Set<AccessAddressRoadRecord> getRoad() {
-        return this.road;
+    public MonotemporalSet<AccessAddressRoadRecord> getRoad() {
+        return new MonotemporalSet<>(this.road);
     }
 
 
@@ -126,10 +127,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_LOCALITY)
-    Set<AccessAddressLocalityRecord> locality = new HashSet<>();
+    private Set<AccessAddressLocalityRecord> locality = new HashSet<>();
 
-    public Set<AccessAddressLocalityRecord> getLocality() {
-        return this.locality;
+    public MonotemporalSet<AccessAddressLocalityRecord> getLocality() {
+        return new MonotemporalSet<>(this.locality);
     }
 
 
@@ -144,10 +145,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_POSTCODE)
-    Set<AccessAddressPostcodeRecord> postcode = new HashSet<>();
+    private Set<AccessAddressPostcodeRecord> postcode = new HashSet<>();
 
-    public Set<AccessAddressPostcodeRecord> getPostcode() {
-        return this.postcode;
+    public MonotemporalSet<AccessAddressPostcodeRecord> getPostcode() {
+        return new MonotemporalSet<>(this.postcode);
     }
 
 
@@ -162,10 +163,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_BUILDING)
-    Set<AccessAddressBuildingReferenceRecord> building = new HashSet<>();
+    private Set<AccessAddressBuildingReferenceRecord> building = new HashSet<>();
 
-    public Set<AccessAddressBuildingReferenceRecord> getBuilding() {
-        return this.building;
+    public MonotemporalSet<AccessAddressBuildingReferenceRecord> getBuilding() {
+        return new MonotemporalSet<>(this.building);
     }
 
 
@@ -180,10 +181,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_STATUS)
-    Set<AccessAddressStatusRecord> status = new HashSet<>();
+    private Set<AccessAddressStatusRecord> status = new HashSet<>();
 
-    public Set<AccessAddressStatusRecord> getStatus() {
-        return this.status;
+    public MonotemporalSet<AccessAddressStatusRecord> getStatus() {
+        return new MonotemporalSet<>(this.status);
     }
 
 
@@ -198,10 +199,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SOURCE)
-    Set<AccessAddressSourceRecord> source = new HashSet<>();
+    private Set<AccessAddressSourceRecord> source = new HashSet<>();
 
-    public Set<AccessAddressSourceRecord> getSource() {
-        return this.source;
+    public MonotemporalSet<AccessAddressSourceRecord> getSource() {
+        return new MonotemporalSet<>(this.source);
     }
 
     
@@ -216,10 +217,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SHAPE)
-    Set<AccessAddressShapeRecord> shape = new HashSet<>();
+    private Set<AccessAddressShapeRecord> shape = new HashSet<>();
 
-    public Set<AccessAddressShapeRecord> getShape() {
-        return this.shape;
+    public MonotemporalSet<AccessAddressShapeRecord> getShape() {
+        return new MonotemporalSet<>(this.shape);
     }
 
 

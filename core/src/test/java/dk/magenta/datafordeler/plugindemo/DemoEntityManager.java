@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.ParseException;
 import dk.magenta.datafordeler.core.exception.WrongSubclassException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.PluginSourceData;
@@ -19,6 +20,7 @@ import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.HttpCommunicator;
 import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.plugindemo.fapi.DemoEntityService;
+import dk.magenta.datafordeler.plugindemo.fapi.DemoRecordQuery;
 import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -110,6 +112,16 @@ public class DemoEntityManager extends EntityManager {
     @Override
     protected Logger getLog() {
         return this.log;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new DemoRecordQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... joined) {
+        return this.getQuery();
     }
 
 

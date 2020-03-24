@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.RawData;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
@@ -99,10 +100,10 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_LOCALITY)
-    Set<BuildingLocalityRecord> locality = new HashSet<>();
+    private Set<BuildingLocalityRecord> locality = new HashSet<>();
 
-    public Set<BuildingLocalityRecord> getLocality() {
-        return this.locality;
+    public MonotemporalSet<BuildingLocalityRecord> getLocality() {
+        return new MonotemporalSet<>(this.locality);
     }
 
 
@@ -119,10 +120,10 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SHAPE)
-    Set<BuildingShapeRecord> shape = new HashSet<>();
+    private Set<BuildingShapeRecord> shape = new HashSet<>();
 
-    public Set<BuildingShapeRecord> getShape() {
-        return this.shape;
+    public MonotemporalSet<BuildingShapeRecord> getShape() {
+        return new MonotemporalSet<>(this.shape);
     }
 
 

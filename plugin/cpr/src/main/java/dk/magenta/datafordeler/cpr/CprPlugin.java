@@ -9,10 +9,13 @@ import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadPostalcodeBitemporalRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.*;
 
 /**
  * Datafordeler Plugin to fetch, parse and serve CPR data (data on people, roads and
@@ -105,4 +108,29 @@ public class CprPlugin extends Plugin {
     public AreaRestrictionDefinition getAreaRestrictionDefinition() {
         return this.areaRestrictionDefinition;
     }
+
+
+    public String getJoinString(Map<String, String> handles) {
+        StringJoiner s = new StringJoiner(" ");
+        // Join accessaddress
+        s.add("LEFT JOIN "+ RoadEntity.class.getCanonicalName()+" cpr_road");
+        s.add("ON cpr_road.roadcode = "+handles.get("roadcode"));
+        s.add("AND cpr_road.municipalityCode = "+handles.get("municipalitycode"));
+/*
+        s.add("LEFT JOIN "+ RoadPostalcodeBitemporalRecord.class.getCanonicalName()+" cpr_postalcode");
+        s.add("ON cpr_postalcode.entity = cpr_road");
+        s.add("AND (" +
+                "(MOD("+handles.get("housenumber")+",2) = 0 AND cpr_postalcode.even is true) OR " +
+                "(MOD("+handles.get("housenumber")+",2) = 1 AND cpr_postalcode.even is false))");
+*/
+        return s.toString();
+    }
+
+    public LinkedHashMap<String, Class> getJoinClassAliases() {
+        LinkedHashMap<String, Class> aliases = new LinkedHashMap<>();
+        aliases.put("cpr_road", RoadEntity.class);
+        //aliases.put("cpr_postalcode", RoadPostalcodeBitemporalRecord.class);
+        return aliases;
+    }
+
 }

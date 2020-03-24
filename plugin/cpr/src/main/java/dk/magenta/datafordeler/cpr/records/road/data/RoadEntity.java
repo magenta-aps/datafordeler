@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
+import dk.magenta.datafordeler.cpr.records.BitemporalSet;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprMonotemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
@@ -109,10 +110,10 @@ public class RoadEntity extends CprRecordEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_NAME_CODE)
-    Set<RoadNameBitemporalRecord> name = new HashSet<>();
+    private Set<RoadNameBitemporalRecord> name = new HashSet<>();
 
-    public Set<RoadNameBitemporalRecord> getName() {
-        return this.name;
+    public BitemporalSet<RoadNameBitemporalRecord> getName() {
+        return new BitemporalSet<>(this.name);
     }
 
 
@@ -134,10 +135,10 @@ public class RoadEntity extends CprRecordEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_CITY_CODE)
-    Set<RoadCityBitemporalRecord> city = new HashSet<>();
+    private Set<RoadCityBitemporalRecord> city = new HashSet<>();
 
-    public Set<RoadCityBitemporalRecord> getCity() {
-        return this.city;
+    public BitemporalSet<RoadCityBitemporalRecord> getCity() {
+        return new BitemporalSet<>(this.city);
     }
 
 
@@ -159,10 +160,10 @@ public class RoadEntity extends CprRecordEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_MEMO_CODE)
-    Set<RoadMemoBitemporalRecord> memo = new HashSet<>();
+    private Set<RoadMemoBitemporalRecord> memo = new HashSet<>();
 
-    public Set<RoadMemoBitemporalRecord> getMemo() {
-        return this.memo;
+    public BitemporalSet<RoadMemoBitemporalRecord> getMemo() {
+        return new BitemporalSet<>(this.memo);
     }
 
 
@@ -184,10 +185,10 @@ public class RoadEntity extends CprRecordEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_POST_CODE)
-    Set<RoadPostalcodeBitemporalRecord> postcode = new HashSet<>();
+    private Set<RoadPostalcodeBitemporalRecord> postcode = new HashSet<>();
 
-    public Set<RoadPostalcodeBitemporalRecord> getPostcode() {
-        return this.postcode;
+    public BitemporalSet<RoadPostalcodeBitemporalRecord> getPostcode() {
+        return new BitemporalSet<>(this.postcode);
     }
 
 

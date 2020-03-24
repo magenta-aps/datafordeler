@@ -1,6 +1,8 @@
 package dk.magenta.datafordeler.geo.data.accessaddress;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,6 +36,33 @@ public class AccessAddressEntityManager extends GeoEntityManager<AccessAddressEn
     @Override
     public String getSchema() {
         return AccessAddressEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new AccessAddressQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
+        for (String join : strings) {
+            switch (join) {
+                case "municipality":
+                    accessAddressQuery.addRelatedMunicipalityQuery();
+                    break;
+                case "road":
+                    accessAddressQuery.addRelatedRoadQuery();
+                    break;
+                case "locality":
+                    accessAddressQuery.addRelatedLocalityQuery();
+                    break;
+                case "postcode":
+                    accessAddressQuery.addRelatedPostcodeQuery();
+                    break;
+            }
+        }
+        return accessAddressQuery;
     }
 
     @Override

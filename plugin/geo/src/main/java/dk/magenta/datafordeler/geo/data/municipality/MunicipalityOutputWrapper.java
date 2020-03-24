@@ -1,9 +1,16 @@
 package dk.magenta.datafordeler.geo.data.municipality;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.magenta.datafordeler.core.fapi.JsonModifier;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
+import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import dk.magenta.datafordeler.geo.data.road.RoadOutputJsonModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Collection;
 
 @Component
 public class MunicipalityOutputWrapper extends GeoOutputWrapper<GeoMunicipalityEntity> {
@@ -11,10 +18,20 @@ public class MunicipalityOutputWrapper extends GeoOutputWrapper<GeoMunicipalityE
     @Autowired
     private ObjectMapper objectMapper;
 
+    @PostConstruct
+    private void register() {
+        this.register(GeoMunicipalityEntity.class);
+    }
+
 
     @Override
     public ObjectMapper getObjectMapper() {
         return this.objectMapper;
+    }
+
+    @Override
+    protected JsonModifier getModifier(ResultSet resultSet) {
+        return new MunicipalityOutputJsonModifier(this, resultSet.get(GeoMunicipalityEntity.class));
     }
 
     @Override

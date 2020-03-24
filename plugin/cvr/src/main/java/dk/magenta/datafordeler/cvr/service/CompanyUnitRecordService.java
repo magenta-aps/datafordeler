@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -109,10 +111,10 @@ public class CompanyUnitRecordService extends FapiBaseService<CompanyUnitRecord,
     }
 
     @Override
-    public List<CompanyUnitRecord> searchByQuery(CompanyUnitRecordQuery query, Session session) {
-        List<CompanyUnitRecord> allRecords = new ArrayList<>();
+    public List<ResultSet<CompanyUnitRecord>> searchByQuery(CompanyUnitRecordQuery query, Session session) {
+        List<ResultSet<CompanyUnitRecord>> allRecords = new ArrayList<>();
 
-        List<CompanyUnitRecord> localResults = super.searchByQuery(query, session);
+        List<ResultSet<CompanyUnitRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {
             log.info("There are "+localResults.size()+" local results");
             allRecords.addAll(localResults);
@@ -120,9 +122,7 @@ public class CompanyUnitRecordService extends FapiBaseService<CompanyUnitRecord,
 
         HashSet<String> pNumbers = new HashSet<>(query.getPNummer());
         if (!pNumbers.isEmpty()) {
-            for (CompanyUnitRecord record : localResults) {
-                pNumbers.remove(Integer.toString(record.getpNumber()));
-            }
+            pNumbers.removeAll(localResults.stream().map(resultset -> Integer.toString(resultset.getPrimaryEntity().getpNumber())).collect(Collectors.toSet()));
             query.setPNummer(pNumbers);
         }
         return allRecords;

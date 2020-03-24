@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.geo.data.postcode;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,16 @@ public class PostcodeEntityManager extends GeoEntityManager<PostcodeEntity, Post
     @Override
     public String getSchema() {
         return PostcodeEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new PostcodeQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 
     @Override

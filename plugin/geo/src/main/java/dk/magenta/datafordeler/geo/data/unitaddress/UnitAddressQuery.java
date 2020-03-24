@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
+import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressQuery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,6 +128,55 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
 
 
+    public static final String FLOOR = UnitAddressEntity.IO_FIELD_FLOOR;
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = FLOOR)
+    private List<String> floor = new ArrayList<>();
+
+
+    public List<String> getFloor() {
+        return floor;
+    }
+
+    public void setFloor(String floor) {
+        this.floor.clear();
+        this.addFloor(floor);
+    }
+
+    public void addFloor(String floor) {
+        if (floor != null) {
+            this.floor.add(floor);
+            this.increaseDataParamCount();
+        }
+    }
+
+
+
+    public static final String DOOR = UnitAddressEntity.IO_FIELD_DOOR;
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = DOOR)
+    private List<String> door = new ArrayList<>();
+
+
+    public List<String> getDoor() {
+        return door;
+    }
+
+    public void setDoor(String door) {
+        this.door.clear();
+        this.addDoor(door);
+    }
+
+    public void addDoor(String door) {
+        if (door != null) {
+            this.door.add(door);
+            this.increaseDataParamCount();
+        }
+    }
+
+
+
+
 
     @Override
     public Map<String, Object> getSearchParameters() {
@@ -160,6 +210,43 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         super.setFromParameters(parameters);
         //this.setBnr(parameters.getFirst(BNR));
         //this.setRoad(parameters.getFirst(ROAD));
+    }
+
+    @Override
+    public String getEntityClassname() {
+        return UnitAddressEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_unitaddress";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseLookupDefinition.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);
+        joinHandles.put("door", UnitAddressEntity.DB_FIELD_DOOR + BaseLookupDefinition.separator + UnitAddressDoorRecord.DB_FIELD_DOOR);
+        joinHandles.put("accessaddress_id", UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("floor", this.floor);
+        this.addCondition("door", this.door);
+    }
+
+    public AccessAddressQuery addRelatedAccessAddressQuery() {
+        AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
+        HashMap<String, String> joinHandles = new HashMap<>();
+        joinHandles.put("accessaddress_id", "id");
+        this.addRelated(accessAddressQuery, joinHandles);
+        return accessAddressQuery;
     }
 
 }

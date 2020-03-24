@@ -89,4 +89,32 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
         this.setName(parameters.getFirst(NAME));
     }
 
+    @Override
+    public String getEntityClassname() {
+        return PostcodeEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_postcode";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("code", PostcodeEntity.DB_FIELD_CODE);
+        joinHandles.put("name", PostcodeEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + PostcodeNameRecord.DB_FIELD_NAME);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("code", this.code, Integer.class);
+        this.addCondition("name", this.name);
+    }
+
 }

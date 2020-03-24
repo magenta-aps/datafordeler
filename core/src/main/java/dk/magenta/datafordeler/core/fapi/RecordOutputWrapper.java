@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends OutputWrapper<E> {
 
@@ -27,6 +28,10 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     public static final String REGISTRATION_TO = "registreringTil";
 
     public abstract ObjectMapper getObjectMapper();
+
+    protected JsonModifier getModifier(ResultSet resultSet) { return null; }
+
+    private HashMap<String, JsonModifier> modifiers = new HashMap<>();
 
     // RVD
     private final Set<String> rvdNodeRemoveFields = new HashSet<>(Arrays.asList(
@@ -58,6 +63,43 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     protected abstract void fillContainer(OutputContainer container, E item, Mode m);
 
     protected abstract ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, Bitemporality mustContain);
+
+
+    public Object wrapResultSet(ResultSet<E> input, BaseQuery query, Mode mode) {
+        // TODO: Somehow wrap the resultset
+        System.out.println("Wrapping resultset "+input);
+
+        for (Class associatedEntityClass : input.getAssociatedEntityClasses()) {
+            OutputWrapper wrapper = wrapperMap.get(associatedEntityClass);
+            if (wrapper instanceof RecordOutputWrapper) {
+                // Find any JsonModifiers from this outputwrapper of associated entityclass, and add them to our cache
+                RecordOutputWrapper recordOutputWrapper = (RecordOutputWrapper) wrapper;
+                JsonModifier modifier = recordOutputWrapper.getModifier(input);
+                if (modifier != null) {
+                    this.modifiers.put(modifier.getName(), modifier);
+                }
+            }
+        }
+
+        Object result = this.wrapResult(input.getPrimaryEntity(), query, mode);
+
+        return result;
+    }
+
+    protected Map<Class, List<String>> getEligibleModifierNames() {
+        return Collections.emptyMap();
+    }
+    private List<JsonModifier> getEligibleModifiers(Class cls) {
+        System.out.println( this.modifiers.keySet());
+        List<String> modifierNames = this.getEligibleModifierNames().get(cls);
+        System.out.println(modifierNames);
+        if (modifierNames == null) {
+            return Collections.emptyList();
+        }
+
+        return modifierNames.stream().map(name -> this.modifiers.get(name)).collect(Collectors.toList());
+    }
+
 
     protected class OutputContainer {
 
@@ -107,7 +149,6 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             this.addTemporal(key, records, converter, unwrapSingle, forceArray, Bitemporal::getBitemporality);
         }
 
-
         private <T extends Monotemporal> void addTemporal(String key, Set<T> records, Function<T, JsonNode> converter, boolean unwrapSingle, boolean forceArray, Function<T, Bitemporality> bitemporalityExtractor) {
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
             for (T record : records) {
@@ -116,6 +157,11 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                     Bitemporality bitemporality = bitemporalityExtractor.apply(record);
                     if (value instanceof ObjectNode) {
                         ObjectNode oValue = (ObjectNode) value;
+                        for (JsonModifier modifier : RecordOutputWrapper.this.getEligibleModifiers(record.getClass())) {
+                            if (modifier != null) {
+                                modifier.modify(oValue);
+                            }
+                        }
                         if (unwrapSingle && value.size() == 1) {
                             this.bitemporalData.add(bitemporality, key, oValue.get(oValue.fieldNames().next()));
                             continue;
@@ -147,6 +193,9 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                 JsonNode value = (converter != null) ? converter.apply(record) : objectMapper.valueToTree(record);
                 if (value instanceof ObjectNode) {
                     ObjectNode oValue = (ObjectNode) value;
+                    for (JsonModifier modifier : RecordOutputWrapper.this.getEligibleModifiers(record.getClass())) {
+                        modifier.modify(oValue);
+                    }
                     if (unwrapSingle && value.size() == 1) {
                         this.nontemporalData.add(key, oValue.get(oValue.fieldNames().next()));
                         continue;

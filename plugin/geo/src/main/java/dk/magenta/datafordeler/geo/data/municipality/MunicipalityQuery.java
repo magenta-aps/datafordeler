@@ -84,4 +84,32 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
         this.setName(parameters.getFirst(NAME));
     }
 
+    @Override
+    public String getEntityClassname() {
+        return GeoMunicipalityEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_municipality";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("code", GeoMunicipalityEntity.DB_FIELD_CODE);
+        joinHandles.put("name", GeoMunicipalityEntity.DB_FIELD_NAME);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("code", this.code, Integer.class);
+        this.addCondition("name", this.name);
+    }
+
 }

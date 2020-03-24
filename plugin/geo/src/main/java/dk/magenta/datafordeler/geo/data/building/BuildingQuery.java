@@ -89,4 +89,33 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
         this.setBnr(parameters.getFirst(BNR));
     }
 
+    @Override
+    public String getEntityClassname() {
+        return BuildingEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_building";
+    }
+
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("anr", BuildingEntity.DB_FIELD_ANR);
+        joinHandles.put("bnr", BuildingEntity.DB_FIELD_BNR);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+        this.addCondition("anr", this.anr);
+        this.addCondition("bnr", this.bnr);
+    }
+
 }

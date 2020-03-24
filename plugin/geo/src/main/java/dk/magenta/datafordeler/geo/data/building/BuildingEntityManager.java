@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.geo.data.building;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,16 @@ public class BuildingEntityManager extends GeoEntityManager<BuildingEntity, Buil
     @Override
     public String getSchema() {
         return BuildingEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new BuildingQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 
     @Override

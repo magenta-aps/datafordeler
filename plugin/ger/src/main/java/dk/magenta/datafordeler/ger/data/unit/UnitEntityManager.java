@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.ger.data.unit;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.ger.data.GerEntityManager;
@@ -39,6 +40,16 @@ public class UnitEntityManager extends GerEntityManager<UnitEntity> {
     @Override
     public String getSchema() {
         return UnitEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new UnitQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 
     @Override

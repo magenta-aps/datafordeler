@@ -121,7 +121,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
 
 
-    protected OutputWrapper<E> getOutputWrapper() {
+    public OutputWrapper<E> getOutputWrapper() {
         return outputWrapper;
     }
 
@@ -133,7 +133,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     private Logger log = LogManager.getLogger(FapiBaseService.class.getCanonicalName());
 
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.RVD;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
 
@@ -210,9 +210,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addUserData(user);
             envelope.addRequestData(request);
             try {
-                List<E> results = this.searchByQuery(query, session);
+                List<ResultSet<E>> results = this.searchByQuery(query, session);
                 if (this.getOutputWrapper() != null) {
-                    envelope.setResults(this.getOutputWrapper().wrapResults(results, query, this.getDefaultMode()));
+                    envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, this.getDefaultMode()));
                 } else {
                     ArrayNode jacksonConverted = objectMapper.valueToTree(results);
                     ArrayList<Object> wrapper = new ArrayList<>();
@@ -293,6 +293,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @return Found Entity, or null if none found.
      */
     // TODO: How to use DafoUserDetails with SOAP requests?
+    /*
     @WebMethod(operationName = "get")
     public Envelope getSoap(@WebParam(name="id") @XmlElement(required=true) String id,
                      @WebParam(name="registeringFra") @XmlElement(required = false) String registeringFra,
@@ -341,7 +342,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             session.close();
         }
         return envelope;
-    }
+    }*/
 
 
     /**
@@ -376,14 +377,15 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                     "Incoming REST request for " + this.getServiceName() + " with query " + requestParams.toString()
             );
             this.checkAndLogAccess(loggerHelper);
+
             Q query = this.getQuery(requestParams, false);
             this.applyAreaRestrictionsToQuery(query, user);
             envelope.addQueryData(query);
             envelope.addUserData(user);
             envelope.addRequestData(request);
-            List<E> results = this.searchByQuery(query, session);
+            List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
-                envelope.setResults(this.getOutputWrapper().wrapResults(results, query, query.getMode(this.getDefaultMode())));
+                envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
                 ArrayNode jacksonConverted = objectMapper.valueToTree(results);
                 ArrayList<Object> wrapper = new ArrayList<>();
@@ -467,9 +469,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addQueryData(query);
             envelope.addUserData(user);
             envelope.addRequestData(request);
-            List<E> results = this.searchByQuery(query, session);
+            List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
-                envelope.setResult(this.getOutputWrapper().wrapResults(results, query, query.getMode(this.getDefaultMode())));
+                envelope.setResult(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
                 envelope.setResults(results);
             }
@@ -519,12 +521,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     //@WebMethod(exclude = true)
     //protected abstract Set<E> searchByQuery(Q query);
     @WebMethod(exclude = true) // Non-soap methods must have this
-    protected List<E> searchByQuery(Q query, Session session) {
+    public List<ResultSet<E>> searchByQuery(Q query, Session session) {
         query.applyFilters(session);
-        return QueryManager.getAllEntities(
-                session, query,
-                this.getEntityClass()
-        );
+        return QueryManager.getAllEntitySets(session, query, this.getEntityClass());
     }
 
     /**

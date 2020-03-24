@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr.data.road;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.Receipt;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
@@ -9,6 +10,7 @@ import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.parsers.RoadParser;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.road.RoadDataRecord;
+import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 import dk.magenta.datafordeler.cpr.records.road.data.CprBitemporalRoadRecord;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import dk.magenta.datafordeler.cpr.records.service.RoadEntityRecordService;
@@ -62,6 +64,16 @@ public class RoadEntityManager extends CprRecordEntityManager<RoadDataRecord, Ro
     @Override
     protected URI getReceiptEndpoint(Receipt receipt) {
         return null;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new RoadRecordQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 
 

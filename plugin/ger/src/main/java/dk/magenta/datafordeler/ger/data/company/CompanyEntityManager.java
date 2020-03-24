@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.ger.data.company;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.ger.data.GerEntityManager;
@@ -39,6 +40,16 @@ public class CompanyEntityManager extends GerEntityManager<CompanyEntity> {
     @Override
     public String getSchema() {
         return CompanyEntity.schema;
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new CompanyQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 
     @Override

@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Query object specifying a search, with basic filter parameters
@@ -85,6 +86,9 @@ public abstract class BaseQuery {
 
     private OutputWrapper.Mode mode = null;
 
+    private LinkedHashSet<Join> joins = new LinkedHashSet<>();
+    private MultiCondition condition = new MultiCondition();
+
     public BaseQuery() {
     }
 
@@ -94,6 +98,7 @@ public abstract class BaseQuery {
      * @param pageSize
      */
     public BaseQuery(int page, int pageSize) {
+        this();
         this.setPage(page);
         this.setPageSize(pageSize);
     }
@@ -494,13 +499,6 @@ public abstract class BaseQuery {
     }
 
 
-
-
-
-
-
-
-
     public OffsetDateTime getRecordAfter() {
         return this.recordAfter;
     }
@@ -566,6 +564,7 @@ public abstract class BaseQuery {
      * @param parameterMap
      */
     public void fillFromParameters(ParameterMap parameterMap, boolean limitsOnly) throws InvalidClientInputException {
+        System.out.println(this.getClass().getCanonicalName()+".fillFromParameters("+parameterMap.toString()+")");
         this.setPage(parameterMap.getFirstOf(PARAM_PAGE));
         this.setPageSize(parameterMap.getFirstOf(PARAM_PAGESIZE));
         try {
@@ -817,5 +816,179 @@ public abstract class BaseQuery {
 
     protected Object castFilterParam(Object input, String filter) {
         return input;
+    }
+
+    public abstract String getEntityClassname();
+
+    public abstract String getEntityIdentifier();
+
+    public void addCondition(Condition condition) {
+        this.finalizedConditions = false;
+        this.condition.add(condition);
+    }
+
+    public void addCondition(String handle, List<String> value) throws Exception {
+        this.addCondition(handle, value, String.class);
+    }
+
+    public void addCondition(String handle, List<String> value, Class type) throws Exception {
+        if (!value.isEmpty()) {
+            this.addCondition(handle, Condition.Operator.EQ, value, type);
+        }
+    }
+
+    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws Exception {
+        this.finalizedConditions = false;
+        String member = this.useJoinHandle(handle);
+        String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replace(".", "__");
+        if (member != null) {
+            try {
+                this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public Set<String> getJoinHandles() {
+        return this.joinHandles().keySet();
+    }
+
+    protected abstract Map<String, String> joinHandles();
+
+    public String useJoinHandle(String handle) throws Exception {
+        // Internally joins handle path
+        String path = this.joinHandles().get(handle);
+        if (path == null) {
+            throw new Exception("Invalid join handle "+handle+" for "+this.getEntityClassname());
+        }
+        StringJoiner resolved = new StringJoiner(",");
+        for (String p : path.split(",")) {
+            p = this.getEntityIdentifier() + "." + p;
+            List<Join> joins = Join.fromPath(p, true);
+            if (joins.isEmpty()) {
+                resolved.add(p);
+            } else {
+                this.joins.addAll(joins);
+                Join lastJoin = joins.get(joins.size() - 1);
+                String lastMember = p.substring(p.lastIndexOf(".") + 1);
+                resolved.add(lastJoin.getAlias() + "." + lastMember);
+            }
+        }
+        return resolved.toString();
+    }
+
+    public String toHql() {
+        this.finalizeConditions();
+        StringJoiner s = new StringJoiner(" \n");
+
+        s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
+        s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
+
+        for (Join join : this.getAllJoins()) {
+            s.add(join.toHql());
+        }
+        for (String extraJoin : this.extraJoins) {
+            s.add(extraJoin);
+        }
+        if (!this.condition.isEmpty()) {
+            s.add("WHERE " + this.condition.toHql());
+        }
+        return s.toString();
+    }
+
+    public Map<String, Object> getParameters() {
+        this.finalizeConditions();
+        return this.condition.getParameters();
+    }
+
+    private boolean finalizedConditions = false;
+    private void finalizeConditions() {
+        if (!this.finalizedConditions) {
+            this.condition = new MultiCondition();
+            for (JoinedQuery joinedQuery : this.related) {
+                this.condition.add(joinedQuery);
+            }
+            try {
+                this.setupConditions();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            this.finalizedConditions = true;
+        }
+    }
+
+    protected abstract void setupConditions() throws Exception;
+
+    private Set<JoinedQuery> related = new HashSet<>();
+
+    public Set<JoinedQuery> getRelated() {
+        return this.related;
+    }
+
+
+    public void addRelated(BaseQuery query, Map<String, String> joinHandles) {
+        try {
+            JoinedQuery joinedQuery = new JoinedQuery(this, query, joinHandles, this.condition);
+            this.related.add(joinedQuery);
+            this.condition.add(joinedQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected List<String> getEntityIdentifiers() {
+        ArrayList<String> identifiers = new ArrayList<>();
+        identifiers.add(this.getEntityIdentifier());
+        for (JoinedQuery joinedQuery : this.related) {
+            identifiers.addAll(joinedQuery.getJoined().getEntityIdentifiers());
+        }
+
+        identifiers.addAll(this.extraTables.keySet());
+
+        return identifiers;
+    }
+    protected List<String> getEntityClassnameStrings() {
+        ArrayList<String> classnames = new ArrayList<>();
+        classnames.add(this.getEntityClassname() + " " + this.getEntityIdentifier());
+        for (JoinedQuery joinedQuery : this.related) {
+            classnames.addAll(joinedQuery.getJoined().getEntityClassnameStrings());
+        }
+        return classnames;
+    }
+    public List<String> getEntityClassnames() {
+        ArrayList<String> classnames = new ArrayList<>();
+        classnames.add(this.getEntityClassname());
+        for (JoinedQuery joinedQuery : this.related) {
+            classnames.addAll(joinedQuery.getJoined().getEntityClassnames());
+        }
+        classnames.addAll(this.extraTables.values().stream().map(Class::getCanonicalName).collect(Collectors.toList()));
+
+        return classnames;
+    }
+    protected List<Join> getAllJoins() {
+        ArrayList<Join> joins = new ArrayList<>();
+        joins.addAll(this.joins);
+        for (JoinedQuery joinedQuery : this.related) {
+            joins.addAll(joinedQuery.getJoined().getAllJoins());
+        }
+        return joins;
+    }
+
+
+
+
+    // Quasi-temporary solution to join in associated data.
+    // Eventually we want a more elegant solution, but for now this works
+    private List<String> extraJoins = new ArrayList<>();
+    private LinkedHashMap<String, Class> extraTables = new LinkedHashMap<>();
+
+    public void addExtraJoin(String hql) {
+        this.extraJoins.add(hql);
+    }
+    public void addExtraTables(LinkedHashMap<String, Class> tables) {
+        this.extraTables.putAll(tables);
+        System.out.println("Added to extratables. It is now: "+this.extraTables);
     }
 }

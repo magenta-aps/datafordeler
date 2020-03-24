@@ -4,8 +4,7 @@ import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
 
 import java.net.URI;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * Base class for a plugin. Defines which methods must be implemented.
@@ -97,4 +96,12 @@ public abstract class Plugin {
     public final PluginManager getPluginManager() {
         return this.pluginManager;
     }
+
+    public String getJoinString(Map<String, String> handles) { return ""; }
+
+    public LinkedHashMap<String, Class> getJoinClassAliases() {
+        return new LinkedHashMap<>();
+    }
+
+
 }

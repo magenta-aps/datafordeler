@@ -8,43 +8,16 @@ import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.person.GenericParentOutputDTO;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
-/**
- * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
- * under a Company is sorted into this format:
- * {
- *     "UUID": <company uuid>
- *     "cvrnummer": <company cvr number>
- *     "id": {
- *         "domaene": <company domain>
- *     },
- *     registreringer: [
- *          {
- *              "registreringFra": <registrationFrom>,
- *              "registreringTil": <registrationTo>,
- *              "navn": [
- *              {
- *                  "navn": <companyName1>
- *                  "virkningFra": <effectFrom1>
- *                  "virkningTil": <effectTo1>
- *              },
- *              {
- *                  "navn": <companyName2>
- *                  "virkningFra": <effectFrom2>
- *                  "virkningTil": <effectTo2>
- *              }
- *              ]
- *          }
- *     ]
- * }
- */
 @Component
 public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEntity> {
 
@@ -54,6 +27,10 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
     @Value("${pitu.base.url}")
     private String pituBaseUrl;
 
+    @PostConstruct
+    private void register() {
+        this.register(PersonEntity.class);
+    }
 
     @Override
     public ObjectMapper getObjectMapper() {
@@ -146,7 +123,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
 
     public HashSet<GenericParentOutputDTO> getParentOutputDTO(Iterator<ParentDataRecord> parent) {
         HashSet<GenericParentOutputDTO> parentList = new HashSet();
-        while(parent.hasNext()) {
+        while (parent.hasNext()) {
             GenericParentOutputDTO genericParentOutputDTO = new GenericParentOutputDTO();
             ParentDataRecord p = parent.next();
             genericParentOutputDTO.setCprNumber(p.getCprNumber());
@@ -155,6 +132,17 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
             parentList.add(genericParentOutputDTO);
         }
         return parentList;
+    }
+
+    public Map<Class, List<String>> getEligibleModifierNames() {
+        HashMap<Class, List<String>> map = new HashMap<>();
+        ArrayList<String> addressModifiers = new ArrayList<>();
+        addressModifiers.add("geo_municipality");
+        addressModifiers.add("geo_road");
+        addressModifiers.add("geo_accessaddress");
+        addressModifiers.add("cpr_road");
+        map.put(AddressDataRecord.class, addressModifiers);
+        return map;
     }
 
 }
