@@ -149,8 +149,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         while(parent.hasNext()) {
             GenericParentOutputDTO genericParentOutputDTO = new GenericParentOutputDTO();
             ParentDataRecord p = parent.next();
-            genericParentOutputDTO.setCprNumber(p.getCprNumber());
-            genericParentOutputDTO.setMother(p.isMother());
+            genericParentOutputDTO.setPnr(p.getCprNumber());
             genericParentOutputDTO.setPituBaseUrl(pituBaseUrl);
             parentList.add(genericParentOutputDTO);
         }
