@@ -123,6 +123,26 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     }
 
     @Override
+    public String getEntityClassname() {
+        return ResidenceEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "cpr_residence";
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return null;
+    }
+
+    @Override
+    protected void setupConditions() throws Exception {
+
+    }
+
+    @Override
     public Class<ResidenceEntity> getEntityClass() {
         return ResidenceEntity.class;
     }
