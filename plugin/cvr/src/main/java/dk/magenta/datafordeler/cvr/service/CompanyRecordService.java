@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -125,10 +127,10 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
     }
 
     @Override
-    public List<CompanyRecord> searchByQuery(CompanyRecordQuery query, Session session) {
-        List<CompanyRecord> allRecords = new ArrayList<>();
+    public List<ResultSet<CompanyRecord>> searchByQuery(CompanyRecordQuery query, Session session) {
+        List<ResultSet<CompanyRecord>> allRecords = new ArrayList<>();
 
-        List<CompanyRecord> localResults = super.searchByQuery(query, session);
+        List<ResultSet<CompanyRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {
             log.info("There are "+localResults.size()+" local results");
             allRecords.addAll(localResults);
@@ -136,9 +138,7 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
 
         HashSet<String> cvrNumbers = new HashSet<>(query.getCvrNumre());
         if (!cvrNumbers.isEmpty()) {
-            for (CompanyRecord record : localResults) {
-                cvrNumbers.remove(Integer.toString(record.getCvrNumber()));
-            }
+            cvrNumbers.removeAll(allRecords.stream().map(resultset -> Integer.toString(resultset.getPrimaryEntity().getCvrNumber())).collect(Collectors.toSet()));
             query.setCvrNumre(cvrNumbers);
         }
         return allRecords;

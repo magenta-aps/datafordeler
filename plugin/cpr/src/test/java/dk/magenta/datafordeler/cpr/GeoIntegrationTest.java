@@ -17,6 +17,10 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadCityBitemporalRecord;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadNameBitemporalRecord;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadPostalcodeBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.service.PersonEntityRecordService;
 import dk.magenta.datafordeler.geo.data.accessaddress.*;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
@@ -244,13 +248,75 @@ public class GeoIntegrationTest {
         session.saveOrUpdate(accessAddressPostcodeRecord);
 
 
+        RoadEntity roadEntity3 = new RoadEntity();
+        roadEntity3.setRoadcode(789);
+        roadEntity3.setMunicipalityCode(101);
+        session.saveOrUpdate(roadEntity3);
+
+        RoadNameBitemporalRecord roadNameRecord3 = new RoadNameBitemporalRecord();
+        roadNameRecord3.setRoadName("DanskVej");
+        roadNameRecord3.setEntity(roadEntity3);
+        session.saveOrUpdate(roadNameRecord3);
+
+        RoadPostalcodeBitemporalRecord postCodeRecord3a = new RoadPostalcodeBitemporalRecord();
+        postCodeRecord3a.setFromHousenumber("1");
+        postCodeRecord3a.setToHousenumber("19");
+        postCodeRecord3a.setEven(false);
+        postCodeRecord3a.setPostalCode(1001);
+        postCodeRecord3a.setPostalDistrict("WrongPostDistrict1");
+        postCodeRecord3a.setEntity(roadEntity3);
+        session.saveOrUpdate(postCodeRecord3a);
+
+        RoadPostalcodeBitemporalRecord postCodeRecord3b = new RoadPostalcodeBitemporalRecord();
+        postCodeRecord3b.setFromHousenumber("2");
+        postCodeRecord3b.setToHousenumber("20B");
+        postCodeRecord3b.setEven(true);
+        postCodeRecord3b.setPostalCode(1002);
+        postCodeRecord3b.setPostalDistrict("WrongPostDistrict2");
+        postCodeRecord3b.setEntity(roadEntity3);
+        session.saveOrUpdate(postCodeRecord3b);
+
+        RoadPostalcodeBitemporalRecord postCodeRecord3c = new RoadPostalcodeBitemporalRecord();
+        postCodeRecord3c.setFromHousenumber("21");
+        postCodeRecord3c.setToHousenumber("999");
+        postCodeRecord3c.setEven(false);
+        postCodeRecord3c.setPostalCode(1003);
+        postCodeRecord3c.setPostalDistrict("WrongPostDistrict3");
+        postCodeRecord3c.setEntity(roadEntity3);
+        session.saveOrUpdate(postCodeRecord3c);
+
+        RoadPostalcodeBitemporalRecord postCodeRecord3d = new RoadPostalcodeBitemporalRecord();
+        postCodeRecord3d.setFromHousenumber("20C");
+        postCodeRecord3d.setToHousenumber("998");
+        postCodeRecord3d.setEven(true);
+        postCodeRecord3d.setPostalCode(1004);
+        postCodeRecord3d.setPostalDistrict("CorrectPostDistrict");
+        postCodeRecord3d.setEntity(roadEntity3);
+        session.saveOrUpdate(postCodeRecord3d);
 
 
+        RoadCityBitemporalRecord cityRecord3a = new RoadCityBitemporalRecord();
+        cityRecord3a.setFromHousenumber("1");
+        cityRecord3a.setToHousenumber("999");
+        cityRecord3a.setEven(false);
+        cityRecord3a.setCityName("TestBy");
+        cityRecord3a.setEntity(roadEntity3);
+        session.saveOrUpdate(cityRecord3a);
+
+        RoadCityBitemporalRecord cityRecord3b = new RoadCityBitemporalRecord();
+        cityRecord3b.setFromHousenumber("2");
+        cityRecord3b.setToHousenumber("998");
+        cityRecord3b.setEven(true);
+        cityRecord3b.setCityName("TestBy");
+        cityRecord3b.setEntity(roadEntity3);
+        session.saveOrUpdate(cityRecord3b);
 
 
         PersonEntity personEntity = new PersonEntity();
         personEntity.setPersonnummer("1234567890");
         session.saveOrUpdate(personEntity);
+
+        /*
         AddressDataRecord personAddressRecord1 = new AddressDataRecord();
         personAddressRecord1.setEntity(personEntity);
         personAddressRecord1.setMunicipalityCode(955);
@@ -258,14 +324,16 @@ public class GeoIntegrationTest {
         personAddressRecord1.setBuildingNumber("B-1234");
         personAddressRecord1.setHouseNumber("5");
         session.saveOrUpdate(personAddressRecord1);
-/*
-        AddressDataRecord personAddressRecord2 = new AddressDataRecord();
-        personAddressRecord2.setEntity(personEntity);
-        personAddressRecord2.setMunicipalityCode(956);
-        personAddressRecord2.setRoadCode(456);
-        personAddressRecord2.setBuildingNumber("B-1234");
-        session.saveOrUpdate(personAddressRecord2);
-*/
+        */
+
+
+        AddressDataRecord personAddressRecord3 = new AddressDataRecord();
+        personAddressRecord3.setEntity(personEntity);
+        personAddressRecord3.setMunicipalityCode(101);
+        personAddressRecord3.setRoadCode(789);
+        personAddressRecord3.setHouseNumber("20C");
+        session.saveOrUpdate(personAddressRecord3);
+
 
 
 

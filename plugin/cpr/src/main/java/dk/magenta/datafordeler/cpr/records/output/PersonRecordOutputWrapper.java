@@ -18,35 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
- * under a Company is sorted into this format:
- * {
- *     "UUID": <company uuid>
- *     "cvrnummer": <company cvr number>
- *     "id": {
- *         "domaene": <company domain>
- *     },
- *     registreringer: [
- *          {
- *              "registreringFra": <registrationFrom>,
- *              "registreringTil": <registrationTo>,
- *              "navn": [
- *              {
- *                  "navn": <companyName1>
- *                  "virkningFra": <effectFrom1>
- *                  "virkningTil": <effectTo1>
- *              },
- *              {
- *                  "navn": <companyName2>
- *                  "virkningFra": <effectFrom2>
- *                  "virkningTil": <effectTo2>
- *              }
- *              ]
- *          }
- *     ]
- * }
- */
 @Component
 public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEntity> {
 
@@ -150,6 +121,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         addressModifiers.add("geo_municipality");
         addressModifiers.add("geo_road");
         addressModifiers.add("geo_accessaddress");
+        addressModifiers.add("cpr_road");
         map.put(AddressDataRecord.class, addressModifiers);
         return map;
     }

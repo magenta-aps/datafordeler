@@ -48,6 +48,11 @@ public class ResponsibleEntityManager extends GerEntityManager<ResponsibleEntity
     }
 
     @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
+    @Override
     protected Class<ResponsibleEntity> getEntityClass() {
         return ResponsibleEntity.class;
     }

@@ -48,6 +48,11 @@ public class CompanyEntityManager extends GerEntityManager<CompanyEntity> {
     }
 
     @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
+    @Override
     protected Class<CompanyEntity> getEntityClass() {
         return CompanyEntity.class;
     }

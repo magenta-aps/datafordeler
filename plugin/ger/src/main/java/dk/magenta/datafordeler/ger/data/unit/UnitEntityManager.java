@@ -48,6 +48,11 @@ public class UnitEntityManager extends GerEntityManager<UnitEntity> {
     }
 
     @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
+    @Override
     protected Class<UnitEntity> getEntityClass() {
         return UnitEntity.class;
     }

@@ -206,7 +206,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     }
 
 
-
+/*
     @Override
     public Map<String, String> getJoinHandles(String entityIdentifier) {
         HashMap<String, String> handles = new HashMap<>();
@@ -223,10 +223,15 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
                         AddressRecord.DB_FIELD_ROADCODE
         );
         return handles;
-    }
+    }*/
 
     @Override
     public BaseQuery getQuery() {
         return new CompanyRecordQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 }

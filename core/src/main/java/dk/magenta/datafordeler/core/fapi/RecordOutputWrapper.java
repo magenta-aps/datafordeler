@@ -90,10 +90,13 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         return Collections.emptyMap();
     }
     private List<JsonModifier> getEligibleModifiers(Class cls) {
+        System.out.println( this.modifiers.keySet());
         List<String> modifierNames = this.getEligibleModifierNames().get(cls);
+        System.out.println(modifierNames);
         if (modifierNames == null) {
             return Collections.emptyList();
         }
+
         return modifierNames.stream().map(name -> this.modifiers.get(name)).collect(Collectors.toList());
     }
 
@@ -155,7 +158,9 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                     if (value instanceof ObjectNode) {
                         ObjectNode oValue = (ObjectNode) value;
                         for (JsonModifier modifier : RecordOutputWrapper.this.getEligibleModifiers(record.getClass())) {
-                            modifier.modify(oValue);
+                            if (modifier != null) {
+                                modifier.modify(oValue);
+                            }
                         }
                         if (unwrapSingle && value.size() == 1) {
                             this.bitemporalData.add(bitemporality, key, oValue.get(oValue.fieldNames().next()));

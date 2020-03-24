@@ -51,7 +51,7 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
             if (entity != null) {
                 AccessAddressPostcodeRecord postcodeRecord = entity.getPostcode().current(); // TODO: Ud fra dato? (bitemporal)
                 PostcodeEntity postcodeEntity = this.postcodeEntities.get(postcodeRecord.getPostcode());
-                node.put("postnr", postcodeEntity.getCode());
+                node.put("postnummer", postcodeEntity.getCode());
                 PostcodeNameRecord postcodeNameRecord = postcodeEntity.getName().current(); // TODO: Ud fra dato? (bitemporal)
                 node.put("postdistrikt", postcodeNameRecord.getName());
 
