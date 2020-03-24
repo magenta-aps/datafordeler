@@ -17,6 +17,9 @@ public abstract class RoadSegmentDataRecord<S extends RoadSegmentDataRecord<S>> 
     public abstract String getToHousenumber();
 
     public boolean matches(String houseNumber) {
+        if (houseNumber == null || houseNumber.isEmpty()) {
+            return true;
+        }
         int subjectNumberPart = getNumberPart(houseNumber);
         if ((subjectNumberPart % 2 == 0) != this.getEven()) {
             return false;

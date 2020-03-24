@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
+import dk.magenta.datafordeler.geo.data.building.BuildingEntityManager;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
@@ -23,7 +24,7 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
         this.outputWrapper = outputWrapper;
         for (AccessAddressEntity accessAddressEntity : (Set<AccessAddressEntity>) resultSet.get(AccessAddressEntity.class)) {
             for (AccessAddressRoadRecord r : accessAddressEntity.getRoad()) {
-                String ident = r.getMunicipalityCode()+"|"+r.getRoadCode()+"|"+accessAddressEntity.getBnr(); // TODO: bør vi også bruge husnummer?
+                String ident = r.getMunicipalityCode()+"|"+r.getRoadCode()+"|"+ BuildingEntityManager.stripBnr(accessAddressEntity.getBnr()); // TODO: bør vi også bruge husnummer?
                 this.accessAddressEntities.put(ident, accessAddressEntity);
             }
         }
@@ -46,7 +47,7 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
         JsonNode bnr = node.get("bnr");
 
         if (municipalityCode != null && roadCode != null && (bnr != null)) {
-            String ident = municipalityCode.asInt()+"|"+roadCode.asInt()+"|"+bnr.asText(); // TODO: bør vi også bruge husnummer?
+            String ident = municipalityCode.asInt()+"|"+roadCode.asInt()+"|"+BuildingEntityManager.stripBnr(bnr.asText()); // TODO: bør vi også bruge husnummer?
             AccessAddressEntity entity = this.accessAddressEntities.get(ident);
             if (entity != null) {
                 AccessAddressPostcodeRecord postcodeRecord = entity.getPostcode().current(); // TODO: Ud fra dato? (bitemporal)

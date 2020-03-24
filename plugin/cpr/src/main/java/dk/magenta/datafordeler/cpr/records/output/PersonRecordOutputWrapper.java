@@ -140,6 +140,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         addressModifiers.add("geo_municipality");
         addressModifiers.add("geo_road");
         addressModifiers.add("geo_accessaddress");
+        addressModifiers.add("geo_locality");
         addressModifiers.add("cpr_road");
         map.put(AddressDataRecord.class, addressModifiers);
         return map;

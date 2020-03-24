@@ -80,9 +80,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                 }
             }
         }
-
         Object result = this.wrapResult(input.getPrimaryEntity(), query, mode);
-
         return result;
     }
 
@@ -90,9 +88,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         return Collections.emptyMap();
     }
     private List<JsonModifier> getEligibleModifiers(Class cls) {
-        System.out.println( this.modifiers.keySet());
         List<String> modifierNames = this.getEligibleModifierNames().get(cls);
-        System.out.println(modifierNames);
         if (modifierNames == null) {
             return Collections.emptyList();
         }

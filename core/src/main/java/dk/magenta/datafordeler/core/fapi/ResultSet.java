@@ -19,7 +19,15 @@ public class ResultSet<E extends IdentifiedEntity> {
     }
 
     public ResultSet(Object databaseRow, List<String> classNames) throws ClassNotFoundException {
-        this((Object[]) databaseRow, classNames);
+        if (classNames.size() == 1) {
+            this.primaryEntity = (E) cast(databaseRow, classNames.get(0));
+        } else {
+            Object[] databaseRowItems = (Object[]) databaseRow;
+            this.primaryEntity = (E) cast(databaseRowItems[0], classNames.get(0));
+            for (int i=1; i<databaseRowItems.length; i++) {
+                this.addAssociatedEntity(cast(databaseRowItems[i], classNames.get(i)));
+            }
+        }
     }
 
     public ResultSet(Object[] databaseRow, List<String> classNames) throws ClassNotFoundException {
