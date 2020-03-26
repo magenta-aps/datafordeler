@@ -5,11 +5,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * Map of URL parameters, where each key can have several values
@@ -18,18 +16,36 @@ public class ParameterMap extends ListHashMap<String, String> {
     public ParameterMap() {
     }
 
+    @Override
+    public ArrayList<String> put(String key, ArrayList<String> value) {
+        value.replaceAll(v -> URLDecoder.decode(v, StandardCharsets.UTF_8));
+        return super.put(key, value);
+    }
+
     public ParameterMap(Map<String, List<String>> initial) {
         super(initial);
     }
 
+    @Override
+    public void add(String key, String value) {
+        super.add(key, URLDecoder.decode(value, StandardCharsets.UTF_8));
+    }
+
+    @Override
+    public void add(String key, Collection<String> values) {
+        ArrayList<String> valueList = new ArrayList<>(values);
+        valueList.replaceAll(v -> URLDecoder.decode(v, StandardCharsets.UTF_8));
+        super.add(key, valueList);
+    }
+
     public ParameterMap set(String key, String value) {
-        super.add(key, value);
+        this.add(key, value);
         return this;
     }
 
     public ParameterMap replace(String key, String value) {
         super.remove(key);
-        super.add(key, value);
+        this.add(key, value);
         return this;
     }
 

@@ -188,7 +188,6 @@ public abstract class QueryManager {
     private static final boolean logQuery = true;
 
     public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
-        System.out.println("getQuery()");
         String queryString = query.toHql();
 
         StringJoiner stringJoiner = null;
@@ -218,7 +217,6 @@ public abstract class QueryManager {
         if (logQuery) {
             log.info(stringJoiner.toString());
         }
-        System.out.println(stringJoiner.toString());
 
         // Offset & limit
         if (query.getOffset() > 0) {
@@ -232,7 +230,6 @@ public abstract class QueryManager {
 
 
     private static <E extends IdentifiedEntity> org.hibernate.query.Query<E> getQuery(Session session, BaseQuery query, Class<E> eClass) {
-        System.out.println("getQuery()");
         BaseLookupDefinition lookupDefinition = query.getLookupDefinition();
         String root = lookupDefinition.usingRVDModel() ? "d" : ENTITY;
 
@@ -273,7 +270,6 @@ public abstract class QueryManager {
         if (logQuery) {
             log.info(stringJoiner.toString());
         }
-        System.out.println(stringJoiner.toString());
 
         // Offset & limit
         if (query.getOffset() > 0) {
@@ -299,7 +295,6 @@ public abstract class QueryManager {
         long start = Instant.now().toEpochMilli();
 
         List<Object> results = databaseQuery.list();
-        System.out.println(results);
         List<String> classNames = query.getEntityClassnames();
         try {
             for (Object row : results) {

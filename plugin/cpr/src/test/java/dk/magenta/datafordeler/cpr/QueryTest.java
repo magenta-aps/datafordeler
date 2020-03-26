@@ -351,22 +351,12 @@ public class QueryTest {
         JsonNode results4 = jsonBody.get("results");
         Assert.assertEquals(results3, results4);
 
-
-        System.out.println("=================================================");
-
         searchParameters.remove("cprKommunekode");
         searchParameters.add("cprVejkode", "111");
         response = restSearch(searchParameters, "person");
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody());
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results5 = jsonBody.get("results");
         Assert.assertEquals(results4, results5);
-
-
-
-
-
     }
 
 }
