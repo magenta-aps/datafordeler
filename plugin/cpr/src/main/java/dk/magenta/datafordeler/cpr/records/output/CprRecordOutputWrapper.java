@@ -20,13 +20,7 @@ public abstract class CprRecordOutputWrapper<E extends CprRecordEntity> extends 
             "virkningFraUsikker",
             "cnt",
             "undone",
-            "technicalCorrection",
-            "myndighed",
-            "mor_verifikation",
-            "far_verifikation",
-            "fødselsdatoUsikkerhedsmarkering",
-            "værgemål",
-            "navneMarkering"
+            "technicalCorrection"
     ));
 
 
