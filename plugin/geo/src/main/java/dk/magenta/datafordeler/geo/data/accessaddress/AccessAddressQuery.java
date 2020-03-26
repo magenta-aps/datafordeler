@@ -310,6 +310,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         this.addCondition("housenumber", this.houseNumber);
         this.addCondition("roadcode", this.roadCode, Integer.class);
         this.addCondition("municipalitycode", this.municipalityCode, Integer.class);
+        this.addCondition("localitycode", this.locality);
     }
 
     public RoadQuery addRelatedRoadQuery() {
