@@ -128,8 +128,11 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     public void addKommunekode(String kommunekode) {
-        this.kommunekoder.add(kommunekode);
-        this.updatedParameters();
+        if (kommunekode != null) {
+            this.kommunekoder.add(kommunekode);
+            this.increaseDataParamCount();
+            this.updatedParameters();
+        }
     }
 
     public void addKommunekode(int kommunekode) {
@@ -158,8 +161,11 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     public void addVejkode(String vejkode) {
-        this.vejkoder.add(vejkode);
-        this.updatedParameters();
+        if (vejkode != null) {
+            this.vejkoder.add(vejkode);
+            this.updatedParameters();
+            this.increaseDataParamCount();
+        }
     }
 
     public void addVejkode(int vejkode) {
@@ -174,6 +180,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.clearVejkode();
         if (vejkoder != null) {
             this.vejkoder.addAll(vejkoder);
+            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -296,6 +303,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.setFornavne(parameters.get(FORNAVNE));
         this.setEfternavne(parameters.get(EFTERNAVN));
         this.setKommunekoder(parameters.get(KOMMUNEKODE));
+        this.setVejkoder(parameters.get(VEJKODE));
         this.setDoors(parameters.get(DOOR));
         this.setFloors(parameters.get(FLOOR));
         this.setHouseNos(parameters.get(HOUSENO));

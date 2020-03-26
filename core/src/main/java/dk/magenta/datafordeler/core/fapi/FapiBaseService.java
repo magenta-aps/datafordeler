@@ -369,6 +369,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     @WebMethod(exclude = true)
     @RequestMapping(path="/search", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Envelope searchRest(@RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request) throws DataFordelerException {
+        System.out.println("search");
         Session session = this.getSessionManager().getSessionFactory().openSession();
         Envelope envelope = new Envelope();
         try {
@@ -385,6 +386,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addUserData(user);
             envelope.addRequestData(request);
             List<ResultSet<E>> results = this.searchByQuery(query, session);
+            System.out.println(results);
             if (this.getOutputWrapper() != null) {
                 envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
