@@ -265,11 +265,15 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     @Override
     protected Map<String, String> joinHandles() {
-        return joinHandles;
+        HashMap<String, String> handles = new HashMap<>();
+        handles.putAll(super.joinHandles());
+        handles.putAll(joinHandles);
+        return handles;
     }
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("code", this.code, Integer.class);
         this.addCondition("name", this.name);
         this.addCondition("addressingname", this.addressingName);

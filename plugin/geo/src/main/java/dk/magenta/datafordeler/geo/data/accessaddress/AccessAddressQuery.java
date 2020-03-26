@@ -288,11 +288,15 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     @Override
     protected Map<String, String> joinHandles() {
-        return joinHandles;
+        HashMap<String, String> handles = new HashMap<>();
+        handles.putAll(super.joinHandles());
+        handles.putAll(joinHandles);
+        return handles;
     }
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("bnr", this.bnr);
         this.addCondition("housenumber", this.houseNumber);
         this.addCondition("roadcode", this.roadCode, Integer.class);

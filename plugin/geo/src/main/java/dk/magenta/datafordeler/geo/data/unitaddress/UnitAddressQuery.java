@@ -240,11 +240,15 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     @Override
     protected Map<String, String> joinHandles() {
-        return joinHandles;
+        HashMap<String, String> handles = new HashMap<>();
+        handles.putAll(super.joinHandles());
+        handles.putAll(joinHandles);
+        return handles;
     }
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("floor", this.floor);
         this.addCondition("door", this.door);
     }

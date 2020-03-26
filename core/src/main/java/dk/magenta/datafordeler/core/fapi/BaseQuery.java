@@ -834,7 +834,7 @@ public abstract class BaseQuery {
     }
 
     public void addCondition(String handle, List<String> value, Class type) throws QueryBuildException {
-        if (!value.isEmpty()) {
+        if (value != null && !value.isEmpty()) {
             this.addCondition(handle, Condition.Operator.EQ, value, type);
         }
     }
