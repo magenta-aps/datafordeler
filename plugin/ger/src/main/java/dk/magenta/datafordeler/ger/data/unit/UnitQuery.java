@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.ger.data.unit;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.ger.data.GerQuery;
@@ -107,7 +108,7 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("deid", this.deid.stream().map(UUID::toString).collect(Collectors.toList()), UUID.class);
         this.addCondition("name", this.name);
     }

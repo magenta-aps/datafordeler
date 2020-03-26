@@ -2,12 +2,12 @@ package dk.magenta.datafordeler.ger.data.responsible;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.ger.data.GerQuery;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
 
@@ -146,7 +146,7 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("name", this.name);
         this.addCondition("gernr", this.gerNr, Integer.class);
         this.addCondition("guid", this.cvrGuid, UUID.class);
