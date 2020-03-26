@@ -295,6 +295,7 @@ public abstract class QueryManager {
         long start = Instant.now().toEpochMilli();
 
         List<Object> results = databaseQuery.list();
+        System.out.println(results);
         List<String> classNames = query.getEntityClassnames();
         try {
             for (Object row : results) {
