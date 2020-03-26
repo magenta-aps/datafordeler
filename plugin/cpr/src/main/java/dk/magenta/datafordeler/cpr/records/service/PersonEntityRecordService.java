@@ -92,7 +92,6 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
 
     @Override
     protected PersonRecordQuery getEmptyQuery() {
-        //return new PersonRecordQuery();
         PersonRecordQuery query = new PersonRecordQuery();
 
         query.addExtraJoin("LEFT JOIN cpr_person.address cpr_person__address");
