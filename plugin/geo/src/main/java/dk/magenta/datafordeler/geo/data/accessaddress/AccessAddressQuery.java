@@ -26,7 +26,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     private List<String> road = new ArrayList<>();
 
 
-    public static final String MUNICIPALITY = AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE;
+    public static final String MUNICIPALITY = AccessAddressRoadRecord.IO_FIELD_MUNICIPALITY_CODE;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = MUNICIPALITY)
     private List<String> municipality = new ArrayList<>();
@@ -42,6 +42,11 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = LOCALITY_UUID)
     private List<UUID> localityUUID = new ArrayList<>();
+
+    public static final String LOCALITY = AccessAddressEntity.IO_FIELD_LOCALITY;
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = LOCALITY)
+    private List<String> locality = new ArrayList<>();
 
 
 
@@ -215,6 +220,9 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         super.setFromParameters(parameters);
         this.setBnr(parameters.getFirst(BNR));
         this.setRoad(parameters.getFirst(ROAD));
+        this.setHouseNumber(parameters.getFirst(HOUSE_NUMBER));
+        this.setMunicipality(parameters.getFirst(MUNICIPALITY));
+
         String roadUUID = parameters.getFirst(ROAD_UUID);
         if (roadUUID != null) {
             try {
