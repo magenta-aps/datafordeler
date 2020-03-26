@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.geo.data.municipality;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -42,6 +43,11 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
         }
     }
 
+    public void clearCode() {
+        this.code.clear();
+        this.updatedParameters();
+    }
+
     public List<String> getName() {
         return name;
     }
@@ -56,6 +62,11 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
             this.name.add(name);
             this.increaseDataParamCount();
         }
+    }
+
+    public void clearName() {
+        this.name.clear();
+        this.updatedParameters();
     }
 
     @Override
@@ -99,7 +110,7 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
 
     static {
         joinHandles.put("code", GeoMunicipalityEntity.DB_FIELD_CODE);
-        joinHandles.put("name", GeoMunicipalityEntity.DB_FIELD_NAME);
+        joinHandles.put("name", GeoMunicipalityEntity.DB_FIELD_NAME + BaseQuery.separator + MunicipalityNameRecord.DB_FIELD_NAME);
     }
 
     @Override

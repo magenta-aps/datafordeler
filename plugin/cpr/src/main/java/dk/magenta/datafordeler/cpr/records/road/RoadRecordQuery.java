@@ -32,19 +32,22 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
     public void addVejkode(String vejkode) {
-        this.vejkoder.add(vejkode);
         if (vejkode != null) {
+            this.vejkoder.add(vejkode);
             this.increaseDataParamCount();
-            this.addParameter();
+            this.updatedParameters();
         }
     }
 
-    public void setVejkode(String vejkode) {
+    public void clearVejkode() {
         this.vejkoder.clear();
-        this.addParameter();
-        this.addVejkode(vejkode);
+        this.updatedParameters();
     }
 
+    public void setVejkode(String vejkode) {
+        this.clearVejkode();
+        this.addVejkode(vejkode);
+    }
     public void setVejkode(int vejkode) {
         this.setVejkode(Integer.toString(vejkode));
     }
@@ -60,16 +63,20 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
     public void addVejnavn(String vejnavn) {
-        this.vejnavne.add(vejnavn);
         if (vejnavn != null) {
+            this.vejnavne.add(vejnavn);
             this.increaseDataParamCount();
-            this.addParameter();
+            this.updatedParameters();
         }
     }
 
-    public void setVejnavn(String vejnavn) {
+    public void clearVejnavn() {
         this.vejnavne.clear();
-        this.addParameter();
+        this.updatedParameters();
+    }
+
+    public void setVejnavn(String vejnavn) {
+        this.clearVejnavn();
         this.addVejnavn(vejnavn);
     }
 
@@ -84,16 +91,15 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
     public void addKommunekode(String kommunekode) {
-        this.kommunekoder.add(kommunekode);
         if (kommunekode != null) {
+            this.kommunekoder.add(kommunekode);
             this.increaseDataParamCount();
-            this.addParameter();
+            this.updatedParameters();
         }
     }
 
     public void setKommunekode(String kommunekode) {
-        this.kommunekoder.clear();
-        this.addParameter();
+        this.clearKommunekode();
         this.addKommunekode(kommunekode);
     }
 
@@ -103,6 +109,7 @@ public class RoadRecordQuery extends BaseQuery {
 
     public void clearKommunekode() {
         this.kommunekoder.clear();
+        this.updatedParameters();
     }
 
     @Override

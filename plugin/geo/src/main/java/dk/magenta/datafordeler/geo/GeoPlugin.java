@@ -188,13 +188,19 @@ public class GeoPlugin extends Plugin {
         return s.toString();
     }
 
-    public LinkedHashMap<String, Class> getJoinClassAliases() {
+    public LinkedHashMap<String, Class> getJoinClassAliases(Collection<String> handles) {
         LinkedHashMap<String, Class> aliases = new LinkedHashMap<>();
-        aliases.put("geo_accessaddress", AccessAddressEntity.class);
-        aliases.put("geo_road", GeoRoadEntity.class);
-        aliases.put("geo_locality", GeoLocalityEntity.class);
-        aliases.put("geo_municipality", GeoMunicipalityEntity.class);
-        aliases.put("geo_postcode", PostcodeEntity.class);
+        if (handles.contains("municipalitycode")) {
+            aliases.put("geo_municipality", GeoMunicipalityEntity.class);
+            if (handles.contains("roadcode")) {
+                aliases.put("geo_road", GeoRoadEntity.class);
+            }
+            aliases.put("geo_locality", GeoLocalityEntity.class);
+            if (handles.contains("housenumber") || handles.contains("bnr")) {
+                aliases.put("geo_accessaddress", AccessAddressEntity.class);
+                aliases.put("geo_postcode", PostcodeEntity.class);
+            }
+        }
         return aliases;
     }
 

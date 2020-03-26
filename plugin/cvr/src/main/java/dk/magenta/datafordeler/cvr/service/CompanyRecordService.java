@@ -119,15 +119,17 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
 
 
         query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
+        query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality  cvr_company__locationAddress__municipality");
+        query.addExtraJoin("LEFT JOIN cvr_company__locationAddress__municipality.municipality  cvr_company__locationAddress__municipality__municipality");
 
 
         HashMap<String, String> handles = new HashMap<>();
-        handles.put("municipalitycode", "cvr_company__locationAddress.municipality.code");
+        handles.put("municipalitycode", "cvr_company__locationAddress__municipality__municipality.code");
         handles.put("roadcode", "cvr_company__locationAddress.roadCode");
         handles.put("housenumber", "cvr_company__locationAddress.houseNumberFrom");
 
         query.addExtraJoin(geoPlugin.getJoinString(handles));
-        query.addExtraTables(geoPlugin.getJoinClassAliases());
+        query.addExtraTables(geoPlugin.getJoinClassAliases(handles.keySet()));
 
         //query.addExtraJoin(cprPlugin.getJoinString(handles));
         //query.addExtraTables(cprPlugin.getJoinClassAliases());

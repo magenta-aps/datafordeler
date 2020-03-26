@@ -38,16 +38,17 @@ public class ParticipantRecordQuery extends BaseQuery {
         if (enhedsNummer != null) {
             this.enhedsNummer.add(enhedsNummer);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setEnhedsNummer(String enhedsNumre) {
-        this.enhedsNummer.clear();
+        this.clearEnhedsNummer();
         this.addEnhedsNummer(enhedsNumre);
     }
 
     public void setEnhedsNummer(Collection<String> enhedsNumre) {
-        this.enhedsNummer.clear();
+        this.clearEnhedsNummer();
         if (enhedsNumre != null) {
             for (String enhedsNummer : enhedsNumre) {
                 this.addEnhedsNummer(enhedsNummer);
@@ -57,6 +58,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     public void clearEnhedsNummer() {
         this.enhedsNummer.clear();
+        this.updatedParameters();
     }
 
 
@@ -72,6 +74,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -80,12 +83,12 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     public void setKommuneKode(String kommunekode) {
-        this.kommunekode.clear();
+        this.clearKommuneKode();
         this.addKommuneKode(kommunekode);
     }
 
     public void setKommuneKode(Collection<String> kommunekoder) {
-        this.kommunekode.clear();
+        this.clearKommuneKode();
         if (kommunekoder != null) {
             for (String kommunekode : kommunekoder) {
                 this.addKommuneKode(kommunekode);
@@ -95,6 +98,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     public void clearKommuneKode() {
         this.kommunekode.clear();
+        this.updatedParameters();
     }
 
 
@@ -111,6 +115,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         if (vejkode != null) {
             this.vejkode.add(vejkode);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -119,12 +124,12 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     public void setVejkode(String vejkode) {
-        this.vejkode.clear();
+        this.clearVejkode();
         this.addVejkode(vejkode);
     }
 
     public void setVejkode(Collection<String> vejkoder) {
-        this.vejkode.clear();
+        this.clearVejkode();
         if (vejkoder != null) {
             for (String vejkode : vejkoder) {
                 this.addVejkode(vejkode);
@@ -134,6 +139,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     public void clearVejkode() {
         this.vejkode.clear();
+        this.updatedParameters();
     }
 
 
@@ -149,16 +155,17 @@ public class ParticipantRecordQuery extends BaseQuery {
         if (navn != null) {
             this.navn.add(navn);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setNavn(String navn) {
-        this.navn.clear();
+        this.clearNavn();
         this.addNavn(navn);
     }
 
     public void setNavn(Collection<String> navne) {
-        this.navn.clear();
+        this.clearNavn();
         if (navne != null) {
             for (String navn : navne) {
                 this.addNavn(navn);
@@ -168,6 +175,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     public void clearNavn() {
         this.navn.clear();
+        this.updatedParameters();
     }
 
 

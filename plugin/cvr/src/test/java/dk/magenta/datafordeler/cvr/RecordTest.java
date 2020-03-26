@@ -352,7 +352,7 @@ public class RecordTest {
         this.applyAccess(testUserDetails);
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943", HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=rvd", HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(200, resp.getStatusCodeValue());
         JsonNode jsonBody = objectMapper.readTree(resp.getBody());
         JsonNode results = jsonBody.get("results");

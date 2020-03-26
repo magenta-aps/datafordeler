@@ -376,8 +376,8 @@ public class GeoIntegrationTest {
 
         LinkedHashMap<String, Class> classAliases = new LinkedHashMap<>();
         classAliases.put("cpr_person", PersonEntity.class);
-        classAliases.putAll(geoPlugin.getJoinClassAliases());
-        classAliases.putAll(cprPlugin.getJoinClassAliases());
+        classAliases.putAll(geoPlugin.getJoinClassAliases(handles.keySet()));
+        classAliases.putAll(cprPlugin.getJoinClassAliases(handles.keySet()));
 
         ParameterMap parameters = new ParameterMap();
         parameters.add("personnummer", "1234567890");

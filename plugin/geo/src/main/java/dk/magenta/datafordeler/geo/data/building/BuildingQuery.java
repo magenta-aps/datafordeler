@@ -32,6 +32,7 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
 
     public void setAnr(String anr) {
         this.anr.clear();
+        this.updatedParameters();
         this.addAnr(anr);
     }
 
@@ -39,6 +40,7 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
         if (anr != null) {
             this.anr.add(anr);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -50,6 +52,7 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
 
     public void setBnr(String bnr) {
         this.bnr.clear();
+        this.updatedParameters();
         this.addBnr(bnr);
     }
 
@@ -57,6 +60,7 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
         if (bnr != null) {
             this.bnr.add(bnr);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 

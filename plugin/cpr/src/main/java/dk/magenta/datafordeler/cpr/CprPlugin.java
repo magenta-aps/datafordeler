@@ -118,9 +118,11 @@ public class CprPlugin extends Plugin {
         return s.toString();
     }
 
-    public LinkedHashMap<String, Class> getJoinClassAliases() {
+    public LinkedHashMap<String, Class> getJoinClassAliases(Collection<String> handles) {
         LinkedHashMap<String, Class> aliases = new LinkedHashMap<>();
-        aliases.put("cpr_road", RoadEntity.class);
+        if (handles.contains("municipalitycode") && handles.contains("roadcode")) {
+            aliases.put("cpr_road", RoadEntity.class);
+        }
         return aliases;
     }
 

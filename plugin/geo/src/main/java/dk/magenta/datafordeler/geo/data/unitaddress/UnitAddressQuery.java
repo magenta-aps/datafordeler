@@ -117,6 +117,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     public void setHouseNumber(String houseNumber) {
         this.houseNumber.clear();
+        this.updatedParameters();
         this.addHouseNumber(houseNumber);
     }
 
@@ -124,6 +125,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         if (houseNumber != null) {
             this.houseNumber.add(houseNumber);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -142,6 +144,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     public void setFloor(String floor) {
         this.floor.clear();
+        this.updatedParameters();
         this.addFloor(floor);
     }
 
@@ -149,6 +152,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         if (floor != null) {
             this.floor.add(floor);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -166,6 +170,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     public void setDoor(String door) {
         this.door.clear();
+        this.updatedParameters();
         this.addDoor(door);
     }
 
@@ -173,6 +178,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         if (door != null) {
             this.door.add(door);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 

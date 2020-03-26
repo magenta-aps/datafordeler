@@ -118,10 +118,10 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
         handles.put("bnr", "cpr_person__address.buildingNumber");
 
         query.addExtraJoin(geoPlugin.getJoinString(handles));
-        query.addExtraTables(geoPlugin.getJoinClassAliases());
+        query.addExtraTables(geoPlugin.getJoinClassAliases(handles.keySet()));
         
         query.addExtraJoin(cprPlugin.getJoinString(handles));
-        query.addExtraTables(cprPlugin.getJoinClassAliases());
+        query.addExtraTables(cprPlugin.getJoinClassAliases(handles.keySet()));
 
         return query;
     }

@@ -34,16 +34,17 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         if (pnummer != null) {
             this.pNummer.add(pnummer);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setPNummer(String pNumre) {
-        this.pNummer.clear();
+        this.clearPNummer();
         this.addPNummer(pNumre);
     }
 
     public void setPNummer(Collection<String> pNumre) {
-        this.pNummer.clear();
+        this.clearPNummer();
         if (pNumre != null) {
             for (String pNummer : pNumre) {
                 this.addPNummer(pNummer);
@@ -53,6 +54,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearPNummer() {
         this.pNummer.clear();
+        this.updatedParameters();
     }
 
 
@@ -68,16 +70,17 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         if (cvrNummer != null) {
             this.associatedCompanyCvrNumber.add(cvrNummer);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setAssociatedCompanyCvrNummer(String cvrNumre) {
-        this.associatedCompanyCvrNumber.clear();
+        this.clearAssociatedCompanyCvrNummer();
         this.addAssociatedCompanyCvrNummer(cvrNumre);
     }
 
     public void setAssociatedCompanyCvrNummer(Collection<String> cvrNumre) {
-        this.associatedCompanyCvrNumber.clear();
+        this.clearAssociatedCompanyCvrNummer();
         if (cvrNumre != null) {
             for (String cvrNummer : cvrNumre) {
                 this.addAssociatedCompanyCvrNummer(cvrNummer);
@@ -87,6 +90,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearAssociatedCompanyCvrNummer() {
         this.associatedCompanyCvrNumber.clear();
+        this.updatedParameters();
     }
 
 
@@ -102,16 +106,17 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         if (primaryIndustry != null) {
             this.primaryIndustry.add(primaryIndustry);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setPrimaryIndustry(String primaryIndustry) {
-        this.primaryIndustry.clear();
+        this.clearPrimaryIndustry();
         this.addPrimaryIndustry(primaryIndustry);
     }
 
     public void setPrimaryIndustry(Collection<String> primaryIndustries) {
-        this.primaryIndustry.clear();
+        this.clearPrimaryIndustry();
         if (primaryIndustries != null) {
             for (String primaryIndustry : primaryIndustries) {
                 this.addPrimaryIndustry(primaryIndustry);
@@ -121,6 +126,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearPrimaryIndustry() {
         this.primaryIndustry.clear();
+        this.updatedParameters();
     }
 
 
@@ -136,6 +142,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -144,12 +151,12 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     }
 
     public void setKommuneKode(String kommunekode) {
-        this.kommunekode.clear();
+        this.clearKommuneKode();
         this.addKommuneKode(kommunekode);
     }
 
     public void setKommuneKode(Collection<String> kommunekoder) {
-        this.kommunekode.clear();
+        this.clearKommuneKode();
         if (kommunekoder != null) {
             for (String kommunekode : kommunekoder) {
                 this.addKommuneKode(kommunekode);
@@ -159,6 +166,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearKommuneKode() {
         this.kommunekode.clear();
+        this.updatedParameters();
     }
 
 
@@ -176,6 +184,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         if (vejkode != null) {
             this.vejkode.add(vejkode);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -184,12 +193,12 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     }
 
     public void setVejkode(String vejkode) {
-        this.vejkode.clear();
+        this.clearVejkode();
         this.addVejkode(vejkode);
     }
 
     public void setVejkode(Collection<String> vejkoder) {
-        this.vejkode.clear();
+        this.clearVejkode();
         if (vejkoder != null) {
             for (String vejkode : vejkoder) {
                 this.addVejkode(vejkode);
@@ -199,6 +208,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearVejkode() {
         this.vejkode.clear();
+        this.updatedParameters();
     }
 
 

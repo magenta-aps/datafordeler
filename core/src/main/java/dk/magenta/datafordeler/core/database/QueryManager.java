@@ -185,10 +185,9 @@ public abstract class QueryManager {
         return results;
     }
 
-    private static final boolean logQuery = false;
+    private static final boolean logQuery = true;
 
     public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
-
         String queryString = query.toHql();
 
         StringJoiner stringJoiner = null;

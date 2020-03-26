@@ -38,6 +38,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
 
     public void setCode(String code) {
         this.code.clear();
+        this.updatedParameters();
         this.addCode(code);
     }
 
@@ -45,6 +46,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         if (code != null) {
             this.code.add(code);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -54,6 +56,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
 
     public void setName(String name) {
         this.name.clear();
+        this.updatedParameters();
         this.addName(name);
     }
 
@@ -61,6 +64,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         if (name != null) {
             this.name.add(name);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -70,6 +74,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
 
     public void setMunicipality(String municipality) {
         this.municipality.clear();
+        this.updatedParameters();
         this.addMunicipality(municipality);
     }
 
@@ -77,6 +82,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         if (municipality != null) {
             this.municipality.add(municipality);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 

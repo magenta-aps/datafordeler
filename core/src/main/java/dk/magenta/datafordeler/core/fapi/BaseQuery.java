@@ -592,7 +592,7 @@ public abstract class BaseQuery {
         if (modeString != null) {
             this.mode = PARAM_OUTPUT_WRAPPING_VALUEMAP.get(modeString);
         }
-        this.addParameter();
+        this.updatedParameters();
     }
 
     private int dataParamCount = 0;
@@ -842,7 +842,7 @@ public abstract class BaseQuery {
     public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws QueryBuildException {
         this.finalizedConditions = false;
         String member = this.useJoinHandle(handle);
-        String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replace(".", "__");
+        String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replaceAll("\\.", "__");
         if (member != null && value != null && !value.isEmpty()) {
             try {
                 this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
@@ -921,7 +921,7 @@ public abstract class BaseQuery {
         }
     }
 
-    protected void addParameter() {
+    protected void updatedParameters() {
         this.finalizedConditions = false;
     }
 

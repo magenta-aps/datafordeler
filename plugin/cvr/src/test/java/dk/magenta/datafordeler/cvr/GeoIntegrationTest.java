@@ -5,13 +5,10 @@ import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import org.hibernate.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +58,7 @@ public class GeoIntegrationTest {
             handles.put("roadcode", "cvr_company__locationAddress.roadCode");
 
             query.addExtraJoin(geoPlugin.getJoinString(handles));
-            query.addExtraTables(geoPlugin.getJoinClassAliases());
+            query.addExtraTables(geoPlugin.getJoinClassAliases(handles.keySet()));
 
             //query.addExtraJoin(cprPlugin.getJoinString(handles));
             //query.addExtraTables(cprPlugin.getJoinClassAliases());

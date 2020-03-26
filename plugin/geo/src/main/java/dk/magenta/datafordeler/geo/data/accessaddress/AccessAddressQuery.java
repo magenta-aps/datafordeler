@@ -71,6 +71,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         if (bnr != null) {
             this.bnr.add(bnr);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -83,6 +84,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     public void setRoadCode(String roadCode) {
         this.roadCode.clear();
+        this.updatedParameters();
         this.addRoadCode(roadCode);
     }
 
@@ -94,6 +96,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         if (roadCode != null) {
             this.roadCode.add(roadCode);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -113,12 +116,14 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void setMunicipalityCode(String municipalityCode) {
         this.municipalityCode.clear();
         this.addMunicipalityCode(municipalityCode);
+        this.updatedParameters();
     }
 
     public void addMunicipalityCode(String municipalityCode) {
         if (municipalityCode != null) {
             this.municipalityCode.add(municipalityCode);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -137,7 +142,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     }
 
     public void setRoadUUID(UUID roadUUID) {
-        this.roadUUID.clear();
+        this.clearRoadUUID();
         this.addRoadUUID(roadUUID);
     }
 
@@ -145,7 +150,12 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         if (roadUUID != null) {
             this.roadUUID.add(roadUUID);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
+    }
+    public void clearRoadUUID() {
+        this.roadUUID.clear();
+        this.updatedParameters();
     }
 
 
@@ -163,6 +173,11 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
             this.localityUUID.add(localityUUID);
             this.increaseDataParamCount();
         }
+    }
+
+    public void clearLocalityUUID() {
+        this.localityUUID.clear();
+        this.updatedParameters();
     }
 
     public void clearHouseNumber() {

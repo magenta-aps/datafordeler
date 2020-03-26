@@ -41,16 +41,17 @@ public class CompanyRecordQuery extends BaseQuery {
         if (cvrnummer != null) {
             this.cvrNumre.add(cvrnummer);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setCvrNumre(String cvrNumre) {
-        this.cvrNumre.clear();
+        this.clearCvrNumre();
         this.addCvrNummer(cvrNumre);
     }
 
     public void setCvrNumre(Collection<String> cvrNumre) {
-        this.cvrNumre.clear();
+        this.clearCvrNumre();
         if (cvrNumre != null) {
             for (String cvrNummer : cvrNumre) {
                 this.addCvrNummer(cvrNummer);
@@ -60,6 +61,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearCvrNumre() {
         this.cvrNumre.clear();
+        this.updatedParameters();
     }
 
 
@@ -71,9 +73,11 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setReklamebeskyttelse(String reklamebeskyttelse) {
-        this.reklamebeskyttelse = reklamebeskyttelse;
+        this.clearReklamebeskyttelse();
         if (reklamebeskyttelse != null) {
+            this.reklamebeskyttelse = reklamebeskyttelse;
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -95,16 +99,17 @@ public class CompanyRecordQuery extends BaseQuery {
         if (virksomhedsnavn != null) {
             this.virksomhedsnavn.add(virksomhedsnavn);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setVirksomhedsnavn(String virksomhedsnavn) {
-        this.virksomhedsnavn.clear();
+        this.clearVirksomhedsnavn();
         this.addVirksomhedsnavn(virksomhedsnavn);
     }
 
     public void setVirksomhedsnavn(Collection<String> virksomhedsnavne) {
-        this.virksomhedsnavn.clear();
+        this.clearVirksomhedsnavn();
         if (virksomhedsnavne != null) {
             for (String virksomhedsnavn : virksomhedsnavne) {
                 this.addVirksomhedsnavn(virksomhedsnavn);
@@ -114,6 +119,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearVirksomhedsnavn() {
         this.virksomhedsnavn.clear();
+        this.updatedParameters();
     }
 
 
@@ -129,16 +135,17 @@ public class CompanyRecordQuery extends BaseQuery {
         if (telefonnummer != null) {
             this.telefonnummer.add(telefonnummer);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setTelefonnummer(String telefonnummer) {
-        this.telefonnummer.clear();
+        this.clearTelefonnummer();
         this.addTelefonnummer(telefonnummer);
     }
 
     public void setTelefonnummer(Collection<String> telefonnumre) {
-        this.telefonnummer.clear();
+        this.clearTelefonnummer();
         if (telefonnumre != null) {
             for (String telefonnummer : telefonnumre) {
                 this.addTelefonnummer(telefonnummer);
@@ -148,6 +155,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearTelefonnummer() {
         this.telefonnummer.clear();
+        this.updatedParameters();
     }
 
 
@@ -163,16 +171,17 @@ public class CompanyRecordQuery extends BaseQuery {
         if (telefaxnummer != null) {
             this.telefaxnummer.add(telefaxnummer);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setTelefaxnummer(String telefaxnummer) {
-        this.telefaxnummer.clear();
+        this.clearTelefaxnummer();
         this.addTelefaxnummer(telefaxnummer);
     }
 
     public void setTelefaxnummer(Collection<String> telefaxnumre) {
-        this.telefaxnummer.clear();
+        this.clearTelefaxnummer();
         if (telefaxnumre != null) {
             for (String telefaxnummer : telefaxnumre) {
                 this.addTelefaxnummer(telefaxnummer);
@@ -182,6 +191,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearTelefaxnummer() {
         this.telefaxnummer.clear();
+        this.updatedParameters();
     }
 
 
@@ -197,11 +207,12 @@ public class CompanyRecordQuery extends BaseQuery {
         if (emailadresse != null) {
             this.emailadresse.add(emailadresse);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setEmailadresse(String emailadresse) {
-        this.emailadresse.clear();
+        this.clearEmailadresse();
         this.addEmailadresse(emailadresse);
     }
 
@@ -216,6 +227,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearEmailadresse() {
         this.emailadresse.clear();
+        this.updatedParameters();
     }
 
 
@@ -231,6 +243,7 @@ public class CompanyRecordQuery extends BaseQuery {
         if (virksomhedsform != null) {
             this.virksomhedsform.add(virksomhedsform);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -239,7 +252,7 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setVirksomhedsform(String virksomhedsform) {
-        this.virksomhedsform.clear();
+        this.clearVirksomhedsform();
         this.addVirksomhedsform(virksomhedsform);
     }
 
@@ -248,7 +261,7 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setVirksomhedsform(Collection<String> virksomhedsformer) {
-        this.virksomhedsform.clear();
+        this.clearVirksomhedsform();
         if (virksomhedsformer != null) {
             for (String virksomhedsform : virksomhedsformer) {
                 this.addVirksomhedsform(virksomhedsform);
@@ -258,6 +271,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearVirksomhedsform() {
         this.virksomhedsform.clear();
+        this.updatedParameters();
     }
 
 
@@ -274,6 +288,7 @@ public class CompanyRecordQuery extends BaseQuery {
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -287,7 +302,7 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setKommuneKode(Collection<String> kommunekoder) {
-        this.kommunekode.clear();
+        this.clearKommuneKoder();
         if (kommunekoder != null) {
             for (String kommunekode : kommunekoder) {
                 this.addKommuneKode(kommunekode);
@@ -301,6 +316,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearKommuneKoder() {
         this.kommunekode.clear();
+        this.updatedParameters();
     }
 
 

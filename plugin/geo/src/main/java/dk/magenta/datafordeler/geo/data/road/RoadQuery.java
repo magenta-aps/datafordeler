@@ -53,6 +53,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setCode(String code) {
         this.code.clear();
+        this.updatedParameters();
         this.addCode(code);
     }
 
@@ -60,6 +61,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         if (code != null) {
             this.code.add(code);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -69,12 +71,14 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setName(String name) {
         this.name.clear();
+        this.updatedParameters();
         this.addName(name);
     }
 
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
+            this.updatedParameters();
             this.increaseDataParamCount();
         }
     }
@@ -86,6 +90,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setAddressingName(String addressingName) {
         this.addressingName.clear();
+        this.updatedParameters();
         this.addAddressingName(addressingName);
     }
 
@@ -93,6 +98,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         if (addressingName != null) {
             this.addressingName.add(addressingName);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -102,6 +108,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setLocality(String locality) {
         this.locality.clear();
+        this.updatedParameters();
         this.addLocality(locality);
     }
 
@@ -109,6 +116,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         if (locality != null) {
             this.locality.add(locality);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -120,6 +128,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setLocalityUUID(UUID localityUUID) {
         this.localityUUID.clear();
+        this.updatedParameters();
         this.addLocalityUUID(localityUUID);
     }
 
@@ -127,6 +136,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         if (localityUUID != null) {
             this.localityUUID.add(localityUUID);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -136,6 +146,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setMunicipalityCode(String municipalityCode) {
         this.municipalityCode.clear();
+        this.updatedParameters();
         this.addMunicipalityCode(municipalityCode);
     }
 
@@ -143,6 +154,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         if (municipalityCode != null) {
             this.municipalityCode.add(municipalityCode);
             this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
