@@ -306,5 +306,6 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         this.addCondition("primaryindustrycode", this.primaryIndustry);
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);
         this.addCondition("roadcode", this.vejkode, Integer.class);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 }

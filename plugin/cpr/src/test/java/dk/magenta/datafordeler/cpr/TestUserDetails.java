@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.UserProfile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TestUserDetails extends DafoUserDetails {
 
@@ -108,6 +109,6 @@ public class TestUserDetails extends DafoUserDetails {
             testUserProfile = new UserProfile(profileName);
             this.addUserProfile(testUserProfile);
         }
-        testUserProfile.addAreaRestrictions(Arrays.asList(areaRestrictions));
+        testUserProfile.addAreaRestrictions(Arrays.stream(areaRestrictions).filter(Objects::nonNull).collect(Collectors.toList()));
     }
 }

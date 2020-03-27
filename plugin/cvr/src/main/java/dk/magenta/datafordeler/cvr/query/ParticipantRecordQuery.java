@@ -268,5 +268,6 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.addCondition("name", this.navn);
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);
         this.addCondition("roadcode", this.vejkode, Integer.class);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 }

@@ -164,6 +164,7 @@ public class RoadRecordQuery extends BaseQuery {
         this.addCondition("municipalitycode", this.kommunekoder, Integer.class);
         this.addCondition("roadcode", this.vejkoder, Integer.class);
         this.addCondition("name", this.vejnavne);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 
 

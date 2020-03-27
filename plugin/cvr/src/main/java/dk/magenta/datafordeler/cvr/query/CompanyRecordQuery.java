@@ -433,6 +433,7 @@ public class CompanyRecordQuery extends BaseQuery {
         this.addCondition("fax", this.telefaxnummer);
         this.addCondition("email", this.emailadresse);
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 
 
