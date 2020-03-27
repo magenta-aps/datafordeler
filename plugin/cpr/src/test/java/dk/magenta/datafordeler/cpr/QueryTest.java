@@ -370,51 +370,51 @@ public class QueryTest {
         Assert.assertEquals(0, mustFail.size());
         searchParameters.remove("efternavn");
 
-        searchParameters.add("cprKommunekode", "958");
+        searchParameters.add("kommunekode", "958");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results4 = jsonBody.get("results");
         Assert.assertEquals(results3, results4);
-        searchParameters.remove("cprKommunekode");
+        searchParameters.remove("kommunekode");
 
-        searchParameters.add("cprKommunekode", "000");
+        searchParameters.add("kommunekode", "000");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         mustFail = jsonBody.get("results");
         Assert.assertTrue(mustFail.isArray());
         Assert.assertEquals(0, mustFail.size());
-        searchParameters.remove("cprKommunekode");
+        searchParameters.remove("kommunekode");
 
-        searchParameters.add("cprVejkode", "111");
+        searchParameters.add("vejkode", "111");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results5 = jsonBody.get("results");
         Assert.assertEquals(results4, results5);
-        searchParameters.remove("cprVejkode");
+        searchParameters.remove("vejkode");
 
-        searchParameters.add("cprVejkode", "000");
+        searchParameters.add("vejkode", "000");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         mustFail = jsonBody.get("results");
         Assert.assertTrue(mustFail.isArray());
         Assert.assertEquals(0, mustFail.size());
-        searchParameters.remove("cprVejkode");
+        searchParameters.remove("vejkode");
 
-        searchParameters.add("husnr", "3");
+        searchParameters.add("husnummer", "3");
         response = restSearch(searchParameters, "person");
         System.out.println(response.getBody());
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results6 = jsonBody.get("results");
         Assert.assertEquals(results5, results6);
-        searchParameters.remove("husnr");
+        searchParameters.remove("husnummer");
 
-        searchParameters.add("husnr", "1234");
+        searchParameters.add("husnummer", "1234");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         mustFail = jsonBody.get("results");
         Assert.assertTrue(mustFail.isArray());
         Assert.assertEquals(0, mustFail.size());
-        searchParameters.remove("husnr");
+        searchParameters.remove("husnummer");
 
         searchParameters.add("etage", "02");
         response = restSearch(searchParameters, "person");
@@ -431,20 +431,20 @@ public class QueryTest {
         Assert.assertEquals(0, mustFail.size());
         searchParameters.remove("etage");
 
-        searchParameters.add("doer", "4");
+        searchParameters.add("sidedør", "4");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results8 = jsonBody.get("results");
         Assert.assertEquals(results7, results8);
-        searchParameters.remove("doer");
+        searchParameters.remove("sidedør");
 
-        searchParameters.add("doer", "5");
+        searchParameters.add("sidedør", "5");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         mustFail = jsonBody.get("results");
         Assert.assertTrue(mustFail.isArray());
         Assert.assertEquals(0, mustFail.size());
-        searchParameters.remove("doer");
+        searchParameters.remove("sidedør");
 
 
     }

@@ -19,14 +19,14 @@ import java.util.*;
 public class PersonRecordQuery extends BaseQuery {
 
     public static final String PERSONNUMMER = PersonEntity.IO_FIELD_CPR_NUMBER;
-    public static final String FORNAVNE = "fornavn";
-    public static final String EFTERNAVN = "efternavn";
-    public static final String KOMMUNEKODE = "cprKommunekode";
-    public static final String VEJKODE = "cprVejkode";
-    public static final String DOOR = "doer";
-    public static final String FLOOR = "etage";
-    public static final String HOUSENO = "husnr";
-    public static final String BUILDINGNO = "bnr";
+    public static final String FORNAVNE = NameDataRecord.IO_FIELD_FIRST_NAMES;
+    public static final String EFTERNAVN = NameDataRecord.IO_FIELD_LAST_NAME;
+    public static final String KOMMUNEKODE = AddressDataRecord.IO_FIELD_MUNICIPALITY_CODE;
+    public static final String VEJKODE = AddressDataRecord.IO_FIELD_ROAD_CODE;
+    public static final String DOOR = AddressDataRecord.IO_FIELD_DOOR;
+    public static final String FLOOR = AddressDataRecord.IO_FIELD_FLOOR;
+    public static final String HOUSENO = AddressDataRecord.IO_FIELD_HOUSENUMBER;
+    public static final String BUILDINGNO = AddressDataRecord.IO_FIELD_BUILDING_NUMBER;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
     private List<String> personnumre = new ArrayList<>();
