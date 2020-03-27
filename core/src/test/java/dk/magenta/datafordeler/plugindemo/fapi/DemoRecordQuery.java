@@ -29,20 +29,17 @@ public class DemoRecordQuery extends BaseQuery {
 
     public void setPostnr(int postnr) {
         this.postnr.add(Integer.toString(postnr));
-        this.increaseDataParamCount();
     }
 
     public void setPostnr(String postnr) {
         if (postnr != null) {
             this.postnr.add(postnr);
-            this.increaseDataParamCount();
         }
     }
 
     public void setBynavn(String bynavn) {
         if (bynavn != null) {
             this.bynavn.add(bynavn);
-            this.increaseDataParamCount();
         }
     }
 
@@ -64,6 +61,11 @@ public class DemoRecordQuery extends BaseQuery {
             lookupDefinition.put(DemoEntityRecord.DB_FIELD_NAME + BaseLookupDefinition.separator + DemoDataRecord.DB_FIELD_NAME, this.bynavn, String.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.postnr.isEmpty() && this.bynavn.isEmpty();
     }
 
     @Override

@@ -60,7 +60,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     public void addCode(String code) {
         if (code != null) {
             this.code.add(code);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -79,7 +78,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         if (name != null) {
             this.name.add(name);
             this.updatedParameters();
-            this.increaseDataParamCount();
         }
     }
 
@@ -97,7 +95,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     public void addAddressingName(String addressingName) {
         if (addressingName != null) {
             this.addressingName.add(addressingName);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -115,7 +112,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     public void addLocality(String locality) {
         if (locality != null) {
             this.locality.add(locality);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -135,7 +131,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     public void addLocalityUUID(UUID localityUUID) {
         if (localityUUID != null) {
             this.localityUUID.add(localityUUID);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -153,7 +148,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     public void addMunicipalityCode(String municipalityCode) {
         if (municipalityCode != null) {
             this.municipalityCode.add(municipalityCode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -217,6 +211,11 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
             lookupDefinition.put(GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE, this.municipalityCode, Integer.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.municipalityCode.isEmpty() && this.code.isEmpty() && this.name.isEmpty() && this.addressingName.isEmpty() && this.locality.isEmpty() && this.localityUUID.isEmpty();
     }
 
     @Override

@@ -44,6 +44,11 @@ public class QueryTest {
         }
 
         @Override
+        protected boolean isEmpty() {
+            return false;
+        }
+
+        @Override
         public void setFromParameters(ParameterMap parameters) {
         }
 

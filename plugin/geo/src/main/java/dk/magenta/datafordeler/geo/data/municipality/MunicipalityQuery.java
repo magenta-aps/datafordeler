@@ -39,7 +39,6 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     public void addCode(String code) {
         if (code != null) {
             this.code.add(code);
-            this.increaseDataParamCount();
         }
     }
 
@@ -60,7 +59,6 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
-            this.increaseDataParamCount();
         }
     }
 
@@ -87,6 +85,11 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
             lookupDefinition.put(GeoMunicipalityEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + MunicipalityNameRecord.DB_FIELD_NAME, this.name, String.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.code.isEmpty() && this.name.isEmpty();
     }
 
     @Override

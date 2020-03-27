@@ -33,7 +33,6 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addPNummer(String pnummer) {
         if (pnummer != null) {
             this.pNummer.add(pnummer);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -69,7 +68,6 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addAssociatedCompanyCvrNummer(String cvrNummer) {
         if (cvrNummer != null) {
             this.associatedCompanyCvrNumber.add(cvrNummer);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -105,7 +103,6 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addPrimaryIndustry(String primaryIndustry) {
         if (primaryIndustry != null) {
             this.primaryIndustry.add(primaryIndustry);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -141,7 +138,6 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addKommuneKode(String kommunekode) {
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -183,7 +179,6 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addVejkode(String vejkode) {
         if (vejkode != null) {
             this.vejkode.add(vejkode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -268,6 +263,11 @@ public class CompanyUnitRecordQuery extends BaseQuery {
             lookupDefinition.put(sj.toString(), this.getKommunekodeRestriction(), Integer.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.pNummer.isEmpty() && this.associatedCompanyCvrNumber.isEmpty() && this.primaryIndustry.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty();
     }
 
     @Override

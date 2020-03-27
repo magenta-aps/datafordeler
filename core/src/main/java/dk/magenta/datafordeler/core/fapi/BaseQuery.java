@@ -511,9 +511,6 @@ public abstract class BaseQuery {
 
     public void setRecordAfter(String recordAfter) throws DateTimeParseException {
         this.recordAfter = parseDateTime(recordAfter);
-        if (recordAfter != null) {
-            this.increaseDataParamCount();
-        }
     }
 
     public void setUuid(Collection<UUID> uuid) {
@@ -584,7 +581,8 @@ public abstract class BaseQuery {
         }
         if (!limitsOnly) {
             this.setFromParameters(parameterMap);
-            if (this.getDataParamCount() == 0) {
+            if (this.isEmpty() && this.recordAfter == null) {
+                // Require at least one of certain url parameters, to prevent huge responses on empty queries
                 throw new InvalidClientInputException("Missing query parameters");
             }
         }
@@ -597,13 +595,7 @@ public abstract class BaseQuery {
 
     private int dataParamCount = 0;
 
-    protected void increaseDataParamCount() {
-        this.dataParamCount++;
-    }
-
-    protected int getDataParamCount() {
-        return this.dataParamCount;
-    }
+    protected abstract boolean isEmpty();
 
     public abstract void setFromParameters(ParameterMap parameterMap) throws InvalidClientInputException;
 

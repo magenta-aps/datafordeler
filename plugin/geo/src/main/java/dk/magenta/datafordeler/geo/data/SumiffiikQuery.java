@@ -32,7 +32,6 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
     public void setSumiffiik(String sumiffiik) {
         this.sumiffiik = sumiffiik;
         if (sumiffiik != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -92,5 +91,10 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
             sumiffiik.replaceFirst("\\}$", "\\}");
         }
         this.addCondition("sumiffiik", sumiffiik != null ? Collections.singletonList(sumiffiik) : null);
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.sumiffiik != null;
     }
 }

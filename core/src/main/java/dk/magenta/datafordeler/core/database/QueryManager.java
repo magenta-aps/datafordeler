@@ -217,6 +217,7 @@ public abstract class QueryManager {
         if (logQuery) {
             log.info(stringJoiner.toString());
         }
+        System.out.println(stringJoiner.toString());
 
         // Offset & limit
         if (query.getOffset() > 0) {
@@ -270,6 +271,8 @@ public abstract class QueryManager {
         if (logQuery) {
             log.info(stringJoiner.toString());
         }
+
+        System.out.println(stringJoiner.toString());
 
         // Offset & limit
         if (query.getOffset() > 0) {

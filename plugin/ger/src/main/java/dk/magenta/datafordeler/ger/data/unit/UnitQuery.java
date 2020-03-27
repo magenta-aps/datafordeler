@@ -30,7 +30,6 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
-            this.increaseDataParamCount();
         }
     }
 
@@ -55,7 +54,6 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     public void addDeid(UUID deid) {
         if (deid != null) {
             this.deid.add(deid);
-            this.increaseDataParamCount();
         }
     }
 
@@ -76,7 +74,15 @@ public class UnitQuery extends GerQuery<UnitEntity> {
         if (this.deid != null && !this.deid.isEmpty()) {
             lookupDefinition.put(UnitEntity.DB_FIELD_DEID, this.deid, UUID.class);
         }
+        if (!this.getGerNr().isEmpty()) {
+            lookupDefinition.put(UnitEntity.DB_FIELD_GERNR, this.getGerNr(), Integer.class);
+        }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.name.isEmpty() && this.deid.isEmpty();
     }
 
     @Override
@@ -100,6 +106,7 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     static {
         joinHandles.put("deid", UnitEntity.DB_FIELD_DEID);
         joinHandles.put("name", UnitEntity.DB_FIELD_NAME);
+        joinHandles.put("ger", UnitEntity.DB_FIELD_NAME);
     }
 
     @Override
@@ -111,6 +118,7 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     protected void setupConditions() throws QueryBuildException {
         this.addCondition("deid", this.deid.stream().map(UUID::toString).collect(Collectors.toList()), UUID.class);
         this.addCondition("name", this.name);
+        this.addCondition("gernr", this.getGerNr(), Integer.class);
     }
 
 }

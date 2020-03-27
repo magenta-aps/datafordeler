@@ -45,7 +45,6 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     public void addCode(String code) {
         if (code != null) {
             this.code.add(code);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -63,7 +62,6 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -81,7 +79,6 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     public void addMunicipality(String municipality) {
         if (municipality != null) {
             this.municipality.add(municipality);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -109,6 +106,11 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
             lookupDefinition.put(GeoLocalityEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + LocalityMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.code.isEmpty() && this.name.isEmpty() && this.municipality.isEmpty();
     }
 
     @Override

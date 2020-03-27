@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -324,39 +325,128 @@ public class QueryTest {
 
         ParameterMap searchParameters = new ParameterMap();
         searchParameters.add("fmt", "dataonly");
-        searchParameters.add("pnr", "0101001234");
 
+        searchParameters.add("pnr", "0101001234");
         ResponseEntity<String> response = restSearch(searchParameters, "person");
         JsonNode jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results1 = jsonBody.get("results");
-
         searchParameters.remove("pnr");
+
+        searchParameters.add("pnr", "0101006666");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("pnr");
+
         searchParameters.add("fornavn", "Tester");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results2 = jsonBody.get("results");
         Assert.assertEquals(results1, results2);
-
         searchParameters.remove("fornavn");
+
+        searchParameters.add("fornavn", "Fejler");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("fornavn");
+
         searchParameters.add("efternavn", "Tystersen");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results3 = jsonBody.get("results");
         Assert.assertEquals(results2, results3);
-
         searchParameters.remove("efternavn");
+
+        searchParameters.add("efternavn", "Fejlersen");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("efternavn");
+
         searchParameters.add("cprKommunekode", "958");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results4 = jsonBody.get("results");
         Assert.assertEquals(results3, results4);
-
         searchParameters.remove("cprKommunekode");
+
+        searchParameters.add("cprKommunekode", "000");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("cprKommunekode");
+
         searchParameters.add("cprVejkode", "111");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results5 = jsonBody.get("results");
         Assert.assertEquals(results4, results5);
+        searchParameters.remove("cprVejkode");
+
+        searchParameters.add("cprVejkode", "000");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("cprVejkode");
+
+        searchParameters.add("husnr", "3");
+        response = restSearch(searchParameters, "person");
+        System.out.println(response.getBody());
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results6 = jsonBody.get("results");
+        Assert.assertEquals(results5, results6);
+        searchParameters.remove("husnr");
+
+        searchParameters.add("husnr", "1234");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("husnr");
+
+        searchParameters.add("etage", "02");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results7 = jsonBody.get("results");
+        Assert.assertEquals(results6, results7);
+        searchParameters.remove("etage");
+
+        searchParameters.add("etage", "01");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("etage");
+
+        searchParameters.add("doer", "4");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results8 = jsonBody.get("results");
+        Assert.assertEquals(results7, results8);
+        searchParameters.remove("doer");
+
+        searchParameters.add("doer", "5");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("doer");
+
+
     }
 
 }

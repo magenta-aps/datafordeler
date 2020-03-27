@@ -31,7 +31,6 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     public void addKommunekode(String kommunekode) {
         this.kommunekoder.add(kommunekode);
         if (kommunekode != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -50,7 +49,6 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     public void setVejkode(String vejkode) {
         this.vejkode = vejkode;
         if (vejkode != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -69,7 +67,6 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     public void setHusnummer(String husnummer) {
         this.husnummer = husnummer;
         if (husnummer != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -84,7 +81,6 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     public void setEtage(String etage) {
         this.etage = etage;
         if (etage != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -99,7 +95,6 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     public void setSideDoer(String sideDoer) {
         this.sideDoer = sideDoer;
         if (sideDoer != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -181,6 +176,11 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
             lookupDefinition.put(ResidenceBaseData.DB_FIELD_MUNICIPALITY_CODE, this.getKommunekodeRestriction(), Integer.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.kommunekoder.isEmpty() && this.vejkode.isEmpty() && this.husnummer.isEmpty() && this.etage.isEmpty() && this.sideDoer.isEmpty();
     }
 
 }

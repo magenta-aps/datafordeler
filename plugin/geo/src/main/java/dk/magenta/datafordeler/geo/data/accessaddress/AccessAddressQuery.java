@@ -75,7 +75,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addBnr(String bnr) {
         if (bnr != null) {
             this.bnr.add(bnr);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -100,7 +99,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addRoadCode(String roadCode) {
         if (roadCode != null) {
             this.roadCode.add(roadCode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -127,7 +125,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addMunicipalityCode(String municipalityCode) {
         if (municipalityCode != null) {
             this.municipalityCode.add(municipalityCode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -154,7 +151,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addRoadUUID(UUID roadUUID) {
         if (roadUUID != null) {
             this.roadUUID.add(roadUUID);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -176,7 +172,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addLocalityUUID(UUID localityUUID) {
         if (localityUUID != null) {
             this.localityUUID.add(localityUUID);
-            this.increaseDataParamCount();
         }
     }
 
@@ -202,7 +197,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addHouseNumber(String houseNumber) {
         if (houseNumber != null) {
             this.houseNumber.add(houseNumber);
-            this.increaseDataParamCount();
         }
     }
 
@@ -242,6 +236,11 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
             lookupDefinition.put(AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE, this.municipalityCode, Integer.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.bnr.isEmpty () && this.houseNumber.isEmpty() && this.roadCode.isEmpty() && this.roadUUID.isEmpty() && this.localityUUID.isEmpty() && this.municipalityCode.isEmpty();
     }
 
     @Override

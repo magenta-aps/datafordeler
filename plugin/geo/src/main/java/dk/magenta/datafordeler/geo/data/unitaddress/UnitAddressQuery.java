@@ -124,7 +124,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     public void addHouseNumber(String houseNumber) {
         if (houseNumber != null) {
             this.houseNumber.add(houseNumber);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -151,7 +150,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     public void addFloor(String floor) {
         if (floor != null) {
             this.floor.add(floor);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -177,7 +175,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     public void addDoor(String door) {
         if (door != null) {
             this.door.add(door);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -211,6 +208,11 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
             lookupDefinition.put(AccessAddressEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + AccessAddressMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
         }*/
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.floor.isEmpty() && this.door.isEmpty();
     }
 
     @Override

@@ -24,9 +24,9 @@ public class PersonRecordQuery extends BaseQuery {
     public static final String KOMMUNEKODE = "cprKommunekode";
     public static final String VEJKODE = "cprVejkode";
     public static final String DOOR = "doer";
-    public static final String FLOOR = "floor";
-    public static final String HOUSENO = "houseno";
-    public static final String BUILDINGNO = "buildingno";
+    public static final String FLOOR = "etage";
+    public static final String HOUSENO = "husnr";
+    public static final String BUILDINGNO = "bnr";
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
     private List<String> personnumre = new ArrayList<>();
@@ -38,7 +38,6 @@ public class PersonRecordQuery extends BaseQuery {
     public void addPersonnummer(String personnummer) {
         this.personnumre.add(personnummer);
         if (personnummer != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -57,7 +56,6 @@ public class PersonRecordQuery extends BaseQuery {
         this.clearPersonnumre();
         if (personnumre != null) {
             this.personnumre.addAll(personnumre);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -77,7 +75,6 @@ public class PersonRecordQuery extends BaseQuery {
     public void addFornavn(String fornavn) {
         this.fornavn.add(fornavn);
         if (fornavn != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -86,7 +83,6 @@ public class PersonRecordQuery extends BaseQuery {
         this.clearFornavn();
         if (fornavne != null) {
             this.fornavn.addAll(fornavne);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -106,7 +102,6 @@ public class PersonRecordQuery extends BaseQuery {
         this.clearEfternavn();
         this.efternavn.add(efternavn);
         if (efternavn != null) {
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -114,7 +109,6 @@ public class PersonRecordQuery extends BaseQuery {
         this.clearEfternavn();
         if (efternavne != null) {
             this.efternavn.addAll(efternavne);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -130,7 +124,6 @@ public class PersonRecordQuery extends BaseQuery {
     public void addKommunekode(String kommunekode) {
         if (kommunekode != null) {
             this.kommunekoder.add(kommunekode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -147,7 +140,6 @@ public class PersonRecordQuery extends BaseQuery {
         this.clearKommunekode();
         if (kommunekoder != null) {
             this.kommunekoder.addAll(kommunekoder);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -164,7 +156,6 @@ public class PersonRecordQuery extends BaseQuery {
         if (vejkode != null) {
             this.vejkoder.add(vejkode);
             this.updatedParameters();
-            this.increaseDataParamCount();
         }
     }
 
@@ -180,7 +171,6 @@ public class PersonRecordQuery extends BaseQuery {
         this.clearVejkode();
         if (vejkoder != null) {
             this.vejkoder.addAll(vejkoder);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -294,6 +284,11 @@ public class PersonRecordQuery extends BaseQuery {
         map.put(FORNAVNE, this.fornavn);
         map.put(EFTERNAVN, this.efternavn);
         map.put(KOMMUNEKODE, this.kommunekoder);
+        map.put(VEJKODE, this.vejkoder);
+        map.put(DOOR, this.doors);
+        map.put(FLOOR, this.floors);
+        map.put(HOUSENO, this.houseNos);
+        map.put(BUILDINGNO, this.buildingNos);
         return map;
     }
 
@@ -406,6 +401,11 @@ public class PersonRecordQuery extends BaseQuery {
 
 
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() && this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty();
     }
 
 }

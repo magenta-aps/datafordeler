@@ -37,7 +37,6 @@ public abstract class GerQuery<E extends GerEntity> extends BaseQuery {
     public void addGerNr(String gerNr) {
         if (gerNr != null) {
             this.gerNr.add(gerNr);
-            this.increaseDataParamCount();
         }
     }
 
@@ -61,4 +60,12 @@ public abstract class GerQuery<E extends GerEntity> extends BaseQuery {
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         this.setGerNr(parameters.getFirst(GERNR));
     }
+
+
+    @Override
+    protected boolean isEmpty() {
+        return this.gerNr.isEmpty();
+    }
+
+
 }

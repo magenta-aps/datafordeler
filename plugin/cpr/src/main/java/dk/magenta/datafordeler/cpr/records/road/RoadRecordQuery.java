@@ -34,7 +34,6 @@ public class RoadRecordQuery extends BaseQuery {
     public void addVejkode(String vejkode) {
         if (vejkode != null) {
             this.vejkoder.add(vejkode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -65,7 +64,6 @@ public class RoadRecordQuery extends BaseQuery {
     public void addVejnavn(String vejnavn) {
         if (vejnavn != null) {
             this.vejnavne.add(vejnavn);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -93,7 +91,6 @@ public class RoadRecordQuery extends BaseQuery {
     public void addKommunekode(String kommunekode) {
         if (kommunekode != null) {
             this.kommunekoder.add(kommunekode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -183,6 +180,11 @@ public class RoadRecordQuery extends BaseQuery {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + RoadEntity.DB_FIELD_MUNIPALITY_CODE, this.getKommunekoder(), Integer.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.vejnavne.isEmpty();
     }
 
 }

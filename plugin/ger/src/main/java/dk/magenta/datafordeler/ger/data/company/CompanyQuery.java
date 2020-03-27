@@ -34,7 +34,6 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
-            this.increaseDataParamCount();
         }
     }
 
@@ -51,7 +50,7 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
         if (this.recordAfter != null) {
             lookupDefinition.put(DataItem.DB_FIELD_LAST_UPDATED, this.recordAfter, OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
         }
-        if (this.getGerNr() != null) {
+        if (!this.getGerNr().isEmpty()) {
             lookupDefinition.put(
                     BaseLookupDefinition.entityref + BaseLookupDefinition.separator + CompanyEntity.DB_FIELD_GERNR,
                     this.getGerNr(),
@@ -63,6 +62,11 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
             lookupDefinition.put(CompanyEntity.DB_FIELD_NAME, this.name, String.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.name.isEmpty();
     }
 
     @Override

@@ -40,7 +40,6 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addCvrNummer(String cvrnummer) {
         if (cvrnummer != null) {
             this.cvrNumre.add(cvrnummer);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -76,7 +75,6 @@ public class CompanyRecordQuery extends BaseQuery {
         this.clearReklamebeskyttelse();
         if (reklamebeskyttelse != null) {
             this.reklamebeskyttelse = reklamebeskyttelse;
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -98,7 +96,6 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addVirksomhedsnavn(String virksomhedsnavn) {
         if (virksomhedsnavn != null) {
             this.virksomhedsnavn.add(virksomhedsnavn);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -134,7 +131,6 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addTelefonnummer(String telefonnummer) {
         if (telefonnummer != null) {
             this.telefonnummer.add(telefonnummer);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -170,7 +166,6 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addTelefaxnummer(String telefaxnummer) {
         if (telefaxnummer != null) {
             this.telefaxnummer.add(telefaxnummer);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -206,7 +201,6 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addEmailadresse(String emailadresse) {
         if (emailadresse != null) {
             this.emailadresse.add(emailadresse);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -242,7 +236,6 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addVirksomhedsform(String virksomhedsform) {
         if (virksomhedsform != null) {
             this.virksomhedsform.add(virksomhedsform);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -287,7 +280,6 @@ public class CompanyRecordQuery extends BaseQuery {
         this.kommunekode.add(kommunekode);
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -390,6 +382,11 @@ public class CompanyRecordQuery extends BaseQuery {
         }
 
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.cvrNumre.isEmpty() && this.virksomhedsform.isEmpty() && this.reklamebeskyttelse == null && this.virksomhedsnavn.isEmpty() && this.telefonnummer.isEmpty() && this.telefaxnummer.isEmpty() && this.emailadresse.isEmpty() && this.kommunekode.isEmpty();
     }
 
     @Override

@@ -37,7 +37,6 @@ public class ParticipantRecordQuery extends BaseQuery {
     public void addEnhedsNummer(String enhedsNummer) {
         if (enhedsNummer != null) {
             this.enhedsNummer.add(enhedsNummer);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -73,7 +72,6 @@ public class ParticipantRecordQuery extends BaseQuery {
     public void addKommuneKode(String kommunekode) {
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -114,7 +112,6 @@ public class ParticipantRecordQuery extends BaseQuery {
     public void addVejkode(String vejkode) {
         if (vejkode != null) {
             this.vejkode.add(vejkode);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -154,7 +151,6 @@ public class ParticipantRecordQuery extends BaseQuery {
     public void addNavn(String navn) {
         if (navn != null) {
             this.navn.add(navn);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -230,6 +226,11 @@ public class ParticipantRecordQuery extends BaseQuery {
             lookupDefinition.put(sj.toString(), this.getKommunekodeRestriction(), Integer.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.enhedsNummer.isEmpty() && this.navn.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty();
     }
 
     @Override

@@ -39,7 +39,6 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
     public void addAnr(String anr) {
         if (anr != null) {
             this.anr.add(anr);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -59,7 +58,6 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
     public void addBnr(String bnr) {
         if (bnr != null) {
             this.bnr.add(bnr);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -85,6 +83,11 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
             lookupDefinition.put(BuildingEntity.DB_FIELD_BNR, this.bnr, String.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.anr.isEmpty() && this.bnr.isEmpty();
     }
 
     @Override

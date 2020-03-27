@@ -40,7 +40,6 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
     public void addAnr(String anr) {
         if (anr != null) {
             this.code.add(anr);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -60,7 +59,6 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
     public void addBnr(String bnr) {
         if (bnr != null) {
             this.name.add(bnr);
-            this.increaseDataParamCount();
             this.updatedParameters();
         }
     }
@@ -86,6 +84,11 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
             lookupDefinition.put(PostcodeEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + PostcodeNameRecord.DB_FIELD_NAME, this.name, String.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.code.isEmpty() && this.name.isEmpty();
     }
 
     @Override
