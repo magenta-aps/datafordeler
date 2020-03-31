@@ -126,7 +126,6 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
         HashMap<String, String> handles = new HashMap<>();
         handles.put("municipalitycode", "cvr_company__locationAddress__municipality__municipality.code");
         handles.put("roadcode", "cvr_company__locationAddress.roadCode");
-        handles.put("housenumber", "cvr_company__locationAddress.houseNumberFrom");
 
         query.addExtraJoin(geoPlugin.getJoinString(handles));
         query.addExtraTables(geoPlugin.getJoinClassAliases(handles.keySet()));
