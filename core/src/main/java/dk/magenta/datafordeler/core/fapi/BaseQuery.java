@@ -873,12 +873,12 @@ public abstract class BaseQuery {
         return resolved.toString();
     }
 
-    public String toHql() {
+    public String toFirstHql() {
         this.finalizeConditions();
         StringJoiner s = new StringJoiner(" \n");
 
-        s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
-        s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
+        s.add("SELECT DISTINCT " + this.getEntityIdentifier());
+        s.add("FROM " + this.getEntityClassname() + " " + this.getEntityIdentifier());
 
         for (Join join : this.getAllJoins()) {
             s.add(join.toHql());
@@ -892,9 +892,32 @@ public abstract class BaseQuery {
         return s.toString();
     }
 
-    public Map<String, Object> getParameters() {
+    public String toSecondHql() {
+        this.finalizeConditions();
+        StringJoiner s = new StringJoiner(" \n");
+
+        s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
+        s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
+
+        for (Join join : this.getAllJoins()) {
+            s.add(join.toHql());
+        }
+        for (String extraJoin : this.extraJoins) {
+            s.add(extraJoin);
+        }
+        s.add("WHERE " + this.getEntityIdentifier() + ".id IN :ids");
+
+        return s.toString();
+    }
+
+
+    public Map<String, Object> getFirstParameters() {
         this.finalizeConditions();
         return this.condition.getParameters();
+    }
+
+    public Map<String, Object> getSecondParameters(Collection<DatabaseEntry> entries) {
+        return Collections.singletonMap("ids", entries.stream().map(DatabaseEntry::getId).collect(Collectors.toList()));
     }
 
     private boolean finalizedConditions = false;
