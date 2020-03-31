@@ -16,6 +16,11 @@ import java.util.Set;
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + CprBitemporalPersonRecord.DB_FIELD_ENTITY, columnList = CprBitemporalPersonRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE, columnList = AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_BUILDING_NUMBER, columnList = AddressDataRecord.DB_FIELD_BUILDING_NUMBER),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_ROAD_CODE, columnList = AddressDataRecord.DB_FIELD_ROAD_CODE),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_FLOOR, columnList = AddressDataRecord.DB_FIELD_FLOOR),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_DOOR, columnList = AddressDataRecord.DB_FIELD_DOOR),
+
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
