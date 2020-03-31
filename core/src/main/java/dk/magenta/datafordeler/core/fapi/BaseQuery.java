@@ -714,8 +714,7 @@ public abstract class BaseQuery {
                 try {
                     return OffsetDateTime.parse(decodedDateTime, formatter);
                 } catch (DateTimeParseException e) {
-                    e.printStackTrace();
-                    //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
+                    // Do nothing - we expect errors when the input is something we cannot parse with this set of parsers. Nothing wrong with that, just move on to the next set of parsers
                 }
             }
             for (DateTimeFormatter formatter : zonedDateFormatters) {
@@ -723,7 +722,6 @@ public abstract class BaseQuery {
                     TemporalAccessor accessor = formatter.parse(decodedDateTime);
                     return OffsetDateTime.of(LocalDate.from(accessor), LocalTime.MIDNIGHT, ZoneOffset.from(accessor));
                 } catch (DateTimeParseException e) {
-                    //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
                 }
             }
             for (DateTimeFormatter formatter : unzonedDateTimeFormatters) {
@@ -731,7 +729,6 @@ public abstract class BaseQuery {
                     TemporalAccessor accessor = formatter.parse(decodedDateTime);
                     return OffsetDateTime.of(LocalDateTime.from(accessor), ZoneOffset.UTC);
                 } catch (DateTimeParseException e) {
-                    //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
                 }
             }
             for (DateTimeFormatter formatter : unzonedDateFormatters) {
@@ -739,9 +736,9 @@ public abstract class BaseQuery {
                     TemporalAccessor accessor = formatter.parse(decodedDateTime);
                     return OffsetDateTime.of(LocalDate.from(accessor), LocalTime.MIDNIGHT, ZoneOffset.UTC);
                 } catch (DateTimeParseException e) {
-                    //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
                 }
             }
+            // If none of the parsers could parse the string, _then_ we may throw an exception
             throw new DateTimeParseException("Unable to parse date string \""+decodedDateTime+"\", tried "+ formatterCount + " parsers of "+DateTimeFormatter.class.getCanonicalName(), decodedDateTime, 0);
         }
         return null;
