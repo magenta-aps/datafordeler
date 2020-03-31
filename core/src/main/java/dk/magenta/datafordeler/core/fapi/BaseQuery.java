@@ -681,7 +681,7 @@ public abstract class BaseQuery {
     private static int formatterCount = zonedDateTimeFormatters.length + zonedDateFormatters.length + unzonedDateTimeFormatters.length + unzonedDateFormatters.length;
 
     public static OffsetDateTime parseDateTime(String dateTime) throws DateTimeParseException {
-        return parseDateTime(dateTime, true);
+        return parseDateTime(dateTime, false);
     }
 
 
