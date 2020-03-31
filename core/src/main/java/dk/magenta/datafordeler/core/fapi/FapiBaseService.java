@@ -386,8 +386,10 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addRequestData(request);
             List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
+                this.log.info("Wrapping resultset with "+this.getOutputWrapper().getClass().getCanonicalName());
                 envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
+                this.log.info("No outputwrapper defined for "+this.getClass().getCanonicalName()+", not wrapping output");
                 ArrayNode jacksonConverted = objectMapper.valueToTree(results.stream().map(resultset -> resultset.getPrimaryEntity()).collect(Collectors.toList()));
                 ArrayList<Object> wrapper = new ArrayList<>();
                 for (JsonNode node : jacksonConverted) {

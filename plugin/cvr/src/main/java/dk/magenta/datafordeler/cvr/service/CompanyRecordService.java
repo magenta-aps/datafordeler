@@ -62,7 +62,7 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
     public void init() {
         this.setOutputWrapper(this.companyRecordOutputWrapper);
         this.monitorService.addAccessCheckPoint("/cvr/company/1/rest/1234");
-        this.monitorService.addAccessCheckPoint("/cvr/company/1/rest/search?cvrnummer=1234");
+        this.monitorService.addAccessCheckPoint("/cvr/company/1/rest/search?cvrNummer=1234");
     }
 
     @Override
