@@ -31,6 +31,12 @@ import java.util.UUID;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__type", columnList = AddressRecord.DB_FIELD_TYPE),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__municipality", columnList = AddressRecord.DB_FIELD_MUNICIPALITY + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__postcode", columnList = AddressRecord.DB_FIELD_POSTCODE_REF + DatabaseEntry.REF),
+
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + AddressRecord.DB_FIELD_HOUSE_FROM, columnList = AddressRecord.DB_FIELD_HOUSE_FROM),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + AddressRecord.DB_FIELD_HOUSE_TO, columnList = AddressRecord.DB_FIELD_HOUSE_TO),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + AddressRecord.DB_FIELD_ROADCODE, columnList = AddressRecord.DB_FIELD_ROADCODE),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + AddressRecord.DB_FIELD_ROADNAME, columnList = AddressRecord.DB_FIELD_ROADNAME)
+
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressRecord extends CvrBitemporalDataMetaRecord {
