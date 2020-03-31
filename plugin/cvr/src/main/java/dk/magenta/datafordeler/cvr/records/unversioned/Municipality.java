@@ -17,14 +17,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static dk.magenta.datafordeler.cvr.records.unversioned.Municipality.DB_FIELD_CODE;
-
 /**
  * Nontemporal storage of a municipality (code + name).
  */
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + "cvr_municipality", indexes = {
-        @Index(name = "cvr_municipality_code", columnList = DB_FIELD_CODE)
+        @Index(name = "cvr_municipality_code", columnList = Municipality.DB_FIELD_CODE),
+        @Index(name = "cvr_municipality_name", columnList = Municipality.DB_FIELD_NAME)
 })
 public class Municipality extends DatabaseEntry {
 
