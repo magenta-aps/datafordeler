@@ -49,6 +49,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -712,7 +713,7 @@ public class FapiTest {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", mediaType);
         HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
-        String now = OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        String now = OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
         StringBuilder sb = new StringBuilder();
         sb.append(urlBase);

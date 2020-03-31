@@ -478,7 +478,7 @@ public class QueryTest {
         Assert.assertEquals(0, mustFail.size());
         searchParameters.remove("pnr");
 
-        searchParameters.add("pnr", "0101006666");
+        searchParameters.set("pnr", "0101006666");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         mustFail = jsonBody.get("results");
@@ -486,7 +486,7 @@ public class QueryTest {
         Assert.assertEquals(0, mustFail.size());
         searchParameters.remove("pnr");
 
-        searchParameters.add("fornavn", "Tester");
+        searchParameters.set("fornavn", "Tester");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results2 = jsonBody.get("results");
@@ -494,7 +494,7 @@ public class QueryTest {
         Assert.assertEquals(0, results2.size());
         searchParameters.remove("fornavn");
 
-        searchParameters.add("efternavn", "Tystersen");
+        searchParameters.set("efternavn", "Tystersen");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results3 = jsonBody.get("results");
@@ -502,7 +502,7 @@ public class QueryTest {
         Assert.assertEquals(0, results3.size());
         searchParameters.remove("efternavn");
 
-        searchParameters.add("kommunekode", "958");
+        searchParameters.set("kommunekode", "958");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results4 = jsonBody.get("results");
@@ -510,7 +510,7 @@ public class QueryTest {
         Assert.assertEquals(0, results4.size());
         searchParameters.remove("kommunekode");
 
-        searchParameters.add("vejkode", "111");
+        searchParameters.set("vejkode", "111");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results5 = jsonBody.get("results");
@@ -518,7 +518,7 @@ public class QueryTest {
         Assert.assertEquals(0, results5.size());
         searchParameters.remove("vejkode");
 
-        searchParameters.add("husnummer", "3");
+        searchParameters.set("husnummer", "3");
         response = restSearch(searchParameters, "person");
         System.out.println(response.getBody());
         jsonBody = objectMapper.readTree(response.getBody());
@@ -527,7 +527,7 @@ public class QueryTest {
         Assert.assertEquals(0, results6.size());
         searchParameters.remove("husnummer");
 
-        searchParameters.add("etage", "02");
+        searchParameters.set("etage", "02");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results7 = jsonBody.get("results");
@@ -535,7 +535,7 @@ public class QueryTest {
         Assert.assertEquals(0, results7.size());
         searchParameters.remove("etage");
 
-        searchParameters.add("sidedør", "4");
+        searchParameters.set("sidedør", "4");
         response = restSearch(searchParameters, "person");
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results8 = jsonBody.get("results");

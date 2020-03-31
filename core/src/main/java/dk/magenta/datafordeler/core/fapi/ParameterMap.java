@@ -18,24 +18,11 @@ public class ParameterMap extends ListHashMap<String, String> {
 
     @Override
     public ArrayList<String> put(String key, ArrayList<String> value) {
-        value.replaceAll(v -> URLDecoder.decode(v, StandardCharsets.UTF_8));
         return super.put(key, value);
     }
 
     public ParameterMap(Map<String, List<String>> initial) {
         super(initial);
-    }
-
-    @Override
-    public void add(String key, String value) {
-        super.add(key, URLDecoder.decode(value, StandardCharsets.UTF_8));
-    }
-
-    @Override
-    public void add(String key, Collection<String> values) {
-        ArrayList<String> valueList = new ArrayList<>(values);
-        valueList.replaceAll(v -> URLDecoder.decode(v, StandardCharsets.UTF_8));
-        super.add(key, valueList);
     }
 
     public ParameterMap set(String key, String value) {

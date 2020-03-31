@@ -91,6 +91,8 @@ public abstract class BaseQuery {
     private LinkedHashSet<Join> joins = new LinkedHashSet<>();
     private MultiCondition condition = new MultiCondition();
 
+    private int conditionCounter = 0;
+
     public BaseQuery() {
     }
 
@@ -712,6 +714,7 @@ public abstract class BaseQuery {
                 try {
                     return OffsetDateTime.parse(decodedDateTime, formatter);
                 } catch (DateTimeParseException e) {
+                    e.printStackTrace();
                     //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
                 }
             }
@@ -834,7 +837,7 @@ public abstract class BaseQuery {
     public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws QueryBuildException {
         this.finalizedConditions = false;
         String member = this.useJoinHandle(handle);
-        String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replaceAll("\\.", "__");
+        String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
         if (member != null && value != null && !value.isEmpty()) {
             try {
                 this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
