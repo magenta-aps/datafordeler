@@ -124,11 +124,7 @@ public class GeoIntegrationTest {
             joinHandles.put("municipalitycode", "municipalitycode");
             joinHandles.put("roadcode", "code");
             personRecordQuery.addRelated(roadQuery, joinHandles);
-
-
-            System.out.println("personQuery:");
-            System.out.println(personRecordQuery.toHql());
-            System.out.println(personRecordQuery.getParameters());
+            
             //m.add(roadManager.getJoinQuery(entityManager.getJoinHandles(personRoot), roadRoot), roadRoot);
             //Session session = sessionManager.getSessionFactory().openSession();
             //System.out.println(QueryManager.getQuery(session, m));
