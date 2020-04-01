@@ -25,7 +25,7 @@
             "reklamebeskyttet": false,
             "navne": [
               {
-                "navn": "A. And Møntpudser",
+                "navn": "A. And Moentpudser",
                 "periode": {
                   "gyldigFra": "2013-06-01",
                   "gyldigTil": null
@@ -58,7 +58,7 @@
                 "sidedoer": null,
                 "conavn": null,
                 "postboks": "1342",
-                "vejnavn": "Rækkerhus",
+                "vejnavn": "Raekkerhus",
                 "bynavn": null,
                 "postnummer": 3900,
                 "postdistrikt": "Nuuk",
@@ -110,7 +110,7 @@
             "hovedbranche": [
               {
                 "branchekode": "011300",
-                "branchetekst": "møntpudsning",
+                "branchetekst": "moentpudsning",
                 "periode": {
                   "gyldigFra": "2013-06-01",
                   "gyldigTil": "2015-01-01"
@@ -124,7 +124,7 @@
             "status": [],
             "virksomhedsstatus": [
               {
-                "status": "Ophørt",
+                "status": "NORMAL",
                 "periode": {
                   "gyldigFra": "1999-11-15",
                   "gyldigTil": null
@@ -234,7 +234,7 @@
               },
               "nyesteHovedbranche": {
                 "branchekode": "011300",
-                "branchetekst": "Møntpudsning",
+                "branchetekst": "Moantpudsning",
                 "periode": {
                   "gyldigFra": "2013-06-01",
                   "gyldigTil": "2015-01-01"
@@ -284,7 +284,7 @@
             "reklamebeskyttet": false,
             "navne": [
               {
-                "navn": "Fætter Højben spilleservice",
+                "navn": "Faetter Hoejben spilleservice",
                 "periode": {
                   "gyldigFra": "2014-02-01",
                   "gyldigTil": null
@@ -295,7 +295,7 @@
             "binavne": [],
             "postadresse": [
               {
-                "landekode": "GL",
+                "landekode": "DK",
                 "fritekst": null,
                 "vejkode": 45,
                 "kommune": {
@@ -317,10 +317,10 @@
                 "sidedoer": null,
                 "conavn": null,
                 "postboks": "1342",
-                "vejnavn": "Rækkerhus",
+                "vejnavn": "hus",
                 "bynavn": null,
-                "postnummer": 3900,
-                "postdistrikt": "Nuuk",
+                "postnummer": 8000,
+                "postdistrikt": "Aarhus C",
                 "periode": {
                   "gyldigFra": "2014-02-01",
                   "gyldigTil": null
@@ -394,7 +394,7 @@
             "spaltninger": [],
             "virksomhedMetadata": {
               "nyesteNavn": {
-                "navn": "Fætter Højben spilleservice",
+                "navn": "Faetter Hoejben spilleservice",
                 "periode": {
                   "gyldigFra": "2014-02-01",
                   "gyldigTil": null
@@ -463,7 +463,7 @@
             "reklamebeskyttet": false,
             "navne": [
               {
-                "navn": "Georg Gearløs opfindelser",
+                "navn": "Georg Gearloes opfindelser",
                 "periode": {
                   "gyldigFra": "2009-07-21",
                   "gyldigTil": null
@@ -476,7 +476,7 @@
               {
                 "landekode": "GL",
                 "fritekst": null,
-                "vejkode": null,
+                "vejkode": 45,
                 "kommune": {
                   "kommuneKode": 956,
                   "kommuneNavn": "SERMERSOOQ",
@@ -496,7 +496,7 @@
                 "sidedoer": null,
                 "conavn": null,
                 "postboks": "1342",
-                "vejnavn": "Rækkerhus",
+                "vejnavn": "hus",
                 "bynavn": null,
                 "postnummer": 3900,
                 "postdistrikt": "Nuuk",
@@ -608,7 +608,7 @@
                   "sidstOpdateret": "2019-10-10T08:45:46.000+02:00",
                   "navne": [
                     {
-                      "navn": "Georg Gearløs",
+                      "navn": "Georg Gearloes",
                       "periode": {
                         "gyldigFra": null,
                         "gyldigTil": null
@@ -683,7 +683,7 @@
             "spaltninger": [],
             "virksomhedMetadata": {
               "nyesteNavn": {
-                "navn": "Georg Gearløs opfindelser",
+                "navn": "Georg Gearloes opfindelser",
                 "periode": {
                   "gyldigFra": "2009-07-21",
                   "gyldigTil": null
@@ -705,7 +705,7 @@
               "nyesteBeliggenhedsadresse": {
                 "landekode": "GL",
                 "fritekst": null,
-                "vejkode": null,
+                "vejkode": 45,
                 "kommune": {
                   "kommuneKode": 956,
                   "kommuneNavn": "SERMERSOOQ",
@@ -737,7 +737,7 @@
               },
               "nyesteHovedbranche": {
                 "branchekode": "433200",
-                "branchetekst": "Møntpudsning",
+                "branchetekst": "Moentpudsning",
                 "periode": {
                   "gyldigFra": "2009-07-21",
                   "gyldigTil": "2010-12-31"
@@ -820,10 +820,10 @@
                 "sidedoer": null,
                 "conavn": null,
                 "postboks": "1342",
-                "vejnavn": "Rækkerhus",
+                "vejnavn": "hus",
                 "bynavn": null,
-                "postnummer": 3900,
-                "postdistrikt": "Nuuk",
+                "postnummer": 8000,
+                "postdistrikt": "Aarhus C",
                 "periode": {
                   "gyldigFra": "2014-02-01",
                   "gyldigTil": null
@@ -886,7 +886,7 @@
             "status": [],
             "virksomhedsstatus": [
               {
-                "status": "Ophørt",
+                "status": "NORMAL",
                 "periode": {
                   "gyldigFra": "1999-11-15",
                   "gyldigTil": null
