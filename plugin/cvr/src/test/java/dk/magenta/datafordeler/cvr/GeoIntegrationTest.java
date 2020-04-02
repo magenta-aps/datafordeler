@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import org.hibernate.Session;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,9 @@ public class GeoIntegrationTest {
     private CompanyEntityManager entityManager;
 
     @Test
+    @Ignore
     public void testLookup() {
+        // Mostly for our own sake during developement
         CompanyRecordQuery query = new CompanyRecordQuery();
         query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality cvr_company__locationAddress__municipality");
@@ -64,8 +67,8 @@ public class GeoIntegrationTest {
             //query.addExtraTables(cprPlugin.getJoinClassAliases());
 
 
-            Session session = sessionManager.getSessionFactory().openSession();
-            System.out.println(QueryManager.getQuery(session, query));
+            //Session session = sessionManager.getSessionFactory().openSession();
+            //System.out.println(QueryManager.getQuery(session, query));
         }
     }
 
