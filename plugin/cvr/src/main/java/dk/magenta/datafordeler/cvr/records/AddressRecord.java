@@ -280,7 +280,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     //----------------------------------------------------
 
     public static final String DB_FIELD_DOOR = "door";
-    public static final String IO_FIELD_DOOR = "sidedoer";
+    public static final String IO_FIELD_DOOR = "sidedør";
 
     @JsonProperty(value = IO_FIELD_DOOR)
     @XmlElement(name = IO_FIELD_DOOR)

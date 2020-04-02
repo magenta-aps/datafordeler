@@ -645,10 +645,10 @@ public abstract class BaseQuery {
     public static Boolean booleanFromString(String s, Boolean def) {
         if (s != null) {
             s = s.toLowerCase();
-            if (s.equals("1") || s.equals("true") || s.equals("yes")) {
+            if (s.equals("1") || s.equals("true") || s.equals("yes") || s.equals("ja")) {
                 return true;
             }
-            if (s.equals("0") || s.equals("false") || s.equals("no")) {
+            if (s.equals("0") || s.equals("false") || s.equals("no") || s.equals("nej")) {
                 return false;
             }
         }
