@@ -8,10 +8,7 @@ import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lars on 19-05-17.
@@ -135,4 +132,17 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
         this.addCondition("name", this.name);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MunicipalityQuery that = (MunicipalityQuery) o;
+        return Objects.equals(code, that.code) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, name);
+    }
 }
