@@ -873,7 +873,7 @@ public abstract class BaseQuery {
         return resolved.toString();
     }
 
-    public String toFirstHql() {
+    public String toHql() {
         this.finalizeConditions();
         StringJoiner s = new StringJoiner(" \n");
 

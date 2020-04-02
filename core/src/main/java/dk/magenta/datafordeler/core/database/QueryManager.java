@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
 import dk.magenta.datafordeler.core.util.ListHashMap;
@@ -188,8 +187,8 @@ public class QueryManager {
 
     private static final boolean logQuery = true;
 
-    public static org.hibernate.query.Query getFirstQuery(Session session, BaseQuery query) {
-        String queryString = query.toFirstHql();
+    public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
+        String queryString = query.toHql();
 
         StringJoiner stringJoiner = null;
         if (logQuery) {
@@ -219,8 +218,6 @@ public class QueryManager {
             log.info(stringJoiner.toString());
         }
 
-        System.out.println(stringJoiner.toString());
-
         // Offset & limit
         if (query.getOffset() > 0) {
             databaseQuery.setFirstResult(query.getOffset());
@@ -230,40 +227,6 @@ public class QueryManager {
         }
         return databaseQuery;
     }
-
-    public static org.hibernate.query.Query getSecondQuery(Session session, BaseQuery query, Collection<DatabaseEntry> entries) {
-        String queryString = query.toSecondHql();
-
-        StringJoiner stringJoiner = null;
-        if (logQuery) {
-            stringJoiner = new StringJoiner("\n");
-            stringJoiner.add(queryString.toString());
-        }
-
-        // Build query
-        org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
-
-        // Insert parameters, casting as necessary
-        Map<String, Object> extraParameters = query.getSecondParameters(entries);
-
-        for (String key : extraParameters.keySet()) {
-            Object value = extraParameters.get(key);
-            if (logQuery) {
-                stringJoiner.add(key+" = "+value);
-            }
-            if (value instanceof Collection) {
-                databaseQuery.setParameterList(key, (Collection) value);
-            } else {
-                databaseQuery.setParameter(key, value);
-            }
-        }
-
-        if (logQuery) {
-            log.info(stringJoiner.toString());
-        }
-        return databaseQuery;
-    }
-
 
     private static <E extends IdentifiedEntity> org.hibernate.query.Query<E> getQuery(Session session, BaseQuery query, Class<E> eClass) {
         BaseLookupDefinition lookupDefinition = query.getLookupDefinition();
@@ -346,7 +309,7 @@ public class QueryManager {
 
         LinkedHashMap<E, ResultSet<E>> identitySetList = new LinkedHashMap<>();
         log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query databaseQuery = QueryManager.getFirstQuery(session, query);
+        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
 
@@ -387,12 +350,11 @@ public class QueryManager {
      */
     public static <E extends IdentifiedEntity> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query databaseQuery = QueryManager.getFirstQuery(session, query);
+        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setFetchSize(1000);
         List<String> classNames = query.getEntityClassnames();
         Stream<E> results = databaseQuery.stream().map(object -> {
-            // org.hibernate.query.Query subQuery = QueryManager.getSecondQuery(session, query, Collections.singletonList(((DatabaseEntry) object)));
             try {
                 return new ResultSet<E>(object, classNames).getPrimaryEntity();
             } catch (ClassNotFoundException e) {
