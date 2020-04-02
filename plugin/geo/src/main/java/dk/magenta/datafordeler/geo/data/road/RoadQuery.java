@@ -296,4 +296,22 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         this.addRelated(localityQuery, joinHandles);
         return localityQuery;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RoadQuery roadQuery = (RoadQuery) o;
+        return Objects.equals(code, roadQuery.code) &&
+                Objects.equals(name, roadQuery.name) &&
+                Objects.equals(addressingName, roadQuery.addressingName) &&
+                Objects.equals(locality, roadQuery.locality) &&
+                Objects.equals(localityUUID, roadQuery.localityUUID) &&
+                Objects.equals(municipalityCode, roadQuery.municipalityCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, name, addressingName, locality, localityUUID, municipalityCode);
+    }
 }
