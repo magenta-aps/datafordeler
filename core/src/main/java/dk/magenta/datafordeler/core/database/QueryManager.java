@@ -333,7 +333,9 @@ public class QueryManager {
 
     public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass) {
         HashMap<BaseQuery, List<ResultSet>> cache = new HashMap<>();
-        return getAllEntitySets(session, query, eClass, cache);
+        List<ResultSet<E>> results = getAllEntitySets(session, query, eClass, cache);
+        System.out.println(results);
+        return results;
     }
 
 

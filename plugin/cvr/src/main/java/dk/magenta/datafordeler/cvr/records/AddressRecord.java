@@ -568,6 +568,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     }*/
 
 
+    @JsonIgnore
     @Override
     public List<BaseQuery> getAssoc() {
         PluginManager pluginManager = PluginManager.getInstance();
