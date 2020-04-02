@@ -16,7 +16,11 @@ import java.util.Set;
  */
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME, indexes = {
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__unit", columnList = OfficeRelationUnitRecord.DB_FIELD_UNITNUMBER)
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__unit", columnList = OfficeRelationUnitRecord.DB_FIELD_UNITNUMBER),
+
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OfficeRelationUnitRecord extends CvrBitemporalRecord {

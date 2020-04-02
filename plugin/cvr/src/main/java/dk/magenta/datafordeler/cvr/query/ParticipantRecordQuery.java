@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cvr.query;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -36,17 +37,17 @@ public class ParticipantRecordQuery extends BaseQuery {
     public void addEnhedsNummer(String enhedsNummer) {
         if (enhedsNummer != null) {
             this.enhedsNummer.add(enhedsNummer);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setEnhedsNummer(String enhedsNumre) {
-        this.enhedsNummer.clear();
+        this.clearEnhedsNummer();
         this.addEnhedsNummer(enhedsNumre);
     }
 
     public void setEnhedsNummer(Collection<String> enhedsNumre) {
-        this.enhedsNummer.clear();
+        this.clearEnhedsNummer();
         if (enhedsNumre != null) {
             for (String enhedsNummer : enhedsNumre) {
                 this.addEnhedsNummer(enhedsNummer);
@@ -56,6 +57,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     public void clearEnhedsNummer() {
         this.enhedsNummer.clear();
+        this.updatedParameters();
     }
 
 
@@ -70,7 +72,7 @@ public class ParticipantRecordQuery extends BaseQuery {
     public void addKommuneKode(String kommunekode) {
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -79,12 +81,12 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     public void setKommuneKode(String kommunekode) {
-        this.kommunekode.clear();
+        this.clearKommuneKode();
         this.addKommuneKode(kommunekode);
     }
 
     public void setKommuneKode(Collection<String> kommunekoder) {
-        this.kommunekode.clear();
+        this.clearKommuneKode();
         if (kommunekoder != null) {
             for (String kommunekode : kommunekoder) {
                 this.addKommuneKode(kommunekode);
@@ -94,6 +96,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     public void clearKommuneKode() {
         this.kommunekode.clear();
+        this.updatedParameters();
     }
 
 
@@ -109,7 +112,7 @@ public class ParticipantRecordQuery extends BaseQuery {
     public void addVejkode(String vejkode) {
         if (vejkode != null) {
             this.vejkode.add(vejkode);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -118,12 +121,12 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     public void setVejkode(String vejkode) {
-        this.vejkode.clear();
+        this.clearVejkode();
         this.addVejkode(vejkode);
     }
 
     public void setVejkode(Collection<String> vejkoder) {
-        this.vejkode.clear();
+        this.clearVejkode();
         if (vejkoder != null) {
             for (String vejkode : vejkoder) {
                 this.addVejkode(vejkode);
@@ -133,6 +136,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     public void clearVejkode() {
         this.vejkode.clear();
+        this.updatedParameters();
     }
 
 
@@ -147,17 +151,17 @@ public class ParticipantRecordQuery extends BaseQuery {
     public void addNavn(String navn) {
         if (navn != null) {
             this.navn.add(navn);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setNavn(String navn) {
-        this.navn.clear();
+        this.clearNavn();
         this.addNavn(navn);
     }
 
     public void setNavn(Collection<String> navne) {
-        this.navn.clear();
+        this.clearNavn();
         if (navne != null) {
             for (String navn : navne) {
                 this.addNavn(navn);
@@ -167,6 +171,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     public void clearNavn() {
         this.navn.clear();
+        this.updatedParameters();
     }
 
 
@@ -224,6 +229,11 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     @Override
+    protected boolean isEmpty() {
+        return this.enhedsNummer.isEmpty() && this.navn.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty();
+    }
+
+    @Override
     protected Object castFilterParam(Object input, String filter) {
         return super.castFilterParam(input, filter);
     }
@@ -253,10 +263,11 @@ public class ParticipantRecordQuery extends BaseQuery {
         return joinHandles;
     }
 
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("unit", this.enhedsNummer, Long.class);
         this.addCondition("name", this.navn);
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);
         this.addCondition("roadcode", this.vejkode, Integer.class);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 }

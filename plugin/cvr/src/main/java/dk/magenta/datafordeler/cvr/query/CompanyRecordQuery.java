@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -39,17 +40,17 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addCvrNummer(String cvrnummer) {
         if (cvrnummer != null) {
             this.cvrNumre.add(cvrnummer);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setCvrNumre(String cvrNumre) {
-        this.cvrNumre.clear();
+        this.clearCvrNumre();
         this.addCvrNummer(cvrNumre);
     }
 
     public void setCvrNumre(Collection<String> cvrNumre) {
-        this.cvrNumre.clear();
+        this.clearCvrNumre();
         if (cvrNumre != null) {
             for (String cvrNummer : cvrNumre) {
                 this.addCvrNummer(cvrNummer);
@@ -59,6 +60,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearCvrNumre() {
         this.cvrNumre.clear();
+        this.updatedParameters();
     }
 
 
@@ -70,9 +72,10 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setReklamebeskyttelse(String reklamebeskyttelse) {
-        this.reklamebeskyttelse = reklamebeskyttelse;
+        this.clearReklamebeskyttelse();
         if (reklamebeskyttelse != null) {
-            this.increaseDataParamCount();
+            this.reklamebeskyttelse = reklamebeskyttelse;
+            this.updatedParameters();
         }
     }
 
@@ -93,17 +96,17 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addVirksomhedsnavn(String virksomhedsnavn) {
         if (virksomhedsnavn != null) {
             this.virksomhedsnavn.add(virksomhedsnavn);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setVirksomhedsnavn(String virksomhedsnavn) {
-        this.virksomhedsnavn.clear();
+        this.clearVirksomhedsnavn();
         this.addVirksomhedsnavn(virksomhedsnavn);
     }
 
     public void setVirksomhedsnavn(Collection<String> virksomhedsnavne) {
-        this.virksomhedsnavn.clear();
+        this.clearVirksomhedsnavn();
         if (virksomhedsnavne != null) {
             for (String virksomhedsnavn : virksomhedsnavne) {
                 this.addVirksomhedsnavn(virksomhedsnavn);
@@ -113,6 +116,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearVirksomhedsnavn() {
         this.virksomhedsnavn.clear();
+        this.updatedParameters();
     }
 
 
@@ -127,17 +131,17 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addTelefonnummer(String telefonnummer) {
         if (telefonnummer != null) {
             this.telefonnummer.add(telefonnummer);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setTelefonnummer(String telefonnummer) {
-        this.telefonnummer.clear();
+        this.clearTelefonnummer();
         this.addTelefonnummer(telefonnummer);
     }
 
     public void setTelefonnummer(Collection<String> telefonnumre) {
-        this.telefonnummer.clear();
+        this.clearTelefonnummer();
         if (telefonnumre != null) {
             for (String telefonnummer : telefonnumre) {
                 this.addTelefonnummer(telefonnummer);
@@ -147,6 +151,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearTelefonnummer() {
         this.telefonnummer.clear();
+        this.updatedParameters();
     }
 
 
@@ -161,17 +166,17 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addTelefaxnummer(String telefaxnummer) {
         if (telefaxnummer != null) {
             this.telefaxnummer.add(telefaxnummer);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setTelefaxnummer(String telefaxnummer) {
-        this.telefaxnummer.clear();
+        this.clearTelefaxnummer();
         this.addTelefaxnummer(telefaxnummer);
     }
 
     public void setTelefaxnummer(Collection<String> telefaxnumre) {
-        this.telefaxnummer.clear();
+        this.clearTelefaxnummer();
         if (telefaxnumre != null) {
             for (String telefaxnummer : telefaxnumre) {
                 this.addTelefaxnummer(telefaxnummer);
@@ -181,6 +186,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearTelefaxnummer() {
         this.telefaxnummer.clear();
+        this.updatedParameters();
     }
 
 
@@ -195,12 +201,12 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addEmailadresse(String emailadresse) {
         if (emailadresse != null) {
             this.emailadresse.add(emailadresse);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setEmailadresse(String emailadresse) {
-        this.emailadresse.clear();
+        this.clearEmailadresse();
         this.addEmailadresse(emailadresse);
     }
 
@@ -215,6 +221,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearEmailadresse() {
         this.emailadresse.clear();
+        this.updatedParameters();
     }
 
 
@@ -229,7 +236,7 @@ public class CompanyRecordQuery extends BaseQuery {
     public void addVirksomhedsform(String virksomhedsform) {
         if (virksomhedsform != null) {
             this.virksomhedsform.add(virksomhedsform);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -238,7 +245,7 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setVirksomhedsform(String virksomhedsform) {
-        this.virksomhedsform.clear();
+        this.clearVirksomhedsform();
         this.addVirksomhedsform(virksomhedsform);
     }
 
@@ -247,7 +254,7 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setVirksomhedsform(Collection<String> virksomhedsformer) {
-        this.virksomhedsform.clear();
+        this.clearVirksomhedsform();
         if (virksomhedsformer != null) {
             for (String virksomhedsform : virksomhedsformer) {
                 this.addVirksomhedsform(virksomhedsform);
@@ -257,6 +264,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearVirksomhedsform() {
         this.virksomhedsform.clear();
+        this.updatedParameters();
     }
 
 
@@ -272,7 +280,7 @@ public class CompanyRecordQuery extends BaseQuery {
         this.kommunekode.add(kommunekode);
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -286,7 +294,7 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setKommuneKode(Collection<String> kommunekoder) {
-        this.kommunekode.clear();
+        this.clearKommuneKoder();
         if (kommunekoder != null) {
             for (String kommunekode : kommunekoder) {
                 this.addKommuneKode(kommunekode);
@@ -300,6 +308,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void clearKommuneKoder() {
         this.kommunekode.clear();
+        this.updatedParameters();
     }
 
 
@@ -376,6 +385,11 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     @Override
+    protected boolean isEmpty() {
+        return this.cvrNumre.isEmpty() && this.virksomhedsform.isEmpty() && this.reklamebeskyttelse == null && this.virksomhedsnavn.isEmpty() && this.telefonnummer.isEmpty() && this.telefaxnummer.isEmpty() && this.emailadresse.isEmpty() && this.kommunekode.isEmpty();
+    }
+
+    @Override
     protected Object castFilterParam(Object input, String filter) {
         return super.castFilterParam(input, filter);
     }
@@ -394,14 +408,14 @@ public class CompanyRecordQuery extends BaseQuery {
 
     static {
         joinHandles.put("cvr", CompanyRecord.DB_FIELD_CVR_NUMBER);
-        joinHandles.put("formcode", CompanyRecord.DB_FIELD_FORM + LookupDefinition.separator + FormRecord.DB_FIELD_FORM + LookupDefinition.separator + CompanyForm.DB_FIELD_CODE);
+        joinHandles.put("formcode", CompanyRecord.DB_FIELD_FORM + BaseQuery.separator + FormRecord.DB_FIELD_FORM + BaseQuery.separator + CompanyForm.DB_FIELD_CODE);
         joinHandles.put("advertprotection", CompanyRecord.DB_FIELD_ADVERTPROTECTION);
-        joinHandles.put("name", CompanyRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME);
-        joinHandles.put("phone", CompanyRecord.DB_FIELD_PHONE + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA);
-        joinHandles.put("fax", CompanyRecord.DB_FIELD_FAX + LookupDefinition.separator +ContactRecord.DB_FIELD_DATA);
-        joinHandles.put("email", CompanyRecord.DB_FIELD_EMAIL + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA);
-        joinHandles.put("municipalitycode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
-        joinHandles.put("roadcode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
+        joinHandles.put("name", CompanyRecord.DB_FIELD_NAMES + BaseQuery.separator + SecNameRecord.DB_FIELD_NAME);
+        joinHandles.put("phone", CompanyRecord.DB_FIELD_PHONE + BaseQuery.separator + ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("fax", CompanyRecord.DB_FIELD_FAX + BaseQuery.separator +ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("email", CompanyRecord.DB_FIELD_EMAIL + BaseQuery.separator + ContactRecord.DB_FIELD_DATA);
+        joinHandles.put("municipalitycode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
+        joinHandles.put("roadcode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
 
     }
 
@@ -410,7 +424,7 @@ public class CompanyRecordQuery extends BaseQuery {
         return joinHandles;
     }
 
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("cvr", this.cvrNumre, Integer.class);
         this.addCondition("formcode", this.virksomhedsform);
         this.addCondition("advertprotection", this.reklamebeskyttelse != null ? Collections.singletonList(this.reklamebeskyttelse) : Collections.emptyList(), Boolean.class);
@@ -419,6 +433,7 @@ public class CompanyRecordQuery extends BaseQuery {
         this.addCondition("fax", this.telefaxnummer);
         this.addCondition("email", this.emailadresse);
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 
 

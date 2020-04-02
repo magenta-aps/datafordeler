@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cpr.data.person;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.ForcedJoinDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -18,14 +19,14 @@ import java.util.*;
 public class PersonRecordQuery extends BaseQuery {
 
     public static final String PERSONNUMMER = PersonEntity.IO_FIELD_CPR_NUMBER;
-    public static final String FORNAVNE = "fornavn";
-    public static final String EFTERNAVN = "efternavn";
-    public static final String KOMMUNEKODE = "cprKommunekode";
-    public static final String VEJKODE = "cprVejkode";
-    public static final String DOOR = "doer";
-    public static final String FLOOR = "floor";
-    public static final String HOUSENO = "houseno";
-    public static final String BUILDINGNO = "buildingno";
+    public static final String FORNAVNE = NameDataRecord.IO_FIELD_FIRST_NAMES;
+    public static final String EFTERNAVN = NameDataRecord.IO_FIELD_LAST_NAME;
+    public static final String KOMMUNEKODE = AddressDataRecord.IO_FIELD_MUNICIPALITY_CODE;
+    public static final String VEJKODE = AddressDataRecord.IO_FIELD_ROAD_CODE;
+    public static final String DOOR = AddressDataRecord.IO_FIELD_DOOR;
+    public static final String FLOOR = AddressDataRecord.IO_FIELD_FLOOR;
+    public static final String HOUSENO = AddressDataRecord.IO_FIELD_HOUSENUMBER;
+    public static final String BUILDINGNO = AddressDataRecord.IO_FIELD_BUILDING_NUMBER;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
     private List<String> personnumre = new ArrayList<>();
@@ -37,20 +38,25 @@ public class PersonRecordQuery extends BaseQuery {
     public void addPersonnummer(String personnummer) {
         this.personnumre.add(personnummer);
         if (personnummer != null) {
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setPersonnummer(String personnummer) {
-        this.personnumre.clear();
+        this.clearPersonnumre();
         this.addPersonnummer(personnummer);
     }
 
-    public void setPersonnumre(Collection<String> personnumre) {
+    public void clearPersonnumre() {
         this.personnumre.clear();
+        this.updatedParameters();
+    }
+
+    public void setPersonnumre(Collection<String> personnumre) {
+        this.clearPersonnumre();
         if (personnumre != null) {
             this.personnumre.addAll(personnumre);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -64,19 +70,20 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void clearFornavn() {
         this.fornavn.clear();
+        this.updatedParameters();
     }
     public void addFornavn(String fornavn) {
         this.fornavn.add(fornavn);
         if (fornavn != null) {
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setFornavne(Collection<String> fornavne) {
-        this.fornavn.clear();
+        this.clearFornavn();
         if (fornavne != null) {
             this.fornavn.addAll(fornavne);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -88,19 +95,21 @@ public class PersonRecordQuery extends BaseQuery {
     }
     public void clearEfternavn() {
         this.efternavn.clear();
+        this.updatedParameters();
     }
 
     public void setEfternavn(String efternavn) {
+        this.clearEfternavn();
         this.efternavn.add(efternavn);
         if (efternavn != null) {
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
     public void setEfternavne(Collection<String> efternavne) {
-        this.efternavn.clear();
+        this.clearEfternavn();
         if (efternavne != null) {
             this.efternavn.addAll(efternavne);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -113,7 +122,10 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     public void addKommunekode(String kommunekode) {
-        this.kommunekoder.add(kommunekode);
+        if (kommunekode != null) {
+            this.kommunekoder.add(kommunekode);
+            this.updatedParameters();
+        }
     }
 
     public void addKommunekode(int kommunekode) {
@@ -122,12 +134,13 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void clearKommunekode() {
         this.kommunekoder.clear();
+        this.updatedParameters();
     }
     public void setKommunekoder(Collection<String> kommunekoder) {
-        this.kommunekoder.clear();
+        this.clearKommunekode();
         if (kommunekoder != null) {
             this.kommunekoder.addAll(kommunekoder);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -140,7 +153,10 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     public void addVejkode(String vejkode) {
-        this.vejkoder.add(vejkode);
+        if (vejkode != null) {
+            this.vejkoder.add(vejkode);
+            this.updatedParameters();
+        }
     }
 
     public void addVejkode(int vejkode) {
@@ -149,11 +165,13 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void clearVejkode() {
         this.vejkoder.clear();
+        this.updatedParameters();
     }
     public void setVejkoder(Collection<String> vejkoder) {
-        this.vejkoder.clear();
+        this.clearVejkode();
         if (vejkoder != null) {
             this.vejkoder.addAll(vejkoder);
+            this.updatedParameters();
         }
     }
 
@@ -167,15 +185,18 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addDoor(String door) {
         this.doors.add(door);
+        this.updatedParameters();
     }
 
     public void clearDoor() {
         this.doors.clear();
+        this.updatedParameters();
     }
     public void setDoors(Collection<String> doors) {
-        this.doors.clear();
+        this.clearDoor();
         if (doors != null) {
             this.doors.addAll(doors);
+            this.updatedParameters();
         }
     }
 
@@ -190,15 +211,18 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addFloor(String floor) {
         this.floors.add(floor);
+        this.updatedParameters();
     }
 
     public void clearFloor() {
         this.floors.clear();
+        this.updatedParameters();
     }
     public void setFloors(Collection<String> floors) {
         this.floors.clear();
         if (floors != null) {
             this.floors.addAll(floors);
+            this.updatedParameters();
         }
     }
 
@@ -212,15 +236,18 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addHouseNo(String houseNo) {
         this.houseNos.add(houseNo);
+        this.updatedParameters();
     }
 
     public void clearHouseNo() {
         this.houseNos.clear();
+        this.updatedParameters();
     }
     public void setHouseNos(Collection<String> houseNos) {
         this.houseNos.clear();
         if (houseNos != null) {
             this.houseNos.addAll(houseNos);
+            this.updatedParameters();
         }
     }
 
@@ -234,15 +261,18 @@ public class PersonRecordQuery extends BaseQuery {
 
     public void addBuildingNo(String houseNo) {
         this.buildingNos.add(houseNo);
+        this.updatedParameters();
     }
 
     public void clearBuildingNo() {
         this.buildingNos.clear();
+        this.updatedParameters();
     }
     public void setBuildingNos(Collection<String> buildingNos) {
         this.buildingNos.clear();
         if (buildingNos != null) {
             this.buildingNos.addAll(buildingNos);
+            this.updatedParameters();
         }
     }
 
@@ -254,6 +284,11 @@ public class PersonRecordQuery extends BaseQuery {
         map.put(FORNAVNE, this.fornavn);
         map.put(EFTERNAVN, this.efternavn);
         map.put(KOMMUNEKODE, this.kommunekoder);
+        map.put(VEJKODE, this.vejkoder);
+        map.put(DOOR, this.doors);
+        map.put(FLOOR, this.floors);
+        map.put(HOUSENO, this.houseNos);
+        map.put(BUILDINGNO, this.buildingNos);
         return map;
     }
 
@@ -263,6 +298,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.setFornavne(parameters.get(FORNAVNE));
         this.setEfternavne(parameters.get(EFTERNAVN));
         this.setKommunekoder(parameters.get(KOMMUNEKODE));
+        this.setVejkoder(parameters.get(VEJKODE));
         this.setDoors(parameters.get(DOOR));
         this.setFloors(parameters.get(FLOOR));
         this.setHouseNos(parameters.get(HOUSENO));
@@ -300,7 +336,7 @@ public class PersonRecordQuery extends BaseQuery {
         return joinHandles;
     }
 
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("pnr", this.personnumre);
         this.addCondition("firstname", this.fornavn);
         this.addCondition("lastname", this.efternavn);
@@ -310,6 +346,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("door", this.doors);
         this.addCondition("housenumber", this.houseNos);
         this.addCondition("bnr", this.buildingNos);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 
 
@@ -364,6 +401,11 @@ public class PersonRecordQuery extends BaseQuery {
 
 
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() && this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty();
     }
 
 }

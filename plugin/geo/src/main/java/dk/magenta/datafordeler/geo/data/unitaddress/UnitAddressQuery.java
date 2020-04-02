@@ -2,6 +2,8 @@ package dk.magenta.datafordeler.geo.data.unitaddress;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -115,13 +117,14 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     public void setHouseNumber(String houseNumber) {
         this.houseNumber.clear();
+        this.updatedParameters();
         this.addHouseNumber(houseNumber);
     }
 
     public void addHouseNumber(String houseNumber) {
         if (houseNumber != null) {
             this.houseNumber.add(houseNumber);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -140,13 +143,14 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     public void setFloor(String floor) {
         this.floor.clear();
+        this.updatedParameters();
         this.addFloor(floor);
     }
 
     public void addFloor(String floor) {
         if (floor != null) {
             this.floor.add(floor);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -164,13 +168,14 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     public void setDoor(String door) {
         this.door.clear();
+        this.updatedParameters();
         this.addDoor(door);
     }
 
     public void addDoor(String door) {
         if (door != null) {
             this.door.add(door);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -206,6 +211,11 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     }
 
     @Override
+    protected boolean isEmpty() {
+        return this.floor.isEmpty() && this.door.isEmpty();
+    }
+
+    @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
         //this.setBnr(parameters.getFirst(BNR));
@@ -225,18 +235,22 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     private static HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
-        joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseLookupDefinition.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);
-        joinHandles.put("door", UnitAddressEntity.DB_FIELD_DOOR + BaseLookupDefinition.separator + UnitAddressDoorRecord.DB_FIELD_DOOR);
+        joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseQuery.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);
+        joinHandles.put("door", UnitAddressEntity.DB_FIELD_DOOR + BaseQuery.separator + UnitAddressDoorRecord.DB_FIELD_DOOR);
         joinHandles.put("accessaddress_id", UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS);
     }
 
     @Override
     protected Map<String, String> joinHandles() {
-        return joinHandles;
+        HashMap<String, String> handles = new HashMap<>();
+        handles.putAll(super.joinHandles());
+        handles.putAll(joinHandles);
+        return handles;
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("floor", this.floor);
         this.addCondition("door", this.door);
     }

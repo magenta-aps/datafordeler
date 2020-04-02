@@ -5,14 +5,12 @@ import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import org.hibernate.Session;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,9 @@ public class GeoIntegrationTest {
     private CompanyEntityManager entityManager;
 
     @Test
+    @Ignore
     public void testLookup() {
+        // Mostly for our own sake during developement
         CompanyRecordQuery query = new CompanyRecordQuery();
         query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality cvr_company__locationAddress__municipality");
@@ -55,20 +55,20 @@ public class GeoIntegrationTest {
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {
-            
+
             HashMap<String, String> handles = new HashMap<>();
             handles.put("municipalitycode", "cvr_company__locationAddress__municipality__municipality.code");
             handles.put("roadcode", "cvr_company__locationAddress.roadCode");
 
             query.addExtraJoin(geoPlugin.getJoinString(handles));
-            query.addExtraTables(geoPlugin.getJoinClassAliases());
+            query.addExtraTables(geoPlugin.getJoinClassAliases(handles.keySet()));
 
             //query.addExtraJoin(cprPlugin.getJoinString(handles));
             //query.addExtraTables(cprPlugin.getJoinClassAliases());
 
 
-            Session session = sessionManager.getSessionFactory().openSession();
-            System.out.println(QueryManager.getQuery(session, query));
+            //Session session = sessionManager.getSessionFactory().openSession();
+            //System.out.println(QueryManager.getQuery(session, query));
         }
     }
 

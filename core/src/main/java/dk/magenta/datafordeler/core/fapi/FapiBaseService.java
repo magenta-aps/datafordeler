@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -385,9 +386,11 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addRequestData(request);
             List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
+                this.log.info("Wrapping resultset with "+this.getOutputWrapper().getClass().getCanonicalName());
                 envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
-                ArrayNode jacksonConverted = objectMapper.valueToTree(results);
+                this.log.info("No outputwrapper defined for "+this.getClass().getCanonicalName()+", not wrapping output");
+                ArrayNode jacksonConverted = objectMapper.valueToTree(results.stream().map(resultset -> resultset.getPrimaryEntity()).collect(Collectors.toList()));
                 ArrayList<Object> wrapper = new ArrayList<>();
                 for (JsonNode node : jacksonConverted) {
                     wrapper.add(node);
@@ -503,7 +506,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      */
     protected Q getQuery(MultiValueMap<String, String> parameters, boolean limitsOnly) throws InvalidClientInputException {
         Q query = this.getEmptyQuery();
-        ParameterMap parameterMap = new ParameterMap(parameters);
+        ParameterMap parameterMap = new ParameterMap(parameters, true);
         query.fillFromParameters(parameterMap, limitsOnly);
         return query;
     }
@@ -603,17 +606,14 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
         List<MediaType> acceptedTypes = MediaType.parseMediaTypes(request.getHeader("Accept"));
 
-        Set<String> omitEntityKeys = Collections.singleton("domain");
+        Set<String> omitEntityKeys = new HashSet<>();
+        omitEntityKeys.add("domain");
+        omitEntityKeys.add("domæne");
         BaseQuery baseQuery = this.getEmptyQuery();
         Iterator<Map<String, String>> dataIter = entities.map(e -> {
             List<Map<String, String>> rows = new ArrayList<>();
             Object wrapped = FapiBaseService.this.getOutputWrapper().wrapResult(e, baseQuery, OutputWrapper.Mode.RVD);
             ObjectNode entityNode = (ObjectNode) wrapped;
-            try {
-                System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entityNode));
-            } catch (JsonProcessingException e1) {
-                e1.printStackTrace();
-            }
             ArrayNode registrations = (ArrayNode) entityNode.get("registreringer");
             if (registrations != null) {
                 for (int i = 0; i < registrations.size(); i++) {

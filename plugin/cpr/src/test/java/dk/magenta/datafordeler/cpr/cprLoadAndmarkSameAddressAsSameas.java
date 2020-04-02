@@ -102,7 +102,7 @@ public class cprLoadAndmarkSameAddressAsSameas {
     }
 
     /**
-     * This unittest validates that is is possible to filter out addresschanges that  does not happen based on the eventtype A01
+     * This unittest validates that it is possible to filter out addresschanges that do not happen based on the eventtype A01
      * @throws DataFordelerException
      * @throws IOException
      */

@@ -24,13 +24,14 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Value("${pitu.base.url}")
-    private String pituBaseUrl;
-
     @PostConstruct
     private void register() {
         this.register(PersonEntity.class);
     }
+
+    @Value("${pitu.base.url}")
+    private String pituBaseUrl;
+
 
     @Override
     public ObjectMapper getObjectMapper() {
@@ -82,9 +83,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
 
     @Override
     protected void fillContainer(OutputContainer container, PersonEntity record, Mode mode) {
-
         container.addNontemporal(PersonEntity.IO_FIELD_CPR_NUMBER, record.getPersonnummer());
-
         container.addBitemporal(PersonEntity.IO_FIELD_ADDRESS_CONAME, record.getConame(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_ADDRESS, record.getAddress());
         container.addBitemporal(PersonEntity.IO_FIELD_ADDRESS_NAME, record.getAddressName());
@@ -121,18 +120,6 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         container.addBitemporal(PersonEntity.IO_FIELD_PROTECTION, record.getProtection());
     }
 
-    public HashSet<GenericParentOutputDTO> getParentOutputDTO(Iterator<ParentDataRecord> parent) {
-        HashSet<GenericParentOutputDTO> parentList = new HashSet();
-        while (parent.hasNext()) {
-            GenericParentOutputDTO genericParentOutputDTO = new GenericParentOutputDTO();
-            ParentDataRecord p = parent.next();
-            genericParentOutputDTO.setCprNumber(p.getCprNumber());
-            genericParentOutputDTO.setMother(p.isMother());
-            genericParentOutputDTO.setPituBaseUrl(pituBaseUrl);
-            parentList.add(genericParentOutputDTO);
-        }
-        return parentList;
-    }
 
     public Map<Class, List<String>> getEligibleModifierNames() {
         HashMap<Class, List<String>> map = new HashMap<>();
@@ -144,6 +131,18 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         addressModifiers.add("cpr_road");
         map.put(AddressDataRecord.class, addressModifiers);
         return map;
+    }
+
+    public HashSet<GenericParentOutputDTO> getParentOutputDTO(Iterator<ParentDataRecord> parent) {
+        HashSet<GenericParentOutputDTO> parentList = new HashSet();
+        while(parent.hasNext()) {
+            GenericParentOutputDTO genericParentOutputDTO = new GenericParentOutputDTO();
+            ParentDataRecord p = parent.next();
+            genericParentOutputDTO.setPnr(p.getCprNumber());
+            genericParentOutputDTO.setPituBaseUrl(pituBaseUrl);
+            parentList.add(genericParentOutputDTO);
+        }
+        return parentList;
     }
 
 }

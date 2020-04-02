@@ -13,7 +13,14 @@ import java.util.*;
  * Record for one participant on a Company or CompanyUnit
  */
 @Entity
-@Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + RelationCompanyRecord.TABLE_NAME)
+@Table(
+        name = CvrPlugin.DEBUG_TABLE_PREFIX + RelationCompanyRecord.TABLE_NAME,
+        indexes = {
+                @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + RelationCompanyRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+                @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + RelationCompanyRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
+                @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + RelationCompanyRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
+        }
+)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RelationCompanyRecord extends CvrBitemporalRecord {
 

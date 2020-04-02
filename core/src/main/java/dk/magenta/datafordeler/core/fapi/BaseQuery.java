@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
  */
 public abstract class BaseQuery {
 
+    public static final String separator = ".";
     public static final String[] PARAM_PAGE = new String[] {"side", "page"};
     public static final String[] PARAM_PAGESIZE = new String[] {"sidestoerrelse", "pageSize"};
     public static final String[] PARAM_REGISTRATION_FROM_BEFORE = new String[] {"registreringFraFør", "registrationFromBefore"};
@@ -88,6 +90,8 @@ public abstract class BaseQuery {
 
     private LinkedHashSet<Join> joins = new LinkedHashSet<>();
     private MultiCondition condition = new MultiCondition();
+
+    private int conditionCounter = 0;
 
     public BaseQuery() {
     }
@@ -509,9 +513,6 @@ public abstract class BaseQuery {
 
     public void setRecordAfter(String recordAfter) throws DateTimeParseException {
         this.recordAfter = parseDateTime(recordAfter);
-        if (recordAfter != null) {
-            this.increaseDataParamCount();
-        }
     }
 
     public void setUuid(Collection<UUID> uuid) {
@@ -564,7 +565,6 @@ public abstract class BaseQuery {
      * @param parameterMap
      */
     public void fillFromParameters(ParameterMap parameterMap, boolean limitsOnly) throws InvalidClientInputException {
-        System.out.println(this.getClass().getCanonicalName()+".fillFromParameters("+parameterMap.toString()+")");
         this.setPage(parameterMap.getFirstOf(PARAM_PAGE));
         this.setPageSize(parameterMap.getFirstOf(PARAM_PAGESIZE));
         try {
@@ -583,7 +583,8 @@ public abstract class BaseQuery {
         }
         if (!limitsOnly) {
             this.setFromParameters(parameterMap);
-            if (this.getDataParamCount() == 0) {
+            if (this.isEmpty() && this.recordAfter == null) {
+                // Require at least one of certain url parameters, to prevent huge responses on empty queries
                 throw new InvalidClientInputException("Missing query parameters");
             }
         }
@@ -591,17 +592,12 @@ public abstract class BaseQuery {
         if (modeString != null) {
             this.mode = PARAM_OUTPUT_WRAPPING_VALUEMAP.get(modeString);
         }
+        this.updatedParameters();
     }
 
     private int dataParamCount = 0;
 
-    protected void increaseDataParamCount() {
-        this.dataParamCount++;
-    }
-
-    protected int getDataParamCount() {
-        return this.dataParamCount;
-    }
+    protected abstract boolean isEmpty();
 
     public abstract void setFromParameters(ParameterMap parameterMap) throws InvalidClientInputException;
 
@@ -685,27 +681,27 @@ public abstract class BaseQuery {
     private static int formatterCount = zonedDateTimeFormatters.length + zonedDateFormatters.length + unzonedDateTimeFormatters.length + unzonedDateFormatters.length;
 
     public static OffsetDateTime parseDateTime(String dateTime) throws DateTimeParseException {
-        return parseDateTime(dateTime, true);
+        return parseDateTime(dateTime, false);
     }
 
 
-                                               /**
-                                                * Convenience method for parsing a String as an OffsetDateTime
-                                                * A series of parsers will attempt to parse the input string, returning on the first success.
-                                                * The Parsers, in order, are:
-                                                *   DateTimeFormatter.ISO_OFFSET_DATE_TIME
-                                                *   DateTimeFormatter.ISO_ZONED_DATE_TIME
-                                                *   DateTimeFormatter.ISO_INSTANT
-                                                *   DateTimeFormatter.RFC_1123_DATE_TIME
-                                                *   DateTimeFormatter.ISO_OFFSET_DATE
-                                                *   DateTimeFormatter.ISO_DATE_TIME
-                                                *   DateTimeFormatter.ISO_LOCAL_DATE_TIME
-                                                *   DateTimeFormatter.ISO_DATE
-                                                *   DateTimeFormatter.BASIC_ISO_DATE
-                                                * @param dateTime
-                                                * @return Parsed OffsetDateTime, or null if input was null
-                                                * @throws DateTimeParseException if no parser succeeded on a non-null input string
-                                                */
+   /**
+    * Convenience method for parsing a String as an OffsetDateTime
+    * A series of parsers will attempt to parse the input string, returning on the first success.
+    * The Parsers, in order, are:
+    *   DateTimeFormatter.ISO_OFFSET_DATE_TIME
+    *   DateTimeFormatter.ISO_ZONED_DATE_TIME
+    *   DateTimeFormatter.ISO_INSTANT
+    *   DateTimeFormatter.RFC_1123_DATE_TIME
+    *   DateTimeFormatter.ISO_OFFSET_DATE
+    *   DateTimeFormatter.ISO_DATE_TIME
+    *   DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    *   DateTimeFormatter.ISO_DATE
+    *   DateTimeFormatter.BASIC_ISO_DATE
+    * @param dateTime
+    * @return Parsed OffsetDateTime, or null if input was null
+    * @throws DateTimeParseException if no parser succeeded on a non-null input string
+    */
     public static OffsetDateTime parseDateTime(String dateTime, boolean urlDecode) throws DateTimeParseException {
         if (dateTime != null) {
             String decodedDateTime;
@@ -718,7 +714,7 @@ public abstract class BaseQuery {
                 try {
                     return OffsetDateTime.parse(decodedDateTime, formatter);
                 } catch (DateTimeParseException e) {
-                    //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
+                    // Do nothing - we expect errors when the input is something we cannot parse with this set of parsers. Nothing wrong with that, just move on to the next set of parsers
                 }
             }
             for (DateTimeFormatter formatter : zonedDateFormatters) {
@@ -726,7 +722,6 @@ public abstract class BaseQuery {
                     TemporalAccessor accessor = formatter.parse(decodedDateTime);
                     return OffsetDateTime.of(LocalDate.from(accessor), LocalTime.MIDNIGHT, ZoneOffset.from(accessor));
                 } catch (DateTimeParseException e) {
-                    //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
                 }
             }
             for (DateTimeFormatter formatter : unzonedDateTimeFormatters) {
@@ -734,7 +729,6 @@ public abstract class BaseQuery {
                     TemporalAccessor accessor = formatter.parse(decodedDateTime);
                     return OffsetDateTime.of(LocalDateTime.from(accessor), ZoneOffset.UTC);
                 } catch (DateTimeParseException e) {
-                    //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
                 }
             }
             for (DateTimeFormatter formatter : unzonedDateFormatters) {
@@ -742,9 +736,9 @@ public abstract class BaseQuery {
                     TemporalAccessor accessor = formatter.parse(decodedDateTime);
                     return OffsetDateTime.of(LocalDate.from(accessor), LocalTime.MIDNIGHT, ZoneOffset.UTC);
                 } catch (DateTimeParseException e) {
-                    //I added logging of exceptions here as I expected exceptions to be an error, it seems like it is this way by design, and I disable the loggings again
                 }
             }
+            // If none of the parsers could parse the string, _then_ we may throw an exception
             throw new DateTimeParseException("Unable to parse date string \""+decodedDateTime+"\", tried "+ formatterCount + " parsers of "+DateTimeFormatter.class.getCanonicalName(), decodedDateTime, 0);
         }
         return null;
@@ -827,25 +821,25 @@ public abstract class BaseQuery {
         this.condition.add(condition);
     }
 
-    public void addCondition(String handle, List<String> value) throws Exception {
+    public void addCondition(String handle, List<String> value) throws QueryBuildException {
         this.addCondition(handle, value, String.class);
     }
 
-    public void addCondition(String handle, List<String> value, Class type) throws Exception {
-        if (!value.isEmpty()) {
+    public void addCondition(String handle, List<String> value, Class type) throws QueryBuildException {
+        if (value != null && !value.isEmpty()) {
             this.addCondition(handle, Condition.Operator.EQ, value, type);
         }
     }
 
-    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws Exception {
+    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws QueryBuildException {
         this.finalizedConditions = false;
         String member = this.useJoinHandle(handle);
-        String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replace(".", "__");
-        if (member != null) {
+        String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
+        if (member != null && value != null && !value.isEmpty()) {
             try {
                 this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (QueryBuildException e) {
+                log.error(e);
             }
         }
     }
@@ -857,11 +851,11 @@ public abstract class BaseQuery {
 
     protected abstract Map<String, String> joinHandles();
 
-    public String useJoinHandle(String handle) throws Exception {
+    public String useJoinHandle(String handle) throws QueryBuildException {
         // Internally joins handle path
         String path = this.joinHandles().get(handle);
         if (path == null) {
-            throw new Exception("Invalid join handle "+handle+" for "+this.getEntityClassname());
+            throw new QueryBuildException("Invalid join handle "+handle+" for "+this.getEntityClassname());
         }
         StringJoiner resolved = new StringJoiner(",");
         for (String p : path.split(",")) {
@@ -879,12 +873,12 @@ public abstract class BaseQuery {
         return resolved.toString();
     }
 
-    public String toHql() {
+    public String toFirstHql() {
         this.finalizeConditions();
         StringJoiner s = new StringJoiner(" \n");
 
-        s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
-        s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
+        s.add("SELECT DISTINCT " + this.getEntityIdentifier());
+        s.add("FROM " + this.getEntityClassname() + " " + this.getEntityIdentifier());
 
         for (Join join : this.getAllJoins()) {
             s.add(join.toHql());
@@ -898,9 +892,32 @@ public abstract class BaseQuery {
         return s.toString();
     }
 
-    public Map<String, Object> getParameters() {
+    public String toSecondHql() {
+        this.finalizeConditions();
+        StringJoiner s = new StringJoiner(" \n");
+
+        s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
+        s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
+
+        for (Join join : this.getAllJoins()) {
+            s.add(join.toHql());
+        }
+        for (String extraJoin : this.extraJoins) {
+            s.add(extraJoin);
+        }
+        s.add("WHERE " + this.getEntityIdentifier() + ".id IN :ids");
+
+        return s.toString();
+    }
+
+
+    public Map<String, Object> getFirstParameters() {
         this.finalizeConditions();
         return this.condition.getParameters();
+    }
+
+    public Map<String, Object> getSecondParameters(Collection<DatabaseEntry> entries) {
+        return Collections.singletonMap("ids", entries.stream().map(DatabaseEntry::getId).collect(Collectors.toList()));
     }
 
     private boolean finalizedConditions = false;
@@ -912,14 +929,18 @@ public abstract class BaseQuery {
             }
             try {
                 this.setupConditions();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (QueryBuildException e) {
+                log.error(e);
             }
             this.finalizedConditions = true;
         }
     }
 
-    protected abstract void setupConditions() throws Exception;
+    protected void updatedParameters() {
+        this.finalizedConditions = false;
+    }
+
+    protected abstract void setupConditions() throws QueryBuildException;
 
     private Set<JoinedQuery> related = new HashSet<>();
 
@@ -933,8 +954,8 @@ public abstract class BaseQuery {
             JoinedQuery joinedQuery = new JoinedQuery(this, query, joinHandles, this.condition);
             this.related.add(joinedQuery);
             this.condition.add(joinedQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (QueryBuildException e) {
+            log.error(e);
         }
     }
 
@@ -944,9 +965,7 @@ public abstract class BaseQuery {
         for (JoinedQuery joinedQuery : this.related) {
             identifiers.addAll(joinedQuery.getJoined().getEntityIdentifiers());
         }
-
         identifiers.addAll(this.extraTables.keySet());
-
         return identifiers;
     }
     protected List<String> getEntityClassnameStrings() {
@@ -964,7 +983,6 @@ public abstract class BaseQuery {
             classnames.addAll(joinedQuery.getJoined().getEntityClassnames());
         }
         classnames.addAll(this.extraTables.values().stream().map(Class::getCanonicalName).collect(Collectors.toList()));
-
         return classnames;
     }
     protected List<Join> getAllJoins() {
@@ -989,6 +1007,5 @@ public abstract class BaseQuery {
     }
     public void addExtraTables(LinkedHashMap<String, Class> tables) {
         this.extraTables.putAll(tables);
-        System.out.println("Added to extratables. It is now: "+this.extraTables);
     }
 }

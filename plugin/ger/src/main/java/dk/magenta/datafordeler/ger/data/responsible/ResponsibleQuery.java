@@ -2,12 +2,12 @@ package dk.magenta.datafordeler.ger.data.responsible;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.ger.data.GerQuery;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
 
@@ -28,35 +28,6 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
-            this.increaseDataParamCount();
-        }
-    }
-
-
-
-    public static final String GERNR = ResponsibleEntity.IO_FIELD_GERNR;
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = GERNR)
-    private List<String> gerNr = new ArrayList<>();
-
-    @Override
-    public List<String> getGerNr() {
-        return this.gerNr;
-    }
-
-    public void setGerNr(int gerNr) {
-        this.setGerNr(Integer.toString(gerNr));
-    }
-
-    public void setGerNr(String gerNr) {
-        this.gerNr.clear();
-        this.addGerNr(gerNr);
-    }
-
-    public void addGerNr(String gerNr) {
-        if (gerNr != null) {
-            this.gerNr.add(gerNr);
-            this.increaseDataParamCount();
         }
     }
 
@@ -83,7 +54,6 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     public void addCvrGuid(String cvrGuid) {
         if (cvrGuid != null) {
             this.cvrGuid.add(cvrGuid);
-            this.increaseDataParamCount();
         }
     }
 
@@ -93,7 +63,6 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>(super.getSearchParameters());
         map.put(NAME, this.name);
-        map.put(GERNR, this.gerNr);
         map.put(CVR_GUID, this.cvrGuid);
         return map;
     }
@@ -104,13 +73,18 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
         if (this.name != null && !this.name.isEmpty()) {
             lookupDefinition.put(ResponsibleEntity.DB_FIELD_NAME, this.name, String.class);
         }
-        if (this.gerNr != null && !this.gerNr.isEmpty()) {
-            lookupDefinition.put(ResponsibleEntity.DB_FIELD_GERNR, this.gerNr, Integer.class);
+        if (!this.getGerNr().isEmpty()) {
+            lookupDefinition.put(ResponsibleEntity.DB_FIELD_GERNR, this.getGerNr(), Integer.class);
         }
         if (this.cvrGuid != null && !this.cvrGuid.isEmpty()) {
             lookupDefinition.put(ResponsibleEntity.DB_FIELD_CVR_PARTICIPANT_GUID, this.cvrGuid, UUID.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty () && this.name.isEmpty() && this.cvrGuid.isEmpty();
     }
 
     @Override
@@ -146,9 +120,9 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("name", this.name);
-        this.addCondition("gernr", this.gerNr, Integer.class);
+        this.addCondition("gernr", this.getGerNr(), Integer.class);
         this.addCondition("guid", this.cvrGuid, UUID.class);
     }
 

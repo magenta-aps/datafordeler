@@ -4,11 +4,13 @@ import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
     public void setSumiffiik(String sumiffiik) {
         this.sumiffiik = sumiffiik;
         if (sumiffiik != null) {
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -68,5 +70,31 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         this.setSumiffiik(parameters.getFirst(SUMIFFIIK));
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("sumiffiik", SumiffiikEntity.DB_FIELD_SUMIFFIIK_ID);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        return joinHandles;
+    }
+
+    @Override
+    protected void setupConditions() throws QueryBuildException {
+        String sumiffiik = this.sumiffiik;
+        if (sumiffiik != null) {
+            sumiffiik.replaceFirst("^\\{$", "\\{");
+            sumiffiik.replaceFirst("\\}$", "\\}");
+        }
+        this.addCondition("sumiffiik", sumiffiik != null ? Collections.singletonList(sumiffiik) : null);
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.sumiffiik != null;
     }
 }

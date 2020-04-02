@@ -142,10 +142,6 @@ public class BaseLookupDefinition {
         }
     }
 
-    public void putForcedJoin(String path) {
-        this.put(new ForcedJoinDefinition(path));
-    }
-
     public void setMatchNulls(boolean matchNulls) {
         this.matchNulls = matchNulls;
     }

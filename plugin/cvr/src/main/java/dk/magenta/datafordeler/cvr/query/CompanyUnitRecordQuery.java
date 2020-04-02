@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cvr.query;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -32,17 +33,17 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addPNummer(String pnummer) {
         if (pnummer != null) {
             this.pNummer.add(pnummer);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setPNummer(String pNumre) {
-        this.pNummer.clear();
+        this.clearPNummer();
         this.addPNummer(pNumre);
     }
 
     public void setPNummer(Collection<String> pNumre) {
-        this.pNummer.clear();
+        this.clearPNummer();
         if (pNumre != null) {
             for (String pNummer : pNumre) {
                 this.addPNummer(pNummer);
@@ -52,6 +53,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearPNummer() {
         this.pNummer.clear();
+        this.updatedParameters();
     }
 
 
@@ -66,17 +68,17 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addAssociatedCompanyCvrNummer(String cvrNummer) {
         if (cvrNummer != null) {
             this.associatedCompanyCvrNumber.add(cvrNummer);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setAssociatedCompanyCvrNummer(String cvrNumre) {
-        this.associatedCompanyCvrNumber.clear();
+        this.clearAssociatedCompanyCvrNummer();
         this.addAssociatedCompanyCvrNummer(cvrNumre);
     }
 
     public void setAssociatedCompanyCvrNummer(Collection<String> cvrNumre) {
-        this.associatedCompanyCvrNumber.clear();
+        this.clearAssociatedCompanyCvrNummer();
         if (cvrNumre != null) {
             for (String cvrNummer : cvrNumre) {
                 this.addAssociatedCompanyCvrNummer(cvrNummer);
@@ -86,6 +88,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearAssociatedCompanyCvrNummer() {
         this.associatedCompanyCvrNumber.clear();
+        this.updatedParameters();
     }
 
 
@@ -100,17 +103,17 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addPrimaryIndustry(String primaryIndustry) {
         if (primaryIndustry != null) {
             this.primaryIndustry.add(primaryIndustry);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
     public void setPrimaryIndustry(String primaryIndustry) {
-        this.primaryIndustry.clear();
+        this.clearPrimaryIndustry();
         this.addPrimaryIndustry(primaryIndustry);
     }
 
     public void setPrimaryIndustry(Collection<String> primaryIndustries) {
-        this.primaryIndustry.clear();
+        this.clearPrimaryIndustry();
         if (primaryIndustries != null) {
             for (String primaryIndustry : primaryIndustries) {
                 this.addPrimaryIndustry(primaryIndustry);
@@ -120,6 +123,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearPrimaryIndustry() {
         this.primaryIndustry.clear();
+        this.updatedParameters();
     }
 
 
@@ -134,7 +138,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addKommuneKode(String kommunekode) {
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -143,12 +147,12 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     }
 
     public void setKommuneKode(String kommunekode) {
-        this.kommunekode.clear();
+        this.clearKommuneKode();
         this.addKommuneKode(kommunekode);
     }
 
     public void setKommuneKode(Collection<String> kommunekoder) {
-        this.kommunekode.clear();
+        this.clearKommuneKode();
         if (kommunekoder != null) {
             for (String kommunekode : kommunekoder) {
                 this.addKommuneKode(kommunekode);
@@ -158,6 +162,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearKommuneKode() {
         this.kommunekode.clear();
+        this.updatedParameters();
     }
 
 
@@ -174,7 +179,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     public void addVejkode(String vejkode) {
         if (vejkode != null) {
             this.vejkode.add(vejkode);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -183,12 +188,12 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     }
 
     public void setVejkode(String vejkode) {
-        this.vejkode.clear();
+        this.clearVejkode();
         this.addVejkode(vejkode);
     }
 
     public void setVejkode(Collection<String> vejkoder) {
-        this.vejkode.clear();
+        this.clearVejkode();
         if (vejkoder != null) {
             for (String vejkode : vejkoder) {
                 this.addVejkode(vejkode);
@@ -198,6 +203,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     public void clearVejkode() {
         this.vejkode.clear();
+        this.updatedParameters();
     }
 
 
@@ -260,6 +266,11 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     }
 
     @Override
+    protected boolean isEmpty() {
+        return this.pNummer.isEmpty() && this.associatedCompanyCvrNumber.isEmpty() && this.primaryIndustry.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty();
+    }
+
+    @Override
     protected Object castFilterParam(Object input, String filter) {
         return super.castFilterParam(input, filter);
     }
@@ -289,11 +300,12 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         return joinHandles;
     }
 
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("pnr", this.pNummer, Integer.class);
         this.addCondition("cvr", this.associatedCompanyCvrNumber, Integer.class);
         this.addCondition("primaryindustrycode", this.primaryIndustry);
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);
         this.addCondition("roadcode", this.vejkode, Integer.class);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 }

@@ -24,14 +24,22 @@ public abstract class RoadSegmentDataRecord<S extends RoadSegmentDataRecord<S>> 
         if ((subjectNumberPart % 2 == 0) != this.getEven()) {
             return false;
         }
-        int fromNumberPart = getNumberPart(this.getFromHousenumber());
-        int toNumberPart = getNumberPart(this.getToHousenumber());
+        String ourFromHouseNumber = this.getFromHousenumber();
+        if (ourFromHouseNumber == null || ourFromHouseNumber.isEmpty()) {
+            ourFromHouseNumber = "0";
+        }
+        String ourToHouseNumber = this.getToHousenumber();
+        if (ourToHouseNumber == null || ourToHouseNumber.isEmpty()) {
+            ourToHouseNumber = "999Z";
+        }
+        int fromNumberPart = getNumberPart(ourFromHouseNumber);
+        int toNumberPart = getNumberPart(ourToHouseNumber);
         if (fromNumberPart < subjectNumberPart && toNumberPart > subjectNumberPart) {
             return true;
         } else if (fromNumberPart == subjectNumberPart) {
-            return getLetterPart(houseNumber).compareTo(getLetterPart(this.getFromHousenumber())) >= 0;
+            return getLetterPart(houseNumber).compareTo(getLetterPart(ourFromHouseNumber)) >= 0;
         } else if (toNumberPart == subjectNumberPart) {
-            return getLetterPart(houseNumber).compareTo(getLetterPart(this.getToHousenumber())) <= 0;
+            return getLetterPart(houseNumber).compareTo(getLetterPart(ourToHouseNumber)) <= 0;
         } else {
             return false;
         }

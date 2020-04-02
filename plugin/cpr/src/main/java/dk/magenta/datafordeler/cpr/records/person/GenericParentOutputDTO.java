@@ -10,25 +10,17 @@ public class GenericParentOutputDTO implements Nontemporal {
 
     private String pituBaseUrl;
     private boolean isMother;
-    private String cprNumber;
+    private String pnr;
 
     public GenericParentOutputDTO() {
     }
 
-    public boolean isMother() {
-        return isMother;
+    public String getPnr() {
+        return pnr;
     }
 
-    public void setMother(boolean mother) {
-        isMother = mother;
-    }
-
-    public String getCprNumber() {
-        return cprNumber;
-    }
-
-    public void setCprNumber(String cprNumber) {
-        this.cprNumber = cprNumber;
+    public void setPnr(String pnr) {
+        this.pnr = pnr;
     }
 
     public void setPituBaseUrl(String pituBaseUrl) {
@@ -36,7 +28,7 @@ public class GenericParentOutputDTO implements Nontemporal {
     }
 
     public String getParentSearchAdress() {
-        return pituBaseUrl+"/cpr/person/1/rest/search?personnummer="+getCprNumber();
+        return pituBaseUrl+"/cpr/person/1/rest/search?pnr="+getPnr();
     }
 
     @Override

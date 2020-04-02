@@ -3,6 +3,8 @@ package dk.magenta.datafordeler.geo.data.accessaddress;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -30,7 +32,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     private List<String> roadCode = new ArrayList<>();
 
 
-    public static final String MUNICIPALITY = AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE;
+    public static final String MUNICIPALITY = AccessAddressRoadRecord.IO_FIELD_MUNICIPALITY_CODE;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = MUNICIPALITY)
     private List<String> municipalityCode = new ArrayList<>();
@@ -46,6 +48,11 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = LOCALITY_UUID)
     private List<UUID> localityUUID = new ArrayList<>();
+
+    public static final String LOCALITY = AccessAddressEntity.IO_FIELD_LOCALITY;
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = LOCALITY)
+    private List<String> locality = new ArrayList<>();
 
 
 
@@ -68,7 +75,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addBnr(String bnr) {
         if (bnr != null) {
             this.bnr.add(bnr);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -81,6 +88,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     public void setRoadCode(String roadCode) {
         this.roadCode.clear();
+        this.updatedParameters();
         this.addRoadCode(roadCode);
     }
 
@@ -91,7 +99,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addRoadCode(String roadCode) {
         if (roadCode != null) {
             this.roadCode.add(roadCode);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -111,12 +119,13 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void setMunicipalityCode(String municipalityCode) {
         this.municipalityCode.clear();
         this.addMunicipalityCode(municipalityCode);
+        this.updatedParameters();
     }
 
     public void addMunicipalityCode(String municipalityCode) {
         if (municipalityCode != null) {
             this.municipalityCode.add(municipalityCode);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -135,15 +144,19 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     }
 
     public void setRoadUUID(UUID roadUUID) {
-        this.roadUUID.clear();
+        this.clearRoadUUID();
         this.addRoadUUID(roadUUID);
     }
 
     public void addRoadUUID(UUID roadUUID) {
         if (roadUUID != null) {
             this.roadUUID.add(roadUUID);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
+    }
+    public void clearRoadUUID() {
+        this.roadUUID.clear();
+        this.updatedParameters();
     }
 
 
@@ -159,8 +172,12 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addLocalityUUID(UUID localityUUID) {
         if (localityUUID != null) {
             this.localityUUID.add(localityUUID);
-            this.increaseDataParamCount();
         }
+    }
+
+    public void clearLocalityUUID() {
+        this.localityUUID.clear();
+        this.updatedParameters();
     }
 
     public void clearHouseNumber() {
@@ -180,7 +197,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addHouseNumber(String houseNumber) {
         if (houseNumber != null) {
             this.houseNumber.add(houseNumber);
-            this.increaseDataParamCount();
         }
     }
 
@@ -223,10 +239,19 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     }
 
     @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.bnr.isEmpty () && this.houseNumber.isEmpty() && this.roadCode.isEmpty() && this.roadUUID.isEmpty() && this.localityUUID.isEmpty() && this.municipalityCode.isEmpty();
+    }
+
+    @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
         this.setBnr(parameters.getFirst(BNR));
+
         this.setRoadCode(parameters.getFirst(ROAD));
+        this.setHouseNumber(parameters.getFirst(HOUSE_NUMBER));
+        this.setMunicipalityCode(parameters.getFirst(MUNICIPALITY));
+
         String roadUUID = parameters.getFirst(ROAD_UUID);
         if (roadUUID != null) {
             try {
@@ -259,27 +284,32 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     static {
         joinHandles.put("bnr", AccessAddressEntity.DB_FIELD_BNR);
-        joinHandles.put("housenumber", AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseLookupDefinition.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
+        joinHandles.put("housenumber", AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseQuery.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
         // Comma-separation in value means that the handle should fit together with a counterpart with an equal number of commas. The separated paths with be ORed together with their counterparts
-        joinHandles.put("bnr_or_housenumber", AccessAddressEntity.DB_FIELD_BNR+","+AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseLookupDefinition.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
-        joinHandles.put("roadcode", AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE);
-        joinHandles.put("municipalitycode", AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE);
-        joinHandles.put("localitycode", AccessAddressEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + AccessAddressLocalityRecord.DB_FIELD_CODE);
-        joinHandles.put("postcode", AccessAddressEntity.DB_FIELD_POSTCODE + BaseLookupDefinition.separator + AccessAddressPostcodeRecord.DB_FIELD_CODE);
+        joinHandles.put("bnr_or_housenumber", AccessAddressEntity.DB_FIELD_BNR+","+AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseQuery.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
+        joinHandles.put("roadcode", AccessAddressEntity.DB_FIELD_ROAD + BaseQuery.separator + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE);
+        joinHandles.put("municipalitycode", AccessAddressEntity.DB_FIELD_ROAD + BaseQuery.separator + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE);
+        joinHandles.put("localitycode", AccessAddressEntity.DB_FIELD_LOCALITY + BaseQuery.separator + AccessAddressLocalityRecord.DB_FIELD_CODE);
+        joinHandles.put("postcode", AccessAddressEntity.DB_FIELD_POSTCODE + BaseQuery.separator + AccessAddressPostcodeRecord.DB_FIELD_CODE);
         joinHandles.put("id", AccessAddressEntity.DB_FIELD_IDENTIFICATION);
     }
 
     @Override
     protected Map<String, String> joinHandles() {
-        return joinHandles;
+        HashMap<String, String> handles = new HashMap<>();
+        handles.putAll(super.joinHandles());
+        handles.putAll(joinHandles);
+        return handles;
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("bnr", this.bnr);
         this.addCondition("housenumber", this.houseNumber);
         this.addCondition("roadcode", this.roadCode, Integer.class);
         this.addCondition("municipalitycode", this.municipalityCode, Integer.class);
+        this.addCondition("localitycode", this.locality);
     }
 
     public RoadQuery addRelatedRoadQuery() {

@@ -23,6 +23,10 @@ import java.util.*;
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_SUMIFFIIK_ID,
                 columnList = PostcodeEntity.DB_FIELD_SUMIFFIIK_ID
         ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_CODE,
+                columnList = PostcodeEntity.DB_FIELD_CODE
+        )
 })
 public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity {
 

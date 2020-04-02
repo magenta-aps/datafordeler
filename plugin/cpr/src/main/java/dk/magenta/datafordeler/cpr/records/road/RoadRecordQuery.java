@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr.records.road;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -31,17 +32,21 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
     public void addVejkode(String vejkode) {
-        this.vejkoder.add(vejkode);
         if (vejkode != null) {
-            this.increaseDataParamCount();
+            this.vejkoder.add(vejkode);
+            this.updatedParameters();
         }
     }
 
-    public void setVejkode(String vejkode) {
+    public void clearVejkode() {
         this.vejkoder.clear();
-        this.addVejkode(vejkode);
+        this.updatedParameters();
     }
 
+    public void setVejkode(String vejkode) {
+        this.clearVejkode();
+        this.addVejkode(vejkode);
+    }
     public void setVejkode(int vejkode) {
         this.setVejkode(Integer.toString(vejkode));
     }
@@ -57,14 +62,19 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
     public void addVejnavn(String vejnavn) {
-        this.vejnavne.add(vejnavn);
         if (vejnavn != null) {
-            this.increaseDataParamCount();
+            this.vejnavne.add(vejnavn);
+            this.updatedParameters();
         }
     }
 
-    public void setVejnavn(String vejnavn) {
+    public void clearVejnavn() {
         this.vejnavne.clear();
+        this.updatedParameters();
+    }
+
+    public void setVejnavn(String vejnavn) {
+        this.clearVejnavn();
         this.addVejnavn(vejnavn);
     }
 
@@ -79,14 +89,14 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
     public void addKommunekode(String kommunekode) {
-        this.kommunekoder.add(kommunekode);
         if (kommunekode != null) {
-            this.increaseDataParamCount();
+            this.kommunekoder.add(kommunekode);
+            this.updatedParameters();
         }
     }
 
     public void setKommunekode(String kommunekode) {
-        this.kommunekoder.clear();
+        this.clearKommunekode();
         this.addKommunekode(kommunekode);
     }
 
@@ -96,6 +106,7 @@ public class RoadRecordQuery extends BaseQuery {
 
     public void clearKommunekode() {
         this.kommunekoder.clear();
+        this.updatedParameters();
     }
 
     @Override
@@ -149,10 +160,11 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("municipalitycode", this.kommunekoder, Integer.class);
         this.addCondition("roadcode", this.vejkoder, Integer.class);
         this.addCondition("name", this.vejnavne);
+        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
     }
 
 
@@ -169,6 +181,11 @@ public class RoadRecordQuery extends BaseQuery {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + RoadEntity.DB_FIELD_MUNIPALITY_CODE, this.getKommunekoder(), Integer.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.vejnavne.isEmpty();
     }
 
 }

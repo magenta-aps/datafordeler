@@ -124,11 +124,7 @@ public class GeoIntegrationTest {
             joinHandles.put("municipalitycode", "municipalitycode");
             joinHandles.put("roadcode", "code");
             personRecordQuery.addRelated(roadQuery, joinHandles);
-
-
-            System.out.println("personQuery:");
-            System.out.println(personRecordQuery.toHql());
-            System.out.println(personRecordQuery.getParameters());
+            
             //m.add(roadManager.getJoinQuery(entityManager.getJoinHandles(personRoot), roadRoot), roadRoot);
             //Session session = sessionManager.getSessionFactory().openSession();
             //System.out.println(QueryManager.getQuery(session, m));
@@ -376,23 +372,9 @@ public class GeoIntegrationTest {
 
         LinkedHashMap<String, Class> classAliases = new LinkedHashMap<>();
         classAliases.put("cpr_person", PersonEntity.class);
-        classAliases.putAll(geoPlugin.getJoinClassAliases());
-        classAliases.putAll(cprPlugin.getJoinClassAliases());
-/*
-        String hql = "SELECT DISTINCT "+classAliases.keySet().stream().collect(Collectors.joining(", ")) + " " +
-                "FROM "+PersonEntity.class.getCanonicalName() +" cpr_person " +
-                "LEFT JOIN cpr_person.address cpr_person__address "+ geoPlugin.getJoinString(handles) + " " + cprPlugin.getJoinString(handles) + " " +
+        classAliases.putAll(geoPlugin.getJoinClassAliases(handles.keySet()));
+        classAliases.putAll(cprPlugin.getJoinClassAliases(handles.keySet()));
 
-        "WHERE (cpr_person.personnummer IN :cpr_person__personnummer)";
-
-        Query dbquery = session.createQuery(hql);
-        dbquery.setParameterList("cpr_person__personnummer", Collections.singletonList("1234567890"));
-        for (Object r : dbquery.list()) {
-            Object[] items = (Object[]) r;
-            for (int i=0; i<items.length; i++) {
-                System.out.println(items[i]);
-            }
-        }*/
         ParameterMap parameters = new ParameterMap();
         parameters.add("personnummer", "1234567890");
 

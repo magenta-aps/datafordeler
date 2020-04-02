@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.ger.data.company;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.ger.data.GerEntity;
@@ -33,7 +34,6 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
-            this.increaseDataParamCount();
         }
     }
 
@@ -50,7 +50,7 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
         if (this.recordAfter != null) {
             lookupDefinition.put(DataItem.DB_FIELD_LAST_UPDATED, this.recordAfter, OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
         }
-        if (this.getGerNr() != null) {
+        if (!this.getGerNr().isEmpty()) {
             lookupDefinition.put(
                     BaseLookupDefinition.entityref + BaseLookupDefinition.separator + CompanyEntity.DB_FIELD_GERNR,
                     this.getGerNr(),
@@ -62,6 +62,11 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
             lookupDefinition.put(CompanyEntity.DB_FIELD_NAME, this.name, String.class);
         }
         return lookupDefinition;
+    }
+
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.name.isEmpty();
     }
 
     @Override
@@ -93,7 +98,7 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
         this.addCondition("gernr", this.getGerNr(), Integer.class);
         this.addCondition("name", this.name);
     }

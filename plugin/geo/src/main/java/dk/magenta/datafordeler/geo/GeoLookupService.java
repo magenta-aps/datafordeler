@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.geo;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.cpr.CprLookupService;
 import dk.magenta.datafordeler.geo.data.GeoHardcode;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
@@ -13,7 +12,6 @@ import dk.magenta.datafordeler.geo.data.locality.LocalityQuery;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
-import dk.magenta.datafordeler.geo.data.postcode.PostcodeQuery;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadQuery;
 import org.apache.logging.log4j.LogManager;
@@ -49,27 +47,7 @@ public class GeoLookupService extends CprLookupService {
         } else {
             try(Session session = sessionManager.getSessionFactory().openSession()) {
 
-
-                AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
-                accessAddressQuery.addBnr(bNumber);
-                accessAddressQuery.addHouseNumber(houseNumber);
-                accessAddressQuery.addRoadCode(roadCode);
-                accessAddressQuery.addMunicipalityCode(municipalityCode);
-
-                RoadQuery roadQuery = accessAddressQuery.addRelatedRoadQuery();
-                MunicipalityQuery municipalityQuery = accessAddressQuery.addRelatedMunicipalityQuery();
-                LocalityQuery localityQuery = accessAddressQuery.addRelatedLocalityQuery();
-                PostcodeQuery postcodeQuery = accessAddressQuery.addRelatedPostcodeQuery();
-
-                List<ResultSet<AccessAddressEntity>> results = QueryManager.getAllEntitySets(session, accessAddressQuery, AccessAddressEntity.class);
-
-
-                System.out.println(results);
-
-
-                GeoLookupDTO geoLookupDTO = new GeoLookupDTO(results.iterator().next());
-/*
-
+                GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
                 String municipalityEntity = null;
                 if (municipalityCacheGR.containsKey(municipalityCode)) {
                     municipalityEntity = municipalityCacheGR.get(municipalityCode);
@@ -77,10 +55,9 @@ public class GeoLookupService extends CprLookupService {
                     MunicipalityQuery query = new MunicipalityQuery();
                     query.addKommunekodeRestriction(Integer.toString(municipalityCode));
                     setQueryNow(query);
-                    List<ResultSet<GeoMunicipalityEntity>> municipilalicities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
-                    for (ResultSet<GeoMunicipalityEntity> municipilalicity : municipilalicities) {
-                        GeoMunicipalityEntity municipality = municipilalicity.getPrimaryEntity();
-                        municipalityCacheGR.put(municipality.getCode(), municipality.getName().iterator().next().getName());
+                    List<GeoMunicipalityEntity> municipilalicities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
+                    for (GeoMunicipalityEntity municipilalicity : municipilalicities) {
+                        municipalityCacheGR.put(municipilalicity.getCode(), municipilalicity.getName().iterator().next().getName());
                     }
                     municipalityEntity = municipalityCacheGR.get(municipalityCode);
                 }
@@ -89,7 +66,7 @@ public class GeoLookupService extends CprLookupService {
                 }
 
                 RoadQuery roadQuery = new RoadQuery();
-                roadQuery.setMunicipalityCode(Integer.toString(municipalityCode));
+                roadQuery.setMunicipalityCode(municipalityCode);
                 roadQuery.setCode(Integer.toString(roadCode));
                 setQueryNow(roadQuery);
                 List<GeoRoadEntity> roadEntities = QueryManager.getAllEntities(session, roadQuery, GeoRoadEntity.class);
@@ -113,7 +90,7 @@ public class GeoLookupService extends CprLookupService {
 
 
                 AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
-                accessAddressQuery.setMunicipalityCode(Integer.toString(municipalityCode));
+                accessAddressQuery.setMunicipalityCode(municipalityCode);
 
                 if (houseNumber != null && !houseNumber.equals("")) {
                     accessAddressQuery.setHouseNumber(houseNumber);
@@ -147,8 +124,6 @@ public class GeoLookupService extends CprLookupService {
                         geoLookupDTO.setLocalityAbbrev(localities.get(0).getAbbreviation().iterator().next().getName());
                     }
                 }
-
- */
                 return geoLookupDTO;
             }
         }

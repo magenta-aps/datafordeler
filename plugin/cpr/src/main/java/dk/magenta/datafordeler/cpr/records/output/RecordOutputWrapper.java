@@ -24,7 +24,8 @@ import java.util.*;
 import java.util.function.Function;
 
 @Component
-public abstract class ObsoleteRecordOutputWrapper<E extends CprEntity> extends OutputWrapper<E> {
+@Deprecated
+public abstract class RecordOutputWrapper<E extends CprEntity> extends OutputWrapper<E> {
 
     public static final String EFFECTS = "virkninger";
     public static final String EFFECT_FROM = "virkningFra";
@@ -67,7 +68,7 @@ public abstract class ObsoleteRecordOutputWrapper<E extends CprEntity> extends O
         }
 
         public <T extends CprBitemporalRecord> void addBitemporal(String key, Set<T> records, Function<T, ObjectNode> converter, boolean unwrapSingle, boolean forceArray) {
-            ObjectMapper objectMapper = ObsoleteRecordOutputWrapper.this.objectMapper;
+            ObjectMapper objectMapper = RecordOutputWrapper.this.objectMapper;
             for (T record : records) {
                 if (record != null) {
                     ObjectNode value = (converter != null) ? converter.apply(record) : objectMapper.valueToTree(record);
@@ -95,7 +96,7 @@ public abstract class ObsoleteRecordOutputWrapper<E extends CprEntity> extends O
         }
 
         public <T extends CprNontemporalRecord> void addNontemporal(String key, Set<T> records, Function<T, JsonNode> converter, boolean unwrapSingle, boolean forceArray) {
-            ObjectMapper objectMapper = ObsoleteRecordOutputWrapper.this.objectMapper;
+            ObjectMapper objectMapper = RecordOutputWrapper.this.objectMapper;
             for (T record : records) {
                 JsonNode value = (converter != null) ? converter.apply(record) : objectMapper.valueToTree(record);
                 this.nontemporalData.add(key, value);
@@ -133,7 +134,7 @@ public abstract class ObsoleteRecordOutputWrapper<E extends CprEntity> extends O
         }
 
         public ObjectNode getRVD(CprBitemporality mustOverlap) {
-            ObjectMapper objectMapper = ObsoleteRecordOutputWrapper.this.objectMapper;
+            ObjectMapper objectMapper = RecordOutputWrapper.this.objectMapper;
             ArrayNode registrationsNode = objectMapper.createArrayNode();
             ArrayList<CprBitemporality> bitemporalities = new ArrayList<>(this.bitemporalData.keySet());
             ListHashMap<OffsetDateTime, CprBitemporality> startTerminators = new ListHashMap<>();
@@ -199,7 +200,7 @@ public abstract class ObsoleteRecordOutputWrapper<E extends CprEntity> extends O
             return this.getRDV(mustOverlap, null, null);
         }
         public ObjectNode getRDV(CprBitemporality mustOverlap, Map<String, String> keyConversion, Function<Pair<String, ObjectNode>, ObjectNode> dataConversion) {
-            ObjectMapper objectMapper = ObsoleteRecordOutputWrapper.this.objectMapper;
+            ObjectMapper objectMapper = RecordOutputWrapper.this.objectMapper;
             ArrayNode registrationsNode = objectMapper.createArrayNode();
             ArrayList<CprBitemporality> bitemporalities = new ArrayList<>(this.bitemporalData.keySet());
             ListHashMap<OffsetDateTime, CprBitemporality> startTerminators = new ListHashMap<>();
@@ -268,7 +269,7 @@ public abstract class ObsoleteRecordOutputWrapper<E extends CprEntity> extends O
         }
 
         public ObjectNode getDRV(CprBitemporality mustOverlap) {
-            ObjectMapper objectMapper = ObsoleteRecordOutputWrapper.this.objectMapper;
+            ObjectMapper objectMapper = RecordOutputWrapper.this.objectMapper;
             ObjectNode objectNode = objectMapper.createObjectNode();
             for (CprBitemporality bitemporality : this.bitemporalData.keySet()) {
                 if (bitemporality.overlaps(mustOverlap)) {
@@ -289,7 +290,7 @@ public abstract class ObsoleteRecordOutputWrapper<E extends CprEntity> extends O
         }
 
         public ObjectNode getBase() {
-            ObjectMapper objectMapper = ObsoleteRecordOutputWrapper.this.objectMapper;
+            ObjectMapper objectMapper = RecordOutputWrapper.this.objectMapper;
             ObjectNode objectNode = objectMapper.createObjectNode();
             for (String key : this.nontemporalData.keySet()) {
                 this.setValue(objectMapper, objectNode, key, this.nontemporalData.get(key));
@@ -312,7 +313,7 @@ public abstract class ObsoleteRecordOutputWrapper<E extends CprEntity> extends O
         private JsonNode prepareNode(String key, JsonNode node) {
             if (node instanceof ObjectNode) {
                 ObjectNode objectNode = (ObjectNode) node;
-                objectNode.remove(ObsoleteRecordOutputWrapper.this.getRemoveFieldNames());
+                objectNode.remove(RecordOutputWrapper.this.getRemoveFieldNames());
                 if (objectNode.size() == 1 && this.trySingle.contains(key)) {
                     return objectNode.get(objectNode.fieldNames().next());
                 }

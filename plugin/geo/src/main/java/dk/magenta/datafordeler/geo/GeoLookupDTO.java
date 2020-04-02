@@ -17,6 +17,7 @@ import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GeoLookupDTO extends CprLookupDTO {
 
@@ -45,6 +46,7 @@ public class GeoLookupDTO extends CprLookupDTO {
         }
         Set<GeoRoadEntity> roadEntities = resultSet.get(GeoRoadEntity.class);
         if (roadEntities != null) {
+            System.out.println("roadEntities: "+roadEntities.stream().map(r -> r.getName().current().getName()).collect(Collectors.toList()));
             for (GeoRoadEntity roadEntity : roadEntities) {
                 if (this.setRoad(roadEntity)) {
                     break;

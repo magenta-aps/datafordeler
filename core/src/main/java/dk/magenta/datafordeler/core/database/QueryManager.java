@@ -187,9 +187,8 @@ public abstract class QueryManager {
 
     private static final boolean logQuery = true;
 
-    public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
-
-        String queryString = query.toHql();
+    public static org.hibernate.query.Query getFirstQuery(Session session, BaseQuery query) {
+        String queryString = query.toFirstHql();
 
         StringJoiner stringJoiner = null;
         if (logQuery) {
@@ -197,13 +196,11 @@ public abstract class QueryManager {
             stringJoiner.add(queryString.toString());
         }
 
-        System.out.println(queryString);
-
         // Build query
         org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
 
         // Insert parameters, casting as necessary
-        Map<String, Object> extraParameters = query.getParameters();
+        Map<String, Object> extraParameters = query.getFirstParameters();
 
         for (String key : extraParameters.keySet()) {
             Object value = extraParameters.get(key);
@@ -218,8 +215,7 @@ public abstract class QueryManager {
         }
 
         if (logQuery) {
-            //log.info(stringJoiner.toString());
-            System.out.println(stringJoiner.toString());
+            log.info(stringJoiner.toString());
         }
 
         // Offset & limit
@@ -228,6 +224,39 @@ public abstract class QueryManager {
         }
         if (query.getCount() < Integer.MAX_VALUE) {
             databaseQuery.setMaxResults(query.getCount());
+        }
+        return databaseQuery;
+    }
+
+    public static org.hibernate.query.Query getSecondQuery(Session session, BaseQuery query, Collection<DatabaseEntry> entries) {
+        String queryString = query.toSecondHql();
+
+        StringJoiner stringJoiner = null;
+        if (logQuery) {
+            stringJoiner = new StringJoiner("\n");
+            stringJoiner.add(queryString.toString());
+        }
+
+        // Build query
+        org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
+
+        // Insert parameters, casting as necessary
+        Map<String, Object> extraParameters = query.getSecondParameters(entries);
+
+        for (String key : extraParameters.keySet()) {
+            Object value = extraParameters.get(key);
+            if (logQuery) {
+                stringJoiner.add(key+" = "+value);
+            }
+            if (value instanceof Collection) {
+                databaseQuery.setParameterList(key, (Collection) value);
+            } else {
+                databaseQuery.setParameter(key, value);
+            }
+        }
+
+        if (logQuery) {
+            log.info(stringJoiner.toString());
         }
         return databaseQuery;
     }
@@ -275,6 +304,8 @@ public abstract class QueryManager {
             log.info(stringJoiner.toString());
         }
 
+        System.out.println(stringJoiner.toString());
+
         // Offset & limit
         if (query.getOffset() > 0) {
             databaseQuery.setFirstResult(query.getOffset());
@@ -294,13 +325,17 @@ public abstract class QueryManager {
     public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass) {
         LinkedHashMap<E, ResultSet<E>> identitySetList = new LinkedHashMap<>();
         log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
+        org.hibernate.query.Query databaseQuery = QueryManager.getFirstQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
 
+        List<Object> results = databaseQuery.list();
+
+        databaseQuery = QueryManager.getSecondQuery(session, query, results.stream().map(o -> (DatabaseEntry) o).collect(Collectors.toList()));
+
+        results = databaseQuery.list();
+        List<String> classNames = query.getEntityClassnames();
         try {
-            List<Object> results = databaseQuery.list();
-            List<String> classNames = query.getEntityClassnames();
             for (Object row : results) {
                 ResultSet<E> resultSet = new ResultSet<E>(row, classNames);
                 ResultSet<E> existing = identitySetList.get(resultSet.getPrimaryEntity());
@@ -311,7 +346,7 @@ public abstract class QueryManager {
                 }
             }
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("Failed casting for query classes "+classNames, e);
         }
 
         log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
@@ -321,19 +356,28 @@ public abstract class QueryManager {
         return getAllEntitySets(session, query, eClass).stream().map(s -> s.getPrimaryEntity()).collect(Collectors.toList());
     }
 
-        /**
-         * Get all Entities of a specific class, that match the given parameters
-         * @param session Database session to work from
-         * @param query Query object defining search parameters
-         * @param eClass Entity subclass
-         * @return
-         */
-    public static <E extends IdentifiedEntity, D extends DataItem> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
+    /**
+     * Get all Entities of a specific class, that match the given parameters
+     * @param session Database session to work from
+     * @param query Query object defining search parameters
+     * @param eClass Entity subclass
+     * @return
+     */
+    public static <E extends IdentifiedEntity> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query<E> databaseQuery = QueryManager.getQuery(session, query, eClass);
+        org.hibernate.query.Query databaseQuery = QueryManager.getFirstQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setFetchSize(1000);
-        Stream<E> results = databaseQuery.stream();
+        List<String> classNames = query.getEntityClassnames();
+        Stream<E> results = databaseQuery.stream().map(object -> {
+            // org.hibernate.query.Query subQuery = QueryManager.getSecondQuery(session, query, Collections.singletonList(((DatabaseEntry) object)));
+            try {
+                return new ResultSet<E>(object, classNames).getPrimaryEntity();
+            } catch (ClassNotFoundException e) {
+                log.error("Failed casting for query classes "+classNames, e);
+            }
+            return null;
+        });
         return results;
     }
 

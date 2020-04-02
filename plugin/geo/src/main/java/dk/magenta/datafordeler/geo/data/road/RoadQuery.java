@@ -3,6 +3,8 @@ package dk.magenta.datafordeler.geo.data.road;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -51,13 +53,14 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setCode(String code) {
         this.code.clear();
+        this.updatedParameters();
         this.addCode(code);
     }
 
     public void addCode(String code) {
         if (code != null) {
             this.code.add(code);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -67,13 +70,14 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setName(String name) {
         this.name.clear();
+        this.updatedParameters();
         this.addName(name);
     }
 
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -84,13 +88,14 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setAddressingName(String addressingName) {
         this.addressingName.clear();
+        this.updatedParameters();
         this.addAddressingName(addressingName);
     }
 
     public void addAddressingName(String addressingName) {
         if (addressingName != null) {
             this.addressingName.add(addressingName);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -100,13 +105,14 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setLocality(String locality) {
         this.locality.clear();
+        this.updatedParameters();
         this.addLocality(locality);
     }
 
     public void addLocality(String locality) {
         if (locality != null) {
             this.locality.add(locality);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -118,13 +124,14 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setLocalityUUID(UUID localityUUID) {
         this.localityUUID.clear();
+        this.updatedParameters();
         this.addLocalityUUID(localityUUID);
     }
 
     public void addLocalityUUID(UUID localityUUID) {
         if (localityUUID != null) {
             this.localityUUID.add(localityUUID);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -134,13 +141,14 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     public void setMunicipalityCode(String municipalityCode) {
         this.municipalityCode.clear();
+        this.updatedParameters();
         this.addMunicipalityCode(municipalityCode);
     }
 
     public void addMunicipalityCode(String municipalityCode) {
         if (municipalityCode != null) {
             this.municipalityCode.add(municipalityCode);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -206,6 +214,11 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     }
 
     @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.municipalityCode.isEmpty() && this.code.isEmpty() && this.name.isEmpty() && this.addressingName.isEmpty() && this.locality.isEmpty() && this.localityUUID.isEmpty();
+    }
+
+    @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
         this.setCode(parameters.getFirst(CODE));
@@ -238,11 +251,11 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     static {
         joinHandles.put("code", GeoRoadEntity.DB_FIELD_CODE);
-        joinHandles.put("name", GeoRoadEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + RoadNameRecord.DB_FIELD_NAME);
-        joinHandles.put("addressingname", GeoRoadEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + RoadNameRecord.DB_FIELD_ADDRESSING_NAME);
-        joinHandles.put("localitycode", GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_CODE);
-        joinHandles.put("localityuuid", GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_REFERENCE + BaseLookupDefinition.separator + Identification.DB_FIELD_UUID);
-        joinHandles.put("municipalitycode", GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE);
+        joinHandles.put("name", GeoRoadEntity.DB_FIELD_NAME + BaseQuery.separator + RoadNameRecord.DB_FIELD_NAME);
+        joinHandles.put("addressingname", GeoRoadEntity.DB_FIELD_NAME + BaseQuery.separator + RoadNameRecord.DB_FIELD_ADDRESSING_NAME);
+        joinHandles.put("localitycode", GeoRoadEntity.DB_FIELD_LOCALITY + BaseQuery.separator + RoadLocalityRecord.DB_FIELD_CODE);
+        joinHandles.put("localityuuid", GeoRoadEntity.DB_FIELD_LOCALITY + BaseQuery.separator + RoadLocalityRecord.DB_FIELD_REFERENCE + BaseQuery.separator + Identification.DB_FIELD_UUID);
+        joinHandles.put("municipalitycode", GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseQuery.separator + RoadMunicipalityRecord.DB_FIELD_CODE);
 
 
         //RoadNameRecord.class, namealias, member
@@ -251,11 +264,15 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
 
     @Override
     protected Map<String, String> joinHandles() {
-        return joinHandles;
+        HashMap<String, String> handles = new HashMap<>();
+        handles.putAll(super.joinHandles());
+        handles.putAll(joinHandles);
+        return handles;
     }
 
     @Override
-    protected void setupConditions() throws Exception {
+    protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("code", this.code, Integer.class);
         this.addCondition("name", this.name);
         this.addCondition("addressingname", this.addressingName);

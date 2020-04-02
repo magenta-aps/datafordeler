@@ -99,7 +99,7 @@ public abstract class Plugin {
 
     public String getJoinString(Map<String, String> handles) { return ""; }
 
-    public LinkedHashMap<String, Class> getJoinClassAliases() {
+    public LinkedHashMap<String, Class> getJoinClassAliases(Collection<String> handles) {
         return new LinkedHashMap<>();
     }
 

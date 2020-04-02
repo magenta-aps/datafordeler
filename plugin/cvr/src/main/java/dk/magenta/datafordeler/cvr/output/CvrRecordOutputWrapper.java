@@ -11,13 +11,10 @@ import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
-import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.*;
+import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.LEGACY;
 
 public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends RecordOutputWrapper<E> {
 
@@ -216,5 +213,18 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
                 }
             }
         }
+    }
+
+
+    public Map<Class, List<String>> getEligibleModifierNames() {
+        HashMap<Class, List<String>> map = new HashMap<>();
+        ArrayList<String> addressModifiers = new ArrayList<>();
+        addressModifiers.add("geo_municipality");
+        addressModifiers.add("geo_road");
+        addressModifiers.add("geo_accessaddress");
+        addressModifiers.add("geo_locality");
+        addressModifiers.add("cpr_road");
+        map.put(AddressRecord.class, addressModifiers);
+        return map;
     }
 }
