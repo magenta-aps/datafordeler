@@ -219,11 +219,12 @@ public class GeoPlugin extends Plugin {
             municipalityQuery.setCode(values.get("municipalitycode"));
             queries.add(municipalityQuery);
         }
-        
+
         if (values.containsKey("municipalitycode") && values.containsKey("roadcode")) {
             RoadQuery roadQuery = new RoadQuery();
             roadQuery.setMunicipalityCode(values.get("municipalitycode"));
             roadQuery.setCode(values.get("roadcode"));
+            roadQuery.addRelatedLocalityQuery();
             queries.add(roadQuery);
         }
 
