@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.plugin;
 
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 
 import java.net.URI;
 import java.util.*;
@@ -101,6 +102,10 @@ public abstract class Plugin {
 
     public LinkedHashMap<String, Class> getJoinClassAliases(Collection<String> handles) {
         return new LinkedHashMap<>();
+    }
+
+    public List<BaseQuery> getQueries(Map<String, String> values) {
+        return Collections.emptyList();
     }
 
 

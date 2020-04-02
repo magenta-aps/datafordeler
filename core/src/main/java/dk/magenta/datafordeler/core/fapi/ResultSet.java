@@ -37,7 +37,7 @@ public class ResultSet<E extends IdentifiedEntity> {
         }
     }
 
-    private void addAssociatedEntity(IdentifiedEntity entity) {
+    public void addAssociatedEntity(IdentifiedEntity entity) {
         if (entity != null) {
             Class c = entity.getClass();
             if (!this.associatedEntities.containsKey(c)) {
@@ -47,7 +47,7 @@ public class ResultSet<E extends IdentifiedEntity> {
         }
     }
 
-    private void addAssociatedEntities(Collection<IdentifiedEntity> entities) {
+    public void addAssociatedEntities(Collection<IdentifiedEntity> entities) {
         for (IdentifiedEntity entity : entities) {
             this.addAssociatedEntity(entity);
         }
@@ -93,6 +93,15 @@ public class ResultSet<E extends IdentifiedEntity> {
             return match;
         }
         return primaryMatch;
+    }
+
+    public List<IdentifiedEntity> all() {
+        ArrayList<IdentifiedEntity> all = new ArrayList<>(this.associatedEntities.size()+1);
+        all.add(this.primaryEntity);
+        for (Class key : this.associatedEntities.keySet()) {
+            all.addAll(this.associatedEntities.get(key));
+        }
+        return all;
     }
 
     public String toString() {

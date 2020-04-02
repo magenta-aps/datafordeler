@@ -3,17 +3,17 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
 import org.hibernate.Session;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Record for Company, CompanyUnit and Participant address data.
@@ -566,4 +566,21 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
                 Objects.equals(lastValidated, that.lastValidated) &&
                 Objects.equals(freeText, that.freeText);
     }*/
+
+
+    @Override
+    public List<BaseQuery> getAssoc() {
+        PluginManager pluginManager = PluginManager.getInstance();
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("municipalitycode", Integer.toString(this.municipality.getMunicipalityCode()));
+        map.put("roadcode", Integer.toString(this.roadCode));
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            queries.addAll(geoPlugin.getQueries(map));
+        }
+
+        return queries;
+    }
 }

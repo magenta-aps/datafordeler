@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.hibernate.Session;
@@ -15,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Base record for Company data, parsed from JSON into a tree of objects
@@ -1516,6 +1518,12 @@ public class CompanyRecord extends CvrEntityRecord {
             subs.add(this.metadata);
         }
         return subs;
+    }
+
+    public List<BaseQuery> getAssoc() {
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        queries.addAll(this.locationAddress.stream().map(a -> a.getAssoc()).flatMap(x -> x.stream()).collect(Collectors.toList()));
+        return queries;
     }
 
 }

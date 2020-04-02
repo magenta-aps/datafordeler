@@ -1,16 +1,18 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME, indexes = {
@@ -382,4 +384,27 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
         CprBitemporalRecord.copy(this, clone);
         return clone;
     }
+
+
+    @Override
+    public List<BaseQuery> getAssoc() {
+        PluginManager pluginManager = PluginManager.getInstance();
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("municipalitycode", Integer.toString(this.municipalityCode));
+        map.put("roadcode", Integer.toString(this.roadCode));
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            queries.addAll(geoPlugin.getQueries(map));
+        }
+
+        Plugin cprPlugin = pluginManager.getPluginByName("cpr");
+        if (cprPlugin != null) {
+            queries.addAll(cprPlugin.getQueries(map));
+        }
+
+        return queries;
+    }
+
 }

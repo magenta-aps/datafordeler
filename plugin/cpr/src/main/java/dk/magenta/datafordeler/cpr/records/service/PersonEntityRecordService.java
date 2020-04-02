@@ -110,17 +110,17 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
         query.addRelated(accessAddressQuery, joinHandles);
         */
 
-        HashMap<String, String> handles = new HashMap<>();
+        /*HashMap<String, String> handles = new HashMap<>();
         handles.put("municipalitycode", "cpr_person__address.municipalityCode");
         handles.put("roadcode", "cpr_person__address.roadCode");
         handles.put("housenumber", "cpr_person__address.houseNumber");
         handles.put("bnr", "cpr_person__address.buildingNumber");
-
-        query.addExtraJoin(geoPlugin.getJoinString(handles));
-        query.addExtraTables(geoPlugin.getJoinClassAliases(handles.keySet()));
+*/
+        //query.addExtraJoin(geoPlugin.getJoinString(handles));
+        //query.addExtraTables(geoPlugin.getJoinClassAliases(handles.keySet()));
         
-        query.addExtraJoin(cprPlugin.getJoinString(handles));
-        query.addExtraTables(cprPlugin.getJoinClassAliases(handles.keySet()));
+        //query.addExtraJoin(cprPlugin.getJoinString(handles));
+        //query.addExtraTables(cprPlugin.getJoinClassAliases(handles.keySet()));
 
         return query;
     }

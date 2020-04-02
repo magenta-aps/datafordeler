@@ -9,6 +9,8 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressQuery;
 import org.hibernate.Session;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -44,7 +46,6 @@ public class GeoIntegrationTest {
     private CompanyEntityManager entityManager;
 
     @Test
-    @Ignore
     public void testLookup() {
         // Mostly for our own sake during developement
         CompanyRecordQuery query = new CompanyRecordQuery();
@@ -56,19 +57,13 @@ public class GeoIntegrationTest {
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {
 
-            HashMap<String, String> handles = new HashMap<>();
-            handles.put("municipalitycode", "cvr_company__locationAddress__municipality__municipality.code");
-            handles.put("roadcode", "cvr_company__locationAddress.roadCode");
+            Session session = sessionManager.getSessionFactory().openSession();
+            //System.out.println(QueryManager.getFirstQuery(session, query));
+QueryManager.getAllEntitySets(session, query, CompanyRecord.class);
 
-            query.addExtraJoin(geoPlugin.getJoinString(handles));
-            query.addExtraTables(geoPlugin.getJoinClassAliases(handles.keySet()));
+            //AccessAddressQuery q = new AccessAddressQuery();
+            //q.setMunicipalityCode();
 
-            //query.addExtraJoin(cprPlugin.getJoinString(handles));
-            //query.addExtraTables(cprPlugin.getJoinClassAliases());
-
-
-            //Session session = sessionManager.getSessionFactory().openSession();
-            //System.out.println(QueryManager.getQuery(session, query));
         }
     }
 
