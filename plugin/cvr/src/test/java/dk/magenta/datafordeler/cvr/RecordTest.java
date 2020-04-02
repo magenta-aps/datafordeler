@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
@@ -869,6 +871,36 @@ public class RecordTest {
             if (!skip) {
                 System.out.println("Mismatch: " + n1.asText() + " (" + n1.getNodeType().name() + ") != " + n2.asText() + " (" + n2.getNodeType().name() + ") at " + path);
             }
+        }
+    }
+
+
+    @Autowired
+    PluginManager pluginManager;
+
+    @Test
+    public void testLookup() throws IOException, DataFordelerException {
+        loadCompany();
+        // Mostly for our own sake during developement
+        CompanyRecordQuery query = new CompanyRecordQuery();
+        OffsetDateTime now = OffsetDateTime.now();
+        query.setRegistrationFromBefore(now);
+        query.setEffectFromBefore(now);
+        query.setRegistrationToAfter(now);
+        query.setEffectToAfter(now);
+        query.setCvrNumre("25052943");
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+
+            Session session = sessionManager.getSessionFactory().openSession();
+            query.applyFilters(session);
+            //System.out.println(QueryManager.getFirstQuery(session, query));
+            QueryManager.getAllEntitySets(session, query, CompanyRecord.class);
+
+            //AccessAddressQuery q = new AccessAddressQuery();
+            //q.setMunicipalityCode();
+
         }
     }
 }

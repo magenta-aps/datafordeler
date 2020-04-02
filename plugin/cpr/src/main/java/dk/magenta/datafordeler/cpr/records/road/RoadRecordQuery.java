@@ -95,6 +95,10 @@ public class RoadRecordQuery extends BaseQuery {
         }
     }
 
+    public void setKommunekode(int kommunekode) {
+        this.setKommunekode(Integer.toString(kommunekode));
+    }
+
     public void setKommunekode(String kommunekode) {
         this.clearKommunekode();
         this.addKommunekode(kommunekode);

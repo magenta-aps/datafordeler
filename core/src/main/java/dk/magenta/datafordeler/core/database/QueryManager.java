@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
 import dk.magenta.datafordeler.core.util.ListHashMap;
@@ -22,7 +23,7 @@ import java.util.stream.Stream;
 /**
  * Collection of static methods for accessing the database
  */
-public abstract class QueryManager {
+public class QueryManager {
 
     private static Logger log = LogManager.getLogger(QueryManager.class.getCanonicalName());
 
@@ -218,6 +219,8 @@ public abstract class QueryManager {
             log.info(stringJoiner.toString());
         }
 
+        System.out.println(stringJoiner.toString());
+
         // Offset & limit
         if (query.getOffset() > 0) {
             databaseQuery.setFirstResult(query.getOffset());
@@ -316,13 +319,29 @@ public abstract class QueryManager {
         return databaseQuery;
     }
 
+
+
+
+
+
     /**
      * Get all Entities of a specific class, that match the given parameters
      * @param session Database session to work from
      * @param query Query object defining search parameters
      * @return
      */
+
     public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass) {
+        HashMap<BaseQuery, List<ResultSet>> cache = new HashMap<>();
+        return getAllEntitySets(session, query, eClass, cache);
+    }
+
+
+    private static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass, HashMap<BaseQuery, List<ResultSet>> cache) {
+        if (cache.containsKey(query)) {
+            return cache.get(query).stream().map(r -> (ResultSet<E>) r).collect(Collectors.toList());
+        }
+
         LinkedHashMap<E, ResultSet<E>> identitySetList = new LinkedHashMap<>();
         log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
         org.hibernate.query.Query databaseQuery = QueryManager.getFirstQuery(session, query);
@@ -330,23 +349,23 @@ public abstract class QueryManager {
         long start = Instant.now().toEpochMilli();
 
         List<Object> results = databaseQuery.list();
-
-        databaseQuery = QueryManager.getSecondQuery(session, query, results.stream().map(o -> (DatabaseEntry) o).collect(Collectors.toList()));
-
-        results = databaseQuery.list();
-        List<String> classNames = query.getEntityClassnames();
-        try {
-            for (Object row : results) {
-                ResultSet<E> resultSet = new ResultSet<E>(row, classNames);
-                ResultSet<E> existing = identitySetList.get(resultSet.getPrimaryEntity());
-                if (existing == null) {
-                    identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
-                } else {
-                    existing.merge(resultSet);
+        for (Object r : results) {
+            try {
+                ResultSet<E> resultSet = new ResultSet<E>(r, query.getEntityClassnames());
+                LinkedList<BaseQuery> subQueries = new LinkedList<>();
+                for (IdentifiedEntity entity : resultSet.all()) {
+                    subQueries.addAll(entity.getAssoc());
                 }
+                for (BaseQuery subQuery : subQueries) {
+                    List<ResultSet<IdentifiedEntity>> subResults = getAllEntitySets(session, subQuery, (Class<IdentifiedEntity>) Class.forName(subQuery.getEntityClassname()), cache);
+                    for (ResultSet<IdentifiedEntity> subResult : subResults) {
+                        resultSet.addAssociatedEntities(subResult.all());
+                    }
+                }
+                identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
+            } catch (ClassNotFoundException e) {
+                log.error(e);
             }
-        } catch (ClassNotFoundException e) {
-            log.error("Failed casting for query classes "+classNames, e);
         }
 
         log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");

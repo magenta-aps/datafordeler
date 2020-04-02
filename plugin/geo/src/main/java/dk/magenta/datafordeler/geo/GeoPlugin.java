@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.geo;
 
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
@@ -12,6 +13,7 @@ import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityEntityManager;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityEntityManager;
+import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
@@ -134,6 +136,13 @@ public class GeoPlugin extends Plugin {
         return this.areaRestrictionDefinition;
     }
 
+
+
+
+
+
+
+
     public String getJoinString(Map<String, String> handles) {
         StringJoiner s = new StringJoiner(" ");
         // Join accessaddress
@@ -202,6 +211,18 @@ public class GeoPlugin extends Plugin {
             }
         }
         return aliases;
+    }
+
+
+
+    public List<BaseQuery> getQueries(Map<String, String> values) {
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        if (values.containsKey("municipalitycode")) {
+            MunicipalityQuery municipalityQuery = new MunicipalityQuery();
+            municipalityQuery.setCode(values.get("municipalitycode"));
+            queries.add(municipalityQuery);
+        }
+        return queries;
     }
 
 

@@ -376,7 +376,7 @@ public class GeoIntegrationTest {
         classAliases.putAll(cprPlugin.getJoinClassAliases(handles.keySet()));
 
         ParameterMap parameters = new ParameterMap();
-        parameters.add("personnummer", "1234567890");
+        parameters.add("pnr", "1234567890");
 
         ResponseEntity<String> response = this.restSearch(parameters, "person");
         System.out.println(response.getBody());
@@ -386,6 +386,7 @@ public class GeoIntegrationTest {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
+        System.out.println(parameters.asUrlParams());
         return this.restTemplate.exchange("/cpr/"+type+"/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
     }
 

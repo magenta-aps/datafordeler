@@ -31,6 +31,10 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
         return code;
     }
 
+    public void setCode(int code) {
+        this.setCode(Integer.toString(code));
+    }
+
     public void setCode(String code) {
         this.code.clear();
         this.addCode(code);
