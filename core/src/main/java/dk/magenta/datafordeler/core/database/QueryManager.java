@@ -363,6 +363,7 @@ public class QueryManager {
                     for (ResultSet<IdentifiedEntity> subResult : subResults) {
                         resultSet.addAssociatedEntities(subResult.all());
                     }
+                    cache.put(subQuery, new ArrayList<>(subResults));
                 }
                 identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
             } catch (ClassNotFoundException e) {
