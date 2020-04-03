@@ -228,6 +228,14 @@ public class GeoPlugin extends Plugin {
             queries.add(roadQuery);
         }
 
+        if (values.containsKey("accessaddress")) {
+            AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
+            accessAddressQuery.setUUID(UUID.fromString(values.get("accessaddress")));
+            accessAddressQuery.addRelatedLocalityQuery();
+            accessAddressQuery.addRelatedPostcodeQuery();
+            queries.add(accessAddressQuery);
+        }
+
         return queries;
     }
 

@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
@@ -12,6 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.UUID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -156,5 +159,28 @@ public class TestGenericServices extends GeoTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode accessAdress4 = (ObjectNode) responseContent.get("results").get(0);
         Assert.assertEquals(accessAdress3, accessAdress4);
+    }
+
+    @Test
+    public void testUnitAddressService() throws IOException {
+        ResponseEntity<String> response = this.lookup("/geo/unitaddress/1/rest/search?fmt=dataonly&bnr=B-31*");
+        System.out.println(response.getBody());
+        Assert.assertEquals(200, response.getStatusCode().value());
+
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+
+        Assert.assertEquals(2, responseContent.get("results").size());
+
+        for (JsonNode j : responseContent.get("results")) {
+            ObjectNode o = (ObjectNode) j;
+            if (o.get("uuid").textValue().equals("1b3ac64b-c28d-40b2-a106-16cee7c188b8")) {
+                Assert.assertEquals("2", o.get("dør").get(0).asText());
+            } else if (o.get("uuid").textValue().equals("1b3ac64b-c28d-40b2-a106-16cee7c188b9")) {
+                Assert.assertEquals("1", o.get("dør").get(0).asText());
+            } else {
+                Assert.fail();
+            }
+        }
+
     }
 }

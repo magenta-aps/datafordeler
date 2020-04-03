@@ -909,49 +909,31 @@ public abstract class BaseQuery {
         for (String extraJoin : this.extraJoins) {
             s.add(extraJoin);
         }
+
         if (!this.condition.isEmpty()) {
             s.add("WHERE " + this.condition.toHql());
         }
         return s.toString();
     }
 
-    public String toSecondHql() {
-        this.finalizeConditions();
-        StringJoiner s = new StringJoiner(" \n");
 
-        s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
-        s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
-
-        for (Join join : this.getAllJoins()) {
-            s.add(join.toHql());
-        }
-        for (String extraJoin : this.extraJoins) {
-            s.add(extraJoin);
-        }
-        s.add("WHERE " + this.getEntityIdentifier() + ".id IN :ids");
-
-        return s.toString();
-    }
-
-
-    public Map<String, Object> getFirstParameters() {
+    public Map<String, Object> getParameters() {
         this.finalizeConditions();
         return this.condition.getParameters();
-    }
-
-    public Map<String, Object> getSecondParameters(Collection<DatabaseEntry> entries) {
-        return Collections.singletonMap("ids", entries.stream().map(DatabaseEntry::getId).collect(Collectors.toList()));
     }
 
     private boolean finalizedConditions = false;
     private void finalizeConditions() {
         if (!this.finalizedConditions) {
             this.condition = new MultiCondition();
-            for (JoinedQuery joinedQuery : this.related) {
-                this.condition.add(joinedQuery);
-            }
             try {
                 this.setupConditions();
+                for (JoinedQuery joinedQuery : this.related) {
+                    this.condition.add(joinedQuery);
+                    BaseQuery relatedQuery = joinedQuery.getJoined();
+                    relatedQuery.setupConditions();
+                    this.condition.add(joinedQuery.getJoined().getCondition());
+                }
             } catch (QueryBuildException e) {
                 log.error(e);
             }
