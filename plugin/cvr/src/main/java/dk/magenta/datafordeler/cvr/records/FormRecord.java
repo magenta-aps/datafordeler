@@ -82,7 +82,7 @@ public class FormRecord extends CvrBitemporalDataRecord {
         return this.longDescription;
     }
 
-    public static final String IO_FIELD_RESPONSIBLE_DATASOURCE = "ansvarligDataleverandoer";
+    public static final String IO_FIELD_RESPONSIBLE_DATASOURCE = "ansvarligDataleverandør";
 
     @Transient
     @JsonProperty(value = IO_FIELD_RESPONSIBLE_DATASOURCE)

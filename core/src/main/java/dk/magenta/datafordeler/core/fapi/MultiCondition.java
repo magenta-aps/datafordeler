@@ -1,5 +1,7 @@
 package dk.magenta.datafordeler.core.fapi;
 
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +23,7 @@ public class MultiCondition extends Condition {
         this("AND");
     }
 
-    public MultiCondition(Condition parent) throws Exception {
+    public MultiCondition(Condition parent) throws QueryBuildException {
         this(parent, "AND");
     }
 
@@ -29,7 +31,7 @@ public class MultiCondition extends Condition {
         this.operator = operator;
     }
 
-    public MultiCondition(Condition parent, String operator) throws Exception {
+    public MultiCondition(Condition parent, String operator) throws QueryBuildException {
         super(parent);
         this.operator = operator;
     }

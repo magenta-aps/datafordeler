@@ -195,13 +195,13 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     @JsonProperty(value = IO_FIELD_HOUSE_FROM)
     @XmlElement(name = IO_FIELD_HOUSE_FROM)
     @Column(name = DB_FIELD_HOUSE_FROM)
-    private String houseNumberFrom;
+    private int houseNumberFrom;
 
-    public String getHouseNumberFrom() {
+    public int getHouseNumberFrom() {
         return this.houseNumberFrom;
     }
 
-    public void setHouseNumberFrom(String houseNumberFrom) {
+    public void setHouseNumberFrom(int houseNumberFrom) {
         this.houseNumberFrom = houseNumberFrom;
     }
 
@@ -213,13 +213,13 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     @JsonProperty(value = IO_FIELD_HOUSE_TO)
     @XmlElement(name = IO_FIELD_HOUSE_TO)
     @Column(name = DB_FIELD_HOUSE_TO)
-    private String houseNumberTo;
+    private int houseNumberTo;
 
-    public String getHouseNumberTo() {
+    public int getHouseNumberTo() {
         return this.houseNumberTo;
     }
 
-    public void setHouseNumberTo(String houseNumberTo) {
+    public void setHouseNumberTo(int houseNumberTo) {
         this.houseNumberTo = houseNumberTo;
     }
 

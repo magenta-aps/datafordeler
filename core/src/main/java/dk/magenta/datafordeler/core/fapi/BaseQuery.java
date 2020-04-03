@@ -816,6 +816,10 @@ public abstract class BaseQuery {
 
     public abstract String getEntityIdentifier();
 
+    public MultiCondition getCondition() {
+        return this.condition;
+    }
+
     public void addCondition(Condition condition) {
         this.finalizedConditions = false;
         this.condition.add(condition);
@@ -827,21 +831,37 @@ public abstract class BaseQuery {
 
     public void addCondition(String handle, List<String> value, Class type) throws QueryBuildException {
         if (value != null && !value.isEmpty()) {
-            this.addCondition(handle, Condition.Operator.EQ, value, type);
+            this.addCondition(handle, Condition.Operator.EQ, value, type, false);
         }
     }
 
-    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws QueryBuildException {
+    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type, boolean orNull) throws QueryBuildException {
         this.finalizedConditions = false;
+        this.makeCondition(this.condition, handle, operator, value, type, orNull);
+    }
+
+
+    public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List<String> value, Class type, boolean orNull) throws QueryBuildException {
         String member = this.useJoinHandle(handle);
         String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
         if (member != null && value != null && !value.isEmpty()) {
             try {
-                this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
+                if (orNull) {
+                    MultiCondition multiCondition = new MultiCondition(parent, "OR");
+                    multiCondition.add(new SingleCondition(multiCondition, member, value, operator, placeholder, type));
+                    multiCondition.add(new NullCondition(multiCondition, member, Condition.Operator.EQ));
+                    parent.add(multiCondition);
+                    return multiCondition;
+                } else {
+                    SingleCondition condition = new SingleCondition(parent, member, value, operator, placeholder, type);
+                    parent.add(condition);
+                    return condition;
+                }
             } catch (QueryBuildException e) {
                 log.error(e);
             }
         }
+        return null;
     }
 
 

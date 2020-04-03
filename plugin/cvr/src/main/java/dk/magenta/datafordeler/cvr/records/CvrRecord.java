@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.records;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import org.hibernate.Session;
@@ -23,6 +24,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     public static final String DB_FIELD_DAFO_UPDATED = "dafoUpdated";
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
+    @JsonIgnore
     @Column(name = DB_FIELD_DAFO_UPDATED)
     private OffsetDateTime dafoUpdated = null;
 

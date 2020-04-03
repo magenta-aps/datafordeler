@@ -13,10 +13,8 @@ public class SingleCondition extends Condition {
     private String left;
     private ArrayList<Object> wildcardValues = new ArrayList<>();
     private ArrayList<Object> staticValues = new ArrayList<>();
-    private ArrayList<Object> unlistableValues = new ArrayList<>();
     private Operator operator;
     private String placeholder;
-    private Class type;
 
     public SingleCondition(Condition parent, String left, List<String> right, Operator operator, String placeholder, Class type) throws QueryBuildException {
         super(parent);
@@ -26,7 +24,6 @@ public class SingleCondition extends Condition {
         this.left = left;
         this.operator = operator;
         this.placeholder = placeholder;
-        this.type = type;
 
         for (String value : right) {
             if (hasWildcard(value)) {
@@ -73,9 +70,9 @@ public class SingleCondition extends Condition {
             if (this.operator == Operator.EQ) {
                 parameters.put(this.placeholder, this.staticValues);
             } else {
-                for (int i = 0; i < this.unlistableValues.size(); i++) {
-                    String placeholder = this.placeholder + "_u" + i;
-                    Object value = this.unlistableValues.get(i);
+                for (int i = 0; i < this.staticValues.size(); i++) {
+                    String placeholder = this.placeholder + "_s" + i;
+                    Object value = this.staticValues.get(i);
                     parameters.put(placeholder, value);
                 }
             }
