@@ -15,6 +15,125 @@
       "get": {
         "summary": "Søgeinterface for CPR persondata.",
         "description": "Ved søgning efter personer skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. De indeholdte data er begrænset til personer med tilknytning til Grønland.",
+        "parameters": [
+          {
+            "name": "pnr",
+            "in": "query",
+            "description": "Personnummer",
+            "examples": {
+              "fuld":  {
+                "value":"0102800123"
+              },
+              "wildcard":  {
+                "value":"010280*"
+              }
+            }
+          },
+          {
+            "name": "fornavn",
+            "in": "query",
+            "description": "Fornavn(e) på personen.",
+            "examples": {
+              "fuld":  {
+                "value":"Jens"
+              },
+              "wildcard":  {
+                "value":"Jen*"
+              }
+            }
+          },
+          {
+            "name": "efternavn",
+            "in": "query",
+            "description": "Efternavn på personen.",
+            "examples": {
+              "fuld":  {
+                "value":"Hansen"
+              },
+              "wildcard":  {
+                "value":"Hans*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode for personens bopæl",
+            "examples": {
+              "fuld":  {
+                "value":"956"
+              },
+              "wildcard":  {
+                "value":"95*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode for personens bopæl",
+            "examples": {
+              "fuld":  {
+                "value": "100"
+              },
+              "wildcard":  {
+                "value":"1*"
+              }
+            }
+          },
+          {
+            "name": "husnummer",
+            "in": "query",
+            "description": "Husnummer for personens bopæl",
+            "examples": {
+              "fuld":  {
+                "value": "23"
+              },
+              "wildcard":  {
+                "value":"2*"
+              }
+            }
+          },
+          {
+            "name": "etage",
+            "in": "query",
+            "description": "Etage for personens bopæl",
+            "examples": {
+              "fuld":  {
+                "value": "1"
+              },
+              "wildcard":  {
+                "value":"*"
+              }
+            }
+          },
+          {
+            "name": "sidedør",
+            "in": "query",
+            "description": "Sidedør for personens bopæl",
+            "examples": {
+              "fuld":  {
+                "value": "tv"
+              },
+              "wildcard":  {
+                "value":"*"
+              }
+            }
+          },
+          {
+            "name": "bnr",
+            "in": "query",
+            "description": "Bnr for personens bopæl",
+            "examples": {
+              "fuld":  {
+                "value": "1234"
+              },
+              "wildcard":  {
+                "value":"12*"
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Liste af matchende personer",
@@ -79,7 +198,6 @@
             "type": "string",
             "example": "https://data.gl/cpr/person/1/rest/"
           },
-
           "navn": {
             "type": "object",
             "properties": {
@@ -99,19 +217,19 @@
                 "type": "string",
                 "example": "Jensen"
               },
-              "fornavnMarkering":{
+              "fornavnMarkering": {
                 "type": "boolean",
                 "example": false
               },
-              "mellemnavnMarkering":{
+              "mellemnavnMarkering": {
                 "type": "boolean",
                 "example": false
               },
-              "efternavnMarkering":{
+              "efternavnMarkering": {
                 "type": "boolean",
                 "example": false
               },
-              "egetEfternavnMarkering":{
+              "egetEfternavnMarkering": {
                 "type": "boolean",
                 "example": false
               },
@@ -208,13 +326,13 @@
           "conavn": {
             "type": "object",
             "properties": {
-            "myndighed": {
-              "type": "integer"
-            },
-            "conavn": {
-              "type": "string"
+              "myndighed": {
+                "type": "integer"
+              },
+              "conavn": {
+                "type": "string"
+              }
             }
-          }
           },
           "kommuneflytning": {
             "type": "object",
@@ -222,7 +340,7 @@
               "myndighed": {
                 "type": "integer",
                 "example": 100
-               },
+              },
               "fraflytningsdatoKommune": {
                 "type": "string",
                 "format": "date-time",
@@ -387,7 +505,7 @@
               }
             }
           },
-          "køn":{
+          "køn": {
             "type": "object",
             "properties": {
               "myndighed": {
