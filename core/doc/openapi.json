@@ -549,6 +549,367 @@
         }
       }
     },
+    "/cvr/company/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for CVR virksomhedsdata.",
+        "description": "Ved søgning efter virksomheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.",
+        "parameters": [
+          {
+            "name": "cvrNummer",
+            "in": "query",
+            "description": "CVR nummer",
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+          {
+            "name": "reklamebeskyttet",
+            "in": "query",
+            "description": "Reklamebeskyttede virksomheder",
+            "examples": {
+              "reklamebeskyttet": {
+                "value": "ja"
+              },
+              "ikke reklamebeskyttet": {
+                "value": "nej"
+              }
+            }
+          },
+          {
+            "name": "navne",
+            "in": "query",
+            "description": "Virksomhedsnavn",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "telefonNummer",
+            "in": "query",
+            "description": "Telefonnummer",
+            "examples": {
+              "fuld": {
+                "value": "123456"
+              },
+              "wildcard": {
+                "value": "1234*"
+              }
+            }
+          },
+          {
+            "name": "elektroniskPost",
+            "in": "query",
+            "description": "Email-adresse",
+            "examples": {
+              "fuld": {
+                "value": "test@test.dk"
+              },
+              "wildcard": {
+                "value": "*@magenta.dk"
+              }
+            }
+          },
+          {
+            "name": "virksomhedsform",
+            "in": "query",
+            "description": "Virksomhedsformkode.\n|Kode|Beskrivelse                                               |Forkortelse|\n|----|----------------------------------------------------------|-----------|\n|10  |Enkeltmandsvirksomhed                                     |ENK        |\n|15  |Personligt ejet Mindre Virksomhed                         |PMV        |\n|30  |Interessentskab                                           |I/S        |\n|40  |Kommanditselskab                                          |K/S        |\n|50  |Partrederi                                                |PAR        |\n|60  |Aktieselskab                                              |A/S        |\n|70  |Kommanditaktieselskab/Partnerselskab                      |KAS        |\n|80  |Anpartsselskab                                            |APS        |\n|81  |Iværksætterselskab                                        |IVS        |\n|90  |Fonde og andre selvejende institutioner                   |FON        |\n|100 |Erhvervsdrivende fond                                     |EFO        |\n|110 |Forening                                                  |FOR        |\n|140 |Andelsselskab (-forening) med begrænset ansvar            |ABA        |\n|151 |Selskab med begrænset ansvar                              |SMA        |\n|170 |Filial af udenlandsk aktieselskab, kommanditaktieselskab  |FAS        |\n|180 |Filial af udenlandsk anpartsselskab eller selskab         |FAP        |\n|230 |Statslig administrativ enhed                              |STA        |\n|270 |Enhed under oprettelse i Erhvervsstyrelsen                |EUO        |\n|285 |Særlig finansiel virksomhed                               |FIV        |\n|520 |Grønlandsk afdeling af udenlandsk selskab eller virksomhed|GUS        |\n",
+            "examples": {
+              "fuld": {
+                "value": "80"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "100"
+              },
+              "wildcard": {
+                "value": "1*"
+              }
+            }
+          },
+          {
+            "name": "husnummer",
+            "in": "query",
+            "description": "Husnummer for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "23"
+              },
+              "wildcard": {
+                "value": "2*"
+              }
+            }
+          },
+          {
+            "name": "etage",
+            "in": "query",
+            "description": "Etage for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "1"
+              },
+              "wildcard": {
+                "value": "*"
+              }
+            }
+          },
+          {
+            "name": "sidedør",
+            "in": "query",
+            "description": "Sidedør for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "tv"
+              },
+              "wildcard": {
+                "value": "*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende virksomheder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "55ef29e6-2226-392a-9266-3775f977d346"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "TODO: Gør noget ved domænet"
+                          },
+                          "cvrNummer": {
+                            "type": "string",
+                            "example": "12950160"
+                          },
+                          "samtId": {
+                            "type": "integer",
+                            "example": 5
+                          },
+                          "enhedsNummer": {
+                            "type": "integer",
+                            "example": 1234567890
+                          },
+                          "reklamebeskyttet": {
+                            "type": "boolean"
+                          },
+                          "enhedstype": {
+                            "type": "string",
+                            "example": "VIRKSOMHED"
+                          },
+                          "penheder": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 9876543210
+                            }
+                          },
+                          "beliggenhedsadresse": {
+                            "$ref": "#/components/schemas/virksomhedsadresse"
+                          },
+                          "hjemmeside": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kontaktoplysning": {
+                                  "type": "string",
+                                  "example": "www.magenta.dk"
+                                },
+                                "hemmelig": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          },
+                          "elektroniskPost": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kontaktoplysning": {
+                                  "type": "string",
+                                  "example": "info@magenta.dk"
+                                },
+                                "hemmelig": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          },
+                          "hovedbranche": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "branchekode": {
+                                  "type": "string",
+                                  "example": "620100"
+                                },
+                                "branchetekst": {
+                                  "type": "string",
+                                  "example": "Computerprogrammering"
+                                }
+                              }
+                            }
+                          },
+                          "virksomhedsform": {
+                            "$ref": "#/components/schemas/virksomhedsform"
+                          },
+                          "virksomhedsstatus": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "NORMAL",
+                              "enum": [
+                                "NORMAL",
+                                "OPLØST EFTER ERKLÆRING",
+                                "OPLØST EFTER FRIVILLIG LIKVIDATION",
+                                "OPLØST EFTER FUSION",
+                                "OPLØST EFTER KONKURS",
+                                "OPLØST EFTER SPALTNING",
+                                "SLETTET",
+                                "TVANGSOPLØST",
+                                "UDEN RETSVIRKNING",
+                                "UNDER FRIVILLIG LIKVIDATION",
+                                "UNDER KONKURS",
+                                "UNDER REASSUMERING",
+                                "UNDER REKONSTRUKTION",
+                                "UNDER TVANGSOPLØSNING"
+                              ]
+                            }
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Magenta Grønland ApS"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "nyesteKontaktoplysninger": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "data": {
+                                      "type": "string",
+                                      "example": "www.magenta.dk"
+                                    }
+                                  }
+                                }
+                              },
+                              "antalPenheder": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "nyesteBeliggenhedsadresse": {
+                                "$ref": "#/components/schemas/virksomhedsadresse"
+                              },
+                              "nyesteHovedbranche": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "branchekode": {
+                                      "type": "string",
+                                      "example": "620100"
+                                    },
+                                    "branchetekst": {
+                                      "type": "string",
+                                      "example": "Computerprogrammering"
+                                    }
+                                  }
+                                }
+                              },
+                              "nyesteNavn": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "Magenta Grønland ApS"
+                                }
+                              },
+                              "nyesteVirksomhedsform": {
+                                "$ref": "#/components/schemas/virksomhedsform"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/geo/municipality/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR kommunedata.",
@@ -1139,6 +1500,95 @@
                   }
                 }
               }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "virksomhedsform": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "virksomhedsformkode": {
+              "type": "string",
+              "example": "80"
+            },
+            "kortBeskrivelse": {
+              "type": "string",
+              "example": "APS"
+            },
+            "langBeskrivelse": {
+              "type": "string",
+              "example": "Anpartsselskab"
+            },
+            "ansvarligDataleverandoer": {
+              "type": "string",
+              "example": "E&S"
+            }
+          },
+          "description": "Virksomhedsformkode.\n|Kode|Beskrivelse                                               |Forkortelse|\n|----|----------------------------------------------------------|-----------|\n|10  |Enkeltmandsvirksomhed                                     |ENK        |\n|15  |Personligt ejet Mindre Virksomhed                         |PMV        |\n|30  |Interessentskab                                           |I/S        |\n|40  |Kommanditselskab                                          |K/S        |\n|50  |Partrederi                                                |PAR        |\n|60  |Aktieselskab                                              |A/S        |\n|70  |Kommanditaktieselskab/Partnerselskab                      |KAS        |\n|80  |Anpartsselskab                                            |APS        |\n|81  |Iværksætterselskab                                        |IVS        |\n|90  |Fonde og andre selvejende institutioner                   |FON        |\n|100 |Erhvervsdrivende fond                                     |EFO        |\n|110 |Forening                                                  |FOR        |\n|140 |Andelsselskab (-forening) med begrænset ansvar            |ABA        |\n|151 |Selskab med begrænset ansvar                              |SMA        |\n|170 |Filial af udenlandsk aktieselskab, kommanditaktieselskab  |FAS        |\n|180 |Filial af udenlandsk anpartsselskab eller selskab         |FAP        |\n|230 |Statslig administrativ enhed                              |STA        |\n|270 |Enhed under oprettelse i Erhvervsstyrelsen                |EUO        |\n|285 |Særlig finansiel virksomhed                               |FIV        |\n|520 |Grønlandsk afdeling af udenlandsk selskab eller virksomhed|GUS        |\n"
+        }
+      },
+      "virksomhedsadresse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kommunekode": {
+              "type": "integer",
+              "example": 956
+            },
+            "kommunenavn": {
+              "type": "string",
+              "example": "Kommuneqarfik Sermersooq"
+            },
+            "lokalitetskode": {
+              "type": "string",
+              "example": "0600"
+            },
+            "lokalitetsnavn": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "postdistrikt": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "postnummer": {
+              "type": "integer",
+              "example": 3900
+            },
+            "bynavn": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "vejkode": {
+              "type": "integer",
+              "example": 212
+            },
+            "vejnavn": {
+              "type": "string",
+              "example": "Nuukullak"
+            },
+            "husnummerFra": {
+              "type": "string",
+              "example": "4"
+            },
+            "husnummerTil": {
+              "type": "string",
+              "example": null
+            },
+            "etage": {
+              "type": "string",
+              "example": "1"
+            },
+            "sidedør": {
+              "type": "string",
+              "example": null
             }
           }
         }
