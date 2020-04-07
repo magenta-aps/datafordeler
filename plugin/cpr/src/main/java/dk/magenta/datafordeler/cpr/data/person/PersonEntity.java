@@ -143,7 +143,7 @@ public class PersonEntity extends CprRecordEntity {
     }
 
     public static final String DB_FIELD_ADDRESS_NAME = "addressName";
-    public static final String IO_FIELD_ADDRESS_NAME = "addresseringsnavn";
+    public static final String IO_FIELD_ADDRESS_NAME = "adresseringsnavn";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
@@ -609,7 +609,7 @@ public class PersonEntity extends CprRecordEntity {
     }
 
     public static final String DB_FIELD_CORE = "person";
-    public static final String IO_FIELD_CORE = "kernedata";
+    public static final String IO_FIELD_CORE = "køn";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
