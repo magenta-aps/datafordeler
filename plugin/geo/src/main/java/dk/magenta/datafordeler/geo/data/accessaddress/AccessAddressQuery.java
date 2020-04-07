@@ -26,7 +26,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     private List<String> bnr = new ArrayList<>();
 
 
-    public static final String ROAD = AccessAddressEntity.IO_FIELD_ROAD;
+    public static final String ROAD = AccessAddressRoadRecord.IO_FIELD_ROAD_CODE;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = ROAD)
     private List<String> roadCode = new ArrayList<>();

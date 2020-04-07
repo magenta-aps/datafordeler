@@ -127,7 +127,7 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
 
 
     public static final String DB_FIELD_MUNICIPALITY = "municipality";
-    public static final String IO_FIELD_MUNICIPALITY = "kommune";
+    public static final String IO_FIELD_MUNICIPALITY = "kommunekode";
     @OneToMany(mappedBy = LocalityMunicipalityRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),

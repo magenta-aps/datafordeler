@@ -548,6 +548,601 @@
           }
         }
       }
+    },
+    "/geo/municipality/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for GAR kommunedata.",
+        "description": "Ved søgning efter kommuner skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "parameters": [
+          {
+            "name": "kode",
+            "in": "query",
+            "description": "Kommunekode",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "navn",
+            "in": "query",
+            "description": "Kommunenavn",
+            "examples": {
+              "fuld": {
+                "value": "Kommuneqarfik Sermersooq"
+              },
+              "wildcard": {
+                "value": "*Sermersooq*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende kommuner",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cpr/person/1/rest/"
+                          },
+                          "kommunekode": {
+                            "type": "integer",
+                            "example": 956
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Kommuneqarfik Sermersooq"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/postcode/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for GAR postnummerdata.",
+        "description": "Ved søgning efter postnumre skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "parameters": [
+          {
+            "name": "kode",
+            "in": "query",
+            "description": "Kommunekode",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "postnummer",
+            "in": "query",
+            "description": "Postnummeret på postdistriktet",
+            "examples": {
+              "fuld": {
+                "value": "3900"
+              },
+              "wildcard": {
+                "value": "39*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende postnumre",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cpr/person/1/rest/"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "postdistrikt": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Nuuk"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/locality/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for GAR lokalitetsdata.",
+        "description": "Ved søgning efter lokaliteter skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "parameters": [
+          {
+            "name": "kode",
+            "in": "query",
+            "description": "Lokalitetskode",
+            "examples": {
+              "fuld": {
+                "value": "0600"
+              },
+              "wildcard": {
+                "value": "06*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode hvor lokaliteten ligger",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "9*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende lokaliteter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cpr/person/1/rest/"
+                          },
+                          "lokalitetskode": {
+                            "type": "string",
+                            "example": "0600"
+                          },
+                          "kommune": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 956
+                            }
+                          },
+                          "forkortelse": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "NUK"
+                            }
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Nuuk"
+                            }
+                          },
+                          "type": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 1,
+                              "description": "TODO: Find ud af hvad typerne betyder"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/road/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for GAR vejdata.",
+        "description": "Ved søgning efter veje skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. Bemærk at elementer her er vejstykker, ikke nødvendigvis hele veje",
+        "parameters": [
+          {
+            "name": "kode",
+            "in": "query",
+            "description": "Vejkode",
+            "examples": {
+              "fuld": {
+                "value": "204"
+              },
+              "wildcard": {
+                "value": "2*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode hvor vejen ligger",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "9*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende veje",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cpr/person/1/rest/"
+                          },
+                          "vejkode": {
+                            "type": "integer",
+                            "example": 204
+                          },
+                          "kommune": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 956
+                            }
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "navn": {
+                                  "type": "string",
+                                  "example": "Norsaq"
+                                },
+                                "addresseringsNavn": {
+                                  "type": "string",
+                                  "example": "Norsaq"
+                                }
+                              }
+                            }
+                          },
+                          "lokalitet": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "0600"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/accessaddress/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for GAR adgangsadresser.",
+        "description": "Ved søgning efter adgangsadresser skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "parameters": [
+          {
+            "name": "bnr",
+            "in": "query",
+            "description": "Bygningsnummer",
+            "examples": {
+              "fuld": {
+                "value": "B-826"
+              },
+              "wildcard": {
+                "value": "B-2*"
+              }
+            }
+          },
+          {
+            "name": "husnummer",
+            "in": "query",
+            "description": "Husnummer",
+            "examples": {
+              "fuld": {
+                "value": "826"
+              },
+              "wildcard": {
+                "value": "8*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode",
+            "examples": {
+              "fuld": {
+                "value": "20"
+              },
+              "wildcard": {
+                "value": "2*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode hvor vejen ligger",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "9*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende adgangsadresser",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cpr/person/1/rest/"
+                          },
+                          "bnr": {
+                            "type": "string",
+                            "example": "B-826"
+                          },
+                          "vej": {
+                            "type": "object",
+                            "properties": {
+                              "kommunekode": {
+                                "type": "integer",
+                                "example": 956
+                              },
+                              "vejkode": {
+                                "type": "integer",
+                                "example": 20
+                              }
+                            }
+                          },
+                          "lokalitet": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "0600"
+                            }
+                          },
+                          "husnummer": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "826"
+                            }
+                          },
+                          "dataKilde": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 1
+                            }
+                          },
+                          "status": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 2
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
