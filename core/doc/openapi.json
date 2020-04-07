@@ -21,11 +21,11 @@
             "in": "query",
             "description": "Personnummer",
             "examples": {
-              "fuld":  {
-                "value":"0102800123"
+              "fuld": {
+                "value": "0102800123"
               },
-              "wildcard":  {
-                "value":"010280*"
+              "wildcard": {
+                "value": "010280*"
               }
             }
           },
@@ -34,11 +34,11 @@
             "in": "query",
             "description": "Fornavn(e) på personen.",
             "examples": {
-              "fuld":  {
-                "value":"Jens"
+              "fuld": {
+                "value": "Jens"
               },
-              "wildcard":  {
-                "value":"Jen*"
+              "wildcard": {
+                "value": "Jen*"
               }
             }
           },
@@ -47,11 +47,11 @@
             "in": "query",
             "description": "Efternavn på personen.",
             "examples": {
-              "fuld":  {
-                "value":"Hansen"
+              "fuld": {
+                "value": "Hansen"
               },
-              "wildcard":  {
-                "value":"Hans*"
+              "wildcard": {
+                "value": "Hans*"
               }
             }
           },
@@ -60,11 +60,11 @@
             "in": "query",
             "description": "Kommunekode for personens bopæl",
             "examples": {
-              "fuld":  {
-                "value":"956"
+              "fuld": {
+                "value": "956"
               },
-              "wildcard":  {
-                "value":"95*"
+              "wildcard": {
+                "value": "95*"
               }
             }
           },
@@ -73,11 +73,11 @@
             "in": "query",
             "description": "Vejkode for personens bopæl",
             "examples": {
-              "fuld":  {
+              "fuld": {
                 "value": "100"
               },
-              "wildcard":  {
-                "value":"1*"
+              "wildcard": {
+                "value": "1*"
               }
             }
           },
@@ -86,11 +86,11 @@
             "in": "query",
             "description": "Husnummer for personens bopæl",
             "examples": {
-              "fuld":  {
+              "fuld": {
                 "value": "23"
               },
-              "wildcard":  {
-                "value":"2*"
+              "wildcard": {
+                "value": "2*"
               }
             }
           },
@@ -99,11 +99,11 @@
             "in": "query",
             "description": "Etage for personens bopæl",
             "examples": {
-              "fuld":  {
+              "fuld": {
                 "value": "1"
               },
-              "wildcard":  {
-                "value":"*"
+              "wildcard": {
+                "value": "*"
               }
             }
           },
@@ -112,11 +112,11 @@
             "in": "query",
             "description": "Sidedør for personens bopæl",
             "examples": {
-              "fuld":  {
+              "fuld": {
                 "value": "tv"
               },
-              "wildcard":  {
-                "value":"*"
+              "wildcard": {
+                "value": "*"
               }
             }
           },
@@ -125,11 +125,11 @@
             "in": "query",
             "description": "Bnr for personens bopæl",
             "examples": {
-              "fuld":  {
+              "fuld": {
                 "value": "1234"
               },
-              "wildcard":  {
-                "value":"12*"
+              "wildcard": {
+                "value": "12*"
               }
             }
           }
@@ -180,7 +180,6 @@
       }
     }
   },
-
   "components": {
     "schemas": {
       "person": {
@@ -199,47 +198,50 @@
             "example": "https://data.gl/cpr/person/1/rest/"
           },
           "navn": {
-            "type": "object",
-            "properties": {
-              "fornavn": {
-                "type": "string",
-                "example": "Jens"
-              },
-              "mellemnavn": {
-                "type": "string",
-                "example": null
-              },
-              "efternavn": {
-                "type": "string",
-                "example": "Hansen"
-              },
-              "egetEfternavn": {
-                "type": "string",
-                "example": "Jensen"
-              },
-              "fornavnMarkering": {
-                "type": "boolean",
-                "example": false
-              },
-              "mellemnavnMarkering": {
-                "type": "boolean",
-                "example": false
-              },
-              "efternavnMarkering": {
-                "type": "boolean",
-                "example": false
-              },
-              "egetEfternavnMarkering": {
-                "type": "boolean",
-                "example": false
-              },
-              "adresseringsnavn": {
-                "type": "string",
-                "example": "Hansen,Jens"
-              },
-              "myndighed": {
-                "type": "integer",
-                "example": 1234
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "fornavn": {
+                  "type": "string",
+                  "example": "Jens"
+                },
+                "mellemnavn": {
+                  "type": "string",
+                  "example": null
+                },
+                "efternavn": {
+                  "type": "string",
+                  "example": "Hansen"
+                },
+                "egetEfternavn": {
+                  "type": "string",
+                  "example": "Jensen"
+                },
+                "fornavnMarkering": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "mellemnavnMarkering": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "efternavnMarkering": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "egetEfternavnMarkering": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "adresseringsnavn": {
+                  "type": "string",
+                  "example": "Hansen,Jens"
+                },
+                "myndighed": {
+                  "type": "integer",
+                  "example": 1234
+                }
               }
             }
           },
@@ -257,123 +259,135 @@
             }
           },
           "adresse": {
-            "type": "object",
-            "properties": {
-              "adresselinie1": {
-                "type": "string"
-              },
-              "adresselinie2": {
-                "type": "string"
-              },
-              "adresselinie3": {
-                "type": "string"
-              },
-              "adresselinie4": {
-                "type": "string"
-              },
-              "adresselinie5": {
-                "type": "string"
-              },
-              "adresseteksttype": {
-                "type": "integer"
-              },
-              "bnr": {
-                "type": "string"
-              },
-              "etage": {
-                "type": "string",
-                "example": "1"
-              },
-              "husnummer": {
-                "type": "string",
-                "example": "23"
-              },
-              "kommunekode": {
-                "type": "integer",
-                "example": 956
-              },
-              "lokalitetsnavn": {
-                "type": "string"
-              },
-              "myndighed": {
-                "type": "integer"
-              },
-              "postdistrikt": {
-                "type": "string",
-                "example": "Nuuk"
-              },
-              "postnummer": {
-                "type": "integer",
-                "example": 3900
-              },
-              "sidedør": {
-                "type": "string",
-                "example": null
-              },
-              "startautoritet": {
-                "type": "integer"
-              },
-              "vejkode": {
-                "type": "integer",
-                "example": 106
-              },
-              "vejnavn": {
-                "type": "string",
-                "example": "Industrivej"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "adresselinie1": {
+                  "type": "string"
+                },
+                "adresselinie2": {
+                  "type": "string"
+                },
+                "adresselinie3": {
+                  "type": "string"
+                },
+                "adresselinie4": {
+                  "type": "string"
+                },
+                "adresselinie5": {
+                  "type": "string"
+                },
+                "adresseteksttype": {
+                  "type": "integer"
+                },
+                "bnr": {
+                  "type": "string"
+                },
+                "etage": {
+                  "type": "string",
+                  "example": "1"
+                },
+                "husnummer": {
+                  "type": "string",
+                  "example": "23"
+                },
+                "kommunekode": {
+                  "type": "integer",
+                  "example": 956
+                },
+                "lokalitetsnavn": {
+                  "type": "string"
+                },
+                "myndighed": {
+                  "type": "integer"
+                },
+                "postdistrikt": {
+                  "type": "string",
+                  "example": "Nuuk"
+                },
+                "postnummer": {
+                  "type": "integer",
+                  "example": 3900
+                },
+                "sidedør": {
+                  "type": "string",
+                  "example": null
+                },
+                "startautoritet": {
+                  "type": "integer"
+                },
+                "vejkode": {
+                  "type": "integer",
+                  "example": 106
+                },
+                "vejnavn": {
+                  "type": "string",
+                  "example": "Industrivej"
+                }
               }
             }
           },
           "conavn": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer"
-              },
-              "conavn": {
-                "type": "string"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer"
+                },
+                "conavn": {
+                  "type": "string"
+                }
               }
             }
           },
           "kommuneflytning": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer",
-                "example": 100
-              },
-              "fraflytningsdatoKommune": {
-                "type": "string",
-                "format": "date-time",
-                "example": null
-              },
-              "fraflytningsdatoKommuneUsikkerhedsmarkering": {
-                "type": "boolean",
-                "example": false
-              },
-              "fraflytningskommunekode": {
-                "type": "integer",
-                "example": 101
-              },
-              "tilflytningsdatoKommune": {
-                "type": "string",
-                "format": "date-time",
-                "example": "2010-01-01T00:00:00"
-              },
-              "tilflytningsdatoKommuneUsikkerhedsmarkering": {
-                "type": "boolean",
-                "example": false
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer",
+                  "example": 100
+                },
+                "fraflytningsdatoKommune": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": null
+                },
+                "fraflytningsdatoKommuneUsikkerhedsmarkering": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "fraflytningskommunekode": {
+                  "type": "integer",
+                  "example": 101
+                },
+                "tilflytningsdatoKommune": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2010-01-01T00:00:00"
+                },
+                "tilflytningsdatoKommuneUsikkerhedsmarkering": {
+                  "type": "boolean",
+                  "example": false
+                }
               }
             }
           },
           "statsborgerskab": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer"
-              },
-              "landekode": {
-                "type": "integer",
-                "example": 5100
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer"
+                },
+                "landekode": {
+                  "type": "integer",
+                  "example": 5100
+                }
               }
             }
           },
@@ -404,120 +418,138 @@
             }
           },
           "folkekirkeoplysning": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer",
-                "example": 9518,
-                "description": "Kode for den registrerende myndighed"
-              },
-              "folkekirkeforhold": {
-                "type": "string",
-                "example": "F",
-                "description": "|Kode|Beskrivelse                            |\n|----|---------------------------------------|\n|F   |Medlem af folkekirken                  |\n|M   |Medlem af valgmenighed (og folkekirken)|\n|S   |Fri for kirkeskat eller udrejst        |\n|U   |Udenfor folkekirken                    |\n|A   |Afventer markering                     |\n"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer",
+                  "example": 9518,
+                  "description": "Kode for den registrerende myndighed"
+                },
+                "folkekirkeforhold": {
+                  "type": "string",
+                  "example": "F",
+                  "description": "|Kode|Beskrivelse                            |\n|----|---------------------------------------|\n|F   |Medlem af folkekirken                  |\n|M   |Medlem af valgmenighed (og folkekirken)|\n|S   |Fri for kirkeskat eller udrejst        |\n|U   |Udenfor folkekirken                    |\n|A   |Afventer markering                     |\n"
+                }
               }
             }
           },
           "status": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer",
-                "example": 1234
-              },
-              "status": {
-                "type": "integer",
-                "example": 5,
-                "description": "|Kode|Beskrivelse                                                                                   |\n|----|----------------------------------------------------------------------------------------------|\n| 1  |Aktiv, bopæl i dansk folkeregister                                                            |\n| 3  |Aktiv, speciel vejkode (9900-9999) i dansk folkeregister                                      |\n| 5  |Aktiv, bopæl i grønlandsk folkeregister                                                       |\n| 7  |Aktiv, speciel vejkode (9900-9999) i grønlandsk folkeregister                                 |\n|10  |Inaktiv, reserveret personnummer                                                              |\n|20  |Inaktiv, uden bopæl i dansk/grønlandsk folkeregister, men tildelt personnummer af skattehensyn|\n|30  |Inaktiv, annuleret personnummer                                                               |\n|50  |Inaktiv, slettet personnummer ved dobbeltnummer                                               |\n|60  |Inaktiv, ændret personnummer ved ændring af fødselsdato og køn                                |\n|70  |Inaktiv, forsvundet                                                                           |\n|80  |Inaktiv, udrejst                                                                              |\n|90  |Inaktiv, død                                                                                  |\n|99  |Ukendt (ikke officiel CPR-kode)                                                               |\n"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer",
+                  "example": 1234
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 5,
+                  "description": "|Kode|Beskrivelse                                                                                   |\n|----|----------------------------------------------------------------------------------------------|\n| 1  |Aktiv, bopæl i dansk folkeregister                                                            |\n| 3  |Aktiv, speciel vejkode (9900-9999) i dansk folkeregister                                      |\n| 5  |Aktiv, bopæl i grønlandsk folkeregister                                                       |\n| 7  |Aktiv, speciel vejkode (9900-9999) i grønlandsk folkeregister                                 |\n|10  |Inaktiv, reserveret personnummer                                                              |\n|20  |Inaktiv, uden bopæl i dansk/grønlandsk folkeregister, men tildelt personnummer af skattehensyn|\n|30  |Inaktiv, annuleret personnummer                                                               |\n|50  |Inaktiv, slettet personnummer ved dobbeltnummer                                               |\n|60  |Inaktiv, ændret personnummer ved ændring af fødselsdato og køn                                |\n|70  |Inaktiv, forsvundet                                                                           |\n|80  |Inaktiv, udrejst                                                                              |\n|90  |Inaktiv, død                                                                                  |\n|99  |Ukendt (ikke officiel CPR-kode)                                                               |\n"
+                }
               }
             }
           },
           "civilstatus": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer",
-                "example": 0
-              },
-              "civilstand": {
-                "type": "string",
-                "example": "G",
-                "description": "|Kode|Beskrivelse                      |\n|----|---------------------------------|\n|U   |Ugift                            |\n|G   |Gift                             |\n|F   |Fraskilt                         |\n|E   |Enke/Enkemand                    |\n|D   |Død                              |\n|P   |Registreret partner              |\n|O   |Ophørt registreret partner       |\n|L   |Længstlevende registreret partner|\n"
-              },
-              "ægtefælleCpr": {
-                "type": "string",
-                "example": "0405861234"
-              },
-              "ægtefælleFødselsdato": {
-                "type": "string",
-                "example": "1986-05-06",
-                "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
-              },
-              "ægtefælleFødselsdatoUsikker": {
-                "type": "boolean",
-                "example": false,
-                "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
-              },
-              "ægtefælleNavn": {
-                "type": "string",
-                "example": "Hansen,Jensine",
-                "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
-              },
-              "ægtefælleNavnMarkering": {
-                "type": "boolean",
-                "example": false,
-                "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer",
+                  "example": 0
+                },
+                "civilstand": {
+                  "type": "string",
+                  "example": "G",
+                  "description": "|Kode|Beskrivelse                      |\n|----|---------------------------------|\n|U   |Ugift                            |\n|G   |Gift                             |\n|F   |Fraskilt                         |\n|E   |Enke/Enkemand                    |\n|D   |Død                              |\n|P   |Registreret partner              |\n|O   |Ophørt registreret partner       |\n|L   |Længstlevende registreret partner|\n"
+                },
+                "ægtefælleCpr": {
+                  "type": "string",
+                  "example": "0405861234"
+                },
+                "ægtefælleFødselsdato": {
+                  "type": "string",
+                  "example": "1986-05-06",
+                  "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+                },
+                "ægtefælleFødselsdatoUsikker": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+                },
+                "ægtefælleNavn": {
+                  "type": "string",
+                  "example": "Hansen,Jensine",
+                  "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+                },
+                "ægtefælleNavnMarkering": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+                }
               }
             }
           },
           "fødselsted": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer",
-                "example": 9520
-              },
-              "cprFødselsregistreringsstedskode": {
-                "type": "integer",
-                "example": 100
-              },
-              "cprFødselsregistreringsstedsnavn": {
-                "type": "string",
-                "example": "Reykjavik"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer",
+                  "example": 9520
+                },
+                "cprFødselsregistreringsstedskode": {
+                  "type": "integer",
+                  "example": 100
+                },
+                "cprFødselsregistreringsstedsnavn": {
+                  "type": "string",
+                  "example": "Reykjavik"
+                }
               }
             }
           },
           "fødselstidspunkt": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer",
-                "example": 9520
-              },
-              "fødselsdato": {
-                "type": "string",
-                "format": "date-time",
-                "example": "1980-01-02T12:34:56"
-              },
-              "fødselsdatoUsikkerhedsmarkering": {
-                "type": "boolean",
-                "example": false
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer",
+                  "example": 9520
+                },
+                "fødselsdato": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "1980-01-02T12:34:56"
+                },
+                "fødselsdatoUsikkerhedsmarkering": {
+                  "type": "boolean",
+                  "example": false
+                }
               }
             }
           },
           "køn": {
-            "type": "object",
-            "properties": {
-              "myndighed": {
-                "type": "integer",
-                "example": 99
-              },
-              "køn": {
-                "type": "string",
-                "enum": [
-                  "KVINDE",
-                  "MAND"
-                ]
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "myndighed": {
+                  "type": "integer",
+                  "example": 99
+                },
+                "køn": {
+                  "type": "string",
+                  "enum": [
+                    "KVINDE",
+                    "MAND"
+                  ]
+                }
               }
             }
           }
