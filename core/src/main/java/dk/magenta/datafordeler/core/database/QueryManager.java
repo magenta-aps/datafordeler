@@ -200,7 +200,7 @@ public class QueryManager {
         org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
 
         // Insert parameters, casting as necessary
-        Map<String, Object> extraParameters = query.getFirstParameters();
+        Map<String, Object> extraParameters = query.getParameters();
 
         for (String key : extraParameters.keySet()) {
             Object value = extraParameters.get(key);
@@ -350,7 +350,7 @@ public class QueryManager {
      */
     public static <E extends IdentifiedEntity> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
+        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query, eClass);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setFetchSize(1000);
         List<String> classNames = query.getEntityClassnames();

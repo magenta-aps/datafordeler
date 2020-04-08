@@ -29,6 +29,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -84,13 +85,13 @@ public class CivilStatusDataServiceTest extends TestBase {
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
         query.setPersonnummer("0101011234");
-        List<PersonEntity> personEntities = QueryManager.getAllEntities(session, query,PersonEntity.class);
+        List<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, query,PersonEntity.class).collect(Collectors.toList());
         Assert.assertEquals(1, personEntities.size());
         PersonEntity personEntity = personEntities.get(0);
         Assert.assertEquals(5, personEntity.getCivilstatus().size());
 
         query.setPersonnummer("0101011235");
-        personEntities = QueryManager.getAllEntities(session, query,PersonEntity.class);
+        personEntities = QueryManager.getAllEntitiesAsStream(session, query,PersonEntity.class).collect(Collectors.toList());
         Assert.assertEquals(1, personEntities.size());
         personEntity = personEntities.get(0);
         Assert.assertEquals(4, personEntity.getCivilstatus().size());

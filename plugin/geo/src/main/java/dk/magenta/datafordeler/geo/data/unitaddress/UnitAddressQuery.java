@@ -10,23 +10,20 @@ import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressQuery;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lars on 19-05-17.
  */
 public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
-/*
-    public static final String BNR = UnitAddressEntity.IO_FIELD_BNR;
+
+    public static final String BNR = AccessAddressEntity.IO_FIELD_BNR;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = BNR)
     private List<String> bnr = new ArrayList<>();
 
-
+/*
     public static final String ROAD = AccessAddressEntity.IO_FIELD_ROAD;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = ROAD)
@@ -46,23 +43,34 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     private List<String> houseNumber = new ArrayList<>();
 
 
-/*
+
     public List<String> getBnr() {
         return bnr;
     }
 
     public void setBnr(String bnr) {
-        this.bnr.clear();
+        this.clearBnr();
         this.addBnr(bnr);
+    }
+    public void setBnr(Collection<String> bnrs) {
+        this.clearBnr();
+        for (String bnr : bnrs) {
+            this.addBnr(bnr);
+        }
+    }
+
+    public void clearBnr() {
+        this.bnr.clear();
+        this.updatedParameters();
     }
 
     public void addBnr(String bnr) {
         if (bnr != null) {
             this.bnr.add(bnr);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
-
+/*
 
 
 
@@ -186,7 +194,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>(super.getSearchParameters());
-        //map.put(BNR, this.bnr);
+        map.put(BNR, this.bnr);
         //map.put(ROAD, this.road);
         map.put(HOUSE_NUMBER, this.houseNumber);
         return map;
@@ -212,13 +220,13 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     @Override
     protected boolean isEmpty() {
-        return this.floor.isEmpty() && this.door.isEmpty();
+        return this.floor.isEmpty() && this.door.isEmpty() && this.bnr.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        //this.setBnr(parameters.getFirst(BNR));
+        this.setBnr(parameters.getI(BNR));
         //this.setRoad(parameters.getFirst(ROAD));
     }
 
@@ -259,6 +267,10 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
         HashMap<String, String> joinHandles = new HashMap<>();
         joinHandles.put("accessaddress_id", "id");
+
+        accessAddressQuery.addRelatedPostcodeQuery();
+        accessAddressQuery.addRelatedLocalityQuery();
+
         this.addRelated(accessAddressQuery, joinHandles);
         return accessAddressQuery;
     }
