@@ -289,19 +289,28 @@ public class QueryManager {
 
     /**
      * Get all Entities of a specific class, that match the given parameters
+     * This method does not support parameters that is or'ed like supplying a list of parameters and fetching all that matches one of them
      * @param session Database session to work from
      * @param query Query object defining search parameters
      * @return
      */
-
     public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass) {
         HashMap<BaseQuery, List<ResultSet>> cache = new HashMap<>();
         List<ResultSet<E>> results = getAllEntitySets(session, query, eClass, cache);
-        System.out.println(results);
         return results;
     }
 
-
+    /**
+     *
+     * Get all Entities of a specific class, that match the given parameters
+     * This method does not support parameters that is or'ed like supplying a list of parameters and fetching all that matches one of them
+     * @param session
+     * @param query
+     * @param eClass
+     * @param cache
+     * @param <E>
+     * @return
+     */
     private static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass, HashMap<BaseQuery, List<ResultSet>> cache) {
         if (cache.containsKey(query)) {
             return cache.get(query).stream().map(r -> (ResultSet<E>) r).collect(Collectors.toList());
@@ -337,12 +346,23 @@ public class QueryManager {
         log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
         return results;
     }
+
+    /**
+     * Get all Entities of a specific class, that match the given parameters
+     * This method does not support parameters that is or'ed like supplying a list of parameters and fetching all that matches one of them
+     * @param session
+     * @param query
+     * @param eClass
+     * @param <E>
+     * @return
+     */
     public static <E extends IdentifiedEntity> List<E> getAllEntities(Session session, BaseQuery query, Class<E> eClass) {
         return getAllEntitySets(session, query, eClass).stream().map(s -> s.getPrimaryEntity()).collect(Collectors.toList());
     }
 
     /**
      * Get all Entities of a specific class, that match the given parameters
+     * This method DOES support parameters that is or'ed like suppliing a list of parameters and fetching all that matches one of them
      * @param session Database session to work from
      * @param query Query object defining search parameters
      * @param eClass Entity subclass
