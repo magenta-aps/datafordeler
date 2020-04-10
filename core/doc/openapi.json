@@ -737,7 +737,7 @@
                           },
                           "domæne": {
                             "type": "string",
-                            "example": "TODO: Gør noget ved domænet"
+                            "example": "https://data.gl/cvr/company/1/rest/"
                           },
                           "cvrNummer": {
                             "type": "string",
@@ -896,6 +896,371 @@
                               },
                               "nyesteVirksomhedsform": {
                                 "$ref": "#/components/schemas/virksomhedsform"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cvr/unit/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for CVR produktionsenhedsdata.",
+        "description": "Ved søgning efter produktionsenheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.",
+        "parameters": [
+          {
+            "name": "pNummer",
+            "in": "query",
+            "description": "P-nummer",
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+          {
+            "name": "cvrNummer",
+            "in": "query",
+            "description": "Tilknyttet CVR-nummer",
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+          {
+            "name": "hovedbranche",
+            "in": "query",
+            "description": "Hovedbranchekode",
+            "examples": {
+              "reklamebeskyttet": {
+                "value": "ja"
+              },
+              "ikke reklamebeskyttet": {
+                "value": "nej"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "100"
+              },
+              "wildcard": {
+                "value": "1*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende produktionsenheder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "55ef29e6-2226-392a-9266-3775f977d346"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cvr/unit/1/rest/"
+                          },
+                          "pNummer": {
+                            "type": "integer",
+                            "example": 1023201115
+                          },
+                          "samtId": {
+                            "type": "integer",
+                            "example": 3
+                          },
+                          "enhedsNummer": {
+                            "type": "integer",
+                            "example": 1234567890
+                          },
+                          "enhedstype": {
+                            "type": "string",
+                            "example": "PRODUKTIONSENHED"
+                          },
+                          "reklamebeskyttet": {
+                            "type": "boolean"
+                          },
+                          "beliggenhedsadresse": {
+                            "$ref": "#/components/schemas/virksomhedsadresse"
+                          },
+                          "hovedbranche": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "branchekode": {
+                                  "type": "string",
+                                  "example": "620100"
+                                },
+                                "branchetekst": {
+                                  "type": "string",
+                                  "example": "Computerprogrammering"
+                                }
+                              }
+                            }
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Magenta Grønland ApS"
+                            }
+                          },
+                          "virksomhedsrelation": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 12950160
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+
+                              "nyesteBeliggenhedsadresse": {
+                                "$ref": "#/components/schemas/virksomhedsadresse"
+                              },
+                              "nyesteHovedbranche": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "branchekode": {
+                                      "type": "string",
+                                      "example": "620100"
+                                    },
+                                    "branchetekst": {
+                                      "type": "string",
+                                      "example": "Computerprogrammering"
+                                    }
+                                  }
+                                }
+                              },
+                              "nyesteNavn": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "Magenta Grønland ApS"
+                                }
+                              },
+                              "nyesteCvrNummerRelation": {
+                                "type": "integer",
+                                "example": 12950160
+                              },
+                              "sammensatStatus": {
+                                "type": "string",
+                                "example": "Aktiv"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cvr/participant/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for CVR deltagerdata.",
+        "description": "Ved søgning efter deltagere skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.",
+        "parameters": [
+          {
+            "name": "enhedsNummer",
+            "in": "query",
+            "description": "Enhedsnummer",
+            "examples": {
+              "fuld": {
+                "value": "1234567890"
+              },
+              "wildcard": {
+                "value": "1234*"
+              }
+            }
+          },
+          {
+            "name": "navn",
+            "in": "query",
+            "description": "Deltagerens navn",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "100"
+              },
+              "wildcard": {
+                "value": "1*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende deltagere",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "55ef29e6-2226-392a-9266-3775f977d346"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cvr/participant/1/rest/"
+                          },
+                          "cvrNummer": {
+                            "type": "string",
+                            "example": "12950160"
+                          },
+                          "samtId": {
+                            "type": "integer",
+                            "example": 5
+                          },
+                          "enhedsNummer": {
+                            "type": "integer",
+                            "example": 1234567890
+                          },
+                          "enhedstype": {
+                            "type": "string",
+                            "example": "ANDEN_DELTAGER"
+                          },
+                          "beliggenhedsadresse": {
+                            "$ref": "#/components/schemas/virksomhedsadresse"
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Magenta Grønland ApS"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "nyesteBeliggenhedsadresse": {
+                                "$ref": "#/components/schemas/virksomhedsadresse"
                               }
                             }
                           }
@@ -1449,6 +1814,219 @@
                             "type": "string",
                             "example": "https://data.gl/cpr/person/1/rest/"
                           },
+                          "bnr": {
+                            "type": "string",
+                            "example": "B-826"
+                          },
+                          "vej": {
+                            "type": "object",
+                            "properties": {
+                              "kommunekode": {
+                                "type": "integer",
+                                "example": 956
+                              },
+                              "vejkode": {
+                                "type": "integer",
+                                "example": 20
+                              }
+                            }
+                          },
+                          "lokalitet": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "0600"
+                            }
+                          },
+                          "husnummer": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "826"
+                            }
+                          },
+                          "dataKilde": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 1
+                            }
+                          },
+                          "status": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 2
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/unitaddress/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for GAR enhedsadresser.",
+        "description": "Ved søgning efter enhedsadresser skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "parameters": [
+          {
+            "name": "bnr",
+            "in": "query",
+            "description": "Bygningsnummer",
+            "examples": {
+              "fuld": {
+                "value": "B-826"
+              },
+              "wildcard": {
+                "value": "B-2*"
+              }
+            }
+          },
+          {
+            "name": "husnummer",
+            "in": "query",
+            "description": "Husnummer",
+            "examples": {
+              "fuld": {
+                "value": "826"
+              },
+              "wildcard": {
+                "value": "8*"
+              }
+            }
+          },
+          {
+            "name": "etage",
+            "in": "query",
+            "description": "Etage",
+            "examples": {
+              "fuld": {
+                "value": "1"
+              },
+              "wildcard": {
+                "value": "*"
+              }
+            }
+          },
+          {
+            "name": "sidedør",
+            "in": "query",
+            "description": "Sidedør",
+            "examples": {
+              "fuld": {
+                "value": "tv"
+              },
+              "wildcard": {
+                "value": "*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende enhedssadresser",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cpr/person/1/rest/"
+                          },
+
+                          "accessaddress": {
+                            "type": "object",
+                            "properties": {
+                              "uuid": {
+                                "type": "string",
+                                "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
+                              },
+                              "kommunekode": {
+                                "type": "integer",
+                                "example": 956
+                              },
+                              "kommunenavn": {
+                                "type": "string",
+                                "example": "Kommuneqarfik Sermersooq"
+                              },
+                              "vejkode": {
+                                "type": "integer",
+                                "example": 20
+                              },
+                              "vejnavn": {
+                                "type": "string",
+                                "example": "Arsuk"
+                              },
+                              "lokalitetskode": {
+                                "type": "string",
+                                "example": "0600"
+                              },
+                              "lokalitetsnavn": {
+                                "type": "string",
+                                "example": "Nuuk"
+                              },
+                              "postnummer": {
+                                "type": "integer",
+                                "example": 3900
+                              },
+                              "postdistrikt": {
+                                "type": "string",
+                                "example": "Nuuk"
+                              }
+                            }
+                          },
+
+
+                          "etage": {
+                            "type": "string",
+                            "example": "1"
+                          },
+
+                          "sidedør": {
+                            "type": "string",
+                            "example": "tv"
+                          },
+
+
                           "bnr": {
                             "type": "string",
                             "example": "B-826"
