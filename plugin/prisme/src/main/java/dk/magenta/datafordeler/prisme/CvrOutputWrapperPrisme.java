@@ -304,11 +304,11 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
             if (addressRecord.getRoadName() != null) {
                 addressFormatted.append(addressRecord.getRoadName());
             }
-            if (addressRecord.getHouseNumberFrom() != null) {
+            if (addressRecord.getHouseNumberFrom() != 0) {
                 addressFormatted.append(" " + addressRecord.getHouseNumberFrom() + emptyIfNull(addressRecord.getLetterFrom()));
-                if (addressRecord.getHouseNumberTo() != null) {
+                if (addressRecord.getHouseNumberTo() != 0) {
                     addressFormatted.append("-");
-                    if (addressRecord.getHouseNumberTo().equals(addressRecord.getHouseNumberFrom())) {
+                    if (addressRecord.getHouseNumberTo()==addressRecord.getHouseNumberFrom()) {
                         addressFormatted.append(emptyIfNull(addressRecord.getLetterTo()));
                     } else {
                         addressFormatted.append(addressRecord.getHouseNumberTo() + emptyIfNull(addressRecord.getLetterTo()));

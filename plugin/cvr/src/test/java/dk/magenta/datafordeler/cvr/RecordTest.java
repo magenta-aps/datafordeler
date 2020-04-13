@@ -812,12 +812,6 @@ public class RecordTest {
         JsonNode result9 = responseNode.get("results");
         Assert.assertEquals(result8, result9);
 
-        resp = restTemplate.exchange("/cvr/company/1/rest/search?husnummer=43&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
-        responseNode = objectMapper.readTree(resp.getBody());
-        JsonNode result10 = responseNode.get("results");
-        Assert.assertEquals(result9, result10);
-
-
     }
 
 
