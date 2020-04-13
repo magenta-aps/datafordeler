@@ -145,6 +145,7 @@ public class TestGenericServices extends GeoTest {
         Assert.assertEquals("House of Testing!", accessAdress1.get("blokNavn").get(0).textValue());
         Assert.assertNull(accessAdress1.get("registreringFra"));
 
+
         response = this.lookup("/geo/accessaddress/1/rest/search?fmt=dataonly&vej=0254");
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode accessAdress2 = (ObjectNode) responseContent.get("results").get(0);

@@ -93,7 +93,7 @@ public class CompanyRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyRe
         }
         container.addCvrBitemporal(CompanyRecord.IO_FIELD_P_UNITS, record.getProductionUnits(), null, true, true);
         container.addNontemporal(CompanyRecord.IO_FIELD_SAMT_ID, record.getSamtId());
-        container.addNontemporal(CompanyRecord.IO_FIELD_REGISTER_ERROR, record.getRegisterError());
+        //container.addNontemporal(CompanyRecord.IO_FIELD_REGISTER_ERROR, record.getRegisterError());
         /*
         participants
         fusions

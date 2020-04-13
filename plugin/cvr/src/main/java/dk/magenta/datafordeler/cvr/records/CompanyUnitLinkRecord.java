@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.service.CompanyUnitRecordService;
 import org.hibernate.Session;
 
 import javax.persistence.Column;
@@ -40,7 +41,7 @@ public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord {
 
     private Identification getUnitIdentification(Session session) {
         UUID unitUUID = CompanyUnitRecord.generateUUID(this.pNumber);
-        Identification unitIdentification = QueryManager.getOrCreateIdentification(session, unitUUID, CvrPlugin.getDomain());
+        Identification unitIdentification = QueryManager.getOrCreateIdentification(session, unitUUID, CompanyUnitRecordService.getDomain());
         return unitIdentification;
     }
 
