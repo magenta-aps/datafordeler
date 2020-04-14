@@ -198,7 +198,7 @@ public class CvrRecordService {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info(
-                "Incoming REST request for PrismeCprService with " +
+                "Incoming REST request for PrismeCvrRecordService with " +
                         PARAM_UPDATED_SINCE + " = " + updatedSince + ", " +
                         PARAM_CVR_NUMBER + " = " + (cvrNumbers != null && cvrNumbers.size() > 10 ? (cvrNumbers.size() + " cpr numbers") : cvrNumbers) + " and " +
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails

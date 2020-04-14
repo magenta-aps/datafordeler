@@ -214,6 +214,7 @@ public abstract class GerEntityManager<E extends GerEntity> extends EntityManage
 
                 timer.start(TASK_POPULATE_DATA);
                 this.updateEntity(entity, rawData, importMetadata);
+                entity.setDafoUpdated(importMetadata.getImportTime());
                 timer.measure(TASK_POPULATE_DATA);
 
                 timer.start(TASK_SAVE);

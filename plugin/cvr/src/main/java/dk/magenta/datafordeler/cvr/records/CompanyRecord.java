@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__cvrnumber", columnList = CompanyRecord.DB_FIELD_CVR_NUMBER, unique = true),
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__advertprotection", columnList = CompanyRecord.DB_FIELD_ADVERTPROTECTION)
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__advertprotection", columnList = CompanyRecord.DB_FIELD_ADVERTPROTECTION),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__" + CompanyRecord.DB_FIELD_DAFO_UPDATED, columnList = CompanyRecord.DB_FIELD_DAFO_UPDATED)
 })
 @FilterDefs({
         @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),

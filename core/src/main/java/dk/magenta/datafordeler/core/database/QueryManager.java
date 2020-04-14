@@ -188,6 +188,8 @@ public class QueryManager {
     private static final boolean logQuery = true;
 
     public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
+        query.applyFilters(session);
+
         String queryString = query.toHql();
 
         StringJoiner stringJoiner = null;
@@ -316,7 +318,7 @@ public class QueryManager {
             return cache.get(query).stream().map(r -> (ResultSet<E>) r).collect(Collectors.toList());
         }
 
-        LinkedHashMap<E, ResultSet<E>> identitySetList = new LinkedHashMap<>();
+        LinkedHashMap<UUID, ResultSet<E>> identitySetList = new LinkedHashMap<>();
         log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
         org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
@@ -336,7 +338,7 @@ public class QueryManager {
                         resultSet.addAssociatedEntities(subResult.all());
                     }
                 }
-                identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
+                identitySetList.put(resultSet.getPrimaryEntity().getIdentification().getUuid(), resultSet);
             } catch (ClassNotFoundException e) {
                 log.error(e);
             }

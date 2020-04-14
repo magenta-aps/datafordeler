@@ -32,6 +32,10 @@ import java.util.UUID;
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + GeoLocalityEntity.TABLE_NAME + GeoLocalityEntity.DB_FIELD_CODE,
                 columnList = GeoLocalityEntity.DB_FIELD_CODE
         ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + GeoLocalityEntity.TABLE_NAME + GeoLocalityEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = GeoLocalityEntity.DB_FIELD_DAFO_UPDATED
+        ),
 })
 public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEntity {
 

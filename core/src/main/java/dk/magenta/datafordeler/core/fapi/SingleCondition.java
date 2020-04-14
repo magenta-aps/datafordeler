@@ -2,6 +2,8 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -71,7 +73,7 @@ public class SingleCondition extends Condition {
                 parameters.put(this.placeholder, this.staticValues);
             } else {
                 for (int i = 0; i < this.staticValues.size(); i++) {
-                    String placeholder = this.placeholder + "_s" + i;
+                    String placeholder = this.placeholder + "_u" + i;
                     Object value = this.staticValues.get(i);
                     parameters.put(placeholder, value);
                 }
@@ -104,6 +106,8 @@ public class SingleCondition extends Condition {
             return Query.booleanFromString(value.toString());
         } else if ((cls == UUID.class) && !(value instanceof UUID)) {
             return UUID.fromString(value.toString());
+        } else if (cls == OffsetDateTime.class && value instanceof String) {
+            return OffsetDateTime.parse((String) value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         }
         return cls.cast(value);
     }

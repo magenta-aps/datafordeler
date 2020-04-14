@@ -28,7 +28,8 @@ import java.util.*;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "road_identification", columnList = RoadEntity.DB_FIELD_IDENTIFICATION, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE + RoadEntity.DB_FIELD_ROAD_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE+","+RoadEntity.DB_FIELD_ROAD_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_ROAD_CODE, columnList = RoadEntity.DB_FIELD_ROAD_CODE),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE)
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_DAFO_UPDATED, columnList = RoadEntity.DB_FIELD_DAFO_UPDATED)
 })
 @FilterDefs({
         @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
@@ -216,6 +217,9 @@ public class RoadEntity extends CprRecordEntity {
         }
         if (added) {
             record.setEntity(this);
+            if (record.getDafoUpdated() != null && (this.getDafoUpdated() == null || record.getDafoUpdated().isAfter(this.getDafoUpdated()))) {
+                this.setDafoUpdated(record.getDafoUpdated());
+            }
         }
     }
 

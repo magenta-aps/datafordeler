@@ -25,6 +25,10 @@ import java.util.*;
 @Entity
 @Table(name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME, indexes = {
         @Index(name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME + AccessAddressEntity.DB_FIELD_BNR, columnList = AccessAddressEntity.DB_FIELD_BNR),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME + AccessAddressEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = AccessAddressEntity.DB_FIELD_DAFO_UPDATED
+        ),
 })
 public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEntity {
 

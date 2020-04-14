@@ -164,6 +164,7 @@ public class CprLookupService {
         if (roadEntity != null) {
             OffsetDateTime now = OffsetDateTime.now();
             RoadNameBitemporalRecord nameRecord = CprRecordFilter.filterRecordsByRegistrationAndEffectReturnNewest(roadEntity.getName(), now);
+            System.out.println("nameRecord: "+nameRecord);
             lookup.setRoadName(nameRecord.getRoadName());
 
             RoadPostalcodeBitemporalRecord postCode = this.getRoadPostalCodeDK(roadEntity, houseNumber);

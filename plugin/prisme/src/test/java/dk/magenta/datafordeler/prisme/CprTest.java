@@ -394,11 +394,11 @@ public class CprTest extends TestBase {
         cprList.add("0000000002");
         cprList.add("0000000003");
         cprList.add("0000000004");
-        cprList.add("0000000015");
-        cprList.add("0000000016");
-        cprList.add("0000000017");
-        cprList.add("0000000018");
-        cprList.add("0000000019");
+        cprList.add("0000000005");
+        cprList.add("0000000006");
+        cprList.add("0000000007");
+        cprList.add("0000000008");
+        cprList.add("0000000009");
         body.set("cprNumber", cprList);
         body.put("updatedSince", middle.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());

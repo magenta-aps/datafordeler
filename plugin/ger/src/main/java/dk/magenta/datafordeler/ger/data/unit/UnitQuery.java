@@ -22,8 +22,13 @@ public class UnitQuery extends GerQuery<UnitEntity> {
         return name;
     }
 
-    public void setName(String name) {
+    public void clearName() {
         this.name.clear();
+        this.updatedParameters();
+    }
+
+    public void setName(String name) {
+        this.clearName();
         this.addName(name);
     }
 
@@ -46,14 +51,20 @@ public class UnitQuery extends GerQuery<UnitEntity> {
         this.setDeid(UUID.fromString(deid));
     }
 
-    public void setDeid(UUID deid) {
+    public void clearDeid() {
         this.deid.clear();
+        this.updatedParameters();
+    }
+
+    public void setDeid(UUID deid) {
+        this.clearDeid();
         this.addDeid(deid);
     }
 
     public void addDeid(UUID deid) {
         if (deid != null) {
             this.deid.add(deid);
+            this.updatedParameters();
         }
     }
 

@@ -27,6 +27,10 @@ import java.util.*;
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressEntity.TABLE_NAME + UnitAddressEntity.DB_FIELD_SUMIFFIIK_ID,
                 columnList = UnitAddressEntity.DB_FIELD_SUMIFFIIK_ID
         ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressEntity.TABLE_NAME + UnitAddressEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = UnitAddressEntity.DB_FIELD_DAFO_UPDATED
+        ),
 })
 public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEntity {
 

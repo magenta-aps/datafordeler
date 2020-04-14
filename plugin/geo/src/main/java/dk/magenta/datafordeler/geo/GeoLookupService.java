@@ -1,5 +1,7 @@
 package dk.magenta.datafordeler.geo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
@@ -55,9 +57,9 @@ public class GeoLookupService extends CprLookupService {
                     MunicipalityQuery query = new MunicipalityQuery();
                     query.addKommunekodeRestriction(Integer.toString(municipalityCode));
                     setQueryNow(query);
-                    List<GeoMunicipalityEntity> municipilalicities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
-                    for (GeoMunicipalityEntity municipilalicity : municipilalicities) {
-                        municipalityCacheGR.put(municipilalicity.getCode(), municipilalicity.getName().iterator().next().getName());
+                    List<GeoMunicipalityEntity> municipalities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
+                    for (GeoMunicipalityEntity municipality : municipalities) {
+                        municipalityCacheGR.put(municipality.getCode(), municipality.getName().current().getName());
                     }
                     municipalityEntity = municipalityCacheGR.get(municipalityCode);
                 }
@@ -148,9 +150,9 @@ public class GeoLookupService extends CprLookupService {
 
     private static void setQueryNow(BaseQuery query) {
         OffsetDateTime now = OffsetDateTime.now();
-        query.setRegistrationFrom(now);
-        query.setRegistrationTo(now);
-        query.setEffectFrom(now);
-        query.setEffectTo(now);
+        query.setRegistrationFromBefore(now);
+        query.setRegistrationToAfter(now);
+        query.setEffectFromBefore(now);
+        query.setEffectToAfter(now);
     }
 }

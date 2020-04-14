@@ -1,29 +1,24 @@
 package dk.magenta.datafordeler.prisme;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
-import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.ger.GerPlugin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,120 +200,120 @@ public class CvrCombinedTest extends TestBase {
         loadAllGeoAdress(sessionManager);
         OffsetDateTime afterLoad = OffsetDateTime.now();
 
-            TestUserDetails testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
 
 
-            testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-            this.applyAccess(testUserDetails);
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
 
-            ObjectNode body = objectMapper.createObjectNode();
-            body.put("cvrNumber", "10000009");
-            HttpEntity<String> httpEntity = new HttpEntity<>(body.toString(), new HttpHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "/prisme/cvr/3/",
-                    HttpMethod.POST,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-            Assert.assertEquals(1, objectMapper.readTree(response.getBody()).size());
+        ObjectNode body = objectMapper.createObjectNode();
+        body.put("cvrNumber", "10000009");
+        HttpEntity<String> httpEntity = new HttpEntity<>(body.toString(), new HttpHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cvr/3/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).size());
 
-
-            body = objectMapper.createObjectNode();
-            ArrayNode cvrList = objectMapper.createArrayNode();
-            cvrList.add("10000002");
-            cvrList.add("10000005");
-            body.set("cvrNumber", cvrList);
-            httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-            response = restTemplate.exchange(
-                    "/prisme/cvr/3/",
-                    HttpMethod.POST,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-            Assert.assertEquals(2, objectMapper.readTree(response.getBody()).size());
-
-
-
-            body = objectMapper.createObjectNode();
-            cvrList = objectMapper.createArrayNode();
-            cvrList.add("10000000");
-            cvrList.add("10000001");
-            cvrList.add("10000002");
-            cvrList.add("10000003");
-            cvrList.add("10000004");
-            cvrList.add("10000005");
-            cvrList.add("10000006");
-            cvrList.add("10000007");
-            cvrList.add("10000008");
-            cvrList.add("10000009");
-            body.set("cvrNumber", cvrList);
-            httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-            long tic = Instant.now().toEpochMilli();
-            response = restTemplate.exchange(
-                    "/prisme/cvr/1/",
-                    HttpMethod.POST,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-            Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
+        body = objectMapper.createObjectNode();
+        ArrayNode cvrList = objectMapper.createArrayNode();
+        cvrList.add("10000002");
+        cvrList.add("10000005");
+        body.set("cvrNumber", cvrList);
+         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+         response = restTemplate.exchange(
+                "/prisme/cvr/3/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(response.getBody())));
+        Assert.assertEquals(2, objectMapper.readTree(response.getBody()).size());
 
 
 
-            body = objectMapper.createObjectNode();
-            cvrList = objectMapper.createArrayNode();
-            cvrList.add("10000000");
-            cvrList.add("10000001");
-            cvrList.add("10000002");
-            cvrList.add("10000003");
-            cvrList.add("10000004");
-            cvrList.add("10000005");
-            cvrList.add("10000006");
-            cvrList.add("10000007");
-            cvrList.add("10000008");
-            cvrList.add("10000009");
-            body.set("cvrNumber", cvrList);
-            //body.put("updatedSince", start.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            body.put("updatedSince", companyUpdate.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-            response = restTemplate.exchange(
-                    "/prisme/cvr/1/",
-                    HttpMethod.POST,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-            Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
+        body = objectMapper.createObjectNode();
+        cvrList = objectMapper.createArrayNode();
+        cvrList.add("10000000");
+        cvrList.add("10000001");
+        cvrList.add("10000002");
+        cvrList.add("10000003");
+        cvrList.add("10000004");
+        cvrList.add("10000005");
+        cvrList.add("10000006");
+        cvrList.add("10000007");
+        cvrList.add("10000008");
+        cvrList.add("10000009");
+        body.set("cvrNumber", cvrList);
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        long tic = Instant.now().toEpochMilli();
+        response = restTemplate.exchange(
+                "/prisme/cvr/1/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
 
 
 
-            body = objectMapper.createObjectNode();
-            cvrList = objectMapper.createArrayNode();
-            cvrList.add("10000000");
-            cvrList.add("10000001");
-            cvrList.add("10000002");
-            cvrList.add("10000003");
-            cvrList.add("10000004");
-            cvrList.add("10000005");
-            cvrList.add("10000006");
-            cvrList.add("10000007");
-            cvrList.add("10000008");
-            cvrList.add("10000009");
-            body.set("cvrNumber", cvrList);
-            //body.put("updatedSince", afterLoad.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            body.put("updatedSince", companyUpdate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-            response = restTemplate.exchange(
-                    "/prisme/cvr/1/",
-                    HttpMethod.POST,
-                    httpEntity,
-                    String.class
-            );
-            log.debug(response.getBody());
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-            Assert.assertEquals(0, objectMapper.readTree(response.getBody()).size());
+        body = objectMapper.createObjectNode();
+        cvrList = objectMapper.createArrayNode();
+        cvrList.add("10000000");
+        cvrList.add("10000001");
+        cvrList.add("10000002");
+        cvrList.add("10000003");
+        cvrList.add("10000004");
+        cvrList.add("10000005");
+        cvrList.add("10000006");
+        cvrList.add("10000007");
+        cvrList.add("10000008");
+        cvrList.add("10000009");
+        body.set("cvrNumber", cvrList);
+        //body.put("updatedSince", start.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        body.put("updatedSince", companyUpdate.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        response = restTemplate.exchange(
+                "/prisme/cvr/1/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
+
+
+        body = objectMapper.createObjectNode();
+        cvrList = objectMapper.createArrayNode();
+        cvrList.add("10000000");
+        cvrList.add("10000001");
+        cvrList.add("10000002");
+        cvrList.add("10000003");
+        cvrList.add("10000004");
+        cvrList.add("10000005");
+        cvrList.add("10000006");
+        cvrList.add("10000007");
+        cvrList.add("10000008");
+        cvrList.add("10000009");
+        body.set("cvrNumber", cvrList);
+        body.put("updatedSince", afterLoad.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        //body.put("updatedSince", companyUpdate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        response = restTemplate.exchange(
+                "/prisme/cvr/1/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        log.debug(response.getBody());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(response.getBody())));
+        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).size());
     }
 
     private void applyAccess(TestUserDetails testUserDetails) {
