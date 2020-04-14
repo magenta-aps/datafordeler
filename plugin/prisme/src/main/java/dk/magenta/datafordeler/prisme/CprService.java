@@ -194,7 +194,6 @@ public class CprService {
 
                         @Override
                         public void accept(PersonEntity personEntity) {
-                            System.out.println(personEntity.getPersonnummer()+": "+personEntity.getDafoUpdated());
                             try {
                                 if (!first) {
                                     outputStream.flush();

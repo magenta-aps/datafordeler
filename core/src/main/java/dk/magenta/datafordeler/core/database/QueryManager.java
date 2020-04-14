@@ -272,8 +272,6 @@ public class QueryManager {
             log.info(stringJoiner.toString());
         }
 
-        System.out.println(stringJoiner.toString());
-
         // Offset & limit
         if (query.getOffset() > 0) {
             databaseQuery.setFirstResult(query.getOffset());

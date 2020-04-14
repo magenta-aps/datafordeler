@@ -56,7 +56,7 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
         if (this.recordAfter != null) {
             lookupDefinition.put(DataItem.DB_FIELD_LAST_UPDATED, this.recordAfter, OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
         }
-        if (!this.getGerNr().isEmpty()) {
+        if (!this.getGerNSr().isEmpty()) {
             lookupDefinition.put(
                     BaseLookupDefinition.entityref + BaseLookupDefinition.separator + CompanyEntity.DB_FIELD_GERNR,
                     this.getGerNr(),
