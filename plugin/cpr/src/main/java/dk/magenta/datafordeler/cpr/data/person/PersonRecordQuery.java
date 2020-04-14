@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.cpr.records.person.PersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 /**
@@ -352,7 +353,7 @@ public class PersonRecordQuery extends BaseQuery {
 
     @Override
     public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition();
+        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition(this);
         
         if (!this.getPersonnumre().isEmpty()) {
             lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_CPR_NUMBER, this.getPersonnumre(), String.class);
@@ -397,6 +398,10 @@ public class PersonRecordQuery extends BaseQuery {
         if (!this.getBuildingNos().isEmpty()) {
             lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER, this.getBuildingNos(), String.class);
             joinedAddress = true;
+        }
+
+        if (this.getRecordAfter() != null) {
+            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_DAFO_UPDATED, this.getRecordAfter(), OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
         }
 
 

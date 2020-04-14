@@ -264,8 +264,8 @@ public class CvrTest extends TestBase {
             cvrList.add("10000008");
             cvrList.add("10000009");
             body.set("cvrNumber", cvrList);
-            body.put("updatedSince", start.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            //body.put("updatedSince", companyUpdate.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            //body.put("updatedSince", start.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            body.put("updatedSince", companyUpdate.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
             httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
             response = restTemplate.exchange(
                     "/prisme/cvr/1/",
@@ -290,8 +290,8 @@ public class CvrTest extends TestBase {
             cvrList.add("10000008");
             cvrList.add("10000009");
             body.set("cvrNumber", cvrList);
-            body.put("updatedSince", end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            //body.put("updatedSince", companyUpdate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            //body.put("updatedSince", end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            body.put("updatedSince", companyUpdate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
             httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
             response = restTemplate.exchange(
                     "/prisme/cvr/1/",
