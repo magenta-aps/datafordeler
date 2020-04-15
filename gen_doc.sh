@@ -217,6 +217,23 @@ function pull_in_error_codes
 }
 task "Pulling in error codes..." pull_in_error_codes
 
+
+
+function generate_openapi_documentation
+{
+    echo "generate_openapi_documentation"
+    mkdir -p $OUTPUT_FOLDER/html/da/
+    cp $SPHINX_SOURCE/openapi.html $OUTPUT_FOLDER/html/da/
+    cp $SPHINX_SOURCE/openapi.json $OUTPUT_FOLDER/html/da/
+    cp -r $SPHINX_SOURCE/swagger/ $OUTPUT_FOLDER/html/da/
+
+}
+task "Generating openapi documentation..." generate_openapi_documentation
+
+
+
+
+
 declare -a langs=("da" "kl" "en")
 
 title "Running sphinx-build to generate documentation"
@@ -257,7 +274,8 @@ function generate_pdf_documentation
         cd $CWD
     done
 }
-#task "Generating pdf documentation..." generate_pdf_documentation
+task "Generating pdf documentation..." generate_pdf_documentation
+
 
 function generate_release_zip
 {

@@ -31,9 +31,12 @@ Indholdsfortegnelse
    autogen-api-geo/javadoc-geo
    autogen-api-prisme/javadoc-prisme
    autogen-api-statistik/javadoc-statistik
+   openapi/openapi
 
    wordlist
    autopulled-codes/index
+
+   http://localhost:8000/da/openapi.html
 
 .. only:: html
 
