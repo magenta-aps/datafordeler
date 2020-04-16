@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Datafordeler",
-    "description": "API description in Markdown.",
+    "description": "Generiske services i datafordeleren tillader opslag på personer, virksomheder og adressedata, sammenkørt med relevante relaterede adressedata.\nUdgangspunktet er f.eks. personer, virksomheder, veje osv. som hver især kun har de absolut nødvendigste adressedata.\nDisse beriges med kommunekode og -navn, lokalitetskode og -navn, vejnavn osv.",
     "version": "1.0.0"
   },
   "servers": [

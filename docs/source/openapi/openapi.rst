@@ -1,3 +1,3 @@
-OpenAPI2
-========
+OpenAPI specifikation
+=====================
 
