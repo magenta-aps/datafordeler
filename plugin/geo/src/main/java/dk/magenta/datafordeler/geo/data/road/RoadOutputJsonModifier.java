@@ -36,7 +36,7 @@ public class RoadOutputJsonModifier extends JsonModifier {
                 for (GeoRoadEntity entity : entities) {
                     RoadNameRecord name = entity.getName().current(); // TODO: Find den rigtige vejnavnsrecord (nyeste?)
                     String existing = node.has("vejnavn") ? node.get("vejnavn").asText() : null;
-                    if (existing == null || existing.length() < name.getName().length()) {
+                    if (name!=null && name.getName()!=null && (existing == null || existing.length() < name.getName().length())) {
                         // Since we cannot be guaranteed that two road-pieces with the same codes have the same name, always pick the longest of those available
                         node.put("vejnavn", name.getName());
                         RoadLocalityRecord locality = entity.getLocality().current();
