@@ -106,7 +106,6 @@ public class TestGenericServices extends GeoTest {
         Assert.assertEquals(200, response.getStatusCode().value());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode road1 = (ObjectNode) responseContent.get("results").get(0);
-        Assert.assertEquals("e1274f15-9e2b-4b6e-8b7d-c8078df65aa2", road1.get("uuid").textValue());
         Assert.assertEquals("{961FFC61-8B04-45F3-80FD-509B0676FEF6}", road1.get("sumiffiik").textValue());
         Assert.assertEquals("Qarsaalik", road1.get("navn").get(0).get("navn").textValue());
         Assert.assertNull(road1.get("registreringFra"));

@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
 
     @Test
+    @Ignore // TEST only in CPR-module
     public void testLookupServiceDk() throws IOException {
 
         Session session = sessionManager.getSessionFactory().openSession();

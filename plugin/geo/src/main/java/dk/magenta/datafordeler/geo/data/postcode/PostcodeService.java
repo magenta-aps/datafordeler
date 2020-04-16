@@ -49,7 +49,7 @@ public class PostcodeService extends FapiBaseService<PostcodeEntity, PostcodeQue
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.DRV;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override
