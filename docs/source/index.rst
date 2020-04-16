@@ -36,8 +36,6 @@ Indholdsfortegnelse
    wordlist
    autopulled-codes/index
 
-   http://localhost:8000/da/openapi.html
-
 .. only:: html
 
     Opslagsværktøjer

@@ -219,21 +219,6 @@ task "Pulling in error codes..." pull_in_error_codes
 
 
 
-function generate_openapi_documentation
-{
-    echo "generate_openapi_documentation"
-    mkdir -p $OUTPUT_FOLDER/html/da/
-    cp $SPHINX_SOURCE/openapi.html $OUTPUT_FOLDER/html/da/
-    cp $SPHINX_SOURCE/openapi.json $OUTPUT_FOLDER/html/da/
-    cp -r $SPHINX_SOURCE/swagger/ $OUTPUT_FOLDER/html/da/
-
-}
-task "Generating openapi documentation..." generate_openapi_documentation
-
-
-
-
-
 declare -a langs=("da" "kl" "en")
 
 title "Running sphinx-build to generate documentation"
@@ -247,6 +232,20 @@ function generate_html_documentation
     done
 }
 task "Generating html documentation..." generate_html_documentation
+
+
+
+function generate_openapi_documentation
+{
+    echo "generate_openapi_documentation"
+    mkdir -p $OUTPUT_FOLDER/html/da/openapi
+    # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    cp $SPHINX_SOURCE/openapi/openapi.html $OUTPUT_FOLDER/html/da/openapi/
+    cp $SPHINX_SOURCE/openapi/openapi.json $OUTPUT_FOLDER/html/da/openapi/
+    cp -r $SPHINX_SOURCE/openapi/swagger/ $OUTPUT_FOLDER/html/da/openapi/
+}
+task "Generating openapi documentation..." generate_openapi_documentation
+
 
 function generate_pdf_documentation
 {
