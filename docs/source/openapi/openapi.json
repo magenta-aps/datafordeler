@@ -1147,7 +1147,7 @@
             }
           },
           {
-            "name": "navn",
+            "name": "navne",
             "in": "query",
             "description": "Deltagerens navn",
             "examples": {
