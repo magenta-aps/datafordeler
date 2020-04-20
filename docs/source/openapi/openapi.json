@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Datafordeler",
-    "description": "Generiske services i datafordeleren tillader opslag på personer, virksomheder og adressedata, sammenkørt med relevante relaterede adressedata.\nUdgangspunktet er f.eks. personer, virksomheder, veje osv. som hver især kun har de absolut nødvendigste adressedata.\nDisse beriges med kommunekode og -navn, lokalitetskode og -navn, vejnavn osv.",
+    "description": "Generiske services i datafordeleren tillader opslag på personer, virksomheder og adressedata, sammenkørt med relevante relaterede adressedata.<br />Udgangspunktet er f.eks. personer, virksomheder, veje osv. som hver især kun har de absolut nødvendigste adressedata.<br />Disse beriges med kommunekode og -navn, lokalitetskode og -navn, vejnavn osv.<br /><br />For alle services under de generiske services gælder det at der er implementeret paginering.<br />pageSize definere hvor mange resultater, der returneres i hvert dataopslag<br />page definere hvilken side, der returneres<br />Hvis der ikke er nogen værdier for disse parametre sættes pageSize=10 og page=1 (Første side)",
     "version": "1.0.0"
   },
   "servers": [
@@ -14,7 +14,7 @@
     "/cpr/person/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for CPR persondata.",
-        "description": "Ved søgning efter personer skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. De indeholdte data er begrænset til personer med tilknytning til Grønland.",
+        "description": "Ved søgning efter personer skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. De indeholdte data er begrænset til personer med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CPR-GENERIC/1<br />Sti under /restapi/search/: /search/",
         "parameters": [
           {
             "name": "pnr",
@@ -552,7 +552,7 @@
     "/cvr/company/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for CVR virksomhedsdata.",
-        "description": "Ved søgning efter virksomheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.",
+        "description": "Ved søgning efter virksomheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-GENERIC/1<br />Sti under /restapi/search/: /search/",
         "parameters": [
           {
             "name": "cvrNummer",
@@ -913,7 +913,7 @@
     "/cvr/unit/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for CVR produktionsenhedsdata.",
-        "description": "Ved søgning efter produktionsenheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.",
+        "description": "Ved søgning efter produktionsenheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-UNIT-GENERIC/1<br />Sti under /restapi/search/: /search/",
         "parameters": [
           {
             "name": "pNummer",
@@ -1128,157 +1128,10 @@
         }
       }
     },
-    "/cvr/participant/1/rest/search": {
-      "get": {
-        "summary": "Søgeinterface for CVR deltagerdata.",
-        "description": "Ved søgning efter deltagere skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.",
-        "parameters": [
-          {
-            "name": "enhedsNummer",
-            "in": "query",
-            "description": "Enhedsnummer",
-            "examples": {
-              "fuld": {
-                "value": "1234567890"
-              },
-              "wildcard": {
-                "value": "1234*"
-              }
-            }
-          },
-          {
-            "name": "navne",
-            "in": "query",
-            "description": "Deltagerens navn",
-            "examples": {
-              "fuld": {
-                "value": "Magenta Grønland ApS"
-              },
-              "wildcard": {
-                "value": "Magenta*"
-              }
-            }
-          },
-          {
-            "name": "kommunekode",
-            "in": "query",
-            "description": "Kommunekode for virksomhedens adresse",
-            "examples": {
-              "fuld": {
-                "value": "956"
-              },
-              "wildcard": {
-                "value": "95*"
-              }
-            }
-          },
-          {
-            "name": "vejkode",
-            "in": "query",
-            "description": "Vejkode for virksomhedens adresse",
-            "examples": {
-              "fuld": {
-                "value": "100"
-              },
-              "wildcard": {
-                "value": "1*"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Liste af matchende deltagere",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "path": {
-                      "type": "string"
-                    },
-                    "terms": {
-                      "type": "string"
-                    },
-                    "requestTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "responseTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "username": {
-                      "type": "string"
-                    },
-                    "page": {
-                      "type": "integer"
-                    },
-                    "pageSize": {
-                      "type": "integer"
-                    },
-                    "results": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "uuid": {
-                            "type": "string",
-                            "example": "55ef29e6-2226-392a-9266-3775f977d346"
-                          },
-                          "domæne": {
-                            "type": "string",
-                            "example": "https://data.gl/cvr/participant/1/rest/"
-                          },
-                          "cvrNummer": {
-                            "type": "string",
-                            "example": "12950160"
-                          },
-                          "samtId": {
-                            "type": "integer",
-                            "example": 5
-                          },
-                          "enhedsNummer": {
-                            "type": "integer",
-                            "example": 1234567890
-                          },
-                          "enhedstype": {
-                            "type": "string",
-                            "example": "ANDEN_DELTAGER"
-                          },
-                          "beliggenhedsadresse": {
-                            "$ref": "#/components/schemas/virksomhedsadresse"
-                          },
-                          "navn": {
-                            "type": "array",
-                            "items": {
-                              "type": "string",
-                              "example": "Magenta Grønland ApS"
-                            }
-                          },
-                          "metadata": {
-                            "type": "object",
-                            "properties": {
-                              "nyesteBeliggenhedsadresse": {
-                                "$ref": "#/components/schemas/virksomhedsadresse"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/geo/municipality/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR kommunedata.",
-        "description": "Ved søgning efter kommuner skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "description": "Ved søgning efter kommuner skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/municipality/1/rest/search/: /municipality/1/rest/search/",
         "parameters": [
           {
             "name": "kode",
@@ -1376,7 +1229,7 @@
     "/geo/postcode/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR postnummerdata.",
-        "description": "Ved søgning efter postnumre skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "description": "Ved søgning efter postnumre skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/postcode/1/rest/search/: /postcode/1/rest/search/",
         "parameters": [
           {
             "name": "kode",
@@ -1474,7 +1327,7 @@
     "/geo/locality/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR lokalitetsdata.",
-        "description": "Ved søgning efter lokaliteter skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "description": "Ved søgning efter lokaliteter skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/locality/1/rest/search/: /locality/1/rest/search/",
         "parameters": [
           {
             "name": "kode",
@@ -1594,7 +1447,7 @@
     "/geo/road/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR vejdata.",
-        "description": "Ved søgning efter veje skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. Bemærk at elementer her er vejstykker, ikke nødvendigvis hele veje",
+        "description": "Ved søgning efter veje skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. Bemærk at elementer her er vejstykker, ikke nødvendigvis hele veje.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/road/1/rest/search/: /road/1/rest/search/",
         "parameters": [
           {
             "name": "kode",
@@ -1715,7 +1568,7 @@
     "/geo/accessaddress/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR adgangsadresser.",
-        "description": "Ved søgning efter adgangsadresser skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
+        "description": "Ved søgning efter adgangsadresser skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/accessaddress/1/rest/search/: /accessaddress/1/rest/search/",
         "parameters": [
           {
             "name": "bnr",
@@ -1814,219 +1667,6 @@
                             "type": "string",
                             "example": "https://data.gl/cpr/person/1/rest/"
                           },
-                          "bnr": {
-                            "type": "string",
-                            "example": "B-826"
-                          },
-                          "vej": {
-                            "type": "object",
-                            "properties": {
-                              "kommunekode": {
-                                "type": "integer",
-                                "example": 956
-                              },
-                              "vejkode": {
-                                "type": "integer",
-                                "example": 20
-                              }
-                            }
-                          },
-                          "lokalitet": {
-                            "type": "array",
-                            "items": {
-                              "type": "string",
-                              "example": "0600"
-                            }
-                          },
-                          "husnummer": {
-                            "type": "array",
-                            "items": {
-                              "type": "string",
-                              "example": "826"
-                            }
-                          },
-                          "dataKilde": {
-                            "type": "array",
-                            "items": {
-                              "type": "integer",
-                              "example": 1
-                            }
-                          },
-                          "status": {
-                            "type": "array",
-                            "items": {
-                              "type": "integer",
-                              "example": 2
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/geo/unitaddress/1/rest/search": {
-      "get": {
-        "summary": "Søgeinterface for GAR enhedsadresser.",
-        "description": "Ved søgning efter enhedsadresser skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.",
-        "parameters": [
-          {
-            "name": "bnr",
-            "in": "query",
-            "description": "Bygningsnummer",
-            "examples": {
-              "fuld": {
-                "value": "B-826"
-              },
-              "wildcard": {
-                "value": "B-2*"
-              }
-            }
-          },
-          {
-            "name": "husnummer",
-            "in": "query",
-            "description": "Husnummer",
-            "examples": {
-              "fuld": {
-                "value": "826"
-              },
-              "wildcard": {
-                "value": "8*"
-              }
-            }
-          },
-          {
-            "name": "etage",
-            "in": "query",
-            "description": "Etage",
-            "examples": {
-              "fuld": {
-                "value": "1"
-              },
-              "wildcard": {
-                "value": "*"
-              }
-            }
-          },
-          {
-            "name": "sidedør",
-            "in": "query",
-            "description": "Sidedør",
-            "examples": {
-              "fuld": {
-                "value": "tv"
-              },
-              "wildcard": {
-                "value": "*"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Liste af matchende enhedssadresser",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "path": {
-                      "type": "string"
-                    },
-                    "terms": {
-                      "type": "string"
-                    },
-                    "requestTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "responseTimestamp": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "username": {
-                      "type": "string"
-                    },
-                    "page": {
-                      "type": "integer"
-                    },
-                    "pageSize": {
-                      "type": "integer"
-                    },
-                    "results": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "uuid": {
-                            "type": "string",
-                            "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
-                          },
-                          "domæne": {
-                            "type": "string",
-                            "example": "https://data.gl/cpr/person/1/rest/"
-                          },
-
-                          "accessaddress": {
-                            "type": "object",
-                            "properties": {
-                              "uuid": {
-                                "type": "string",
-                                "example": "33960e68-2f0a-4cb0-bb3d-02d9f0b21304"
-                              },
-                              "kommunekode": {
-                                "type": "integer",
-                                "example": 956
-                              },
-                              "kommunenavn": {
-                                "type": "string",
-                                "example": "Kommuneqarfik Sermersooq"
-                              },
-                              "vejkode": {
-                                "type": "integer",
-                                "example": 20
-                              },
-                              "vejnavn": {
-                                "type": "string",
-                                "example": "Arsuk"
-                              },
-                              "lokalitetskode": {
-                                "type": "string",
-                                "example": "0600"
-                              },
-                              "lokalitetsnavn": {
-                                "type": "string",
-                                "example": "Nuuk"
-                              },
-                              "postnummer": {
-                                "type": "integer",
-                                "example": 3900
-                              },
-                              "postdistrikt": {
-                                "type": "string",
-                                "example": "Nuuk"
-                              }
-                            }
-                          },
-
-
-                          "etage": {
-                            "type": "string",
-                            "example": "1"
-                          },
-
-                          "sidedør": {
-                            "type": "string",
-                            "example": "tv"
-                          },
-
-
                           "bnr": {
                             "type": "string",
                             "example": "B-826"
