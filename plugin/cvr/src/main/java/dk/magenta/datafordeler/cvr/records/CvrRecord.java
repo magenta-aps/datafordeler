@@ -29,7 +29,8 @@ public abstract class CvrRecord extends DatabaseEntry {
     @Column(name = DB_FIELD_DAFO_UPDATED)
     private OffsetDateTime dafoUpdated = null;
 
-    @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
+    // @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
+    @JsonIgnore
     public OffsetDateTime getDafoUpdated() {
         return this.dafoUpdated;
     }

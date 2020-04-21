@@ -2,34 +2,35 @@
 # tasks file for vim
   - name: Install python
     apt:
-      name: python
+      name: python3
       update_cache: yes
       state: present
     become: yes
 
   - name: Install python (dev)
     apt:
-      name: python-dev
+      name: python3-dev
       update_cache: yes
       state: present
     become: yes
 
   - name: Install pip
     apt:
-      name: python-pip
+      name: python3-pip
       update_cache: yes
       state: present
     become: yes
 
-  - name: Upgrade pip
-    pip:
-      name: pip
-      extra_args: --upgrade
-    become: yes
+#  - name: Upgrade pip
+#    pip:
+#      name: pip
+#      extra_args: install --upgrade
+#    become: yes
 
   - name: Install virtualenv
     pip:
       name: virtualenv
+      executable: /usr/bin/pip3
     become: yes
 
 ...

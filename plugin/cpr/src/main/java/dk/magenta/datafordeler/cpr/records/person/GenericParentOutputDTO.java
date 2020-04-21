@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.person;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,11 +28,12 @@ public class GenericParentOutputDTO implements Nontemporal {
         this.pituBaseUrl = pituBaseUrl;
     }
 
-    public String getParentSearchAdress() {
+    public String getParentSearchAddress() {
         return pituBaseUrl+"/cpr/person/1/rest/search?pnr="+getPnr();
     }
 
     @Override
+    @JsonIgnore
     public OffsetDateTime getDafoUpdated() {
         return null;
     }
