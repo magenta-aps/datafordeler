@@ -14,7 +14,7 @@
     "/cpr/person/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for CPR persondata.",
-        "description": "Ved søgning efter personer skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. De indeholdte data er begrænset til personer med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CPR-GENERIC/1<br />Sti under /restapi/search/: /search/",
+        "description": "Ved søgning efter personer skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. De indeholdte data er begrænset til personer med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CPR-GENERIC/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "parameters": [
           {
             "name": "pnr",
@@ -552,7 +552,7 @@
     "/cvr/company/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for CVR virksomhedsdata.",
-        "description": "Ved søgning efter virksomheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-GENERIC/1<br />Sti under /restapi/search/: /search/",
+        "description": "Ved søgning efter virksomheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-GENERIC/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "parameters": [
           {
             "name": "cvrNummer",
@@ -913,7 +913,7 @@
     "/cvr/unit/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for CVR produktionsenhedsdata.",
-        "description": "Ved søgning efter produktionsenheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-UNIT-GENERIC/1<br />Sti under /restapi/search/: /search/",
+        "description": "Ved søgning efter produktionsenheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-UNIT-GENERIC/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "parameters": [
           {
             "name": "pNummer",
@@ -1131,7 +1131,7 @@
     "/geo/municipality/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR kommunedata.",
-        "description": "Ved søgning efter kommuner skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/municipality/1/rest/search/: /municipality/1/rest/search/",
+        "description": "Ved søgning efter kommuner skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADDRESS-GENERIC/1<br />Sti under /restapi/: /municipality/1/rest/search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/municipality/1/rest/search/",
         "parameters": [
           {
             "name": "kode",
@@ -1229,7 +1229,7 @@
     "/geo/postcode/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR postnummerdata.",
-        "description": "Ved søgning efter postnumre skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/postcode/1/rest/search/: /postcode/1/rest/search/",
+        "description": "Ved søgning efter postnumre skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADDRESS-GENERIC/1<br />Sti under /restapi/: /postcode/1/rest/search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/postcode/1/rest/search/",
         "parameters": [
           {
             "name": "kode",
@@ -1327,7 +1327,7 @@
     "/geo/locality/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR lokalitetsdata.",
-        "description": "Ved søgning efter lokaliteter skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/locality/1/rest/search/: /locality/1/rest/search/",
+        "description": "Ved søgning efter lokaliteter skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADDRESS-GENERIC/1<br />Sti under /restapi/: /locality/1/rest/search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/locality/1/rest/search/",
         "parameters": [
           {
             "name": "kode",
@@ -1447,7 +1447,7 @@
     "/geo/road/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR vejdata.",
-        "description": "Ved søgning efter veje skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. Bemærk at elementer her er vejstykker, ikke nødvendigvis hele veje.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/road/1/rest/search/: /road/1/rest/search/",
+        "description": "Ved søgning efter veje skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. Bemærk at elementer her er vejstykker, ikke nødvendigvis hele veje.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADDRESS-GENERIC/1<br />Sti under /restapi/: /road/1/rest/search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/road/1/rest/search/",
         "parameters": [
           {
             "name": "kode",
@@ -1568,7 +1568,7 @@
     "/geo/accessaddress/1/rest/search": {
       "get": {
         "summary": "Søgeinterface for GAR adgangsadresser.",
-        "description": "Ved søgning efter adgangsadresser skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADRESS-GENERIC/1<br />Sti under /restapi/accessaddress/1/rest/search/: /accessaddress/1/rest/search/",
+        "description": "Ved søgning efter adgangsadresser skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADDRESS-GENERIC/1<br />Sti under /restapi/: /accessaddress/1/rest/search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/accessaddress/1/rest/search/",
         "parameters": [
           {
             "name": "bnr",
