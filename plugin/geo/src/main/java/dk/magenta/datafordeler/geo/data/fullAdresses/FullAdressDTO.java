@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.geo.data.fullAdresses;
 
 public class FullAdressDTO {
 
-    private String sumiffiikId;
     private String bnr;
     private String husNummer;
     private String blokNavn;
@@ -15,23 +14,12 @@ public class FullAdressDTO {
     private String post_navn;
     private Number status;
     private Number source;
-    private String dataKilde;
     private String etage;
     private String doer;
     private String nummer;
-    private String anvendelsesKode;
-    private String objektStatus;
     private Number vej_kode;
     private String vej_navn;
 
-
-    public String getSumiffiikId() {
-        return sumiffiikId;
-    }
-
-    public void setSumiffiikId(String sumiffiikId) {
-        this.sumiffiikId = sumiffiikId;
-    }
 
     public String getBnr() {
         return bnr;
@@ -129,14 +117,6 @@ public class FullAdressDTO {
         this.source = source;
     }
 
-    public String getDataKilde() {
-        return dataKilde;
-    }
-
-    public void setDataKilde(String dataKilde) {
-        this.dataKilde = dataKilde;
-    }
-
     public String getEtage() {
         return etage;
     }
@@ -160,23 +140,6 @@ public class FullAdressDTO {
     public void setNummer(String nummer) {
         this.nummer = nummer;
     }
-
-    public String getAnvendelsesKode() {
-        return anvendelsesKode;
-    }
-
-    public void setAnvendelsesKode(String anvendelsesKode) {
-        this.anvendelsesKode = anvendelsesKode;
-    }
-
-    public String getObjektStatus() {
-        return objektStatus;
-    }
-
-    public void setObjektStatus(String objektStatus) {
-        this.objektStatus = objektStatus;
-    }
-
 
     public Number getVej_kode() {
         return vej_kode;

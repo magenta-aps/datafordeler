@@ -122,7 +122,7 @@ public class GenericUnitAddressService {
                 output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
                 output.setLokalitet_navn(localityRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setLokalitet_type(localityRecord.getType().stream().findFirst().orElse(null).getType());
-                output.setBnr(postcodeRecord.getName().stream().findFirst().orElse(null).getName());
+                output.setPost_navn(postcodeRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setVej_navn(roadRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
                 adressElementList.add(output);
