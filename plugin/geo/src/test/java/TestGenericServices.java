@@ -2,6 +2,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
+import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressHouseNumberRecord;
+import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressRoadRecord;
+import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
+import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -160,6 +169,15 @@ public class TestGenericServices extends GeoTest {
         ObjectNode accessAdress4 = (ObjectNode) responseContent.get("results").get(0);
         Assert.assertEquals(accessAdress3, accessAdress4);
     }
+
+    @Test
+    public void testGenericService() throws IOException {
+        ResponseEntity<String> response = this.lookup("/geo/genericunitaddress/join/");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        JsonNode responseContent = objectMapper.readTree(response.getBody());
+        System.out.println(responseContent);
+    }
+
 
     @Test
     public void testUnitAddressService() throws IOException {
