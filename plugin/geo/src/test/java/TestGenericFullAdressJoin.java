@@ -77,7 +77,7 @@ SELECT *  FROM
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
-            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, accessAddressPostcodeRecord, accessAddressRoadRecord, geoMunipialicityEntity  " +
+            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, accessAddressPostcodeRecord, accessAddressRoadRecord, postcodeEntity, geoMunipialicityEntity, roadEntity  " +
                     "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
                     "JOIN "+ UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity."+UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS+"=accessAddressEntity."+AccessAddressEntity.DB_FIELD_IDENTIFICATION+" "+
                     "JOIN "+ AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord."+AccessAddressHouseNumberRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
@@ -91,18 +91,24 @@ SELECT *  FROM
                     "JOIN "+ PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord."+AccessAddressPostcodeRecord.DB_FIELD_CODE+"=postcodeEntity."+PostcodeEntity.DB_FIELD_CODE+" "+
 
                     "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
-                    "JOIN "+ GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+"=roadEntity."+ GeoRoadEntity.DB_FIELD_CODE+" "+
+                    "JOIN "+ GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE+"=roadEntity."+ GeoRoadEntity.DB_FIELD_IDENTIFICATION+" "+
 
                     "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
                     "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
 
-                    " WHERE accessAddressEntity.bnr='B-3197'"+
+                    " WHERE accessAddressEntity.bnr=:bnr"+
                     "";//B-3197
 
             //"";//B-3197
 
             Query query = session.createQuery(hql);
+
+            query.setParameter("bnr", "B-3197");
+
+
             Assert.assertTrue(query.getResultList().size() > 0);
+
+            System.out.println(query.getResultList().size());
 
             for (Object item : query.getResultList()) {
                 {

@@ -172,7 +172,7 @@ public class TestGenericServices extends GeoTest {
 
     @Test
     public void testGenericService() throws IOException {
-        ResponseEntity<String> response = this.lookup("/geo/genericunitaddress/join/");
+        ResponseEntity<String> response = this.lookup("/geo/genericunitaddress/fullAdress?bnr=B-31*");
         Assert.assertEquals(200, response.getStatusCode().value());
         JsonNode responseContent = objectMapper.readTree(response.getBody());
         System.out.println(responseContent);

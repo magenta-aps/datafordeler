@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.geo.data.fullAdresses;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.geo.AdresseService;
 import dk.magenta.datafordeler.geo.data.accessaddress.*;
@@ -18,7 +19,11 @@ import org.apache.poi.ss.formula.functions.T;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,10 +49,14 @@ public class GenericUnitAddressService {
     private Logger log = LogManager.getLogger(AdresseService.class);
 
 
-    @RequestMapping("/join")
-    public void getLocalities(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
+    /*@RequestMapping(path="/{uuid}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public Envelope getRest(@PathVariable("uuid") String uuid, @RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request)*/
+
+    @RequestMapping("/fullAdress")
+    public void getLocalities(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws DataFordelerException, IOException {
 
         try(Session session = sessionManager.getSessionFactory().openSession();) {
+
 
             String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity  " +
                     "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
@@ -63,15 +72,21 @@ public class GenericUnitAddressService {
                     "JOIN "+ PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord."+AccessAddressPostcodeRecord.DB_FIELD_CODE+"=postcodeEntity."+PostcodeEntity.DB_FIELD_CODE+" "+
 
                     "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
-                    "JOIN "+ GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+"=roadEntity."+ GeoRoadEntity.DB_FIELD_CODE+" "+
+                    "JOIN "+ GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE+"=roadEntity."+ GeoRoadEntity.DB_FIELD_IDENTIFICATION+" "+
 
                     "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
                     "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
 
-                    " WHERE accessAddressEntity.bnr='B-3197'"+
+                    " WHERE accessAddressEntity.bnr=:bnr"+
                     "";//B-3197
 
             Query query = session.createQuery(hql);
+
+            for(String key : requestParams.keySet()) {
+                query.setParameter(key, requestParams.getFirst(key));
+            }
+
+
 
             query.setMaxResults(10);
 
@@ -79,7 +94,7 @@ public class GenericUnitAddressService {
 
             List<Object[]> resultList = query.getResultList();
 
-            ArrayList<FullAdressDTO> arl = new ArrayList<FullAdressDTO>();
+            ArrayList<FullAdressDTO> adressElementList = new ArrayList<FullAdressDTO>();
 
             for(Object[] item : resultList) {
                 AccessAddressEntity accessAddressEntity = (AccessAddressEntity)item[0];
@@ -91,8 +106,6 @@ public class GenericUnitAddressService {
 
                 FullAdressDTO output = new FullAdressDTO();
                 output.setBnr(accessAddressEntity.getBnr());
-
-
 
                 output.setHusNummer(accessAddressEntity.getHouseNumber().stream().findFirst().orElse(null).getNumber());
                 output.setVej_kode(accessAddressEntity.getRoad().stream().findFirst().orElse(null).getRoadCode());
@@ -112,14 +125,10 @@ public class GenericUnitAddressService {
                 output.setBnr(postcodeRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setVej_navn(roadRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
-                System.out.println(output);
-                arl.add(output);
-
+                adressElementList.add(output);
             }
 
-
-
-            response.getWriter().write(objectMapper.writeValueAsString(arl));
+            response.getWriter().write(objectMapper.writeValueAsString(adressElementList));
 
         }
 
