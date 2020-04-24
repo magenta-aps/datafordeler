@@ -49,7 +49,7 @@ public class GenericUnitAddressService {
 
         try(Session session = sessionManager.getSessionFactory().openSession();) {
 
-            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, accessAddressPostcodeRecord, accessAddressRoadRecord, geoMunipialicityEntity  " +
+            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity  " +
                     "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
                     "JOIN "+ UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity."+UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS+"=accessAddressEntity."+AccessAddressEntity.DB_FIELD_IDENTIFICATION+" "+
                     "JOIN "+ AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord."+AccessAddressHouseNumberRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
@@ -84,9 +84,9 @@ public class GenericUnitAddressService {
             for(Object[] item : resultList) {
                 AccessAddressEntity accessAddressEntity = (AccessAddressEntity)item[0];
                 UnitAddressEntity unitAddressEntity = (UnitAddressEntity)item[1];
-                GeoLocalityEntity accessAddressLocalityRecord = (GeoLocalityEntity)item[2];
-                AccessAddressPostcodeRecord accessAddressPostcodeRecord = (AccessAddressPostcodeRecord)item[3];
-                AccessAddressRoadRecord accessAddressRoadRecord = (AccessAddressRoadRecord)item[4];
+                GeoLocalityEntity localityRecord = (GeoLocalityEntity)item[2];
+                PostcodeEntity postcodeRecord = (PostcodeEntity)item[3];
+                GeoRoadEntity roadRecord = (GeoRoadEntity)item[4];
                 GeoMunicipalityEntity geoMunicipalityEntity = (GeoMunicipalityEntity)item[5];
 
                 FullAdressDTO output = new FullAdressDTO();
@@ -107,11 +107,11 @@ public class GenericUnitAddressService {
                 output.setEtage(unitAddressEntity.getFloor().stream().findFirst().orElse(null).getFloor());
                 //output.mabeysomething(unitAddressEntity.getUsage().stream().findFirst().orElse(null).getUsage());
                 output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
-                /*output.setBnr(accessAddressHouseNumberRecord.getNumber());
-                output.setBnr(unitAddressEntity.getBnr());
-                output.setBnr(unitAddressEntity.getBnr());
-                output.setBnr(unitAddressEntity.getBnr());
-                output.setBnr(unitAddressEntity.getBnr());*/
+                output.setLokalitet_navn(localityRecord.getName().stream().findFirst().orElse(null).getName());
+                output.setLokalitet_type(localityRecord.getType().stream().findFirst().orElse(null).getType());
+                output.setBnr(postcodeRecord.getName().stream().findFirst().orElse(null).getName());
+                output.setVej_navn(roadRecord.getName().stream().findFirst().orElse(null).getName());
+                output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
                 System.out.println(output);
                 arl.add(output);
 

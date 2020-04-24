@@ -9,6 +9,7 @@ public class FullAdressDTO {
     private Number kommune_kode;
     private String kommune_navn;
     private String lokalitet_kode;
+    private Number lokalitet_type;
     private String lokalitet_navn;
     private Number post_kode;
     private String post_navn;
@@ -78,6 +79,14 @@ public class FullAdressDTO {
 
     public void setLokalitet_kode(String lokalitet_kode) {
         this.lokalitet_kode = lokalitet_kode;
+    }
+
+    public Number getLokalitet_type() {
+        return lokalitet_type;
+    }
+
+    public void setLokalitet_type(Number lokalitet_type) {
+        this.lokalitet_type = lokalitet_type;
     }
 
     public String getLokalitet_navn() {
