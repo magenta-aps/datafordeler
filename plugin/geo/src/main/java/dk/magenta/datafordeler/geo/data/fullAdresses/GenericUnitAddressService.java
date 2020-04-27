@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
+import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.geo.AdresseService;
+import dk.magenta.datafordeler.geo.data.GeoHardcode;
 import dk.magenta.datafordeler.geo.data.accessaddress.*;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
@@ -15,13 +18,10 @@ import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.formula.functions.T;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,15 +29,25 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RestController("GeoGenericUnitAddressService")
 @RequestMapping("/geo/genericunitaddress")
 public class GenericUnitAddressService {
 
-    @Autowired
+    private static Map<String, String> parameterMappings = new HashMap<String, String>();
+
+    static {
+        parameterMappings.put("bnr", "accessAddressEntity.bnr");
+        parameterMappings.put("husNummer", "accessAddressNumberRecord.number");
+        parameterMappings.put("bloknavn", "accessAddressBlockNameRecord.name");
+        parameterMappings.put("kommune_kode", "geoMunipialicityEntity.code");
+        parameterMappings.put("lokalitet_kode", "localityRecord.code");
+        parameterMappings.put("post_kode", "postcodeEntity.code");
+    }
+
+
+        @Autowired
     SessionManager sessionManager;
 
     @Autowired
@@ -49,16 +59,18 @@ public class GenericUnitAddressService {
     private Logger log = LogManager.getLogger(AdresseService.class);
 
 
-    /*@RequestMapping(path="/{uuid}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Envelope getRest(@PathVariable("uuid") String uuid, @RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request)*/
-
-    @RequestMapping("/fullAdress")
-    public void getLocalities(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws DataFordelerException, IOException {
+    @RequestMapping("/fullAddress")
+    public Envelope getLocalities(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws DataFordelerException, IOException {
 
         try(Session session = sessionManager.getSessionFactory().openSession();) {
+            Envelope envelope = new Envelope();
+            DafoUserDetails user = this.dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.info(
+                    "Fetching from generic address service"
+            );
 
-
-            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity  " +
+            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity, geoMunipialicityEntity.name AS munipialicityName " +
                     "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
                     "JOIN "+ UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity."+UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS+"=accessAddressEntity."+AccessAddressEntity.DB_FIELD_IDENTIFICATION+" "+
                     "JOIN "+ AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord."+AccessAddressHouseNumberRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
@@ -77,23 +89,30 @@ public class GenericUnitAddressService {
                     "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
                     "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
 
-                    " WHERE accessAddressEntity.bnr=:bnr"+
-                    "";//B-3197
-
-            Query query = session.createQuery(hql);
+                    " WHERE geoMunipialicityEntity.code > 900 ";
 
             for(String key : requestParams.keySet()) {
-                query.setParameter(key, requestParams.getFirst(key));
+                if(parameterMappings.containsKey(key)) {
+                    hql += " AND "+parameterMappings.get(key)+"=:"+key;
+                }
             }
 
+            Query query = session.createQuery(hql);
+            Set<String> params = query.getParameterMetadata().getNamedParameterNames();
 
+            for(String key : requestParams.keySet()) {
+                if(params.contains(key)) {
+                    if(key.equals("kommune_kode")||key.equals("post_kode")) {
+                        query.setParameter(key, Integer.parseInt(requestParams.getFirst(key)));
+                    } else {
+                        query.setParameter(key, requestParams.getFirst(key));
+                    }
+                }
+            }
 
             query.setMaxResults(10);
-
             setHeaders(response);
-
             List<Object[]> resultList = query.getResultList();
-
             ArrayList<FullAdressDTO> adressElementList = new ArrayList<FullAdressDTO>();
 
             for(Object[] item : resultList) {
@@ -106,7 +125,6 @@ public class GenericUnitAddressService {
 
                 FullAdressDTO output = new FullAdressDTO();
                 output.setBnr(accessAddressEntity.getBnr());
-
                 output.setHusNummer(accessAddressEntity.getHouseNumber().stream().findFirst().orElse(null).getNumber());
                 output.setVej_kode(accessAddressEntity.getRoad().stream().findFirst().orElse(null).getRoadCode());
                 output.setKommune_kode(accessAddressEntity.getRoad().stream().findFirst().orElse(null).getMunicipalityCode());
@@ -127,12 +145,10 @@ public class GenericUnitAddressService {
                 output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
                 adressElementList.add(output);
             }
-
-            response.getWriter().write(objectMapper.writeValueAsString(adressElementList));
-
+            envelope.setResults(adressElementList);
+            setHeaders(response);
+            return envelope;
         }
-
-        setHeaders(response);
     }
 
 

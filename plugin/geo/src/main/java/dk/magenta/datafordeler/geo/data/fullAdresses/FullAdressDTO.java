@@ -2,8 +2,8 @@ package dk.magenta.datafordeler.geo.data.fullAdresses;
 
 public class FullAdressDTO {
 
-    private String bnr;
-    private String husNummer;
+    private String bnr;//
+    private String husNummer;//
     private String blokNavn;
     private Number kommune_kode;
     private String kommune_navn;
