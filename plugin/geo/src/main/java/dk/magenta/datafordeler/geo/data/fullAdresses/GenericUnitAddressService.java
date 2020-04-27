@@ -144,7 +144,12 @@ public class GenericUnitAddressService {
                             hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+"=:"+parameterName;
                         }
                     } else {
-                        hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+"=:"+parameterName;
+                        String value = requestParams.getFirst(key);
+                        if(value.contains("*")) {
+                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+" LIKE :"+parameterName;
+                        } else {
+                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+" = :"+parameterName;
+                        }
                     }
                 }
             }
@@ -167,7 +172,9 @@ public class GenericUnitAddressService {
                         int numberValue = Integer.parseInt(requestParams.getFirst(key));
                         query.setParameter(parameterName, numberValue);
                     } else {
-                        query.setParameter(parameterName, requestParams.getFirst(parameterName));
+                        String value = requestParams.getFirst(key);
+                        String valueWithReplaces = value.replace("*", "%");
+                        query.setParameter(parameterName, valueWithReplaces);
                     }
                 }
             }

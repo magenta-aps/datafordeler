@@ -183,6 +183,16 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
+        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-31*");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-32*");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+
         response = this.lookup("/geo/genericunitaddress/fullAddress?husNummer=18");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
