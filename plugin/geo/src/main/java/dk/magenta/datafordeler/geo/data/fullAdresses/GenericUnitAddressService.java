@@ -164,17 +164,8 @@ public class GenericUnitAddressService {
                 }
                 if(params.contains(parameterName)) {
                     if(parameterName.equals("kommune_kode")||parameterName.equals("post_kode")) {
-
-                        String h = requestParams.getFirst(key);
-
-                        System.out.println("ttt");
-                        System.out.println(key);
-                        System.out.println(h);
-
-                        int i = Integer.parseInt(requestParams.getFirst(key));
-
-
-                        query.setParameter(parameterName, i);
+                        int numberValue = Integer.parseInt(requestParams.getFirst(key));
+                        query.setParameter(parameterName, numberValue);
                     } else {
                         query.setParameter(parameterName, requestParams.getFirst(parameterName));
                     }
