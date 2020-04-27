@@ -183,6 +183,27 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
+        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&pageSize=1");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(1, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&pageSize=1&page=1");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(1, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&pageSize=1&page=2");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(1, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&pageSize=1&page=3");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+
+
         response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-31*");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());

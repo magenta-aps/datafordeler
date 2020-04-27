@@ -89,6 +89,11 @@ public class GenericUnitAddressService {
     @RequestMapping("/fullAddress")
     public Envelope getLocalities(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws DataFordelerException, IOException {
 
+        //This was supposed to use the BaseQuery from core, but it was not completely supported
+
+        String pageSize = requestParams.getFirst("pageSize");
+        String page = requestParams.getFirst("page");
+
         try(Session session = sessionManager.getSessionFactory().openSession();) {
             Envelope envelope = new Envelope();
             DafoUserDetails user = this.dafoUserManager.getUserFromRequest(request);
@@ -116,14 +121,11 @@ public class GenericUnitAddressService {
                     "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
                     "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
 
-                    " WHERE geoMunipialicityEntity.code > 900 ";
+                    " WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenlan adresses no matter what
 
             for(String key : requestParams.keySet()) {
                 String parameterName = key;
                 String comparator = null;
-
-                System.out.println(key);
-                System.out.println(parameterName);
 
                 if(key.contains(".")) {
                     StringTokenizer tokens = new StringTokenizer(parameterName, ".");
@@ -154,9 +156,19 @@ public class GenericUnitAddressService {
                 }
             }
 
-            System.out.println(hql);
-
             Query query = session.createQuery(hql);
+
+            if(pageSize != null) {
+                query.setMaxResults(Integer.valueOf(pageSize));
+            } else {
+                query.setMaxResults(10);
+            }
+            if(page != null) {
+                query.setFirstResult(Integer.valueOf(page)-1);
+            } else {
+                query.setFirstResult(0);
+            }
+
             Set<String> params = query.getParameterMetadata().getNamedParameterNames();
 
             for(String key : requestParams.keySet()) {
@@ -179,7 +191,6 @@ public class GenericUnitAddressService {
                 }
             }
 
-            query.setMaxResults(10);
             setHeaders(response);
             List<Object[]> resultList = query.getResultList();
             ArrayList<FullAdressDTO> adressElementList = new ArrayList<FullAdressDTO>();
