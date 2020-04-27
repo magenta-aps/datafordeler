@@ -19,6 +19,7 @@ import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
@@ -35,15 +36,41 @@ import java.util.*;
 @RequestMapping("/geo/genericunitaddress")
 public class GenericUnitAddressService {
 
-    private static Map<String, String> parameterMappings = new HashMap<String, String>();
+    private static Map<String, ParameterType> parameterMappings = new HashMap<String, ParameterType>();
+
+    public enum ParameterType {
+        bnr("accessAddressEntity.bnr", false),
+        husNummer("accessAddressNumberRecord.number", false),
+        bloknavn("accessAddressBlockNameRecord.name", false),
+        kommune_kode("geoMunipialicityEntity.code", true),
+        lokalitet_kode("localityRecord.code", false),
+        post_kode("postcodeEntity.code", true);
+
+        private final String searchString;
+        private final boolean numberType;
+
+        ParameterType(String searchString, boolean numberType) {
+            this.searchString = searchString;
+            this.numberType = numberType;
+        }
+
+        public String getSerarchString() {
+            return searchString;
+        }
+
+        public boolean isNumberType() {
+            return numberType;
+        }
+
+    }
 
     static {
-        parameterMappings.put("bnr", "accessAddressEntity.bnr");
-        parameterMappings.put("husNummer", "accessAddressNumberRecord.number");
-        parameterMappings.put("bloknavn", "accessAddressBlockNameRecord.name");
-        parameterMappings.put("kommune_kode", "geoMunipialicityEntity.code");
-        parameterMappings.put("lokalitet_kode", "localityRecord.code");
-        parameterMappings.put("post_kode", "postcodeEntity.code");
+        parameterMappings.put("bnr", ParameterType.bnr);
+        parameterMappings.put("husNummer", ParameterType.husNummer);
+        parameterMappings.put("bloknavn", ParameterType.bloknavn);
+        parameterMappings.put("kommune_kode", ParameterType.kommune_kode);
+        parameterMappings.put("lokalitet_kode", ParameterType.lokalitet_kode);
+        parameterMappings.put("post_kode", ParameterType.post_kode);
     }
 
 
@@ -92,20 +119,64 @@ public class GenericUnitAddressService {
                     " WHERE geoMunipialicityEntity.code > 900 ";
 
             for(String key : requestParams.keySet()) {
-                if(parameterMappings.containsKey(key)) {
-                    hql += " AND "+parameterMappings.get(key)+"=:"+key;
+                String parameterName = key;
+                String comparator = null;
+
+                System.out.println(key);
+                System.out.println(parameterName);
+
+                if(key.contains(".")) {
+                    StringTokenizer tokens = new StringTokenizer(parameterName, ".");
+                    parameterName = (String)tokens.nextElement();
+                    comparator = (String)tokens.nextElement();
+                }
+
+                if(parameterMappings.containsKey(parameterName)) {
+                    if(parameterMappings.get(parameterName).isNumberType()) {
+
+                        System.out.println(comparator);
+
+                        if("lt".equals(comparator)) {
+                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+"<:"+parameterName;
+                        } else if("gt".equals(comparator)) {
+                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+">:"+parameterName;
+                        } else {
+                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+"=:"+parameterName;
+                        }
+                    } else {
+                        hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+"=:"+parameterName;
+                    }
                 }
             }
+
+            System.out.println(hql);
 
             Query query = session.createQuery(hql);
             Set<String> params = query.getParameterMetadata().getNamedParameterNames();
 
             for(String key : requestParams.keySet()) {
-                if(params.contains(key)) {
-                    if(key.equals("kommune_kode")||key.equals("post_kode")) {
-                        query.setParameter(key, Integer.parseInt(requestParams.getFirst(key)));
+                String parameterName = key;
+                String comparator = null;
+                if(key.contains(".")) {
+                    StringTokenizer tokens = new StringTokenizer(parameterName, ".");
+                    parameterName = (String)tokens.nextElement();
+                    comparator = (String)tokens.nextElement();
+                }
+                if(params.contains(parameterName)) {
+                    if(parameterName.equals("kommune_kode")||parameterName.equals("post_kode")) {
+
+                        String h = requestParams.getFirst(key);
+
+                        System.out.println("ttt");
+                        System.out.println(key);
+                        System.out.println(h);
+
+                        int i = Integer.parseInt(requestParams.getFirst(key));
+
+
+                        query.setParameter(parameterName, i);
                     } else {
-                        query.setParameter(key, requestParams.getFirst(key));
+                        query.setParameter(parameterName, requestParams.getFirst(parameterName));
                     }
                 }
             }
@@ -148,7 +219,10 @@ public class GenericUnitAddressService {
             envelope.setResults(adressElementList);
             setHeaders(response);
             return envelope;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
 

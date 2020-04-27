@@ -173,7 +173,7 @@ public class TestGenericServices extends GeoTest {
     @Test
     public void testGenericService() throws IOException {
         ResponseEntity<String> response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&husNummer=18&bloknavn=House of Testing!" +
-                "&kommune_kode=956&lokalitet_kode=0600&lokalitet_navn=Nuuk&post_kode=3900");
+                "&kommune_kode=956&lokalitet_kode=0600&post_kode=3900");
         Assert.assertEquals(200, response.getStatusCode().value());
         JsonNode responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
@@ -194,6 +194,43 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
         System.out.println(responseContent);
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode=956");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+        System.out.println(responseContent);
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode=955");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+        System.out.println(responseContent);
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode.gt=955");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+        System.out.println(responseContent);
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode.gt=957");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+        System.out.println(responseContent);
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode.lt=955");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+        System.out.println(responseContent);
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode.lt=957");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+        System.out.println(responseContent);
+
     }
 
 
