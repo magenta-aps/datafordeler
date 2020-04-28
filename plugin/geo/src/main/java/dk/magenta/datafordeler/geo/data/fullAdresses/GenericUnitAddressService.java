@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController("GeoGenericUnitAddressService")
@@ -121,6 +123,9 @@ public class GenericUnitAddressService {
             loggerHelper.info(
                     "Fetching from generic address service"
             );
+            loggerHelper.urlInvokePersistablelogs("fullAddress");
+            envelope.setRequestTimestamp(user.getCreationTime());
+            envelope.setUsername(user.toString());
 
             String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity, geoMunipialicityEntity.name AS munipialicityName " +
                     "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
@@ -147,7 +152,6 @@ public class GenericUnitAddressService {
                     "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
                     "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
                     "JOIN "+ MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName."+MunicipalityNameRecord.DB_FIELD_ENTITY+"=geoMunipialicityEntity."+ "id"+" "+
-
 
                     " WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
 
@@ -254,13 +258,16 @@ public class GenericUnitAddressService {
                 output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
                 adressElementList.add(output);
             }
+
+            envelope.setPageSize(query.getMaxResults());
+            envelope.setPage(query.getFirstResult()+1);
+            envelope.setPath(request.getServletPath());
+            envelope.setResponseTimestamp(OffsetDateTime.now());
+
             envelope.setResults(adressElementList);
             setHeaders(response);
             return envelope;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
     }
 
 
