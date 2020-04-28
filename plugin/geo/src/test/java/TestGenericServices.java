@@ -329,11 +329,38 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
+        System.out.println(responseContent);
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?doer=1");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(1, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?doer=2");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(1, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?doer=3");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?etage=kld");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?etage=other");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+
 
         //"vej_kode":254,"vej_navn":"Qarsaalik_previous"
 
 
-        System.out.println(responseContent);
+        //System.out.println(responseContent);
 
     }
 
