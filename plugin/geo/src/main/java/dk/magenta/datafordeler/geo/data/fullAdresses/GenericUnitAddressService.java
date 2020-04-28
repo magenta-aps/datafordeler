@@ -11,8 +11,11 @@ import dk.magenta.datafordeler.geo.AdresseService;
 import dk.magenta.datafordeler.geo.data.GeoHardcode;
 import dk.magenta.datafordeler.geo.data.accessaddress.*;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
+import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
+import dk.magenta.datafordeler.geo.data.municipality.MunicipalityNameRecord;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
+import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
@@ -43,8 +46,11 @@ public class GenericUnitAddressService {
         husNummer("accessAddressNumberRecord.number", false),
         bloknavn("accessAddressBlockNameRecord.name", false),
         kommune_kode("geoMunipialicityEntity.code", true),
+        kommune_navn("municipalityName.name", false),
         lokalitet_kode("localityRecord.code", false),
-        post_kode("postcodeEntity.code", true);
+        lokalitet_navn("localityName.name", false),
+        post_kode("postcodeEntity.code", true),
+        post_navn("postcodeName.name", false);
 
         private final String searchString;
         private final boolean numberType;
@@ -69,12 +75,15 @@ public class GenericUnitAddressService {
         parameterMappings.put("husNummer", ParameterType.husNummer);
         parameterMappings.put("bloknavn", ParameterType.bloknavn);
         parameterMappings.put("kommune_kode", ParameterType.kommune_kode);
+        parameterMappings.put("kommune_navn", ParameterType.kommune_navn);
         parameterMappings.put("lokalitet_kode", ParameterType.lokalitet_kode);
+        parameterMappings.put("lokalitet_navn", ParameterType.lokalitet_navn);
         parameterMappings.put("post_kode", ParameterType.post_kode);
+        parameterMappings.put("post_navn", ParameterType.post_navn);
     }
 
 
-        @Autowired
+    @Autowired
     SessionManager sessionManager;
 
     @Autowired
@@ -109,17 +118,21 @@ public class GenericUnitAddressService {
 
                     "JOIN "+ AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
                     "JOIN "+ GeoLocalityEntity.class.getCanonicalName() + " localityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_CODE+"=localityRecord."+GeoLocalityEntity.DB_FIELD_CODE+" "+
+                    "JOIN "+ LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName."+LocalityNameRecord.DB_FIELD_ENTITY+"=localityRecord."+ "id"+" "+
 
                     "JOIN "+ AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord."+AccessAddressBlockNameRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
 
                     "JOIN "+ AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord."+AccessAddressPostcodeRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
                     "JOIN "+ PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord."+AccessAddressPostcodeRecord.DB_FIELD_CODE+"=postcodeEntity."+PostcodeEntity.DB_FIELD_CODE+" "+
+                    "JOIN "+ PostcodeNameRecord.class.getCanonicalName() + " postcodeName ON postcodeName."+PostcodeNameRecord.DB_FIELD_ENTITY+"=postcodeEntity."+ "id"+" "+
 
                     "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
                     "JOIN "+ GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE+"=roadEntity."+ GeoRoadEntity.DB_FIELD_IDENTIFICATION+" "+
 
                     "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
                     "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
+                    "JOIN "+ MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName."+MunicipalityNameRecord.DB_FIELD_ENTITY+"=geoMunipialicityEntity."+ "id"+" "+
+
 
                     " WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenlan adresses no matter what
 
