@@ -302,8 +302,6 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        System.out.println(responseContent);
-
         response = this.lookup("/geo/genericunitaddress/fullAddress?vej_kode=254");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
@@ -328,8 +326,6 @@ public class TestGenericServices extends GeoTest {
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
-
-        System.out.println(responseContent);
 
         response = this.lookup("/geo/genericunitaddress/fullAddress?doer=1");
         Assert.assertEquals(200, response.getStatusCode().value());
@@ -356,11 +352,19 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
+        response = this.lookup("/geo/genericunitaddress/fullAddress?etage=kld");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+        Assert.assertNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
+        Assert.assertNull(responseContent.get("results").get(0).get("unitAddress_objectId"));
 
-        //"vej_kode":254,"vej_navn":"Qarsaalik_previous"
-
-
-        //System.out.println(responseContent);
+        response = this.lookup("/geo/genericunitaddress/fullAddress?etage=kld&debug=1");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+        Assert.assertNotNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
+        Assert.assertNotNull(responseContent.get("results").get(0).get("unitAddress_objectId"));
 
     }
 

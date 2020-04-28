@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.geo.AdresseService;
-import dk.magenta.datafordeler.geo.data.GeoHardcode;
 import dk.magenta.datafordeler.geo.data.accessaddress.*;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
@@ -25,7 +24,6 @@ import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
@@ -37,8 +35,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static dk.magenta.datafordeler.geo.AdresseService.PARAM_DEBUG;
 
 @RestController("GeoGenericUnitAddressService")
 @RequestMapping("/geo/genericunitaddress")
@@ -115,6 +114,7 @@ public class GenericUnitAddressService {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
+        boolean debug = "1".equals(request.getParameter(PARAM_DEBUG));
 
         try(Session session = sessionManager.getSessionFactory().openSession();) {
             Envelope envelope = new Envelope();
@@ -226,7 +226,7 @@ public class GenericUnitAddressService {
 
             setHeaders(response);
             List<Object[]> resultList = query.getResultList();
-            ArrayList<FullAdressDTO> adressElementList = new ArrayList<FullAdressDTO>();
+            ArrayList<FullAddressDTO> adressElementList = new ArrayList<FullAddressDTO>();
 
             for(Object[] item : resultList) {
                 AccessAddressEntity accessAddressEntity = (AccessAddressEntity)item[0];
@@ -236,7 +236,8 @@ public class GenericUnitAddressService {
                 GeoRoadEntity roadRecord = (GeoRoadEntity)item[4];
                 GeoMunicipalityEntity geoMunicipalityEntity = (GeoMunicipalityEntity)item[5];
 
-                FullAdressDTO output = new FullAdressDTO();
+                FullAddressDTO output = new FullAddressDTO();
+
                 output.setBnr(accessAddressEntity.getBnr());
                 output.setHusNummer(accessAddressEntity.getHouseNumber().stream().findFirst().orElse(null).getNumber());
                 output.setVej_kode(accessAddressEntity.getRoad().stream().findFirst().orElse(null).getRoadCode());
@@ -256,6 +257,10 @@ public class GenericUnitAddressService {
                 output.setPost_navn(postcodeRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setVej_navn(roadRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
+                if(debug) {
+                    output.setAccessAddress_objectId(Integer.toString(accessAddressEntity.getObjectId()));
+                    output.setUnitAddress_objectId(Integer.toString(unitAddressEntity.getObjectId()));
+                }
                 adressElementList.add(output);
             }
 

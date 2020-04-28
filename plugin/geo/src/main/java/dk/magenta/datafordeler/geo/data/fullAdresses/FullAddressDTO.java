@@ -1,6 +1,8 @@
 package dk.magenta.datafordeler.geo.data.fullAdresses;
 
-public class FullAdressDTO {
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+public class FullAddressDTO {
 
     private String bnr;//
     private String husNummer;//
@@ -19,6 +21,8 @@ public class FullAdressDTO {
     private String nummer;
     private Number vej_kode;
     private String vej_navn;
+    private String accessAddress_objectId;
+    private String unitAddress_objectId;
 
 
     public String getBnr() {
@@ -155,5 +159,25 @@ public class FullAdressDTO {
 
     public void setVej_navn(String vej_navn) {
         this.vej_navn = vej_navn;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public String getAccessAddress_objectId() {
+        return accessAddress_objectId;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public void setAccessAddress_objectId(String accessAddress_objectId) {
+        this.accessAddress_objectId = accessAddress_objectId;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public String getUnitAddress_objectId() {
+        return unitAddress_objectId;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public void setUnitAddress_objectId(String unitAddress_objectId) {
+        this.unitAddress_objectId = unitAddress_objectId;
     }
 }
