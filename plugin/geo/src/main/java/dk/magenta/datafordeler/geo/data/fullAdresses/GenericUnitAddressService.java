@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
+import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,7 +51,9 @@ public class GenericUnitAddressService {
         lokalitet_kode("localityRecord.code", false),
         lokalitet_navn("localityName.name", false),
         post_kode("postcodeEntity.code", true),
-        post_navn("postcodeName.name", false);
+        post_navn("postcodeName.name", false),
+        vej_kode("roadEntity.code", true),
+        vej_navn("roadName.name", false);
 
         private final String searchString;
         private final boolean numberType;
@@ -80,6 +83,8 @@ public class GenericUnitAddressService {
         parameterMappings.put("lokalitet_navn", ParameterType.lokalitet_navn);
         parameterMappings.put("post_kode", ParameterType.post_kode);
         parameterMappings.put("post_navn", ParameterType.post_navn);
+        parameterMappings.put("vej_kode", ParameterType.vej_kode);
+        parameterMappings.put("vej_navn", ParameterType.vej_navn);
     }
 
 
@@ -128,13 +133,14 @@ public class GenericUnitAddressService {
 
                     "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
                     "JOIN "+ GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE+"=roadEntity."+ GeoRoadEntity.DB_FIELD_IDENTIFICATION+" "+
+                    "JOIN "+ RoadNameRecord.class.getCanonicalName() + " roadName ON roadName."+RoadNameRecord.DB_FIELD_ENTITY+"=roadEntity."+ "id"+" "+
 
                     "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
                     "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
                     "JOIN "+ MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName."+MunicipalityNameRecord.DB_FIELD_ENTITY+"=geoMunipialicityEntity."+ "id"+" "+
 
 
-                    " WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenlan adresses no matter what
+                    " WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
 
             for(String key : requestParams.keySet()) {
                 String parameterName = key;
@@ -193,7 +199,8 @@ public class GenericUnitAddressService {
                     comparator = (String)tokens.nextElement();
                 }
                 if(params.contains(parameterName)) {
-                    if(parameterName.equals("kommune_kode")||parameterName.equals("post_kode")) {
+                    if(parameterMappings.get(parameterName).isNumberType()) {
+
                         int numberValue = Integer.parseInt(requestParams.getFirst(key));
                         query.setParameter(parameterName, numberValue);
                     } else {

@@ -297,12 +297,40 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        System.out.println(responseContent);
-
         response = this.lookup("/geo/genericunitaddress/fullAddress?lokalitet_navn=Unknown");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
+
+        System.out.println(responseContent);
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_kode=254");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_kode.lt=253");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_kode.gt=253");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_navn=Unknown");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(0, responseContent.get("results").size());
+
+        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_navn=Qarsaalik*");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(2, responseContent.get("results").size());
+
+
+        //"vej_kode":254,"vej_navn":"Qarsaalik_previous"
 
 
         System.out.println(responseContent);
