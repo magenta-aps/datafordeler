@@ -1187,5 +1187,94 @@
         }
       }
     }
+  },
+  "components": {
+    "schemas": {
+      "virksomhedsform": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "virksomhedsformkode": {
+              "type": "string",
+              "example": "80"
+            },
+            "kortBeskrivelse": {
+              "type": "string",
+              "example": "APS"
+            },
+            "langBeskrivelse": {
+              "type": "string",
+              "example": "Anpartsselskab"
+            },
+            "ansvarligDataleverandoer": {
+              "type": "string",
+              "example": "E&S"
+            }
+          },
+          "description": "Virksomhedsformkode.\n|Kode|Beskrivelse                                               |Forkortelse|\n|----|----------------------------------------------------------|-----------|\n|10  |Enkeltmandsvirksomhed                                     |ENK        |\n|15  |Personligt ejet Mindre Virksomhed                         |PMV        |\n|30  |Interessentskab                                           |I/S        |\n|40  |Kommanditselskab                                          |K/S        |\n|50  |Partrederi                                                |PAR        |\n|60  |Aktieselskab                                              |A/S        |\n|70  |Kommanditaktieselskab/Partnerselskab                      |KAS        |\n|80  |Anpartsselskab                                            |APS        |\n|81  |Iværksætterselskab                                        |IVS        |\n|90  |Fonde og andre selvejende institutioner                   |FON        |\n|100 |Erhvervsdrivende fond                                     |EFO        |\n|110 |Forening                                                  |FOR        |\n|140 |Andelsselskab (-forening) med begrænset ansvar            |ABA        |\n|151 |Selskab med begrænset ansvar                              |SMA        |\n|170 |Filial af udenlandsk aktieselskab, kommanditaktieselskab  |FAS        |\n|180 |Filial af udenlandsk anpartsselskab eller selskab         |FAP        |\n|230 |Statslig administrativ enhed                              |STA        |\n|270 |Enhed under oprettelse i Erhvervsstyrelsen                |EUO        |\n|285 |Særlig finansiel virksomhed                               |FIV        |\n|520 |Grønlandsk afdeling af udenlandsk selskab eller virksomhed|GUS        |\n"
+        }
+      },
+      "virksomhedsadresse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kommunekode": {
+              "type": "integer",
+              "example": 956
+            },
+            "kommunenavn": {
+              "type": "string",
+              "example": "Kommuneqarfik Sermersooq"
+            },
+            "lokalitetskode": {
+              "type": "string",
+              "example": "0600"
+            },
+            "lokalitetsnavn": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "postdistrikt": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "postnummer": {
+              "type": "integer",
+              "example": 3900
+            },
+            "bynavn": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "vejkode": {
+              "type": "integer",
+              "example": 212
+            },
+            "vejnavn": {
+              "type": "string",
+              "example": "Nuukullak"
+            },
+            "husnummerFra": {
+              "type": "string",
+              "example": "4"
+            },
+            "husnummerTil": {
+              "type": "string",
+              "example": null
+            },
+            "etage": {
+              "type": "string",
+              "example": "1"
+            },
+            "sidedør": {
+              "type": "string",
+              "example": null
+            }
+          }
+        }
+      }
+    }
   }
 }
