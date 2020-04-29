@@ -196,7 +196,8 @@ public class GenericUnitAddressService {
                 query.setMaxResults(10);
             }
             if(page != null) {
-                query.setFirstResult(Integer.valueOf(page)-1);
+                int pageIndex = (Integer.valueOf(page)-1)*query.getMaxResults();
+                query.setFirstResult(pageIndex);
             } else {
                 query.setFirstResult(0);
             }
