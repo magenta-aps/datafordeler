@@ -40,7 +40,7 @@ import java.util.*;
 import static dk.magenta.datafordeler.geo.AdresseService.PARAM_DEBUG;
 
 @RestController("GeoGenericUnitAddressService")
-@RequestMapping("/geo/genericunitaddress")
+@RequestMapping("/geo/fullAddress/1/rest")
 public class GenericUnitAddressService {
 
     private static Map<String, ParameterType> parameterMappings = new HashMap<String, ParameterType>();
@@ -107,7 +107,7 @@ public class GenericUnitAddressService {
     private Logger log = LogManager.getLogger(AdresseService.class);
 
 
-    @RequestMapping("/fullAddress")
+    @RequestMapping("/search")
     public Envelope getLocalities(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws DataFordelerException, IOException {
 
         //This was supposed to use the BaseQuery from core, but it was not completely supported

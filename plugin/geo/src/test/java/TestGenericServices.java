@@ -2,15 +2,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
-import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressHouseNumberRecord;
-import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressRoadRecord;
-import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
-import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.UUID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -175,191 +164,191 @@ public class TestGenericServices extends GeoTest {
         ResponseEntity<String> response;
         JsonNode responseContent;
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&husNummer=18&bloknavn=House of Testing!" +
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&husNummer=18&bloknavn=House of Testing!" +
                 "&kommune_kode=956&lokalitet_kode=0600&post_kode=3900");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197");
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&pageSize=1");
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&pageSize=1");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(1, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&pageSize=1&page=1");
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&pageSize=1&page=1");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(1, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&pageSize=1&page=2");
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&pageSize=1&page=2");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(1, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-3197&pageSize=1&page=3");
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&pageSize=1&page=3");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-31*");
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-31*");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?bnr=B-32*");
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-32*");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?husNummer=18");
+        response = this.lookup("/geo/fullAddress/1/rest/search?husNummer=18");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?husNummer=17");
+        response = this.lookup("/geo/fullAddress/1/rest/search?husNummer=17");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode=956");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_kode=956");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode=955");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_kode=955");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode.gt=955");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_kode.gt=955");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode.gt=957");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_kode.gt=957");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode.lt=955");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_kode.lt=955");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_kode.lt=957");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_kode.lt=957");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_navn=Kommuneqarfik Sermersooq");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_navn=Kommuneqarfik Sermersooq");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_navn=Kommuneqa*");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_navn=Kommuneqa*");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?kommune_navn=Unknown");
+        response = this.lookup("/geo/fullAddress/1/rest/search?kommune_navn=Unknown");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?post_navn=Nuuk");
+        response = this.lookup("/geo/fullAddress/1/rest/search?post_navn=Nuuk");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?post_navn=Nu*");
+        response = this.lookup("/geo/fullAddress/1/rest/search?post_navn=Nu*");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?post_navn=Unknown");
+        response = this.lookup("/geo/fullAddress/1/rest/search?post_navn=Unknown");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?lokalitet_navn=Nuuk");
+        response = this.lookup("/geo/fullAddress/1/rest/search?lokalitet_navn=Nuuk");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?lokalitet_navn=Nu*");
+        response = this.lookup("/geo/fullAddress/1/rest/search?lokalitet_navn=Nu*");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?lokalitet_navn=Unknown");
+        response = this.lookup("/geo/fullAddress/1/rest/search?lokalitet_navn=Unknown");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_kode=254");
+        response = this.lookup("/geo/fullAddress/1/rest/search?vej_kode=254");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_kode.lt=253");
+        response = this.lookup("/geo/fullAddress/1/rest/search?vej_kode.lt=253");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_kode.gt=253");
+        response = this.lookup("/geo/fullAddress/1/rest/search?vej_kode.gt=253");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_navn=Unknown");
+        response = this.lookup("/geo/fullAddress/1/rest/search?vej_navn=Unknown");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?vej_navn=Qarsaalik*");
+        response = this.lookup("/geo/fullAddress/1/rest/search?vej_navn=Qarsaalik*");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?doer=1");
+        response = this.lookup("/geo/fullAddress/1/rest/search?doer=1");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(1, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?doer=2");
+        response = this.lookup("/geo/fullAddress/1/rest/search?doer=2");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(1, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?doer=3");
+        response = this.lookup("/geo/fullAddress/1/rest/search?doer=3");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?etage=kld");
+        response = this.lookup("/geo/fullAddress/1/rest/search?etage=kld");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?etage=other");
+        response = this.lookup("/geo/fullAddress/1/rest/search?etage=other");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(0, responseContent.get("results").size());
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?etage=kld");
+        response = this.lookup("/geo/fullAddress/1/rest/search?etage=kld");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
         Assert.assertNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
         Assert.assertNull(responseContent.get("results").get(0).get("unitAddress_objectId"));
 
-        response = this.lookup("/geo/genericunitaddress/fullAddress?etage=kld&debug=1");
+        response = this.lookup("/geo/fullAddress/1/rest/search?etage=kld&debug=1");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
