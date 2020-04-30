@@ -16,7 +16,10 @@ import dk.magenta.datafordeler.geo.data.municipality.MunicipalityEntityManager;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
-import dk.magenta.datafordeler.geo.data.road.*;
+import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
+import dk.magenta.datafordeler.geo.data.road.RoadLocalityRecord;
+import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -219,14 +222,6 @@ public class GeoPlugin extends Plugin {
             municipalityQuery.setCode(values.get("municipalitycode"));
             queries.add(municipalityQuery);
         }
-        
-        if (values.containsKey("municipalitycode") && values.containsKey("roadcode")) {
-            RoadQuery roadQuery = new RoadQuery();
-            roadQuery.setMunicipalityCode(values.get("municipalitycode"));
-            roadQuery.setCode(values.get("roadcode"));
-            queries.add(roadQuery);
-        }
-
         return queries;
     }
 

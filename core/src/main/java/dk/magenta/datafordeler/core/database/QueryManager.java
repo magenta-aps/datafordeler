@@ -350,8 +350,8 @@ public class QueryManager {
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
 
-        List<Object> databaseResults = databaseQuery.list();
-        for (Object r : databaseResults) {
+        List<Object> results = databaseQuery.list();
+        for (Object r : results) {
             try {
                 ResultSet<E> resultSet = new ResultSet<E>(r, query.getEntityClassnames());
                 LinkedList<BaseQuery> subQueries = new LinkedList<>();
@@ -363,16 +363,16 @@ public class QueryManager {
                     for (ResultSet<IdentifiedEntity> subResult : subResults) {
                         resultSet.addAssociatedEntities(subResult.all());
                     }
+                    cache.put(subQuery, new ArrayList<>(subResults));
                 }
                 identitySetList.put(resultSet.getPrimaryEntity(), resultSet);
             } catch (ClassNotFoundException e) {
                 log.error(e);
             }
         }
-        List<ResultSet<E>> results = new ArrayList<>(identitySetList.values());
-        cache.put(query, new ArrayList<>(results));
+
         log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
-        return results;
+        return new ArrayList<>(identitySetList.values());
     }
     public static <E extends IdentifiedEntity> List<E> getAllEntities(Session session, BaseQuery query, Class<E> eClass) {
         return getAllEntitySets(session, query, eClass).stream().map(s -> s.getPrimaryEntity()).collect(Collectors.toList());

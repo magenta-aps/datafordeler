@@ -192,18 +192,4 @@ public class RoadRecordQuery extends BaseQuery {
         return this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.vejnavne.isEmpty();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RoadRecordQuery that = (RoadRecordQuery) o;
-        return Objects.equals(vejkoder, that.vejkoder) &&
-                Objects.equals(vejnavne, that.vejnavne) &&
-                Objects.equals(kommunekoder, that.kommunekoder);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(vejkoder, vejnavne, kommunekoder);
-    }
 }
