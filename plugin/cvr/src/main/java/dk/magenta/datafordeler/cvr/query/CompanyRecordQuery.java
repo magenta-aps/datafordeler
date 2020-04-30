@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
-import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.fapi.ParameterMap;
-import dk.magenta.datafordeler.core.fapi.QueryField;
+import dk.magenta.datafordeler.core.fapi.*;
 import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
@@ -29,6 +27,10 @@ public class CompanyRecordQuery extends BaseQuery {
     public static final String EMAILADRESSE = CompanyRecord.IO_FIELD_EMAIL;
     public static final String VIRKSOMHEDSFORM = CompanyRecord.IO_FIELD_FORM;
     public static final String KOMMUNEKODE = Municipality.IO_FIELD_CODE;
+    public static final String VEJKODE = AddressRecord.IO_FIELD_ROADCODE;
+    public static final String HUSNUMMER = "husnummer";
+    public static final String ETAGE = AddressRecord.IO_FIELD_FLOOR;
+    public static final String DOOR = AddressRecord.IO_FIELD_DOOR;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CVRNUMMER)
     private List<String> cvrNumre = new ArrayList<>();
@@ -277,7 +279,6 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void addKommuneKode(String kommunekode) {
-        this.kommunekode.add(kommunekode);
         if (kommunekode != null) {
             this.kommunekode.add(kommunekode);
             this.updatedParameters();
@@ -288,7 +289,7 @@ public class CompanyRecordQuery extends BaseQuery {
         this.addKommuneKode(String.format("%03d", kommunekode));
     }
 
-    public void setKommunekode(String kommunekode) {
+    public void setKommuneKode(String kommunekode) {
         this.kommunekode.clear();
         this.addKommuneKode(kommunekode);
     }
@@ -303,13 +304,171 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     public void setKommuneKode(int kommunekode) {
-        this.setKommunekode(String.format("%03d", kommunekode));
+        this.setKommuneKode(String.format("%03d", kommunekode));
     }
 
     public void clearKommuneKoder() {
         this.kommunekode.clear();
         this.updatedParameters();
     }
+
+
+
+
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
+    private List<String> vejkode = new ArrayList<>();
+
+    public Collection<String> getVejKode() {
+        return this.vejkode;
+    }
+
+    public void addVejKode(String vejkode) {
+        if (vejkode != null) {
+            this.vejkode.add(vejkode);
+            this.updatedParameters();
+        }
+    }
+
+    public void addVejKode(int vejkode) {
+        this.addVejKode(String.format("%03d", vejkode));
+    }
+
+    public void setVejkode(String vejkode) {
+        this.vejkode.clear();
+        this.addVejKode(vejkode);
+    }
+
+    public void setVejkode(Collection<String> vejkoder) {
+        this.clearVejKoder();
+        if (vejkoder != null) {
+            for (String vejkode : vejkoder) {
+                this.addVejKode(vejkode);
+            }
+        }
+    }
+
+    public void setVejKode(int vejkode) {
+        this.setVejkode(String.format("%03d", vejkode));
+    }
+
+    public void clearVejKoder() {
+        this.vejkode.clear();
+        this.updatedParameters();
+    }
+
+
+
+
+
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = HUSNUMMER)
+    private List<String> husnummer = new ArrayList<>();
+
+    public Collection<String> getHusnummer() {
+        return this.husnummer;
+    }
+
+    public void addHusnummer(String husnummer) {
+        if (husnummer != null) {
+            this.husnummer.add(husnummer);
+            this.updatedParameters();
+        }
+    }
+
+    public void setHusnummer(String husnummer) {
+        this.husnummer.clear();
+        this.addHusnummer(husnummer);
+    }
+
+    public void setHusnummer(Collection<String> husnumre) {
+        this.clearHusnummer();
+        if (husnumre != null) {
+            for (String husnummer : husnumre) {
+                this.addHusnummer(husnummer);
+            }
+        }
+    }
+
+    public void clearHusnummer() {
+        this.husnummer.clear();
+        this.updatedParameters();
+    }
+
+
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = ETAGE)
+    private List<String> etage = new ArrayList<>();
+
+    public Collection<String> getEtage() {
+        return this.etage;
+    }
+
+    public void addEtage(String etage) {
+        if (etage != null) {
+            this.etage.add(etage);
+            this.updatedParameters();
+        }
+    }
+
+    public void setEtage(String etage) {
+        this.etage.clear();
+        this.addEtage(etage);
+    }
+
+    public void setEtage(Collection<String> etager) {
+        this.clearEtager();
+        if (etager != null) {
+            for (String etage : etager) {
+                this.addEtage(etage);
+            }
+        }
+    }
+
+    public void clearEtager() {
+        this.etage.clear();
+        this.updatedParameters();
+    }
+
+
+
+
+
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = DOOR)
+    private List<String> door = new ArrayList<>();
+
+    public Collection<String> getDoor() {
+        return this.door;
+    }
+
+    public void addDoor(String door) {
+        if (door != null) {
+            this.door.add(door);
+            this.updatedParameters();
+        }
+    }
+
+    public void setDoor(String door) {
+        this.door.clear();
+        this.addDoor(door);
+    }
+
+    public void setDoor(Collection<String> doors) {
+        this.clearDoor();
+        if (doors != null) {
+            for (String door : doors) {
+                this.addDoor(door);
+            }
+        }
+    }
+
+    public void clearDoor() {
+        this.door.clear();
+        this.updatedParameters();
+    }
+
+
 
 
     @Override
@@ -323,6 +482,10 @@ public class CompanyRecordQuery extends BaseQuery {
         map.put(EMAILADRESSE, this.emailadresse);
         map.put(VIRKSOMHEDSFORM, this.virksomhedsform);
         map.put(KOMMUNEKODE, this.kommunekode);
+        map.put(VEJKODE, this.vejkode);
+        map.put(HUSNUMMER, this.husnummer);
+        map.put(ETAGE, this.etage);
+        map.put(DOOR, this.door);
         return map;
     }
 
@@ -336,6 +499,10 @@ public class CompanyRecordQuery extends BaseQuery {
         this.setEmailadresse(parameters.getI(EMAILADRESSE));
         this.setVirksomhedsform(parameters.getI(VIRKSOMHEDSFORM));
         this.setKommuneKode(parameters.getI(KOMMUNEKODE));
+        this.setVejkode(parameters.getI(VEJKODE));
+        this.setHusnummer(parameters.getI(HUSNUMMER));
+        this.setEtage(parameters.getI(ETAGE));
+        this.setDoor(parameters.getI(DOOR));
     }
 
 
@@ -381,12 +548,31 @@ public class CompanyRecordQuery extends BaseQuery {
             joinedAddress = true;
         }
 
+
+        if (this.getVejKode() != null && !this.getVejKode().isEmpty()) {
+            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator +
+                    CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE, this.getVejKode(), Integer.class);
+            joinedAddress = true;
+        }
+        if (this.getEtage() != null && !this.getEtage().isEmpty()) {
+            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator +
+                    CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_FLOOR, this.getEtage(), String.class);
+            joinedAddress = true;
+        }
+        if (this.getDoor() != null && !this.getDoor().isEmpty()) {
+            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator +
+                    CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_FLOOR, this.getDoor(), String.class);
+            joinedAddress = true;
+        }
+
         return lookupDefinition;
     }
 
     @Override
     protected boolean isEmpty() {
-        return this.cvrNumre.isEmpty() && this.virksomhedsform.isEmpty() && this.reklamebeskyttelse == null && this.virksomhedsnavn.isEmpty() && this.telefonnummer.isEmpty() && this.telefaxnummer.isEmpty() && this.emailadresse.isEmpty() && this.kommunekode.isEmpty();
+        return this.cvrNumre.isEmpty() && this.virksomhedsform.isEmpty() && this.reklamebeskyttelse == null && this.virksomhedsnavn.isEmpty() &&
+                this.telefonnummer.isEmpty() && this.telefaxnummer.isEmpty() && this.emailadresse.isEmpty() && this.kommunekode.isEmpty() &&
+                this.vejkode.isEmpty() && this.husnummer.isEmpty() && this.etage.isEmpty() && this.door.isEmpty();
     }
 
     @Override
@@ -416,6 +602,13 @@ public class CompanyRecordQuery extends BaseQuery {
         joinHandles.put("email", CompanyRecord.DB_FIELD_EMAIL + BaseQuery.separator + ContactRecord.DB_FIELD_DATA);
         joinHandles.put("municipalitycode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
         joinHandles.put("roadcode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
+
+
+        joinHandles.put("housenumberfrom", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_HOUSE_FROM);
+        joinHandles.put("housenumberto", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_HOUSE_TO);
+
+        joinHandles.put("floor", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_FLOOR);
+        joinHandles.put("door", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_DOOR);
     }
 
     @Override
@@ -432,7 +625,21 @@ public class CompanyRecordQuery extends BaseQuery {
         this.addCondition("fax", this.telefaxnummer);
         this.addCondition("email", this.emailadresse);
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);
+        this.addCondition("roadcode", this.vejkode, Integer.class);
+        this.addCondition("floor", this.etage);
+        this.addCondition("door", this.door);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
+
+        if (!this.husnummer.isEmpty()) {
+            // Match hvis housenumberfrom == value   eller   housenumberfrom <= value og housenumberto >= value
+            MultiCondition multiCondition = new MultiCondition(this.getCondition(), "OR");
+            this.addCondition(multiCondition);
+            this.makeCondition(multiCondition, "housenumberfrom", Condition.Operator.EQ, this.husnummer, Integer.class, false);
+            MultiCondition rangeCondition = new MultiCondition(multiCondition);
+            multiCondition.add(rangeCondition);
+            this.makeCondition(rangeCondition, "housenumberfrom", Condition.Operator.LTE, this.husnummer, Integer.class, false);
+            this.makeCondition(rangeCondition, "housenumberto", Condition.Operator.GTE, this.husnummer, Integer.class, false);
+        }
     }
 
 

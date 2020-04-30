@@ -746,7 +746,7 @@ public class RecordTest {
 
         Assert.assertEquals(1, responseNode.get("results").size());
 
-        ResponseEntity<String> resp2 = restTemplate.exchange("/cvr/company/1/rest/search?navne=MAGENTA ApS", HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<String> resp2 = restTemplate.exchange("/cvr/company/1/rest/search?navn=MAGENTA ApS", HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(1, responseNode.get("results").size());
     }
 
@@ -797,10 +797,21 @@ public class RecordTest {
         JsonNode result6 = responseNode.get("results");
         Assert.assertEquals(result5, result6);
 
-        resp = restTemplate.exchange("/cvr/company/1/rest/search?kommuneKode=101&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?kommunekode=101&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
         responseNode = objectMapper.readTree(resp.getBody());
         JsonNode result7 = responseNode.get("results");
         Assert.assertEquals(result6, result7);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?vejkode=5520&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result8 = responseNode.get("results");
+        Assert.assertEquals(result7, result8);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?etage=3&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result9 = responseNode.get("results");
+        Assert.assertEquals(result8, result9);
+
     }
 
 

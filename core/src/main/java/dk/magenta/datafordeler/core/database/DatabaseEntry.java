@@ -31,6 +31,7 @@ public abstract class DatabaseEntry {
 
     public static final String REF = "_id";
 
+    @JsonIgnore
     public List<BaseQuery> getAssoc() {
         return Collections.emptyList();
     }

@@ -26,7 +26,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     private List<String> bnr = new ArrayList<>();
 
 
-    public static final String ROAD = AccessAddressEntity.IO_FIELD_ROAD;
+    public static final String ROAD = AccessAddressRoadRecord.IO_FIELD_ROAD_CODE;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = ROAD)
     private List<String> roadCode = new ArrayList<>();
@@ -67,9 +67,21 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         return bnr;
     }
 
-    public void setBnr(String bnr) {
+    public void clearBnr() {
         this.bnr.clear();
+        this.updatedParameters();
+    }
+
+    public void setBnr(String bnr) {
+        this.clearBnr();
         this.addBnr(bnr);
+    }
+
+    public void setBnr(Collection<String> bnrs) {
+        this.clearBnr();
+        for (String bnr : bnrs) {
+            this.addBnr(bnr);
+        }
     }
 
     public void addBnr(String bnr) {
@@ -201,6 +213,11 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     }
 
 
+    private UUID uuid;
+    public void setUUID(UUID uuid) {
+        this.uuid = uuid;
+        this.updatedParameters();
+    }
 
 
 
@@ -292,6 +309,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         joinHandles.put("localitycode", AccessAddressEntity.DB_FIELD_LOCALITY + BaseQuery.separator + AccessAddressLocalityRecord.DB_FIELD_CODE);
         joinHandles.put("postcode", AccessAddressEntity.DB_FIELD_POSTCODE + BaseQuery.separator + AccessAddressPostcodeRecord.DB_FIELD_CODE);
         joinHandles.put("id", AccessAddressEntity.DB_FIELD_IDENTIFICATION);
+        joinHandles.put("uuid", AccessAddressEntity.DB_FIELD_IDENTIFICATION + BaseQuery.separator + Identification.DB_FIELD_UUID);
     }
 
     @Override
@@ -310,6 +328,9 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         this.addCondition("roadcode", this.roadCode, Integer.class);
         this.addCondition("municipalitycode", this.municipalityCode, Integer.class);
         this.addCondition("localitycode", this.locality);
+        if (this.uuid != null) {
+            this.addCondition("uuid", Collections.singletonList(this.uuid.toString()), UUID.class);
+        }
     }
 
     public RoadQuery addRelatedRoadQuery() {
@@ -345,4 +366,23 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         return postcodeQuery;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AccessAddressQuery that = (AccessAddressQuery) o;
+        return Objects.equals(bnr, that.bnr) &&
+                Objects.equals(roadCode, that.roadCode) &&
+                Objects.equals(municipalityCode, that.municipalityCode) &&
+                Objects.equals(roadUUID, that.roadUUID) &&
+                Objects.equals(localityUUID, that.localityUUID) &&
+                Objects.equals(locality, that.locality) &&
+                Objects.equals(houseNumber, that.houseNumber) &&
+                Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bnr, roadCode, municipalityCode, roadUUID, localityUUID, locality, houseNumber, uuid);
+    }
 }

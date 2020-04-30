@@ -20,14 +20,21 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
         return name;
     }
 
-    public void setName(String name) {
+
+    public void clearName() {
         this.name.clear();
+        this.updatedParameters();
+    }
+
+    public void setName(String name) {
+        this.clearName();
         this.addName(name);
     }
 
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
+            this.updatedParameters();
         }
     }
 
@@ -42,18 +49,24 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
         return this.cvrGuid;
     }
 
+    public void clearCvrGuid() {
+        this.cvrGuid.clear();
+        this.updatedParameters();
+    }
+
     public void setCvrGuid(UUID cvrGuid) {
         this.setCvrGuid(cvrGuid.toString());
     }
 
     public void setCvrGuid(String cvrGuid) {
-        this.cvrGuid.clear();
+        this.clearCvrGuid();
         this.addCvrGuid(cvrGuid);
     }
 
     public void addCvrGuid(String cvrGuid) {
         if (cvrGuid != null) {
             this.cvrGuid.add(cvrGuid);
+            this.updatedParameters();
         }
     }
 

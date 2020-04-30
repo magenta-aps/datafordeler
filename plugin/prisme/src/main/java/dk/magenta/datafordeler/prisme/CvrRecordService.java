@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
@@ -49,8 +50,11 @@ import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/prisme/cvr/1")
@@ -194,7 +198,7 @@ public class CvrRecordService {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info(
-                "Incoming REST request for PrismeCprService with " +
+                "Incoming REST request for PrismeCvrRecordService with " +
                         PARAM_UPDATED_SINCE + " = " + updatedSince + ", " +
                         PARAM_CVR_NUMBER + " = " + (cvrNumbers != null && cvrNumbers.size() > 10 ? (cvrNumbers.size() + " cpr numbers") : cvrNumbers) + " and " +
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
@@ -226,7 +230,7 @@ public class CvrRecordService {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
                 Session session = sessionManager.getSessionFactory().openSession();
-                List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
+                List<CompanyRecord> records = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class).collect(Collectors.toList());
                 GeoLookupService lookupService = new GeoLookupService(sessionManager);
                 try {
                     boolean first = true;
@@ -342,11 +346,11 @@ public class CvrRecordService {
             if (addressRecord.getRoadName() != null) {
                 addressFormatted.append(addressRecord.getRoadName());
             }
-            if (addressRecord.getHouseNumberFrom() != null) {
+            if (addressRecord.getHouseNumberFrom() != 0) {
                 addressFormatted.append(" " + addressRecord.getHouseNumberFrom() + emptyIfNull(addressRecord.getLetterFrom()));
-                if (addressRecord.getHouseNumberTo() != null) {
+                if (addressRecord.getHouseNumberTo() != 0) {
                     addressFormatted.append("-");
-                    if (addressRecord.getHouseNumberTo().equals(addressRecord.getHouseNumberFrom())) {
+                    if (addressRecord.getHouseNumberTo()==addressRecord.getHouseNumberFrom()) {
                         addressFormatted.append(emptyIfNull(addressRecord.getLetterTo()));
                     } else {
                         addressFormatted.append(addressRecord.getHouseNumberTo() + emptyIfNull(addressRecord.getLetterTo()));

@@ -44,7 +44,7 @@ public class MunicipalityService extends FapiBaseService<GeoMunicipalityEntity, 
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.DRV;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override

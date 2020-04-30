@@ -50,7 +50,7 @@ public class BuildingService extends FapiBaseService<BuildingEntity, BuildingQue
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.DRV;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override

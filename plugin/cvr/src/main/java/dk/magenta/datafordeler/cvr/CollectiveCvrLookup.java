@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 /**
  * Lookup functionality for finding companys and participants first in local database.
@@ -35,7 +36,7 @@ public class CollectiveCvrLookup {
         CompanyRecordQuery query = new CompanyRecordQuery();
         query.setCvrNumre(cvrNumbers);
 
-        Collection<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, query, CompanyRecord.class);
+        Collection<CompanyRecord> companyRecords = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class).collect(Collectors.toList());;
 
         for(CompanyRecord record : companyRecords) {
             cvrNumbers.remove(Integer.toString(record.getCvrNumber()));

@@ -1,0 +1,1280 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Datafordeler",
+    "description": "Generiske services i datafordeleren tillader opslag på personer, virksomheder og adressedata, sammenkørt med relevante relaterede adressedata.<br />Udgangspunktet er f.eks. personer, virksomheder, veje osv. som hver især kun har de absolut nødvendigste adressedata.<br />Disse beriges med kommunekode og -navn, lokalitetskode og -navn, vejnavn osv.<br /><br />For alle services under de generiske services gælder det at der er implementeret paginering.<br />pageSize definere hvor mange resultater, der returneres i hvert dataopslag<br />page definere hvilken side, der returneres<br />Hvis der ikke er nogen værdier for disse parametre sættes pageSize=10 og page=1 (Første side)",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://dafo.data.gl"
+    }
+  ],
+  "paths": {
+    "/cpr/person/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for CPR persondata.",
+        "description": "Ved søgning efter personer skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. De indeholdte data er begrænset til personer med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CPR-GENERIC/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "parameters": [
+          {
+            "name": "pnr",
+            "in": "query",
+            "description": "Personnummer",
+            "examples": {
+              "fuld": {
+                "value": "0102800123"
+              },
+              "wildcard": {
+                "value": "010280*"
+              }
+            }
+          },
+          {
+            "name": "fornavn",
+            "in": "query",
+            "description": "Fornavn(e) på personen.",
+            "examples": {
+              "fuld": {
+                "value": "Jens"
+              },
+              "wildcard": {
+                "value": "Jen*"
+              }
+            }
+          },
+          {
+            "name": "efternavn",
+            "in": "query",
+            "description": "Efternavn på personen.",
+            "examples": {
+              "fuld": {
+                "value": "Hansen"
+              },
+              "wildcard": {
+                "value": "Hans*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode for personens bopæl",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode for personens bopæl",
+            "examples": {
+              "fuld": {
+                "value": "100"
+              },
+              "wildcard": {
+                "value": "1*"
+              }
+            }
+          },
+          {
+            "name": "husnummer",
+            "in": "query",
+            "description": "Husnummer for personens bopæl",
+            "examples": {
+              "fuld": {
+                "value": "23"
+              },
+              "wildcard": {
+                "value": "2*"
+              }
+            }
+          },
+          {
+            "name": "etage",
+            "in": "query",
+            "description": "Etage for personens bopæl",
+            "examples": {
+              "fuld": {
+                "value": "1"
+              },
+              "wildcard": {
+                "value": "*"
+              }
+            }
+          },
+          {
+            "name": "sidedør",
+            "in": "query",
+            "description": "Sidedør for personens bopæl",
+            "examples": {
+              "fuld": {
+                "value": "tv"
+              },
+              "wildcard": {
+                "value": "*"
+              }
+            }
+          },
+          {
+            "name": "bnr",
+            "in": "query",
+            "description": "Bnr for personens bopæl",
+            "examples": {
+              "fuld": {
+                "value": "1234"
+              },
+              "wildcard": {
+                "value": "12*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende personer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pnr": {
+                            "type": "string",
+                            "example": "0102800123"
+                          },
+                          "uuid": {
+                            "type": "string",
+                            "example": "92035a6b-68f5-4ce3-b8a7-9d9a96199b12"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cpr/person/1/rest/"
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "fornavn": {
+                                  "type": "string",
+                                  "example": "Jens"
+                                },
+                                "mellemnavn": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "efternavn": {
+                                  "type": "string",
+                                  "example": "Hansen"
+                                },
+                                "egetEfternavn": {
+                                  "type": "string",
+                                  "example": "Jensen"
+                                },
+                                "fornavnMarkering": {
+                                  "type": "boolean",
+                                  "example": false
+                                },
+                                "mellemnavnMarkering": {
+                                  "type": "boolean",
+                                  "example": false
+                                },
+                                "efternavnMarkering": {
+                                  "type": "boolean",
+                                  "example": false
+                                },
+                                "egetEfternavnMarkering": {
+                                  "type": "boolean",
+                                  "example": false
+                                },
+                                "adresseringsnavn": {
+                                  "type": "string",
+                                  "example": "Hansen,Jens"
+                                },
+                                "myndighed": {
+                                  "type": "integer",
+                                  "example": 1234
+                                }
+                              }
+                            }
+                          },
+                          "adresseringsnavn": {
+                            "type": "object",
+                            "properties": {
+                              "adressenavn": {
+                                "type": "string",
+                                "example": "Hansen,Jens"
+                              },
+                              "myndighed": {
+                                "type": "integer",
+                                "example": 1234
+                              }
+                            }
+                          },
+                          "adresse": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "adresselinie1": {
+                                  "type": "string"
+                                },
+                                "adresselinie2": {
+                                  "type": "string"
+                                },
+                                "adresselinie3": {
+                                  "type": "string"
+                                },
+                                "adresselinie4": {
+                                  "type": "string"
+                                },
+                                "adresselinie5": {
+                                  "type": "string"
+                                },
+                                "adresseteksttype": {
+                                  "type": "integer"
+                                },
+                                "bnr": {
+                                  "type": "string"
+                                },
+                                "etage": {
+                                  "type": "string",
+                                  "example": "1"
+                                },
+                                "husnummer": {
+                                  "type": "string",
+                                  "example": "23"
+                                },
+                                "kommunekode": {
+                                  "type": "integer",
+                                  "example": 956
+                                },
+                                "lokalitetsnavn": {
+                                  "type": "string"
+                                },
+                                "myndighed": {
+                                  "type": "integer"
+                                },
+                                "postdistrikt": {
+                                  "type": "string",
+                                  "example": "Nuuk"
+                                },
+                                "postnummer": {
+                                  "type": "integer",
+                                  "example": 3900
+                                },
+                                "sidedør": {
+                                  "type": "string",
+                                  "example": null
+                                },
+                                "startautoritet": {
+                                  "type": "integer"
+                                },
+                                "vejkode": {
+                                  "type": "integer",
+                                  "example": 106
+                                },
+                                "vejnavn": {
+                                  "type": "string",
+                                  "example": "Industrivej"
+                                }
+                              }
+                            }
+                          },
+                          "conavn": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer"
+                                },
+                                "conavn": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "kommuneflytning": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer",
+                                  "example": 100
+                                },
+                                "fraflytningsdatoKommune": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": null
+                                },
+                                "fraflytningsdatoKommuneUsikkerhedsmarkering": {
+                                  "type": "boolean",
+                                  "example": false
+                                },
+                                "fraflytningskommunekode": {
+                                  "type": "integer",
+                                  "example": 101
+                                },
+                                "tilflytningsdatoKommune": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2010-01-01T00:00:00"
+                                },
+                                "tilflytningsdatoKommuneUsikkerhedsmarkering": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          },
+                          "statsborgerskab": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer"
+                                },
+                                "landekode": {
+                                  "type": "integer",
+                                  "example": 5100
+                                }
+                              }
+                            }
+                          },
+                          "mor": {
+                            "type": "object",
+                            "properties": {
+                              "pnr": {
+                                "type": "string",
+                                "example": "0102631234"
+                              },
+                              "parentSearchAddress": {
+                                "type": "string",
+                                "example": "${pitu.base.url}/cpr/person/1/rest/search?pnr=0102631234"
+                              }
+                            }
+                          },
+                          "far": {
+                            "type": "object",
+                            "properties": {
+                              "pnr": {
+                                "type": "string",
+                                "example": "0102630123"
+                              },
+                              "parentSearchAddress": {
+                                "type": "string",
+                                "example": "${pitu.base.url}/cpr/person/1/rest/search?pnr=0102630123"
+                              }
+                            }
+                          },
+                          "folkekirkeoplysning": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer",
+                                  "example": 9518,
+                                  "description": "Kode for den registrerende myndighed"
+                                },
+                                "folkekirkeforhold": {
+                                  "type": "string",
+                                  "example": "F",
+                                  "description": "|Kode|Beskrivelse                            |\n|----|---------------------------------------|\n|F   |Medlem af folkekirken                  |\n|M   |Medlem af valgmenighed (og folkekirken)|\n|S   |Fri for kirkeskat eller udrejst        |\n|U   |Udenfor folkekirken                    |\n|A   |Afventer markering                     |\n"
+                                }
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer",
+                                  "example": 1234
+                                },
+                                "status": {
+                                  "type": "integer",
+                                  "example": 5,
+                                  "description": "|Kode|Beskrivelse                                                                                   |\n|----|----------------------------------------------------------------------------------------------|\n| 1  |Aktiv, bopæl i dansk folkeregister                                                            |\n| 3  |Aktiv, speciel vejkode (9900-9999) i dansk folkeregister                                      |\n| 5  |Aktiv, bopæl i grønlandsk folkeregister                                                       |\n| 7  |Aktiv, speciel vejkode (9900-9999) i grønlandsk folkeregister                                 |\n|10  |Inaktiv, reserveret personnummer                                                              |\n|20  |Inaktiv, uden bopæl i dansk/grønlandsk folkeregister, men tildelt personnummer af skattehensyn|\n|30  |Inaktiv, annuleret personnummer                                                               |\n|50  |Inaktiv, slettet personnummer ved dobbeltnummer                                               |\n|60  |Inaktiv, ændret personnummer ved ændring af fødselsdato og køn                                |\n|70  |Inaktiv, forsvundet                                                                           |\n|80  |Inaktiv, udrejst                                                                              |\n|90  |Inaktiv, død                                                                                  |\n|99  |Ukendt (ikke officiel CPR-kode)                                                               |\n"
+                                }
+                              }
+                            }
+                          },
+                          "civilstatus": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer",
+                                  "example": 0
+                                },
+                                "civilstand": {
+                                  "type": "string",
+                                  "example": "G",
+                                  "description": "|Kode|Beskrivelse                      |\n|----|---------------------------------|\n|U   |Ugift                            |\n|G   |Gift                             |\n|F   |Fraskilt                         |\n|E   |Enke/Enkemand                    |\n|D   |Død                              |\n|P   |Registreret partner              |\n|O   |Ophørt registreret partner       |\n|L   |Længstlevende registreret partner|\n"
+                                },
+                                "ægtefælleCpr": {
+                                  "type": "string",
+                                  "example": "0405861234"
+                                },
+                                "ægtefælleFødselsdato": {
+                                  "type": "string",
+                                  "example": "1986-05-06",
+                                  "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+                                },
+                                "ægtefælleFødselsdatoUsikker": {
+                                  "type": "boolean",
+                                  "example": false,
+                                  "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+                                },
+                                "ægtefælleNavn": {
+                                  "type": "string",
+                                  "example": "Hansen,Jensine",
+                                  "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+                                },
+                                "ægtefælleNavnMarkering": {
+                                  "type": "boolean",
+                                  "example": false,
+                                  "description": "Feltet bruges oftest når der ikke foreligger et ægtefælleCpr - f.eks. hvis personen er gift med en udenlandsk statsborger"
+                                }
+                              }
+                            }
+                          },
+                          "fødselsted": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer",
+                                  "example": 9520
+                                },
+                                "cprFødselsregistreringsstedskode": {
+                                  "type": "integer",
+                                  "example": 100
+                                },
+                                "cprFødselsregistreringsstedsnavn": {
+                                  "type": "string",
+                                  "example": "Reykjavik"
+                                }
+                              }
+                            }
+                          },
+                          "fødselstidspunkt": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer",
+                                  "example": 9520
+                                },
+                                "fødselsdato": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "1980-01-02T12:34:56"
+                                },
+                                "fødselsdatoUsikkerhedsmarkering": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          },
+                          "køn": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "myndighed": {
+                                  "type": "integer",
+                                  "example": 99
+                                },
+                                "køn": {
+                                  "type": "string",
+                                  "enum": [
+                                    "KVINDE",
+                                    "MAND"
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cvr/company/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for CVR virksomhedsdata.",
+        "description": "Ved søgning efter virksomheder skal mindst én søgeparameter angives. Alle søgeparametre undtagen 'reklamebeskyttet' kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-GENERIC/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "parameters": [
+          {
+            "name": "cvrNummer",
+            "in": "query",
+            "description": "CVR nummer",
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+          {
+            "name": "reklamebeskyttet",
+            "in": "query",
+            "description": "Reklamebeskyttede virksomheder",
+            "examples": {
+              "reklamebeskyttet": {
+                "value": "ja"
+              },
+              "ikke reklamebeskyttet": {
+                "value": "nej"
+              }
+            }
+          },
+          {
+            "name": "navne",
+            "in": "query",
+            "description": "Virksomhedsnavn",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "telefonNummer",
+            "in": "query",
+            "description": "Telefonnummer",
+            "examples": {
+              "fuld": {
+                "value": "123456"
+              },
+              "wildcard": {
+                "value": "1234*"
+              }
+            }
+          },
+          {
+            "name": "elektroniskPost",
+            "in": "query",
+            "description": "Email-adresse",
+            "examples": {
+              "fuld": {
+                "value": "test@test.dk"
+              },
+              "wildcard": {
+                "value": "*@magenta.dk"
+              }
+            }
+          },
+          {
+            "name": "virksomhedsform",
+            "in": "query",
+            "description": "Virksomhedsformkode.\n|Kode|Beskrivelse                                               |Forkortelse|\n|----|----------------------------------------------------------|-----------|\n|10  |Enkeltmandsvirksomhed                                     |ENK        |\n|15  |Personligt ejet Mindre Virksomhed                         |PMV        |\n|30  |Interessentskab                                           |I/S        |\n|40  |Kommanditselskab                                          |K/S        |\n|50  |Partrederi                                                |PAR        |\n|60  |Aktieselskab                                              |A/S        |\n|70  |Kommanditaktieselskab/Partnerselskab                      |KAS        |\n|80  |Anpartsselskab                                            |APS        |\n|81  |Iværksætterselskab                                        |IVS        |\n|90  |Fonde og andre selvejende institutioner                   |FON        |\n|100 |Erhvervsdrivende fond                                     |EFO        |\n|110 |Forening                                                  |FOR        |\n|140 |Andelsselskab (-forening) med begrænset ansvar            |ABA        |\n|151 |Selskab med begrænset ansvar                              |SMA        |\n|170 |Filial af udenlandsk aktieselskab, kommanditaktieselskab  |FAS        |\n|180 |Filial af udenlandsk anpartsselskab eller selskab         |FAP        |\n|230 |Statslig administrativ enhed                              |STA        |\n|270 |Enhed under oprettelse i Erhvervsstyrelsen                |EUO        |\n|285 |Særlig finansiel virksomhed                               |FIV        |\n|520 |Grønlandsk afdeling af udenlandsk selskab eller virksomhed|GUS        |\n",
+            "examples": {
+              "fuld": {
+                "value": "80"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "100"
+              },
+              "wildcard": {
+                "value": "1*"
+              }
+            }
+          },
+          {
+            "name": "husnummer",
+            "in": "query",
+            "description": "Husnummer for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "23"
+              },
+              "wildcard": {
+                "value": "2*"
+              }
+            }
+          },
+          {
+            "name": "etage",
+            "in": "query",
+            "description": "Etage for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "1"
+              },
+              "wildcard": {
+                "value": "*"
+              }
+            }
+          },
+          {
+            "name": "sidedør",
+            "in": "query",
+            "description": "Sidedør for virksomhedens adresse",
+            "examples": {
+              "fuld": {
+                "value": "tv"
+              },
+              "wildcard": {
+                "value": "*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende virksomheder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "55ef29e6-2226-392a-9266-3775f977d346"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cvr/company/1/rest/"
+                          },
+                          "cvrNummer": {
+                            "type": "string",
+                            "example": "12950160"
+                          },
+                          "samtId": {
+                            "type": "integer",
+                            "example": 5
+                          },
+                          "enhedsNummer": {
+                            "type": "integer",
+                            "example": 1234567890
+                          },
+                          "enhedstype": {
+                            "type": "string",
+                            "example": "VIRKSOMHED"
+                          },
+                          "penheder": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": 9876543210
+                            }
+                          },
+                          "beliggenhedsadresse": {
+                            "$ref": "#/components/schemas/virksomhedsadresse"
+                          },
+                          "hjemmeside": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kontaktoplysning": {
+                                  "type": "string",
+                                  "example": "www.magenta.dk"
+                                },
+                                "hemmelig": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          },
+                          "elektroniskPost": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kontaktoplysning": {
+                                  "type": "string",
+                                  "example": "info@magenta.dk"
+                                },
+                                "hemmelig": {
+                                  "type": "boolean",
+                                  "example": false
+                                }
+                              }
+                            }
+                          },
+                          "hovedbranche": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "branchekode": {
+                                  "type": "string",
+                                  "example": "620100"
+                                },
+                                "branchetekst": {
+                                  "type": "string",
+                                  "example": "Computerprogrammering"
+                                }
+                              }
+                            }
+                          },
+                          "virksomhedsform": {
+                            "$ref": "#/components/schemas/virksomhedsform"
+                          },
+                          "virksomhedsstatus": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "NORMAL",
+                              "enum": [
+                                "NORMAL",
+                                "OPLØST EFTER ERKLÆRING",
+                                "OPLØST EFTER FRIVILLIG LIKVIDATION",
+                                "OPLØST EFTER FUSION",
+                                "OPLØST EFTER KONKURS",
+                                "OPLØST EFTER SPALTNING",
+                                "SLETTET",
+                                "TVANGSOPLØST",
+                                "UDEN RETSVIRKNING",
+                                "UNDER FRIVILLIG LIKVIDATION",
+                                "UNDER KONKURS",
+                                "UNDER REASSUMERING",
+                                "UNDER REKONSTRUKTION",
+                                "UNDER TVANGSOPLØSNING"
+                              ]
+                            }
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Magenta Grønland ApS"
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "nyesteKontaktoplysninger": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "data": {
+                                      "type": "string",
+                                      "example": "www.magenta.dk"
+                                    }
+                                  }
+                                }
+                              },
+                              "antalPenheder": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "nyesteBeliggenhedsadresse": {
+                                "$ref": "#/components/schemas/virksomhedsadresse"
+                              },
+                              "nyesteHovedbranche": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "branchekode": {
+                                      "type": "string",
+                                      "example": "620100"
+                                    },
+                                    "branchetekst": {
+                                      "type": "string",
+                                      "example": "Computerprogrammering"
+                                    }
+                                  }
+                                }
+                              },
+                              "nyesteNavn": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "Magenta Grønland ApS"
+                                }
+                              },
+                              "nyesteVirksomhedsform": {
+                                "$ref": "#/components/schemas/virksomhedsform"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/fullAddress/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for GAR adresser.",
+        "description": "Ved søgning efter adresser kan der benyttes en kombination af søgeparametre<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ADDRESS-GENERIC/1<br />Sti under /restapi/: /fullAddress/1/rest/search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/fullAddress/1/rest/search/",
+        "parameters": [
+          {
+            "name": "bnr",
+            "in": "query",
+            "description": "Bygningsnummer",
+            "examples": {
+              "fuld": {
+                "value": "B-826"
+              },
+              "wildcard": {
+                "value": "B-2*"
+              }
+            }
+          },
+          {
+            "name": "husNummer",
+            "in": "query",
+            "description": "Husnummer",
+            "examples": {
+              "fuld": {
+                "value": "15"
+              },
+              "wildcard": {
+                "value": "1*"
+              }
+            }
+          },
+          {
+            "name": "doer",
+            "in": "query",
+            "description": "Dør",
+            "examples": {
+              "fuld": {
+                "value": "20"
+              },
+              "wildcard": {
+                "value": "2*"
+              }
+            }
+          },
+          {
+            "name": "etage",
+            "in": "query",
+            "description": "Etage",
+            "examples": {
+              "fuld": {
+                "value": "st"
+              }
+            }
+          },
+          {
+            "name": "kommune_kode",
+            "in": "query",
+            "description": "Den unikke kommunekode",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "større end": {
+                "value": "kommune_kode.gt=956"
+              },
+              "mindre end": {
+                "value": "kommune_kode.lt=956"
+              }
+            }
+          },
+          {
+            "name": "kommune_navn",
+            "in": "query",
+            "description": "Kommunens navn",
+            "examples": {
+              "fuld": {
+                "value": "Kommuneqarfik Sermersooq"
+              },
+              "wildcard": {
+                "value": "*Sermersooq*"
+              }
+            }
+          },
+          {
+            "name": "lokalitet_kode",
+            "in": "query",
+            "description": "Lokalitetskoden",
+            "examples": {
+              "fuld": {
+                "value": "1607"
+              }
+            }
+          },
+          {
+            "name": "lokalitet_navn",
+            "in": "query",
+            "description": "Navnet på lokaliteten",
+            "examples": {
+              "fuld": {
+                "value": "Kullorsuaq"
+              },
+              "wildcard": {
+                "value": "*suaq"
+              }
+            }
+          },
+          {
+            "name": "post_kode",
+            "in": "query",
+            "description": "Postnummer",
+            "examples": {
+              "fuld": {
+                "value": "3951"
+              },
+              "større end": {
+                "value": "post_kode.gt=3950"
+              },
+              "mindre end": {
+                "value": "post_kode.lt=3950"
+              }
+            }
+          },
+          {
+            "name": "post_navn",
+            "in": "query",
+            "description": "Navnet som hænger sammen med postnummeret",
+            "examples": {
+              "fuld": {
+                "value": "Qasigiannguit"
+              },
+              "wildcard": {
+                "value": "*annguit"
+              }
+            }
+          },
+          {
+            "name": "vej_kode",
+            "in": "query",
+            "description": "Den unikke vejode",
+            "examples": {
+              "fuld": {
+                "value": "212"
+              },
+              "større end": {
+                "value": "vej_kode.gt=212"
+              },
+              "mindre end": {
+                "value": "vej_kode.lt=212"
+              }
+            }
+          },
+          {
+            "name": "vej_navn",
+            "in": "query",
+            "description": "Vejnavn",
+            "examples": {
+              "fuld": {
+                "value": "Nuukullak"
+              },
+              "wildcard": {
+                "value": "Nuuk*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende adresser",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "bnr": {
+                            "type": "string",
+                            "example": "B-1400"
+                          },
+                          "husNummer": {
+                            "type": "string",
+                            "example": "5A"
+                          },
+                          "blokNavn": {
+                            "type": "string",
+                            "example": "Pax"
+                          },
+                          "kommune_kode": {
+                            "type": "integer",
+                            "example": 956
+                          },
+                          "kommune_navn": {
+                            "type": "string",
+                            "example": "Kommuneqarfik Sermersooq"
+                          },
+                          "lokalitet_kode": {
+                            "type": "string",
+                            "example": "1607"
+                          },
+                          "lokalitet_type": {
+                            "type": "integer",
+                            "example": 3
+                          },
+                          "lokalitet_navn": {
+                            "type": "string",
+                            "example": "Kullorsuaq"
+                          },
+                          "post_kode": {
+                            "type": "integer",
+                            "example": 3951
+                          },
+                          "post_navn": {
+                            "type": "string",
+                            "example": "Qasigiannguit"
+                          },
+                          "status": {
+                            "type": "integer",
+                            "example": 2
+                          },
+                          "source": {
+                            "type": "string",
+                            "example": 1
+                          },
+                          "etage": {
+                            "type": "string",
+                            "example": "kld"
+                          },
+                          "doer": {
+                            "type": "string",
+                            "example": "A"
+                          },
+                          "nummer": {
+                            "type": "string",
+                            "example": "5"
+                          },
+                          "vej_kode": {
+                            "type": "string",
+                            "example": 269
+                          },
+                          "vej_navn": {
+                            "type": "string",
+                            "example": "Qeqertaq"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "virksomhedsform": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "virksomhedsformkode": {
+              "type": "string",
+              "example": "80"
+            },
+            "kortBeskrivelse": {
+              "type": "string",
+              "example": "APS"
+            },
+            "langBeskrivelse": {
+              "type": "string",
+              "example": "Anpartsselskab"
+            },
+            "ansvarligDataleverandoer": {
+              "type": "string",
+              "example": "E&S"
+            }
+          },
+          "description": "Virksomhedsformkode.\n|Kode|Beskrivelse                                               |Forkortelse|\n|----|----------------------------------------------------------|-----------|\n|10  |Enkeltmandsvirksomhed                                     |ENK        |\n|15  |Personligt ejet Mindre Virksomhed                         |PMV        |\n|30  |Interessentskab                                           |I/S        |\n|40  |Kommanditselskab                                          |K/S        |\n|50  |Partrederi                                                |PAR        |\n|60  |Aktieselskab                                              |A/S        |\n|70  |Kommanditaktieselskab/Partnerselskab                      |KAS        |\n|80  |Anpartsselskab                                            |APS        |\n|81  |Iværksætterselskab                                        |IVS        |\n|90  |Fonde og andre selvejende institutioner                   |FON        |\n|100 |Erhvervsdrivende fond                                     |EFO        |\n|110 |Forening                                                  |FOR        |\n|140 |Andelsselskab (-forening) med begrænset ansvar            |ABA        |\n|151 |Selskab med begrænset ansvar                              |SMA        |\n|170 |Filial af udenlandsk aktieselskab, kommanditaktieselskab  |FAS        |\n|180 |Filial af udenlandsk anpartsselskab eller selskab         |FAP        |\n|230 |Statslig administrativ enhed                              |STA        |\n|270 |Enhed under oprettelse i Erhvervsstyrelsen                |EUO        |\n|285 |Særlig finansiel virksomhed                               |FIV        |\n|520 |Grønlandsk afdeling af udenlandsk selskab eller virksomhed|GUS        |\n"
+        }
+      },
+      "virksomhedsadresse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kommunekode": {
+              "type": "integer",
+              "example": 956
+            },
+            "kommunenavn": {
+              "type": "string",
+              "example": "Kommuneqarfik Sermersooq"
+            },
+            "lokalitetskode": {
+              "type": "string",
+              "example": "0600"
+            },
+            "lokalitetsnavn": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "postdistrikt": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "postnummer": {
+              "type": "integer",
+              "example": 3900
+            },
+            "bynavn": {
+              "type": "string",
+              "example": "Nuuk"
+            },
+            "vejkode": {
+              "type": "integer",
+              "example": 212
+            },
+            "vejnavn": {
+              "type": "string",
+              "example": "Nuukullak"
+            },
+            "husnummerFra": {
+              "type": "string",
+              "example": "4"
+            },
+            "husnummerTil": {
+              "type": "string",
+              "example": null
+            },
+            "etage": {
+              "type": "string",
+              "example": "1"
+            },
+            "sidedør": {
+              "type": "string",
+              "example": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

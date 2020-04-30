@@ -46,7 +46,7 @@ public class AccessAddressRoadRecord extends GeoMonotemporalRecord<AccessAddress
 
 
     public static final String DB_FIELD_MUNICIPALITY_CODE = "municipalityCode";
-    public static final String IO_FIELD_MUNICIPALITY_CODE = "kommuneKode";
+    public static final String IO_FIELD_MUNICIPALITY_CODE = "kommunekode";
     @Column(name = DB_FIELD_MUNICIPALITY_CODE, nullable = true)
     @JsonProperty(value = IO_FIELD_MUNICIPALITY_CODE)
     private Integer municipalityCode;
@@ -62,7 +62,7 @@ public class AccessAddressRoadRecord extends GeoMonotemporalRecord<AccessAddress
 
 
     public static final String DB_FIELD_ROAD_CODE = "roadCode";
-    public static final String IO_FIELD_ROAD_CODE = "vejKode";
+    public static final String IO_FIELD_ROAD_CODE = "vejkode";
     @Column(name = DB_FIELD_ROAD_CODE)
     @JsonProperty(value = IO_FIELD_ROAD_CODE)
     private Integer roadCode;

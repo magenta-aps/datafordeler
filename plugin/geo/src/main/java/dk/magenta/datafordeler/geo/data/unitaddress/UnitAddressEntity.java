@@ -3,10 +3,13 @@ package dk.magenta.datafordeler.geo.data.unitaddress;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
 import dk.magenta.datafordeler.geo.data.MonotemporalSet;
@@ -16,16 +19,17 @@ import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressEntity.TABLE_NAME, indexes = {
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressEntity.TABLE_NAME + UnitAddressEntity.DB_FIELD_SUMIFFIIK_ID,
                 columnList = UnitAddressEntity.DB_FIELD_SUMIFFIIK_ID
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressEntity.TABLE_NAME + UnitAddressEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = UnitAddressEntity.DB_FIELD_DAFO_UPDATED
         ),
 })
 public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEntity {
@@ -217,5 +221,23 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
         records.add(this.source);
         records.add(this.status);
         return records;
+    }
+
+
+
+    @JsonIgnore
+    @Override
+    public List<BaseQuery> getAssoc() {
+        PluginManager pluginManager = PluginManager.getInstance();
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("accessaddress", this.accessAddress.getUuid().toString());
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            queries.addAll(geoPlugin.getQueries(map));
+        }
+
+        return queries;
     }
 }

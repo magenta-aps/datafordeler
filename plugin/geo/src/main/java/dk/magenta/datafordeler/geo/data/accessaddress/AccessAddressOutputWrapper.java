@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.geo.data.accessaddress;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
@@ -10,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
+import java.util.*;
 
 @Component
 public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEntity> {
@@ -42,6 +43,25 @@ public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEn
         container.addMonotemporal("vej", item.getRoad());
         container.addMonotemporal("status", item.getStatus());
         container.addNontemporal("sumiffiik", item.getSumiffiikId());
+    }
+
+
+    public Map<Class, List<String>> getEligibleModifierNames() {
+        HashMap<Class, List<String>> map = new HashMap<>();
+        ArrayList<String> addressModifiers = new ArrayList<>();
+        addressModifiers.add("geo_locality");
+        addressModifiers.add("geo_road");
+        addressModifiers.add("geo_municipality");
+        map.put(AccessAddressEntity.class, addressModifiers);
+
+        ArrayList<String> roadModifiers = new ArrayList<>();
+        roadModifiers.add("geo_road");
+        roadModifiers.add("geo_municipality");
+        map.put(AccessAddressRoadRecord.class, roadModifiers);
+        map.put(AccessAddressLocalityRecord.class, Collections.singletonList("geo_locality"));
+        map.put(AccessAddressPostcodeRecord.class, Collections.singletonList("geo_postcode"));
+
+        return map;
     }
 
 }

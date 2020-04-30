@@ -1,5 +1,8 @@
 package dk.magenta.datafordeler.core.fapi;
 
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
+
+import javax.validation.constraints.Null;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +24,7 @@ public class MultiCondition extends Condition {
         this("AND");
     }
 
-    public MultiCondition(Condition parent) throws Exception {
+    public MultiCondition(Condition parent) throws QueryBuildException {
         this(parent, "AND");
     }
 
@@ -29,7 +32,7 @@ public class MultiCondition extends Condition {
         this.operator = operator;
     }
 
-    public MultiCondition(Condition parent, String operator) throws Exception {
+    public MultiCondition(Condition parent, String operator) throws QueryBuildException {
         super(parent);
         this.operator = operator;
     }
@@ -46,12 +49,12 @@ public class MultiCondition extends Condition {
 
     public String toHql() {
         // Join leaf nodes' hql together with our operator ("AND" or "OR")
-        return this.conditions.stream().map(c -> "(" + c.toHql() + ")").collect(Collectors.joining(" " + this.operator + " "));
+        return this.conditions.stream().map(Condition::toHql).filter(h -> h != null && !h.isEmpty()).map(h -> "("+h+")").collect(Collectors.joining(" " + this.operator + " "));
     }
 
     public boolean isEmpty() {
         for (Condition condition : this.conditions) {
-            if (condition instanceof SingleCondition) {
+            if (condition instanceof SingleCondition || condition instanceof NullCondition/* || condition instanceof JoinedQuery*/) {
                 return false;
             } else if (condition instanceof MultiCondition) {
                 MultiCondition m = (MultiCondition) condition;

@@ -84,13 +84,12 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     protected Map<Class, List<String>> getEligibleModifierNames() {
         return Collections.emptyMap();
     }
-    private List<JsonModifier> getEligibleModifiers(Class cls) {
+    protected List<JsonModifier> getEligibleModifiers(Class cls) {
         List<String> modifierNames = this.getEligibleModifierNames().get(cls);
         if (modifierNames == null) {
             return Collections.emptyList();
         }
-
-        return modifierNames.stream().map(name -> this.modifiers.get(name)).collect(Collectors.toList());
+        return modifierNames.stream().map(name -> this.modifiers.get(name)).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 
@@ -223,6 +222,17 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
         public void addNontemporal(String key, OffsetDateTime data) {
             this.nontemporalData.add(key, data != null ? new TextNode(data.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)) : null);
+        }
+
+        public void addNontemporal(String key, Identification data) {
+            if (data != null) {
+                ObjectNode container = getObjectMapper().createObjectNode();
+                container.put("uuid", data.getUuid().toString());
+                for (JsonModifier modifier : RecordOutputWrapper.this.getEligibleModifiers(Identification.class)) {
+                    modifier.modify(container);
+                }
+                this.nontemporalData.add(key, container);
+            }
         }
 
 

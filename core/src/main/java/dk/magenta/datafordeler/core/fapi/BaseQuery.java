@@ -645,10 +645,10 @@ public abstract class BaseQuery {
     public static Boolean booleanFromString(String s, Boolean def) {
         if (s != null) {
             s = s.toLowerCase();
-            if (s.equals("1") || s.equals("true") || s.equals("yes")) {
+            if (s.equals("1") || s.equals("true") || s.equals("yes") || s.equals("ja")) {
                 return true;
             }
-            if (s.equals("0") || s.equals("false") || s.equals("no")) {
+            if (s.equals("0") || s.equals("false") || s.equals("no") || s.equals("nej")) {
                 return false;
             }
         }
@@ -792,11 +792,6 @@ public abstract class BaseQuery {
             log.debug("Activating filter "+Bitemporal.FILTER_EFFECTTO_AFTER+"  "+this.getEffectToAfter());
             this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_AFTER, Bitemporal.FILTERPARAM_EFFECTTO_AFTER, this.getEffectToAfter());
         }
-
-        if (this.getRecordAfter() != null) {
-            //this.applyFilter(session, DataItem.FILTER_RECORD_AFTER, DataItem.FILTERPARAM_RECORD_AFTER, this.getRecordAfter());
-            this.applyFilter(session, Nontemporal.FILTER_LASTUPDATED_AFTER, Nontemporal.FILTERPARAM_LASTUPDATED_AFTER, this.getRecordAfter());
-        }
     }
 
     private void applyFilter(Session session, String filterName, String parameterName, Object parameterValue) {
@@ -816,6 +811,15 @@ public abstract class BaseQuery {
 
     public abstract String getEntityIdentifier();
 
+    public MultiCondition getCondition() {
+        return this.condition;
+    }
+    private Map<String, String> allJoinHandles() {
+        HashMap<String, String> map = new HashMap<>(this.joinHandles());
+        map.put("dafoUpdated", Nontemporal.DB_FIELD_UPDATED);
+        return map;
+    }
+
     public void addCondition(Condition condition) {
         this.finalizedConditions = false;
         this.condition.add(condition);
@@ -827,33 +831,49 @@ public abstract class BaseQuery {
 
     public void addCondition(String handle, List<String> value, Class type) throws QueryBuildException {
         if (value != null && !value.isEmpty()) {
-            this.addCondition(handle, Condition.Operator.EQ, value, type);
+            this.addCondition(handle, Condition.Operator.EQ, value, type, false);
         }
     }
 
-    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type) throws QueryBuildException {
+    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type, boolean orNull) throws QueryBuildException {
         this.finalizedConditions = false;
+        this.makeCondition(this.condition, handle, operator, value, type, orNull);
+    }
+
+
+    public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List<String> value, Class type, boolean orNull) throws QueryBuildException {
         String member = this.useJoinHandle(handle);
-        String placeholder = this.getEntityIdentifier() + "__" + this.joinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
+        String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
         if (member != null && value != null && !value.isEmpty()) {
             try {
-                this.condition.add(new SingleCondition(this.condition, member, value, operator, placeholder, type));
+                if (orNull) {
+                    MultiCondition multiCondition = new MultiCondition(parent, "OR");
+                    multiCondition.add(new SingleCondition(multiCondition, member, value, operator, placeholder, type));
+                    multiCondition.add(new NullCondition(multiCondition, member, Condition.Operator.EQ));
+                    parent.add(multiCondition);
+                    return multiCondition;
+                } else {
+                    SingleCondition condition = new SingleCondition(parent, member, value, operator, placeholder, type);
+                    parent.add(condition);
+                    return condition;
+                }
             } catch (QueryBuildException e) {
                 log.error(e);
             }
         }
+        return null;
     }
 
 
     public Set<String> getJoinHandles() {
-        return this.joinHandles().keySet();
+        return this.allJoinHandles().keySet();
     }
 
     protected abstract Map<String, String> joinHandles();
 
     public String useJoinHandle(String handle) throws QueryBuildException {
         // Internally joins handle path
-        String path = this.joinHandles().get(handle);
+        String path = this.allJoinHandles().get(handle);
         if (path == null) {
             throw new QueryBuildException("Invalid join handle "+handle+" for "+this.getEntityClassname());
         }
@@ -873,28 +893,12 @@ public abstract class BaseQuery {
         return resolved.toString();
     }
 
-    public String toFirstHql() {
+    public String toHql() {
         this.finalizeConditions();
         StringJoiner s = new StringJoiner(" \n");
 
-        s.add("SELECT DISTINCT " + this.getEntityIdentifier());
-        s.add("FROM " + this.getEntityClassname() + " " + this.getEntityIdentifier());
-
-        for (Join join : this.getAllJoins()) {
-            s.add(join.toHql());
-        }
-        for (String extraJoin : this.extraJoins) {
-            s.add(extraJoin);
-        }
-        if (!this.condition.isEmpty()) {
-            s.add("WHERE " + this.condition.toHql());
-        }
-        return s.toString();
-    }
-
-    public String toSecondHql() {
-        this.finalizeConditions();
-        StringJoiner s = new StringJoiner(" \n");
+//        s.add("SELECT DISTINCT " + this.getEntityIdentifier());
+//        s.add("FROM " + this.getEntityClassname() + " " + this.getEntityIdentifier());
 
         s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
         s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
@@ -905,30 +909,36 @@ public abstract class BaseQuery {
         for (String extraJoin : this.extraJoins) {
             s.add(extraJoin);
         }
-        s.add("WHERE " + this.getEntityIdentifier() + ".id IN :ids");
 
+        if (!this.condition.isEmpty()) {
+            s.add("WHERE " + this.condition.toHql());
+        }
         return s.toString();
     }
 
 
-    public Map<String, Object> getFirstParameters() {
+    public Map<String, Object> getParameters() {
         this.finalizeConditions();
         return this.condition.getParameters();
-    }
-
-    public Map<String, Object> getSecondParameters(Collection<DatabaseEntry> entries) {
-        return Collections.singletonMap("ids", entries.stream().map(DatabaseEntry::getId).collect(Collectors.toList()));
     }
 
     private boolean finalizedConditions = false;
     private void finalizeConditions() {
         if (!this.finalizedConditions) {
             this.condition = new MultiCondition();
-            for (JoinedQuery joinedQuery : this.related) {
-                this.condition.add(joinedQuery);
-            }
             try {
                 this.setupConditions();
+
+                for (JoinedQuery joinedQuery : this.related) {
+                    this.condition.add(joinedQuery);
+                    BaseQuery relatedQuery = joinedQuery.getJoined();
+                    relatedQuery.setupConditions();
+                    this.condition.add(joinedQuery.getJoined().getCondition());
+                }
+
+                if (this.recordAfter != null) {
+                    this.addCondition("dafoUpdated", Condition.Operator.GT, Collections.singletonList(this.recordAfter.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)), OffsetDateTime.class, false);
+                }
             } catch (QueryBuildException e) {
                 log.error(e);
             }

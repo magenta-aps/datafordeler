@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
 
 import javax.persistence.*;
@@ -142,7 +143,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     private Identification getParticipantIdentification(Session session) {
         if (this.relationParticipantRecord != null) {
             UUID participantUUID = this.relationParticipantRecord.generateUUID();
-            Identification participantIdentification = QueryManager.getOrCreateIdentification(session, participantUUID, CvrPlugin.getDomain());
+            Identification participantIdentification = QueryManager.getOrCreateIdentification(session, participantUUID, ParticipantRecordService.getDomain());
             return participantIdentification;
         } else {
             return null;

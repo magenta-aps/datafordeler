@@ -49,7 +49,7 @@ public class UnitAddressService extends FapiBaseService<UnitAddressEntity, UnitA
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.DRV;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override

@@ -40,7 +40,8 @@ import java.util.stream.Stream;
 @javax.persistence.Entity
 @Table(name= CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_entity", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_identification", columnList = PersonEntity.DB_FIELD_IDENTIFICATION, unique = true),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true)
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED, columnList = PersonEntity.DB_FIELD_DAFO_UPDATED)
 })
 @FilterDefs({
         @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
@@ -56,6 +57,8 @@ import java.util.stream.Stream;
 })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PersonEntity extends CprRecordEntity {
+
+    public static final String TABLE_NAME = "cpr_person_entity";
 
     public PersonEntity() {
     }
@@ -143,7 +146,7 @@ public class PersonEntity extends CprRecordEntity {
     }
 
     public static final String DB_FIELD_ADDRESS_NAME = "addressName";
-    public static final String IO_FIELD_ADDRESS_NAME = "addresseringsnavn";
+    public static final String IO_FIELD_ADDRESS_NAME = "adresseringsnavn";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
@@ -609,7 +612,7 @@ public class PersonEntity extends CprRecordEntity {
     }
 
     public static final String DB_FIELD_CORE = "person";
-    public static final String IO_FIELD_CORE = "kernedata";
+    public static final String IO_FIELD_CORE = "køn";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
@@ -856,6 +859,9 @@ public class PersonEntity extends CprRecordEntity {
         }
         if (added) {
             record.setEntity(this);
+            if (record.getDafoUpdated() != null && (this.getDafoUpdated() == null || record.getDafoUpdated().isAfter(this.getDafoUpdated()))) {
+                this.setDafoUpdated(record.getDafoUpdated());
+            }
         }
 
     }

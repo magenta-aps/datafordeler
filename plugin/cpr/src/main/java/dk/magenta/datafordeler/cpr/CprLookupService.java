@@ -164,6 +164,7 @@ public class CprLookupService {
         if (roadEntity != null) {
             OffsetDateTime now = OffsetDateTime.now();
             RoadNameBitemporalRecord nameRecord = CprRecordFilter.filterRecordsByRegistrationAndEffectReturnNewest(roadEntity.getName(), now);
+            System.out.println("nameRecord: "+nameRecord);
             lookup.setRoadName(nameRecord.getRoadName());
 
             RoadPostalcodeBitemporalRecord postCode = this.getRoadPostalCodeDK(roadEntity, houseNumber);
@@ -175,7 +176,7 @@ public class CprLookupService {
     }
 
 
-    private dk.magenta.datafordeler.cpr.records.road.data.RoadEntity getRoadDK(Session session, int municipalityCode, int roadCode) {
+    public dk.magenta.datafordeler.cpr.records.road.data.RoadEntity getRoadDK(Session session, int municipalityCode, int roadCode) {
         try {
             RoadRecordQuery roadQuery = new RoadRecordQuery();
             setQueryNow(roadQuery);
@@ -231,9 +232,9 @@ public class CprLookupService {
 
     private static void setQueryNow(BaseQuery query) {
         OffsetDateTime now = OffsetDateTime.now();
-        query.setRegistrationFrom(now);
-        query.setRegistrationTo(now);
-        query.setEffectFrom(now);
-        query.setEffectTo(now);
+        query.setRegistrationFromBefore(now);
+        query.setRegistrationToAfter(now);
+        query.setEffectFromBefore(now);
+        query.setEffectToAfter(now);
     }
 }

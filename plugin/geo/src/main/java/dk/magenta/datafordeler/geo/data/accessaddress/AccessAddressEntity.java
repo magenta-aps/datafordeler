@@ -3,9 +3,12 @@ package dk.magenta.datafordeler.geo.data.accessaddress;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
 import dk.magenta.datafordeler.geo.data.MonotemporalSet;
@@ -17,14 +20,15 @@ import org.hibernate.annotations.Filters;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME, indexes = {
         @Index(name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME + AccessAddressEntity.DB_FIELD_BNR, columnList = AccessAddressEntity.DB_FIELD_BNR),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME + AccessAddressEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = AccessAddressEntity.DB_FIELD_DAFO_UPDATED
+        ),
 })
 public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEntity {
 
@@ -294,6 +298,30 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
         records.add(this.status);
         records.add(this.shape);
         return records;
+    }
+
+
+    @JsonIgnore
+    @Override
+    public List<BaseQuery> getAssoc() {
+        PluginManager pluginManager = PluginManager.getInstance();
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        AccessAddressRoadRecord roadRecord = this.getRoad().current();
+        map.put("municipalitycode", Integer.toString(roadRecord.getMunicipalityCode()));
+        map.put("roadcode", Integer.toString(roadRecord.getRoadCode()));
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            queries.addAll(geoPlugin.getQueries(map));
+        }
+
+        Plugin cprPlugin = pluginManager.getPluginByName("cpr");
+        if (cprPlugin != null) {
+            queries.addAll(cprPlugin.getQueries(map));
+        }
+
+        return queries;
     }
 
 }

@@ -1,18 +1,18 @@
 package dk.magenta.datafordeler.geo.data.road;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
-import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
+import dk.magenta.datafordeler.cpr.records.road.RoadPostcodeRecord;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class RoadOutputWrapper extends GeoOutputWrapper<GeoRoadEntity> {
@@ -42,6 +42,14 @@ public class RoadOutputWrapper extends GeoOutputWrapper<GeoRoadEntity> {
         container.addMonotemporal("lokalitet", item.getLocality());
         container.addMonotemporal("kommune", item.getMunicipality());
         container.addNontemporal("sumiffiik", item.getSumiffiikId());
+    }
+
+    public Map<Class, List<String>> getEligibleModifierNames() {
+        HashMap<Class, List<String>> map = new HashMap<>();
+        map.put(RoadMunicipalityRecord.class, Collections.singletonList("geo_municipality"));
+        //map.put(RoadLocalityRecord.class, Collections.singletonList("geo_locality"));
+        map.put(RoadPostcodeRecord.class, Collections.singletonList("geo_postcode"));
+        return map;
     }
 
 }

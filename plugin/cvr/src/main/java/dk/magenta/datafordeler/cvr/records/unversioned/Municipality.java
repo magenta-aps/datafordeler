@@ -30,7 +30,7 @@ public class Municipality extends DatabaseEntry {
     private static Logger log = LogManager.getLogger(Municipality.class.getSimpleName());
 
     public static final String DB_FIELD_CODE = "code";
-    public static final String IO_FIELD_CODE = "kommuneKode";
+    public static final String IO_FIELD_CODE = "kommunekode";
 
     @JsonProperty(value = IO_FIELD_CODE)
     @XmlElement(name = IO_FIELD_CODE)
@@ -48,7 +48,7 @@ public class Municipality extends DatabaseEntry {
     //----------------------------------------------------
 
     public static final String DB_FIELD_NAME = "name";
-    public static final String IO_FIELD_NAME = "kommuneNavn";
+    public static final String IO_FIELD_NAME = "kommunenavn";
 
     @JsonProperty(value = IO_FIELD_NAME)
     @XmlElement(name = IO_FIELD_NAME)

@@ -26,14 +26,20 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
         return name;
     }
 
-    public void setName(String name) {
+    public void clearName() {
         this.name.clear();
+        this.updatedParameters();
+    }
+
+    public void setName(String name) {
+        this.clearName();
         this.addName(name);
     }
 
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
+            this.updatedParameters();
         }
     }
 
