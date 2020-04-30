@@ -36,8 +36,6 @@ public class RoadOutputJsonModifier extends JsonModifier {
                 for (GeoRoadEntity entity : entities) {
                     RoadNameRecord name = entity.getName().current(); // TODO: Find den rigtige vejnavnsrecord (nyeste?)
                     node.put("vejnavn", name.getName());
-                    RoadLocalityRecord locality = entity.getLocality().current();
-                    node.put("lokalitetskode", locality.getCode());
                 }
             }
         }

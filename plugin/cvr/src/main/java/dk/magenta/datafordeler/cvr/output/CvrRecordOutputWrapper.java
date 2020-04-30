@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.RecordOutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
@@ -151,12 +150,6 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
                         oValue.put(REGISTRATION_TO, formatTime(record.getRegistrationTo()));
                         oValue.put(EFFECT_FROM, formatTime(record.getValidFrom()));
                         oValue.put(EFFECT_TO, formatTime(record.getValidTo()));
-
-                        for (JsonModifier modifier : CvrRecordOutputWrapper.this.getEligibleModifiers(record.getClass())) {
-                            if (modifier != null) {
-                                modifier.modify(oValue);
-                            }
-                        }
                     }
                     this.bitemporalData.add(record.getBitemporality(), key, value);
                 }

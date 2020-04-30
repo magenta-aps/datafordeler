@@ -84,11 +84,12 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     protected Map<Class, List<String>> getEligibleModifierNames() {
         return Collections.emptyMap();
     }
-    protected List<JsonModifier> getEligibleModifiers(Class cls) {
+    private List<JsonModifier> getEligibleModifiers(Class cls) {
         List<String> modifierNames = this.getEligibleModifierNames().get(cls);
         if (modifierNames == null) {
             return Collections.emptyList();
         }
+
         return modifierNames.stream().map(name -> this.modifiers.get(name)).collect(Collectors.toList());
     }
 
