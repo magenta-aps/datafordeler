@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
@@ -387,7 +386,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     }
 
 
-    @JsonIgnore
     @Override
     public List<BaseQuery> getAssoc() {
         PluginManager pluginManager = PluginManager.getInstance();
