@@ -968,12 +968,26 @@
             "examples": {
               "fuld": {
                 "value": "956"
-              },
-              "større end": {
-                "value": "kommune_kode.gt=956"
-              },
-              "mindre end": {
-                "value": "kommune_kode.lt=956"
+              }
+            }
+          },
+          {
+            "name": "kommune_kode.gt",
+            "in": "query",
+            "description": "Fremsøgning på den unikke kommunekode større end",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              }
+            }
+          },
+          {
+            "name": "kommune_kode.lt",
+            "in": "query",
+            "description": "Fremsøgning på den unikke kommunekode mindre end",
+            "examples": {
+              "fuld": {
+                "value": "956"
               }
             }
           },
@@ -1020,12 +1034,26 @@
             "examples": {
               "fuld": {
                 "value": "3951"
-              },
-              "større end": {
-                "value": "post_kode.gt=3950"
-              },
-              "mindre end": {
-                "value": "post_kode.lt=3950"
+              }
+            }
+          },
+          {
+            "name": "post_kode.gt",
+            "in": "query",
+            "description": "Fremsøgning på Postnummer større end",
+            "examples": {
+              "fuld": {
+                "value": "3951"
+              }
+            },"Fremsøgning på den unikke kommunekode mindre end"
+          },
+          {
+            "name": "post_kode.lt",
+            "in": "query",
+            "description": "Fremsøgning på Postnummer mindre end",
+            "examples": {
+              "fuld": {
+                "value": "3951"
               }
             }
           },
@@ -1049,12 +1077,26 @@
             "examples": {
               "fuld": {
                 "value": "212"
-              },
-              "større end": {
-                "value": "vej_kode.gt=212"
-              },
-              "mindre end": {
-                "value": "vej_kode.lt=212"
+              }
+            }
+          },
+          {
+            "name": "vej_kode.gt",
+            "in": "query",
+            "description":"Fremsøgning på den unikke vejkode større end",
+            "examples": {
+              "fuld": {
+                "value": "212"
+              }
+            }
+          },
+          {
+            "name": "vej_kode.lt",
+            "in": "query",
+            "description": "Fremsøgning på den unikke vejkode mindre end",
+            "examples": {
+              "fuld": {
+                "value": "212"
               }
             }
           },
