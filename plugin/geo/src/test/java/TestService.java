@@ -44,7 +44,6 @@ public class TestService extends GeoTest {
 
 
     @Test
-    @Ignore // TODO something is wrong with filter order
     public void testLocality() throws IOException {
         ResponseEntity<String> response = this.lookup("/geo/adresse/lokalitet?kommune=956");
         Assert.assertEquals(200, response.getStatusCode().value());

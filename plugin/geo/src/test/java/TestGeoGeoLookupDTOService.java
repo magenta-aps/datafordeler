@@ -70,7 +70,6 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
 
     @Test
-    @Ignore // TEST only in CPR-module
     public void testLookupServiceDk() throws IOException {
 
         Session session = sessionManager.getSessionFactory().openSession();
