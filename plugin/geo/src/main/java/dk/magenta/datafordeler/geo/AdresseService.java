@@ -860,10 +860,10 @@ public class AdresseService {
 
     private static void setQueryNow(BaseQuery query) {
         OffsetDateTime now = OffsetDateTime.now();
-        query.setRegistrationFrom(now);
-        query.setRegistrationTo(now);
-        query.setEffectFrom(now);
-        query.setEffectTo(now);
+        query.setRegistrationFromBefore(now);
+        query.setRegistrationToAfter(now);
+        query.setEffectFromBefore(now);
+        query.setEffectToAfter(now);
     }
     private static void setQueryNoLimit(BaseQuery query) {
         query.setPage(1);
