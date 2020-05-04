@@ -1,13 +1,30 @@
 stages:
   - test
 
-unit-test:
+.test-default: &test-default
   stage: test
   image: maven:3-jdk-11
   tags:
     - docker
+
+
+test-core:
+  <<: *test-default
   before_script:
     - cd core
     - mvn clean install
   script:
     - mvn test
+
+test-plugins:
+  <<: *test-default
+  before_script:
+    - cd plugins
+  script:
+    - >
+      for dir in $(ls -d */ | sed 's#/##'); do
+        cd $dir
+        mvn clean install
+        mvn test
+        cd ..
+      done
