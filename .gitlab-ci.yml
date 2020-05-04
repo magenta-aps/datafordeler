@@ -19,7 +19,9 @@ test-core:
 test-plugins:
   <<: *test-default
   before_script:
-    - cd plugin
+    - cd core
+    - mvn clean install
+    - cd ../plugin
   script:
     - >
       for dir in $(ls -d */ | sed 's#/##'); do
