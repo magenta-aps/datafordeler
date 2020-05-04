@@ -19,7 +19,7 @@ test-core:
 test-plugins:
   <<: *test-default
   before_script:
-    - cd plugins
+    - cd plugin
   script:
     - >
       for dir in $(ls -d */ | sed 's#/##'); do
