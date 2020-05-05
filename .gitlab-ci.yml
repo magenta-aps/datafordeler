@@ -18,7 +18,7 @@ build-image:
   before_script:
     #login to gitlab registry
     - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-  scrip:
+  script:
     - docker build -f docker/Dockerfile --pull --tag ${IMAGE_SHA} --cache-from ${IMAGE_DEV} .
     - docker push ${IMAGE_SHA}
 
