@@ -1,14 +1,7 @@
 stages:
   - build
   - test
-
-include:
-  - project: 'labs/master-ci'
-    ref: master
-    file: '/project/docker.yml'
-
 variables:
-  DOCKER_TLS_CERTDIR: ""
   IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
   IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
 
@@ -16,17 +9,23 @@ build-image:
   stage: build
   tags:
     - docker
-  before_script:
-    #login to gitlab registry
-    - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+  image:
+    # We use the `:debug` image as it contains `sh` needed by gitlab-ci.
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - docker build -f docker/Dockerfile --pull --tag ${IMAGE_SHA} --cache-from ${IMAGE_DEV} .
-    - docker push ${IMAGE_SHA}
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context=${CI_PROJECT_DIR}
+      --dockerfile=ci/dockerFile
+      --destination=${IMAGE_DEV}
+      --cache=true
 
 .test-default: &test-default
   stage: test
   image:
-    name: ${IMAGE_SHA}
+    name: ${IMAGE_DEV}
   tags:
     - docker
 
