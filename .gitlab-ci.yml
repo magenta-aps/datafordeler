@@ -15,10 +15,9 @@ build-image:
   stage: build
   tags:
     - docker
-    - privileged
   before_script:
     #login to gitlab registry
-    - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker build -f docker/Dockerfile --pull --tag ${IMAGE_SHA} --cache-from ${IMAGE_DEV} .
     - docker push ${IMAGE_SHA}
