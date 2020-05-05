@@ -1,32 +1,49 @@
 stages:
+  - build
   - test
+
+include:
+  - project: 'labs/master-ci'
+    ref: master
+    file: '/project/docker.yml'
+
+variables:
+  IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
+  IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
+
+build-image:
+  stage: build
+  tags:
+    - docker
+  before_script:
+    #login to gitlab registry
+    - echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+  scrpt:
+    - docker build -f docker/Dockerfile --pull --tag ${IMAGE_SHA} --cache-from ${IMAGE_DEV} .
+    - docker push ${IMAGE_SHA}
 
 .test-default: &test-default
   stage: test
-  image: maven:3-jdk-11
+  image:
+    name: ${IMAGE_SHA}
   tags:
     - docker
-
 
 test-core:
   <<: *test-default
   before_script:
-    - cd core
-    - mvn clean install
+    - cd /app/core
   script:
-    - mvn test
+    - mvn --batch-mode -T 2C test
 
 test-plugins:
   <<: *test-default
   before_script:
-    - cd core
-    - mvn clean install
-    - cd ../plugin
+    - cd /app/plugin
   script:
     - >
       for dir in $(ls -d */ | sed 's#/##'); do
         cd $dir
-        mvn clean install
-        mvn test
+        mvn --batch-mode -T 2C test
         cd ..
       done
