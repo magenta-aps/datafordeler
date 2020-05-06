@@ -14,7 +14,7 @@ build-image:
     - docker
   image:
     # We use the `:debug` image as it contains `sh` needed by gitlab-ci.
-    name: gcr.io/kaniko-project/executor:v0.16.0
+    name: gcr.io/kaniko-project/executor:debug-v0.16.0
     entrypoint: [""]
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
