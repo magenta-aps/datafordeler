@@ -1,5 +1,5 @@
 FROM maven:3-jdk-11
-MAKEDIR /app
+run mkdir /app
 COPY ../core /app/core
 COPY ../plugin /app/plugin
 WORKDIR /srv/core
