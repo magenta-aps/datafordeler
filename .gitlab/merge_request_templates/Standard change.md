@@ -10,10 +10,11 @@ Examples:
 ## Code quality checklist
 
 - [ ] I have added unit tests or made a conscious decision not to
-- [ ] I have checked the code with flake8
+- [ ] Code has been reformatted according to chosen standard
 - [ ] The code is documented where relevant
-- [ ] The branch has been rebased on top of the latest version of its target branch and all commits reference the ticket id (eg. `[#12345] Implement featureX in Y`)
-- [ ] All commits on this MR are atomic/logical, or: the MR is set to be squashed into a single commit on merge
+- [ ] The branch has been rebased on / merged with top of the latest version of its target branch
+- [ ] All commits reference the ticket id (eg. `[#12345] Implement featureX in Y`)
+- [ ] All commits on this MR are atomic/logical (via `rebase -i develop`), or: the MR is set to be squashed into a single commit on merge
 
 ## Pre-review instructions
 
@@ -21,7 +22,8 @@ Examples:
 * Ensure that the title of this MR contains the relevant ticket no., formatted like `[#12345]` or `#12345`
 * Add deployment notes on the corresponding Redmine ticket if relevant
 * `@assign` this MR to your choice of reviewer
-* Set the corresponding Redmine ticket to `Release Management: QA(int)`, assign it to the reviewer and add a link to this page to the `Merge request` field.
+* Set the corresponding Redmine ticket to `Needs review`, assign it to the reviewer and add a link to this page to the `Merge request` field.
+* Provide instructions on how to test the feature (which environment, example URLs etc.)
 
 ---
 
@@ -29,6 +31,7 @@ Examples:
 
 - [ ] The code is understandable, well-structured and sufficiently documented
 - [ ] I would be able to deploy this feature and verify that it's working without further input from the author
+- [ ] I have run relevant unit-tests and made sure they succeeded
 - [ ] I have checked out the code and tested locally, tested the feature on the testing server or thorougly vetted the code
 
 If this MR contains database changes, please do a dry run of a potential deployment in your local environment.
@@ -38,4 +41,3 @@ If this MR contains database changes, please do a dry run of a potential deploym
 * Do not merge the MR, just approve it
 * If set up for squashing, make sure the squash commit message makes sense
 * Set the corresponding Redmine ticket to `Release Management: Approved` and unassign yourself
- 
