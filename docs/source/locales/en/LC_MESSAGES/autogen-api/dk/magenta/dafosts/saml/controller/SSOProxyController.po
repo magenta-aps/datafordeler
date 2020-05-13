@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:18
+msgid "SSOProxyController"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:25
+msgid "Created by row on 07-09-2017."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:28
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:30
+msgid "SSO_PRESELECTED_IDP"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:36
+msgid "SSO_RETURN_URL"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:42
+msgid "SSO_TOKEN_RETURN_PARAM"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:48
+msgid "metadataManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:54
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:56
+msgid "sso_proxy"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:61
+msgid ""
+"Proxy that will store return URL, preselected IdP and optional token "
+"return param in the session and redirect to the get_token_for_service "
+"URL."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:63
+msgid "The URL of the service the resulting token should be sent to."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:64
+msgid "An optional alias of a preselected IdP."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:65
+msgid ""
+"The HTTP parameter that will be used to send the token back to the "
+"specified URL."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:66
+msgid "The current HttpSesssion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst
+msgid "Returnerer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/controller/SSOProxyController.rst:67
+msgid "\"redirect:/by_saml_sso/get_token_for_service\""
+msgstr ""
+

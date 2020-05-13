@@ -112,7 +112,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
     }
 
     public Stream<Map<String, String>> formatItems(Session personSession, Stream<PersonEntity> personEntities, Session lookupSession, Filter filter) {
-        GeoLookupService lookupService = new GeoLookupService(lookupSession);
+        GeoLookupService lookupService = new GeoLookupService(this.getSessionManager());
         return personEntities.flatMap(
                 personEntity -> {
                     List<Map<String, String>> output = formatPerson(personEntity, lookupSession, lookupService, filter);
@@ -270,4 +270,9 @@ public abstract class PersonStatisticsService extends StatisticsService {
         return record.getBitemporality();
     }
 
+
+    public static <R extends CprBitemporalRecord> List<R> FilterOnRegistrationFrom(Collection<R> records, OffsetDateTime registrationTimeStart, OffsetDateTime registrationTimeEnd) {
+        List<R> filtered = records.stream().filter(r -> r.getRegistrationFrom()!= null && (registrationTimeStart==null || r.getRegistrationFrom().isAfter(registrationTimeStart)) && (registrationTimeEnd==null || r.getRegistrationFrom().isBefore(registrationTimeEnd))).collect(Collectors.toList());
+        return filtered;
+    }
 }

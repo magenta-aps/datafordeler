@@ -1,0 +1,80 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:8
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:56
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:62
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:68
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:74
+msgid "Bitemporality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:16
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:18
+msgid "effectFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:24
+msgid "effectFromUncertain"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:30
+msgid "effectTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:36
+msgid "effectToUncertain"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:42
+msgid "registrationFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:48
+msgid "registrationTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:54
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:80
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:82
+msgid "equals"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:88
+msgid "hashCode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:94
+msgid "matches"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/records/Bitemporality.rst:100
+msgid "toString"
+msgstr ""
+

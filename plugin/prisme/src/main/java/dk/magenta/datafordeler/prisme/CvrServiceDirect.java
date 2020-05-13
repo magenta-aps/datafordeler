@@ -126,6 +126,7 @@ public class CvrServiceDirect extends CvrRecordService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrServiceDirect");
 
         HashSet<String> cvr = new HashSet<>();
 
@@ -141,12 +142,13 @@ public class CvrServiceDirect extends CvrRecordService {
             throw new InvalidClientInputException("Please specify at least one CVR number");
         }
 
+        loggerHelper.urlResponsePersistablelogs("CvrServiceDirect");
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
 
                 final Session lookupSession = sessionManager.getSessionFactory().openSession();
-                GeoLookupService lookupService = new GeoLookupService(lookupSession);
+                GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
                 HashSet<CompanyRecord> records = companyEntityManager.directLookup(cvr, updatedSince, CvrServiceDirect.this.getMunicipalityRestrictions(user));
                 Stream<ObjectNode> cvrFormattedOutput = records.stream().map(

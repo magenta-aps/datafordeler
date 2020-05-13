@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autopulled-codes/datafordeler.accessdenied.rst:2
+msgid "Code: datafordeler.accessdenied"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.accessdenied.rst:3
+#: ../../source/autopulled-codes/datafordeler.accessrequired.rst:3
+#: ../../source/autopulled-codes/datafordeler.authorization.invalid_token.rst:3
+#: ../../source/autopulled-codes/datafordeler.configuration.rst:3
+#: ../../source/autopulled-codes/datafordeler.http.invalid-client-input.rst:3
+#: ../../source/autopulled-codes/datafordeler.http.not-found.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.duplicate_sequence_number.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.http_status.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.interrupted.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.missing_entity.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.missing_reference.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.parse_error.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.reference_failed.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.reference_invalid.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.registration_boundary_mismatch.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.similar_job_running.rst:3
+#: ../../source/autopulled-codes/datafordeler.import.skipped_sequence_number.rst:3
+#: ../../source/autopulled-codes/datafordeler.ioexception.rst:3
+#: ../../source/autopulled-codes/datafordeler.plugin.entitymanager_not_found.rst:3
+#: ../../source/autopulled-codes/datafordeler.plugin.implementation_error.rst:3
+#: ../../source/autopulled-codes/datafordeler.plugin.invalid_owner_definition.rst:3
+#: ../../source/autopulled-codes/datafordeler.plugin.invalid_plugin_definition.rst:3
+#: ../../source/autopulled-codes/datafordeler.plugin.plugin_not_found.rst:3
+#: ../../source/autopulled-codes/datafordeler.plugin.plugin_received_wrong_class.rst:3
+msgid "Denne fejlbesked betyder..."
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.accessrequired.rst:2
+msgid "Code: datafordeler.accessrequired"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.authorization.invalid_token.rst:2
+msgid "Code: datafordeler.authorization.invalid_token"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.configuration.rst:2
+msgid "Code: datafordeler.configuration"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.http.invalid-client-input.rst:2
+msgid "Code: datafordeler.http.invalid-client-input"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.http.not-found.rst:2
+msgid "Code: datafordeler.http.not-found"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.duplicate_sequence_number.rst:2
+msgid "Code: datafordeler.import.duplicate_sequence_number"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.http_status.rst:2
+msgid "Code: datafordeler.import.http_status"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.interrupted.rst:2
+msgid "Code: datafordeler.import.interrupted"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.missing_entity.rst:2
+msgid "Code: datafordeler.import.missing_entity"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.missing_reference.rst:2
+msgid "Code: datafordeler.import.missing_reference"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.parse_error.rst:2
+msgid "Code: datafordeler.import.parse_error"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.reference_failed.rst:2
+msgid "Code: datafordeler.import.reference_failed"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.reference_invalid.rst:2
+msgid "Code: datafordeler.import.reference_invalid"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.registration_boundary_mismatch.rst:2
+msgid "Code: datafordeler.import.registration_boundary_mismatch"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.similar_job_running.rst:2
+msgid "Code: datafordeler.import.similar_job_running"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.import.skipped_sequence_number.rst:2
+msgid "Code: datafordeler.import.skipped_sequence_number"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.ioexception.rst:2
+msgid "Code: datafordeler.ioexception"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.plugin.entitymanager_not_found.rst:2
+msgid "Code: datafordeler.plugin.entitymanager_not_found"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.plugin.implementation_error.rst:2
+msgid "Code: datafordeler.plugin.implementation_error"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.plugin.invalid_owner_definition.rst:2
+msgid "Code: datafordeler.plugin.invalid_owner_definition"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.plugin.invalid_plugin_definition.rst:2
+msgid "Code: datafordeler.plugin.invalid_plugin_definition"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.plugin.plugin_not_found.rst:2
+msgid "Code: datafordeler.plugin.plugin_not_found"
+msgstr ""
+
+#: ../../source/autopulled-codes/datafordeler.plugin.plugin_received_wrong_class.rst:2
+msgid "Code: datafordeler.plugin.plugin_received_wrong_class"
+msgstr ""
+
+#: ../../source/autopulled-codes/index.rst:2
+msgid "Fejlkodebibliotek"
+msgstr ""
+

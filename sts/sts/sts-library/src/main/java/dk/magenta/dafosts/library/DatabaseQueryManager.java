@@ -1,16 +1,23 @@
 package dk.magenta.dafosts.library;
 
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.*;
 
-import dk.magenta.dafosts.library.users.DafoCertificateUserDetails;
 import dk.magenta.dafosts.library.users.DafoPasswordUserDetails;
+import dk.magenta.dafosts.library.users.DafoUserData;
+import org.opensaml.saml2.core.Assertion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class DatabaseQueryManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseQueryManager.class);
 
     private JdbcTemplate jdbcTemplate;
 
@@ -20,6 +27,8 @@ public class DatabaseQueryManager {
     public static int IDENTIFICATION_MODE_INVALID = -1;
     public static int IDENTIFICATION_MODE_SINGLE_USER = 1;
     public static int IDENTIFICATION_MODE_ON_BEHALF_OF = 2;
+
+    public static int INVALID_TOKEN_ID = -1;
 
     // If updating this, also update django/dafousers/model_constants.py in the DAFO-admin project.
     public static final String IDP_UPDATE_TIMESTAMP_NAME = "LAST_IDP_UPDATE";
@@ -37,7 +46,6 @@ public class DatabaseQueryManager {
 
         while(rows.next()) {
             result.add(rows.getString(1));
-            System.out.println(rows.getString(1));
         }
 
         return result;
@@ -83,15 +91,39 @@ public class DatabaseQueryManager {
                                 "[dafousers_certificate].[id]",
 	                    "   )",
                         "WHERE (",
-                        "   [dafousers_accessaccount].[status] = ?",
-                        "   AND",
                         "   [dafousers_certificate].[fingerprint] = ?",
                         ")"
                 ),
-                new Object[] {ACCESS_ACCOUNT_STATUS_ACTIVE, fingerprint}
+                new Object[] {fingerprint}
         );
         if(rows.next()) {
             result = rows.getInt(1);
+        }
+
+        return result;
+    }
+
+    public boolean isAccessAccountActive(int accessAccountId) {
+        boolean result = false;
+
+        SqlRowSet rows = jdbcTemplate.queryForRowSet(
+                String.join("\n",
+                        "SELECT",
+                        "   [dafousers_accessaccount].[id]",
+                        "FROM",
+                        "   [dafousers_accessaccount] ",
+                        "WHERE (",
+                        "   [dafousers_accessaccount].[id] = ? ",
+                        "   AND ",
+                        "   [dafousers_accessaccount].[status] = ?",
+                        ")"
+                ),
+                new Object[] {accessAccountId, ACCESS_ACCOUNT_STATUS_ACTIVE}
+        );
+        if(rows.next()) {
+            if(rows.getInt(1) == accessAccountId) {
+                result = true;
+            }
         }
 
         return result;
@@ -291,5 +323,81 @@ public class DatabaseQueryManager {
             result = LocalDateTime.of(2000, 1,1,1,1,1);
         }
         return result;
+    }
+
+    public int registerPendingToken(DafoUserData user, HttpServletRequest request) {
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        try {
+            jdbcTemplate.update(
+                    connection -> {
+                        @SuppressWarnings({"SqlDialectInspection", "SqlNoDataSourceInspection"})
+                        final String query = "" +
+                                "INSERT INTO [dafousers_issuedtoken] (" +
+                                "   [access_account_id], " +
+                                "   [issued_time], " +
+                                "   [token_nameid], " +
+                                "   [token_on_behalf_of], " +
+                                "   [request_service_url], " +
+                                "   [client_ip], " +
+                                "   [client_user_agent]" +
+                                ")" +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+                        String remoteAddr = request.getHeader("X-Forwarded-For");
+                        if(remoteAddr == null) {
+                            remoteAddr = request.getRemoteAddr();
+                        }
+
+                        PreparedStatement preparedStatement = connection.prepareStatement(
+                                query, Statement.RETURN_GENERATED_KEYS
+                        );
+                        preparedStatement.setInt(
+                                1,
+                                user.getAccessAccountId() == INVALID_USER_ID ? null : user.getAccessAccountId()
+                        );
+                        preparedStatement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+                        preparedStatement.setString(
+                                3,
+                                String.format("[%s]@[%s]", user.getUsername(), user.getNameQualifier())
+                        );
+                        preparedStatement.setString(4, user.getOnBehalfOf());
+                        preparedStatement.setString(5, request.getRequestURL().toString());
+                        preparedStatement.setString(6, remoteAddr);
+                        preparedStatement.setString(7, request.getHeader("User-Agent"));
+
+                        return preparedStatement;
+                    },
+                    generatedKeyHolder
+            );
+        }
+        catch(Exception e) {
+            logger.warn("Failed to insert pending token: " + e.getMessage());
+            return INVALID_TOKEN_ID;
+        }
+
+        return generatedKeyHolder.getKey().intValue();
+    }
+
+    public void updateRegisteredToken(Assertion assertion, String textValue) {
+        @SuppressWarnings({"SqlDialectInspection", "SqlNoDataSourceInspection"})
+        final String query =
+                "UPDATE [dafousers_issuedtoken] " +
+                "SET " +
+                "   [issued_time] = ?, " +
+                "   [token_data] = ? " +
+                "WHERE " +
+                "   [id] = ?";
+
+        int tokenId = LogRequestWrapper.getTokenIdFromToken(assertion);
+        if(tokenId == INVALID_TOKEN_ID) {
+            return;
+        }
+
+        jdbcTemplate.update(
+                query,
+                new java.sql.Timestamp(assertion.getIssueInstant().getMillis()),
+                textValue,
+                tokenId
+        );
     }
 }

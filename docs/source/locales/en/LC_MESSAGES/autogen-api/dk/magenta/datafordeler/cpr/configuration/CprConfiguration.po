@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:22
+msgid "CprConfiguration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:29
+msgid "Created by lars on 16-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:32
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:34
+msgid "getPersonRegisterCharset"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:40
+msgid "getPersonRegisterFtpAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:46
+msgid "getPersonRegisterFtpPassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:52
+msgid "getPersonRegisterFtpUsername"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:58
+msgid "getPersonRegisterLocalFile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:64
+msgid "getPersonRegisterPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:70
+msgid "getPersonRegisterType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:76
+msgid "getPersonRegisterURI"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:82
+msgid "getRegisterCharset"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:88
+msgid "getRegisterFtpAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:94
+msgid "getRegisterFtpPassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:100
+msgid "getRegisterFtpUsername"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:106
+msgid "getRegisterLocalFile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:112
+msgid "getRegisterPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:118
+msgid "getRegisterType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:124
+msgid "getRegisterURI"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:130
+msgid "getResidenceRegisterCharset"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:136
+msgid "getResidenceRegisterFtpAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:142
+msgid "getResidenceRegisterFtpPassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:148
+msgid "getResidenceRegisterFtpUsername"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:154
+msgid "getResidenceRegisterLocalFile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:160
+msgid "getResidenceRegisterPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:166
+msgid "getResidenceRegisterType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:172
+msgid "getResidenceRegisterURI"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:178
+msgid "getRoadRegisterCharset"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:184
+msgid "getRoadRegisterFtpAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:190
+msgid "getRoadRegisterFtpPassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:196
+msgid "getRoadRegisterFtpUsername"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:202
+msgid "getRoadRegisterLocalFile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:208
+msgid "getRoadRegisterPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:214
+msgid "getRoadRegisterType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:220
+msgid "getRoadRegisterURI"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:226
+msgid "setPersonRegisterDataCharset"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:232
+msgid "setPersonRegisterFtpAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:238
+msgid "setPersonRegisterFtpPassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:244
+msgid "setPersonRegisterFtpUsername"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:250
+msgid "setPersonRegisterLocalFile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:256
+msgid "setPersonRegisterPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:261
+msgid "For testing - test methods will set these, but not save the entity to DB"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:264
+msgid "setPersonRegisterType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:270
+msgid "setResidenceRegisterDataCharset"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:276
+msgid "setResidenceRegisterFtpAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:282
+msgid "setResidenceRegisterFtpPassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:288
+msgid "setResidenceRegisterFtpUsername"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:294
+msgid "setResidenceRegisterLocalFile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:300
+msgid "setResidenceRegisterPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:306
+msgid "setResidenceRegisterType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:312
+msgid "setRoadRegisterDataCharset"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:318
+msgid "setRoadRegisterFtpAddress"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:324
+msgid "setRoadRegisterFtpPassword"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:330
+msgid "setRoadRegisterFtpUsername"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:336
+msgid "setRoadRegisterLocalFile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:342
+msgid "setRoadRegisterPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/configuration/CprConfiguration.rst:348
+msgid "setRoadRegisterType"
+msgstr ""
+

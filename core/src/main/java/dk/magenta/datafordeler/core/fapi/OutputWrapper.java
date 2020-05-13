@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.core.fapi;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 
@@ -72,6 +73,13 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
                 this.node.put(key, value);
             }
         }
+
+        public void putArray(String key, ArrayNode value) {
+            if (value != null) {
+                this.node.withArray(key).addAll(value);
+            }
+        }
+
         public void set(String key, JsonNode value) {
             if (value != null) {
                 this.node.set(key, value);

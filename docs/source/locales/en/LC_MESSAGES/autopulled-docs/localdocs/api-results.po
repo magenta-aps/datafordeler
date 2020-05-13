@@ -1,0 +1,151 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:4
+msgid "API resultater"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:6
+msgid ""
+"REST-API'er returnerer `HTTP svarkoder. "
+"<https://tools.ietf.org/html/rfc7231>`_ I det følgende findes de hyppigst"
+" forventede svarkoder til en række almindelige forespørgsler."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:10
+msgid "Forventede resultater"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:12
+msgid ""
+"I dette afsnit er eksempler på API-forespørgsler, hvor der er succes med "
+"at få besked om det søgte findes eller ej. Dele af teksten er "
+"anonymiseret med ˽ som erstatningstegn."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:16
+msgid "200 - OK - En succesfuld forespørgsel med svar"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:18
+msgid "URL: https://test.data.gl/cpr/1/rest/search?cpr=˽˽˽˽˽˽˽˽˽˽"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:20
+msgid ""
+"Kendetegnet for en velykket søgning med resultat er indhold i feltet "
+"``\"results\": [ _indhold_ ]``. Datafordeleren sætter ikke statuskode på "
+"resultatet.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:43
+msgid "204 - No content - En succesfuld forespørgsel med et tomt resultat"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:45
+msgid "URL: https://test.data.gl/cpr/person/1/rest/search?lastName=Jansson"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:47
+msgid ""
+"Kendetegnet for en vellykket søgning uden resultat er linjen "
+"``\"results\": []``. Forventes der et indhold, skal man efterse "
+"parametrene og det søgte mønster.  Datafordeleren sætter ikke statuskode "
+"på resultatet.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:61
+msgid "Andre resultater end de forventede"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:63
+msgid ""
+"Her findes de typiske fejl, som brugere kan møde i datafordelerens API. "
+"REST API'er anvender fejlmeddelelserne i `HTTP-protokollen, "
+"<https://tools.ietf.org/html/rfc7231#section-6.1>`_ der rummer den fulde "
+"oversigt over mulige fejlkoder."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:66
+msgid "400 - Bad request - Fejl i parametre"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:68
+msgid ""
+"Forespørgslen indeholder parametre eller mønstre som API ikke kan "
+"genkende. Efterse parametre, deres stavning og om navnene findes på "
+"API'et. Navne er versalfølsomme og skal skrives præcist. Mønstre er ikke "
+"versalfølsomme.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:79
+msgid ""
+"URL'en https://test.data.gl/cpr/person/1/rest/find=Finn giver fejl, da "
+"'find' ikke er et kendt navn på API'et."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:83
+msgid "403 - Forbidden - Ingen adgang til API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:85
+msgid ""
+"Forespørgslen mangler en token som beskrevet i :ref:`STS Secure Token "
+"Service. <sts-secure-token-service>` I beskeden kan desuden være anført "
+"brugernavn for login, så bruger kan efterse om det er det korrekte "
+"navn.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:98
+msgid "401 - Unauthorized - Token er ubrugelig"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:100
+msgid ""
+"Token er ikke gyldig. Anvender-systemet skal efterse at aftale er på "
+"plads om sikker adgang til Datafordeleren, at certifikater er på plads og"
+" i orden, at brugeren er tildelt de rette rettigheder i anvendersystemet "
+"og hvorvidt anvender er oprettet med de ønskede rettigheder i "
+"Datafordeleren af den registeransvarlige eller den dataansvarlige for det"
+" pågældende register.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:113
+msgid "401 - Unauthorized - Token is older than 3600 seconds"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:115
+msgid ""
+"Tiden er udløbet, så forbindelsen skal fornys. I de fleste anvender-"
+"systemer skal bruger blot gentage sin forespørgsel og så sørger anvender-"
+"systemet for at forny brugers token.::"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:128
+msgid "404 - Not found - Ingen besked er modtaget"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/api-results.rst:130
+msgid ""
+"API'et svarer ikke på henvendelsen. Efterse i dokumentation om API'et "
+"findes eller ej. Hvis API er korrekt, kan det være ude af drift, så vent "
+"lidt og forsøg igen.::"
+msgstr ""
+

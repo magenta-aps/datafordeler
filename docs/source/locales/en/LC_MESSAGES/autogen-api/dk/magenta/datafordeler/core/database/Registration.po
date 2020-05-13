@@ -1,0 +1,271 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:34
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:114
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:120
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:126
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:132
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:138
+msgid "Registration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:41
+msgid ""
+"Created by lars on 20-02-17. A Registration defines the time range in "
+"which a piece of data is “registered”, that is, when did it enter into "
+"the records of our data source, and when was it supplanted by more recent"
+" data. A Registration points to exactly one Entity, and may have any "
+"number of Effects associated. Generally, there should not be stored other"
+" data in the object."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:44
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:46
+msgid "FILTERPARAM_REGISTRATION_FROM"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:52
+msgid "FILTERPARAM_REGISTRATION_TO"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:58
+msgid "FILTER_REGISTRATION_FROM"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:64
+msgid "FILTER_REGISTRATION_TO"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:70
+msgid "effects"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:76
+msgid "entity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:82
+msgid "lastImportTime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:88
+msgid "registerChecksum"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:94
+msgid "registrationFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:100
+msgid "registrationTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:106
+msgid "sequenceNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:112
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:143
+msgid ""
+"A date string, parseable by DateTimeFormatter.ISO_OFFSET_DATE_TIME (in "
+"the format 2007-12-03T10:15:30+01:00)"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:144
+msgid ""
+"A date string, parseable by DateTimeFormatter.ISO_OFFSET_DATE_TIME (in "
+"the format 2007-12-03T10:15:30+01:00) If you want other date formats, "
+"consider using java.time.OffsetDateTime.parse() to generate an "
+"OffsetDateTime object and pass it"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:147
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:149
+msgid "addEffect"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:154
+msgid "Add an effect to this registration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:157
+msgid "compareTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:162
+msgid ""
+"Comparison method for the Comparable interface; results in Registrations "
+"being sorted by registrationFrom date, nulls first?"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:165
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:171
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:177
+msgid "createEffect"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:183
+msgid "createEmptyEffect"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:189
+msgid "equals"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:195
+msgid "forceLoad"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:201
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:209
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:215
+msgid "getEffect"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:206
+msgid ""
+"Looks for an effect on this Registration, that matches the given range "
+"exactly."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:221
+msgid "getEffects"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:227
+msgid "getEffectsAt"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:233
+msgid "getEntity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:239
+msgid "getLastImportTime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:245
+msgid "getRegisterChecksum"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:251
+msgid "getRegistrationFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:257
+msgid "getRegistrationTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:263
+msgid "getSequenceNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:269
+msgid "getSortedEffects"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:274
+msgid ""
+"Get the Effects of the Registration, sorted by the comparison method of "
+"the Effect class (usually by startDate)"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:277
+msgid "removeEffect"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:282
+msgid "Removed an Effect from this Registration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:285
+msgid "setEffects"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:291
+msgid "setEntity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:297
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:303
+msgid "setLastImportTime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:309
+msgid "setRegisterChecksum"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:315
+msgid "setRegistrationFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:321
+msgid "setRegistrationTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:327
+msgid "setSequenceNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:333
+msgid "split"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:339
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:349
+msgid "toString"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:344
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:354
+msgid "Pretty-print contained data"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst
+msgid "Returnerer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:346
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:357
+msgid "Compiled string output"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:356
+msgid "Number of spaces to indent the output with"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/database/Registration.rst:360
+msgid "wireEffects"
+msgstr ""
+

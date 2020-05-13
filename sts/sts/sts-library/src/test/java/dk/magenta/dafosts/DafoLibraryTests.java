@@ -62,7 +62,7 @@ public class DafoLibraryTests {
             public String getNameQualifier() {
                 return "<none>";
             }
-        });
+        }, null);
     }
 
 }

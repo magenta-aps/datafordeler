@@ -1,5 +1,6 @@
 package dk.magenta.dafosts;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -12,8 +13,8 @@ public class MockViewControllerRegistry extends ViewControllerRegistry {
     private Set<String> mappings;
 
     public MockViewControllerRegistry() {
-        mappings = new HashSet<>();
-        setApplicationContext(new GenericApplicationContext());
+        super(new GenericApplicationContext());
+        this.mappings = new HashSet<>();
     }
 
     public Set<String>  getMappings() {

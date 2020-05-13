@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:64
+msgid "DafoAssertionVerifier"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:72
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:74
+msgid "log"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:80
+msgid "metadataManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:86
+msgid "samlConfigurerBean"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:92
+msgid "samlWebSecurityConfig"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:98
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:100
+msgid "getMetadataManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:106
+msgid "parseAssertion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/saml/users/DafoAssertionVerifier.rst:112
+msgid "verifyAssertion"
+msgstr ""
+

@@ -59,6 +59,12 @@ public class DafoWebSSOProfileConsumer extends DSLWebSSOProfileConsumerImpl {
         super.verifyAuthnContext(requestedAuthnContext, receivedContext, context);
     }
 
+    @Override
+    public long getMaxAuthenticationAge() {
+        // Allow tokens up to a day old
+        return 60 * 60 * 24;
+    }
+
     public void verifyPassiveAssertion(Assertion assertion, SAMLMessageContext context)
             throws AuthenticationException, SAMLException,
             org.opensaml.xml.security.SecurityException,

@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:38
+msgid "GapiTestBase"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:45
+msgid "Created by lars on 10-02-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:48
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:50
+msgid "INTERFACE_PATH"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:56
+msgid "callbackController"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:62
+msgid "restTemplate"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:68
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:70
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:76
+msgid "deleteEntity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:82
+msgid "envelopData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:88
+msgid "envelopReference"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:94
+msgid "getBody"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:100
+msgid "getHeaders"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:106
+msgid "getPayload"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:112
+msgid "hash"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/gapi/GapiTestBase.rst:118
+msgid "waitToMilliseconds"
+msgstr ""
+

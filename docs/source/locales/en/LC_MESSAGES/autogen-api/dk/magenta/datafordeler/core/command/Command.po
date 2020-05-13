@@ -1,0 +1,128 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:30
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:42
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:48
+msgid "Command"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:37
+msgid ""
+"Created by lars on 29-05-17. Command descriptor, holding data about an "
+"issued command"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:40
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:54
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:56
+msgid "done"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:62
+msgid "fromRequest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:67
+msgid ""
+"Create a Command object from a http request, a user and a command name "
+"The request is used to obtain the command body (ie. the request body), to"
+" be parsed by a CommandHandler The user object is used to set the command"
+" issuer Also sets the received time"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst
+msgid "Kaster"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:75
+msgid "getCommandBody"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:81
+msgid "getCommandName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:87
+msgid "getErrorMessage"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:93
+msgid "getHandled"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:99
+msgid "getId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:105
+msgid "getIssuer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:111
+msgid "getReceived"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:117
+msgid "getStatus"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:123
+msgid "getStatusName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:129
+msgid "setCommandBody"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:135
+msgid "setCommandName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:141
+msgid "setErrorMessage"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:147
+msgid "setHandled"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:153
+msgid "setIssuer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:159
+msgid "setReceived"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/command/Command.rst:165
+msgid "setStatus"
+msgstr ""
+

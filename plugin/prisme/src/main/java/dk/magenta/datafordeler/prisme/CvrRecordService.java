@@ -34,6 +34,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,12 +123,13 @@ public class CvrRecordService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrRecordService");
 
         HashSet<String> cvrNumbers = new HashSet<>();
         cvrNumbers.add(cvrNummer);
 
         Session session = sessionManager.getSessionFactory().openSession();
-        GeoLookupService service = new GeoLookupService(session);
+        GeoLookupService service = new GeoLookupService(sessionManager);
         try {
             ObjectNode formattedRecord = null;
 
@@ -148,11 +150,13 @@ public class CvrRecordService {
             }
 
             if (formattedRecord != null) {
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprService done");
                 return objectMapper.writeValueAsString(formattedRecord);
             }
         } finally {
             session.close();
         }
+        loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CprService done");
         throw new HttpNotFoundException("No entity with CVR number " + cvrNummer + " was found");
     }
 
@@ -196,6 +200,7 @@ public class CvrRecordService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrRecordService");
 
         HashSet<String> cvr = new HashSet<>();
 
@@ -216,12 +221,13 @@ public class CvrRecordService {
         query.setRecordAfter(updatedSince);
         this.applyAreaRestrictionsToQuery(query, user);
 
+        loggerHelper.urlResponsePersistablelogs("CvrRecordService");
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
                 Session session = sessionManager.getSessionFactory().openSession();
                 List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-                GeoLookupService lookupService = new GeoLookupService(session);
+                GeoLookupService lookupService = new GeoLookupService(sessionManager);
                 try {
                     boolean first = true;
                     outputStream.write(START_OBJECT);
@@ -609,23 +615,25 @@ public class CvrRecordService {
         if (returnParticipantDetails) {
             ResponsibleQuery responsibleQuery = new ResponsibleQuery();
             responsibleQuery.setGerNr(entity.getGerNr());
-            List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(lookupService.getSession(), responsibleQuery, ResponsibleEntity.class);
-            if (!responsibleEntities.isEmpty()) {
-                ArrayNode participantsNode = objectMapper.createArrayNode();
-                for (ResponsibleEntity responsibleEntity : responsibleEntities) {
-                    ObjectNode responsibleNode = objectMapper.createObjectNode();
-                    if (responsibleEntity.getCprNumber() != null) {
-                        responsibleNode.put("deltagerPnr", responsibleEntity.getCprNumberString());
+            try(Session session = sessionManager.getSessionFactory().openSession();) {
+                List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(session, responsibleQuery, ResponsibleEntity.class);
+                if (!responsibleEntities.isEmpty()) {
+                    ArrayNode participantsNode = objectMapper.createArrayNode();
+                    for (ResponsibleEntity responsibleEntity : responsibleEntities) {
+                        ObjectNode responsibleNode = objectMapper.createObjectNode();
+                        if (responsibleEntity.getCprNumber() != null) {
+                            responsibleNode.put("deltagerPnr", responsibleEntity.getCprNumberString());
+                        }
+                        if (responsibleEntity.getCvrNumber() != null) {
+                            responsibleNode.put("deltagerCvrNr", responsibleEntity.getCvrNumber().toString());
+                        }
+                        if (responsibleEntity.getName() != null) {
+                            responsibleNode.put("deltagerNavn", responsibleEntity.getName());
+                        }
+                        participantsNode.add(responsibleNode);
                     }
-                    if (responsibleEntity.getCvrNumber() != null) {
-                        responsibleNode.put("deltagerCvrNr", responsibleEntity.getCvrNumber().toString());
-                    }
-                    if (responsibleEntity.getName() != null) {
-                        responsibleNode.put("deltagerNavn", responsibleEntity.getName());
-                    }
-                    participantsNode.add(responsibleNode);
+                    root.set("deltagere", participantsNode);
                 }
-                root.set("deltagere", participantsNode);
             }
         }
 

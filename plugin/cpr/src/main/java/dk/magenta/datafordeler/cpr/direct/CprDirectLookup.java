@@ -157,7 +157,7 @@ public class CprDirectLookup {
                 return response;
             } if (errorCode == 5) {
                 // Unknown cpr
-                log.error("cpr not found " + pnr);
+                log.warn("cpr not found " + pnr);
                 return null;
             } else if (errorCode == ERR_TOKEN_EXPIRED) {
                 // Login and try again

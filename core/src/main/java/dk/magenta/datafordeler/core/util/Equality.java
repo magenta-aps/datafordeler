@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.util;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
@@ -50,6 +51,19 @@ public abstract class Equality {
         if (a == null && b == null) return true;
         if (a == null || b == null) return false;
         return equal(a.toLocalDate(), b.toLocalDate());
+    }
+
+    /**
+     * Add feature for comparing of timestamps recieved from CPR (We do not trust the precission very much)
+     * @param a
+     * @param b
+     * @return
+     */
+    public static boolean cprDomainEqualDate(OffsetDateTime a, OffsetDateTime b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+        long diff = Duration.between(a, b).abs().toHours();
+        return diff < 48;
     }
 
 }

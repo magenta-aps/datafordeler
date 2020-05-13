@@ -33,6 +33,7 @@ Indholdsfortegnelse
    autogen-api-statistik/javadoc-statistik
 
    wordlist
+   autopulled-codes/index
 
 .. only:: html
 

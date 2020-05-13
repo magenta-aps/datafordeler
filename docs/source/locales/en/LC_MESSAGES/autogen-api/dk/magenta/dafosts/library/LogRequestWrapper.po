@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:18
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:30
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:36
+msgid "LogRequestWrapper"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:25
+msgid ""
+"A wrapper that prefixes log messages with information about the request's"
+" remote address and the principal."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:28
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:42
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:44
+msgid "debug"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:50
+msgid "error"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:56
+msgid "getLogger"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:62
+msgid "getRequest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:68
+msgid "getUserName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:74
+msgid "info"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:80
+msgid "logIssuedToken"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:86
+msgid "setLogger"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:92
+msgid "setRequest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:98
+msgid "setUserName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:104
+msgid "trace"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/library/LogRequestWrapper.rst:110
+msgid "warn"
+msgstr ""
+

@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:10
+msgid "GladdrregRolesDefinition"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:17
+msgid "Created by lars on 12-01-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:20
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:22
+msgid "EXECUTE_GLADDRREG_PULL_ROLE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:28
+msgid "READ_GLADDRREG_PULL_ROLE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:34
+msgid "READ_GLADDRREG_ROLE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:40
+msgid "STOP_GLADDRREG_PULL_ROLE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:46
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:48
+msgid "getDefaultReadRole"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/GladdrregRolesDefinition.rst:54
+msgid "getRoles"
+msgstr ""
+

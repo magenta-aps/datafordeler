@@ -1,0 +1,129 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:26
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:38
+msgid "PluginManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:33
+msgid "Created by lars on 12-01-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:36
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:44
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:46
+msgid "addPluginURISubstring"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:52
+msgid "addPostConstructCallBackHandler"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:58
+msgid "getPluginByName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:63
+msgid "Find a plugin by name"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:65
+msgid "Plugin name to search for. Must be an exact match"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst
+msgid "Returnerer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:66
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:77
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:94
+msgid "Found Plugin, or null if none found"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:69
+msgid "getPluginForSchema"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:74
+msgid "Find the plugin that handles the defined schema"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:76
+msgid "Schema name to search by"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:80
+msgid "getPluginForServicePath"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:86
+msgid "getPluginForURI"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:91
+msgid "Find the plugin that handles the defined URI"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:93
+msgid ""
+"URI to search by. A plugin handles this URI if the uri begins with one of"
+" the plugin's handledUriSubstrings"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:97
+msgid "getPlugins"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:102
+msgid ""
+"Get all detected plugins (Subclasses of Plugin that are Beans and present"
+" in the classpath)"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:104
+msgid "List of Plugins"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:107
+msgid "init"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:112
+msgid ""
+"Run bean initialization Populate pluginsByName for lookup by plugin name "
+"Populate pluginsByURISubstring for lookup by URI substring"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/PluginManager.rst:115
+msgid "removePluginURISubstring"
+msgstr ""
+

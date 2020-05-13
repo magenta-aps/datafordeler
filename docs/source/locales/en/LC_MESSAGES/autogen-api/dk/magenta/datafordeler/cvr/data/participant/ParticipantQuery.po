@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:20
+msgid "ParticipantQuery"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:27
+msgid "Created by lars on 19-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:30
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:32
+msgid "CVRNUMMER"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:38
+msgid "KOMMUNEKODE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:44
+msgid "NAVN"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:50
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:52
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:58
+msgid "addKommunekode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:64
+msgid "getCVRNummer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:70
+msgid "getDataClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:76
+msgid "getEntityClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:82
+msgid "getKommunekoder"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:88
+msgid "getLookupDefinition"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:94
+msgid "getNavne"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:100
+msgid "getSearchParameters"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:106
+msgid "setCVRNummer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:112
+msgid "setFromParameters"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/participant/ParticipantQuery.rst:118
+msgid "setNavne"
+msgstr ""
+

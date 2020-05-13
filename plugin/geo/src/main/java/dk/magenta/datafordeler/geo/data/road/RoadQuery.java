@@ -200,6 +200,7 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         this.setName(parameters.getFirst(NAME));
         this.setAddressingName(parameters.getFirst(ADDRESSING_NAME));
         this.setLocality(parameters.getFirst(LOCALITY));
+        this.setMunicipality(parameters.getFirst(MUNICIPALITY));
     }
 
 }

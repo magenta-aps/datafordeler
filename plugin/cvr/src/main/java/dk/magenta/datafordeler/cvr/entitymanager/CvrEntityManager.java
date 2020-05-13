@@ -20,6 +20,8 @@ import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.core.util.Stopwatch;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
+import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
 import dk.magenta.datafordeler.cvr.records.CvrEntityRecord;
 import dk.magenta.datafordeler.cvr.records.CvrRecord;
@@ -28,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -54,6 +57,9 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
+
+    @Value("${dafo.cpr.demoCompanyList}")
+    private String cvrDemoList;
 
     private static final String TASK_PARSE = "CvrParse";
     private static final String TASK_FIND_ENTITY = "CvrFindEntity";
@@ -83,6 +89,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     public void init() {
         // Ignore case on property names when parsing incoming JSON
         this.objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+    }
+
+    public void setCvrDemoList(String cvrDemoList) {
+        this.cvrDemoList = cvrDemoList;
     }
 
     /**
@@ -179,6 +189,12 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         Session session = importMetadata.getSession();
         if (session != null) {
+            //With this flag true initiated testdata is cleared before initiation of new data is initiated
+            if(importMetadata.getImportConfiguration()!=null &&
+                    importMetadata.getImportConfiguration().has("cleantestdatafirst") &&
+                    importMetadata.getImportConfiguration().get("cleantestdatafirst").booleanValue()) {
+                cleanDemoData(session);
+            }
             Industry.initializeCache(session);
             CompanyForm.initializeCache(session);
             CompanyStatus.initializeCache(session);
@@ -282,6 +298,27 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         log.info("Parse complete");
         return null;
     }
+
+    /**
+     * Clean democompanys which has been initiated in the database.
+     * democompanys is used on the demoenvironment for demo and education purposes
+     */
+    public void cleanDemoData(Session session) {
+        CompanyRecordQuery personQuery = new CompanyRecordQuery();
+        List<String> testCompanyList = Arrays.asList(cvrDemoList.split(","));
+        for(String testCompany : testCompanyList) {
+            personQuery.addCvrNummer(testCompany);
+        }
+        session.beginTransaction();
+        personQuery.setPageSize(1000);
+        personQuery.applyFilters(session);
+        List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
+        for(CompanyRecord companyForDeletion : companyEntities) {
+            session.delete(companyForDeletion);
+        }
+        session.getTransaction().commit();
+    }
+
 
     protected abstract SessionManager getSessionManager();
     protected abstract String getJsonTypeName();

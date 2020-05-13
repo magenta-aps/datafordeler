@@ -228,7 +228,7 @@ public class RoadTest extends TestBase {
             loadRoad(importMetadata);
             transaction.commit();
 
-            CprLookupService lookupService = new CprLookupService(session);
+            CprLookupService lookupService = new CprLookupService(this.getSessionManager());
 
             CprLookupDTO lookupDTO = lookupService.doLookup(730, 1, "18");
 

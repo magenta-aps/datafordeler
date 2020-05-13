@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,10 +87,11 @@ public class CprRecordService {
                 "Incoming REST request for PrismeCprService with cprNummer " + cprNummer
         );
         this.checkAndLogAccess(loggerHelper);
+        loggerHelper.urlInvokePersistablelogs("CprRecordService");
 
         final Session session = sessionManager.getSessionFactory().openSession();
         try {
-            GeoLookupService lookupService = new GeoLookupService(session);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
@@ -108,9 +110,10 @@ public class CprRecordService {
 
             if (!personEntities.isEmpty()) {
                 PersonEntity personEntity = personEntities.get(0);
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprRecordService done");
                 return objectMapper.writeValueAsString(personOutputWrapper.wrapRecordResult(personEntity, personQuery));
             }
-
+            loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CprRecordService done");
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
         } finally {
             session.close();
@@ -150,6 +153,7 @@ public class CprRecordService {
                         PARAM_CPR_NUMBER + " = " + (cprNumbers != null && cprNumbers.size() > 10 ? (cprNumbers.size() + " cpr numbers") : cprNumbers)
         );
         this.checkAndLogAccess(loggerHelper);
+        loggerHelper.urlInvokePersistablelogs("CprRecordService");
 
         PersonRecordQuery personQuery = new PersonRecordQuery();
         personQuery.setPageSize(Integer.MAX_VALUE);
@@ -174,7 +178,7 @@ public class CprRecordService {
         return outputStream -> {
 
             final Session lookupSession = sessionManager.getSessionFactory().openSession();
-            GeoLookupService lookupService = new GeoLookupService(lookupSession);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
             final Session entitySession = sessionManager.getSessionFactory().openSession();
@@ -214,6 +218,7 @@ public class CprRecordService {
             } catch (InvalidClientInputException e) {
                 e.printStackTrace();
             } finally {
+                loggerHelper.urlResponsePersistablelogs("CprRecordService done");
                 entitySession.close();
                 lookupSession.close();
             }

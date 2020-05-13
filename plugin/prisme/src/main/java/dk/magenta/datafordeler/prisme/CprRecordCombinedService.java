@@ -91,9 +91,10 @@ public class CprRecordCombinedService {
                 "Incoming REST request for PrismeCprService with cprNummer " + cprNummer
         );
         this.checkAndLogAccess(loggerHelper);
+        loggerHelper.urlInvokePersistablelogs("CprRecordCombinedService");
 
         try (final Session session = sessionManager.getSessionFactory().openSession()) {
-            GeoLookupService lookupService = new GeoLookupService(session);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
@@ -127,6 +128,7 @@ public class CprRecordCombinedService {
 
             PersonAttributeQuality personAttrQuality = this.acceptPersonEntity(personEntity);
             Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
+            loggerHelper.urlInvokePersistablelogs("CprRecordCombinedService done");
             switch (personAttrQuality) {
                 case PersonInformationIsOk:
                     return objectMapper.writeValueAsString(obj);
@@ -214,7 +216,7 @@ public class CprRecordCombinedService {
         return outputStream -> {
 
             final Session lookupSession = sessionManager.getSessionFactory().openSession();
-            GeoLookupService lookupService = new GeoLookupService(lookupSession);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
             final Session entitySession = sessionManager.getSessionFactory().openSession();
