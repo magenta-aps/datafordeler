@@ -1,38 +1,71 @@
 Datafordeler
 ============
 
-Meta repository for the datafordeler project.
+Repository for the datafordeler project.
 
 Also main repository for documentation of the project.
 For specific documentation about the documentation, see [This README](docs/README.md)
 
 ## Usage:
-To clone this repository recursively, please run:
+To clone this repository, please run:
 
-     git clone --recursive git@github.com:magenta-aps/datafordeler.git
+     git clone git@git.magenta.dk:gronlandsprojekter/datafordeler.git
 
-Or using older versions of git:
-
-     git clone git@github.com:magenta-aps/datafordeler.git
-     cd datafordeler
-     git submodule update --init --recursive
      
 On Windows (inside `git-on-windows`), the clone command may have to become:
 
-     ssh-agent bash -c 'ssh-add; git clone git@github.com:magenta-aps/datafordeler.git'
+     ssh-agent bash -c 'ssh-add; git clone git@git.magenta.dk:gronlandsprojekter/datafordeler.git'
 
-## Vagrant:
-For information on the Vagrantfile, and Ansible, please check:
-[This repository](https://github.com/magenta-aps/vagrant-ansible-example)
+## seperate projects:
+The project consists of different projects which should be developed separately, and which generates its own *.jar file.
+Some projects is dependant of the *.jar files in other projects.
 
-*Note: When using vagrant with Virtualbox, you'll be prompted to choose a 
-bridged network interface. Select the interface that is being used to connect
-to the internet.*
+There is a project in the folder core, and 9 projects in the folder plugin.
+
+## Plugins:
+Each plugin has its own pom.xml. Some plugins depends on other plugins the following projects exists in plugins:
+
+cpr:
+This project is parsing data from cpr, and persists it in the database
+
+cvr:
+This project is parsing data from virk.dk, and persists it in the database
+
+geo:
+This project is parsing data from GAR, and persists it in the database
+
+ger:
+This project is parsing data from ger, and persists it in the database
+
+eboks:
+This project exposes data from from cpr and cvr.
+The project is used for fetching information about the possibility af sending eboks messages for persons 
+and companies in datafordeler.
+
+prisme:
+This project exposes data from from cpr, cvr and geo.
+The project is used for fetching information about persons and companies in datafordeler.
+This plugin deliveres inform
 
 
-## Generate documentation
+gladdreg:
+This project is parsing data from gladdreg, and persists it in the database.
+Data in gladdreg is not maintained any more, but it will not be removed yet either.
 
-Use the vagrant image:
-box_image=(ENV['BOX_NAME'] || 'ubuntu/bionic64')
-box_version=(ENV['BOX_VERSION'] || '>=0')
+adresseservice:
+This project exposes data from gladdreg, it is not used by any customers, and is considered deprecated
+
+statistik:
+This project exposes data from cpr and geo, it is not used by any customers, and is considered deprecated
+
+
+## Compiling/building/testing:
+
+Datafordeler is developed for Java11, in order to start developing first install Java and maven
+
+Go to core, or one of the plugins and execute 'mvn clean install'
+The command will build the plugin, start the servers, and run the tests
+
+
+
 
