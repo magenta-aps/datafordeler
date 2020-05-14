@@ -36,8 +36,10 @@ Examples:
 
 If this MR contains database changes, please do a dry run of a potential deployment in your local environment.
 
-## Approval instructions
+## Merge instructions
 
-* Do not merge the MR, just approve it
+* If the MR is ready for deployment it can be merged straight away. If there is doubt about 
+  whether it should go in production, prepare it for merge, add `WIP: ` in front of the title
+  and assign it to the release manager.
 * If set up for squashing, make sure the squash commit message makes sense
 * Set the corresponding Redmine ticket to `Release Management: Approved` and unassign yourself
