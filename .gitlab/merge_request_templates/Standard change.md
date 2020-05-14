@@ -38,8 +38,14 @@ If this MR contains database changes, please do a dry run of a potential deploym
 
 ## Merge instructions
 
-* If the MR is ready for deployment it can be merged straight away. If there is doubt about 
-  whether it should go in production, prepare it for merge, add `WIP: ` in front of the title
-  and assign it to the release manager.
-* If set up for squashing, make sure the squash commit message makes sense
-* Set the corresponding Redmine ticket to `Release Management: Approved` and unassign yourself
+* If the MR is marked as work-in-progres (it has `WIP:` in the start of the title):
+** Approve the MR
+** Unassign yourself
+** Assign the MR to the original author or the release manager
+** Add a note in redmine saying the MR was approved, change redmine ticket to `In progress`
+   and assign the redmine ticket to the same person you assigned the MR to. 
+* If the MR is not work-in-progress:
+** Merge it.
+** Set the corresponding Redmine ticket to `Done` and unassign yourself
+* In both cases:
+** If set up for squashing, make sure the squash commit message makes sense
