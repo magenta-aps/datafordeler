@@ -5,12 +5,18 @@ import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class PostcodeOutputWrapper extends GeoOutputWrapper<PostcodeEntity> {
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    @PostConstruct
+    private void register() {
+        this.register(PostcodeEntity.class);
+    }
 
     @Override
     public ObjectMapper getObjectMapper() {
@@ -18,9 +24,9 @@ public class PostcodeOutputWrapper extends GeoOutputWrapper<PostcodeEntity> {
     }
 
     @Override
-    protected void fillContainer(OutputContainer container, PostcodeEntity item) {
+    protected void fillContainer(OutputContainer container, PostcodeEntity item, Mode mode) {
         container.addNontemporal("postnummer", item.getCode());
-        container.addNontemporal("postdistrikt", item.getName());
+        container.addMonotemporal("postdistrikt", item.getName());
     }
 
 }

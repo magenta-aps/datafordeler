@@ -2,7 +2,9 @@ package dk.magenta.datafordeler.cpr;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -149,6 +151,13 @@ public class QueryTest {
         Assert.assertEquals(1, results.size());
         Assert.assertEquals("4ccc3b64-1779-38f2-a96c-458e541a010d", results.get(0).get("uuid").asText());
 
+        searchParameters.add("registrationFromBefore", "ALWAYS");
+        searchParameters.add("registrationToAfter", "ALWAYS");
+        searchParameters.add("effectFromBefore", "ALWAYS");
+        searchParameters.add("effectToAfter", "ALWAYS");
+        response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+
 
         testUserDetails.giveAccess(
                 plugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
@@ -163,6 +172,7 @@ public class QueryTest {
         Assert.assertEquals(200, response.getStatusCode().value());
         jsonBody = objectMapper.readTree(response.getBody());
         results = jsonBody.get("results");
+        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(results));
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(0, results.size());
 
@@ -234,9 +244,8 @@ public class QueryTest {
         JsonNode results = jsonBody.get("results");
         Assert.assertTrue(results.isArray());
 
-        //System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(results));
         Assert.assertEquals(1, results.size());
-        Assert.assertEquals(4, results.get(0).size());
+        Assert.assertEquals(8, results.get(0).size());
 
         searchParameters = new ParameterMap();
         searchParameters.add("registreringFraFør", "2011-06-17T14:06:19.196");
@@ -251,6 +260,288 @@ public class QueryTest {
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(results));
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(1, results.size());
+    }
+
+    @Test
+    public void testPersonDataOnly() throws Exception {
+        whitelistLocalhost();
+        OffsetDateTime now = OffsetDateTime.now();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        loadPerson(importMetadata);
+        transaction.commit();
+        session.close();
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ParameterMap searchParameters = new ParameterMap();
+        searchParameters.add("fornavn", "Tester");
+        searchParameters.add("fmt", "rvd");
+
+        ResponseEntity<String> response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        JsonNode jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results = jsonBody.get("results");
+
+        JsonNode firstElement = results.get(0);
+        JsonNode registreringer = firstElement.get("registreringer");
+        Assert.assertNotNull(registreringer);
+
+        searchParameters.replace("fmt", "dataonly");
+
+        response = restSearch(searchParameters, "person");
+        Assert.assertEquals(200, response.getStatusCode().value());
+        jsonBody = objectMapper.readTree(response.getBody());
+        results = jsonBody.get("results");
+
+        firstElement = results.get(0);
+        registreringer = firstElement.get("registreringer");
+        Assert.assertNull(registreringer);
+    }
+
+
+
+
+    @Test
+    public void testPersonGenericSearchParameters() throws Exception {
+        whitelistLocalhost();
+        OffsetDateTime now = OffsetDateTime.now();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        loadPerson(importMetadata);
+        transaction.commit();
+        session.close();
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ParameterMap searchParameters = new ParameterMap();
+        searchParameters.add("fmt", "dataonly");
+
+        searchParameters.add("pnr", "0101001234");
+        ResponseEntity<String> response = restSearch(searchParameters, "person");
+        JsonNode jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results1 = jsonBody.get("results");
+        searchParameters.remove("pnr");
+
+        searchParameters.add("pnr", "0101006666");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("pnr");
+
+        searchParameters.add("fornavn", "Tester");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results2 = jsonBody.get("results");
+        Assert.assertEquals(results1, results2);
+        searchParameters.remove("fornavn");
+
+        searchParameters.add("fornavn", "Fejler");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("fornavn");
+
+        searchParameters.add("efternavn", "Tystersen");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results3 = jsonBody.get("results");
+        Assert.assertEquals(results2, results3);
+        searchParameters.remove("efternavn");
+
+        searchParameters.add("efternavn", "Fejlersen");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("efternavn");
+
+        searchParameters.add("kommunekode", "958");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results4 = jsonBody.get("results");
+        Assert.assertEquals(results3, results4);
+        searchParameters.remove("kommunekode");
+
+        searchParameters.add("kommunekode", "000");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("kommunekode");
+
+        searchParameters.add("vejkode", "111");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results5 = jsonBody.get("results");
+        Assert.assertEquals(results4, results5);
+        searchParameters.remove("vejkode");
+
+        searchParameters.add("vejkode", "000");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("vejkode");
+
+        searchParameters.add("husnummer", "3");
+        response = restSearch(searchParameters, "person");
+        System.out.println(response.getBody());
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results6 = jsonBody.get("results");
+        Assert.assertEquals(results5, results6);
+        searchParameters.remove("husnummer");
+
+        searchParameters.add("husnummer", "1234");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("husnummer");
+
+        searchParameters.add("etage", "02");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results7 = jsonBody.get("results");
+        Assert.assertEquals(results6, results7);
+        searchParameters.remove("etage");
+
+        searchParameters.add("etage", "01");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("etage");
+
+        searchParameters.add("sidedør", "4");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results8 = jsonBody.get("results");
+        Assert.assertEquals(results7, results8);
+        searchParameters.remove("sidedør");
+
+        searchParameters.add("sidedør", "5");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("sidedør");
+    }
+
+    @Test
+    public void testPersonMunicipalityRestriction() throws Exception {
+        whitelistLocalhost();
+        OffsetDateTime now = OffsetDateTime.now();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        loadPerson(importMetadata);
+        transaction.commit();
+        session.close();
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        AreaRestriction a = AreaRestriction.lookup(plugin.getName() + ":" + CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER + ":" + CprAreaRestrictionDefinition.RESTRICTION_KOMMUNE_SERMERSOOQ);
+        testUserDetails.giveAccess(a);
+        this.applyAccess(testUserDetails);
+
+        ParameterMap searchParameters = new ParameterMap();
+        searchParameters.add("fmt", "dataonly");
+
+        searchParameters.add("pnr", "0101001234");
+        ResponseEntity<String> response = restSearch(searchParameters, "person");
+        JsonNode jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("pnr");
+
+        searchParameters.set("pnr", "0101006666");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        mustFail = jsonBody.get("results");
+        Assert.assertTrue(mustFail.isArray());
+        Assert.assertEquals(0, mustFail.size());
+        searchParameters.remove("pnr");
+
+        searchParameters.set("fornavn", "Tester");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results2 = jsonBody.get("results");
+        Assert.assertTrue(results2.isArray());
+        Assert.assertEquals(0, results2.size());
+        searchParameters.remove("fornavn");
+
+        searchParameters.set("efternavn", "Tystersen");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results3 = jsonBody.get("results");
+        Assert.assertTrue(results3.isArray());
+        Assert.assertEquals(0, results3.size());
+        searchParameters.remove("efternavn");
+
+        searchParameters.set("kommunekode", "958");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results4 = jsonBody.get("results");
+        Assert.assertTrue(results4.isArray());
+        Assert.assertEquals(0, results4.size());
+        searchParameters.remove("kommunekode");
+
+        searchParameters.set("vejkode", "111");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results5 = jsonBody.get("results");
+        Assert.assertTrue(results5.isArray());
+        Assert.assertEquals(0, results5.size());
+        searchParameters.remove("vejkode");
+
+        searchParameters.set("husnummer", "3");
+        response = restSearch(searchParameters, "person");
+        System.out.println(response.getBody());
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results6 = jsonBody.get("results");
+        Assert.assertTrue(results6.isArray());
+        Assert.assertEquals(0, results6.size());
+        searchParameters.remove("husnummer");
+
+        searchParameters.set("etage", "02");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results7 = jsonBody.get("results");
+        Assert.assertTrue(results7.isArray());
+        Assert.assertEquals(0, results7.size());
+        searchParameters.remove("etage");
+
+        searchParameters.set("sidedør", "4");
+        response = restSearch(searchParameters, "person");
+        jsonBody = objectMapper.readTree(response.getBody());
+        JsonNode results8 = jsonBody.get("results");
+        Assert.assertTrue(results8.isArray());
+        Assert.assertEquals(0, results8.size());
+        searchParameters.remove("sidedør");
     }
 
 }

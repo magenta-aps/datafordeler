@@ -1,11 +1,13 @@
 package dk.magenta.datafordeler.geo.data.road;
 
+import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.util.*;
 
 @Component("GeoRoadEntityManager")
 public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawData> {
@@ -57,4 +59,24 @@ public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawDa
         return new GeoRoadEntity(record);
     }
 
+    @Override
+    public BaseQuery getQuery() {
+        return new RoadQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        RoadQuery roadQuery = new RoadQuery();
+        for (String join : strings) {
+            switch (join) {
+                case "municipality":
+                    roadQuery.addRelatedMunicipalityQuery();
+                    break;
+                case "locality":
+                    roadQuery.addRelatedLocalityQuery();
+                    break;
+            }
+        }
+        return roadQuery;
+    }
 }

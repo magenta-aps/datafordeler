@@ -1,11 +1,14 @@
 package dk.magenta.datafordeler.cpr.data;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import org.hibernate.Session;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -47,5 +50,21 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
     public void forceLoad(Session session) {
 
     }
+
+    public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
+    public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
+
+    @Column(name = DB_FIELD_DAFO_UPDATED)
+    private OffsetDateTime dafoUpdated;
+
+    @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
+    public OffsetDateTime getDafoUpdated() {
+        return this.dafoUpdated;
+    }
+
+    public void setDafoUpdated(OffsetDateTime dafoUpdated) {
+        this.dafoUpdated = dafoUpdated;
+    }
+
 
 }

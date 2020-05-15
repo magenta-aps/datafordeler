@@ -3,11 +3,15 @@ package dk.magenta.datafordeler.geo.data.accessaddress;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.RawData;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
@@ -16,14 +20,15 @@ import org.hibernate.annotations.Filters;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME, indexes = {
         @Index(name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME + AccessAddressEntity.DB_FIELD_BNR, columnList = AccessAddressEntity.DB_FIELD_BNR),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressEntity.TABLE_NAME + AccessAddressEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = AccessAddressEntity.DB_FIELD_DAFO_UPDATED
+        ),
 })
 public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEntity {
 
@@ -73,10 +78,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_HOUSE_NUMBER)
-    Set<AccessAddressHouseNumberRecord> houseNumber = new HashSet<>();
+    private Set<AccessAddressHouseNumberRecord> houseNumber = new HashSet<>();
 
-    public Set<AccessAddressHouseNumberRecord> getHouseNumber() {
-        return this.houseNumber;
+    public MonotemporalSet<AccessAddressHouseNumberRecord> getHouseNumber() {
+        return new MonotemporalSet<>(this.houseNumber);
     }
 
 
@@ -92,8 +97,8 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     @JsonProperty(IO_FIELD_BLOCK_NAME)
     Set<AccessAddressBlockNameRecord> blockName = new HashSet<>();
 
-    public Set<AccessAddressBlockNameRecord> getBlockName() {
-        return this.blockName;
+    public MonotemporalSet<AccessAddressBlockNameRecord> getBlockName() {
+        return new MonotemporalSet<>(this.blockName);
     }
 
 
@@ -108,10 +113,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_ROAD)
-    Set<AccessAddressRoadRecord> road = new HashSet<>();
+    private Set<AccessAddressRoadRecord> road = new HashSet<>();
 
-    public Set<AccessAddressRoadRecord> getRoad() {
-        return this.road;
+    public MonotemporalSet<AccessAddressRoadRecord> getRoad() {
+        return new MonotemporalSet<>(this.road);
     }
 
 
@@ -126,10 +131,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_LOCALITY)
-    Set<AccessAddressLocalityRecord> locality = new HashSet<>();
+    private Set<AccessAddressLocalityRecord> locality = new HashSet<>();
 
-    public Set<AccessAddressLocalityRecord> getLocality() {
-        return this.locality;
+    public MonotemporalSet<AccessAddressLocalityRecord> getLocality() {
+        return new MonotemporalSet<>(this.locality);
     }
 
 
@@ -144,10 +149,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_POSTCODE)
-    Set<AccessAddressPostcodeRecord> postcode = new HashSet<>();
+    private Set<AccessAddressPostcodeRecord> postcode = new HashSet<>();
 
-    public Set<AccessAddressPostcodeRecord> getPostcode() {
-        return this.postcode;
+    public MonotemporalSet<AccessAddressPostcodeRecord> getPostcode() {
+        return new MonotemporalSet<>(this.postcode);
     }
 
 
@@ -162,10 +167,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_BUILDING)
-    Set<AccessAddressBuildingReferenceRecord> building = new HashSet<>();
+    private Set<AccessAddressBuildingReferenceRecord> building = new HashSet<>();
 
-    public Set<AccessAddressBuildingReferenceRecord> getBuilding() {
-        return this.building;
+    public MonotemporalSet<AccessAddressBuildingReferenceRecord> getBuilding() {
+        return new MonotemporalSet<>(this.building);
     }
 
 
@@ -180,10 +185,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_STATUS)
-    Set<AccessAddressStatusRecord> status = new HashSet<>();
+    private Set<AccessAddressStatusRecord> status = new HashSet<>();
 
-    public Set<AccessAddressStatusRecord> getStatus() {
-        return this.status;
+    public MonotemporalSet<AccessAddressStatusRecord> getStatus() {
+        return new MonotemporalSet<>(this.status);
     }
 
 
@@ -198,10 +203,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SOURCE)
-    Set<AccessAddressSourceRecord> source = new HashSet<>();
+    private Set<AccessAddressSourceRecord> source = new HashSet<>();
 
-    public Set<AccessAddressSourceRecord> getSource() {
-        return this.source;
+    public MonotemporalSet<AccessAddressSourceRecord> getSource() {
+        return new MonotemporalSet<>(this.source);
     }
 
     
@@ -216,10 +221,10 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SHAPE)
-    Set<AccessAddressShapeRecord> shape = new HashSet<>();
+    private Set<AccessAddressShapeRecord> shape = new HashSet<>();
 
-    public Set<AccessAddressShapeRecord> getShape() {
-        return this.shape;
+    public MonotemporalSet<AccessAddressShapeRecord> getShape() {
+        return new MonotemporalSet<>(this.shape);
     }
 
 
@@ -293,6 +298,30 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
         records.add(this.status);
         records.add(this.shape);
         return records;
+    }
+
+
+    @JsonIgnore
+    @Override
+    public List<BaseQuery> getAssoc() {
+        PluginManager pluginManager = PluginManager.getInstance();
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        AccessAddressRoadRecord roadRecord = this.getRoad().current();
+        map.put("municipalitycode", Integer.toString(roadRecord.getMunicipalityCode()));
+        map.put("roadcode", Integer.toString(roadRecord.getRoadCode()));
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            queries.addAll(geoPlugin.getQueries(map));
+        }
+
+        Plugin cprPlugin = pluginManager.getPluginByName("cpr");
+        if (cprPlugin != null) {
+            queries.addAll(cprPlugin.getQueries(map));
+        }
+
+        return queries;
     }
 
 }

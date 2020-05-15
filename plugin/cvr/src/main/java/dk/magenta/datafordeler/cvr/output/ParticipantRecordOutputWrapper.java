@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.cvr.records.ParticipantMetadataRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
 
 /**
  * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
@@ -47,7 +48,7 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
     }
 
     @Override
-    protected void fillContainer(OutputContainer oContainer, ParticipantRecord record) {
+    protected void fillContainer(OutputContainer oContainer, ParticipantRecord record, Mode mode) {
 
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
@@ -67,21 +68,24 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
         container.addCvrBitemporal(ParticipantRecord.IO_FIELD_EMAIL, record.getEmailAddress(), true);
         container.addAttribute(ParticipantRecord.IO_FIELD_ATTRIBUTES, record.getAttributes());
         container.addNontemporal(ParticipantRecord.IO_FIELD_SAMT_ID, record.getSamtId());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_REGISTER_ERROR, record.getRegisterError());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_DATA_ACCESS, record.getDataAccess());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_LAST_LOADED, record.getLastLoaded());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_LAST_UPDATED, record.getLastUpdated());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_LOADING_ERROR, record.getLoadingError());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_NEAREST_FUTURE_DATE, record.getNearestFutureDate());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_ERRORDESCRIPTION, record.getErrorDescription());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_EFFECT_AGENT, record.getEffectAgent());
+
+        if (!DATAONLY.equals(mode)) {
+            container.addNontemporal(ParticipantRecord.IO_FIELD_REGISTER_ERROR, record.getRegisterError());
+            container.addNontemporal(ParticipantRecord.IO_FIELD_DATA_ACCESS, record.getDataAccess());
+            container.addNontemporal(ParticipantRecord.IO_FIELD_LAST_LOADED, record.getLastLoaded());
+            container.addNontemporal(ParticipantRecord.IO_FIELD_LAST_UPDATED, record.getLastUpdated());
+            container.addNontemporal(ParticipantRecord.IO_FIELD_LOADING_ERROR, record.getLoadingError());
+            container.addNontemporal(ParticipantRecord.IO_FIELD_NEAREST_FUTURE_DATE, record.getNearestFutureDate());
+            container.addNontemporal(ParticipantRecord.IO_FIELD_ERRORDESCRIPTION, record.getErrorDescription());
+            container.addNontemporal(ParticipantRecord.IO_FIELD_EFFECT_AGENT, record.getEffectAgent());
+        }
         /*
         companyrelation
         */
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, ParticipantRecord record) {
+    protected void fillMetadataContainer(OutputContainer oContainer, ParticipantRecord record, Mode m) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         ParticipantMetadataRecord meta = record.getMetadata();

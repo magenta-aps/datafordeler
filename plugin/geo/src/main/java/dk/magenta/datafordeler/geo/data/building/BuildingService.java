@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 @RestController("GeoBuildingService")
 @RequestMapping("/geo/building/1/rest")
-public class BuildingService extends FapiBaseService<BuildingEntity, PostcodeQuery> {
+public class BuildingService extends FapiBaseService<BuildingEntity, BuildingQuery> {
 
     @Autowired
     private GeoPlugin geoPlugin;
@@ -50,7 +50,7 @@ public class BuildingService extends FapiBaseService<BuildingEntity, PostcodeQue
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.DRV;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override
@@ -79,8 +79,8 @@ public class BuildingService extends FapiBaseService<BuildingEntity, PostcodeQue
     }
 
     @Override
-    protected PostcodeQuery getEmptyQuery() {
-        return new PostcodeQuery();
+    protected BuildingQuery getEmptyQuery() {
+        return new BuildingQuery();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class BuildingService extends FapiBaseService<BuildingEntity, PostcodeQue
     }
 
     @Override
-    protected void applyAreaRestrictionsToQuery(PostcodeQuery query, DafoUserDetails user) {
+    protected void applyAreaRestrictionsToQuery(BuildingQuery query, DafoUserDetails user) {
         Collection<AreaRestriction> restrictions = user.getAreaRestrictionsForRole(GeoRolesDefinition.READ_GEO_ROLE);
         AreaRestrictionDefinition areaRestrictionDefinition = this.geoPlugin.getAreaRestrictionDefinition();
         AreaRestrictionType municipalityType = areaRestrictionDefinition.getAreaRestrictionTypeByName(GeoAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER);

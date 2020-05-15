@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
-import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @javax.persistence.Entity
@@ -16,17 +15,17 @@ import java.util.Objects;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadCityBitemporalRecord.TABLE_NAME + RoadCityBitemporalRecord.DB_FIELD_ENTITY, columnList = CprBitemporalRoadRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadCityBitemporalRecord.TABLE_NAME + RoadCityBitemporalRecord.DB_FIELD_REPLACED_BY, columnList = CprBitemporalRoadRecord.DB_FIELD_REPLACED_BY + DatabaseEntry.REF),
 })
-public class RoadCityBitemporalRecord extends CprBitemporalRoadRecord<RoadCityBitemporalRecord> {
+public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBitemporalRecord> {
 
     public static final String TABLE_NAME = "cpr_road_city_record";
 
     public RoadCityBitemporalRecord() {
     }
 
-    public RoadCityBitemporalRecord(String toHousenumber, String fromHousenumber, boolean equalUnequal, String cityName) {
+    public RoadCityBitemporalRecord(String toHousenumber, String fromHousenumber, boolean even, String cityName) {
         this.toHousenumber = toHousenumber;
         this.fromHousenumber = fromHousenumber;
-        this.equalUnequal = equalUnequal;
+        this.even = even;
         this.cityName = cityName;
     }
 
@@ -62,18 +61,18 @@ public class RoadCityBitemporalRecord extends CprBitemporalRoadRecord<RoadCityBi
     }
 
     // Lige/ulige indikator
-    public static final String DB_FIELD_EQUAL_UNEQUAL = "equalUnequal";
-    public static final String IO_FIELD_EQUAL_UNEQUAL = "ligeUlige";
+    public static final String DB_FIELD_EQUAL_UNEQUAL = "even";
+    public static final String IO_FIELD_EQUAL_UNEQUAL = "lige";
     @Column(name = DB_FIELD_EQUAL_UNEQUAL)
     @JsonProperty(value = IO_FIELD_EQUAL_UNEQUAL)
     @XmlElement(name = IO_FIELD_EQUAL_UNEQUAL)
-    private boolean equalUnequal;
-    public boolean getEqualUnequal() {
-        return equalUnequal;
+    private boolean even;
+    public boolean getEven() {
+        return even;
     }
 
-    public void setEqualUnequal(boolean equalUnequal) {
-        this.equalUnequal = equalUnequal;
+    public void setEven(boolean even) {
+        this.even = even;
     }
 
     // Byens navn
@@ -99,7 +98,7 @@ public class RoadCityBitemporalRecord extends CprBitemporalRoadRecord<RoadCityBi
         RoadCityBitemporalRecord that = (RoadCityBitemporalRecord) o;
         return Objects.equals(toHousenumber, that.toHousenumber) &&
                 Objects.equals(fromHousenumber, that.fromHousenumber) &&
-                Objects.equals(equalUnequal, that.equalUnequal) &&
+                Objects.equals(even, that.even) &&
                 Objects.equals(cityName, that.cityName);
     }
 
@@ -111,7 +110,7 @@ public class RoadCityBitemporalRecord extends CprBitemporalRoadRecord<RoadCityBi
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), toHousenumber, fromHousenumber, equalUnequal, cityName);
+        return Objects.hash(super.hashCode(), toHousenumber, fromHousenumber, even, cityName);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class RoadCityBitemporalRecord extends CprBitemporalRoadRecord<RoadCityBi
         RoadCityBitemporalRecord clone = new RoadCityBitemporalRecord();
         clone.toHousenumber = this.toHousenumber;
         clone.fromHousenumber = this.fromHousenumber;
-        clone.equalUnequal = this.equalUnequal;
+        clone.even = this.even;
         clone.cityName = this.cityName;
         RoadCityBitemporalRecord.copy(this, clone);
         return clone;

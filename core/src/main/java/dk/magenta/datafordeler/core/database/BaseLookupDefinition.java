@@ -177,19 +177,18 @@ public class BaseLookupDefinition {
         return false;
     }
 
-    protected HashSet<String> getHqlJoinParts(String rootKey, FieldDefinition fieldDefinition) {
-        HashSet<String> joinTables = new HashSet<>();
-        String path = fieldDefinition.path;
-        if (path.contains(separator)) {
-            String[] parts = path.split(quotedSeparator);
-            String firstPart = parts[0];
-            if (firstPart.equals(entityref) || firstPart.equals(registrationref) || firstPart.equals(effectref)) {
-                parts = Arrays.copyOfRange(parts, 1, parts.length);
-            }
+    protected List<String> getHqlJoinParts(String rootKey, FieldDefinition fieldDefinition) {
+        LinkedHashSet<String> joinTables = new LinkedHashSet<>();
+        List<String> pathParts = fieldDefinition.getJoinParts();
 
-            StringBuilder fullParts = new StringBuilder(rootKey);
-            for (int i = 0; i<parts.length - 1; i++) {
-                String part = parts[i];
+        StringBuilder fullParts = new StringBuilder(rootKey);
+        if (pathParts != null) {
+            String firstPart = pathParts.get(0);
+            if (firstPart.equals(BaseLookupDefinition.entityref) || firstPart.equals(BaseLookupDefinition.registrationref) || firstPart.equals(BaseLookupDefinition.effectref)) {
+                pathParts = new ArrayList<>(pathParts);
+                pathParts.remove(0);
+            }
+            for (String part : pathParts) {
                 String beforeAppend = fullParts.toString();
                 fullParts.append("_").append(part);
                 String joinEntry = beforeAppend + "." + part + " " + fullParts;
@@ -206,7 +205,7 @@ public class BaseLookupDefinition {
                 joinTables.addAll(this.getHqlJoinParts(rootKey, other));
             }
         }
-        return joinTables;
+        return new ArrayList<>(joinTables);
     }
 
     public String getHqlWhereString(String rootKey, String entityKey) {
@@ -226,7 +225,10 @@ public class BaseLookupDefinition {
     public String getHqlWhereString(String dataItemKey, String entityKey, String prefix) {
         StringJoiner extraWhere = new StringJoiner(" AND ");
         for (FieldDefinition fieldDefinition : this.fieldDefinitions) {
-            extraWhere.add("(" + this.getHqlWherePart(dataItemKey, entityKey, fieldDefinition, true) + ")");
+            String part = this.getHqlWherePart(dataItemKey, entityKey, fieldDefinition, true);
+            if (part != null) {
+                extraWhere.add("(" + part + ")");
+            }
         }
         if (extraWhere.length() > 0) {
             return prefix + " " + extraWhere.toString();
@@ -249,6 +251,10 @@ public class BaseLookupDefinition {
     }
 
     protected String getHqlWherePart(String rootKey, String entityKey, FieldDefinition fieldDefinition, boolean joinedTable) {
+        if (fieldDefinition instanceof ForcedJoinDefinition) {
+            // Forced joins are basically joins on our query that don't add any WHERE conditions
+            return null;
+        }
         String where = null;
         String path = fieldDefinition.path;
         String parameterPath = BaseLookupDefinition.getParameterPath(rootKey, entityKey, path) + "_" + fieldDefinition.id;

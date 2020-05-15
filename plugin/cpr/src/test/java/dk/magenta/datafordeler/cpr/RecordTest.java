@@ -110,9 +110,9 @@ public class RecordTest {
             query.addKommunekode(958);
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearKommunekode();
-            query.setFornavn("Tester");
+            query.addFornavn("Tester");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.setFornavn(null);
+            query.clearFornavn();
 
             query.setEfternavn("Tystersen");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());

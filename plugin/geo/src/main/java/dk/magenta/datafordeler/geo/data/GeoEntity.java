@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import org.hibernate.Session;
@@ -72,6 +73,24 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
         this.setCreationDate(Instant.ofEpochMilli(creationDate).atOffset(ZoneOffset.UTC));
     }
 
+
+
+    public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
+    public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
+
+    @Column(name = DB_FIELD_DAFO_UPDATED)
+    private OffsetDateTime dafoUpdated = null;
+
+    @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
+    public OffsetDateTime getDafoUpdated() {
+        return this.dafoUpdated;
+    }
+
+    public void setDafoUpdated(OffsetDateTime dafoUpdated) {
+        this.dafoUpdated = dafoUpdated;
+    }
+
+
     @Override
     public void forceLoad(Session session) {
     }
@@ -80,6 +99,9 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
         for (GeoMonotemporalRecord record : rawData.getMonotemporalRecords()) {
             record.setDafoUpdated(timestamp);
             this.addMonotemporalRecord(record);
+            if (timestamp != null && (this.dafoUpdated == null || timestamp.isAfter(this.dafoUpdated))) {
+                this.dafoUpdated = timestamp;
+            }
         }
     }
 

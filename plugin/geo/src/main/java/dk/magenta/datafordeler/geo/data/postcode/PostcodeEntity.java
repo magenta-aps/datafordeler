@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import org.hibernate.annotations.Filter;
@@ -21,6 +22,14 @@ import java.util.*;
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_SUMIFFIIK_ID,
                 columnList = PostcodeEntity.DB_FIELD_SUMIFFIIK_ID
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_CODE,
+                columnList = PostcodeEntity.DB_FIELD_CODE
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = PostcodeEntity.DB_FIELD_DAFO_UPDATED
         ),
 })
 public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity {
@@ -72,10 +81,10 @@ public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity 
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_NAME)
-    Set<PostcodeNameRecord> name = new HashSet<>();
+    private Set<PostcodeNameRecord> name = new HashSet<>();
 
-    public Set<PostcodeNameRecord> getName() {
-        return this.name;
+    public MonotemporalSet<PostcodeNameRecord> getName() {
+        return new MonotemporalSet<>(this.name);
     }
 
 
@@ -94,10 +103,10 @@ public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity 
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SHAPE)
-    Set<PostcodeShapeRecord> shape = new HashSet<>();
+    private Set<PostcodeShapeRecord> shape = new HashSet<>();
 
-    public Set<PostcodeShapeRecord> getShape() {
-        return this.shape;
+    public MonotemporalSet<PostcodeShapeRecord> getShape() {
+        return new MonotemporalSet<>(this.shape);
     }
 
 

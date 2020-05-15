@@ -52,7 +52,7 @@ public abstract class GapiTestBase {
     }
 
     protected String getPayload(String resourceName) throws IOException {
-        return IOUtils.toString(GapiTestBase.class.getResourceAsStream(resourceName), StandardCharsets.UTF_8);
+        return IOUtils.toString(GapiTestBase.class.getResourceAsStream(resourceName), StandardCharsets.UTF_8).strip();
     }
 
     protected String getBody(String schema, String resourceName) throws IOException {

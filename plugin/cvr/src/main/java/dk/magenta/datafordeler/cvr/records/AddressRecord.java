@@ -3,17 +3,17 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
 import org.hibernate.Session;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Record for Company, CompanyUnit and Participant address data.
@@ -31,6 +31,16 @@ import java.util.UUID;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__type", columnList = AddressRecord.DB_FIELD_TYPE),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__municipality", columnList = AddressRecord.DB_FIELD_MUNICIPALITY + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__postcode", columnList = AddressRecord.DB_FIELD_POSTCODE_REF + DatabaseEntry.REF),
+
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + AddressRecord.DB_FIELD_HOUSE_FROM, columnList = AddressRecord.DB_FIELD_HOUSE_FROM),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + AddressRecord.DB_FIELD_HOUSE_TO, columnList = AddressRecord.DB_FIELD_HOUSE_TO),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + AddressRecord.DB_FIELD_ROADCODE, columnList = AddressRecord.DB_FIELD_ROADCODE),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + AddressRecord.DB_FIELD_ROADNAME, columnList = AddressRecord.DB_FIELD_ROADNAME),
+
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
+
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressRecord extends CvrBitemporalDataMetaRecord {
@@ -185,13 +195,13 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     @JsonProperty(value = IO_FIELD_HOUSE_FROM)
     @XmlElement(name = IO_FIELD_HOUSE_FROM)
     @Column(name = DB_FIELD_HOUSE_FROM)
-    private String houseNumberFrom;
+    private int houseNumberFrom;
 
-    public String getHouseNumberFrom() {
+    public int getHouseNumberFrom() {
         return this.houseNumberFrom;
     }
 
-    public void setHouseNumberFrom(String houseNumberFrom) {
+    public void setHouseNumberFrom(int houseNumberFrom) {
         this.houseNumberFrom = houseNumberFrom;
     }
 
@@ -203,13 +213,13 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     @JsonProperty(value = IO_FIELD_HOUSE_TO)
     @XmlElement(name = IO_FIELD_HOUSE_TO)
     @Column(name = DB_FIELD_HOUSE_TO)
-    private String houseNumberTo;
+    private int houseNumberTo;
 
-    public String getHouseNumberTo() {
+    public int getHouseNumberTo() {
         return this.houseNumberTo;
     }
 
-    public void setHouseNumberTo(String houseNumberTo) {
+    public void setHouseNumberTo(int houseNumberTo) {
         this.houseNumberTo = houseNumberTo;
     }
 
@@ -270,7 +280,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     //----------------------------------------------------
 
     public static final String DB_FIELD_DOOR = "door";
-    public static final String IO_FIELD_DOOR = "sidedoer";
+    public static final String IO_FIELD_DOOR = "sidedør";
 
     @JsonProperty(value = IO_FIELD_DOOR)
     @XmlElement(name = IO_FIELD_DOOR)
@@ -556,4 +566,22 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
                 Objects.equals(lastValidated, that.lastValidated) &&
                 Objects.equals(freeText, that.freeText);
     }*/
+
+
+    @JsonIgnore
+    @Override
+    public List<BaseQuery> getAssoc() {
+        PluginManager pluginManager = PluginManager.getInstance();
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("municipalitycode", Integer.toString(this.municipality.getMunicipalityCode()));
+        map.put("roadcode", Integer.toString(this.roadCode));
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            queries.addAll(geoPlugin.getQueries(map));
+        }
+
+        return queries;
+    }
 }

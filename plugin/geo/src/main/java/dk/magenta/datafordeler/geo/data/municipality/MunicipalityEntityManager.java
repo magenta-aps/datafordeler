@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.geo.data.municipality;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,17 @@ public class MunicipalityEntityManager extends GeoEntityManager<GeoMunicipalityE
     public String getSchema() {
         return GeoMunicipalityEntity.schema;
     }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new MunicipalityQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
 
     @Override
     protected Class<GeoMunicipalityEntity> getEntityClass() {

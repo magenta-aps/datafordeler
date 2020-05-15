@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class RoadTest extends TestBase {
 
     @Autowired
@@ -135,16 +135,9 @@ public class RoadTest extends TestBase {
             entities = QueryManager.getAllEntities(session, query, RoadEntity.class);
             Assert.assertEquals(2, entities.size());
 
-            entity = entities.get(0);
-            Assert.assertEquals(RoadEntity.generateUUID(730, 15), entity.getUUID());
-            Assert.assertEquals(730, entity.getMunicipalityCode());
-            Assert.assertEquals(15, entity.getRoadcode());
+            Assert.assertTrue(entities.stream().anyMatch(e -> e.getUUID().equals(RoadEntity.generateUUID(730, 15))));
 
-            entity = entities.get(1);
-            Assert.assertEquals(RoadEntity.generateUUID(730, 16), entity.getUUID());
-            Assert.assertEquals(730, entity.getMunicipalityCode());
-            Assert.assertEquals(16, entity.getRoadcode());
-
+            Assert.assertTrue(entities.stream().anyMatch(e -> e.getUUID().equals(RoadEntity.generateUUID(730, 16))));
 
             //Search for road-name with asterix
             query = new RoadRecordQuery();
@@ -188,6 +181,7 @@ public class RoadTest extends TestBase {
         JsonNode results = jsonBody.get("results");
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(9, results.size());
+        System.out.println(this.getObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(results));
 
         for (int i=0; i<results.size(); i++) {
             ObjectNode roadNode = (ObjectNode) results.get(i);
