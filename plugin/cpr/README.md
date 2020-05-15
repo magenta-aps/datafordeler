@@ -10,7 +10,7 @@ Every day changes to the originally "etableringsudtræk" is fetched from the FTP
 All files is stored on the filesystem on the server, and the files is not keept by CPR-kontoret for more than two month
 
 If it is nessesary to clean the database and reload information pull needs to be called with {"plugin":"cpr","remote":false}.
-This is to mak sure that the previous fethceh files from CPR is parsed before the daily ammendments is added.
+This is to make sure that the previous fetched files from CPR is parsed before the daily ammendments is added.
 
 ##Roads
 The Danish roadregiser is imported manually by copying the file from CPR-kontoret, and place it on the server.
