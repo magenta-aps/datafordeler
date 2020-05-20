@@ -66,14 +66,6 @@ public class CvrOwnerHistoryTest extends TestBase {
     @Autowired
     private CvrPlugin cvrPlugin;
 
-    @Autowired
-    private GerPlugin gerPlugin;
-
-    @Autowired
-    private CvrRecordService cvrRecordService;
-
-    HashSet<Entity> createdEntities = new HashSet<>();
-
     @After
     public void cleanup() {
         this.cleanupCompanyData(sessionManager);
@@ -84,15 +76,29 @@ public class CvrOwnerHistoryTest extends TestBase {
     @Test
     public void testCompanyPrisme() throws IOException, DataFordelerException {
         loadAllGeoAdress(sessionManager);
+        loadCompany(cvrPlugin, sessionManager, objectMapper);
         loadInteressentskab(cvrPlugin, sessionManager, objectMapper);
 
         try {
 
             TestUserDetails testUserDetails = new TestUserDetails();
-
+            testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+            this.applyAccess(testUserDetails);
 
             HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
             ResponseEntity<String> response = restTemplate.exchange(
+                    "/prisme/cvr/ownerhistory/1/" + 88888885,
+                    HttpMethod.GET,
+                    httpEntity,
+                    String.class
+            );
+            testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+            this.applyAccess(testUserDetails);
+
+            Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+            httpEntity = new HttpEntity<String>("", new HttpHeaders());
+            response = restTemplate.exchange(
                     "/prisme/cvr/ownerhistory/1/" + 25052943,
                     HttpMethod.GET,
                     httpEntity,
@@ -101,15 +107,25 @@ public class CvrOwnerHistoryTest extends TestBase {
             Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
 
-            testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-            testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-            this.applyAccess(testUserDetails);
+
+            httpEntity = new HttpEntity<String>("", new HttpHeaders());
             response = restTemplate.exchange(
-                    "/prisme/cvr/ownerhistory/1/" + 25052943,
+                    "/prisme/cvr/ownerhistory/1/" + 11111111,
                     HttpMethod.GET,
                     httpEntity,
                     String.class
             );
+            Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+
+
+            response = restTemplate.exchange(
+                    "/prisme/cvr/ownerhistory/1/" + 88888885,
+                    HttpMethod.GET,
+                    httpEntity,
+                    String.class
+            );
+
             Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
             System.out.println(response.getBody());

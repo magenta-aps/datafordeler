@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,7 +74,7 @@ public class CvrCompanyOwnerHistory {
                 "Incoming REST request for PrismeCvrService with cvrNummer " + cvrNummer
         );
         this.checkAndLogAccess(loggerHelper);
-        loggerHelper.urlInvokePersistablelogs("CvrRecordService");
+        loggerHelper.urlInvokePersistablelogs("CvrCompanyOwnerHistory");
 
         HashSet<String> cvrNumbers = new HashSet<>();
         cvrNumbers.add(cvrNummer);
@@ -81,20 +82,25 @@ public class CvrCompanyOwnerHistory {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setCvrNumre(cvrNumbers);
-            //Get the company, there can only be one
-            CompanyRecord companyrecord =  QueryManager.getAllEntities(session, query, CompanyRecord.class).get(0);
+            //Get the company, there can only be 0-1
+            List<CompanyRecord> companyrecords =  QueryManager.getAllEntities(session, query, CompanyRecord.class);
+            if(companyrecords.size()==0) {
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CvrCompanyOwnerHistory done");
+                throw new HttpNotFoundException("Company not found " + cvrNummer);
+            }
+            CompanyRecord companyrecord = companyrecords.get(0);
 
             FormRecord formRecord = companyrecord.getMetadata().getNewestForm().iterator().next();
             String formCodeString = formRecord.getCompanyFormCode();
             Integer formCode = Integer.parseInt(formCodeString);
-            if(formCode != 10 && formCode != 30 && formCode != 50) {
-                return objectMapper.writeValueAsString(root.getNode());
-            }
-
             root.put("virksomhedsformkode", formRecord.getCompanyFormCode());
 
             root.put("shortDescribtion", formRecord.getShortDescription());
             root.put("longDescribtion", formRecord.getLongDescription());
+            if(formCode != 10 && formCode != 30 && formCode != 50) {
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
+                throw new AccessDeniedException("The requested company is not of a formcode where this request is accepted " + cvrNummer);
+            }
 
             Set<CompanyParticipantRelationRecord> participants = companyrecord.getParticipants();
 
@@ -115,8 +121,8 @@ public class CvrCompanyOwnerHistory {
                 personAdressItemList.add(ownerItem);
             }
             ArrayNode jsonAdressArray = mapper.valueToTree(personAdressItemList);
-            root.putArray("cprs", jsonAdressArray);
-
+            root.putArray("owners", jsonAdressArray);
+            loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CvrCompanyOwnerHistory done");
             return objectMapper.writeValueAsString(root.getNode());
         }
     }
