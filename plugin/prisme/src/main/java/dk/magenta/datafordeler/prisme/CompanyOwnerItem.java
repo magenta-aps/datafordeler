@@ -1,14 +1,11 @@
 package dk.magenta.datafordeler.prisme;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Class for containing a single ownershipInformation for serializing to webservice
  */
 public class CompanyOwnerItem {
 
-    @JsonIgnore
-    private long id;
     private Number personUuid;
     private String personCpr;
     private String gyldigFra;
@@ -17,8 +14,7 @@ public class CompanyOwnerItem {
     public CompanyOwnerItem() {
     }
 
-    public CompanyOwnerItem(long id, Number personUuid, String personCpr, String gyldigFra, String gyldigTil) {
-        this.id = id;
+    public CompanyOwnerItem(Number personUuid, String personCpr, String gyldigFra, String gyldigTil) {
         this.personUuid = personUuid;
         this.personCpr = personCpr;
         this.gyldigFra = gyldigFra;
@@ -26,13 +22,6 @@ public class CompanyOwnerItem {
 
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Number getPersonUuid() {
         return personUuid;

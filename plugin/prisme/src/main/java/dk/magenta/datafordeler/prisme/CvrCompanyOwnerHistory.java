@@ -50,7 +50,7 @@ public class CvrCompanyOwnerHistory {
     @Autowired
     private DirectLookup directLookup;
 
-    private Logger log = LogManager.getLogger(CvrRecordService.class.getCanonicalName());
+    private Logger log = LogManager.getLogger(CvrCompanyOwnerHistory.class.getCanonicalName());
 
     @PostConstruct
     public void init() {
@@ -97,6 +97,8 @@ public class CvrCompanyOwnerHistory {
 
             root.put("shortDescribtion", formRecord.getShortDescription());
             root.put("longDescribtion", formRecord.getLongDescription());
+
+            //It is legally forbidden to supply this information from companies with other formcodes then 10, 30 and 50
             if(formCode != 10 && formCode != 30 && formCode != 50) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
                 throw new AccessDeniedException("The requested company is not of a formcode where this request is accepted " + cvrNummer);
@@ -110,15 +112,25 @@ public class CvrCompanyOwnerHistory {
             for(CompanyParticipantRelationRecord participant : participants) {
                 String from = null;
                 String to = null;
-                Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
-                if(orgRecord.hasNext()) {
-                    AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
-                    from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
-                    to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
-                }
+                Number deltagerPnr = null;
 
-                CompanyOwnerItem ownerItem = new CompanyOwnerItem(0, participant.getParticipantUnitNumber(), "personCpr", from, to);
-                personAdressItemList.add(ownerItem);
+                Long participantNumber = participant.getParticipantUnitNumber();
+
+                if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
+
+
+                    ParticipantRecord participantRecord = directLookup.participantLookup("11111111");
+
+                    deltagerPnr = participantRecord.getBusinessKey();
+                    Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
+                    if(orgRecord.hasNext()) {
+                        AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
+                        from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
+                        to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
+                    }
+                    CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, String.format("%010d", deltagerPnr), from, to);
+                    personAdressItemList.add(ownerItem);
+                }
             }
             ArrayNode jsonAdressArray = mapper.valueToTree(personAdressItemList);
             root.putArray("owners", jsonAdressArray);
