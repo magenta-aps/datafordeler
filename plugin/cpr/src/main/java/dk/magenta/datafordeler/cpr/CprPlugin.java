@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr;
 
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
@@ -9,10 +10,14 @@ import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
+import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadPostalcodeBitemporalRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.*;
 
 /**
  * Datafordeler Plugin to fetch, parse and serve CPR data (data on people, roads and
@@ -105,4 +110,33 @@ public class CprPlugin extends Plugin {
     public AreaRestrictionDefinition getAreaRestrictionDefinition() {
         return this.areaRestrictionDefinition;
     }
+
+
+    public String getJoinString(Map<String, String> handles) {
+        StringJoiner s = new StringJoiner(" ");
+        s.add("LEFT JOIN "+ RoadEntity.class.getCanonicalName()+" cpr_road");
+        s.add("ON cpr_road.roadcode = "+handles.get("roadcode"));
+        s.add("AND cpr_road.municipalityCode = "+handles.get("municipalitycode"));
+        return s.toString();
+    }
+
+    public LinkedHashMap<String, Class> getJoinClassAliases(Collection<String> handles) {
+        LinkedHashMap<String, Class> aliases = new LinkedHashMap<>();
+        if (handles.contains("municipalitycode") && handles.contains("roadcode")) {
+            aliases.put("cpr_road", RoadEntity.class);
+        }
+        return aliases;
+    }
+
+    public List<BaseQuery> getQueries(Map<String, String> values) {
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        if (values.containsKey("municipalitycode") && values.containsKey("roadcode")) {
+            RoadRecordQuery recordQuery = new RoadRecordQuery();
+            recordQuery.setVejkode(values.get("roadcode"));
+            recordQuery.setKommunekode(values.get("municipalitycode"));
+            queries.add(recordQuery);
+        }
+        return queries;
+    }
+
 }

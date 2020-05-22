@@ -2,6 +2,8 @@ package dk.magenta.datafordeler.geo.data.postcode;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
@@ -31,13 +33,14 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
 
     public void setCode(String code) {
         this.code.clear();
+        this.updatedParameters();
         this.addAnr(code);
     }
 
     public void addAnr(String anr) {
         if (anr != null) {
             this.code.add(anr);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -49,13 +52,14 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
 
     public void setName(String name) {
         this.name.clear();
+        this.updatedParameters();
         this.addBnr(name);
     }
 
     public void addBnr(String bnr) {
         if (bnr != null) {
             this.name.add(bnr);
-            this.increaseDataParamCount();
+            this.updatedParameters();
         }
     }
 
@@ -83,10 +87,47 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
     }
 
     @Override
+    protected boolean isEmpty() {
+        return this.code.isEmpty() && this.name.isEmpty();
+    }
+
+    @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
         this.setCode(parameters.getFirst(CODE));
         this.setName(parameters.getFirst(NAME));
+    }
+
+    @Override
+    public String getEntityClassname() {
+        return PostcodeEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_postcode";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("code", PostcodeEntity.DB_FIELD_CODE);
+        joinHandles.put("name", PostcodeEntity.DB_FIELD_NAME + BaseQuery.separator + PostcodeNameRecord.DB_FIELD_NAME);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        HashMap<String, String> handles = new HashMap<>();
+        handles.putAll(super.joinHandles());
+        handles.putAll(joinHandles);
+        return handles;
+    }
+
+    @Override
+    protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
+        this.addCondition("code", this.code, Integer.class);
+        this.addCondition("name", this.name);
     }
 
 }

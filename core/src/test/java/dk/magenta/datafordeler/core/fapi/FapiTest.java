@@ -49,6 +49,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -321,7 +322,11 @@ public class FapiTest {
             headers.set("Accept", "text/csv");
             HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
             ResponseEntity<String> resp = this.restTemplate
-                    .exchange("/demo/postnummer/1/rest/" + uuid.toString(),
+                    .exchange("/demo/postnummer/1/rest/" + uuid.toString()
+                                    + "?registrationFromBefore=ALWAYS&"
+                                    + "registrationToAfter=ALWAYS&"
+                                    + "effectFromBefore=ALWAYS&"
+                                    + "effectToAfter=ALWAYS&",
                             HttpMethod.GET, httpEntity, String.class);
             Assert.assertEquals(200, resp.getStatusCode().value());
             Assert.assertEquals(new MediaType("text", "csv"),
@@ -353,7 +358,11 @@ public class FapiTest {
             headers.set("Accept", "text/tsv");
             HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
             ResponseEntity<String> resp = this.restTemplate.exchange(
-                    "/demo/postnummer/1/rest/" + uuid.toString(),
+                    "/demo/postnummer/1/rest/" + uuid.toString()
+                    + "?registrationFromBefore=ALWAYS&"
+                    + "registrationToAfter=ALWAYS&"
+                    + "effectFromBefore=ALWAYS&"
+                    + "effectToAfter=ALWAYS&",
                     HttpMethod.GET, httpEntity, String.class
             );
             Assert.assertEquals(200, resp.getStatusCode().value());
@@ -678,7 +687,7 @@ public class FapiTest {
         ResponseEntity<String> resp = getRegistrationFilterRequest(urlBase,
                 null, registerOverlapEnd, registerOverlapStart, null,
                 null,effectOverlapEnd, effectOverlapStart, null,
-                MediaType.APPLICATION_JSON_VALUE);
+                MediaType.APPLICATION_JSON_VALUE, "rvd");
         JsonNode jsonBody = objectMapper.readTree(resp.getBody());
 
         ArrayNode list = (ArrayNode) jsonBody.get("results");
@@ -699,12 +708,12 @@ public class FapiTest {
             String urlBase,
             String registerFromAfter, String registerFromBefore, String registerToAfter, String registerToBefore,
             String effectFromAfter, String effectFromBefore, String effectToAfter, String effectToBefore,
-            String mediaType
+            String mediaType, String mode
     ) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", mediaType);
         HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
-        String now = OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        String now = OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
         StringBuilder sb = new StringBuilder();
         sb.append(urlBase);
@@ -740,6 +749,9 @@ public class FapiTest {
             }
             if (effectToBefore != null) {
                 parameters.add(Query.PARAM_EFFECT_TO_BEFORE[0], effectToBefore);
+            }
+            if (mode != null) {
+                parameters.add(Query.PARAM_OUTPUT_WRAPPING[0], mode);
             }
             if (parameters.size() > 0) {
                 sb.append(urlBase.contains("?") ? "&" : "?");

@@ -2,14 +2,13 @@ package dk.magenta.datafordeler.geo.data.municipality;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lars on 19-05-17.
@@ -29,6 +28,10 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
         return code;
     }
 
+    public void setCode(int code) {
+        this.setCode(Integer.toString(code));
+    }
+
     public void setCode(String code) {
         this.code.clear();
         this.addCode(code);
@@ -37,8 +40,12 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     public void addCode(String code) {
         if (code != null) {
             this.code.add(code);
-            this.increaseDataParamCount();
         }
+    }
+
+    public void clearCode() {
+        this.code.clear();
+        this.updatedParameters();
     }
 
     public List<String> getName() {
@@ -53,8 +60,12 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
-            this.increaseDataParamCount();
         }
+    }
+
+    public void clearName() {
+        this.name.clear();
+        this.updatedParameters();
     }
 
     @Override
@@ -78,10 +89,60 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     }
 
     @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.code.isEmpty() && this.name.isEmpty();
+    }
+
+    @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
         this.setCode(parameters.getFirst(CODE));
         this.setName(parameters.getFirst(NAME));
     }
 
+    @Override
+    public String getEntityClassname() {
+        return GeoMunicipalityEntity.class.getCanonicalName();
+    }
+
+    @Override
+    public String getEntityIdentifier() {
+        return "geo_municipality";
+    }
+
+    private static HashMap<String, String> joinHandles = new HashMap<>();
+
+    static {
+        joinHandles.put("code", GeoMunicipalityEntity.DB_FIELD_CODE);
+        joinHandles.put("name", GeoMunicipalityEntity.DB_FIELD_NAME + BaseQuery.separator + MunicipalityNameRecord.DB_FIELD_NAME);
+    }
+
+    @Override
+    protected Map<String, String> joinHandles() {
+        HashMap<String, String> handles = new HashMap<>();
+        handles.putAll(super.joinHandles());
+        handles.putAll(joinHandles);
+        return handles;
+    }
+
+    @Override
+    protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
+        this.addCondition("code", this.code, Integer.class);
+        this.addCondition("name", this.name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MunicipalityQuery that = (MunicipalityQuery) o;
+        return Objects.equals(code, that.code) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, name);
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +44,32 @@ public class QueryTest {
         }
 
         @Override
+        protected boolean isEmpty() {
+            return false;
+        }
+
+        @Override
         public void setFromParameters(ParameterMap parameters) {
+        }
+
+        @Override
+        public String getEntityClassname() {
+            return Entity.class.getCanonicalName();
+        }
+
+        @Override
+        public String getEntityIdentifier() {
+            return "entity";
+        }
+
+        @Override
+        protected Map<String, String> joinHandles() {
+            return Collections.emptyMap();
+        }
+
+        @Override
+        protected void setupConditions() {
+
         }
 
         @Override
@@ -131,9 +157,9 @@ public class QueryTest {
         Assert.assertEquals(time, query.getRegistrationFromAfter());
 
         for (String testDateTime : this.dateTimeTests.keySet()) {
-            query.setRegistrationFromBefore(java.net.URLEncoder.encode(testDateTime));
+            query.setRegistrationFromBefore(testDateTime);
             Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationFromBefore());
-            query.setRegistrationFromAfter(java.net.URLEncoder.encode(testDateTime));
+            query.setRegistrationFromAfter(testDateTime);
             Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationFromAfter());
         }
     }
@@ -146,7 +172,7 @@ public class QueryTest {
         Assert.assertEquals(time, query.getRegistrationToBefore());
 
         for (String testDateTime : this.dateTimeTests.keySet()) {
-            query.setRegistrationToBefore(java.net.URLEncoder.encode(testDateTime));
+            query.setRegistrationToBefore(testDateTime);
             Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationToBefore());
         }
     }
@@ -161,9 +187,9 @@ public class QueryTest {
         Assert.assertEquals(time, query.getEffectFromAfter());
 
         for (String testDateTime : this.dateTimeTests.keySet()) {
-            query.setEffectFromBefore(java.net.URLEncoder.encode(testDateTime));
+            query.setEffectFromBefore(testDateTime);
             Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectFromBefore());
-            query.setEffectFromAfter(java.net.URLEncoder.encode(testDateTime));
+            query.setEffectFromAfter(testDateTime);
             Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectFromAfter());
         }
     }
@@ -178,9 +204,9 @@ public class QueryTest {
         Assert.assertEquals(time, query.getEffectToAfter());
 
         for (String testDateTime : this.dateTimeTests.keySet()) {
-            query.setEffectToBefore(java.net.URLEncoder.encode(testDateTime));
+            query.setEffectToBefore(testDateTime);
             Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectToBefore());
-            query.setEffectToAfter(java.net.URLEncoder.encode(testDateTime));
+            query.setEffectToAfter(testDateTime);
             Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectToAfter());
         }
     }

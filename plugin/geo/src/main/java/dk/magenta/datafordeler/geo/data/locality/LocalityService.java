@@ -44,7 +44,7 @@ public class LocalityService extends FapiBaseService<GeoLocalityEntity, Locality
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.DRV;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override

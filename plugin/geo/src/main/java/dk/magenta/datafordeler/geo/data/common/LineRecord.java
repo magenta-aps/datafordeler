@@ -76,8 +76,9 @@ public abstract class LineRecord<E extends GeoEntity> extends GeoMonotemporalRec
 
 
     public static MultiLineString convert(org.geojson.MultiLineString original) {
+        List<LineString> list = original.getCoordinates().stream().map(LineRecord::convert).collect(Collectors.toList());
         return new MultiLineString(
-                original.getCoordinates().stream().map(LineRecord::convert).toArray(LineString[]::new),
+                list.toArray(new LineString[list.size()]),
                 geometryFactory
         );
     }
@@ -91,9 +92,10 @@ public abstract class LineRecord<E extends GeoEntity> extends GeoMonotemporalRec
     }
 
     public static LineString convert(List<LngLatAlt> original) {
+        List<Coordinate> list = original.stream().map(AreaRecord::convert).collect(Collectors.toList());
         return new LineString(
                 geometryFactory.getCoordinateSequenceFactory().create(
-                        original.stream().map(AreaRecord::convert).toArray(Coordinate[]::new)
+                        list.toArray(new Coordinate[list.size()])
                 ),
                 geometryFactory
         );

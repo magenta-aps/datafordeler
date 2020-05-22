@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends OutputWrapper<E> {
 
@@ -27,6 +28,10 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     public static final String REGISTRATION_TO = "registreringTil";
 
     public abstract ObjectMapper getObjectMapper();
+
+    protected JsonModifier getModifier(ResultSet resultSet) { return null; }
+
+    private HashMap<String, JsonModifier> modifiers = new HashMap<>();
 
     // RVD
     private final Set<String> rvdNodeRemoveFields = new HashSet<>(Arrays.asList(
@@ -41,19 +46,52 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     ));
     private final Set<String> rdvNodeRemoveFields = rvdNodeRemoveFields;
 
+    private Set<String> dataonlyNodeRemoveFields = rvdNodeRemoveFields;
+
     public Set<String> getRemoveFieldNames(Mode mode) {
         switch (mode) {
             case RVD:
                 return this.rvdNodeRemoveFields;
             case RDV:
                 return this.rdvNodeRemoveFields;
+            case DATAONLY:
+                return this.dataonlyNodeRemoveFields;
         }
         return Collections.emptySet();
     }
 
-    protected abstract void fillContainer(OutputContainer container, E item);
+    protected abstract void fillContainer(OutputContainer container, E item, Mode m);
 
     protected abstract ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, Bitemporality mustContain);
+
+
+    public Object wrapResultSet(ResultSet<E> input, BaseQuery query, Mode mode) {
+        for (Class associatedEntityClass : input.getAssociatedEntityClasses()) {
+            OutputWrapper wrapper = wrapperMap.get(associatedEntityClass);
+            if (wrapper instanceof RecordOutputWrapper) {
+                // Find any JsonModifiers from this outputwrapper of associated entityclass, and add them to our cache
+                RecordOutputWrapper recordOutputWrapper = (RecordOutputWrapper) wrapper;
+                JsonModifier modifier = recordOutputWrapper.getModifier(input);
+                if (modifier != null) {
+                    this.modifiers.put(modifier.getName(), modifier);
+                }
+            }
+        }
+        Object result = this.wrapResult(input.getPrimaryEntity(), query, mode);
+        return result;
+    }
+
+    protected Map<Class, List<String>> getEligibleModifierNames() {
+        return Collections.emptyMap();
+    }
+    protected List<JsonModifier> getEligibleModifiers(Class cls) {
+        List<String> modifierNames = this.getEligibleModifierNames().get(cls);
+        if (modifierNames == null) {
+            return Collections.emptyList();
+        }
+        return modifierNames.stream().map(name -> this.modifiers.get(name)).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
 
     protected class OutputContainer {
 
@@ -103,7 +141,6 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             this.addTemporal(key, records, converter, unwrapSingle, forceArray, Bitemporal::getBitemporality);
         }
 
-
         private <T extends Monotemporal> void addTemporal(String key, Set<T> records, Function<T, JsonNode> converter, boolean unwrapSingle, boolean forceArray, Function<T, Bitemporality> bitemporalityExtractor) {
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
             for (T record : records) {
@@ -112,6 +149,11 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                     Bitemporality bitemporality = bitemporalityExtractor.apply(record);
                     if (value instanceof ObjectNode) {
                         ObjectNode oValue = (ObjectNode) value;
+                        for (JsonModifier modifier : RecordOutputWrapper.this.getEligibleModifiers(record.getClass())) {
+                            if (modifier != null) {
+                                modifier.modify(oValue);
+                            }
+                        }
                         if (unwrapSingle && value.size() == 1) {
                             this.bitemporalData.add(bitemporality, key, oValue.get(oValue.fieldNames().next()));
                             continue;
@@ -143,6 +185,9 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                 JsonNode value = (converter != null) ? converter.apply(record) : objectMapper.valueToTree(record);
                 if (value instanceof ObjectNode) {
                     ObjectNode oValue = (ObjectNode) value;
+                    for (JsonModifier modifier : RecordOutputWrapper.this.getEligibleModifiers(record.getClass())) {
+                        modifier.modify(oValue);
+                    }
                     if (unwrapSingle && value.size() == 1) {
                         this.nontemporalData.add(key, oValue.get(oValue.fieldNames().next()));
                         continue;
@@ -177,6 +222,17 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
         public void addNontemporal(String key, OffsetDateTime data) {
             this.nontemporalData.add(key, data != null ? new TextNode(data.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)) : null);
+        }
+
+        public void addNontemporal(String key, Identification data) {
+            if (data != null) {
+                ObjectNode container = getObjectMapper().createObjectNode();
+                container.put("uuid", data.getUuid().toString());
+                for (JsonModifier modifier : RecordOutputWrapper.this.getEligibleModifiers(Identification.class)) {
+                    modifier.modify(container);
+                }
+                this.nontemporalData.add(key, container);
+            }
         }
 
 
@@ -375,6 +431,28 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             return objectNode;
         }
 
+        // DataOnly
+        public ObjectNode getDataOnly(Bitemporality mustOverlap) {
+            ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            for (Bitemporality bitemporality : this.bitemporalData.keySet()) {
+                if (bitemporality.overlaps(mustOverlap)) {
+                    HashMap<String, ArrayList<JsonNode>> data = this.bitemporalData.get(bitemporality);
+                    for (String key : data.keySet()) {
+                        ArrayNode arrayNode = (ArrayNode) objectNode.get(key);
+                        if (arrayNode == null) {
+                            arrayNode = objectMapper.createArrayNode();
+                            objectNode.set(key, arrayNode);
+                        }
+                        List<JsonNode> nodes = data.get(key);
+                        nodes = this.removeFields(nodes, Mode.DATAONLY);
+                        arrayNode.addAll(nodes);
+                    }
+                }
+            }
+            return objectNode;
+        }
+
         public ObjectNode getBase() {
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
             ObjectNode objectNode = objectMapper.createObjectNode();
@@ -427,7 +505,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             root.put(Identification.IO_FIELD_DOMAIN, record.getIdentification().getDomain());
         }
         OutputContainer recordOutput = this.createOutputContainer();
-        this.fillContainer(recordOutput, record);
+        this.fillContainer(recordOutput, record, mode);
         root.setAll(recordOutput.getBase());
         switch (mode) {
             case RVD:
@@ -438,6 +516,9 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                 break;
             case DRV:
                 root.setAll(recordOutput.getDRV(overlap));
+                break;
+            case DATAONLY:
+                root.setAll(recordOutput.getDataOnly(overlap));
                 break;
             default:
                 root.setAll(this.fallbackOutput(mode, recordOutput, overlap));

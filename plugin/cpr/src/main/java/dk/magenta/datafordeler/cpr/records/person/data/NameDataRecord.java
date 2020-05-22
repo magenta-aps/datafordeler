@@ -80,7 +80,7 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
 
 
     public static final String DB_FIELD_FIRST_NAMES_MARKING = "firstNamesMarking";
-    public static final String IO_FIELD_FIRST_NAMES_MARKING = "fornavneMarkering";
+    public static final String IO_FIELD_FIRST_NAMES_MARKING = "fornavnMarkering";
     @Column(name = DB_FIELD_FIRST_NAMES_MARKING)
     @JsonProperty(value = IO_FIELD_FIRST_NAMES_MARKING)
     @XmlElement(name = IO_FIELD_FIRST_NAMES_MARKING)

@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
-import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @javax.persistence.Entity
@@ -17,17 +16,17 @@ import java.util.Objects;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME + RoadPostalcodeBitemporalRecord.DB_FIELD_POSTAL_CODE, columnList = RoadPostalcodeBitemporalRecord.DB_FIELD_POSTAL_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME + RoadPostalcodeBitemporalRecord.DB_FIELD_REPLACED_BY, columnList = CprBitemporalRoadRecord.DB_FIELD_REPLACED_BY + DatabaseEntry.REF),
 })
-public class RoadPostalcodeBitemporalRecord extends CprBitemporalRoadRecord<RoadPostalcodeBitemporalRecord> {
+public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPostalcodeBitemporalRecord> {
 
     public static final String TABLE_NAME = "cpr_road_postalcode_record";
 
     public RoadPostalcodeBitemporalRecord() {
     }
 
-    public RoadPostalcodeBitemporalRecord(String toHousenumber, String fromHousenumber, boolean equalUnequal, int postalCode, String postalDistrict) {
+    public RoadPostalcodeBitemporalRecord(String toHousenumber, String fromHousenumber, boolean even, int postalCode, String postalDistrict) {
         this.toHousenumber = toHousenumber;
         this.fromHousenumber = fromHousenumber;
-        this.equalUnequal = equalUnequal;
+        this.even = even;
         this.postalCode = postalCode;
         this.postalDistrict = postalDistrict;
     }
@@ -64,23 +63,23 @@ public class RoadPostalcodeBitemporalRecord extends CprBitemporalRoadRecord<Road
     }
 
     // Lige/ulige indikator
-    public static final String DB_FIELD_EQUAL_UNEQUAL = "equalUnequal";
-    public static final String IO_FIELD_EQUAL_UNEQUAL= "ligeUlige";
-    @Column(name = DB_FIELD_EQUAL_UNEQUAL)
-    @JsonProperty(value = IO_FIELD_EQUAL_UNEQUAL)
-    @XmlElement(name = IO_FIELD_EQUAL_UNEQUAL)
-    private boolean equalUnequal;
-    public boolean getEqualUnequal() {
-        return equalUnequal;
+    public static final String DB_FIELD_EVEN = "even";
+    public static final String IO_FIELD_EVEN = "lige";
+    @Column(name = DB_FIELD_EVEN)
+    @JsonProperty(value = IO_FIELD_EVEN)
+    @XmlElement(name = IO_FIELD_EVEN)
+    private boolean even;
+    public boolean getEven() {
+        return even;
     }
 
-    public void setEqualUnequal(boolean equalUnequal) {
-        this.equalUnequal = equalUnequal;
+    public void setEven(boolean even) {
+        this.even = even;
     }
 
     // postnummer
     public static final String DB_FIELD_POSTAL_CODE = "postalCode";
-    public static final String IO_FIELD_POSTAL_CODE= "postnummer";
+    public static final String IO_FIELD_POSTAL_CODE = "postnummer";
     @Column(name = DB_FIELD_POSTAL_CODE)
     @JsonProperty(value = IO_FIELD_POSTAL_CODE)
     @XmlElement(name = IO_FIELD_POSTAL_CODE)
@@ -116,7 +115,7 @@ public class RoadPostalcodeBitemporalRecord extends CprBitemporalRoadRecord<Road
         RoadPostalcodeBitemporalRecord that = (RoadPostalcodeBitemporalRecord) o;
         return Objects.equals(toHousenumber, that.toHousenumber) &&
                 Objects.equals(fromHousenumber, that.fromHousenumber) &&
-                Objects.equals(equalUnequal, that.equalUnequal) &&
+                Objects.equals(even, that.even) &&
                 Objects.equals(postalCode, that.postalCode) &&
                 Objects.equals(postalDistrict, that.postalDistrict);
     }
@@ -129,7 +128,7 @@ public class RoadPostalcodeBitemporalRecord extends CprBitemporalRoadRecord<Road
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), toHousenumber, fromHousenumber, equalUnequal, postalCode, postalDistrict);
+        return Objects.hash(super.hashCode(), toHousenumber, fromHousenumber, even, postalCode, postalDistrict);
     }
 
     @Override
@@ -137,10 +136,11 @@ public class RoadPostalcodeBitemporalRecord extends CprBitemporalRoadRecord<Road
         RoadPostalcodeBitemporalRecord clone = new RoadPostalcodeBitemporalRecord();
         clone.toHousenumber = this.toHousenumber;
         clone.fromHousenumber = this.fromHousenumber;
-        clone.equalUnequal = this.equalUnequal;
+        clone.even = this.even;
         clone.postalCode = this.postalCode;
         clone.postalDistrict = this.postalDistrict;
         RoadPostalcodeBitemporalRecord.copy(this, clone);
         return clone;
     }
+
 }

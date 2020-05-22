@@ -26,16 +26,4 @@ public class CvrRecordLookupDefinition extends BaseLookupDefinition {
         return false;
     }
 
-    @Override
-    public String getHqlWhereString(String dataItemKey, String entityKey, String prefix) {
-        StringJoiner extraWhere = new StringJoiner(" AND ");
-        for (FieldDefinition fieldDefinition : this.fieldDefinitions) {
-            extraWhere.add("(" + this.getHqlWherePart(dataItemKey, entityKey, fieldDefinition, true) + ")");
-        }
-        if (extraWhere.length() > 0) {
-            return prefix + " " + extraWhere.toString();
-        }
-        return "";
-    }
-
 }
