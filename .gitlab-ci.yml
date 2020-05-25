@@ -27,7 +27,8 @@ build-image:
 
 .test-default: &test-default
   stage: test
-  GIT_STRATEGY: none
+  variables:
+    GIT_STRATEGY: none
   needs:
     - build-image
   image:
