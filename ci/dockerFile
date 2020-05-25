@@ -6,6 +6,7 @@ RUN mvn --batch-mode -T 2C -DskipTests clean install
 COPY plugin /app/plugin
 ADD ci/build_plugins.sh /app/plugin/build_plugins.sh
 WORKDIR /app/plugin
+RUN chmod +x /app/plugin/build_plugins.sh
 RUN /app/plugin/build_plugins.sh
 
 
