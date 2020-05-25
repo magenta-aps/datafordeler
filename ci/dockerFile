@@ -2,7 +2,7 @@ FROM maven:3-jdk-11
 run mkdir /app
 COPY core /app/core
 WORKDIR /app/core
-RUN mvn --batch-mode -T 2C install
+RUN mvn --batch-mode -T 2C -DskipTests clean install
 
 
 
