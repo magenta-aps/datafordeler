@@ -4,9 +4,8 @@ COPY core /app/core
 WORKDIR /app/core
 RUN mvn --batch-mode -T 2C -DskipTests clean install
 COPY plugin /app/plugin
-WORKDIR /app/plugin
 RUN ci/build_plugins.sh
-
+WORKDIR /app/plugin
 
 
 
