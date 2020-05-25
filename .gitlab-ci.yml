@@ -41,6 +41,10 @@ test-core:
     - cd /app/core
   script:
     - mvn --batch-mode -q -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /app/core/target/surefire-reports/TEST-*.xml
 
 test-plugins:
   <<: *test-default
@@ -53,3 +57,7 @@ test-plugins:
         mvn --batch-mode -q -T 2C test
         cd ..
       done
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/*/target/surefire-reports/TEST-*.xml
