@@ -23,6 +23,7 @@ build-image:
       --context=${CI_PROJECT_DIR}
       --dockerfile=${CI_PROJECT_DIR}/ci/dockerFile
       --destination=${IMAGE_DEV}
+      --cache=true
 
 .test-default: &test-default
   stage: test
