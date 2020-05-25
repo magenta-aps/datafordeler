@@ -1,6 +1,7 @@
 #!/bin/sh
-for plugin in "cpr cvr ger geo gladdreg adresseservice eboks prisme statistik";
-  cd $plugin
+for plugin in "cpr cvr ger geo gladdreg adresseservice eboks prisme statistik"
+do
+  cd $dir
   mvn --batch-mode -T 2C -DskipTests clean install || exit 1
   cd ..
 done
