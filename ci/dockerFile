@@ -1,10 +1,9 @@
 FROM maven:3-jdk-11
-run mkdir /app
-COPY core /app/core
-COPY plugin /app/plugin
+WORKDIR core
+RUN mvn --batch-mode -T 2C install
 
-WORKDIR /app/core
-RUN mvn --batch-mode -T 2C clean install
 
-WORKDIR /app/plugin
+
+
+
 
