@@ -27,6 +27,7 @@ build-image:
 
 .test-default: &test-default
   stage: test
+  GIT_STRATEGY: none
   needs:
     - build-image
   image:
@@ -39,7 +40,7 @@ test-core:
   before_script:
     - cd /app/core
   script:
-    - mvn --batch-mode -T 2C test
+    - mvn --batch-mode -q -T 2C test
 
 test-plugins:
   <<: *test-default
@@ -49,6 +50,6 @@ test-plugins:
     - >
       for dir in $(ls -d */ | sed 's#/##'); do
         cd $dir
-        mvn --batch-mode -T 2C test
+        mvn --batch-mode -q -T 2C test
         cd ..
       done
