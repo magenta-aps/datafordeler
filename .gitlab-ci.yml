@@ -41,7 +41,7 @@ test-core:
   before_script:
     - cd /app/core
   script:
-    - mvn --batch-mode -q -T 2C test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -55,7 +55,7 @@ test-plugins:
     - >
       for dir in $(ls -d */ | sed 's#/##'); do
         cd $dir
-        mvn --batch-mode -q -T 2C test
+        mvn --batch-mode -T 2C test
         cd ..
       done
   artifacts:
