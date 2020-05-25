@@ -3,28 +3,33 @@ package dk.magenta.datafordeler.geo.data.unitaddress;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressEntity.TABLE_NAME, indexes = {
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressEntity.TABLE_NAME + UnitAddressEntity.DB_FIELD_SUMIFFIIK_ID,
                 columnList = UnitAddressEntity.DB_FIELD_SUMIFFIIK_ID
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressEntity.TABLE_NAME + UnitAddressEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = UnitAddressEntity.DB_FIELD_DAFO_UPDATED
         ),
 })
 public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEntity {
@@ -70,10 +75,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_FLOOR)
-    Set<UnitAddressFloorRecord> floor = new HashSet<>();
+    private Set<UnitAddressFloorRecord> floor = new HashSet<>();
 
-    public Set<UnitAddressFloorRecord> getFloor() {
-        return this.floor;
+    public MonotemporalSet<UnitAddressFloorRecord> getFloor() {
+        return new MonotemporalSet<>(this.floor);
     }
 
 
@@ -88,10 +93,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_DOOR)
-    Set<UnitAddressDoorRecord> door = new HashSet<>();
+    private Set<UnitAddressDoorRecord> door = new HashSet<>();
 
-    public Set<UnitAddressDoorRecord> getDoor() {
-        return this.door;
+    public MonotemporalSet<UnitAddressDoorRecord> getDoor() {
+        return new MonotemporalSet(this.door);
     }
 
 
@@ -106,10 +111,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_NUMBER)
-    Set<UnitAddressNumberRecord> number = new HashSet<>();
+    private Set<UnitAddressNumberRecord> number = new HashSet<>();
 
-    public Set<UnitAddressNumberRecord> getNumber() {
-        return this.number;
+    public MonotemporalSet<UnitAddressNumberRecord> getNumber() {
+        return new MonotemporalSet<>(this.number);
     }
 
 
@@ -124,10 +129,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_USAGE)
-    Set<UnitAddressUsageRecord> usage = new HashSet<>();
+    private Set<UnitAddressUsageRecord> usage = new HashSet<>();
 
-    public Set<UnitAddressUsageRecord> getUsage() {
-        return this.usage;
+    public MonotemporalSet<UnitAddressUsageRecord> getUsage() {
+        return new MonotemporalSet<>(this.usage);
     }
 
 
@@ -143,10 +148,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_STATUS)
-    Set<UnitAddressStatusRecord> status = new HashSet<>();
+    private Set<UnitAddressStatusRecord> status = new HashSet<>();
 
-    public Set<UnitAddressStatusRecord> getStatus() {
-        return this.status;
+    public MonotemporalSet<UnitAddressStatusRecord> getStatus() {
+        return new MonotemporalSet<>(this.status);
     }
 
 
@@ -161,10 +166,10 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SOURCE)
-    Set<UnitAddressSourceRecord> source = new HashSet<>();
+    private Set<UnitAddressSourceRecord> source = new HashSet<>();
 
-    public Set<UnitAddressSourceRecord> getSource() {
-        return this.source;
+    public MonotemporalSet<UnitAddressSourceRecord> getSource() {
+        return new MonotemporalSet<>(this.source);
     }
 
 
@@ -216,5 +221,23 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
         records.add(this.source);
         records.add(this.status);
         return records;
+    }
+
+
+
+    @JsonIgnore
+    @Override
+    public List<BaseQuery> getAssoc() {
+        PluginManager pluginManager = PluginManager.getInstance();
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("accessaddress", this.accessAddress.getUuid().toString());
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            queries.addAll(geoPlugin.getQueries(map));
+        }
+
+        return queries;
     }
 }

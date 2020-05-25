@@ -17,21 +17,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static dk.magenta.datafordeler.cvr.records.unversioned.Municipality.DB_FIELD_CODE;
-
 /**
  * Nontemporal storage of a municipality (code + name).
  */
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + "cvr_municipality", indexes = {
-        @Index(name = "cvr_municipality_code", columnList = DB_FIELD_CODE)
+        @Index(name = "cvr_municipality_code", columnList = Municipality.DB_FIELD_CODE),
+        @Index(name = "cvr_municipality_name", columnList = Municipality.DB_FIELD_NAME)
 })
 public class Municipality extends DatabaseEntry {
 
     private static Logger log = LogManager.getLogger(Municipality.class.getSimpleName());
 
     public static final String DB_FIELD_CODE = "code";
-    public static final String IO_FIELD_CODE = "kommuneKode";
+    public static final String IO_FIELD_CODE = "kommunekode";
 
     @JsonProperty(value = IO_FIELD_CODE)
     @XmlElement(name = IO_FIELD_CODE)
@@ -49,7 +48,7 @@ public class Municipality extends DatabaseEntry {
     //----------------------------------------------------
 
     public static final String DB_FIELD_NAME = "name";
-    public static final String IO_FIELD_NAME = "kommuneNavn";
+    public static final String IO_FIELD_NAME = "kommunenavn";
 
     @JsonProperty(value = IO_FIELD_NAME)
     @XmlElement(name = IO_FIELD_NAME)

@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
@@ -34,6 +35,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,8 +50,11 @@ import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/prisme/cvr/1")
@@ -122,12 +127,13 @@ public class CvrRecordService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrRecordService");
 
         HashSet<String> cvrNumbers = new HashSet<>();
         cvrNumbers.add(cvrNummer);
 
         Session session = sessionManager.getSessionFactory().openSession();
-        GeoLookupService service = new GeoLookupService(session);
+        GeoLookupService service = new GeoLookupService(sessionManager);
         try {
             ObjectNode formattedRecord = null;
 
@@ -148,11 +154,13 @@ public class CvrRecordService {
             }
 
             if (formattedRecord != null) {
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprService done");
                 return objectMapper.writeValueAsString(formattedRecord);
             }
         } finally {
             session.close();
         }
+        loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CprService done");
         throw new HttpNotFoundException("No entity with CVR number " + cvrNummer + " was found");
     }
 
@@ -190,12 +198,13 @@ public class CvrRecordService {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info(
-                "Incoming REST request for PrismeCprService with " +
+                "Incoming REST request for PrismeCvrRecordService with " +
                         PARAM_UPDATED_SINCE + " = " + updatedSince + ", " +
                         PARAM_CVR_NUMBER + " = " + (cvrNumbers != null && cvrNumbers.size() > 10 ? (cvrNumbers.size() + " cpr numbers") : cvrNumbers) + " and " +
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrRecordService");
 
         HashSet<String> cvr = new HashSet<>();
 
@@ -216,12 +225,13 @@ public class CvrRecordService {
         query.setRecordAfter(updatedSince);
         this.applyAreaRestrictionsToQuery(query, user);
 
+        loggerHelper.urlResponsePersistablelogs("CvrRecordService");
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
                 Session session = sessionManager.getSessionFactory().openSession();
-                List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-                GeoLookupService lookupService = new GeoLookupService(session);
+                List<CompanyRecord> records = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class).collect(Collectors.toList());
+                GeoLookupService lookupService = new GeoLookupService(sessionManager);
                 try {
                     boolean first = true;
                     outputStream.write(START_OBJECT);
@@ -336,11 +346,11 @@ public class CvrRecordService {
             if (addressRecord.getRoadName() != null) {
                 addressFormatted.append(addressRecord.getRoadName());
             }
-            if (addressRecord.getHouseNumberFrom() != null) {
+            if (addressRecord.getHouseNumberFrom() != 0) {
                 addressFormatted.append(" " + addressRecord.getHouseNumberFrom() + emptyIfNull(addressRecord.getLetterFrom()));
-                if (addressRecord.getHouseNumberTo() != null) {
+                if (addressRecord.getHouseNumberTo() != 0) {
                     addressFormatted.append("-");
-                    if (addressRecord.getHouseNumberTo().equals(addressRecord.getHouseNumberFrom())) {
+                    if (addressRecord.getHouseNumberTo()==addressRecord.getHouseNumberFrom()) {
                         addressFormatted.append(emptyIfNull(addressRecord.getLetterTo()));
                     } else {
                         addressFormatted.append(addressRecord.getHouseNumberTo() + emptyIfNull(addressRecord.getLetterTo()));
@@ -609,23 +619,25 @@ public class CvrRecordService {
         if (returnParticipantDetails) {
             ResponsibleQuery responsibleQuery = new ResponsibleQuery();
             responsibleQuery.setGerNr(entity.getGerNr());
-            List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(lookupService.getSession(), responsibleQuery, ResponsibleEntity.class);
-            if (!responsibleEntities.isEmpty()) {
-                ArrayNode participantsNode = objectMapper.createArrayNode();
-                for (ResponsibleEntity responsibleEntity : responsibleEntities) {
-                    ObjectNode responsibleNode = objectMapper.createObjectNode();
-                    if (responsibleEntity.getCprNumber() != null) {
-                        responsibleNode.put("deltagerPnr", responsibleEntity.getCprNumberString());
+            try(Session session = sessionManager.getSessionFactory().openSession();) {
+                List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(session, responsibleQuery, ResponsibleEntity.class);
+                if (!responsibleEntities.isEmpty()) {
+                    ArrayNode participantsNode = objectMapper.createArrayNode();
+                    for (ResponsibleEntity responsibleEntity : responsibleEntities) {
+                        ObjectNode responsibleNode = objectMapper.createObjectNode();
+                        if (responsibleEntity.getCprNumber() != null) {
+                            responsibleNode.put("deltagerPnr", responsibleEntity.getCprNumberString());
+                        }
+                        if (responsibleEntity.getCvrNumber() != null) {
+                            responsibleNode.put("deltagerCvrNr", responsibleEntity.getCvrNumber().toString());
+                        }
+                        if (responsibleEntity.getName() != null) {
+                            responsibleNode.put("deltagerNavn", responsibleEntity.getName());
+                        }
+                        participantsNode.add(responsibleNode);
                     }
-                    if (responsibleEntity.getCvrNumber() != null) {
-                        responsibleNode.put("deltagerCvrNr", responsibleEntity.getCvrNumber().toString());
-                    }
-                    if (responsibleEntity.getName() != null) {
-                        responsibleNode.put("deltagerNavn", responsibleEntity.getName());
-                    }
-                    participantsNode.add(responsibleNode);
+                    root.set("deltagere", participantsNode);
                 }
-                root.set("deltagere", participantsNode);
             }
         }
 

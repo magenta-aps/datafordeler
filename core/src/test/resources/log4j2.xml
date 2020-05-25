@@ -6,6 +6,10 @@
         <!-- Location of the error file for monitoring. The value *must* match the "dafo.error_file" property in application.properties -->
         <Property name="monitorfile">cache/log/${sys:PID}.err</Property>
     </Properties>
+    <CustomLevels>
+        <CustomLevel name="URLINVOKE" intLevel="250" />
+        <CustomLevel name="URLRESPONSE" intLevel="251" />
+    </CustomLevels>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%logger{36}] %-5level: %msg%n"/>
@@ -16,6 +20,8 @@
     </Appenders>
     <Loggers>
         <Logger name="dk.magenta.datafordeler" level="info"/>
+        <Logger name="dk.magenta.datafordeler" level="urlinvoke"/>
+        <Logger name="dk.magenta.datafordeler" level="urlresponse"/>
         <Logger name="dk.magenta.datafordeler" level="error">
             <AppenderRef ref="MonitorFile" />
         </Logger>

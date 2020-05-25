@@ -10,6 +10,7 @@ import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.saml2.metadata.provider.ResourceBackedMetadataProvider;
 import org.opensaml.util.resource.ResourceException;
+import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.parse.ParserPool;
 import org.slf4j.Logger;
@@ -51,6 +52,9 @@ public class DafoCachingMetadataManager extends CachingMetadataManager {
             throws ResourceException, MetadataProviderException {
         this.queryManager = queryManager;
         updateDafoMetadataProviders();
+        /*
+         TODO: Ticket #21274: defaultMetadataProvider is only disabled for now.
+         TODO: All code referencing it needs to be removed as well.
         if(defaultIdpMetadataLocation != null) {
             DefaultResourceLoader loader = new DefaultResourceLoader();
             defaultMetadataProvider = new ResourceBackedMetadataProvider(
@@ -60,13 +64,14 @@ public class DafoCachingMetadataManager extends CachingMetadataManager {
             defaultMetadataProvider.setParserPool(parserPool);
             addMetadataProvider(defaultMetadataProvider);
         }
+        */
     }
 
     public DatabaseQueryManager getDatabaseQueryManager() {
         return queryManager;
     }
 
-    public void updateDafoMetadataProviders() throws MetadataProviderException {
+    public void updateDafoMetadataProviders() {
         LocalDateTime lastDbUpdate = queryManager.getLastIdPUpdate();
         if(!lastDbUpdate.isAfter(lastUpdate)) {
             return;
@@ -74,19 +79,29 @@ public class DafoCachingMetadataManager extends CachingMetadataManager {
         Map<String, LocalDateTime> providersInDatabase = queryManager.getIdPUpdateMap();
 
         for(String identityId : providersInDatabase.keySet()) {
+            DafoIdPData newData = null;
             if(dafoMetadataProviderMap.containsKey(identityId)) {
                 DafoMetadataProvider existing = dafoMetadataProviderMap.get(identityId);
                 if(existing.getLastUpdate().isBefore(providersInDatabase.get(identityId))) {
-                    DafoIdPData newData = queryManager.getIdPDataByName(identityId);
-                    existing.setDafoIdpData(newData);
-                    updateDafoMetadataManagerAlias(existing);
+                    removeMetadataProvider(existing);
+                    newData = queryManager.getIdPDataByName(identityId);
                 }
             } else {
-                DafoIdPData newData = queryManager.getIdPDataByName(identityId);
-                DafoMetadataProvider newProvider = new DafoMetadataProvider(newData, parserPool);
-                dafoMetadataProviderMap.put(identityId, newProvider);
-                addMetadataProvider(newProvider);
-                updateDafoMetadataManagerAlias(newProvider);
+                newData = queryManager.getIdPDataByName(identityId);
+            }
+            if(newData != null) {
+                try {
+                    DafoMetadataProvider newProvider = new DafoMetadataProvider(newData, parserPool);
+                    newProvider.initialize();
+                    if(newProvider.getMetadata() != null) {
+                        addMetadataProvider(newProvider);
+                        dafoMetadataProviderMap.put(identityId, newProvider);
+                        updateDafoMetadataManagerAlias(newProvider);
+                    }
+                }
+                catch(MetadataProviderException e) {
+                    logger.warn("Failed to load metadata for " + identityId + ": " + e.getMessage());
+                }
             }
         }
 
@@ -133,15 +148,18 @@ public class DafoCachingMetadataManager extends CachingMetadataManager {
             } catch (Exception e) {
                 logger.warn("Unable to get IdentityID for default metadata provider: " + e.getMessage());
             }
-            for(DafoMetadataProvider dafoMetadataProvider : dafoMetadataProviderMap.values()) {
-                result.put(dafoMetadataProvider.getEntityId(), dafoMetadataProvider.getName());
-            }
+        }
+        for(DafoMetadataProvider dafoMetadataProvider : dafoMetadataProviderMap.values()) {
+            result.put(dafoMetadataProvider.getEntityId(), dafoMetadataProvider.getName());
         }
 
         return result;
     }
 
     public boolean isDefaultMetadataProvider(String entityID) {
+        if(defaultMetadataProvider == null) {
+            return false;
+        }
         try {
             String defaultEntityId = ((EntityDescriptor) defaultMetadataProvider.getMetadata()).getEntityID();
             return (defaultEntityId ==  entityID);

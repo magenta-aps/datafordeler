@@ -86,7 +86,7 @@ public class DafoMetadataProvider extends AbstractMetadataProvider {
             try {
                 cachedMetadata = unmarshallMetadata(new ByteArrayInputStream(getXmlMetadataString().getBytes()));
             } catch (UnmarshallingException e) {
-                e.printStackTrace();
+                throw new MetadataProviderException("Failed to parse metadata", e);
             }
         }
 

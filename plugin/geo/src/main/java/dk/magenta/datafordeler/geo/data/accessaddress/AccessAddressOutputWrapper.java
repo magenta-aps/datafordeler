@@ -1,9 +1,17 @@
 package dk.magenta.datafordeler.geo.data.accessaddress;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.magenta.datafordeler.core.database.Identification;
+import dk.magenta.datafordeler.core.fapi.JsonModifier;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
+import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
+import dk.magenta.datafordeler.geo.data.municipality.MunicipalityOutputJsonModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.*;
 
 @Component
 public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEntity> {
@@ -11,6 +19,10 @@ public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEn
     @Autowired
     private ObjectMapper objectMapper;
 
+    @PostConstruct
+    private void register() {
+        this.register(AccessAddressEntity.class);
+    }
 
     @Override
     public ObjectMapper getObjectMapper() {
@@ -18,7 +30,11 @@ public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEn
     }
 
     @Override
-    protected void fillContainer(OutputContainer container, AccessAddressEntity item) {
+    protected JsonModifier getModifier(ResultSet resultSet) {
+        return new AccessAddressOutputJsonModifier(this, resultSet);
+    }
+    @Override
+    protected void fillContainer(OutputContainer container, AccessAddressEntity item, Mode mode) {
         container.addMonotemporal("husNummer", item.getHouseNumber());
         container.addNontemporal("bnr", item.getBnr());
         container.addMonotemporal("blokNavn", item.getBlockName());
@@ -27,6 +43,25 @@ public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEn
         container.addMonotemporal("vej", item.getRoad());
         container.addMonotemporal("status", item.getStatus());
         container.addNontemporal("sumiffiik", item.getSumiffiikId());
+    }
+
+
+    public Map<Class, List<String>> getEligibleModifierNames() {
+        HashMap<Class, List<String>> map = new HashMap<>();
+        ArrayList<String> addressModifiers = new ArrayList<>();
+        addressModifiers.add("geo_locality");
+        addressModifiers.add("geo_road");
+        addressModifiers.add("geo_municipality");
+        map.put(AccessAddressEntity.class, addressModifiers);
+
+        ArrayList<String> roadModifiers = new ArrayList<>();
+        roadModifiers.add("geo_road");
+        roadModifiers.add("geo_municipality");
+        map.put(AccessAddressRoadRecord.class, roadModifiers);
+        map.put(AccessAddressLocalityRecord.class, Collections.singletonList("geo_locality"));
+        map.put(AccessAddressPostcodeRecord.class, Collections.singletonList("geo_postcode"));
+
+        return map;
     }
 
 }

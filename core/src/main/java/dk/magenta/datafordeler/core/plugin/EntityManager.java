@@ -7,8 +7,10 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.FailedReferenceException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
 import dk.magenta.datafordeler.core.exception.WrongSubclassException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.FapiService;
+import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.PluginSourceData;
 import dk.magenta.datafordeler.core.io.Receipt;
@@ -27,6 +29,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
 
 /**
  * Entity (and associates) specific manager. Subclass in plugins
@@ -346,4 +350,12 @@ public abstract class EntityManager {
     public boolean pullEnabled() {
         return false;
     }
+
+    public OutputWrapper getOutputWrapper() {
+        return this.getEntityService().getOutputWrapper();
+    }
+
+    public abstract BaseQuery getQuery();
+
+    public abstract BaseQuery getQuery(String... joined);
 }

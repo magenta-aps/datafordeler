@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,10 +80,10 @@ public class SameAddressService {
                 "Incoming REST request for PrismeCprService with cprNumber " + cprNummer
         );
         this.checkAndLogAccess(loggerHelper);
-
+        loggerHelper.urlInvokePersistablelogs("SameAddressService");
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            GeoLookupService lookupService = new GeoLookupService(session);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setPersonnummer(cprNummer);
@@ -139,8 +140,10 @@ public class SameAddressService {
                 }
 
                 root.set("sameAddressCprs", sameAddressCprs);
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "SameAddressService done");
                 return objectMapper.writeValueAsString(root.getNode());
             }
+            loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "SameAddressService done");
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
         }
     }

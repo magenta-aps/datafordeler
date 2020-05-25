@@ -1,0 +1,144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:22
+msgid "RoadCoreData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:29
+msgid "Created by lars on 16-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:32
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:34
+msgid "DB_FIELD_ADDRESS_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:40
+msgid "DB_FIELD_FROM_MUNICIPALITY"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:46
+msgid "DB_FIELD_FROM_ROAD"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:52
+msgid "DB_FIELD_ROAD_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:58
+msgid "DB_FIELD_TO_MUNICIPALITY"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:64
+msgid "DB_FIELD_TO_ROAD"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:70
+msgid "IO_FIELD_ADDRESS_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:76
+msgid "IO_FIELD_FROM_MUNICIPALITY"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:82
+msgid "IO_FIELD_FROM_ROAD"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:88
+msgid "IO_FIELD_ROAD_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:94
+msgid "IO_FIELD_TO_MUNICIPALITY"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:100
+msgid "IO_FIELD_TO_ROAD"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:106
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:108
+msgid "asMap"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:113
+msgid "Return a map of attributes, including those from the superclass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:116
+msgid "databaseFields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:122
+msgid "getAddressingName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:128
+msgid "getFromMunicipality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:134
+msgid "getFromRoad"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:140
+msgid "getName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:146
+msgid "getToMunicipality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:152
+msgid "getToRoad"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:158
+msgid "setAddressingName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:164
+msgid "setFromMunicipality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:170
+msgid "setFromRoad"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:176
+msgid "setName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:182
+msgid "setToMunicipality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/road/data/RoadCoreData.rst:188
+msgid "setToRoad"
+msgstr ""
+

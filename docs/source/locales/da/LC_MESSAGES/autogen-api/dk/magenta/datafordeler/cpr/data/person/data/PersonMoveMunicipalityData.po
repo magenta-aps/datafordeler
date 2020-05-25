@@ -1,0 +1,120 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:20
+msgid "PersonMoveMunicipalityData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:27
+msgid "Created by lars on 22-06-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:30
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:32
+msgid "DB_FIELD_IN_DATETIME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:38
+msgid "DB_FIELD_IN_DATETIME_UNCERTAIN"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:44
+msgid "DB_FIELD_OUT_DATETIME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:50
+msgid "DB_FIELD_OUT_DATETIME_UNCERTAIN"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:56
+msgid "DB_FIELD_OUT_MUNICIPALITY"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:62
+msgid "IO_FIELD_IN_DATETIME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:68
+msgid "IO_FIELD_IN_DATETIME_UNCERTAIN"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:74
+msgid "IO_FIELD_OUT_DATETIME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:80
+msgid "IO_FIELD_OUT_DATETIME_UNCERTAIN"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:86
+msgid "IO_FIELD_OUT_MUNICIPALITY"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:92
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:94
+msgid "asMap"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:100
+msgid "getInDatetime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:106
+msgid "getOutDatetime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:112
+msgid "getOutMunicipality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:118
+msgid "isInDatetimeUncertain"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:124
+msgid "isOutDatetimeUncertain"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:130
+msgid "setInDatetime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:136
+msgid "setInDatetimeUncertain"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:142
+msgid "setOutDatetime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:148
+msgid "setOutDatetimeUncertain"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/data/PersonMoveMunicipalityData.rst:154
+msgid "setOutMunicipality"
+msgstr ""
+

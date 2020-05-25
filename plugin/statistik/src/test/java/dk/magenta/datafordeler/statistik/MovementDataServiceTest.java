@@ -20,6 +20,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -30,6 +31,7 @@ import java.io.IOException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class MovementDataServiceTest extends TestBase {
 
     @Autowired
@@ -147,8 +149,7 @@ public class MovementDataServiceTest extends TestBase {
         Assert.assertFalse(response.getBody().isEmpty());
         String expected = "\"Pnr\";\"FoedAar\";\"PnrGaeld\";\"Status\";\"FoedMynKod\";\"StatKod\";\"M_Pnr\";\"F_Pnr\";\"AegtePnr\";\"ProdDto\";\"ProdFilDto\";\"FlyDto\";\"FraLand\";\"FraKomKod\";\"FraLokKortNavn\";\"FraVejKod\";\"FraHusNr\";\"FraEtage\";\"FraSideDoer\";\"FraBnr\";\"TilLand\";\"TilKomKod\";\"TilLokKortNavn\";\"TilVejKod\";\"TilHusNr\";\"TilEtage\";\"TilSideDoer\";\"TilBnr\"\n" +
                 "\"0101011236\";\"1982\";;\"05\";\"9509\";;\"1111111111\";\"111111111\";\"\";\"21-05-2019\";\"\";\"14-02-2019\";;\"0957\";\"\";\"0125\";\"0056\";\"\";\"O-1\";\"\";;\"0957\";\"\";\"0125\";\"0056\";\"\";\"1-1\";\"\"\n" +
-                "\"0101011236\";\"1982\";;\"05\";\"9509\";;\"1111111111\";\"111111111\";\"\";\"11-02-2019\";\"\";\"01-02-2019\";;\"0956\";\"\";\"0204\";\"009A\";\"\";\"0402\";\"\";;\"0957\";\"\";\"0125\";\"0056\";\"\";\"O-1\";\"\"\n" +
-                "\"0101011236\";\"1982\";;\"05\";\"9509\";;\"1111111111\";\"111111111\";\"\";\"11-02-2019\";\"\";\"01-02-2016\";;\"0956\";\"\";\"0282\";\"0003\";\"\";\"C013\";\"\";;\"0956\";\"\";\"0204\";\"009A\";\"\";\"0402\";\"\"";
+                "\"0101011236\";\"1982\";;\"05\";\"9509\";;\"1111111111\";\"111111111\";\"\";\"11-02-2019\";\"\";\"01-02-2019\";;\"0956\";\"\";\"0204\";\"009A\";\"\";\"0402\";\"\";;\"0957\";\"\";\"0125\";\"0056\";\"\";\"O-1\";\"\"\n";
         Assert.assertEquals(
                 testUtil.csvToJsonString(expected),
                 testUtil.csvToJsonString(response.getBody().trim())

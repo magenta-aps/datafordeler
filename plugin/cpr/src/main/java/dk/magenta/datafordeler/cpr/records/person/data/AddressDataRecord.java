@@ -1,21 +1,29 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + CprBitemporalPersonRecord.DB_FIELD_ENTITY, columnList = CprBitemporalPersonRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE, columnList = AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_BUILDING_NUMBER, columnList = AddressDataRecord.DB_FIELD_BUILDING_NUMBER),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_ROAD_CODE, columnList = AddressDataRecord.DB_FIELD_ROAD_CODE),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_FLOOR, columnList = AddressDataRecord.DB_FIELD_FLOOR),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + AddressDataRecord.DB_FIELD_DOOR, columnList = AddressDataRecord.DB_FIELD_DOOR),
+
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
@@ -49,7 +57,7 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
 
 
     public static final String DB_FIELD_MUNICIPALITY_CODE = "municipalityCode";
-    public static final String IO_FIELD_MUNICIPALITY_CODE = "cprKommunekode";
+    public static final String IO_FIELD_MUNICIPALITY_CODE = "kommunekode";
     @Column(name = DB_FIELD_MUNICIPALITY_CODE)
     @JsonProperty(value = IO_FIELD_MUNICIPALITY_CODE)
     @XmlElement(name = IO_FIELD_MUNICIPALITY_CODE)
@@ -68,7 +76,7 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
 
 
     public static final String DB_FIELD_ROAD_CODE = "roadCode";
-    public static final String IO_FIELD_ROAD_CODE = "cprVejkode";
+    public static final String IO_FIELD_ROAD_CODE = "vejkode";
     @Column(name = DB_FIELD_ROAD_CODE)
     @JsonProperty(value = IO_FIELD_ROAD_CODE)
     @XmlElement(name = IO_FIELD_ROAD_CODE)
@@ -84,7 +92,7 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
 
 
     public static final String DB_FIELD_BUILDING_NUMBER = "buildingNumber";
-    public static final String IO_FIELD_BUILDING_NUMBER = "bygningsnummer";
+    public static final String IO_FIELD_BUILDING_NUMBER = "bnr";
     @Column(name = DB_FIELD_BUILDING_NUMBER)
     @JsonProperty(value = IO_FIELD_BUILDING_NUMBER)
     @XmlElement(name = IO_FIELD_BUILDING_NUMBER)
@@ -377,4 +385,28 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
         CprBitemporalRecord.copy(this, clone);
         return clone;
     }
+
+
+    @JsonIgnore
+    @Override
+    public List<BaseQuery> getAssoc() {
+        PluginManager pluginManager = PluginManager.getInstance();
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("municipalitycode", Integer.toString(this.municipalityCode));
+        map.put("roadcode", Integer.toString(this.roadCode));
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+            queries.addAll(geoPlugin.getQueries(map));
+        }
+
+        Plugin cprPlugin = pluginManager.getPluginByName("cpr");
+        if (cprPlugin != null) {
+            queries.addAll(cprPlugin.getQueries(map));
+        }
+
+        return queries;
+    }
+
 }

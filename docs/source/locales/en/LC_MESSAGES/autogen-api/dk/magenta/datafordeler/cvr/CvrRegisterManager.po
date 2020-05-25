@@ -1,0 +1,105 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:46
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:58
+msgid "CvrRegisterManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:53
+msgid "Created by lars on 16-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:56
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:64
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:66
+msgid "getBaseEndpoint"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:72
+msgid "getChecksumFetcher"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:78
+msgid "getEventFetcher"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:84
+msgid "getEventInterface"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:90
+msgid "getListChecksumInterface"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:96
+msgid "getLog"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:102
+msgid "getObjectMapper"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:108
+msgid "getPlugin"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:114
+msgid "getPullCronSchedule"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:120
+msgid "getSessionManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:126
+msgid "init"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:131
+msgid ""
+"RegisterManager initialization; set up configuration, source fetcher and "
+"source url"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:134
+msgid "parseEventResponse"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:140
+msgid "pullRawData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/CvrRegisterManager.rst:145
+msgid ""
+"Pull data from the data source denoted by eventInterface, using the "
+"mechanism appropriate for the source. For CVR, this is done using a "
+"ScanScrollCommunicator, where we specify the query in a POST, then get a "
+"handle back that we can use in a series of subsequent GET requests to get"
+" all the data. We then package each response in an Event, and feed them "
+"into a stream for returning."
+msgstr ""
+

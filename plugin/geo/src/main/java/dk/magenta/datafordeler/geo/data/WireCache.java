@@ -58,7 +58,7 @@ public class WireCache {
         Integer code = 10000 * municipalityCode + roadCode;
         if (!this.roadCacheByCode.containsKey(code)) {
             RoadQuery query = new RoadQuery();
-            query.setMunicipality(Integer.toString(municipalityCode));
+            query.setMunicipalityCode(Integer.toString(municipalityCode));
             query.setCode(Integer.toString(roadCode));
             List<GeoRoadEntity> list = QueryManager.getAllEntities(session, query, GeoRoadEntity.class);
             this.roadCacheByCode.add(code, list);

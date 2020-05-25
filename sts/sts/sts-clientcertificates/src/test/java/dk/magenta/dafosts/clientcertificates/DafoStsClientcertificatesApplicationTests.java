@@ -33,6 +33,7 @@ import static dk.magenta.dafosts.library.DatabaseQueryManager.IDENTIFICATION_MOD
 import static dk.magenta.dafosts.library.DatabaseQueryManager.IDENTIFICATION_MODE_SINGLE_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
 
 
@@ -120,6 +121,8 @@ public class DafoStsClientcertificatesApplicationTests {
     @Test
     public void issueTokenFromCertificate() throws Exception {
         when(dbManager.getUserIdByCertificateData(anyString())).thenReturn(MOCK_USERID);
+        when(dbManager.isAccessAccountActive(anyInt())).thenReturn(true);
+        when(dbManager.getUserIdentificationByAccountId(MOCK_USERID)).thenReturn("jubk@magenta.dk");
         when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(DUMMY_USER_PROFILES);
         when(dbManager.getCertUserIdentificationMode(MOCK_USERID)).thenReturn(IDENTIFICATION_MODE_SINGLE_USER);
 
@@ -133,10 +136,25 @@ public class DafoStsClientcertificatesApplicationTests {
         assertThat(rawToken).contains(">UserProfile1<");
     }
 
+    @Test
+    public void rejectInactiveUser() throws Exception {
+        when(dbManager.getUserIdByCertificateData(anyString())).thenReturn(MOCK_USERID);
+        when(dbManager.isAccessAccountActive(anyInt())).thenReturn(false);
+        when(dbManager.getUserIdentificationByAccountId(MOCK_USERID)).thenReturn("jubk@magenta.dk");
+        when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(DUMMY_USER_PROFILES);
+        when(dbManager.getCertUserIdentificationMode(MOCK_USERID)).thenReturn(IDENTIFICATION_MODE_SINGLE_USER);
+
+
+        ResponseEntity<String> response = restTemplate.getForEntity("/get_token", String.class);
+        assertThat(response.getStatusCodeValue()).isEqualTo(403);
+        assertThat(response.getBody().toString()).contains("is not active");
+    }
 
     @Test
     public void issueTokenOnBehalfOf() throws Exception {
         when(dbManager.getUserIdByCertificateData(anyString())).thenReturn(MOCK_USERID);
+        when(dbManager.isAccessAccountActive(anyInt())).thenReturn(true);
+        when(dbManager.getUserIdentificationByAccountId(MOCK_USERID)).thenReturn("jubk@magenta.dk");
         when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(DUMMY_USER_PROFILES);
         when(dbManager.getCertUserIdentificationMode(MOCK_USERID)).thenReturn(IDENTIFICATION_MODE_ON_BEHALF_OF);
 
@@ -157,6 +175,7 @@ public class DafoStsClientcertificatesApplicationTests {
     @Test
     public void rejectOnBehalfOfForSingleUser() {
         when(dbManager.getUserIdByCertificateData(anyString())).thenReturn(MOCK_USERID);
+        when(dbManager.isAccessAccountActive(anyInt())).thenReturn(true);
         when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(DUMMY_USER_PROFILES);
         when(dbManager.getCertUserIdentificationMode(MOCK_USERID)).thenReturn(IDENTIFICATION_MODE_SINGLE_USER);
 
@@ -170,6 +189,7 @@ public class DafoStsClientcertificatesApplicationTests {
     @Test
     public void rejectEmptyOnBehalfOf() {
         when(dbManager.getUserIdByCertificateData(anyString())).thenReturn(MOCK_USERID);
+        when(dbManager.isAccessAccountActive(anyInt())).thenReturn(true);
         when(dbManager.getUserProfiles(MOCK_USERID)).thenReturn(
                 Arrays.asList(new String[] {"UserProfile1", "UserProfile2"})
         );

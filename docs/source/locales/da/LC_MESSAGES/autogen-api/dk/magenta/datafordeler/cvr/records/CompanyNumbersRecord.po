@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:12
+msgid "CompanyNumbersRecord"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:19
+msgid "Created by lars on 26-06-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:22
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:24
+msgid "getEmployeeHigh"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:30
+msgid "getEmployeeLow"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:36
+msgid "getFulltimeEquivalentHigh"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:42
+msgid "getFulltimeEquivalentLow"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:48
+msgid "getIncludingOwnersHigh"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:54
+msgid "getIncludingOwnersLow"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:60
+msgid "getValidFrom"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:66
+msgid "getValidTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:72
+msgid "setEmployeeRange"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:78
+msgid "setFulltimeEquivalentRange"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/records/CompanyNumbersRecord.rst:84
+msgid "setIncludingOwnersRange"
+msgstr ""
+

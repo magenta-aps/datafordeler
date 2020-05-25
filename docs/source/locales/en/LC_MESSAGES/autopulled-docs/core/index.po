@@ -1,0 +1,221 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autopulled-docs/core/index.rst:2
+msgid "Datafordelermotor"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:4
+msgid ""
+"Dokumentation for `datafordelermototen. <https://github.com/magenta-aps"
+"/datafordeler-core>`_"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:14
+msgid "Formål"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:16
+msgid ""
+"Datafordelerens Core-komponent har til opgave at styre import og "
+"udstilling af data, ved at:"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:18
+msgid "Implementere generelle metoder til import og udstilling"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:19
+msgid ""
+"Lade plugins definere de specifikke indstillinger (såsom adgangsroller, "
+"kilde-urls, og hvordan data hentes og fortolkes)"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:20
+msgid "Definere hvordan bitemporalitetsmodellen er opbygget"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:21
+msgid "Definere superklasser til plugins, som de som minimum skal implementere"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:22
+msgid "Stille hjælpeklasser og -metoder til rådighed for plugins"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:23
+msgid "Foretage databaseopslag til lagring og udtræk af dataentiteter"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:27
+msgid "Komponenter"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:29
+msgid "De væsentligste komponenter i Core er:"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:33
+msgid "FapiService"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:32
+msgid ""
+"Stiller en FAPI-service superklasse til rådighed for plugins. Denne "
+"superklasse implementerer opslag generisk, og behøver blot enkelte "
+"definitioner fra hvert plugin."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:36
+msgid "Envelope"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:36
+msgid ""
+"Generel data-konvolut som vi anbringer svar på forespørgsler i, samt "
+"metadata omkring forespørgslen og svaret på den."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:40
+msgid "Query"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:39
+msgid ""
+"Definerer en standardiseret måde at beskrive databaseopslag. Ud fra "
+"brugerens forespørgsel opbygges et Query, som med en LookupDefinition "
+"oversætter de adspurgte felter til en databaseforespørgsel."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:46
+msgid "CommandService"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:43
+msgid ""
+"Stiller et kommando-interface til rådighed i form af en service, hvortil "
+"der kan sendes HTTP POST-forespørgsler for at eksekverer kommandoer "
+"(f.eks. Pull), GET for at se status for eksekverende kommandoer, og "
+"DELETE for at afbryde kommandoer. Se :ref:`command`."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:49
+msgid "ConfigurationManager"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:49
+msgid ""
+"Indlæser/opretter konfigurationsobjekter for de plugins som har en "
+"implementation af den."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:53
+msgid "Bitemporalitetsmodel"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:52
+msgid ""
+"Klasser til at definere bitemporalitetsmodellen overfor plugins. Se "
+":ref:`bitemporality`."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:58
+msgid "LookupDefintion"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:56
+msgid ""
+"Klasse til at beskrive et opslag i databasen. Ud fra en liste af input "
+"for feltets objektsti, feltets datatype, den efterspurgte værdi, og "
+"eventuelt sammenlignings-operator, kan der genereres komponentstrenge til"
+" HQL-opslag i databasen."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:62
+msgid "QueryManager"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:61
+msgid ""
+"Fællespunkt for opslag i databasen; indeholder metoder til bl.a. at finde"
+" entiteter ud fra klasse, query og UUID, samt mere generelle "
+"opslagsmetoder."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:66
+msgid "Exception-samling"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:65
+msgid ""
+"Hierarkisk samling af exception-klasser til brug i datafordeleren; alle "
+"exception-klasser nedarver fra en abstrakt DatafordelerException, og har "
+"en unik kode."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:69
+msgid "GapiServlet"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:69
+msgid "Adgangspunkt for Push af data til datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:73
+msgid "Plugin-definition"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:72
+msgid ""
+"Superklasser til plugins. Definerer hvilke metoder og klasser et plugin "
+"som minimum skal implementere. Se :ref:`plugins`."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:76
+msgid "Hjælpeklasser til plugins"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:76
+msgid ""
+"Klasser til hentning af data fra eksterne kilder med HTTP, FTP, og HTTP "
+"med scan-scroll."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:80
+msgid "Rollesystem"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:79
+msgid ""
+"Klasser til brug for definition af hvilke brugerroller der findes i "
+"systemet. De enkele plugins skal instantiere og returnere disse i deres "
+"rolledefinition."
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:82
+msgid "Brugerhåndtering"
+msgstr ""
+
+#: ../../source/autopulled-docs/core/index.rst:83
+msgid ""
+"Klasser til parsing, validering og håndtering af tokens som kommer ind "
+"med forespørgsler."
+msgstr ""
+

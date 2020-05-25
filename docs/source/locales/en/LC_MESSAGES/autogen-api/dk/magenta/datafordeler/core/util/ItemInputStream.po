@@ -1,0 +1,103 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:18
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:30
+msgid "ItemInputStream"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:25
+msgid ""
+"Created by lars on 16-02-17. A type-specific ObjectInputStream, that "
+"should only contain objects of the specific type. Contains static methods"
+" for deserializing an InputStream of JSON data into an ItemInputStream."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:28
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:36
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:38
+msgid "next"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:44
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:58
+msgid "parseJsonStream"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:49
+msgid ""
+"Parses a stream of JSON data into a stream of instances of type T The "
+"json data should be in the form of a wrapped array, like "
+"'{\"items\":[{object1},{object2},...]}"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:51
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:65
+msgid "A stream of text data containing JSON"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:52
+msgid "The class we expect objects to parse to"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:53
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:67
+msgid "The fieldname denoting the array; \"items\" in the example above"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:54
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:69
+msgid "A Jackson object mapper"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:55
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:70
+msgid "A JSON-deserializable class instance"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:63
+msgid ""
+"Parses a stream of JSON data into a stream of Object instances, their "
+"class according to the given classMap The json data should be in the form"
+" of a wrapped array, like '{\"items\":[{\"type\":\"foo\",more object "
+"data},{\"type\":\"bar\",more object data},...]}"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:66
+msgid ""
+"A map converting type fields to classes. In the above example: "
+"{\"foo\":com.example.Foo, \"bar\":com.example.Bar}. Any objects found in "
+"the input that are not found in this map will be ignored."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/util/ItemInputStream.rst:68
+msgid "The fieldname denoting the object type; \"type\" in the example above"
+msgstr ""
+

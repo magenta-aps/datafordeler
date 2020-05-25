@@ -44,7 +44,7 @@ public class RoadService extends FapiBaseService<GeoRoadEntity, RoadQuery> {
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.DRV;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override

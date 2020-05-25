@@ -94,6 +94,11 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
             }
         }
 
+        CitizenshipDataRecord citizenshipData = this.getLatest(input.getCitizenship());
+        if (citizenshipData != null) {
+            root.put("statsborgerskab", citizenshipData.getCountryCode());
+        }
+
         root.put("adressebeskyttelse", false);
         /*Collection<ProtectionDataRecord> personProtectionData = input.getProtection();
         if (personProtectionData != null && !personProtectionData.isEmpty()) {
@@ -218,7 +223,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
 
     Pattern postboxExtract = Pattern.compile("bo(?:x|(?:ks))\\s*(\\d+)");
 
-    private String formatDate(OffsetDateTime dateTime) {
+    public static String formatDate(OffsetDateTime dateTime) {
         if (dateTime != null) {
             return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
         }
@@ -244,10 +249,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         return null;
     }
 
-    public String getAddressFormatted(String roadName, String houseNumberFrom, String houseNumberTo, String letterFrom, String letterTo, String floor, String door, String bNumber) {
-//        if (this.addressText != null) {
-//            return this.addressText;
-//        }
+    public static String getAddressFormatted(String roadName, String houseNumberFrom, String houseNumberTo, String letterFrom, String letterTo, String floor, String door, String bNumber) {
         StringBuilder out = new StringBuilder();
 
         if (roadName != null) {
@@ -299,12 +301,12 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         }
     }
 
-    private String emptyIfNull(String text) {
+    private static String emptyIfNull(String text) {
         if (text == null) return "";
         return text;
     }
 
-    private static HashMap<Integer, String> countryCodeMap = new HashMap<>();
+    public static HashMap<Integer, String> countryCodeMap = new HashMap<>();
     static {
         countryCodeMap.put(5404, "AF");
         countryCodeMap.put(5299, "XX");

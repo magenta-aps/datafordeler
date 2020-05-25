@@ -20,6 +20,10 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__unit", columnList = FormRecord.DB_FIELD_COMPANYUNIT + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__companymeta", columnList = FormRecord.DB_FIELD_COMPANY_METADATA + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__participant_company_relation", columnList = FormRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION + DatabaseEntry.REF),
+
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FormRecord extends CvrBitemporalDataRecord {
@@ -78,7 +82,7 @@ public class FormRecord extends CvrBitemporalDataRecord {
         return this.longDescription;
     }
 
-    public static final String IO_FIELD_RESPONSIBLE_DATASOURCE = "ansvarligDataleverandoer";
+    public static final String IO_FIELD_RESPONSIBLE_DATASOURCE = "ansvarligDataleverandør";
 
     @Transient
     @JsonProperty(value = IO_FIELD_RESPONSIBLE_DATASOURCE)

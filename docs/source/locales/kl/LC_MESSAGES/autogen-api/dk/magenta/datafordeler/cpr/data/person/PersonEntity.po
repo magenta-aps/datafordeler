@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:24
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:56
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:62
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:68
+msgid "PersonEntity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:31
+msgid "Created by lars on 16-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:34
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:36
+msgid "DB_FIELD_CPR_NUMBER"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:42
+msgid "IO_FIELD_CPR_NUMBER"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:48
+msgid "schema"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:54
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:74
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:76
+msgid "createEmptyRegistration"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:82
+msgid "generateUUID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:88
+msgid "getPersonnummer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/data/person/PersonEntity.rst:94
+msgid "setPersonnummer"
+msgstr ""
+

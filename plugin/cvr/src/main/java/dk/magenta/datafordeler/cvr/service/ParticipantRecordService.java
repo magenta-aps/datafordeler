@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -111,10 +113,10 @@ public class ParticipantRecordService extends FapiBaseService<ParticipantRecord,
     }
 
     @Override
-    public List<ParticipantRecord> searchByQuery(ParticipantRecordQuery query, Session session) {
-        List<ParticipantRecord> allRecords = new ArrayList<>();
+    public List<ResultSet<ParticipantRecord>> searchByQuery(ParticipantRecordQuery query, Session session) {
+        List<ResultSet<ParticipantRecord>> allRecords = new ArrayList<>();
 
-        List<ParticipantRecord> localResults = super.searchByQuery(query, session);
+        List<ResultSet<ParticipantRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {
             log.info("There are "+localResults.size()+" local results");
             allRecords.addAll(localResults);
@@ -122,9 +124,7 @@ public class ParticipantRecordService extends FapiBaseService<ParticipantRecord,
 
         HashSet<String> eNumbers = new HashSet<>(query.getEnhedsNummer());
         if (!eNumbers.isEmpty()) {
-            for (ParticipantRecord record : localResults) {
-                eNumbers.remove(record.getUnitNumber());
-            }
+            eNumbers.removeAll(localResults.stream().map(resultset -> Long.toString(resultset.getPrimaryEntity().getUnitNumber())).collect(Collectors.toSet()));
             query.setEnhedsNummer(eNumbers);
         }
 

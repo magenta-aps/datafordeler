@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:24
+msgid "LocalityData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:31
+msgid "Created by lars on 16-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:34
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:36
+msgid "asMap"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:42
+msgid "getAbbrev"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:48
+msgid "getCode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:54
+msgid "getDistrict"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:60
+msgid "getLocalityState"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:66
+msgid "getMunicipality"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:72
+msgid "getName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:78
+msgid "getPostalCode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:84
+msgid "getReferences"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:90
+msgid "getType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/locality/LocalityData.rst:96
+msgid "updateReferences"
+msgstr ""
+

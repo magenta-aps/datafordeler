@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:4
+msgid "AjpProperties"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:11
+msgid "Configuration properties used for setting up the Ajp connector."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:14
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:16
+msgid "getAjpPort"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:22
+msgid "getScheme"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:28
+msgid "isAllowTrace"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:34
+msgid "isEnabled"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:40
+msgid "isSecure"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:46
+msgid "setAjpPort"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:52
+msgid "setAllowTrace"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:58
+msgid "setEnabled"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:64
+msgid "setScheme"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/dafosts/clientcertificates/config/AjpProperties.rst:70
+msgid "setSecure"
+msgstr ""
+

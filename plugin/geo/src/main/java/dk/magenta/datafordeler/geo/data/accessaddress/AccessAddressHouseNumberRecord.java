@@ -17,6 +17,10 @@ import java.util.Objects;
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressHouseNumberRecord.TABLE_NAME + AccessAddressHouseNumberRecord.DB_FIELD_ENTITY,
                 columnList = AccessAddressHouseNumberRecord.DB_FIELD_ENTITY + DatabaseEntry.REF
         ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressHouseNumberRecord.TABLE_NAME + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER,
+                columnList = AccessAddressHouseNumberRecord.DB_FIELD_NUMBER
+        )
 })
 public class AccessAddressHouseNumberRecord extends GeoMonotemporalRecord<AccessAddressEntity> {
 

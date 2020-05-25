@@ -1,0 +1,1016 @@
+{
+  "_scroll_id": "DnF1ZXJ5VGhlbkZldGNoBgAAAAAqRf0bFmw5UlF5VVhVVHRxUW5NYnI3YkxLNlEAAAAAKkNACRZjU0hhNXJ6NVQ3R3g3RjlDNGxkb1RnAAAAACpDQAgWY1NIYTVyejVUN0d4N0Y5QzRsZG9UZwAAAAAqRf0cFmw5UlF5VVhVVHRxUW5NYnI3YkxLNlEAAAAAKkX9HRZsOVJReVVYVVR0cVFuTWJyN2JMSzZRAAAAACpDQAoWY1NIYTVyejVUN0d4N0Y5QzRsZG9UZw==",
+  "took": 4,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 8473,
+    "max_score": 2.0,
+    "hits": [
+      {
+        "_index": "cvr-v-20200115",
+        "_type": "_doc",
+        "_id": "4008226549",
+        "_score": 2.0,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 88888881,
+            "regNummer": [],
+            "brancheAnsvarskode": null,
+            "reklamebeskyttet": false,
+            "navne": [
+              {
+                "navn": "A. And Moentpudser",
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              }
+            ],
+            "binavne": [],
+            "postadresse": [
+              {
+                "landekode": "GL",
+                "fritekst": null,
+                "vejkode": 45,
+                "kommune": {
+                  "kommuneKode": 956,
+                  "kommuneNavn": "SERMERSOOQ",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2015-03-07T00:00:00.000+01:00"
+                },
+                "husnummerFra": 42,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": 20,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": "1342",
+                "vejnavn": "Raekkerhus",
+                "bynavn": null,
+                "postnummer": 3900,
+                "postdistrikt": "Nuuk",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              }
+            ],
+            "beliggenhedsadresse": [
+            ],
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "000000",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "sekundaertTelefonNummer": [],
+            "sekundaertTelefaxNummer": [],
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "a_and@hotmail.com",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              }
+            ],
+            "hjemmeside": [],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              }
+            ],
+            "hovedbranche": [
+              {
+                "branchekode": "011300",
+                "branchetekst": "moentpudsning",
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              }
+            ],
+            "bibranche1": [],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [
+              {
+                "status": "NORMAL",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+              }
+            ],
+            "virksomhedsform": [
+              {
+                "virksomhedsformkode": 10,
+                "kortBeskrivelse": "ENK",
+                "langBeskrivelse": "Enkeltmandsvirksomhed",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              }
+            ],
+            "aarsbeskaeftigelse": [],
+            "kvartalsbeskaeftigelse": [],
+            "maanedsbeskaeftigelse": [],
+            "attributter": [
+              {
+                "sekvensnr": 0,
+                "type": "BYGNINGSNUMMER",
+                "vaerditype": "string",
+                "vaerdier": [
+                  {
+                    "vaerdi": "1153",
+                    "periode": {
+                      "gyldigFra": "2013-06-01",
+                      "gyldigTil": "2015-01-01"
+                    },
+                    "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+                  }
+                ]
+              }
+            ],
+            "penheder": [
+              {
+                "pNummer": 1111111111,
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              }
+            ],
+            "deltagerRelation": [],
+            "fusioner": [],
+            "spaltninger": [],
+            "virksomhedMetadata": {
+              "nyesteNavn": {
+                "navn": "A. And Møntpudser",
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              },
+              "nyesteBinavne": [],
+              "nyesteVirksomhedsform": {
+                "virksomhedsformkode": 10,
+                "kortBeskrivelse": "ENK",
+                "langBeskrivelse": "Enkeltmandsvirksomhed",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "landekode": "GL",
+                "fritekst": "Qallimiut/Ammassivik",
+                "vejkode": 45,
+                "kommune": {
+                  "kommuneKode": 955,
+                  "kommuneNavn": "KUJALLEQ",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2015-03-07T00:00:00.000+01:00"
+                },
+                "husnummerFra": null,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": null,
+                "bynavn": null,
+                "postnummer": 3920,
+                "postdistrikt": "Qaqortoq",
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "011300",
+                "branchetekst": "Moantpudsning",
+                "periode": {
+                  "gyldigFra": "2013-06-01",
+                  "gyldigTil": "2015-01-01"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:30.000+02:00"
+              },
+              "nyesteBibranche1": null,
+              "nyesteBibranche2": null,
+              "nyesteBibranche3": null,
+              "nyesteStatus": null,
+              "nyesteKontaktoplysninger": [
+                "000000",
+                "a_and@hotmail.com"
+              ],
+              "antalPenheder": 1,
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteKvartalsbeskaeftigelse": null,
+              "nyesteMaanedsbeskaeftigelse": null,
+              "sammensatStatus": "NORMAL",
+              "stiftelsesDato": "2013-06-01",
+              "virkningsDato": "2013-06-01"
+            },
+            "samtId": 1,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 7777777771,
+            "enhedstype": "VIRKSOMHED",
+            "sidstIndlaest": "2019-10-10T09:33:05.395+02:00",
+            "sidstOpdateret": "2019-10-10T09:23:30.000+02:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "R"
+          }
+        }
+      },
+      {
+        "_index": "cvr-v-20200115",
+        "_type": "_doc",
+        "_id": "4008226508",
+        "_score": 2.0,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 88888882,
+            "regNummer": [],
+            "brancheAnsvarskode": null,
+            "reklamebeskyttet": false,
+            "navne": [
+              {
+                "navn": "Faetter Hoejben spilleservice",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              }
+            ],
+            "binavne": [],
+            "postadresse": [
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 45,
+                "kommune": {
+                  "kommuneKode": 751,
+                  "kommuneNavn": "Aarhus",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2015-03-07T00:00:00.000+01:00"
+                },
+                "husnummerFra": 42,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": 20,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": "1342",
+                "vejnavn": "hus",
+                "bynavn": null,
+                "postnummer": 8000,
+                "postdistrikt": "Aarhus C",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              }
+            ],
+            "beliggenhedsadresse": [
+            ],
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "sekundaertTelefonNummer": [],
+            "sekundaertTelefaxNummer": [],
+            "elektroniskPost": [],
+            "hjemmeside": [],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": "2014-03-13"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              }
+            ],
+            "hovedbranche": [
+              {
+                "branchekode": "494100",
+                "branchetekst": "Gambling",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": "2014-03-13"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              }
+            ],
+            "bibranche1": [],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [
+              {
+                "status": "NORMAL",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+              }
+            ],
+            "virksomhedsform": [
+              {
+                "virksomhedsformkode": 10,
+                "kortBeskrivelse": "ENK",
+                "langBeskrivelse": "Enkeltmandsvirksomhed",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": "2014-03-13"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              }
+            ],
+            "aarsbeskaeftigelse": [],
+            "kvartalsbeskaeftigelse": [],
+            "maanedsbeskaeftigelse": [],
+            "attributter": [],
+            "penheder": [],
+            "deltagerRelation": [],
+            "fusioner": [],
+            "spaltninger": [],
+            "virksomhedMetadata": {
+              "nyesteNavn": {
+                "navn": "Faetter Hoejben spilleservice",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              },
+              "nyesteBinavne": [],
+              "nyesteVirksomhedsform": {
+                "virksomhedsformkode": 10,
+                "kortBeskrivelse": "ENK",
+                "langBeskrivelse": "Enkeltmandsvirksomhed",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": "2014-03-13"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              },
+              "nyesteBeliggenhedsadresse": {},
+              "nyesteHovedbranche": {
+                "branchekode": "494100",
+                "branchetekst": "Vejgodstransport",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": "2014-03-13"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              },
+              "nyesteBibranche1": null,
+              "nyesteBibranche2": null,
+              "nyesteBibranche3": null,
+              "nyesteStatus": null,
+              "nyesteKontaktoplysninger": [],
+              "antalPenheder": 1,
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteKvartalsbeskaeftigelse": null,
+              "nyesteMaanedsbeskaeftigelse": null,
+              "sammensatStatus": "NORMAL",
+              "stiftelsesDato": "2014-02-01",
+              "virkningsDato": "2014-02-01"
+            },
+            "samtId": 1,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 7777777774,
+            "enhedstype": "VIRKSOMHED",
+            "sidstIndlaest": "2019-10-10T09:32:46.795+02:00",
+            "sidstOpdateret": "2019-10-10T09:23:14.000+02:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "R"
+          }
+        }
+      },
+      {
+        "_index": "cvr-v-20200115",
+        "_type": "_doc",
+        "_id": "4008226533",
+        "_score": 2.0,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 88888883,
+            "regNummer": [],
+            "brancheAnsvarskode": null,
+            "reklamebeskyttet": false,
+            "navne": [
+              {
+                "navn": "Georg Gearloes opfindelser",
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              }
+            ],
+            "binavne": [],
+            "postadresse": [
+              {
+                "landekode": "GL",
+                "fritekst": null,
+                "vejkode": 45,
+                "kommune": {
+                  "kommuneKode": 956,
+                  "kommuneNavn": "SERMERSOOQ",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2015-03-07T00:00:00.000+01:00"
+                },
+                "husnummerFra": 42,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": 20,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": "1342",
+                "vejnavn": "hus",
+                "bynavn": null,
+                "postnummer": 3900,
+                "postdistrikt": "Nuuk",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              }
+            ],
+            "beliggenhedsadresse": [
+            ],
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "+299 000000",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "sekundaertTelefonNummer": [],
+            "sekundaertTelefaxNummer": [],
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "a_and@hotmail.com",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              }
+            ],
+            "hjemmeside": [],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              }
+            ],
+            "hovedbranche": [
+              {
+                "branchekode": "433200",
+                "branchetekst": "Opfinder",
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              }
+            ],
+            "bibranche1": [],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [
+              {
+                "status": "NORMAL",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+              }
+            ],
+            "virksomhedsform": [
+              {
+                "virksomhedsformkode": 10,
+                "kortBeskrivelse": "ENK",
+                "langBeskrivelse": "Enkeltmandsvirksomhed",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              }
+            ],
+            "aarsbeskaeftigelse": [],
+            "kvartalsbeskaeftigelse": [],
+            "maanedsbeskaeftigelse": [],
+            "attributter": [],
+            "penheder": [
+              {
+                "pNummer": 1111111113,
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              }
+            ],
+            "deltagerRelation": [
+              {
+                "deltager": {
+                  "enhedsNummer": 7777777775,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": null,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2019-10-10T09:32:57.311+02:00",
+                  "sidstOpdateret": "2019-10-10T08:45:46.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Georg Gearloes",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "adresseHemmelig": false,
+                  "adresseHemmeligUndtagelse": false,
+                  "adresseOpdateringOphoert": false,
+                  "beliggenhedsadresse": [],
+                  "postadresse": []
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Interessenter",
+                            "periode": {
+                              "gyldigFra": "2009-07-21",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": null
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "INTERESSENTER",
+                                "periode": {
+                                  "gyldigFra": "2009-07-21",
+                                  "gyldigTil": "2010-12-31"
+                                },
+                                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "fusioner": [],
+            "spaltninger": [],
+            "virksomhedMetadata": {
+              "nyesteNavn": {
+                "navn": "Georg Gearloes opfindelser",
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              },
+              "nyesteBinavne": [],
+              "nyesteVirksomhedsform": {
+                "virksomhedsformkode": 10,
+                "kortBeskrivelse": "ENK",
+                "langBeskrivelse": "Enkeltmandsvirksomhed",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "landekode": "GL",
+                "fritekst": null,
+                "vejkode": 45,
+                "kommune": {
+                  "kommuneKode": 956,
+                  "kommuneNavn": "SERMERSOOQ",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2015-03-07T00:00:00.000+01:00"
+                },
+                "husnummerFra": 52,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": "7777",
+                "vejnavn": "Attartu",
+                "bynavn": null,
+                "postnummer": 3905,
+                "postdistrikt": "Nuussuaq",
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "433200",
+                "branchetekst": "Moentpudsning",
+                "periode": {
+                  "gyldigFra": "2009-07-21",
+                  "gyldigTil": "2010-12-31"
+                },
+                "sidstOpdateret": "2019-10-10T09:23:23.000+02:00"
+              },
+              "nyesteBibranche1": null,
+              "nyesteBibranche2": null,
+              "nyesteBibranche3": null,
+              "nyesteStatus": null,
+              "nyesteKontaktoplysninger": [
+                "+299 000000",
+                "a_and@hotmail.com"
+              ],
+              "antalPenheder": 1,
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteKvartalsbeskaeftigelse": null,
+              "nyesteMaanedsbeskaeftigelse": null,
+              "sammensatStatus": "Ophørt",
+              "stiftelsesDato": "2009-07-21",
+              "virkningsDato": "2009-07-21"
+            },
+            "samtId": 1,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 7777777776,
+            "enhedstype": "VIRKSOMHED",
+            "sidstIndlaest": "2019-10-10T09:32:57.311+02:00",
+            "sidstOpdateret": "2019-10-10T09:23:23.000+02:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "R"
+          }
+        }
+      },
+      {
+        "_index": "cvr-v-20200115",
+        "_type": "_doc",
+        "_id": "4008225577",
+        "_score": 2.0,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 88888884,
+            "regNummer": [],
+            "brancheAnsvarskode": null,
+            "reklamebeskyttet": false,
+            "navne": [
+              {
+                "navn": "Anderssines catering service",
+                "periode": {
+                  "gyldigFra": "2015-07-09",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:14:18.000+02:00"
+              }
+            ],
+            "binavne": [],
+            "postadresse": [
+              {
+                "landekode": "GL",
+                "fritekst": null,
+                "vejkode": 45,
+                "kommune": {
+                  "kommuneKode": 751,
+                  "kommuneNavn": "SERMERSOOQ",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2015-03-07T00:00:00.000+01:00"
+                },
+                "husnummerFra": 42,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": 20,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": "1342",
+                "vejnavn": "hus",
+                "bynavn": null,
+                "postnummer": 8000,
+                "postdistrikt": "Aarhus C",
+                "periode": {
+                  "gyldigFra": "2014-02-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:23:14.000+02:00"
+              }
+            ],
+            "beliggenhedsadresse": [
+            ],
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "000000",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2015-07-09",
+                  "gyldigTil": "2015-09-30"
+                },
+                "sidstOpdateret": "2019-10-10T09:14:18.000+02:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "sekundaertTelefonNummer": [],
+            "sekundaertTelefaxNummer": [],
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "a_and@hotmail.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2015-07-09",
+                  "gyldigTil": "2015-09-30"
+                },
+                "sidstOpdateret": "2019-10-10T09:14:18.000+02:00"
+              }
+            ],
+            "hjemmeside": [],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2015-07-09",
+                  "gyldigTil": "2015-09-30"
+                },
+                "sidstOpdateret": "2019-10-10T09:14:18.000+02:00"
+              }
+            ],
+            "hovedbranche": [
+              {
+                "branchekode": "031100",
+                "branchetekst": "Catering",
+                "periode": {
+                  "gyldigFra": "2015-07-09",
+                  "gyldigTil": "2015-09-30"
+                },
+                "sidstOpdateret": "2019-10-10T09:14:18.000+02:00"
+              }
+            ],
+            "bibranche1": [],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [
+              {
+                "status": "NORMAL",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+              }
+            ],
+            "virksomhedsform": [
+              {
+                "virksomhedsformkode": 10,
+                "kortBeskrivelse": "ENK",
+                "langBeskrivelse": "Enkeltmandsvirksomhed",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2015-07-09",
+                  "gyldigTil": "2015-09-30"
+                },
+                "sidstOpdateret": "2019-10-10T09:14:18.000+02:00"
+              }
+            ],
+            "aarsbeskaeftigelse": [],
+            "kvartalsbeskaeftigelse": [],
+            "maanedsbeskaeftigelse": [],
+            "attributter": [],
+            "penheder": [],
+            "deltagerRelation": [
+              {
+                "deltager": {
+                  "enhedsNummer": 7777777777,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": null,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2019-10-10T09:21:24.010+02:00",
+                  "sidstOpdateret": "2019-06-06T16:36:05.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Fætter højben",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "adresseHemmelig": false,
+                  "adresseHemmeligUndtagelse": false,
+                  "adresseOpdateringOphoert": true,
+                  "beliggenhedsadresse": [],
+                  "postadresse": []
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                    ],
+                    "medlemsData": []
+                  }
+                ]
+              }
+            ],
+            "fusioner": [],
+            "spaltninger": [],
+            "virksomhedMetadata": {
+              "nyesteNavn": {
+                "navn": "Anderssines catering service",
+                "periode": {
+                  "gyldigFra": "2015-07-09",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-10-10T09:14:18.000+02:00"
+              },
+              "nyesteBinavne": [],
+              "nyesteVirksomhedsform": {
+                "virksomhedsformkode": 10,
+                "kortBeskrivelse": "ENK",
+                "langBeskrivelse": "Enkeltmandsvirksomhed",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2015-07-09",
+                  "gyldigTil": "2015-09-30"
+                },
+                "sidstOpdateret": "2019-10-10T09:14:18.000+02:00"
+              },
+              "nyesteBeliggenhedsadresse": {},
+              "nyesteHovedbranche": {},
+              "nyesteBibranche1": null,
+              "nyesteBibranche2": null,
+              "nyesteBibranche3": null,
+              "nyesteStatus": null,
+              "nyesteKontaktoplysninger": [],
+              "antalPenheder": 1,
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteKvartalsbeskaeftigelse": null,
+              "nyesteMaanedsbeskaeftigelse": null,
+              "sammensatStatus": "Ophørt",
+              "stiftelsesDato": "2015-07-09",
+              "virkningsDato": "2015-07-09"
+            },
+            "samtId": 1,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 7777777778,
+            "enhedstype": "VIRKSOMHED",
+            "sidstIndlaest": "2019-10-10T09:21:24.010+02:00",
+            "sidstOpdateret": "2019-10-10T09:14:18.000+02:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "R"
+          }
+        }
+      }
+    ]
+  }
+}

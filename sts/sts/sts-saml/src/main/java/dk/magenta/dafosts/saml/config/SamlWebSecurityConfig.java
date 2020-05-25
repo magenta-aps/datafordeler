@@ -21,12 +21,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.saml.context.SAMLContextProvider;
-import org.springframework.security.saml.context.SAMLContextProviderImpl;
 import org.springframework.security.saml.key.JKSKeyManager;
 import org.springframework.security.saml.key.KeyManager;
 import org.springframework.security.saml.log.SAMLDefaultLogger;
 import org.springframework.security.saml.storage.EmptyStorageFactory;
-import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
 
 import java.security.KeyStore;
 import java.util.Collections;
@@ -144,6 +142,9 @@ public class SamlWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .extendedMetadata() //(5)
                     .idpDiscoveryEnabled(true)
+                .and()
+                    .ssoProfileConsumer(dafoWebSSOProfileConsumer)
+                    .sso()
                 .and()
             .http()
                 .authorizeRequests()

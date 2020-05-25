@@ -1,0 +1,96 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:84
+msgid "QueryTest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:92
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:94
+msgid "personEntityList"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:100
+msgid "residenceEntityList"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:106
+msgid "roadEntityList"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:112
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:114
+msgid "cleanup"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:120
+msgid "deletePerson"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:126
+msgid "deleteResidence"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:132
+msgid "deleteRoad"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:138
+msgid "loadPerson"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:144
+msgid "loadResidence"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:150
+msgid "loadRoad"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:156
+msgid "testPersonAccess"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:162
+msgid "testPersonRecordTime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:168
+msgid "testResidenceAccess"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:174
+msgid "testResidenceRecordTime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:180
+msgid "testRoadAccess"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cpr/QueryTest.rst:186
+msgid "testRoadRecordTime"
+msgstr ""
+

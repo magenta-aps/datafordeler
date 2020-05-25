@@ -28,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,14 +100,17 @@ public class CvrRecordCombinedService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrRecordCombinedService");
 
         ArrayList<String> cvrNumbers = new ArrayList<String>();
         cvrNumbers.add(cvrNummer);
         ObjectNode formattedRecord = getJSONFromCvrList(cvrNumbers, returnParticipantDetails, false);
 
         if (formattedRecord != null && formattedRecord.size()>0) {
+            loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprService done");
             return objectMapper.writeValueAsString(formattedRecord);
         } else {
+            loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CprService done");
             throw new HttpNotFoundException("No entity with CVR number " + cvrNummer + " was found");
         }
     }
@@ -149,9 +153,10 @@ public class CvrRecordCombinedService {
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
         );
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
+        loggerHelper.urlInvokePersistablelogs("CvrRecordCombinedService");
 
         ObjectNode formattedRecord = getJSONFromCvrList(cvrNumbers, returnParticipantDetails, true);
-
+        loggerHelper.urlResponsePersistablelogs("CvrRecordCombinedService");
         return new StreamingResponseBody() {
             @Override
             public void writeTo(OutputStream outputStream) throws IOException {
@@ -162,7 +167,7 @@ public class CvrRecordCombinedService {
 
     private ObjectNode getJSONFromCvrList(List<String> cvrNumbers, boolean returnParticipantDetails, boolean asList) throws DataFordelerException, JsonProcessingException {
         Session session = sessionManager.getSessionFactory().openSession();
-        GeoLookupService service = new GeoLookupService(session);
+        GeoLookupService service = new GeoLookupService(sessionManager);
         try {
 
             ObjectNode formattedRecord = objectMapper.createObjectNode();

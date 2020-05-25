@@ -20,6 +20,9 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
     @Value("${cvr.encryption.keyfile:local/cvr/keyfile.json}")
     private String encryptionKeyFileName;
 
+    @Value("${dafo.cpr.demoCompanyList:bob}")
+    private String cvrDemoList;
+
     private Logger log = LogManager.getLogger("CvrConfigurationManager");
 
     @PostConstruct

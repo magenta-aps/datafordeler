@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:26
+msgid "AttributeData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:33
+msgid "Created by lars on 26-06-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:36
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:38
+msgid "DB_FIELD_SEQNO"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:44
+msgid "DB_FIELD_TYPE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:50
+msgid "DB_FIELD_VALUE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:56
+msgid "DB_FIELD_VALUETYPE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:62
+msgid "IO_FIELD_SEQNO"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:68
+msgid "IO_FIELD_TYPE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:74
+msgid "IO_FIELD_VALUE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:80
+msgid "IO_FIELD_VALUETYPE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:86
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:88
+msgid "asMap"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:94
+msgid "compareTo"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:100
+msgid "databaseFields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:105
+msgid "Return a map of attributes, including those from the superclass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:108
+msgid "getSequenceNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:114
+msgid "getType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:120
+msgid "getValue"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:126
+msgid "getValueType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:132
+msgid "setCompanyBaseData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:138
+msgid "setCompanyUnitBaseData"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:144
+msgid "setSequenceNumber"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:150
+msgid "setType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:156
+msgid "setValue"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/cvr/data/shared/AttributeData.rst:162
+msgid "setValueType"
+msgstr ""
+

@@ -7,7 +7,11 @@ import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.Pull;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.io.ImportInputStream;
+import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.FtpCommunicator;
+import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
@@ -16,8 +20,6 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthPlaceDataRecord;
-import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
-import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.junit.After;
@@ -37,9 +39,12 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -107,6 +112,21 @@ public class PullTest {
         return sslContext.getSocketFactory();
     }
 
+    /**
+     * Load the GLBASETEST, which is the file with testpersons recieved from CPR-office
+     * @param importMetadata
+     * @throws DataFordelerException
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
+        InputStream testData1 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST");
+        LabeledSequenceInputStream labeledInputStream = new LabeledSequenceInputStream("GLBASETEST", new ByteArrayInputStream("GLBASETEST".getBytes()), "GLBASETEST", testData1);
+        ImportInputStream inputstream = new ImportInputStream(labeledInputStream);
+        personEntityManager.parseData(inputstream, importMetadata);
+        testData1.close();
+    }
+
     @Test
     public void pull() throws Exception {
 
@@ -156,7 +176,7 @@ public class PullTest {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setFornavn("Tester");
+            personQuery.addFornavn("Tester");
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             Assert.assertEquals(1, personEntities.size());
             Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());
@@ -328,6 +348,47 @@ public class PullTest {
             personFtp.stopServer();
         } finally {
             localSubFolder.delete();
+        }
+    }
+
+    /**
+     * Verify that testdata can be cleaned through calling pull with flag "cleantestdatafirst":true
+     * @throws Exception
+     */
+    @Test
+    public void testCleanTestdataThroughPull() throws Exception {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
+            Assert.assertEquals(0, personEntities.size());//Validate that no persons is initiated in the beginning of this test
+        }
+        pull();//Pull 1 person from persondata
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
+            Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
+        }
+
+        //Pull 39 persons from GLBASETEST
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPersonWithOrigin(importMetadata);
+            session.close();
+        }
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
+            Assert.assertEquals(40, personEntities.size());//Validate that 40 persons is now initiated
+        }
+
+        //Clean the testdata
+        ObjectNode config = (ObjectNode) objectMapper.readTree("{\""+ CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE+"\": [5], \"cleantestdatafirst\":true}");
+        Pull pull = new Pull(engine, plugin, config);
+        pull.run();
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
+            Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
     }
 }

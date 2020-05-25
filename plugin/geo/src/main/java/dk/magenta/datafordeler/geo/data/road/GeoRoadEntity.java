@@ -3,22 +3,25 @@ package dk.magenta.datafordeler.geo.data.road;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.RawData;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
+import dk.magenta.datafordeler.geo.data.locality.LocalityQuery;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = GeoPlugin.DEBUG_TABLE_PREFIX + GeoRoadEntity.TABLE_NAME, indexes = {
@@ -29,6 +32,10 @@ import java.util.Set;
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + GeoRoadEntity.TABLE_NAME + GeoRoadEntity.DB_FIELD_CODE,
                 columnList = GeoRoadEntity.DB_FIELD_CODE
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + GeoRoadEntity.TABLE_NAME + GeoRoadEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = GeoRoadEntity.DB_FIELD_DAFO_UPDATED
         ),
 })
 public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
@@ -73,10 +80,10 @@ public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_NAME)
-    Set<RoadNameRecord> name = new HashSet<>();
+    private Set<RoadNameRecord> name = new HashSet<>();
 
-    public Set<RoadNameRecord> getName() {
-        return this.name;
+    public MonotemporalSet<RoadNameRecord> getName() {
+        return new MonotemporalSet<>(this.name);
     }
 
 
@@ -91,10 +98,10 @@ public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_LOCALITY)
-    Set<RoadLocalityRecord> locality = new HashSet<>();
+    private Set<RoadLocalityRecord> locality = new HashSet<>();
 
-    public Set<RoadLocalityRecord> getLocality() {
-        return this.locality;
+    public MonotemporalSet<RoadLocalityRecord> getLocality() {
+        return new MonotemporalSet<>(this.locality);
     }
 
 
@@ -109,10 +116,10 @@ public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_MUNICIPALITY)
-    Set<RoadMunicipalityRecord> municipality = new HashSet<>();
+    private Set<RoadMunicipalityRecord> municipality = new HashSet<>();
 
-    public Set<RoadMunicipalityRecord> getMunicipality() {
-        return this.municipality;
+    public MonotemporalSet<RoadMunicipalityRecord> getMunicipality() {
+        return new MonotemporalSet<>(this.municipality);
     }
 
 
@@ -127,10 +134,10 @@ public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SHAPE)
-    Set<RoadShapeRecord> shape = new HashSet<>();
+    private Set<RoadShapeRecord> shape = new HashSet<>();
 
-    public Set<RoadShapeRecord> getShape() {
-        return this.shape;
+    public MonotemporalSet<RoadShapeRecord> getShape() {
+        return new MonotemporalSet<>(this.shape);
     }
 
 

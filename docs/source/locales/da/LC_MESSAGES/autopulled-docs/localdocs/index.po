@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autopulled-docs/localdocs/index.rst:4
+msgid "Grønlands Datafordeler API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:6
+msgid "Indhold"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:16
+msgid ""
+"Anvendelse af API er underlagt :ref:`betingelser for anvendelse "
+"<agreements>` af Datafordeleren og dens formidlede data. API findes på "
+"https://test.data.gl/"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:20
+msgid "API'er og deklarationer"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:22
+msgid "Generelt gælder det at:"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:24
+msgid "API'er er selvdeklarerende RESTfull API'er og de er alle af typen ``GET``."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:25
+msgid ""
+"Navngivning af URL til API følger hovedreglen: ``/ et kort registernavn "
+"(f.eks. cpr) / et versionnummer f.eks. (1) / API-type (f.eks. rest) /`` "
+"og så følger parametrene."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:26
+msgid ""
+"Et kald til roden på de enkelte API'er giver en liste over parametre, der"
+" er tilgængelige i API'et."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:27
+msgid ""
+"Uddybning af felter, navne, deres anvendelse og særlige betingelser "
+"findes hos de respektive myndigheder, der udstiller data via "
+"datafordeleren."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:29
+msgid ""
+"Eventuelle afvigelser og særlige forhold for Datafordeleren vil være "
+"nævnt i deklarationen."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:31
+msgid ""
+"De resulterende svarformater er beskrevet på siden om :ref:`JSON-"
+"formatet. <json-results>`"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:35
+msgid "Et eksempel på deklarationskald til API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:37
+msgid ""
+"Et kald som ``https://test.data.gl/cpr/person/1/rest`` giver resultat som"
+" på billedet. Opsætningen kan variere fra browser til browser."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:41
+msgid "Selvdeklarationen af et API på datafordeleren rummer disse oplysninger:"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:43
+msgid "\"metadata_url\": Adressen på metadata om API'et"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:44
+msgid ""
+"\"fetch_url\": Adressen til at hente oplysninger ved personens unikke "
+"UUID, der alene anvendes i Datafordeleren\""
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:45
+msgid "\"search_url\": Adressen til søgning på API'et"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:46
+msgid ""
+"\"declaration_url\": Web-adressen til :ref:`betingelser <agreements>` for"
+" anvendelse af API'et"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:47
+msgid "\"search_queryfields\": Oversigten over søgefelter på det aktuelle API"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:48
+msgid "\"name\": Navn(ene) på de tilgængelige søgefelter"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:49
+msgid "\"type\": Datatypen der skal anvendes ved søgningen"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:51
+msgid ""
+"Uddybning af feltnavnene og deres indhold samt anvendelse er dokumenteret"
+" hos de ansvarlige myndigheder for registret. Hvor det er muligt, vil der"
+" være link til myndighedens databeskrivelse. Eventuelle særlige forhold i"
+" forbindelse med Datafordeleren vil være nævnt i deklarationen af API'et."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:55
+msgid "Søgemønstre i API-søgninger"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:57
+msgid "Søgning skrives i en parameterform som ``search?felt=værdi``"
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:59
+msgid ""
+"Alle tilgængelige objekter bliver gennemsøgt for værdien i det nævnte "
+"søgefeltnavn."
+msgstr ""
+
+#: ../../source/autopulled-docs/localdocs/index.rst:61
+msgid ""
+"Asterisk (stjerne) repræsenterer nul, et eller mange vilkårlige tegn; "
+"``search?navn=Pa*aq`` finder alt der begynder med pa og ender med aq, "
+"f.eks. Paninnguaq. Asterisk kan anbringes først, midt i, eller sidst i "
+"søgeordet."
+msgstr ""
+

@@ -5,36 +5,36 @@ import dk.magenta.datafordeler.cvr.records.CompanyMetadataRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.Collections;
+import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
 
 /**
  * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
  * under a Company is sorted into this format:
  * {
- *     "UUID": <company uuid>
- *     "cvrnummer": <company cvr number>
- *     "id": {
- *         "domaene": <company domain>
- *     },
- *     registreringer: [
- *          {
- *              "registreringFra": <registrationFrom>,
- *              "registreringTil": <registrationTo>,
- *              "navn": [
- *              {
- *                  "navn": <companyName1>
- *                  "virkningFra": <effectFrom1>
- *                  "virkningTil": <effectTo1>
- *              },
- *              {
- *                  "navn": <companyName2>
- *                  "virkningFra": <effectFrom2>
- *                  "virkningTil": <effectTo2>
- *              }
- *              ]
- *          }
- *     ]
+ * "UUID": <company uuid>
+ * "cvrnummer": <company cvr number>
+ * "id": {
+ * "domaene": <company domain>
+ * },
+ * registreringer: [
+ * {
+ * "registreringFra": <registrationFrom>,
+ * "registreringTil": <registrationTo>,
+ * "navn": [
+ * {
+ * "navn": <companyName1>
+ * "virkningFra": <effectFrom1>
+ * "virkningTil": <effectTo1>
+ * },
+ * {
+ * "navn": <companyName2>
+ * "virkningFra": <effectFrom2>
+ * "virkningTil": <effectTo2>
+ * }
+ * ]
+ * }
+ * ]
  * }
  */
 @Component
@@ -49,7 +49,7 @@ public class CompanyRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyRe
     }
 
     @Override
-    protected void fillContainer(OutputContainer oContainer, CompanyRecord record) {
+    protected void fillContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         container.addNontemporal(CompanyRecord.IO_FIELD_CVR_NUMBER, record.getCvrNumber());
@@ -77,21 +77,23 @@ public class CompanyRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyRe
         container.addCvrBitemporal(CompanyRecord.IO_FIELD_FORM, record.getCompanyForm());
         container.addCvrBitemporal(CompanyRecord.IO_FIELD_STATUS, record.getStatus());
         container.addCvrBitemporal(CompanyRecord.IO_FIELD_COMPANYSTATUS, record.getCompanyStatus(), true);
-        container.addCvrBitemporal("livscyklusAktiv", record.getLifecycle(), this::createLifecycleNode);
-        container.addCvrBitemporal(CompanyRecord.IO_FIELD_YEARLY_NUMBERS, record.getYearlyNumbers());
-        container.addCvrBitemporal(CompanyRecord.IO_FIELD_QUARTERLY_NUMBERS, record.getQuarterlyNumbers());
-        container.addCvrBitemporal(CompanyRecord.IO_FIELD_MONTHLY_NUMBERS, record.getMonthlyNumbers());
-        container.addAttribute(CompanyRecord.IO_FIELD_ATTRIBUTES, record.getAttributes());
+        if (!DATAONLY.equals(mode)) {
+            container.addCvrBitemporal("livscyklusAktiv", record.getLifecycle(), this::createLifecycleNode);
+            container.addCvrBitemporal(CompanyRecord.IO_FIELD_YEARLY_NUMBERS, record.getYearlyNumbers());
+            container.addCvrBitemporal(CompanyRecord.IO_FIELD_QUARTERLY_NUMBERS, record.getQuarterlyNumbers());
+            container.addCvrBitemporal(CompanyRecord.IO_FIELD_MONTHLY_NUMBERS, record.getMonthlyNumbers());
+            container.addAttribute(CompanyRecord.IO_FIELD_ATTRIBUTES, record.getAttributes());
+            container.addNontemporal(CompanyRecord.IO_FIELD_DATA_ACCESS, record.getDataAccess());
+            container.addNontemporal(CompanyRecord.IO_FIELD_LAST_LOADED, record.getLastLoaded());
+            container.addNontemporal(CompanyRecord.IO_FIELD_LAST_UPDATED, record.getLastUpdated());
+            container.addNontemporal(CompanyRecord.IO_FIELD_LOADING_ERROR, record.getLoadingError());
+            container.addNontemporal(CompanyRecord.IO_FIELD_NEAREST_FUTURE_DATE, record.getNearestFutureDate());
+            container.addNontemporal(CompanyRecord.IO_FIELD_ERRORDESCRIPTION, record.getErrorDescription());
+            container.addNontemporal(CompanyRecord.IO_FIELD_EFFECT_AGENT, record.getEffectAgent());
+        }
         container.addCvrBitemporal(CompanyRecord.IO_FIELD_P_UNITS, record.getProductionUnits(), null, true, true);
         container.addNontemporal(CompanyRecord.IO_FIELD_SAMT_ID, record.getSamtId());
-        container.addNontemporal(CompanyRecord.IO_FIELD_REGISTER_ERROR, record.getRegisterError());
-        container.addNontemporal(CompanyRecord.IO_FIELD_DATA_ACCESS, record.getDataAccess());
-        container.addNontemporal(CompanyRecord.IO_FIELD_LAST_LOADED, record.getLastLoaded());
-        container.addNontemporal(CompanyRecord.IO_FIELD_LAST_UPDATED, record.getLastUpdated());
-        container.addNontemporal(CompanyRecord.IO_FIELD_LOADING_ERROR, record.getLoadingError());
-        container.addNontemporal(CompanyRecord.IO_FIELD_NEAREST_FUTURE_DATE, record.getNearestFutureDate());
-        container.addNontemporal(CompanyRecord.IO_FIELD_ERRORDESCRIPTION, record.getErrorDescription());
-        container.addNontemporal(CompanyRecord.IO_FIELD_EFFECT_AGENT, record.getEffectAgent());
+        //container.addNontemporal(CompanyRecord.IO_FIELD_REGISTER_ERROR, record.getRegisterError());
         /*
         participants
         fusions
@@ -100,7 +102,7 @@ public class CompanyRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyRe
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, CompanyRecord record) {
+    protected void fillMetadataContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         CompanyMetadataRecord meta = record.getMetadata();
@@ -114,12 +116,14 @@ public class CompanyRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyRe
         container.addCvrBitemporal(CompanyMetadataRecord.IO_FIELD_NEWEST_STATUS, Collections.singleton(meta.getNewestStatus()));
         container.addCvrNontemporal(CompanyMetadataRecord.IO_FIELD_NEWEST_CONTACT_DATA, meta.getMetadataContactRecords(), null, true, true);
         container.addNontemporal(CompanyMetadataRecord.IO_FIELD_UNIT_COUNT, meta.getUnitCount());
-        container.addCvrBitemporal(CompanyMetadataRecord.IO_FIELD_NEWEST_YEARLY_NUMBERS, Collections.singleton(meta.getNewestYearlyNumbers()));
-        container.addCvrBitemporal(CompanyMetadataRecord.IO_FIELD_NEWEST_QUARTERLY_NUMBERS, Collections.singleton(meta.getNewestQuarterlyNumbers()));
-        container.addCvrBitemporal(CompanyMetadataRecord.IO_FIELD_NEWEST_MONTHLY_NUMBERS, Collections.singleton(meta.getNewestMonthlyNumbers()));
-        container.addNontemporal(CompanyMetadataRecord.IO_FIELD_AGGREGATE_STATUS, meta.getAggregateStatus());
-        container.addNontemporal(CompanyMetadataRecord.IO_FIELD_FOUNDING_DATE, meta.getFoundingDate());
-        container.addNontemporal(CompanyMetadataRecord.IO_FIELD_EFFECT_DATE, meta.getEffectDate());
+        if (!DATAONLY.equals(mode)) {
+            container.addCvrBitemporal(CompanyMetadataRecord.IO_FIELD_NEWEST_YEARLY_NUMBERS, Collections.singleton(meta.getNewestYearlyNumbers()));
+            container.addCvrBitemporal(CompanyMetadataRecord.IO_FIELD_NEWEST_QUARTERLY_NUMBERS, Collections.singleton(meta.getNewestQuarterlyNumbers()));
+            container.addCvrBitemporal(CompanyMetadataRecord.IO_FIELD_NEWEST_MONTHLY_NUMBERS, Collections.singleton(meta.getNewestMonthlyNumbers()));
+            container.addNontemporal(CompanyMetadataRecord.IO_FIELD_AGGREGATE_STATUS, meta.getAggregateStatus());
+            container.addNontemporal(CompanyMetadataRecord.IO_FIELD_FOUNDING_DATE, meta.getFoundingDate());
+            container.addNontemporal(CompanyMetadataRecord.IO_FIELD_EFFECT_DATE, meta.getEffectDate());
+        }
     }
 
 }

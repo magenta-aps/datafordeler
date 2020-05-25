@@ -20,6 +20,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.eboks.utils.FilterUtilities;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
@@ -110,7 +111,7 @@ public class EboksRecieveLookupService {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
                     } else if (FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus() == 90) {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
-                    } else if (FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
+                    } else if (k.getAddress().size()==0 || FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
                     } else {
                         validCprList.add(k.getPersonnummer());
@@ -146,7 +147,12 @@ public class EboksRecieveLookupService {
 
                 companyEntities.forEach((k) -> {
                     String cvrNumber = Integer.toString(k.getCvrNumber());
-                    if (FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress()).getMunicipality().getMunicipalityCode() >= 950) {
+
+                    AddressRecord adress = FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress());
+                    if(adress==null) {
+                        adress = FilterUtilities.findNewestUnclosedCvr(k.getPostalAddress());
+                    }
+                    if (adress.getMunicipality().getMunicipalityCode() >= 950) {
                         cvrList.add(cvrNumber);
                     } else {
                         failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));

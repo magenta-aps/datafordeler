@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -121,7 +122,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
 
 
-    protected OutputWrapper<E> getOutputWrapper() {
+    public OutputWrapper<E> getOutputWrapper() {
         return outputWrapper;
     }
 
@@ -133,7 +134,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     private Logger log = LogManager.getLogger(FapiBaseService.class.getCanonicalName());
 
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.RVD;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
 
@@ -210,9 +211,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addUserData(user);
             envelope.addRequestData(request);
             try {
-                List<E> results = this.searchByQuery(query, session);
+                List<ResultSet<E>> results = this.searchByQuery(query, session);
                 if (this.getOutputWrapper() != null) {
-                    envelope.setResults(this.getOutputWrapper().wrapResults(results, query, this.getDefaultMode()));
+                    envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, this.getDefaultMode()));
                 } else {
                     ArrayNode jacksonConverted = objectMapper.valueToTree(results);
                     ArrayList<Object> wrapper = new ArrayList<>();
@@ -293,6 +294,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @return Found Entity, or null if none found.
      */
     // TODO: How to use DafoUserDetails with SOAP requests?
+    /*
     @WebMethod(operationName = "get")
     public Envelope getSoap(@WebParam(name="id") @XmlElement(required=true) String id,
                      @WebParam(name="registeringFra") @XmlElement(required = false) String registeringFra,
@@ -341,7 +343,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             session.close();
         }
         return envelope;
-    }
+    }*/
 
 
     /**
@@ -376,16 +378,19 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                     "Incoming REST request for " + this.getServiceName() + " with query " + requestParams.toString()
             );
             this.checkAndLogAccess(loggerHelper);
+
             Q query = this.getQuery(requestParams, false);
             this.applyAreaRestrictionsToQuery(query, user);
             envelope.addQueryData(query);
             envelope.addUserData(user);
             envelope.addRequestData(request);
-            List<E> results = this.searchByQuery(query, session);
+            List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
-                envelope.setResults(this.getOutputWrapper().wrapResults(results, query, query.getMode(this.getDefaultMode())));
+                this.log.info("Wrapping resultset with "+this.getOutputWrapper().getClass().getCanonicalName());
+                envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
-                ArrayNode jacksonConverted = objectMapper.valueToTree(results);
+                this.log.info("No outputwrapper defined for "+this.getClass().getCanonicalName()+", not wrapping output");
+                ArrayNode jacksonConverted = objectMapper.valueToTree(results.stream().map(resultset -> resultset.getPrimaryEntity()).collect(Collectors.toList()));
                 ArrayList<Object> wrapper = new ArrayList<>();
                 for (JsonNode node : jacksonConverted) {
                     wrapper.add(node);
@@ -467,9 +472,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addQueryData(query);
             envelope.addUserData(user);
             envelope.addRequestData(request);
-            List<E> results = this.searchByQuery(query, session);
+            List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
-                envelope.setResult(this.getOutputWrapper().wrapResults(results, query, query.getMode(this.getDefaultMode())));
+                envelope.setResult(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
                 envelope.setResults(results);
             }
@@ -501,7 +506,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      */
     protected Q getQuery(MultiValueMap<String, String> parameters, boolean limitsOnly) throws InvalidClientInputException {
         Q query = this.getEmptyQuery();
-        ParameterMap parameterMap = new ParameterMap(parameters);
+        ParameterMap parameterMap = new ParameterMap(parameters, true);
         query.fillFromParameters(parameterMap, limitsOnly);
         return query;
     }
@@ -519,12 +524,8 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     //@WebMethod(exclude = true)
     //protected abstract Set<E> searchByQuery(Q query);
     @WebMethod(exclude = true) // Non-soap methods must have this
-    protected List<E> searchByQuery(Q query, Session session) {
-        query.applyFilters(session);
-        return QueryManager.getAllEntities(
-                session, query,
-                this.getEntityClass()
-        );
+    public List<ResultSet<E>> searchByQuery(Q query, Session session) {
+        return QueryManager.getAllEntitySets(session, query, this.getEntityClass());
     }
 
     /**
@@ -536,7 +537,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     //protected abstract Set<E> searchByQuery(Q query);
     @WebMethod(exclude = true) // Non-soap methods must have this
     protected Stream<E> searchByQueryAsStream(Q query, Session session) {
-        query.applyFilters(session);
         return QueryManager.getAllEntitiesAsStream(
                 session, query,
                 this.getEntityClass()
@@ -604,17 +604,14 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
         List<MediaType> acceptedTypes = MediaType.parseMediaTypes(request.getHeader("Accept"));
 
-        Set<String> omitEntityKeys = Collections.singleton("domain");
+        Set<String> omitEntityKeys = new HashSet<>();
+        omitEntityKeys.add("domain");
+        omitEntityKeys.add("domæne");
         BaseQuery baseQuery = this.getEmptyQuery();
         Iterator<Map<String, String>> dataIter = entities.map(e -> {
             List<Map<String, String>> rows = new ArrayList<>();
             Object wrapped = FapiBaseService.this.getOutputWrapper().wrapResult(e, baseQuery, OutputWrapper.Mode.RVD);
             ObjectNode entityNode = (ObjectNode) wrapped;
-            try {
-                System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entityNode));
-            } catch (JsonProcessingException e1) {
-                e1.printStackTrace();
-            }
             ArrayNode registrations = (ArrayNode) entityNode.get("registreringer");
             if (registrations != null) {
                 for (int i = 0; i < registrations.size(); i++) {
@@ -629,7 +626,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                                     output.putAll(objectNodeToFlatMap(effectNode, null));
                                     output.putAll(objectNodeToFlatMap(registrationNode, null));
                                     output.putAll(objectNodeToFlatMap(entityNode, omitEntityKeys));
-                                    System.out.println(output);
                                     rows.add(output);
                                 }
                             }
@@ -701,7 +697,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
         while (dataIter.hasNext()) {
             Map<String, String> data = dataIter.next();
-            System.out.println("data: "+data);
             writer.write(data);
         }
     }

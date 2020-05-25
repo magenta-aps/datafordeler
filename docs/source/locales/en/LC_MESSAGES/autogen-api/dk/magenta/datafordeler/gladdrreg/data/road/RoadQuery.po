@@ -1,0 +1,128 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:16
+msgid "RoadQuery"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:23
+msgid "Created by lars on 19-05-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:26
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:28
+msgid "ALTERNATE_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:34
+msgid "CODE"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:40
+msgid "CPR_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:46
+msgid "MUNICIPALITY_ID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:52
+msgid "NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:58
+msgid "SHORT_NAME"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:64
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:66
+msgid "getAlternateName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:72
+msgid "getCode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:78
+msgid "getCprName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:84
+msgid "getDataClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:90
+msgid "getEntityClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:96
+msgid "getLookupDefinition"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:102
+msgid "getMunicipalityIdentifier"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:108
+msgid "getName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:114
+msgid "getSearchParameters"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:120
+msgid "getShortName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:126
+msgid "setAlternateName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:132
+msgid "setCode"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:138
+msgid "setCprName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:144
+msgid "setFromParameters"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:150
+msgid "setMunicipalityIdentifier"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:156
+msgid "setName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/gladdrreg/data/road/RoadQuery.rst:162
+msgid "setShortName"
+msgstr ""
+

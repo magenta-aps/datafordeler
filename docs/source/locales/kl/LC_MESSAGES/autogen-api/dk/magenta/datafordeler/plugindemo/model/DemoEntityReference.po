@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/plugindemo/model/DemoEntityReference.rst:14
+msgid "DemoEntityReference"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/plugindemo/model/DemoEntityReference.rst:21
+msgid "Created by lars on 03-04-17."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/plugindemo/model/DemoEntityReference.rst:24
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/plugindemo/model/DemoEntityReference.rst:26
+msgid "getEntityClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/plugindemo/model/DemoEntityReference.rst:32
+msgid "getType"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/plugindemo/model/DemoEntityReference.rst:38
+msgid "setObjectId"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/plugindemo/model/DemoEntityReference.rst:44
+msgid "setRegistrations"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/plugindemo/model/DemoEntityReference.rst:50
+msgid "toString"
+msgstr ""
+

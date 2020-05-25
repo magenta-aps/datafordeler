@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.statistik.queries.PersonStatusQuery;
 import dk.magenta.datafordeler.statistik.utils.Filter;
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -148,7 +149,11 @@ public class StatusDataService extends PersonStatisticsService {
         // Loop over the list of registrations (which is already sorted (by time, ascending))
         NameDataRecord nameDataRecord = filter(person.getName(), filter);
         if(nameDataRecord!=null) {
-            item.put(FIRST_NAME, nameDataRecord.getFirstNames());
+            String firstname = nameDataRecord.getFirstNames();
+            if(!StringUtils.isEmpty(nameDataRecord.getMiddleName())) {
+                firstname += " "+nameDataRecord.getMiddleName();
+            }
+            item.put(FIRST_NAME, firstname);
             item.put(LAST_NAME, nameDataRecord.getLastName());
         }
 

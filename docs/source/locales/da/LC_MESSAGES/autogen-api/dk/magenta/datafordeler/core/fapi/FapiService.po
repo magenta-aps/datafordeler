@@ -1,0 +1,359 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:64
+msgid "FapiService"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:71
+msgid ""
+"Created by lars on 19-04-17. Service container to be subclassed for each "
+"Entity class, serving REST and SOAP"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:74
+msgid "Fields"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:76
+msgid "context"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:82
+msgid "objectMapper"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:88
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:90
+msgid "applyAreaRestrictionsToQuery"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:96
+msgid "checkAccess"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:101
+msgid "Checks that the user has access to the service"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst
+msgid "Parametre"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:103
+msgid "DafoUserDetails object representing the user provided from a SAML token."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst
+msgid "Kaster"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:104
+msgid ""
+"Implementing this method as a noop will make the service publicly "
+"accessible."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:107
+msgid "checkAndLogAccess"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:113
+msgid "getDataClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:118
+msgid "Obtains the DataItem class that the service handles."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst
+msgid "Returnerer"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:120
+msgid "DataItem subclass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:123
+msgid "getDebugDisableSecurity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:129
+msgid "getEmptyQuery"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:134
+msgid "Obtain an empty Query instance of the correct subclass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:136
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:170
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:181
+msgid "Query subclass instance"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:139
+msgid "getEntityClass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:144
+msgid "Obtains the Entity class that the service handles."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:146
+msgid "Entity subclass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:149
+msgid "getOutputWrapper"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:155
+msgid "getPlugin"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:161
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:173
+msgid "getQuery"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:166
+msgid "Parse a registration boundary into a Query object of the correct subclass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:168
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:246
+msgid "Low boundary for registration inclusion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:169
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:247
+msgid "High boundary for registration inclusion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:178
+msgid "Parse a map of URL parameters into a Query object of the correct subclass"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:180
+msgid "URL parameters received in a request"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:184
+msgid "getRest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:189
+msgid ""
+"Handle a lookup-by-UUID request in REST. This method is called by the "
+"Servlet"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:191
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:245
+msgid "Identifier coming from the client"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:192
+msgid "url parameters"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:193
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:248
+msgid "Found Entity, or null if none found."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:196
+msgid "getRestCSV"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:201
+msgid "Handle a lookup-by-UUID request in REST, returning CSV text."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:203
+msgid ""
+"**See also:** "
+":java:ref:`.getRest(String,MultiValueMap,HttpServletRequest)`"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:206
+msgid "getServiceDescriptor"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:212
+msgid "getServiceName"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:217
+msgid ""
+"Obtains the name of the service. This will be used in the path that "
+"requests may interface with"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:219
+msgid "service name, e.g. \"postnummer\""
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:222
+msgid "getServicePaths"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:228
+msgid "getSessionManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:233
+msgid "Obtains the autowired SessionManager"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:235
+msgid "SessionManager instance"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:238
+msgid "getSoap"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:243
+msgid ""
+"Handle a lookup-by-UUID request in SOAP. This method is called by the "
+"Servlet"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:251
+msgid "getVersion"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:256
+msgid ""
+"Obtains the version number of the service. This will be used in the path "
+"that requests may interface with"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:258
+msgid "service version, e.g. 1"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:261
+msgid "index"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:267
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:279
+msgid "searchById"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:272
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:284
+msgid "Perform a search for Entities by id"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:274
+msgid "Identifier to search by. Must be parseable as a UUID"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:275
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:287
+msgid "Query object modifying the output (such as a bitemporal range)"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:276
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:288
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:299
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:310
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:321
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:342
+msgid "Found Entities"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:286
+msgid "Identifier to search by"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:291
+msgid "searchByQuery"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:296
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:307
+msgid "Perform a search for Entities by a Query object"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:298
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:309
+msgid "Query objects to search by"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:302
+msgid "searchByQueryAsStream"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:313
+msgid "searchRest"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:318
+msgid ""
+"Handle a lookup-by-parameters request in REST. This method is called by "
+"the Servlet"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:320
+msgid "Request Parameters from spring boot"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:324
+msgid "searchRestCSV"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:329
+msgid "Handle a lookup-by-parameters request in REST, outputting CSV text."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:331
+msgid "**See also:** :java:ref:`.searchRest(MultiValueMap,HttpServletRequest)`"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:334
+msgid "searchSoap"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:339
+msgid ""
+"Handle a lookup-by-parameters request in SOAP. This method is called by "
+"the Servlet"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:341
+msgid "Query object specifying search parameters"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:345
+msgid "sendAsCSV"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/fapi/FapiService.rst:351
+msgid "setOutputWrapper"
+msgstr ""
+

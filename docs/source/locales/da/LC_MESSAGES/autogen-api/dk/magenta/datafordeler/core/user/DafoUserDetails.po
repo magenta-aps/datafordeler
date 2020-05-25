@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2017, Magenta ApS
+# This file is distributed under the same license as the datafordeler
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: datafordeler 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-30 15:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.4.0\n"
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:14
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:26
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:32
+msgid "DafoUserDetails"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:21
+msgid "Created by jubk on 12-06-2017."
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:24
+msgid "Constructors"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:38
+msgid "Methods"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:40
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:46
+msgid "checkHasSystemRole"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:52
+msgid "checkHasUserProfile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:58
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:64
+msgid "getAreaRestrictionsForRole"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:70
+msgid "getCreationTime"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:76
+msgid "getIdentity"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:82
+msgid "getNameQualifier"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:88
+msgid "getOnBehalfOf"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:94
+msgid "getSystemRoles"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:100
+msgid "getUserProfiles"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:106
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:112
+msgid "getUserProfilesForRole"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:118
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:124
+msgid "hasSystemRole"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:130
+msgid "hasUserProfile"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:136
+msgid "isAnonymous"
+msgstr ""
+
+#: ../../source/autogen-api/dk/magenta/datafordeler/core/user/DafoUserDetails.rst:142
+msgid "toString"
+msgstr ""
+

@@ -21,6 +21,10 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + SecNameRecord.TABLE_NAME + "__companyunit", columnList = SecNameRecord.DB_FIELD_COMPANYUNIT + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + SecNameRecord.TABLE_NAME + "__participant", columnList = SecNameRecord.DB_FIELD_PARTICIPANT + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + SecNameRecord.TABLE_NAME + "__data", columnList = SecNameRecord.DB_FIELD_NAME),
+
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + SecNameRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + SecNameRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + SecNameRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SecNameRecord extends CvrBitemporalDataRecord {

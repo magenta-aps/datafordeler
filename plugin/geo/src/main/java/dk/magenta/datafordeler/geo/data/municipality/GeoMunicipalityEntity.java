@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.RawData;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
@@ -30,6 +31,10 @@ import java.util.UUID;
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + GeoMunicipalityEntity.TABLE_NAME + GeoMunicipalityEntity.DB_FIELD_CODE,
                 columnList = GeoMunicipalityEntity.DB_FIELD_CODE
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + GeoMunicipalityEntity.TABLE_NAME + GeoMunicipalityEntity.DB_FIELD_DAFO_UPDATED,
+                columnList = GeoMunicipalityEntity.DB_FIELD_DAFO_UPDATED
         ),
 })
 public class GeoMunicipalityEntity extends SumiffiikEntity implements IdentifiedEntity {
@@ -81,10 +86,10 @@ public class GeoMunicipalityEntity extends SumiffiikEntity implements Identified
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_NAME)
-    Set<MunicipalityNameRecord> name = new HashSet<>();
+    private Set<MunicipalityNameRecord> name = new HashSet<>();
 
-    public Set<MunicipalityNameRecord> getName() {
-        return this.name;
+    public MonotemporalSet<MunicipalityNameRecord> getName() {
+        return new MonotemporalSet<>(this.name);
     }
 
 
@@ -111,10 +116,10 @@ public class GeoMunicipalityEntity extends SumiffiikEntity implements Identified
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
     @JsonProperty(IO_FIELD_SHAPE)
-    Set<MunicipalityShapeRecord> shape = new HashSet<>();
+    private Set<MunicipalityShapeRecord> shape = new HashSet<>();
 
-    public Set<MunicipalityShapeRecord> getShape() {
-        return this.shape;
+    public MonotemporalSet<MunicipalityShapeRecord> getShape() {
+        return new MonotemporalSet<>(this.shape);
     }
 
 

@@ -20,6 +20,7 @@ import org.opensaml.xml.XMLObjectBuilder;
 import org.opensaml.xml.io.Marshaller;
 import org.opensaml.xml.io.MarshallerFactory;
 import org.opensaml.xml.io.MarshallingException;
+import org.opensaml.xml.schema.XSInteger;
 import org.opensaml.xml.schema.XSString;
 import org.opensaml.xml.security.SecurityHelper;
 import org.opensaml.xml.security.credential.UsageType;
@@ -34,10 +35,12 @@ import org.opensaml.xml.signature.impl.X509CertificateBuilder;
 import org.opensaml.xml.signature.impl.X509DataBuilder;
 import org.opensaml.xml.util.Base64;
 import org.opensaml.xml.util.XMLHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.ClassPathResource;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.namespace.QName;
 import java.io.*;
 import java.security.KeyFactory;
@@ -54,11 +57,17 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
+import static dk.magenta.dafosts.library.DatabaseQueryManager.INVALID_TOKEN_ID;
+
 @EnableConfigurationProperties(TokenGeneratorProperties.class)
 public class DafoTokenGenerator {
 
     public static String USERPROFILE_CLAIM_URL = "https://data.gl/claims/userprofile";
     public static String ON_BEHALF_OF_CLAIM_URL = "https://data.gl/claims/on-behalf-of";
+    public static String TOKEN_ID_CLAIM_URL = "https://data.gl/claims/token-id";
+
+    @Autowired
+    DatabaseQueryManager databaseQueryManager;
 
     TokenGeneratorProperties properties;
 
@@ -151,7 +160,7 @@ public class DafoTokenGenerator {
         SubjectConfirmationData confirmationMethod = (SubjectConfirmationData) builder.buildObject();
         // NotBefore is not allowed for BEARER tokens
         // confirmationMethod.setNotBefore(now);
-        confirmationMethod.setNotOnOrAfter(now.plusMinutes(10));
+        confirmationMethod.setNotOnOrAfter(now.plusSeconds(properties.getTokenLifetimeInSeconds()));
 
         return confirmationMethod;
     }
@@ -266,14 +275,31 @@ public class DafoTokenGenerator {
         return attr;
     }
 
+    public Attribute buildIntAttribute(String name, int value) {
+        SAMLObjectBuilder attrBuilder = getObjectBuilder(Attribute.DEFAULT_ELEMENT_NAME);
+        Attribute attr = (Attribute) attrBuilder.buildObject();
+        attr.setName(name);
+        XMLObjectBuilder valueBuilder = Configuration.getBuilderFactory().getBuilder(XSInteger.TYPE_NAME);
+        XSInteger attrValue = (XSInteger) valueBuilder.buildObject(
+                AttributeValue.DEFAULT_ELEMENT_NAME, XSInteger.TYPE_NAME
+        );
+        attrValue.setValue(value);
+        attr.getAttributeValues().add(attrValue);
+
+        return attr;
+    }
+
     /**
      * Builds the AttributeStatement part of a token
      * @param user - The user identified by the bootstrap token.
      * @return A populated AttributeStatement object
      */
-    public AttributeStatement buildAttributeStatement(DafoUserData user) {
+    public AttributeStatement buildAttributeStatement(int tokenId, DafoUserData user) {
         SAMLObjectBuilder attrStatementBuilder = getObjectBuilder(AttributeStatement.DEFAULT_ELEMENT_NAME);
         AttributeStatement attrStatement = (AttributeStatement) attrStatementBuilder.buildObject();
+
+        Attribute tokenIdAttribute = buildIntAttribute(TOKEN_ID_CLAIM_URL, tokenId);
+        attrStatement.getAttributes().add(tokenIdAttribute);
 
         if(user != null) {
             Collection<String> userProfiles = user.getUserProfiles();
@@ -302,7 +328,7 @@ public class DafoTokenGenerator {
         Conditions conditions = (Conditions) conditionsBuilder.buildObject();
 
         conditions.setNotBefore(now);
-        conditions.setNotOnOrAfter(now.plusMinutes(10));
+        conditions.setNotOnOrAfter(now.plusSeconds(properties.getTokenLifetimeInSeconds()));
 
         conditions.getConditions().add(buildAudienceRestrictionCondition());
 
@@ -353,7 +379,11 @@ public class DafoTokenGenerator {
      * @return A populated Assertion object
      * @throws Exception
      */
-    public Assertion buildAssertion(DafoUserData user) throws Exception {
+    public Assertion buildAssertion(DafoUserData user, HttpServletRequest request) throws Exception {
+        int tokenId = INVALID_TOKEN_ID;
+        if(request != null) {
+            tokenId = databaseQueryManager.registerPendingToken(user, request);
+        }
 
         SAMLObjectBuilder assertionBuilder = getObjectBuilder(Assertion.DEFAULT_ELEMENT_NAME);
         Assertion assertion = (Assertion) assertionBuilder.buildObject();
@@ -363,13 +393,27 @@ public class DafoTokenGenerator {
         assertion.setVersion(SAMLVersion.VERSION_20);
 
         assertion.getAuthnStatements().add(buildAuthnStatement(now));
-        assertion.getAttributeStatements().add(buildAttributeStatement(user));
+        assertion.getAttributeStatements().add(buildAttributeStatement(tokenId, user));
 
         assertion.setSubject(buildSubject(user, now));
 
         assertion.setConditions(buildConditions(now));
 
         return assertion;
+    }
+
+    /**
+     * Converts the given token to a deflated and encoded string, stores the generated token
+     * in the database and return thes deflated and encoded string.
+     * @param assertion - The Assertion to save
+     * @return A String with deflated and encoded token data
+     * @throws Exception
+     */
+    public String saveGeneratedToken(Assertion assertion) throws Exception {
+        String deflatedAndEncodedToken = deflateAndEncode(getTokenXml(assertion));
+        databaseQueryManager.updateRegisteredToken(assertion, deflatedAndEncodedToken);
+
+        return deflatedAndEncodedToken;
     }
 
     /**
@@ -389,21 +433,6 @@ public class DafoTokenGenerator {
         assertion.setSignature(signature);
         Configuration.getMarshallerFactory().getMarshaller(assertion).marshall(assertion);
         Signer.signObject(signature);
-    }
-
-
-    /**
-     * Generates the XML for a signed SAML2 Assertion
-     * @param user - The user identified by the bootstrap token
-     * @return A valid signed SAML2 assertion as an XML string
-     * @throws Exception
-     */
-    public String getTokenXml(DafoUserData user) throws Exception {
-        Assertion assertion = buildAssertion(user);
-        signAssertion(assertion);
-
-        ResponseMarshaller marshaller = new ResponseMarshaller();
-        return XMLHelper.nodeToString(marshaller.marshall(assertion));
     }
 
 

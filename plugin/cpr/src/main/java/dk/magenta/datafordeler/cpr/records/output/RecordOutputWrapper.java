@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.function.Function;
 
 @Component
+@Deprecated
 public abstract class RecordOutputWrapper<E extends CprEntity> extends OutputWrapper<E> {
 
     public static final String EFFECTS = "virkninger";
@@ -41,7 +42,7 @@ public abstract class RecordOutputWrapper<E extends CprEntity> extends OutputWra
 
     public abstract Set<String> getRemoveFieldNames();
 
-    protected abstract void fillContainer(OutputContainer container, E item);
+    protected abstract void fillContainer(OutputContainer container, E item, Mode mode);
 
     protected abstract ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, CprBitemporality mustContain);
 
@@ -327,7 +328,7 @@ public abstract class RecordOutputWrapper<E extends CprEntity> extends OutputWra
         root.put(Entity.IO_FIELD_UUID, record.getIdentification().getUuid().toString());
         root.put(Entity.IO_FIELD_DOMAIN, record.getIdentification().getDomain());
         OutputContainer recordOutput = new OutputContainer();
-        this.fillContainer(recordOutput, record);
+        this.fillContainer(recordOutput, record, mode);
         root.setAll(recordOutput.getBase());
         switch (mode) {
             case RVD:

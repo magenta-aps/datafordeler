@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.prisme;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -147,7 +148,7 @@ public class CprTest extends TestBase {
     public void test1PersonRecordOutput() throws Exception {
 
         Session session = sessionManager.getSessionFactory().openSession();
-        GeoLookupService lookupService = new GeoLookupService(session);
+        GeoLookupService lookupService = new GeoLookupService(sessionManager);
         personOutputWrapper.setLookupService(lookupService);
         try {
             String ENTITY = "e";
@@ -393,11 +394,11 @@ public class CprTest extends TestBase {
         cprList.add("0000000002");
         cprList.add("0000000003");
         cprList.add("0000000004");
-        cprList.add("0000000015");
-        cprList.add("0000000016");
-        cprList.add("0000000017");
-        cprList.add("0000000018");
-        cprList.add("0000000019");
+        cprList.add("0000000005");
+        cprList.add("0000000006");
+        cprList.add("0000000007");
+        cprList.add("0000000008");
+        cprList.add("0000000009");
         body.set("cprNumber", cprList);
         body.put("updatedSince", middle.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
@@ -527,7 +528,7 @@ public class CprTest extends TestBase {
     @Test
     public void testDirectLookup3() throws Exception {
 
-        String data = "038406uKBKxWLcWUDI0178001104000000000000003840120190815000000000010607623197          90200502051034 M1962-07-06 2005-10-20                                              0030607621234Petersen,Mads Munk                                                                                                                                                                                                                          0080607621234Mads                                               Munk                                     Petersen                                 196207061029 Petersen,Mads Munk                00906076212345180                    01006076212345180196207061029*0110607621234U1962-07-06 0120607621234D0506650038                                              200502051034             01406076212340506871018014060762123405089210040140607621234060794106801406076212340705901007014060762123407059600110140607621234080789104901506076212341962-07-06*0000000000                                              1962-07-06*0000000000                                              999999999999900000014";
+        String data = "038406uKBKxWLcWUDI0178001104000000000000003840120190815000000000010607621234          90200502051034 M1962-07-06 2005-10-20                                              0030607621234Petersen,Mads Munk                                                                                                                                                                                                                          0080607621234Mads                                               Munk                                     Petersen                                 196207061029 Petersen,Mads Munk                00906076212345180                    01006076212345180196207061029*0110607621234U1962-07-06 0120607621234D0506650038                                              200502051034             01406076212340506871018014060762123405089210040140607621234060794106801406076212340705901007014060762123407059600110140607621234080789104901506076212341962-07-06*0000000000                                              1962-07-06*0000000000                                              999999999999900000014";
 
         Mockito.doReturn(data).when(cprDirectLookup).lookup(ArgumentMatchers.eq("0607621234"));
         TestUserDetails testUserDetails = new TestUserDetails();
@@ -705,5 +706,27 @@ public class CprTest extends TestBase {
         } finally {
             session.close();
         }
+    }
+
+    @Test
+    public void testMoveHistoryPrisme() throws Exception {
+        loadPerson("/adressChangeHistory.txt");
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/addresshistory/1/" + "0101011234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectNode responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
+        Assert.assertEquals("0101011234", responseObject.get("cprNummer").asText());
+        JsonNode adressList = responseObject.get("addresses");
+        Assert.assertEquals(18, adressList.size());
+        System.out.println(response.getBody());
     }
 }

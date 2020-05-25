@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.FixedQueueMap;
 import dk.magenta.datafordeler.core.util.ListHashMap;
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -38,7 +40,8 @@ import java.util.stream.Stream;
 @javax.persistence.Entity
 @Table(name= CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_entity", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_identification", columnList = PersonEntity.DB_FIELD_IDENTIFICATION, unique = true),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true)
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED, columnList = PersonEntity.DB_FIELD_DAFO_UPDATED)
 })
 @FilterDefs({
         @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
@@ -54,6 +57,8 @@ import java.util.stream.Stream;
 })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PersonEntity extends CprRecordEntity {
+
+    public static final String TABLE_NAME = "cpr_person_entity";
 
     public PersonEntity() {
     }
@@ -72,11 +77,11 @@ public class PersonEntity extends CprRecordEntity {
     public static final String schema = "Person";
 
     public static final String DB_FIELD_CPR_NUMBER = "personnummer";
-    public static final String IO_FIELD_CPR_NUMBER = "personnummer";
+    public static final String IO_FIELD_CPR_NUMBER = "pnr";
 
     @Column(name = DB_FIELD_CPR_NUMBER)
-    @JsonProperty("personnummer")
-    @XmlElement(name=("personnummer"))
+    @JsonProperty(IO_FIELD_CPR_NUMBER)
+    @XmlElement(name=(IO_FIELD_CPR_NUMBER))
     private String personnummer;
 
     public String getPersonnummer() {
@@ -141,7 +146,7 @@ public class PersonEntity extends CprRecordEntity {
     }
 
     public static final String DB_FIELD_ADDRESS_NAME = "addressName";
-    public static final String IO_FIELD_ADDRESS_NAME = "addresseringsnavn";
+    public static final String IO_FIELD_ADDRESS_NAME = "adresseringsnavn";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
@@ -607,7 +612,7 @@ public class PersonEntity extends CprRecordEntity {
     }
 
     public static final String DB_FIELD_CORE = "person";
-    public static final String IO_FIELD_CORE = "kernedata";
+    public static final String IO_FIELD_CORE = "køn";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
@@ -854,6 +859,9 @@ public class PersonEntity extends CprRecordEntity {
         }
         if (added) {
             record.setEntity(this);
+            if (record.getDafoUpdated() != null && (this.getDafoUpdated() == null || record.getDafoUpdated().isAfter(this.getDafoUpdated()))) {
+                this.setDafoUpdated(record.getDafoUpdated());
+            }
         }
 
     }
@@ -864,8 +872,8 @@ public class PersonEntity extends CprRecordEntity {
     private static <E extends CprBitemporalPersonRecord> boolean addItem(PersonEntity entity, Set<E> set, CprBitemporalPersonRecord newItem, Session session, boolean compareExisting) {
 
         /*
-        * Technical
-        * */
+         * Technical
+         * */
         ListHashMap<OffsetDateTime, CprBitemporalPersonRecord> recentTechnicalCorrectionRecords = recentTechnicalCorrections.get(entity);
         if (recentTechnicalCorrectionRecords == null) {
             recentTechnicalCorrectionRecords = new ListHashMap<>();
@@ -907,7 +915,7 @@ public class PersonEntity extends CprRecordEntity {
                                     Equality.equal(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
                                     oldItem.getCorrectionof() == null &&
                                     correctingRecord == null
-                            ) {
+                    ) {
                         // The new record with corrected data is the first record with the same origin that shares registration
                         correctingRecord = oldItem;
                     } else if (newItem.equalData(oldItem) && !Objects.equals(newItem.getOrigin(), oldItem.getOrigin())) {
@@ -919,13 +927,14 @@ public class PersonEntity extends CprRecordEntity {
                 /*
                  * Item marking that a previous record should be undone by setting a flag on it, enabling lookups to ignore it
                  * */
-                else if (newItem.isUndo() && Equality.equal(newItem.getEffectFrom(), oldItem.getEffectFrom()) && newItem.equalData(oldItem) && oldItem.getReplacedby() == null) {
+                else if (newItem.isUndo() && Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom()) && newItem.equalData(oldItem) && oldItem.getReplacedby() == null) {
                     // Annkor: A
                     oldItem.setUndone(true);
                     session.saveOrUpdate(oldItem);
                     return false;
                 }
-
+                //If we get the same adress again we need to figure out if we already got the information,
+                // or the person is moving to the same adress again
                 else if (newItem.equalData(oldItem)) {
                     /*
                      * Historic item matching prior current item. This means we have the prior item ended, and should set registrationTo
@@ -933,11 +942,11 @@ public class PersonEntity extends CprRecordEntity {
                      * */
                     if (
                             newItem.isHistoric() && !oldItem.isHistoric() &&
-                            //Equality.equal(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
-                            Equality.equalDate(newItem.getEffectFrom(), oldItem.getEffectFrom()) && oldItem.getEffectTo() == null &&
-                            !Equality.equalDate(newItem.getEffectFrom(), newItem.getEffectTo())
-                            && oldItem.getReplacedby() == null
-                            ) {
+                                    //Equality.equal(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
+                                    Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom()) && oldItem.getEffectTo() == null &&
+                                    !Equality.cprDomainEqualDate(newItem.getEffectFrom(), newItem.getEffectTo())
+                                    && oldItem.getReplacedby() == null
+                    ) {
                         //I would expect that this case is wrong, why let a historic overwrite an nonhistoric
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
@@ -957,10 +966,9 @@ public class PersonEntity extends CprRecordEntity {
                         return set.add((E) newItem);
 
                     } else if (
-                            Equality.equalDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
-                                    (Equality.equalDate(newItem.getRegistrationTo(), oldItem.getRegistrationTo()) || newItem.getRegistrationTo() == null) &&
-                                    Equality.equalDate(newItem.getEffectFrom(), oldItem.getEffectFrom()) &&
-                                    newItem.getEffectTo() == null
+                            Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
+                                    (Equality.cprDomainEqualDate(newItem.getRegistrationTo(), oldItem.getRegistrationTo()) || newItem.getRegistrationTo() == null) &&
+                                    Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom())
                     ) {
                         /*
                          * We see a record that is a near-repeat of a prior record. No need to add it
@@ -1095,5 +1103,11 @@ public class PersonEntity extends CprRecordEntity {
     @Override
     public IdentifiedEntity getNewest(Collection<IdentifiedEntity> collection) {
         return null;
+    }
+
+    public List<BaseQuery> getAssoc() {
+        ArrayList<BaseQuery> queries = new ArrayList<>();
+        queries.addAll(this.address.stream().map(a -> a.getAssoc()).flatMap(x -> x.stream()).collect(Collectors.toList()));
+        return queries;
     }
 }
