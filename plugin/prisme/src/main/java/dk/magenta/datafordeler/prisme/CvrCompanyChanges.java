@@ -75,19 +75,20 @@ public class CvrCompanyChanges {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
+            query.setPageSize("10000");
             query.setRecordAfter(updatedSinceTimestamp);
             for (String form : companyForms) {
                 query.addVirksomhedsform(form);
             }
-            ArrayNode sameAddressCprs = objectMapper.createArrayNode();
+            ArrayNode companyChanges = objectMapper.createArrayNode();
 
             //Get the companies
             List<CompanyRecord> companyrecords =  QueryManager.getAllEntities(session, query, CompanyRecord.class);
             for(CompanyRecord company : companyrecords) {
-                sameAddressCprs.add(company.getCvrNumber());
+                companyChanges.add(company.getCvrNumber());
             }
 
-            root.putArray("changedList", sameAddressCprs);
+            root.putArray("changedList", companyChanges);
 
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CvrCompanyChanges done");
             return objectMapper.writeValueAsString(root.getNode());
