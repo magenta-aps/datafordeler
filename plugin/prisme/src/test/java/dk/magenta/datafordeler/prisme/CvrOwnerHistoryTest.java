@@ -8,10 +8,13 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Assert;
@@ -19,6 +22,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -63,11 +68,38 @@ public class CvrOwnerHistoryTest extends TestBase {
     @Autowired
     private CvrPlugin cvrPlugin;
 
+    @SpyBean
+    private DirectLookup directLookup;
+
     @Test
     public void testCompanyOwnerHistoryPrisme() throws IOException, DataFordelerException {
         loadAllGeoAdress(sessionManager);
         loadCompany(cvrPlugin, sessionManager, objectMapper);
         loadInteressentskab(cvrPlugin, sessionManager, objectMapper);
+
+        ParticipantRecord participant1 = new ParticipantRecord();
+        participant1.setBusinessKey(1111111111L);
+        Mockito.doReturn(participant1).when(directLookup).participantLookup(ArgumentMatchers.eq("4000032977"));
+
+        ParticipantRecord participant2 = new ParticipantRecord();
+        participant2.setBusinessKey(1111111112L);
+        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000448343"));
+
+        ParticipantRecord participant3 = new ParticipantRecord();
+        participant2.setBusinessKey(1111111113L);
+        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000355373"));
+
+        ParticipantRecord participant4 = new ParticipantRecord();
+        participant2.setBusinessKey(1111111114L);
+        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000417793"));
+
+        ParticipantRecord participant5 = new ParticipantRecord();
+        participant2.setBusinessKey(1111111115L);
+        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000004988"));
+
+        ParticipantRecord participant6 = new ParticipantRecord();
+        participant2.setBusinessKey(1111111116L);
+        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4006182867"));
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);

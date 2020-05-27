@@ -117,9 +117,7 @@ public class CvrCompanyOwnerHistory {
                 Long participantNumber = participant.getParticipantUnitNumber();
 
                 if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
-
-
-                    ParticipantRecord participantRecord = directLookup.participantLookup("11111111");
+                    ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
 
                     deltagerPnr = participantRecord.getBusinessKey();
                     Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
