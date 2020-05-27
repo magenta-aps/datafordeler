@@ -117,17 +117,21 @@ public class CvrCompanyOwnerHistory {
                 Long participantNumber = participant.getParticipantUnitNumber();
 
                 if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
-                    ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
+                    try {
+                        ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
 
-                    deltagerPnr = participantRecord.getBusinessKey();
-                    Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
-                    if(orgRecord.hasNext()) {
-                        AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
-                        from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
-                        to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
+                        deltagerPnr = participantRecord.getBusinessKey();
+                        Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
+                        if (orgRecord.hasNext()) {
+                            AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
+                            from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
+                            to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
+                        }
+                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, String.format("%010d", deltagerPnr), from, to);
+                        personAdressItemList.add(ownerItem);
+                    } catch(Exception e) {
+                        throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                     }
-                    CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, String.format("%010d", deltagerPnr), from, to);
-                    personAdressItemList.add(ownerItem);
                 }
             }
             ArrayNode jsonAdressArray = mapper.valueToTree(personAdressItemList);
