@@ -24,7 +24,8 @@ public class NullCondition extends Condition {
 
     public String toHql() {
         StringJoiner s = new StringJoiner(" ");
-        s.add("this.left is");
+        s.add(this.left);
+        s.add("is");
         if (this.operator == Operator.NE) {
             s.add("not");
         }
