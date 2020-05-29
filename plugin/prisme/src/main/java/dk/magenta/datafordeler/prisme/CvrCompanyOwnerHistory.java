@@ -35,6 +35,27 @@ import java.util.*;
 @RequestMapping("/prisme/cvr/ownerhistory/1")
 public class CvrCompanyOwnerHistory {
 
+    /*
+
+    40387781
+
+    --FINDING ALL PARTICIPANTS
+
+    SELECT *
+  FROM [Datafordeler_Test].[dbo].[cvr_record_company] comp
+  JOIN [Datafordeler_Test].[dbo].[cvr_record_form] form ON (comp.id = form.companyRecord_id)
+  JOIN [Datafordeler_Test].[dbo].[cvr_form] formt ON (formt.id = form.companyForm_id)
+  JOIN [Datafordeler_Test].[dbo].[cvr_record_company_participant_relation] compRel ON (compRel.companyRecord_id = comp.id)
+  JOIN [Datafordeler_Test].[dbo].[cvr_record_company_participant_relation_participant] rpar ON (compRel.relationParticipantRecord_id = rpar.id)
+  JOIN [Datafordeler_Test].[dbo].[cvr_record_company_participant_relation_organization] pRelOrg ON (pRelOrg.companyParticipantRelationRecord_id = compRel.id)
+  JOIN [Datafordeler_Test].[dbo].[cvr_record_attribute] att ON (att.organizationRecord_id = pRelOrg.id)
+  JOIN [Datafordeler_Test].[dbo].[cvr_record_attribute_value] attv ON (att.id = attv.attribute_id)
+
+  WHERE companyFormCode = 10 OR
+	companyFormCode = 30 OR
+	companyFormCode = 50
+     */
+
     @Autowired
     SessionManager sessionManager;
 
@@ -79,12 +100,12 @@ public class CvrCompanyOwnerHistory {
         HashSet<String> cvrNumbers = new HashSet<>();
         cvrNumbers.add(cvrNummer);
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setCvrNumre(cvrNumbers);
             //Get the company, there can only be 0-1
-            List<CompanyRecord> companyrecords =  QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            if(companyrecords.size()==0) {
+            List<CompanyRecord> companyrecords = QueryManager.getAllEntities(session, query, CompanyRecord.class);
+            if (companyrecords.size() == 0) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CvrCompanyOwnerHistory done");
                 throw new HttpNotFoundException("Company not found " + cvrNummer);
             }
@@ -99,7 +120,7 @@ public class CvrCompanyOwnerHistory {
             root.put("longDescribtion", formRecord.getLongDescription());
 
             //It is legally forbidden to supply this information from companies with other formcodes then 10, 30 and 50
-            if(formCode != 10 && formCode != 30 && formCode != 50) {
+            if (formCode != 10 && formCode != 30 && formCode != 50) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
                 throw new AccessDeniedException("The requested company is not of a formcode where this request is accepted " + cvrNummer);
             }
@@ -116,39 +137,54 @@ public class CvrCompanyOwnerHistory {
 
                 Long participantNumber = participant.getParticipantUnitNumber();
 
-                if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
-                    try {
-                        ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
 
-                        deltagerPnr = participantRecord.getBusinessKey();
+                if(participant.getOrganizations().stream().anyMatch(o -> o.getMainType().equals("FULDT_ANSVARLIG_DELTAGERE"))) {
+
+                    if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
+                        try {
+                            ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
+
+                            deltagerPnr = participantRecord.getBusinessKey();
+                            Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
+                            if (orgRecord.hasNext()) {
+                                AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
+                                from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
+                                to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
+                            }
+                            CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
+
+                            personAdressItemList.add(ownerItem);
+                        } catch(Exception e) {
+                            throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
+                        }
+                    } /*else if("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {
+
+
                         Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
                         if (orgRecord.hasNext()) {
                             AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
                             from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
                             to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
                         }
-                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, String.format("%010d", deltagerPnr), from, to);
+                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(null, participantNumber, null, from, to);
                         personAdressItemList.add(ownerItem);
-                    } catch(Exception e) {
-                        throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
-                    }
+                    }*/
                 }
             }
             ArrayNode jsonAdressArray = mapper.valueToTree(personAdressItemList);
-            root.putArray("owners", jsonAdressArray);
+            root.putArray("cprs", jsonAdressArray);
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CvrCompanyOwnerHistory done");
             return objectMapper.writeValueAsString(root.getNode());
         }
     }
 
-    protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
+    protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 }
