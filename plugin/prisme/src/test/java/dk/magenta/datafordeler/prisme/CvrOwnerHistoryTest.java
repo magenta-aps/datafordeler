@@ -85,11 +85,6 @@ public class CvrOwnerHistoryTest extends TestBase {
         participant2.setBusinessKey(1111111112L);
         Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000000001"));
 
-        ParticipantRecord participant3 = new ParticipantRecord();
-        participant3.setBusinessKey(1111111113L);
-        Mockito.doReturn(participant3).when(directLookup).participantLookup(ArgumentMatchers.eq("4000000002"));
-
-
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
@@ -132,9 +127,18 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 
-        System.out.println(response.getBody());
+        ParticipantRecord participant3 = new ParticipantRecord();
+        participant3.setBusinessKey(1111111113L);
+        Mockito.doReturn(participant3).when(directLookup).participantLookup(ArgumentMatchers.eq("4000000002"));
 
+        response = restTemplate.exchange(
+                "/prisme/cvr/ownerhistory/1/" + 88888885,
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         System.out.println(response.getBody());

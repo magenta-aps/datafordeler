@@ -137,7 +137,6 @@ public class CvrCompanyOwnerHistory {
 
                 Long participantNumber = participant.getParticipantUnitNumber();
 
-
                 if(participant.getOrganizations().stream().anyMatch(o -> o.getMainType().equals("FULDT_ANSVARLIG_DELTAGERE"))) {
 
                     if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
