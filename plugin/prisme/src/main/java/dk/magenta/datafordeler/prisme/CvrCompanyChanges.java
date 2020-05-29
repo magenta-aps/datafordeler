@@ -88,7 +88,7 @@ public class CvrCompanyChanges {
                 companyChanges.add(company.getCvrNumber());
             }
 
-            root.putArray("changedList", companyChanges);
+            root.putArray("cvrs", companyChanges);
 
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CvrCompanyChanges done");
             return objectMapper.writeValueAsString(root.getNode());
