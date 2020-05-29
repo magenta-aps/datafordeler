@@ -172,7 +172,7 @@ public class CvrCompanyOwnerHistory {
                 }
             }
             ArrayNode jsonAdressArray = mapper.valueToTree(personAdressItemList);
-            root.putArray("cprs", jsonAdressArray);
+            root.putArray("pnrs", jsonAdressArray);
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CvrCompanyOwnerHistory done");
             return objectMapper.writeValueAsString(root.getNode());
         }

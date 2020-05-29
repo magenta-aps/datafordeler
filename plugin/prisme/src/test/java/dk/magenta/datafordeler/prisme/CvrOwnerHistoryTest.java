@@ -79,27 +79,16 @@ public class CvrOwnerHistoryTest extends TestBase {
 
         ParticipantRecord participant1 = new ParticipantRecord();
         participant1.setBusinessKey(1111111111L);
-        Mockito.doReturn(participant1).when(directLookup).participantLookup(ArgumentMatchers.eq("4000032977"));
+        Mockito.doReturn(participant1).when(directLookup).participantLookup(ArgumentMatchers.eq("4000000000"));
 
         ParticipantRecord participant2 = new ParticipantRecord();
         participant2.setBusinessKey(1111111112L);
-        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000448343"));
+        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000000001"));
 
         ParticipantRecord participant3 = new ParticipantRecord();
-        participant2.setBusinessKey(1111111113L);
-        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000355373"));
+        participant3.setBusinessKey(1111111113L);
+        Mockito.doReturn(participant3).when(directLookup).participantLookup(ArgumentMatchers.eq("4000000002"));
 
-        ParticipantRecord participant4 = new ParticipantRecord();
-        participant2.setBusinessKey(1111111114L);
-        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000417793"));
-
-        ParticipantRecord participant5 = new ParticipantRecord();
-        participant2.setBusinessKey(1111111115L);
-        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4000004988"));
-
-        ParticipantRecord participant6 = new ParticipantRecord();
-        participant2.setBusinessKey(1111111116L);
-        Mockito.doReturn(participant2).when(directLookup).participantLookup(ArgumentMatchers.eq("4006182867"));
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
@@ -124,7 +113,7 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        //Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
 
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -143,6 +132,8 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class
         );
+
+        System.out.println(response.getBody());
 
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 

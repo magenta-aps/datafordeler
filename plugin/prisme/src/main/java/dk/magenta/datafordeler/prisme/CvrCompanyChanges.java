@@ -75,7 +75,7 @@ public class CvrCompanyChanges {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
-            query.setPageSize("10000");
+            query.setPageSize("12000");
             query.setRecordAfter(updatedSinceTimestamp);
             for (String form : companyForms) {
                 query.addVirksomhedsform(form);

@@ -8,67 +8,80 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 public class CompanyOwnerItem {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Number personUuid;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Number companyUuid;
-
-
-    private String personCpr;
-    private String gyldigFra;
-    private String gyldigTil;
+    private String pnr;
+    private UnitDetails enhedDetaljer;
 
     public CompanyOwnerItem() {
     }
 
-    public CompanyOwnerItem(Number personUuid, Number companyUuid, String personCpr, String gyldigFra, String gyldigTil) {
-        this.personUuid = personUuid;
-        this.companyUuid = companyUuid;
-        this.personCpr = personCpr;
-        this.gyldigFra = gyldigFra;
-        this.gyldigTil = gyldigTil;
-
+    public CompanyOwnerItem(Number enhedsNummer, Number companyUuid, String pnr, String gyldigFra, String gyldigTil) {
+        this.pnr = pnr;
+        this.enhedDetaljer = new UnitDetails(enhedsNummer, companyUuid, gyldigFra, gyldigTil);
     }
 
-
-    public Number getPersonUuid() {
-        return personUuid;
+    public String getPnr() {
+        return pnr;
     }
 
-    public void setPersonUuid(Number personUuid) {
-        this.personUuid = personUuid;
+    public void setPnr(String personCpr) {
+        this.pnr = pnr;
     }
 
-    public Number getCompanyUuid() {
-        return companyUuid;
+    public UnitDetails getEnhedDetaljer() {
+        return enhedDetaljer;
     }
 
-    public void setCompanyUuid(Number companyUuid) {
-        this.companyUuid = companyUuid;
+    public void setEnhedDetaljer(UnitDetails enhed) {
+        this.enhedDetaljer = enhed;
     }
 
-    public String getPersonCpr() {
-        return personCpr;
-    }
+    public class UnitDetails {
 
-    public void setPersonCpr(String personCpr) {
-        this.personCpr = personCpr;
-    }
+        private Number enhedsNummer;
 
-    public String getGyldigFra() {
-        return gyldigFra;
-    }
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        private Number cvr;
 
-    public void setGyldigFra(String gyldigFra) {
-        this.gyldigFra = gyldigFra;
-    }
+        private String gyldigFra;
+        private String gyldigTil;
 
-    public String getGyldigTil() {
-        return gyldigTil;
-    }
+        public UnitDetails(Number enhedsNummer, Number cvr, String gyldigFra, String gyldigTil) {
+            this.enhedsNummer = enhedsNummer;
+            this.cvr = cvr;
+            this.gyldigFra = gyldigFra;
+            this.gyldigTil = gyldigTil;
+        }
 
-    public void setGyldigTil(String gyldigTil) {
-        this.gyldigTil = gyldigTil;
+        public Number getEnhedsNummer() {
+            return enhedsNummer;
+        }
+
+        public void seEnhedsNummer(Number enhedsNummer) {
+            this.enhedsNummer = enhedsNummer;
+        }
+
+        public Number getCvr() {
+            return cvr;
+        }
+
+        public void setCompanyUuid(Number cvr) {
+            this.cvr = cvr;
+        }
+
+        public String getGyldigFra() {
+            return gyldigFra;
+        }
+
+        public void setGyldigFra(String gyldigFra) {
+            this.gyldigFra = gyldigFra;
+        }
+
+        public String getGyldigTil() {
+            return gyldigTil;
+        }
+
+        public void setGyldigTil(String gyldigTil) {
+            this.gyldigTil = gyldigTil;
+        }
     }
 }
