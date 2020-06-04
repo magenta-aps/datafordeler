@@ -99,18 +99,13 @@ public class SameAddressService {
 
             OutputWrapper.NodeWrapper root = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
 
-
-
-
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             if (!personEntities.isEmpty()) {
                 PersonEntity person = personEntities.get(0);
 
                 AddressDataRecord address = FilterUtilities.findNewestUnclosed(person.getAddress());
+                root.put("cprNumber", cprNummer);
                 if(address != null) {
-
-                    root.put("cprNumber", cprNummer);
-
                     int municipalityCode = address.getMunicipalityCode();
                     root.put("municipalitycode", municipalityCode);
                     int roadCode = address.getRoadCode();
@@ -148,8 +143,8 @@ public class SameAddressService {
                     }
                     root.set("sameAddressCprs", sameAddressCprs);
                     loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "SameAddressService done");
-                    return objectMapper.writeValueAsString(root.getNode());
                 }
+                return objectMapper.writeValueAsString(root.getNode());
             }
             loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "SameAddressService done");
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
