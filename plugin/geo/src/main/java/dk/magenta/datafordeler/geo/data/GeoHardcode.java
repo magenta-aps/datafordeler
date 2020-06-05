@@ -32,6 +32,11 @@ public class GeoHardcode {
         munipialicities.put(956, new HashMap<Integer, HardcodedAdressStructure>());
         munipialicities.get(956).put(9997, new HardcodedAdressStructure("Internordiske Tilfl",3900,"Nuuk","600"));
         munipialicities.get(956).put(9998, new HardcodedAdressStructure("Færinger På Trawler",3900,"Nuuk","600"));
+        munipialicities.get(956).put(9900, new HardcodedAdressStructure("Administrativ",3900,"Nuuk","600"));//Efter aftale med Arne Sermersooq
+        munipialicities.get(956).put(9901, new HardcodedAdressStructure("Administrativ",3900,"Nuuk","600"));//Tilføjes yderligere administrative adresser
+        munipialicities.get(956).put(9902, new HardcodedAdressStructure("Administrativ",3900,"Nuuk","600"));
+        munipialicities.get(956).put(9903, new HardcodedAdressStructure("Administrativ",3900,"Nuuk","600"));
+        munipialicities.get(956).put(9984, new HardcodedAdressStructure("Administrativ",3900,"Nuuk","600"));
 
         munipialicities.put(958, new HashMap<Integer, HardcodedAdressStructure>());
         munipialicities.get(958).put(9901, new HardcodedAdressStructure("Skattesty,Qaasuitsup",3952,"Ilulissat","1200"));

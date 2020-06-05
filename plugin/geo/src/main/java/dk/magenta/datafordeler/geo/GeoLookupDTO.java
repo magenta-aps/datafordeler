@@ -3,10 +3,8 @@ package dk.magenta.datafordeler.geo;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.cpr.CprLookupDTO;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
-import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressHouseNumberRecord;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityAbbreviationRecord;
-import dk.magenta.datafordeler.geo.data.locality.LocalityEntityManager;
 import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityNameRecord;
@@ -15,11 +13,13 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 
-import java.util.Collection;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GeoLookupDTO extends CprLookupDTO {
+
+    private boolean administrativ = false;
 
     public GeoLookupDTO() {
     }
@@ -79,6 +79,14 @@ public class GeoLookupDTO extends CprLookupDTO {
         }
 
 
+    }
+
+    public boolean isAdministrativ() {
+        return administrativ;
+    }
+
+    public void setAdministrativ(boolean administrativ) {
+        this.administrativ = administrativ;
     }
 
     private String bNumber = null;
