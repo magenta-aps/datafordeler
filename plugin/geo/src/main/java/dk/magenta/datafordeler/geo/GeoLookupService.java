@@ -1,7 +1,5 @@
 package dk.magenta.datafordeler.geo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
@@ -83,6 +81,7 @@ public class GeoLookupService extends CprLookupService {
                 } else {
                     GeoHardcode.HardcodedAdressStructure hardcodedAdress = GeoHardcode.getHardcodedRoadname(municipalityCode, roadCode);
                     if (hardcodedAdress != null) {
+                        geoLookupDTO.setAdministrativ(true);
                         geoLookupDTO.setRoadName(hardcodedAdress.getVejnavn());
                         geoLookupDTO.setPostalCode(hardcodedAdress.getPostcode());
                         geoLookupDTO.setLocalityCode(hardcodedAdress.getLocationcode());
