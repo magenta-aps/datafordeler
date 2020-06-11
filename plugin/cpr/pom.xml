@@ -37,12 +37,7 @@
             <version>1.1</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>dk.magenta.datafordeler</groupId>
-            <artifactId>datafordeler-plugin-geo</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
