@@ -52,10 +52,25 @@ test-plugins:
   before_script:
     - cd /app/plugin
   script:
-    - >
-        cd cpr
-        mvn --batch-mode -T 2C test
-        cd ..
+    - |
+      cd cpr
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd geo
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd cvr
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd ger
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd eboks
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd prisme
+      mvn --batch-mode -T 2C test
+      cd ..
 
   artifacts:
     reports:
