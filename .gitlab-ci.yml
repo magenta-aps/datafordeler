@@ -53,11 +53,10 @@ test-plugins:
     - cd /app/plugin
   script:
     - >
-      for dir in $(ls -d */ | sed 's#/##'); do
-        cd $dir
+        cd cpr
         mvn --batch-mode -T 2C test
         cd ..
-      done
+
   artifacts:
     reports:
       junit:
