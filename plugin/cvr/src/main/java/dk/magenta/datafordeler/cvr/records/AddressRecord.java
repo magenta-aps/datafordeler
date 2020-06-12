@@ -574,12 +574,14 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         PluginManager pluginManager = PluginManager.getInstance();
         ArrayList<BaseQuery> queries = new ArrayList<>();
         HashMap<String, String> map = new HashMap<>();
-        map.put("municipalitycode", Integer.toString(this.municipality.getMunicipalityCode()));
-        map.put("roadcode", Integer.toString(this.roadCode));
+        if(this.municipality!=null) {
+            map.put("municipalitycode", Integer.toString(this.municipality.getMunicipalityCode()));
+            map.put("roadcode", Integer.toString(this.roadCode));
 
-        Plugin geoPlugin = pluginManager.getPluginByName("geo");
-        if (geoPlugin != null) {
-            queries.addAll(geoPlugin.getQueries(map));
+            Plugin geoPlugin = pluginManager.getPluginByName("geo");
+            if (geoPlugin != null) {
+                queries.addAll(geoPlugin.getQueries(map));
+            }
         }
 
         return queries;
