@@ -4,11 +4,30 @@ COPY core /app/core
 WORKDIR /app/core
 RUN mvn --batch-mode -T 2C -DskipTests clean install
 COPY plugin /app/plugin
-ADD ci/build_plugins.sh /app/plugin/build_plugins.sh
-WORKDIR /app/plugin
-RUN chmod +x /app/plugin/build_plugins.sh
-RUN /app/plugin/build_plugins.sh
+#ADD ci/build_plugins.sh /app/plugin/build_plugins.sh
+#WORKDIR /app/plugin
+#RUN chmod +x /app/plugin/build_plugins.sh
+#RUN /app/plugin/build_plugins.sh
 
+WORKDIR /app/plugin/cpr
+RUN mvn --batch-mode -T 2C -DskipTests clean install
 
+WORKDIR /app/plugin/geo
+RUN mvn --batch-mode -T 2C -DskipTests clean install
 
+WORKDIR /app/plugin/cvr
+RUN mvn --batch-mode -T 2C -DskipTests clean install
+
+WORKDIR /app/plugin/ger
+RUN mvn --batch-mode -T 2C -DskipTests clean install
+
+WORKDIR /app/plugin/eboks
+RUN mvn --batch-mode -T 2C -DskipTests clean install
+
+WORKDIR /app/plugin/prisme
+RUN mvn --batch-mode -T 2C -DskipTests clean install
+
+#TODO WE NEED TO FIX TESTS OF STATISTICS
+#WORKDIR /app/plugin/statistik
+#RUN mvn --batch-mode -T 2C clean install -DskipTests
 
