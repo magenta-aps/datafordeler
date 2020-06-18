@@ -9,13 +9,11 @@ services:
       context: .
       dockerfile: ci/dockerFile
     environment:
-      CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8889"
       SERVER_PORT: 8080
     volumes:
       - ./dev-environment/application.properties:/usr/local/tomcat/lib/application.properties
     ports:
-      - 9090:8080
-      - 8889:8889
+      - 8080:8083
 
 volumes:
   datafordeler-gl:

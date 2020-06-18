@@ -4,6 +4,7 @@ FROM maven:3-jdk-11
 
 run mkdir /app
 COPY core /app/core
+COPY ci /app/ci
 WORKDIR /app/core
 RUN mvn --batch-mode -T 2C package install -DskipTests
 COPY plugin /app/plugin
@@ -32,33 +33,11 @@ RUN mvn --batch-mode -T 2C package install -DskipTests
 
 #TODO WE NEED TO FIX TESTS OF STATISTICS
 WORKDIR /app/plugin/statistik
-RUN mvn --batch-mode -T 2C package install -DskipTests
+RUN mvn --batch-mode -T 2C package install -DskipTests -Duser.timezone=Europe/Copenhagen
 
-#ENTRYPOINT ["entrypoint.sh"]
+WORKDIR /app/ci
+ENTRYPOINT ["./entrypoint.sh"]
 
-WORKDIR /app/core
-RUN mvn test
 
-WORKDIR /app/plugin/cpr
-RUN mvn test
-
-WORKDIR /app/plugin/geo
-RUN mvn test
-
-WORKDIR /app/plugin/cvr
-RUN mvn test
-
-WORKDIR /app/plugin/ger
-RUN mvn test
-
-WORKDIR /app/plugin/eboks
-RUN mvn test
-
-WORKDIR /app/plugin/prisme
-RUN mvn test
-
-WORKDIR /app/plugin/statistik
-#TODO: We need to solve that tests can only pass in DK-timezone
-RUN mvn test -Duser.timezone=Europe/Copenhagen
 
 
