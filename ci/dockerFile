@@ -34,8 +34,6 @@ RUN mvn --batch-mode -T 2C package install -DskipTests
 WORKDIR /app/plugin/statistik
 RUN mvn --batch-mode -T 2C package install -DskipTests
 
-RUN unlink /etc/localtime
-RUN ln -s /usr/share/zoneinfo/Europe/Copenhagen /etc/localtime
 #ENTRYPOINT ["entrypoint.sh"]
 
 WORKDIR /app/core
@@ -60,6 +58,7 @@ WORKDIR /app/plugin/prisme
 RUN mvn test
 
 WORKDIR /app/plugin/statistik
-RUN mvn test
+#TODO: We need to solve that tests can only pass in DK-timezone
+RUN mvn test -Duser.timezone=Europe/Copenhagen
 
 
