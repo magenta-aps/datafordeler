@@ -1,8 +1,11 @@
 FROM maven:3-jdk-11
+
+
+
 run mkdir /app
 COPY core /app/core
 WORKDIR /app/core
-RUN mvn --batch-mode -T 2C -DskipTests clean install
+RUN mvn --batch-mode -T 2C package install -DskipTests
 COPY plugin /app/plugin
 #ADD ci/build_plugins.sh /app/plugin/build_plugins.sh
 #WORKDIR /app/plugin
@@ -10,24 +13,53 @@ COPY plugin /app/plugin
 #RUN /app/plugin/build_plugins.sh
 
 WORKDIR /app/plugin/cpr
-RUN mvn --batch-mode -T 2C -DskipTests clean install
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/geo
-RUN mvn --batch-mode -T 2C -DskipTests clean install
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/cvr
-RUN mvn --batch-mode -T 2C -DskipTests clean install
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/ger
-RUN mvn --batch-mode -T 2C -DskipTests clean install
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/eboks
-RUN mvn --batch-mode -T 2C -DskipTests clean install
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/prisme
-RUN mvn --batch-mode -T 2C -DskipTests clean install
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 #TODO WE NEED TO FIX TESTS OF STATISTICS
-#WORKDIR /app/plugin/statistik
-#RUN mvn --batch-mode -T 2C clean install -DskipTests
+WORKDIR /app/plugin/statistik
+RUN mvn --batch-mode -T 2C package install -DskipTests
+
+RUN unlink /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Europe/Copenhagen /etc/localtime
+#ENTRYPOINT ["entrypoint.sh"]
+
+WORKDIR /app/core
+RUN mvn test
+
+WORKDIR /app/plugin/cpr
+RUN mvn test
+
+WORKDIR /app/plugin/geo
+RUN mvn test
+
+WORKDIR /app/plugin/cvr
+RUN mvn test
+
+WORKDIR /app/plugin/ger
+RUN mvn test
+
+WORKDIR /app/plugin/eboks
+RUN mvn test
+
+WORKDIR /app/plugin/prisme
+RUN mvn test
+
+WORKDIR /app/plugin/statistik
+RUN mvn test
+
 
