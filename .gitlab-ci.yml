@@ -18,6 +18,7 @@ build-image:
     entrypoint: [""]
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
     - /kaniko/executor
       --context=${CI_PROJECT_DIR}
       --dockerfile=${CI_PROJECT_DIR}/ci/dockerFile
@@ -34,42 +35,45 @@ build-image:
     name: ${IMAGE_DEV}
   tags:
     - docker
-  script:
-    - mvn --batch-mode -T 2C test
 
 test-core:
   <<: *test-default
   before_script:
     - cd /app/core
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /app/core/target/surefire-reports/TEST-*.xml
 
-test-cpr:
+test-plugins:
   <<: *test-default
   before_script:
-    - cd /app/plugin/cpr
+    - cd /app/plugin
+  script:
+    - |
+      cd cpr
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd geo
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd cvr
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd ger
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd eboks
+      mvn --batch-mode -T 2C test
+      cd ..
+      cd prisme
+      mvn --batch-mode -T 2C test
+      cd ..
 
-test-geo:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/geo
-
-test-cvr:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/cvr
-
-test-ger:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/ger
-
-test-eboks:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/eboks
-
-test-prisme:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/prisme
-
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/*/target/surefire-reports/TEST-*.xml
 
