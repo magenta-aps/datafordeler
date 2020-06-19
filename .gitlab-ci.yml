@@ -35,43 +35,42 @@ build-image:
     name: ${IMAGE_DEV}
   tags:
     - docker
+  script:
+    - mvn --batch-mode -T 2C test
 
 test-core:
   <<: *test-default
   before_script:
     - cd /app/core
-  script:
-    - mvn --batch-mode -T 2C test -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
-  artifacts:
-    reports:
-      junit:
-        - /app/core/target/surefire-reports/TEST-*.xml
 
-test-plugins:
+test-cpr:
   <<: *test-default
   before_script:
-    - cd /app/plugin
-  script:
-    - |
-      cd cpr
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd geo
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd cvr
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd ger
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd eboks
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd prisme
-      mvn --batch-mode -T 2C test
+    - cd /app/plugin/cpr
 
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/*/target/surefire-reports/TEST-*.xml
+test-geo:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/geo
+
+test-cvr:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/cvr
+
+test-ger:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/ger
+
+test-eboks:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/eboks
+
+test-prisme:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/prisme
+
+

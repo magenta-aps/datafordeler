@@ -6,7 +6,7 @@ run mkdir /app
 COPY core /app/core
 COPY ci /app/ci
 WORKDIR /app/core
-RUN mvn --batch-mode -T 2C package install -DskipTests -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
+RUN mvn --batch-mode -T 2C package install -DskipTests
 COPY plugin /app/plugin
 #ADD ci/build_plugins.sh /app/plugin/build_plugins.sh
 #WORKDIR /app/plugin
@@ -14,22 +14,22 @@ COPY plugin /app/plugin
 #RUN /app/plugin/build_plugins.sh
 
 WORKDIR /app/plugin/cpr
-RUN mvn --batch-mode -T 2C package install -DskipTests -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/geo
-RUN mvn --batch-mode -T 2C package install -DskipTests -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/cvr
-RUN mvn --batch-mode -T 2C package install -DskipTests -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/ger
-RUN mvn --batch-mode -T 2C package install -DskipTests -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/eboks
-RUN mvn --batch-mode -T 2C package install -DskipTests -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 WORKDIR /app/plugin/prisme
-RUN mvn --batch-mode -T 2C package install -DskipTests -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 #TODO WE NEED TO FIX TESTS OF STATISTICS
 WORKDIR /app/plugin/statistik
