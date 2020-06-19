@@ -24,7 +24,7 @@ public class MultiCondition extends Condition {
         this("AND");
     }
 
-    public MultiCondition(Condition parent) throws QueryBuildException {
+    public MultiCondition(MultiCondition parent) throws QueryBuildException {
         this(parent, "AND");
     }
 
@@ -32,7 +32,7 @@ public class MultiCondition extends Condition {
         this.operator = operator;
     }
 
-    public MultiCondition(Condition parent, String operator) throws QueryBuildException {
+    public MultiCondition(MultiCondition parent, String operator) throws QueryBuildException {
         super(parent);
         this.operator = operator;
     }
@@ -47,9 +47,13 @@ public class MultiCondition extends Condition {
         }
     }
 
+    public void remove(Condition condition) {
+        this.conditions.remove(condition);
+    }
+
     public String toHql() {
         // Join leaf nodes' hql together with our operator ("AND" or "OR")
-        return this.conditions.stream().map(Condition::toHql).filter(h -> h != null && !h.isEmpty()).map(h -> "("+h+")").collect(Collectors.joining(" " + this.operator + " "));
+        return this.conditions.stream().filter(c -> !c.isEmpty()).map(c -> (c.size() == 1) ? c.toHql() : ("("+c.toHql()+")")).collect(Collectors.joining(" " + this.operator + " "));
     }
 
     public boolean isEmpty() {
@@ -66,6 +70,10 @@ public class MultiCondition extends Condition {
         return true;
     }
 
+    public int size() {
+        return this.conditions.size();
+    }
+
 
     public Map<String, Object> getParameters() {
         // Collect parameters from our leaf nodes
@@ -74,5 +82,9 @@ public class MultiCondition extends Condition {
             parameters.putAll(condition.getParameters());
         }
         return parameters;
+    }
+
+    public MultiCondition asMultiCondition() {
+        return this;
     }
 }
