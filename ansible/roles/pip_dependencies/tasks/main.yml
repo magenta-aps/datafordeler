@@ -4,6 +4,6 @@
     pip:
       requirements: /vagrant/requirements.txt
       virtualenv: /home/vagrant/venv/
-      virtualenv_python: python2.7
+      virtualenv_python: python3.6
 
 ...

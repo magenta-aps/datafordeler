@@ -17,6 +17,10 @@ import java.util.Objects;
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressFloorRecord.TABLE_NAME + UnitAddressFloorRecord.DB_FIELD_ENTITY,
                 columnList = UnitAddressFloorRecord.DB_FIELD_ENTITY + DatabaseEntry.REF
         ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + UnitAddressFloorRecord.TABLE_NAME + UnitAddressFloorRecord.DB_FIELD_FLOOR,
+                columnList = UnitAddressFloorRecord.DB_FIELD_FLOOR
+        ),
 })
 public class UnitAddressFloorRecord extends GeoMonotemporalRecord<UnitAddressEntity> {
 

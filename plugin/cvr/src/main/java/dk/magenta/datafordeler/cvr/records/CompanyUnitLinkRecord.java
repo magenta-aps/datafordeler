@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.service.CompanyUnitRecordService;
 import org.hibernate.Session;
 
 import javax.persistence.Column;
@@ -20,7 +21,11 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitLinkRecord.TABLE_NAME, indexes = {
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitLinkRecord.TABLE_NAME + "__company", columnList = CompanyLinkRecord.DB_FIELD_COMPANY + DatabaseEntry.REF)
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitLinkRecord.TABLE_NAME + "__company", columnList = CompanyLinkRecord.DB_FIELD_COMPANY + DatabaseEntry.REF),
+
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitLinkRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitLinkRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitLinkRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord {
@@ -36,7 +41,7 @@ public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord {
 
     private Identification getUnitIdentification(Session session) {
         UUID unitUUID = CompanyUnitRecord.generateUUID(this.pNumber);
-        Identification unitIdentification = QueryManager.getOrCreateIdentification(session, unitUUID, CvrPlugin.getDomain());
+        Identification unitIdentification = QueryManager.getOrCreateIdentification(session, unitUUID, CompanyUnitRecordService.getDomain());
         return unitIdentification;
     }
 

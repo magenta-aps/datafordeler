@@ -1,9 +1,11 @@
 package dk.magenta.datafordeler.cvr.entitymanager;
 
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
+import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyUnitRecordService;
 import org.apache.logging.log4j.LogManager;
@@ -76,6 +78,16 @@ public class CompanyUnitEntityManager extends CvrEntityManager<CompanyUnitRecord
     public boolean pullEnabled() {
         CvrConfiguration configuration = configurationManager.getConfiguration();
         return (configuration.getCompanyUnitRegisterType() != CvrConfiguration.RegisterType.DISABLED);
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new CompanyUnitRecordQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 
 }

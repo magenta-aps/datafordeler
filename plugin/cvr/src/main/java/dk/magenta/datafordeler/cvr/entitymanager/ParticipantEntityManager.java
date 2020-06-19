@@ -1,9 +1,11 @@
 package dk.magenta.datafordeler.cvr.entitymanager;
 
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
+import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.apache.logging.log4j.LogManager;
@@ -76,6 +78,16 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
     public boolean pullEnabled() {
         CvrConfiguration configuration = configurationManager.getConfiguration();
         return (configuration.getParticipantRegisterType() != CvrConfiguration.RegisterType.DISABLED);
+    }
+
+    @Override
+    public BaseQuery getQuery() {
+        return new ParticipantRecordQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 
 }

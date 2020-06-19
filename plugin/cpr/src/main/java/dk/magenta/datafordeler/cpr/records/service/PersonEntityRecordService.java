@@ -1,15 +1,18 @@
 package dk.magenta.datafordeler.cpr.records.service;
 
 import dk.magenta.datafordeler.core.MonitorService;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.AccessRequiredException;
 import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
+import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.cpr.CprAccessChecker;
@@ -27,12 +30,19 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/cpr/person/1/rest")
 public class PersonEntityRecordService extends FapiBaseService<PersonEntity, PersonRecordQuery> {
+
+    @Autowired
+    private PluginManager pluginManager;
 
     @Autowired
     private CprPlugin cprPlugin;
@@ -52,7 +62,7 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
 
     @Override
     protected OutputWrapper.Mode getDefaultMode() {
-        return OutputWrapper.Mode.LEGACY;
+        return OutputWrapper.Mode.DATAONLY;
     }
 
     @Override
@@ -82,7 +92,9 @@ public class PersonEntityRecordService extends FapiBaseService<PersonEntity, Per
 
     @Override
     protected PersonRecordQuery getEmptyQuery() {
-        return new PersonRecordQuery();
+        PersonRecordQuery query = new PersonRecordQuery();
+        query.addExtraJoin("LEFT JOIN cpr_person.address cpr_person__address");
+        return query;
     }
 
     @Override

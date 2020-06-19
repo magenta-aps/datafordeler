@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.geo.data.building;
 
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,16 @@ public class BuildingEntityManager extends GeoEntityManager<BuildingEntity, Buil
     }
 
     @Override
+    public BaseQuery getQuery() {
+        return new BuildingQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
+    }
+
+    @Override
     protected Class<BuildingEntity> getEntityClass() {
         return BuildingEntity.class;
     }
@@ -55,6 +66,18 @@ public class BuildingEntityManager extends GeoEntityManager<BuildingEntity, Buil
     @Override
     protected BuildingEntity createBasicEntity(BuildingRawData record, Session session) {
         return new BuildingEntity(record);
+    }
+
+    public static String stripBnr(String bnr) {
+        if (bnr != null) {
+            bnr = bnr.toUpperCase();
+            if (bnr.startsWith("B-")) {
+                bnr = bnr.substring(2);
+            } else if (bnr.startsWith("B")) {
+                bnr = bnr.substring(1);
+            }
+        }
+        return bnr;
     }
 
 }

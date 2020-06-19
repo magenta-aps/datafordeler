@@ -97,50 +97,53 @@ public class SameAddressService {
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
 
+            OutputWrapper.NodeWrapper root = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
+
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             if (!personEntities.isEmpty()) {
                 PersonEntity person = personEntities.get(0);
+
                 AddressDataRecord address = FilterUtilities.findNewestUnclosed(person.getAddress());
-
-                PersonRecordQuery personSameAddressQuery = new PersonRecordQuery();
-                personSameAddressQuery.setPageSize("30");
-                personSameAddressQuery.addKommunekode(address.getMunicipalityCode());
-                personSameAddressQuery.addVejkode(address.getRoadCode());
-                personSameAddressQuery.addHouseNo(address.getHouseNumber());
-                personSameAddressQuery.addDoor(address.getDoor());
-                personSameAddressQuery.addFloor(address.getFloor());
-                personSameAddressQuery.addBuildingNo(address.getBuildingNumber());
-
-                ArrayNode sameAddressCprs = objectMapper.createArrayNode();
-
-                List<PersonEntity> personEntitiesOnSameAdd = QueryManager.getAllEntities(session, personSameAddressQuery, PersonEntity.class);
-                for(PersonEntity personentity : personEntitiesOnSameAdd) {
-                    sameAddressCprs.add(personentity.getPersonnummer());
-                }
-
-                OutputWrapper.NodeWrapper root = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
-
                 root.put("cprNumber", cprNummer);
+                if(address != null) {
+                    int municipalityCode = address.getMunicipalityCode();
+                    root.put("municipalitycode", municipalityCode);
+                    int roadCode = address.getRoadCode();
+                    root.put("roadcode", address.getRoadCode());
+                    root.put("housenumber", address.getHouseNumber());
+                    root.put("floor", address.getFloor());
+                    root.put("door", address.getDoor());
+                    root.put("buildingNo", address.getBuildingNumber());
 
-                int municipalityCode = address.getMunicipalityCode();
-                root.put("municipalitycode", municipalityCode);
-                int roadCode = address.getRoadCode();
-                root.put("roadcode", address.getRoadCode());
-                root.put("housenumber", address.getHouseNumber());
-                root.put("floor", address.getFloor());
-                root.put("door", address.getDoor());
-                root.put("buildingNo", address.getBuildingNumber());
-
-                if (municipalityCode > 0 && lookupService != null) {
-                    GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode);
-                    if (lookup.getLocalityCodeNumber() != 0) {
-                        root.put("localityCode", lookup.getLocalityCodeNumber());
-                        root.put("roadName", lookup.getRoadName());
+                    GeoLookupDTO lookup = null;
+                    if (municipalityCode > 0 && lookupService != null) {
+                        lookup = lookupService.doLookup(municipalityCode, roadCode);
+                        if (lookup.getLocalityCodeNumber() != 0) {
+                            root.put("localityCode", lookup.getLocalityCodeNumber());
+                            root.put("roadName", lookup.getRoadName());
+                        }
                     }
-                }
+                    ArrayNode sameAddressCprs = objectMapper.createArrayNode();
+                    if(lookup != null && !lookup.isAdministrativ()) {
+                        PersonRecordQuery personSameAddressQuery = new PersonRecordQuery();
+                        personSameAddressQuery.setPageSize("30");
+                        personSameAddressQuery.addKommunekode(address.getMunicipalityCode());
+                        personSameAddressQuery.addVejkode(address.getRoadCode());
+                        personSameAddressQuery.addHouseNo(address.getHouseNumber());
+                        personSameAddressQuery.addDoor(address.getDoor());
+                        personSameAddressQuery.addFloor(address.getFloor());
+                        personSameAddressQuery.addBuildingNo(address.getBuildingNumber());
 
-                root.set("sameAddressCprs", sameAddressCprs);
-                loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "SameAddressService done");
+                        List<PersonEntity> personEntitiesOnSameAdd = QueryManager.getAllEntities(session, personSameAddressQuery, PersonEntity.class);
+                        for (PersonEntity personentity : personEntitiesOnSameAdd) {
+                            sameAddressCprs.add(personentity.getPersonnummer());
+                        }
+                    } else {
+                        sameAddressCprs.add(cprNummer);
+                    }
+                    root.set("sameAddressCprs", sameAddressCprs);
+                    loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "SameAddressService done");
+                }
                 return objectMapper.writeValueAsString(root.getNode());
             }
             loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "SameAddressService done");

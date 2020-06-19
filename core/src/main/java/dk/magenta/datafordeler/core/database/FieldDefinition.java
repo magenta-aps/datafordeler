@@ -79,6 +79,15 @@ public class FieldDefinition {
         return other;
     }
 
+    public List<String> getJoinParts() {
+        if (this.path.contains(BaseLookupDefinition.separator)) {
+            ArrayList<String> parts = new ArrayList<>(Arrays.asList(this.path.split(BaseLookupDefinition.quotedSeparator)));
+            parts.remove(parts.size()-1);
+            return parts;
+        }
+        return null;
+    }
+
     public Map<String, Object> getParameterMap(String rootKey, String entityKey) {
         HashMap<String, Object> map = new HashMap<>();
         String path = this.path;

@@ -8,20 +8,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.plugin.ScanScrollCommunicator;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
+import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -198,5 +198,35 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             e.printStackTrace();
         }
         return records;
+    }
+
+
+/*
+    @Override
+    public Map<String, String> getJoinHandles(String entityIdentifier) {
+        HashMap<String, String> handles = new HashMap<>();
+        final String sep = BaseLookupDefinition.separator;
+        handles.put(
+                "municipalitycode",
+                BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, CompanyRecord.DB_FIELD_LOCATION_ADDRESS + sep + AddressRecord.DB_FIELD_MUNICIPALITY) + sep +
+                        AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + sep +
+                        Municipality.DB_FIELD_CODE
+        );
+        handles.put(
+                "roadcode",
+                        BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, CompanyRecord.DB_FIELD_LOCATION_ADDRESS) + sep +
+                        AddressRecord.DB_FIELD_ROADCODE
+        );
+        return handles;
+    }*/
+
+    @Override
+    public BaseQuery getQuery() {
+        return new CompanyRecordQuery();
+    }
+
+    @Override
+    public BaseQuery getQuery(String... strings) {
+        return this.getQuery();
     }
 }

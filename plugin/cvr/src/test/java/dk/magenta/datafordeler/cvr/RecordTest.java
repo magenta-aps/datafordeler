@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
@@ -341,6 +343,35 @@ public class RecordTest {
         String body = resp.getBody();
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(body)));
         Assert.assertEquals(200, resp.getStatusCodeValue());
+    }
+
+    @Test
+    public void testDataOnlyRestCompany() throws IOException, DataFordelerException {
+        loadCompany("/company_in.json");
+        whitelistLocalhost();
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=rvd", HttpMethod.GET, httpEntity, String.class);
+        Assert.assertEquals(200, resp.getStatusCodeValue());
+        JsonNode jsonBody = objectMapper.readTree(resp.getBody());
+        JsonNode results = jsonBody.get("results");
+
+        JsonNode firstElement = results.get(0);
+        JsonNode registreringer = firstElement.get("registreringer");;
+        Assert.assertNotNull(registreringer);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        String body = resp.getBody();
+        Assert.assertEquals(200, resp.getStatusCodeValue());
+        jsonBody = objectMapper.readTree(resp.getBody());
+        results = jsonBody.get("results");
+
+        firstElement = results.get(0);
+        registreringer = firstElement.get("registreringer");;
+        Assert.assertNull(registreringer);
     }
 
     private HashMap<Integer, JsonNode> loadUnit(String resource) throws IOException, DataFordelerException {
@@ -708,15 +739,79 @@ public class RecordTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
-        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943", HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
         JsonNode responseNode = objectMapper.readTree(resp.getBody());
 
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode));
 
         Assert.assertEquals(1, responseNode.get("results").size());
 
-        ResponseEntity<String> resp2 = restTemplate.exchange("/cvr/company/1/rest/search?navne=MAGENTA ApS", HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<String> resp2 = restTemplate.exchange("/cvr/company/1/rest/search?navn=MAGENTA ApS", HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(1, responseNode.get("results").size());
+    }
+
+    /**
+     * Test the use of different searchparameters for cvr-lookup
+     * @throws IOException
+     * @throws DataFordelerException
+     */
+    @Test
+    public void testCollectiveLookupDifferentSearchParameters() throws IOException, DataFordelerException {
+        whitelistLocalhost();
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        loadParticipant("/person.json");
+        loadCompany();
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+
+        ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        JsonNode responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result1 = responseNode.get("results");
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?reklamebeskyttet=true&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result2 = responseNode.get("results");
+        Assert.assertEquals(result1, result2);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?navne=MAGENTA ApS&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result3 = responseNode.get("results");
+        Assert.assertEquals(result2, result3);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?telefonNummer=33369696&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result4 = responseNode.get("results");
+        Assert.assertEquals(result3, result4);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?elektroniskPost=info@magenta.dk&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result5 = responseNode.get("results");
+        Assert.assertEquals(result4, result5);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?virksomhedsform=80&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result6 = responseNode.get("results");
+        Assert.assertEquals(result5, result6);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?kommunekode=101&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result7 = responseNode.get("results");
+        Assert.assertEquals(result6, result7);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?vejkode=5520&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result8 = responseNode.get("results");
+        Assert.assertEquals(result7, result8);
+
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?etage=3&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
+        JsonNode result9 = responseNode.get("results");
+        Assert.assertEquals(result8, result9);
+
     }
 
 
@@ -787,6 +882,36 @@ public class RecordTest {
             if (!skip) {
                 System.out.println("Mismatch: " + n1.asText() + " (" + n1.getNodeType().name() + ") != " + n2.asText() + " (" + n2.getNodeType().name() + ") at " + path);
             }
+        }
+    }
+
+
+    @Autowired
+    PluginManager pluginManager;
+
+    @Test
+    public void testLookup() throws IOException, DataFordelerException {
+        loadCompany();
+        // Mostly for our own sake during developement
+        CompanyRecordQuery query = new CompanyRecordQuery();
+        OffsetDateTime now = OffsetDateTime.now();
+        query.setRegistrationFromBefore(now);
+        query.setEffectFromBefore(now);
+        query.setRegistrationToAfter(now);
+        query.setEffectToAfter(now);
+        query.setCvrNumre("25052943");
+
+        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+        if (geoPlugin != null) {
+
+            Session session = sessionManager.getSessionFactory().openSession();
+            query.applyFilters(session);
+            //System.out.println(QueryManager.getFirstQuery(session, query));
+            QueryManager.getAllEntitySets(session, query, CompanyRecord.class);
+
+            //AccessAddressQuery q = new AccessAddressQuery();
+            //q.setMunicipalityCode();
+
         }
     }
 }

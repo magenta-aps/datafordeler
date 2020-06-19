@@ -18,6 +18,8 @@ import java.util.List;
 @Component()
 public class PluginManager {
 
+    private static PluginManager instance;
+
     @Autowired(required = false)
     private List<Plugin> plugins;
 
@@ -56,6 +58,7 @@ public class PluginManager {
             handler.executePluginManagerCallback(this);
         }
         afterPostContruct = true;
+        instance = this;
     }
 
     public void addPostConstructCallBackHandler(PluginManagerCallbackHandler handler) {
@@ -135,5 +138,9 @@ public class PluginManager {
     }
     public void removePluginURISubstring(Plugin plugin, String substring) {
         this.pluginsByURISubstring.remove(substring, plugin);
+    }
+
+    public static PluginManager getInstance() {
+        return instance;
     }
 }

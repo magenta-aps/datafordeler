@@ -114,8 +114,9 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
 
 
     public static MultiPolygon convert(org.geojson.MultiPolygon original) {
+        List<Polygon> list = original.getCoordinates().stream().map(AreaRecord::convertList).filter(Objects::nonNull).collect(Collectors.toList());
         return new MultiPolygon(
-                original.getCoordinates().stream().map(AreaRecord::convertList).filter(Objects::nonNull).toArray(Polygon[]::new),
+                list.toArray(new Polygon[list.size()]),
                 geometryFactory
         );
     }
@@ -130,9 +131,10 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
 
 
     public static Polygon convert(org.geojson.Polygon original) {
+        List<LinearRing> list = original.getInteriorRings().stream().map(AreaRecord::convert).filter(Objects::nonNull).collect(Collectors.toList());
         return new Polygon(
                 AreaRecord.convert(original.getExteriorRing()),
-                original.getInteriorRings().stream().map(AreaRecord::convert).filter(Objects::nonNull).toArray(LinearRing[]::new),
+                list.toArray(new LinearRing[list.size()]),
                 geometryFactory
         );
     }
@@ -149,9 +151,10 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
 
     public static Polygon convertList(List<List<LngLatAlt>> original) {
         if (original.isEmpty()) return null;
+        List<LinearRing> list = original.subList(1, original.size()).stream().map(AreaRecord::convert).collect(Collectors.toList());
         return new Polygon(
                 AreaRecord.convert(original.get(0)),
-                original.subList(1, original.size()).stream().map(AreaRecord::convert).toArray(LinearRing[]::new),
+                list.toArray(new LinearRing[list.size()]),
                 geometryFactory
         );
     }
@@ -169,9 +172,10 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
 
     public static LinearRing convert(List<LngLatAlt> original) {
         if (original == null) return null;
+        List<Coordinate> list = original.stream().map(AreaRecord::convert).collect(Collectors.toList());
         return new LinearRing(
                 geometryFactory.getCoordinateSequenceFactory().create(
-                        original.stream().map(AreaRecord::convert).toArray(Coordinate[]::new)
+                        list.toArray(new Coordinate[list.size()])
                 ),
                 geometryFactory
         );
