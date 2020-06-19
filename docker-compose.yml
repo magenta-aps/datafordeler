@@ -10,8 +10,6 @@ services:
       dockerfile: ci/dockerFile
     environment:
       SERVER_PORT: 8080
-    volumes:
-      - ./dev-environment/application.properties:/usr/local/tomcat/lib/application.properties
     ports:
       - 8080:8083
 

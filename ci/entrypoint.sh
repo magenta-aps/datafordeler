@@ -1,6 +1,6 @@
 #!/bin/sh
-#WORKDIR /app/core
-#RUN mvn test
+cd /app/core
+mvn test
 	
 cd /app/plugin/cpr
 mvn test
