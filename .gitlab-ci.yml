@@ -41,7 +41,7 @@ test-core:
   before_script:
     - cd /app/core
   script:
-    - mvn --batch-mode -T 2C test
+    - mvn --batch-mode -T 2C --queit test
   artifacts:
     reports:
       junit:
@@ -54,23 +54,22 @@ test-plugins:
   script:
     - |
       cd cpr
-      mvn --batch-mode -T 2C test
+      mvn --batch-mode -T 2C --queit test
       cd ..
       cd geo
-      mvn --batch-mode -T 2C test
+      mvn --batch-mode -T 2C --queit test
       cd ..
       cd cvr
-      mvn --batch-mode -T 2C test
+      mvn --batch-mode -T 2C --queit test
       cd ..
       cd ger
-      mvn --batch-mode -T 2C test
+      mvn --batch-mode -T 2C --queit test
       cd ..
       cd eboks
-      mvn --batch-mode -T 2C test
+      mvn --batch-mode -T 2C --queit test
       cd ..
       cd prisme
-      mvn --batch-mode -T 2C test
-      cd ..
+      mvn --batch-mode -T 2C --queit test
 
   artifacts:
     reports:
