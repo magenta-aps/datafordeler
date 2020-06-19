@@ -61,7 +61,6 @@ public class PersonMoveQuery extends PersonStatisticsQuery {
         this.applyBitemporalConditions(condition, "address");
         this.applyBitemporalConditions(condition, "migration");
         this.addCondition(condition);
-        System.out.println("hql: "+this.getCondition().toHql());
     }
 
     /*

@@ -118,11 +118,6 @@ public class CvrRegisterManager extends RegisterManager {
         return this.configurationManager.getConfiguration().getPullCronSchedule();
     }
 
-    @Override
-    public boolean pullsEventsCommonly() {
-        return false;
-    }
-
 
     @Override
     public URI getEventInterface(EntityManager entityManager) {

@@ -144,11 +144,6 @@ public class GerRegisterManager extends RegisterManager {
     }
 
     @Override
-    public boolean pullsEventsCommonly() {
-        return false;
-    }
-
-    @Override
     public ImportInputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
         this.log.info("eventInterface: "+eventInterface);
         GerConfiguration configuration = this.configurationManager.getConfiguration();
