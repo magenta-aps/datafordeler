@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -18,7 +19,11 @@ public class SingleCondition extends Condition {
     private Operator operator;
     private String placeholder;
 
-    public SingleCondition(Condition parent, String left, List<String> right, Operator operator, String placeholder, Class type) throws QueryBuildException {
+    public SingleCondition(MultiCondition parent, String left, Object right, Operator operator, String placeholder, Class type) throws QueryBuildException {
+        this(parent, left, Collections.singletonList(right), operator, placeholder, type);
+    }
+
+    public SingleCondition(MultiCondition parent, String left, List<Object> right, Operator operator, String placeholder, Class type) throws QueryBuildException {
         super(parent);
         if (right.isEmpty()) {
             throw new QueryBuildException("No comparison value for "+left);
@@ -27,8 +32,8 @@ public class SingleCondition extends Condition {
         this.operator = operator;
         this.placeholder = placeholder;
 
-        for (String value : right) {
-            if (hasWildcard(value)) {
+        for (Object value : right) {
+            if (value instanceof String && hasWildcard((String)value)) {
                 this.wildcardValues.add(replaceWildcard(value));
             } else {
                 Object v = castValue(type, value);
@@ -82,6 +87,16 @@ public class SingleCondition extends Condition {
         return parameters;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return 1;
+    }
+
     private static boolean hasWildcard(String value) {
         return value.contains("*");
     }
@@ -108,6 +123,8 @@ public class SingleCondition extends Condition {
             return UUID.fromString(value.toString());
         } else if (cls == OffsetDateTime.class && value instanceof String) {
             return OffsetDateTime.parse((String) value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        } else if (cls == LocalDateTime.class && value instanceof String) {
+            return LocalDateTime.parse((String) value, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         }
         return cls.cast(value);
     }

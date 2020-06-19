@@ -370,7 +370,7 @@ public class QueryManager {
      */
     public static <E extends IdentifiedEntity> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query, eClass);
+        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setFetchSize(1000);
         List<String> classNames = query.getEntityClassnames();

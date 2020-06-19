@@ -80,6 +80,7 @@ public class MovementDataServiceTest extends TestBase {
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
 
+        System.out.println("--------------------------");
         response = restTemplate.exchange("/statistik/movement_data/?pnr=0101001234&registrationAfter=1900-01-01&registrationBefore=2018-08-01", HttpMethod.GET, httpEntity, String.class);
         System.out.println(response.getStatusCodeValue());
         Assert.assertNotNull(response.getBody());

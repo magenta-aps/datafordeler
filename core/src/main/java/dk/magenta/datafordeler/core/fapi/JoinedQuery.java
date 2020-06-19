@@ -77,4 +77,14 @@ public class JoinedQuery extends Condition {
     public Map<String, Object> getParameters() {
         return Collections.emptyMap();
     }
+
+    @Override
+    public boolean isEmpty() {
+        return this.joinHandles.isEmpty();
+    }
+
+    @Override
+    public int size() {
+        return this.joinHandles.size();
+    }
 }

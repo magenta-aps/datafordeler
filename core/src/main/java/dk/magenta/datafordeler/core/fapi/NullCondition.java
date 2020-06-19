@@ -12,7 +12,7 @@ public class NullCondition extends Condition {
     private String left;
     private Operator operator;
 
-    public NullCondition(Condition parent, String left, Operator operator) throws QueryBuildException {
+    public NullCondition(MultiCondition parent, String left, Operator operator) throws QueryBuildException {
         super(parent);
         this.left = left;
         if (operator == Operator.EQ || operator == Operator.NE) {
@@ -35,6 +35,16 @@ public class NullCondition extends Condition {
 
     public Map<String, Object> getParameters() {
         return Collections.emptyMap();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return 1;
     }
 
 }

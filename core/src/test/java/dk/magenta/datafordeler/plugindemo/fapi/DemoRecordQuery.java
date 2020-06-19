@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DemoRecordQuery extends BaseQuery {
 
@@ -98,8 +99,8 @@ public class DemoRecordQuery extends BaseQuery {
 
     @Override
     protected void setupConditions() throws QueryBuildException {
-        this.addCondition("postnr", this.postnr, Integer.class);
-        this.addCondition("bynavn", this.bynavn);
+        this.addCondition("postnr", this.postnr.stream().collect(Collectors.toList()), Integer.class);
+        this.addCondition("bynavn", this.bynavn.stream().collect(Collectors.toList()), String.class);
     }
 
 }
