@@ -29,6 +29,7 @@ build-image:
   stage: test
   variables:
     GIT_STRATEGY: none
+    MAVEN_OPTS: -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
   needs:
     - build-image
   image:
@@ -41,7 +42,7 @@ test-core:
   before_script:
     - cd /app/core
   script:
-    - mvn --batch-mode -T 2C --queit test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -54,22 +55,22 @@ test-plugins:
   script:
     - |
       cd cpr
-      mvn --batch-mode -T 2C --queit test
+      mvn --batch-mode -T 2C test
       cd ..
       cd geo
-      mvn --batch-mode -T 2C --queit test
+      mvn --batch-mode -T 2C test
       cd ..
       cd cvr
-      mvn --batch-mode -T 2C --queit test
+      mvn --batch-mode -T 2C test
       cd ..
       cd ger
-      mvn --batch-mode -T 2C --queit test
+      mvn --batch-mode -T 2C test
       cd ..
       cd eboks
-      mvn --batch-mode -T 2C --queit test
+      mvn --batch-mode -T 2C test
       cd ..
       cd prisme
-      mvn --batch-mode -T 2C --queit test
+      mvn --batch-mode -T 2C test
 
   artifacts:
     reports:
