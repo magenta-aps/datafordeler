@@ -165,61 +165,47 @@ public class Pull extends Worker implements Runnable {
 
             boolean error = false;
             boolean skip = false;
-            if (this.registerManager.pullsEventsCommonly()) {
-                this.log.info(this.prefix + "Pulling data for " + this.registerManager.getClass().getSimpleName());
-                ItemInputStream<? extends PluginSourceData> stream = this.registerManager.pullEvents(this.importMetadata);
-                if (stream != null) {
-                    this.doPull(importMetadata, stream);
-                    Session session = this.engine.sessionManager.getSessionFactory().openSession();
-                    importMetadata.setSession(session);
-                    this.registerManager.setLastUpdated(null, importMetadata);
-                    session.close();
-                } else {
-                    skip = true;
+            for (EntityManager entityManager : this.registerManager.getEntityManagers()) {
+                if (this.doCancel) {
+                    break;
                 }
-            } else {
-                for (EntityManager entityManager : this.registerManager.getEntityManagers()) {
-                    if (this.doCancel) {
-                        break;
-                    }
-                    if (!entityManager.pullEnabled()) {
-                        this.log.info(this.prefix + "Entitymanager "+entityManager.getClass().getSimpleName()+" is disabled");
-                        continue;
-                    }
+                if (!entityManager.pullEnabled()) {
+                    this.log.info(this.prefix + "Entitymanager "+entityManager.getClass().getSimpleName()+" is disabled");
+                    continue;
+                }
 
-                    Session session = this.engine.sessionManager.getSessionFactory().openSession();
-                    OffsetDateTime lastUpdate = entityManager.getLastUpdated(session);
-                    session.close();
-                    if (lastUpdate != null && importMetadata.getImportTime().toLocalDate().isEqual(lastUpdate.toLocalDate()) && importConfiguration.size() == 0) {
-                        this.log.info(this.prefix + "Already pulled data for " + entityManager.getClass().getSimpleName()+" at "+lastUpdate+", no need to re-pull today");
-                        continue;
-                    }
+                Session session = this.engine.sessionManager.getSessionFactory().openSession();
+                OffsetDateTime lastUpdate = entityManager.getLastUpdated(session);
+                session.close();
+                if (lastUpdate != null && importMetadata.getImportTime().toLocalDate().isEqual(lastUpdate.toLocalDate()) && importConfiguration.size() == 0) {
+                    this.log.info(this.prefix + "Already pulled data for " + entityManager.getClass().getSimpleName()+" at "+lastUpdate+", no need to re-pull today");
+                    continue;
+                }
 
-                    this.log.info(this.prefix + "Pulling data for " + entityManager.getClass().getSimpleName());
+                this.log.info(this.prefix + "Pulling data for " + entityManager.getClass().getSimpleName());
 
-                    this.registerManager.beforePull(entityManager, this.importMetadata);
-                    InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
-                    if (stream != null) {
-                        session = this.engine.sessionManager.getSessionFactory().openSession();
-                        this.importMetadata.setSession(session);
+                this.registerManager.beforePull(entityManager, this.importMetadata);
+                InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
+                if (stream != null) {
+                    session = this.engine.sessionManager.getSessionFactory().openSession();
+                    this.importMetadata.setSession(session);
 
-                        try {
-                            entityManager.parseData(stream, importMetadata);
-                            if (!entityManager.shouldSkipLastUpdate(importMetadata)) {
-                                this.registerManager.setLastUpdated(entityManager, importMetadata);
-                            }
-                        } catch (Exception e) {
-                            if (this.doCancel) {
-                                break;
-                            } else {
-                                throw e;
-                            }
-                        } finally {
-                            QueryManager.clearCaches();
-                            session.close();
-                            this.importMetadata.setSession(null);
-                            stream.close();
+                    try {
+                        entityManager.parseData(stream, importMetadata);
+                        if (!entityManager.shouldSkipLastUpdate(importMetadata)) {
+                            this.registerManager.setLastUpdated(entityManager, importMetadata);
                         }
+                    } catch (Exception e) {
+                        if (this.doCancel) {
+                            break;
+                        } else {
+                            throw e;
+                        }
+                    } finally {
+                        QueryManager.clearCaches();
+                        session.close();
+                        this.importMetadata.setSession(null);
+                        stream.close();
                     }
                 }
             }
@@ -321,42 +307,6 @@ public class Pull extends Worker implements Runnable {
             transaction.rollback();
         } finally {
             session.close();
-        }
-    }
-
-    private void doPull(ImportMetadata importMetadata, ItemInputStream<? extends PluginSourceData> eventStream) throws DataStreamException, IOException {
-        this.log.info("doPull");
-        int count = 0;
-        long last_time = System.currentTimeMillis();
-
-        try {
-            PluginSourceData event;
-            Plugin plugin = this.registerManager.getPlugin();
-            while ((event = eventStream.next()) != null && !this.doCancel) {
-                boolean success = this.engine.handleEvent(event, plugin, importMetadata);
-                if (!success) {
-                    this.log.warn("Worker " + this.getId() + " failed handling event " + event.getId() + ", not processing further events");
-                    eventStream.close();
-                    break;
-                }
-
-                count++;
-
-                if (count % 100 == 0) {
-                    long now = System.currentTimeMillis();
-                    log.info(
-                        "%d: %fms per event",
-                        count, (now - last_time) / 100.0
-                    );
-                    last_time = now;
-                }
-            }
-
-        } catch (IOException e) {
-            throw new DataStreamException(e);
-        } finally {
-            this.log.info("Worker " + this.getId() + " processed " + count + " events. Closing stream.");
-            eventStream.close();
         }
     }
 

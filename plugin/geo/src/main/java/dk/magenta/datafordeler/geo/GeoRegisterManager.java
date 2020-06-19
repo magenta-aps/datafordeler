@@ -172,11 +172,6 @@ public class GeoRegisterManager extends RegisterManager {
     }
 
     @Override
-    public boolean pullsEventsCommonly() {
-        return false;
-    }
-
-    @Override
     public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) {
         // First delete items that are deleted on input server
         try {

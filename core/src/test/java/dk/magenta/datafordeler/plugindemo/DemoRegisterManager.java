@@ -139,11 +139,6 @@ public class DemoRegisterManager extends RegisterManager {
         return expandBaseURI(this.getBaseEndpoint(), "/getNewEvents");
     }
 
-    @Override
-    public boolean pullsEventsCommonly() {
-        return false;
-    }
-
     public ItemInputStream<? extends PluginSourceData> pullEvents(ImportMetadata importMetadata) throws DataFordelerException {
         return this.pullEvents(this.getEventInterface(null), null, importMetadata);
     }

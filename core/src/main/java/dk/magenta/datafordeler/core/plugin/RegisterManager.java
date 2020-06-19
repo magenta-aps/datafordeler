@@ -172,8 +172,6 @@ public abstract class RegisterManager {
         return new ImportInputStream(inputStream, cacheFiles);
     }
 
-    public abstract boolean pullsEventsCommonly();
-
     public ItemInputStream<? extends PluginSourceData> pullEvents(ImportMetadata importMetadata) throws DataFordelerException {
         /*HashMap<EntityManager, ItemInputStream<? extends PluginSourceData>> streams = new HashMap<>();
         for (EntityManager entityManager : this.getEntityManagers()) {

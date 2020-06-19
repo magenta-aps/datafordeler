@@ -125,11 +125,6 @@ public class CprRegisterManager extends RegisterManager {
         return null;
     }
 
-    @Override
-    public boolean pullsEventsCommonly() {
-        return false;
-    }
-
     public String getPullCronSchedule() {
         // TODO: make entitymanager specific
         return this.configurationManager.getConfiguration().getPersonRegisterPullCronSchedule();
