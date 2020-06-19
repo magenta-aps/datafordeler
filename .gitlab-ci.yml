@@ -29,7 +29,6 @@ build-image:
   stage: test
   variables:
     GIT_STRATEGY: none
-    MAVEN_OPTS: -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
   needs:
     - build-image
   image:
@@ -42,7 +41,7 @@ test-core:
   before_script:
     - cd /app/core
   script:
-    - mvn --batch-mode -T 2C test
+    - mvn --batch-mode -T 2C test -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
   artifacts:
     reports:
       junit:
