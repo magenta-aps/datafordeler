@@ -8,15 +8,21 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 public class CompanyOwnerItem {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String pnr;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Number cvr;
+
     private UnitDetails enhedDetaljer;
 
     public CompanyOwnerItem() {
     }
 
-    public CompanyOwnerItem(Number enhedsNummer, Number companyUuid, String pnr, String gyldigFra, String gyldigTil) {
+    public CompanyOwnerItem(Number enhedsNummer, Number cvr, String pnr, String gyldigFra, String gyldigTil) {
         this.pnr = pnr;
-        this.enhedDetaljer = new UnitDetails(enhedsNummer, companyUuid, gyldigFra, gyldigTil);
+        this.cvr = cvr;
+        this.enhedDetaljer = new UnitDetails(enhedsNummer, gyldigFra, gyldigTil);
     }
 
     public String getPnr() {
@@ -25,6 +31,14 @@ public class CompanyOwnerItem {
 
     public void setPnr(String personCpr) {
         this.pnr = pnr;
+    }
+
+    public Number getCvr() {
+        return cvr;
+    }
+
+    public void setCvr(Number cvr) {
+        this.cvr = cvr;
     }
 
     public UnitDetails getEnhedDetaljer() {
@@ -45,9 +59,8 @@ public class CompanyOwnerItem {
         private String gyldigFra;
         private String gyldigTil;
 
-        public UnitDetails(Number enhedsNummer, Number cvr, String gyldigFra, String gyldigTil) {
+        public UnitDetails(Number enhedsNummer, String gyldigFra, String gyldigTil) {
             this.enhedsNummer = enhedsNummer;
-            this.cvr = cvr;
             this.gyldigFra = gyldigFra;
             this.gyldigTil = gyldigTil;
         }
@@ -58,14 +71,6 @@ public class CompanyOwnerItem {
 
         public void seEnhedsNummer(Number enhedsNummer) {
             this.enhedsNummer = enhedsNummer;
-        }
-
-        public Number getCvr() {
-            return cvr;
-        }
-
-        public void setCompanyUuid(Number cvr) {
-            this.cvr = cvr;
         }
 
         public String getGyldigFra() {

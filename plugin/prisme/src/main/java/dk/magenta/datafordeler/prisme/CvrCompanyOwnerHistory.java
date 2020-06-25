@@ -128,7 +128,8 @@ public class CvrCompanyOwnerHistory {
             Set<CompanyParticipantRelationRecord> participants = companyrecord.getParticipants();
 
             ObjectMapper mapper = new ObjectMapper();
-            List<CompanyOwnerItem> personAdressItemList = new ArrayList<CompanyOwnerItem>();
+            List<CompanyOwnerItem> personalOwnerList = new ArrayList<CompanyOwnerItem>();
+            List<CompanyOwnerItem> companyOwnerList = new ArrayList<CompanyOwnerItem>();
 
             for(CompanyParticipantRelationRecord participant : participants) {
                 String from = null;
@@ -137,9 +138,12 @@ public class CvrCompanyOwnerHistory {
 
                 Long participantNumber = participant.getParticipantUnitNumber();
 
-                if(participant.getOrganizations().stream().anyMatch(o -> o.getMainType().equals("FULDT_ANSVARLIG_DELTAGERE"))) {
+                //We expose two types of relations ”Reelle ejere" and ”Legale ejere”
+                if(participant.getOrganizations().stream().anyMatch(o -> o.getMainType().equals("FULDT_ANSVARLIG_DELTAGERE") ||
+                        o.getMainType().equals("ANDEN_DELTAGER"))) {
 
                     if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
+                        //A company can be owned by a person, then we need to find the persons cpr-number from live-lookup
                         try {
                             ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
 
@@ -152,26 +156,27 @@ public class CvrCompanyOwnerHistory {
                             }
                             CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
 
-                            personAdressItemList.add(ownerItem);
+                            personalOwnerList.add(ownerItem);
                         } catch(Exception e) {
                             throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                         }
-                    } /*else if("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {
-
-
+                    } else if("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {
+                        //A company can be owned by a person, then we need to find the companys cvr-number from the database
                         Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
                         if (orgRecord.hasNext()) {
                             AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
                             from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
                             to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
                         }
-                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(null, participantNumber, null, from, to);
-                        personAdressItemList.add(ownerItem);
-                    }*/
+                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber,  participant.getRelationParticipantRecord().getBusinessKey(), null, from, to);
+                        companyOwnerList.add(ownerItem);
+                    }
                 }
             }
-            ArrayNode jsonAdressArray = mapper.valueToTree(personAdressItemList);
-            root.putArray("pnrs", jsonAdressArray);
+            ArrayNode jsonOwnerArrayPersonal = mapper.valueToTree(personalOwnerList);
+            ArrayNode jsonOwnerArrayCompany = mapper.valueToTree(companyOwnerList);
+            root.putArray("pnrs", jsonOwnerArrayPersonal);
+            root.putArray("cvrs", jsonOwnerArrayCompany);
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CvrCompanyOwnerHistory done");
             return objectMapper.writeValueAsString(root.getNode());
         }

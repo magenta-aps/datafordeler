@@ -415,6 +415,91 @@
               },
               {
                 "deltager": {
+                  "enhedsNummer": 4000395354,
+                  "enhedstype": "VIRKSOMHED",
+                  "forretningsnoegle": 73585511,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2020-04-09T05:06:28.454+02:00",
+                  "sidstOpdateret": "2020-04-06T10:18:04.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "TESTCOMPANY A/S",
+                      "periode": {
+                        "gyldigFra": "2013-01-17",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2013-01-28T15:00:32.000+01:00"
+                    }
+                  ],
+                  "adresseHemmelig": null,
+                  "adresseHemmeligUndtagelse": null,
+                  "adresseOpdateringOphoert": null,
+                  "beliggenhedsadresse": [
+                    {
+
+                      "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+                    }
+                  ],
+                  "postadresse": []
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Interessenter",
+                            "periode": {
+                              "gyldigFra": "2015-03-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": null
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "INTERESSENTER",
+                                "periode": {
+                                  "gyldigFra": "2015-03-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2018-01-02T14:56:18.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
                   "enhedsNummer": 4000000002,
                   "enhedstype": "PERSON",
                   "forretningsnoegle": null,
