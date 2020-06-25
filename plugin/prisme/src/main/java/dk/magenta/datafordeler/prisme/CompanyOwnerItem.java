@@ -29,7 +29,7 @@ public class CompanyOwnerItem {
         return pnr;
     }
 
-    public void setPnr(String personCpr) {
+    public void setPnr(String pnr) {
         this.pnr = pnr;
     }
 
