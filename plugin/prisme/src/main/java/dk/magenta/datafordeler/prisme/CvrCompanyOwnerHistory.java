@@ -138,9 +138,8 @@ public class CvrCompanyOwnerHistory {
 
                 Long participantNumber = participant.getParticipantUnitNumber();
 
-                //We expose two types of relations ”Reelle ejere" and ”Legale ejere”
-                if(participant.getOrganizations().stream().anyMatch(o -> o.getMainType().equals("FULDT_ANSVARLIG_DELTAGERE") ||
-                        o.getMainType().equals("ANDEN_DELTAGER"))) {
+                //We expose all owners of the company
+                if(participant.getOrganizations().stream().anyMatch(o -> o.getMainType().equals("FULDT_ANSVARLIG_DELTAGERE"))) {
 
                     if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
                         //A company can be owned by a person, then we need to find the persons cpr-number from live-lookup
