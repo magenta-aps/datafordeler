@@ -122,7 +122,7 @@ public class CvrCompanyOwnerHistory {
             //It is legally forbidden to supply this information from companies with other formcodes then 10, 30 and 50
             if (formCode != 10 && formCode != 30 && formCode != 50) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
-                throw new AccessDeniedException("The requested company \""+cvrNummer+"\" is not of a formcode where this request is accepted");
+                throw new AccessDeniedException("The requested company \""+cvrNummer+"\" is not of a formcode where this request is accepted. Accepted form codes are 10, 30 and 50");
             }
 
             Set<CompanyParticipantRelationRecord> participants = companyrecord.getParticipants();
