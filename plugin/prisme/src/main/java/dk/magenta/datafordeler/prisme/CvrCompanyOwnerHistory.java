@@ -172,10 +172,9 @@ public class CvrCompanyOwnerHistory {
                     }
                 }
             }
-            ArrayNode jsonOwnerArrayPersonal = mapper.valueToTree(personalOwnerList);
-            ArrayNode jsonOwnerArrayCompany = mapper.valueToTree(companyOwnerList);
-            root.putArray("pnrs", jsonOwnerArrayPersonal);
-            root.putArray("cvrs", jsonOwnerArrayCompany);
+            root.putArray("pnrs", mapper.valueToTree(personalOwnerList));
+            root.putArray("cvrs", mapper.valueToTree(companyOwnerList));
+
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CvrCompanyOwnerHistory done");
             return objectMapper.writeValueAsString(root.getNode());
         }
