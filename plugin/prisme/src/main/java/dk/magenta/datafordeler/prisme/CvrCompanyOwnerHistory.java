@@ -88,7 +88,6 @@ public class CvrCompanyOwnerHistory {
         OutputWrapper.NodeWrapper root = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
         root.put("cvrNummer", cvrNummer);
 
-
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info(
@@ -97,32 +96,33 @@ public class CvrCompanyOwnerHistory {
         this.checkAndLogAccess(loggerHelper);
         loggerHelper.urlInvokePersistablelogs("CvrCompanyOwnerHistory");
 
-        HashSet<String> cvrNumbers = new HashSet<>();
-        cvrNumbers.add(cvrNummer);
-
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
-            query.setCvrNumre(cvrNumbers);
+            query.setCvrNumre(cvrNummer);
             //Get the company, there can only be 0-1
             List<CompanyRecord> companyrecords = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            if (companyrecords.size() == 0) {
+            if (companyrecords.isEmpty()) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CvrCompanyOwnerHistory done");
                 throw new HttpNotFoundException("Company not found " + cvrNummer);
             }
             CompanyRecord companyrecord = companyrecords.get(0);
 
-            FormRecord formRecord = companyrecord.getMetadata().getNewestForm().iterator().next();
+            FormRecord formRecord = companyrecord.getMetadata().getNewestForm().stream().findFirst().orElse(null);
+            if(formRecord==null) {
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
+                throw new AccessDeniedException("The requested company \""+cvrNummer+"\" not active");
+            }
             String formCodeString = formRecord.getCompanyFormCode();
             Integer formCode = Integer.parseInt(formCodeString);
             root.put("virksomhedsformkode", formRecord.getCompanyFormCode());
 
-            root.put("shortDescribtion", formRecord.getShortDescription());
-            root.put("longDescribtion", formRecord.getLongDescription());
+            root.put("shortDescription", formRecord.getShortDescription());
+            root.put("longDescription", formRecord.getLongDescription());
 
             //It is legally forbidden to supply this information from companies with other formcodes then 10, 30 and 50
             if (formCode != 10 && formCode != 30 && formCode != 50) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
-                throw new AccessDeniedException("The requested company is not of a formcode where this request is accepted " + cvrNummer);
+                throw new AccessDeniedException("The requested company \""+cvrNummer+"\" is not of a formcode where this request is accepted. Accepted form codes are 10, 30 and 50");
             }
 
             Set<CompanyParticipantRelationRecord> participants = companyrecord.getParticipants();
@@ -147,15 +147,23 @@ public class CvrCompanyOwnerHistory {
                             ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
 
                             deltagerPnr = participantRecord.getBusinessKey();
-                            Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
-                            if (orgRecord.hasNext()) {
-                                AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
-                                from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
-                                to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
-                            }
-                            CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
+                            Iterator<OrganizationRecord> orgRecordList = participant.getOrganizations().iterator();
+                            while (orgRecordList.hasNext()) {
+                                OrganizationRecord orgRecord = orgRecordList.next();
+                                Iterator<AttributeRecord> attributeList = orgRecord.getAttributes().iterator();//.next().getValues().iterator().next();
+                                while (attributeList.hasNext()) {
+                                    AttributeRecord attribute = attributeList.next();
 
-                            personalOwnerList.add(ownerItem);
+                                    Iterator<AttributeValueRecord> attributeValueList = attribute.getValues().iterator();
+                                    while (attributeValueList.hasNext()) {
+                                        AttributeValueRecord attValue = attributeValueList.next();
+                                        from = Optional.ofNullable(attValue.getValidFrom()).map(o -> o.toString()).orElse(null);
+                                        to = Optional.ofNullable(attValue.getValidTo()).map(o -> o.toString()).orElse(null);
+                                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
+                                        personalOwnerList.add(ownerItem);
+                                    }
+                                }
+                            }
                         } catch(Exception e) {
                             throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                         }
@@ -172,10 +180,9 @@ public class CvrCompanyOwnerHistory {
                     }
                 }
             }
-            ArrayNode jsonOwnerArrayPersonal = mapper.valueToTree(personalOwnerList);
-            ArrayNode jsonOwnerArrayCompany = mapper.valueToTree(companyOwnerList);
-            root.putArray("pnrs", jsonOwnerArrayPersonal);
-            root.putArray("cvrs", jsonOwnerArrayCompany);
+            root.putArray("pnrs", mapper.valueToTree(personalOwnerList));
+            root.putArray("cvrs", mapper.valueToTree(companyOwnerList));
+
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CvrCompanyOwnerHistory done");
             return objectMapper.writeValueAsString(root.getNode());
         }

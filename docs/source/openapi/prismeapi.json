@@ -1,0 +1,200 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Datafordeler",
+    "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere hos Fujitsu, sekundært Selvstyrets og Digitaliseringsstyrelsens medarbejdere med relation til ERP-projektet. For at få adgang til datafordelerens prismeservices skal brugeren indhente en adgangsgivende token fra datafordeleren. Det gøres ved f.eks. med cURL hvor <brugernavn> og <kodeord> udfyldes med de brugeroplysninger, som man tidligere har fået udleveret: curl -u <brugernavn>:<kodeord> -X GET https://sts.test.data.gl/get_token_passive Som respons får man en adgangsgivende token, som man skal sende med i headeren for ens forespørgsler til datafordelerens prismeservices. Headeren skal hedde Authorization og værdien skal være SAML efter fulgt af et mellemrum og dernæst den adgangsgivende token. F.eks: curl -H \"Authorization: SAML <token>\" -X GET https://dafo.test.data.gl/prisme/cvr/1/<cvrnummer> Der refereres i dette dokument til dafo-testserverens endpoint, der findes tilsvarende for prodmiljøet ved adgang til prodmiljøet skal .test – delen udelades i url’en",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://dafo.data.gl"
+    }
+  ],
+  "paths": {
+    "/prisme/cpr/addresshistory/<version>": {
+      "get": {
+        "summary": "Enkeltopslag i CPR - adressehistorik",
+        "description": "Formater: CPR-numre er ti cifre uden bindestreg. Responsformat: JSON",
+        "parameters": [
+          {
+            "name": "cprNummer",
+            "in": "query",
+            "description": "CPR-nummer",
+            "examples": {
+              "fuld": {
+                "value": "0102800123"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string"
+                          },
+                          "vejkode": {
+                            "type": "string"
+                          },
+                          "kommune": {
+                            "type": "string"
+                          },
+                          "adresse": {
+                            "type": "string"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string"
+                          },
+                          "startdato": {
+                            "type": "string"
+                          },
+                          "slutdato": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/ownerhistory/<version>": {
+      "get": {
+        "summary": "Enkeltopslag i CVR - ejerskabshistorik",
+        "description": "Servicen fremsøger en historik over egerskabet af et CVR-nummer<br/><br/>Hvis det forespurgte CVR-nummer findes i datafordeleren, og hvis virksomheden er af en type hvor der er lovgrundlag for at fremsøge informationen, så leveres en liste med et svar. <br/><br/>Der kan leveres information om ejerskab på følgende 3 typer af virksomheder:<br/>Enkeltmandsvirksomheder (virksomhedsformkode = 10)<br/>Interessentskaber (virksomhedsformkode = 30)<br/>Partsrederier (virksomhedsformkode = 50)<br/><br/>Da der tilføjes CPR-information til data som leveres fra ejerskabshistorik skal brugeren som  kalder denne service være oprettet som en bruger med adgang til både cpr- og cvr- data.<br/>Hvis brugeren ikke har denne adgang svares med http 401.<br/><br/>Hvis der ikke kan findes information om CPR-nummer via liveopslag returneres http 500",
+
+        "parameters": [
+          {
+            "name": "cprNummer",
+            "in": "query",
+            "description": "CPR-nummer",
+            "examples": {
+              "fuld": {
+                "value": "0102800123"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Virksomhedsinformation og en liste over denne virksomhed ejerhistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cvrNummer": {
+                      "type": "string",
+                      "example": "12345678"
+                    },
+                    "virksomhedsformkode": {
+                      "type": "string",
+                      "example": "30"
+                    },
+                    "shortDescribtion": {
+                      "type": "string",
+                      "example": "I/S"
+                    },
+                    "longDescribtion": {
+                      "type": "string",
+                      "example": "Interessentskab"
+                    },
+                    "pnrs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pnr": {
+                            "type": "string",
+                            "example": "0101011234"
+                          },
+                          "enhedDetaljer": {
+                            "type": "object",
+                            "properties": {
+                              "enhedsNummer": {
+                                "type": "string",
+                                "example": "4000000000"
+                              },
+                              "gyldigFra": {
+                                "type": "string",
+                                "example": "2020-02-20"
+                              },
+                              "gyldigTil": {
+                                "type": "string",
+                                "example": "2020-05-20"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "cvrs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "cvr": {
+                            "type": "string",
+                            "example": "12345677"
+                          },
+                          "enhedDetaljer": {
+                            "type": "object",
+                            "properties": {
+                              "enhedsNummer": {
+                                "type": "string",
+                                "example": "4000000000"
+                              },
+                              "gyldigFra": {
+                                "type": "string",
+                                "example": "2020-02-20"
+                              },
+                              "gyldigTil": {
+                                "type": "string",
+                                "example": "2020-05-20"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
