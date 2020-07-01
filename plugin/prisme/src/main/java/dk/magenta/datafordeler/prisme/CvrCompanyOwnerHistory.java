@@ -88,7 +88,6 @@ public class CvrCompanyOwnerHistory {
         OutputWrapper.NodeWrapper root = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
         root.put("cvrNummer", cvrNummer);
 
-
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info(
@@ -97,12 +96,9 @@ public class CvrCompanyOwnerHistory {
         this.checkAndLogAccess(loggerHelper);
         loggerHelper.urlInvokePersistablelogs("CvrCompanyOwnerHistory");
 
-        HashSet<String> cvrNumbers = new HashSet<>();
-        cvrNumbers.add(cvrNummer);
-
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
-            query.setCvrNumre(cvrNumbers);
+            query.setCvrNumre(cvrNummer);
             //Get the company, there can only be 0-1
             List<CompanyRecord> companyrecords = QueryManager.getAllEntities(session, query, CompanyRecord.class);
             if (companyrecords.isEmpty()) {
@@ -111,7 +107,11 @@ public class CvrCompanyOwnerHistory {
             }
             CompanyRecord companyrecord = companyrecords.get(0);
 
-            FormRecord formRecord = companyrecord.getMetadata().getNewestForm().iterator().next();
+            FormRecord formRecord = companyrecord.getMetadata().getNewestForm().stream().findFirst().orElse(null);
+            if(formRecord==null) {
+                loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
+                throw new AccessDeniedException("The requested company \""+cvrNummer+"\" not active");
+            }
             String formCodeString = formRecord.getCompanyFormCode();
             Integer formCode = Integer.parseInt(formCodeString);
             root.put("virksomhedsformkode", formRecord.getCompanyFormCode());
@@ -147,15 +147,23 @@ public class CvrCompanyOwnerHistory {
                             ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
 
                             deltagerPnr = participantRecord.getBusinessKey();
-                            Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
-                            if (orgRecord.hasNext()) {
-                                AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
-                                from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
-                                to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
-                            }
-                            CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
+                            Iterator<OrganizationRecord> orgRecordList = participant.getOrganizations().iterator();
+                            while (orgRecordList.hasNext()) {
+                                OrganizationRecord orgRecord = orgRecordList.next();
+                                Iterator<AttributeRecord> attributeList = orgRecord.getAttributes().iterator();//.next().getValues().iterator().next();
+                                while (attributeList.hasNext()) {
+                                    AttributeRecord attribute = attributeList.next();
 
-                            personalOwnerList.add(ownerItem);
+                                    Iterator<AttributeValueRecord> attributeValueList = attribute.getValues().iterator();
+                                    while (attributeValueList.hasNext()) {
+                                        AttributeValueRecord attValue = attributeValueList.next();
+                                        from = Optional.ofNullable(attValue.getValidFrom()).map(o -> o.toString()).orElse(null);
+                                        to = Optional.ofNullable(attValue.getValidTo()).map(o -> o.toString()).orElse(null);
+                                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
+                                        personalOwnerList.add(ownerItem);
+                                    }
+                                }
+                            }
                         } catch(Exception e) {
                             throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                         }

@@ -55,8 +55,8 @@ public class CvrCompanyChanges {
     public static final String PARAM_UPDATED_SINCE = "updatedSince";
     public static final String COMPANY_FORMS = "companyForms";
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String getSingle(@RequestParam(value = COMPANY_FORMS,required=true, defaultValue = "") List<String> companyForms, @RequestParam(value = PARAM_UPDATED_SINCE,required=true, defaultValue = "") String updatedSince, HttpServletRequest request)
+    @RequestMapping(method = RequestMethod.GET, path = "/lookup", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public String getSingle(@RequestParam(value = COMPANY_FORMS,required=true, defaultValue = "") List<String> companyForms, @RequestParam(value = PARAM_UPDATED_SINCE,required=true) String updatedSince, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
         // Root
@@ -75,7 +75,7 @@ public class CvrCompanyChanges {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
-            query.setPageSize("12000");
+            query.setPageSize("50000");
             query.setRecordAfter(updatedSinceTimestamp);
             for (String form : companyForms) {
                 query.addVirksomhedsform(form);
