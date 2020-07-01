@@ -413,6 +413,7 @@
     </dependencies>
 
     <build>
+        <defaultGoal>install</defaultGoal>
         <finalName>datafordeler-core</finalName>
         <plugins>
             <plugin>
