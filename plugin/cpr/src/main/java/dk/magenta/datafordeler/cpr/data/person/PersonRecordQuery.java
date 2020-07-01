@@ -359,8 +359,8 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
 
 
-        this.addCondition("birthtime", Condition.Operator.GT, this.birth_gt, LocalDateTime.class, false);
-        this.addCondition("birthtime", Condition.Operator.LT, this.birth_lt, LocalDateTime.class, false);
+        this.addCondition("birthdate", Condition.Operator.GT, this.birth_gt, LocalDateTime.class, false);
+        this.addCondition("birthdate", Condition.Operator.LT, this.birth_lt, LocalDateTime.class, false);
     }
 
 
