@@ -116,7 +116,7 @@ public class CvrCompanyOwnerHistory {
             Integer formCode = Integer.parseInt(formCodeString);
             root.put("virksomhedsformkode", formRecord.getCompanyFormCode());
 
-            root.put("shortDescribtion", formRecord.getShortDescription());
+            root.put("shortDescription", formRecord.getShortDescription());
             root.put("longDescription", formRecord.getLongDescription());
 
             //It is legally forbidden to supply this information from companies with other formcodes then 10, 30 and 50
