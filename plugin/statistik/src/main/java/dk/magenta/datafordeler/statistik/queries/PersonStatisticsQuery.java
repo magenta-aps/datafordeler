@@ -17,9 +17,7 @@ import dk.magenta.datafordeler.statistik.services.StatisticsService;
 import dk.magenta.datafordeler.statistik.utils.Filter;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
@@ -156,6 +154,35 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
         return (firstSepIndex == -1) ? path : path.substring(0, firstSepIndex);
     }
 
+    protected Condition getOrigintimesCondition(MultiCondition parent, String handle) throws QueryBuildException {
+        MultiCondition condition = new MultiCondition(parent, "AND");
+        if (this.originTimeAfter != null) {
+            condition.add(
+                    this.makeCondition(
+                            condition,
+                            handle,
+                            Condition.Operator.GTE,
+                            Collections.singletonList(this.originTimeAfter.format(DateTimeFormatter.ISO_LOCAL_DATE)),
+                            LocalDate.class,
+                            false
+                    )
+            );
+        }
+        if (this.originTimeBefore != null) {
+            condition.add(
+                    this.makeCondition(
+                            condition,
+                            handle,
+                            Condition.Operator.LTE,
+                            Collections.singletonList(this.originTimeBefore.format(DateTimeFormatter.ISO_LOCAL_DATE)),
+                            OffsetDateTime.class,
+                            true
+                    )
+            );
+        }
+        return condition;
+    }
+
 
     protected void applyOriginTimes(FieldDefinition fieldDefinition) {
         // Omtænk denne
@@ -237,6 +264,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
         joinHandles.put(handle + "RegistrationTo", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO);
         joinHandles.put(handle + "EffectFrom", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_EFFECT_FROM);
         joinHandles.put(handle + "EffectTo", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_EFFECT_TO);
+        joinHandles.put(handle + "Origin", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_ORIGIN_DATE);
         return joinHandles;
     }
 
@@ -248,6 +276,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
         parentCondition.add(condition);
         condition.add(this.getRegistrationtimesCondition(condition, handle + "RegistrationFrom", handle + "RegistrationTo"));
         condition.add(this.getEffecttimesCondition(condition, handle + "EffectFrom", handle + "EffectTo"));
+        condition.add(this.getOrigintimesCondition(condition, handle + "Origin"));
         return condition;
     }
 
