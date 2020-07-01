@@ -29,7 +29,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Virksomhedsinformation og en liste over denne virksomhed ejerhistorik",
+            "description": "Personinformation og en liste over denne persons adressehistorik",
             "content": {
               "application/json": {
                 "schema": {
@@ -108,7 +108,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "description": "Virksomhedsinformation og en liste over denne virksomhed ejerhistorik",
             "content": {
               "application/json": {
                 "schema": {
@@ -116,7 +116,7 @@
                   "properties": {
                     "cvrNummer": {
                       "type": "string",
-                      "example": "1111111111"
+                      "example": "12345678"
                     },
                     "virksomhedsformkode": {
                       "type": "string",
@@ -133,19 +133,28 @@
                     "pnrs": {
                       "type": "array",
                       "items": {
-                        "pnr": {
-                          "type": "string"
-                        },
                         "type": "object",
                         "properties": {
-                          "enhedsNummer": {
-                            "type": "string"
+                          "pnr": {
+                            "type": "string",
+                            "example": "0101011234"
                           },
-                          "gyldigFra": {
-                            "type": "string"
-                          },
-                          "gyldigTil": {
-                            "type": "string"
+                          "enhedDetaljer": {
+                            "type": "object",
+                            "properties": {
+                              "enhedsNummer": {
+                                "type": "string",
+                                "example": "4000000000"
+                              },
+                              "gyldigFra": {
+                                "type": "string",
+                                "example": "2020-02-20"
+                              },
+                              "gyldigTil": {
+                                "type": "string",
+                                "example": "2020-05-20"
+                              }
+                            }
                           }
                         }
                       }
@@ -155,37 +164,26 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "myndighedskode": {
-                            "type": "string"
+                          "cvr": {
+                            "type": "string",
+                            "example": "12345677"
                           },
-                          "vejkode": {
-                            "type": "string"
-                          },
-                          "kommune": {
-                            "type": "string"
-                          },
-                          "adresse": {
-                            "type": "string"
-                          },
-                          "postnummer": {
-                            "type": "integer",
-                            "example": 3900
-                          },
-                          "bynavn": {
-                            "type": "string"
-                          },
-                          "stedkode": {
-                            "type": "integer",
-                            "example": 200
-                          },
-                          "landekode": {
-                            "type": "string"
-                          },
-                          "startdato": {
-                            "type": "string"
-                          },
-                          "slutdato": {
-                            "type": "string"
+                          "enhedDetaljer": {
+                            "type": "object",
+                            "properties": {
+                              "enhedsNummer": {
+                                "type": "string",
+                                "example": "4000000000"
+                              },
+                              "gyldigFra": {
+                                "type": "string",
+                                "example": "2020-02-20"
+                              },
+                              "gyldigTil": {
+                                "type": "string",
+                                "example": "2020-05-20"
+                              }
+                            }
                           }
                         }
                       }
