@@ -105,7 +105,7 @@ public class CvrCompanyOwnerHistory {
             query.setCvrNumre(cvrNumbers);
             //Get the company, there can only be 0-1
             List<CompanyRecord> companyrecords = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            if (companyrecords.size() == 0) {
+            if (companyrecords.isEmpty()) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "CvrCompanyOwnerHistory done");
                 throw new HttpNotFoundException("Company not found " + cvrNummer);
             }
