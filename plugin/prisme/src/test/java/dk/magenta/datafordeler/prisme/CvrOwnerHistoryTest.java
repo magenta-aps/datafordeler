@@ -144,7 +144,7 @@ public class CvrOwnerHistoryTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("{\"cvrNummer\":\"88888885\",\"virksomhedsformkode\":\"30\"," +
-                        "\"shortDescribtion\":\"I/S\",\"longDescribtion\":\"Interessentskab\",\"pnrs\":[{\"pnr\":" +
+                        "\"shortDescription\":\"I/S\",\"longDescription\":\"Interessentskab\",\"pnrs\":[{\"pnr\":" +
                         "\"1111111111\",\"enhedDetaljer\":{\"enhedsNummer\":4000000000,\"gyldigFra\":\"2013-09-01\"," +
                         "\"gyldigTil\":null}},{\"pnr\":\"1111111112\",\"enhedDetaljer\":{\"enhedsNummer\":4000000001," +
                         "\"gyldigFra\":\"2013-09-01\",\"gyldigTil\":null}},{\"pnr\":\"1111111113\",\"enhedDetaljer\":{" +
