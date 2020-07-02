@@ -1,14 +1,12 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.ForcedJoinDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
-import dk.magenta.datafordeler.cpr.records.person.PersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
@@ -331,9 +329,7 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("door", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR);
         joinHandles.put("housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("bnr", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER);
-
         joinHandles.put("birthdate", PersonEntity.DB_FIELD_BIRTHTIME + LookupDefinition.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
-
         joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
     }
 
@@ -357,8 +353,6 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("housenumber", this.houseNos);
         this.addCondition("bnr", this.buildingNos);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
-
-
         this.addCondition("birthdate", Condition.Operator.GT, this.birth_gt, LocalDateTime.class, false);
         this.addCondition("birthdate", Condition.Operator.LT, this.birth_lt, LocalDateTime.class, false);
     }

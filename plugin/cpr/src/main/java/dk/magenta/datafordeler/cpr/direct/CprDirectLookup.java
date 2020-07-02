@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.cpr.direct;
 
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
-import dk.magenta.datafordeler.core.exception.MissingEntityException;
 import dk.magenta.datafordeler.core.exception.ParseException;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
@@ -22,7 +21,6 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.OffsetDateTime;

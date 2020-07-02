@@ -1,23 +1,20 @@
 package dk.magenta.datafordeler.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.dump.Dump;
 import dk.magenta.datafordeler.core.dump.Dump.Task;
 import dk.magenta.datafordeler.core.dump.DumpConfiguration;
-import dk.magenta.datafordeler.core.exception.*;
-import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.io.PluginSourceData;
-import dk.magenta.datafordeler.core.io.Receipt;
-import dk.magenta.datafordeler.core.plugin.EntityManager;
+import dk.magenta.datafordeler.core.exception.ConfigurationException;
+import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.util.CronUtil;
-import dk.magenta.datafordeler.core.util.ItemInputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +29,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @Component
 public class Engine {

@@ -8,8 +8,6 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
-import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.statistik.StatistikRolesDefinition;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportSyncHandler;
 import dk.magenta.datafordeler.statistik.utils.Filter;
@@ -21,7 +19,11 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,12 +31,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController

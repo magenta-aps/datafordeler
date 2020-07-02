@@ -1,11 +1,15 @@
 package dk.magenta.datafordeler.core.fapi;
 
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.format.DateTimeFormatter;

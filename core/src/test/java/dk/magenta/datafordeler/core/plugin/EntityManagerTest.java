@@ -1,29 +1,22 @@
 package dk.magenta.datafordeler.core.plugin;
 
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.io.Receipt;
 import dk.magenta.datafordeler.core.testutil.CallbackController;
-import dk.magenta.datafordeler.core.testutil.ExpectorCallback;
-import dk.magenta.datafordeler.plugindemo.DemoEntityManager;
 import dk.magenta.datafordeler.plugindemo.DemoRegisterManager;
 import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)

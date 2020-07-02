@@ -1,11 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.road.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
-
 import javax.persistence.MappedSuperclass;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 
 @MappedSuperclass
 public abstract class RoadSegmentDataRecord<S extends RoadSegmentDataRecord<S>> extends CprBitemporalRoadRecord<S> {

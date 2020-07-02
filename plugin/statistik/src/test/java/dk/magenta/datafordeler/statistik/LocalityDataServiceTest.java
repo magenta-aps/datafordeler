@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.statistik.services.LocalityDataService;
-import dk.magenta.datafordeler.statistik.services.RoadDataService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

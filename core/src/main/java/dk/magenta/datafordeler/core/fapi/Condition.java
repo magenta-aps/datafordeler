@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 
-import java.util.List;
 import java.util.Map;
 
 public abstract class Condition {

@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.cpr;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.database.QueryManager;
@@ -34,7 +33,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.InputStream;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 
 import static org.mockito.Mockito.when;

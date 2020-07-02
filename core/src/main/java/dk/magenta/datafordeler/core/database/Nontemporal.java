@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.core.database;
 
 import java.time.OffsetDateTime;
-import java.util.Set;
 
 public interface Nontemporal {
 

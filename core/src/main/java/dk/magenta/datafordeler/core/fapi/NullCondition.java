@@ -2,8 +2,9 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * A single field somewhere in the query structure, being compared to null

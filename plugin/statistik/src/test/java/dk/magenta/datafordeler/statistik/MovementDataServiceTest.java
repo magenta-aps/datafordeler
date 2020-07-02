@@ -8,7 +8,10 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.statistik.services.MovementDataService;
 import dk.magenta.datafordeler.statistik.services.StatisticsService;
 import org.json.JSONException;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -80,7 +83,6 @@ public class MovementDataServiceTest extends TestBase {
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
 
-        System.out.println("--------------------------");
         response = restTemplate.exchange("/statistik/movement_data/?pnr=0101001234&registrationAfter=1900-01-01&registrationBefore=2018-08-01", HttpMethod.GET, httpEntity, String.class);
         System.out.println(response.getStatusCodeValue());
         Assert.assertNotNull(response.getBody());

@@ -2,20 +2,16 @@ package dk.magenta.datafordeler.core.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.IdentifiedEntity;
+import dk.magenta.datafordeler.core.database.LastUpdated;
+import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.exception.FailedReferenceException;
-import dk.magenta.datafordeler.core.exception.HttpStatusException;
-import dk.magenta.datafordeler.core.exception.WrongSubclassException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
-import dk.magenta.datafordeler.core.fapi.FapiService;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.PluginSourceData;
-import dk.magenta.datafordeler.core.io.Receipt;
-import dk.magenta.datafordeler.core.util.ItemInputStream;
-import org.apache.http.StatusLine;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
@@ -24,13 +20,9 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Collections;
 
 /**
  * Entity (and associates) specific manager. Subclass in plugins

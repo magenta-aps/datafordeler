@@ -1,14 +1,12 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.io.Receipt;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.cpr.direct.CprDirectPasswordUpdate;
@@ -16,7 +14,6 @@ import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.parsers.PersonParser;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.*;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
@@ -34,11 +31,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.InputStream;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 @Component
 public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord, PersonEntity> {
