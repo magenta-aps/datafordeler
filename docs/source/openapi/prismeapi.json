@@ -14,17 +14,13 @@
     "/prisme/cpr/addresshistory/<version>": {
       "get": {
         "summary": "Enkeltopslag i CPR - adressehistorik",
-        "description": "Formater: CPR-numre er ti cifre uden bindestreg. Responsformat: JSON",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
         "parameters": [
           {
             "name": "cprNummer",
             "in": "query",
             "description": "CPR-nummer",
-            "examples": {
-              "fuld": {
-                "value": "0102800123"
-              }
-            }
+            "example": "0101011234"
           }
         ],
         "responses": {
@@ -35,11 +31,21 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "path": {
-                      "type": "string"
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
                     },
-                    "terms": {
-                      "type": "string"
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
                     },
                     "adresses": {
                       "type": "array",
@@ -47,36 +53,44 @@
                         "type": "object",
                         "properties": {
                           "myndighedskode": {
-                            "type": "string"
+                            "type": "string",
+                            "example": 956
                           },
                           "vejkode": {
-                            "type": "string"
+                            "type": "string",
+                            "example": 187
                           },
                           "kommune": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
                           },
                           "adresse": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "Aqqusernga"
                           },
                           "postnummer": {
                             "type": "integer",
                             "example": 3900
                           },
                           "bynavn": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "Kangerlussuaq"
                           },
                           "stedkode": {
                             "type": "integer",
                             "example": 200
                           },
                           "landekode": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "GL"
                           },
                           "startdato": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "2020-02-03"
                           },
                           "slutdato": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "2020-03-19"
                           }
                         }
                       }
@@ -92,23 +106,19 @@
     "/prisme/cvr/ownerhistory/<version>": {
       "get": {
         "summary": "Enkeltopslag i CVR - ejerskabshistorik",
-        "description": "Servicen fremsøger en historik over egerskabet af et CVR-nummer<br/><br/>Hvis det forespurgte CVR-nummer findes i datafordeleren, og hvis virksomheden er af en type hvor der er lovgrundlag for at fremsøge informationen, så leveres en liste med et svar. <br/><br/>Der kan leveres information om ejerskab på følgende 3 typer af virksomheder:<br/>Enkeltmandsvirksomheder (virksomhedsformkode = 10)<br/>Interessentskaber (virksomhedsformkode = 30)<br/>Partsrederier (virksomhedsformkode = 50)<br/><br/>Da der tilføjes CPR-information til data som leveres fra ejerskabshistorik skal brugeren som  kalder denne service være oprettet som en bruger med adgang til både cpr- og cvr- data.<br/>Hvis brugeren ikke har denne adgang svares med http 401.<br/><br/>Hvis der ikke kan findes information om CPR-nummer via liveopslag returneres http 500",
+        "description": "Servicen fremsøger en historik over egerskabet af et CVR-nummer<br/><br/>Hvis det forespurgte CVR-nummer findes i datafordeleren, og hvis virksomheden er af en type hvor der er lovgrundlag for at fremsøge informationen, så leveres en liste med et svar. <br/><br/>Der kan leveres information om ejerskab på følgende 3 typer af virksomheder:<br/>Enkeltmandsvirksomheder (virksomhedsformkode = 10)<br/>Interessentskaber (virksomhedsformkode = 30)<br/>Partsrederier (virksomhedsformkode = 50)<br/><br/>Da der tilføjes CPR-information til data som leveres fra ejerskabshistorik, skal brugeren som  kalder denne service være oprettet som en bruger med adgang til både cpr- og cvr- data.<br/>Hvis brugeren ikke har denne adgang svares med http 401.<br/><br/>Hvis der ikke kan findes information om CPR-nummer via liveopslag returneres http 500",
 
         "parameters": [
           {
-            "name": "cprNummer",
+            "name": "cvrNummer",
             "in": "query",
-            "description": "CPR-nummer",
-            "examples": {
-              "fuld": {
-                "value": "0102800123"
-              }
-            }
+            "description": "CVR-nummer",
+            "example": "12345678"
           }
         ],
         "responses": {
           "200": {
-            "description": "Virksomhedsinformation og en liste over denne virksomhed ejerhistorik",
+            "description": "Virksomhedsinformation og en liste over denne virksomheds ejerhistorik",
             "content": {
               "application/json": {
                 "schema": {
@@ -187,6 +197,47 @@
                           }
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/companychanges/<version>/lookup": {
+      "get": {
+        "summary": "Fremsøgning af virksomheder som er tilføjet eller ændret siden et tidspunkt, samt hvilke virksomhedsformkoder der ønskes fremsøgning af",
+        "description": "Servicen kaldes med et tidsstempel, og en liste af virksomhedsformkoder.<br/>Alle virksomheder i datafordeleren som både er af en af de forespurgte virksomhedsformkoder, og hvor der er sket ændringer siden tidsstemplet leveres i svaret.",
+        "parameters": [
+          {
+            "name": "updatedSince",
+            "in": "query",
+            "description": "Opdateret i DAFO siden",
+            "example": "2020-05-20"
+          },
+          {
+            "name": "companyForms",
+            "in": "query",
+            "description": "Liste af virksomhedsformkoder, som ønskes fremsøgt",
+            "example": "10,30,50"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cvrs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["12345678","12345679"]
                     }
                   }
                 }
