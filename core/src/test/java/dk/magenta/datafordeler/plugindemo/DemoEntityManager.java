@@ -100,11 +100,6 @@ public class DemoEntityManager extends EntityManager {
     }
 
     @Override
-    protected Communicator getReceiptSender() {
-        return this.commonFetcher;
-    }
-
-    @Override
     public FapiBaseService getEntityService() {
         return this.demoEntityService;
     }
@@ -143,28 +138,6 @@ public class DemoEntityManager extends EntityManager {
         this.baseEndpoint = baseEndpoint;
     }
 
-    /** Receipt sending **/
-
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return expandBaseURI(this.getBaseEndpoint(), "/receipt");
-    }
-
-
-    /** Reference parsing **/
-
-    public RegistrationReference parseReference(InputStream referenceData) throws IOException {
-        return this.objectMapper.readValue(referenceData, this.managedRegistrationReferenceClass);
-    }
-
-    public RegistrationReference parseReference(String referenceData, String charsetName) throws IOException {
-        return this.objectMapper.readValue(referenceData.getBytes(charsetName), this.managedRegistrationReferenceClass);
-    }
-
-    public RegistrationReference parseReference(URI referenceURI) {
-        return null;
-    }
-
     /** Registration parsing **/
 
     public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
@@ -188,30 +161,6 @@ public class DemoEntityManager extends EntityManager {
 
     public void parseData(JsonNode jsonNode, ImportMetadata importMetadata) throws ParseException {
         System.out.println("parse this: "+jsonNode.toString());
-    }
-
-    /** Registration fetching **/
-
-    public URI getRegistrationInterface(RegistrationReference reference) throws WrongSubclassException {
-        if (!this.managedRegistrationReferenceClass.isInstance(reference)) {
-            throw new WrongSubclassException(this.managedRegistrationReferenceClass, reference);
-        }
-        if (reference.getURI() != null) {
-            return reference.getURI();
-        }
-        return EntityManager.expandBaseURI(this.getBaseEndpoint(), "/get/"+reference.getChecksum());
-    }
-
-    /** Checksum fetching **/
-
-    @Override
-    protected URI getListChecksumInterface(OffsetDateTime fromDate) {
-        return this.getRegisterManager().getListChecksumInterface(this.getSchema(), fromDate);
-    }
-
-    @Override
-    protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        return null;
     }
 
 }

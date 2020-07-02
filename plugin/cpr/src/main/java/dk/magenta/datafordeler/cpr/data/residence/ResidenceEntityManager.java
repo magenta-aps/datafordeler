@@ -29,9 +29,6 @@ public class ResidenceEntityManager extends CprGeoEntityManager<ResidenceRecord,
 
     public ResidenceEntityManager() {
         this.managedEntityClass = ResidenceEntity.class;
-        this.managedEntityReferenceClass = ResidenceEntityReference.class;
-        this.managedRegistrationClass = ResidenceRegistration.class;
-        this.managedRegistrationReferenceClass = PersonRegistrationReference.class;
     }
 
     @Override

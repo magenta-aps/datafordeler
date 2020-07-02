@@ -152,34 +152,6 @@ public class DemoRegisterManager extends RegisterManager {
         return this.configurationManager.getConfiguration().getPullCronSchedule();
     }
 
-    /* listChecksums */
-
-    @Override
-    protected Communicator getChecksumFetcher() {
-        return this.commonFetcher;
-    }
-
-    public URI getListChecksumInterface(String schema, OffsetDateTime from) {
-        ListHashMap<String, String> parameters = new ListHashMap<>();
-        if (schema != null) {
-            parameters.add("objectType", schema);
-        }
-        if (from != null) {
-            parameters.add("timestamp", from.format(DateTimeFormatter.ISO_DATE_TIME));
-        }
-        return expandBaseURI(this.getBaseEndpoint(), "/listChecksums", RegisterManager.joinQueryString(parameters), null);
-    }
-
-    @Override
-    protected ItemInputStream<EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        //responseContent = this.printStream(responseContent); // Just for printing, can be omitted
-        HashMap<String, Class<? extends EntityReference>> classMap = new HashMap<>();
-        for (EntityManager entityManager : this.entityManagers) {
-            classMap.put(entityManager.getSchema(), entityManager.getManagedEntityReferenceClass());
-        }
-        return ItemInputStream.parseJsonStream(responseContent, classMap, "items", "type", this.objectMapper);
-    }
-
     @Override
     public void setLastUpdated(EntityManager entityManager, ImportMetadata importMetadata) {
         boolean inTransaction = importMetadata.isTransactionInProgress();

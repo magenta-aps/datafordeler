@@ -94,7 +94,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     private static PersonEntityManager instance;
 
     public PersonEntityManager() {
-        this.managedRegistrationReferenceClass = PersonRegistrationReference.class;
         instance = this;
     }
 
@@ -132,11 +131,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     @Override
     public String getSchema() {
         return PersonEntity.schema;
-    }
-
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return null;
     }
 
     private HashSet<String> nonGreenlandicCprNumbers = new HashSet<>();

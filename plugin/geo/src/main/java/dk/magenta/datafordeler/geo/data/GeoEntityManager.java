@@ -94,58 +94,8 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     }
 
     @Override
-    protected Communicator getReceiptSender() {
-        return this.commonFetcher;
-    }
-
-    @Override
     public URI getBaseEndpoint() {
         return this.getRegisterManager().getBaseEndpoint();
-    }
-
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return null;
-    }
-
-    @Override
-    public RegistrationReference parseReference(InputStream referenceData) throws IOException {
-        return this.getObjectMapper().readValue(referenceData, this.managedRegistrationReferenceClass);
-    }
-
-    @Override
-    public RegistrationReference parseReference(String referenceData, String charsetName) throws IOException {
-        return this.getObjectMapper().readValue(referenceData.getBytes(charsetName), this.managedRegistrationReferenceClass);
-    }
-
-    @Override
-    public RegistrationReference parseReference(URI uri) {
-        try {
-            return this.parseReference(uri.toString(),"utf-8");
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    @Override
-    protected URI getListChecksumInterface(OffsetDateTime offsetDateTime) {
-        return null;
-    }
-
-    @Override
-    public URI getRegistrationInterface(RegistrationReference reference) throws WrongSubclassException {
-        if (!this.managedRegistrationReferenceClass.isInstance(reference)) {
-            throw new WrongSubclassException(this.managedRegistrationReferenceClass, reference);
-        }
-        if (reference.getURI() != null) {
-            return reference.getURI();
-        }
-        return EntityManager.expandBaseURI(this.getBaseEndpoint(), "/get/"+this.getBaseName()+"/"+reference.getChecksum());
-    }
-
-    @Override
-    protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) {
-        return ItemInputStream.parseJsonStream(responseContent, this.managedEntityReferenceClass, "items", this.getObjectMapper());
     }
 
     @Override

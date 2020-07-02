@@ -85,57 +85,11 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
     }
 
     @Override
-    protected Communicator getReceiptSender() {
-        return this.commonFetcher;
-    }
-
-    @Override
     public URI getBaseEndpoint() {
         return this.getRegisterManager().getBaseEndpoint();
     }
 
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return null;
-    }
-
-    @Override
-    public RegistrationReference parseReference(InputStream referenceData) throws IOException {
-        return this.getObjectMapper().readValue(referenceData, this.managedRegistrationReferenceClass);
-    }
-
-    @Override
-    public RegistrationReference parseReference(String referenceData, String charsetName) throws IOException {
-        return this.getObjectMapper().readValue(referenceData.getBytes(charsetName), this.managedRegistrationReferenceClass);
-    }
-
     protected abstract RegistrationReference createRegistrationReference(URI uri);
-
-    @Override
-    public RegistrationReference parseReference(URI uri) {
-        return this.createRegistrationReference(uri);
-    }
-
-    @Override
-    public URI getRegistrationInterface(RegistrationReference reference) throws WrongSubclassException {
-        if (!this.managedRegistrationReferenceClass.isInstance(reference)) {
-            throw new WrongSubclassException(this.managedRegistrationReferenceClass, reference);
-        }
-        if (reference.getURI() != null) {
-            return reference.getURI();
-        }
-        return EntityManager.expandBaseURI(this.getBaseEndpoint(), "/get/"+this.getBaseName()+"/"+reference.getChecksum());
-    }
-
-    @Override
-    protected URI getListChecksumInterface(OffsetDateTime fromDate) {
-        return this.getRegisterManager().getListChecksumInterface(this.getSchema(), fromDate);
-    }
-
-    @Override
-    protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        return ItemInputStream.parseJsonStream(responseContent, this.managedEntityReferenceClass, "items", this.getObjectMapper());
-    }
 
     @Override
     protected Logger getLog() {
