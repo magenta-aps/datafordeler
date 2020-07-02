@@ -88,11 +88,6 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
     }
 
     @Override
-    protected Communicator getReceiptSender() {
-        return this.commonFetcher;
-    }
-
-    @Override
     public URI getBaseEndpoint() {
         return this.getRegisterManager().getBaseEndpoint();
     }
@@ -440,40 +435,4 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
         }
     }
 
-
-    @Override
-    public URI getRegistrationInterface(RegistrationReference reference) throws WrongSubclassException {
-        if (!this.managedRegistrationReferenceClass.isInstance(reference)) {
-            throw new WrongSubclassException(this.managedRegistrationReferenceClass, reference);
-        }
-        if (reference.getURI() != null) {
-            return reference.getURI();
-        }
-        return null;
-    }
-
-    @Override
-    protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        return ItemInputStream.parseJsonStream(responseContent, this.managedEntityReferenceClass, "items", this.getObjectMapper());
-    }
-
-    @Override
-    protected URI getListChecksumInterface(OffsetDateTime fromDate) {
-        return this.getRegisterManager().getListChecksumInterface(this.getSchema(), fromDate);
-    }
-
-    @Override
-    public RegistrationReference parseReference(InputStream inputStream) throws IOException {
-        return null;
-    }
-
-    @Override
-    public RegistrationReference parseReference(String s, String s1) throws IOException {
-        return null;
-    }
-
-    @Override
-    public RegistrationReference parseReference(URI uri) {
-        return null;
-    }
 }

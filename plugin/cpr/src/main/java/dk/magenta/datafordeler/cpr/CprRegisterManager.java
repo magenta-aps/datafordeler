@@ -115,16 +115,6 @@ public class CprRegisterManager extends RegisterManager {
         return null;
     }
 
-    @Override
-    protected Communicator getChecksumFetcher() {
-        return null;
-    }
-
-    @Override
-    public URI getListChecksumInterface(String schema, OffsetDateTime from) {
-        return null;
-    }
-
     public String getPullCronSchedule() {
         // TODO: make entitymanager specific
         return this.configurationManager.getConfiguration().getPersonRegisterPullCronSchedule();

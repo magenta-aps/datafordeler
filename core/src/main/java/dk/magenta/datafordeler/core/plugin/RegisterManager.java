@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * Manager for a Plugin's connection to its data source, through e series of EntityManagers
+ * Manager for a Plugin's connection to its data source, through a series of EntityManagers
  */
 public abstract class RegisterManager {
 
@@ -199,53 +199,6 @@ public abstract class RegisterManager {
     public String getPullCronSchedule() {
         return null;
     }
-
-    /** Checksum fetching **/
-
-    /**
-     * Plugins must return a Fetcher instance from this method
-     * @return
-     */
-    protected abstract Communicator getChecksumFetcher();
-
-    public abstract URI getListChecksumInterface(String schema, OffsetDateTime from);
-
-    /**
-     * Fetches checksum data (for synchronization) from the register. Plugins are free to implement their own version
-     * @param fromDate
-     * @return
-     * @throws DataFordelerException
-     */
-    public ItemInputStream<? extends EntityReference> listRegisterChecksums(String schema, OffsetDateTime fromDate) throws DataFordelerException {
-        URI checksumInterface = this.getListChecksumInterface(schema, fromDate);
-        this.getLog().info(
-                "Getting " + (fromDate==null ? "all " : "") + "checksums for " +
-                (schema==null ? "all schemas":("schema "+schema)) +
-                (fromDate!=null ? (" since "+fromDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)):"") +
-                " from address "+checksumInterface);
-        // TODO: Do this in a thread?
-        InputStream responseBody = this.getChecksumFetcher().fetch(checksumInterface);
-        if (schema != null) {
-            EntityManager entityManager = this.getEntityManager(schema);
-            if (entityManager != null) {
-                return entityManager.parseChecksumResponse(responseBody);
-            }
-        }
-        return this.parseChecksumResponse(responseBody);
-    }
-
-    protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        HashMap<String, Class<? extends EntityReference>> classMap = new HashMap<>();
-        for (EntityManager entityManager : this.entityManagers) {
-            classMap.put(entityManager.getSchema(), entityManager.getManagedEntityReferenceClass());
-        }
-        return ItemInputStream.parseJsonStream(responseContent, classMap, "items", "type", this.getObjectMapper());
-    }
-
-
-
-
-
 
     /**
      * Utility method to be used by subclasses

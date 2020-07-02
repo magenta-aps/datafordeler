@@ -162,16 +162,6 @@ public class GeoRegisterManager extends RegisterManager {
     }
 
     @Override
-    protected Communicator getChecksumFetcher() {
-        return null;
-    }
-
-    @Override
-    public URI getListChecksumInterface(String schema, OffsetDateTime from) {
-        return null;
-    }
-
-    @Override
     public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) {
         // First delete items that are deleted on input server
         try {

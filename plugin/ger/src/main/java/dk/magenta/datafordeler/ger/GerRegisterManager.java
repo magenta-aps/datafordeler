@@ -134,16 +134,6 @@ public class GerRegisterManager extends RegisterManager {
     }
 
     @Override
-    protected Communicator getChecksumFetcher() {
-        return null;
-    }
-
-    @Override
-    public URI getListChecksumInterface(String schema, OffsetDateTime from) {
-        return null;
-    }
-
-    @Override
     public ImportInputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
         this.log.info("eventInterface: "+eventInterface);
         GerConfiguration configuration = this.configurationManager.getConfiguration();

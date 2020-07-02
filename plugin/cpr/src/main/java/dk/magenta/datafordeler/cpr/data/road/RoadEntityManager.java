@@ -37,7 +37,6 @@ public class RoadEntityManager extends CprRecordEntityManager<RoadDataRecord, Ro
     private static RoadEntityManager instance;
 
     public RoadEntityManager() {
-        this.managedRegistrationReferenceClass = RoadRegistrationReference.class;
         instance = this;
     }
 
@@ -59,11 +58,6 @@ public class RoadEntityManager extends CprRecordEntityManager<RoadDataRecord, Ro
     @Override
     public String getSchema() {
         return RoadEntity.schema;
-    }
-
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return null;
     }
 
     @Override

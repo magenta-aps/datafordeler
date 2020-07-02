@@ -63,28 +63,6 @@ public class EntityManagerTest extends PluginTestBase {
     }
 
     @Test
-    public void testReceipts() throws IOException {
-        DemoEntityManager entityManager = (DemoEntityManager) this.plugin.getEntityManager(DemoEntityRecord.schema);
-        Receipt receipt1 = new Receipt("Testing receipt 1", OffsetDateTime.now());
-        Receipt receipt2 = new Receipt("Testing receipt 2", OffsetDateTime.now());
-        ExpectorCallback receiptResponder = new ExpectorCallback();
-        this.callbackController.addCallbackResponse("/test/receipt", "response body", receiptResponder);
-        try {
-            entityManager.setBaseEndpoint(new URI("http", null, "localhost", this.port, "/test", null, null));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        ArrayList<Receipt> receipts = new ArrayList<>();
-        receipts.add(receipt1);
-        receipts.add(receipt2);
-        Map<Receipt, Integer> responses = entityManager.sendReceipts(receipts);
-        Assert.assertNotNull(responses.get(receipt1));
-        Assert.assertNotNull(responses.get(receipt2));
-        Assert.assertEquals(200, responses.get(receipt1).intValue());
-        Assert.assertEquals(200, responses.get(receipt2).intValue());
-    }
-
-    @Test
     public void testExpandBaseUri() throws URISyntaxException {
         Assert.assertEquals(new URI("http://localhost/foo/bar"), EntityManager.expandBaseURI(new URI("http://localhost"), "/foo/bar"));
         Assert.assertEquals(new URI("http://localhost/foo/bar?bat=42#hey"), EntityManager.expandBaseURI(new URI("http://localhost"), "/foo/bar", "bat=42", "hey"));
