@@ -106,7 +106,7 @@
     "/prisme/cvr/ownerhistory/<version>": {
       "get": {
         "summary": "Enkeltopslag i CVR - ejerskabshistorik",
-        "description": "Servicen fremsøger en historik over egerskabet af et CVR-nummer<br/><br/>Hvis det forespurgte CVR-nummer findes i datafordeleren, og hvis virksomheden er af en type hvor der er lovgrundlag for at fremsøge informationen, så leveres en liste med et svar. <br/><br/>Der kan leveres information om ejerskab på følgende 3 typer af virksomheder:<br/>Enkeltmandsvirksomheder (virksomhedsformkode = 10)<br/>Interessentskaber (virksomhedsformkode = 30)<br/>Partsrederier (virksomhedsformkode = 50)<br/><br/>Da der tilføjes CPR-information til data som leveres fra ejerskabshistorik, skal brugeren som  kalder denne service være oprettet som en bruger med adgang til både cpr- og cvr- data.<br/>Hvis brugeren ikke har denne adgang svares med http 401.<br/><br/>Hvis der ikke kan findes information om CPR-nummer via liveopslag returneres http 500",
+        "description": "Servicen fremsøger en historik over egerskabet af et CVR-nummer<br/><br/>Hvis det forespurgte CVR-nummer findes i datafordeleren, og hvis virksomheden er af en type hvor der er lovgrundlag for at fremsøge informationen, så leveres en liste med et svar. <br/><br/>Der kan leveres information om ejerskab på følgende 3 typer af virksomheder:<br/>Enkeltmandsvirksomheder (virksomhedsformkode = 10)<br/>Interessentskaber (virksomhedsformkode = 30)<br/>Partsrederier (virksomhedsformkode = 50)<br/><br/>Da der tilføjes CPR-information til data som leveres fra ejerskabshistorik, skal brugeren som  kalder denne service være oprettet som en bruger med adgang til både cpr- og cvr- data.<br/>Hvis brugeren ikke har denne adgang svares med http 401.<br/><br/>Hvis der ikke kan findes information om CPR-nummer via liveopslag returneres http 500<br/><br/>Eksempel:<br/>/prisme/cvr/ownerhistory/1/12345678",
 
         "parameters": [
           {
@@ -208,8 +208,8 @@
     },
     "/prisme/cvr/companychanges/<version>/lookup": {
       "get": {
-        "summary": "Fremsøgning af virksomheder som er tilføjet eller ændret siden et tidspunkt, samt hvilke virksomhedsformkoder der ønskes fremsøgning af",
-        "description": "Servicen kaldes med et tidsstempel, og en liste af virksomhedsformkoder.<br/>Alle virksomheder i datafordeleren som både er af en af de forespurgte virksomhedsformkoder, og hvor der er sket ændringer siden tidsstemplet leveres i svaret.",
+        "summary": "Fremsøgning af virksomheder som er tilføjet eller ændret siden et tidspunkt",
+        "description": "Servicen kaldes med et tidsstempel, og en liste af virksomhedsformkoder.<br/>Alle virksomheder i datafordeleren som både er af en af de forespurgte virksomhedsformkoder, og hvor der er sket ændringer siden tidsstemplet leveres i svaret.<br/><br/>Eksempel:<br/>/prisme/cvr/companychanges/1/lookup/?updatedSince=2020-06-29&companyForms=10,30,50",
         "parameters": [
           {
             "name": "updatedSince",
