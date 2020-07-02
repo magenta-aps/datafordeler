@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 
-import javax.validation.constraints.Null;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;

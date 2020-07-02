@@ -1,14 +1,9 @@
 package dk.magenta.datafordeler.core.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.FilterDefs;
-import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

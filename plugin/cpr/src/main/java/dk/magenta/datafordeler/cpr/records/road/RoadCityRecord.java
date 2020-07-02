@@ -3,10 +3,8 @@ package dk.magenta.datafordeler.cpr.records.road;
 import dk.magenta.datafordeler.core.exception.ParseException;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
-import dk.magenta.datafordeler.cpr.records.road.data.CprBitemporalRoadRecord;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadCityBitemporalRecord;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

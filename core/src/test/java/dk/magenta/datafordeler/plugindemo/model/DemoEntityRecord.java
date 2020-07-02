@@ -6,9 +6,9 @@ import dk.magenta.datafordeler.core.database.*;
 import org.hibernate.Session;
 import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
