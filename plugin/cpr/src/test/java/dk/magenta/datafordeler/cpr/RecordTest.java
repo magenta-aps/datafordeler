@@ -133,6 +133,27 @@ public class RecordTest {
         }
     }
 
+    @Test
+    public void testImportPersonWithChildren() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        importMetadata.setSession(session);
+        this.loadPerson("/personWithChildren.txt", importMetadata);
+
+        try {
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("0101011234");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+            Assert.assertEquals(3, personEntity.getChildren().size());
+
+        } catch(Exception e) {
+
+        }
+    }
+
+
 
     @Test
     public void testPersonAddressSearch() throws DataFordelerException, IOException {
