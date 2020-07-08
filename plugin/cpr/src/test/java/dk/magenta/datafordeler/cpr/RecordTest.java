@@ -16,9 +16,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
-import dk.magenta.datafordeler.cpr.records.person.data.ChurchVerificationDataRecord;
 import org.hibernate.Session;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,13 +77,6 @@ public class RecordTest {
         personEntityManager.parseData(testData, importMetadata);
         testData.close();
     }
-/*
-    @After
-    public void clean() {
-        Session session = sessionManager.getSessionFactory().openSession();
-
-        session.close();
-    }*/
 
     @Test
     public void testPerson() throws DataFordelerException, IOException {
@@ -135,21 +126,16 @@ public class RecordTest {
 
     @Test
     public void testImportPersonWithChildren() throws DataFordelerException, IOException {
-        Session session = sessionManager.getSessionFactory().openSession();
-        ImportMetadata importMetadata = new ImportMetadata();
-        importMetadata.setSession(session);
-        this.loadPerson("/personWithChildren.txt", importMetadata);
-
-        try {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPerson("/personWithChildren.txt", importMetadata);
 
             PersonRecordQuery query = new PersonRecordQuery();
             query.setPersonnummer("0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
-            Assert.assertEquals(3, personEntity.getChildren().size());
-
-        } catch(Exception e) {
-
+            Assert.assertEquals(4, personEntity.getChildren().size());//SHOULD BE FAILING
         }
     }
 
