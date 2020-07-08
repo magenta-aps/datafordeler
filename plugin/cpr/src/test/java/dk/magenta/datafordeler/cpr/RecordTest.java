@@ -124,6 +124,20 @@ public class RecordTest {
         }
     }
 
+    /**
+     * One person with cpr=0101011234 has 4 children
+     * -0101001234
+     * -0101121234
+     * -0101141234
+     * -0101161234
+     * The child with cpr=0101141234 gets custody handed over to person with cpr=0101991234
+     * Another child with cpr=0101131234 gets custody handed over to person with cpr=0101011234
+     *
+     * The person with cpr=0101011234 now has lost custody of one child, but gains custody of another child
+     *
+     * @throws DataFordelerException
+     * @throws IOException
+     */
     @Test
     public void testImportPersonWithChildren() throws DataFordelerException, IOException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
