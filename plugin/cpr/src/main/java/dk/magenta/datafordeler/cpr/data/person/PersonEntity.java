@@ -815,6 +815,9 @@ public class PersonEntity extends CprRecordEntity {
         if (record instanceof CitizenshipDataRecord) {
             added = addItem(this, this.citizenship, record, session, compareExisting);
         }
+        if (record instanceof ChildrenDataRecord) {
+            added = addItem(this, this.children, record, session, compareExisting);
+        }
         if (record instanceof CitizenshipVerificationDataRecord) {
             added = addItem(this, this.citizenshipVerification, record, session, compareExisting);
         }
@@ -1100,6 +1103,7 @@ public class PersonEntity extends CprRecordEntity {
         records.addAll(this.birthTime);
         records.addAll(this.churchRelation);
         records.addAll(this.churchRelationVerification);
+        records.addAll(this.children);
         records.addAll(this.citizenship);
         records.addAll(this.citizenshipVerification);
         records.addAll(this.civilstatus);
