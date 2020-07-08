@@ -25,7 +25,7 @@ public class CustodyRecord extends PersonDataRecord {
         this.obtain(mapping);
 
         this.temporality = new CprBitemporality(
-                this.getOffsetDateTime("start_dt-umyndig"),
+                this.getOffsetDateTime("start_ts"),
                 null,
                 this.getOffsetDateTime("start_dt-umyndig"),
                 this.getMarking("start_dt_umrk-umyndig"),
@@ -36,24 +36,16 @@ public class CustodyRecord extends PersonDataRecord {
 
     public static final Mapping traditionalMapping = new Mapping();
     static {
-        traditionalMapping.add("start_mynkod-umyndig", 14, 4);
-        traditionalMapping.add("start_dt-umyndig", 18, 10);
-        traditionalMapping.add("start_dt_umrk-umyndig", 28, 1);
-        traditionalMapping.add("slet_dt-umyndig", 29, 10);
-        traditionalMapping.add("umyn_reltyp", 39, 4);
-        traditionalMapping.add("reltyp-relpnr_pnr", 43, 4);
-        traditionalMapping.add("start_mynkod-relpnr_pnr", 47, 4);
-        traditionalMapping.add("relpnr", 51, 10);
-        traditionalMapping.add("start_dt-relpnr_pnr", 61, 10);
-        traditionalMapping.add("reltyp-relpnr_txt", 71, 4);
-        traditionalMapping.add("start_mynkod-relpnr_txt", 75, 4);
-        traditionalMapping.add("reladrsat_relpnr_txt", 79, 34);
-        traditionalMapping.add("start_dt-relpnr_txt", 113, 10);
-        traditionalMapping.add("reltxt1", 123, 34);
-        traditionalMapping.add("reltxt2", 157, 34);
-        traditionalMapping.add("reltxt3", 191, 34);
-        traditionalMapping.add("reltxt4", 225, 34);
-        traditionalMapping.add("reltxt5", 259, 34);
+        traditionalMapping.add("start_ts", 14, 12);
+        traditionalMapping.add("umyn_reltyp", 26, 4);//ok
+        traditionalMapping.add("start_mynkod-umyndig", 30, 4);//ok
+        traditionalMapping.add("start_dt-umyndig", 34, 10);//ok
+        traditionalMapping.add("start_dt_umrk-umyndig", 44, 1);//ok
+        traditionalMapping.add("slet_dt-umyndig", 45, 10);//ok
+        traditionalMapping.add("reltyp-relpnr_pnr", 55, 4);//ok
+        traditionalMapping.add("start_mynkod-relpnr_pnr", 59, 4);//ok
+        traditionalMapping.add("relpnr", 63, 10);//ok
+        traditionalMapping.add("start_dt-relpnr_pnr", 73, 10);//ok
     }
 
     @Override
