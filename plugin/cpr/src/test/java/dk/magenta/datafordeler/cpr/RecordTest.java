@@ -16,6 +16,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
+import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
@@ -150,7 +151,21 @@ public class RecordTest {
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
             Assert.assertEquals(4, personEntity.getChildren().size());
-            Assert.assertEquals(2, personEntity.getCustody().size());
+            Assert.assertEquals(0, personEntity.getCustody().size());
+
+            query = new PersonRecordQuery();
+            query.setPersonnummer("0101141234");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+            Assert.assertEquals(0, personEntity.getChildren().size());
+            Assert.assertEquals(1, personEntity.getCustody().size());
+
+            query = new PersonRecordQuery();
+            query.setPersonnummer("0101131234");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+            Assert.assertEquals(0, personEntity.getChildren().size());
+            Assert.assertEquals(1, personEntity.getCustody().size());
         }
     }
 
