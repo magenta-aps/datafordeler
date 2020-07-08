@@ -149,7 +149,8 @@ public class RecordTest {
             query.setPersonnummer("0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
-            Assert.assertEquals(4, personEntity.getChildren().size());//SHOULD BE FAILING
+            Assert.assertEquals(4, personEntity.getChildren().size());
+            Assert.assertEquals(2, personEntity.getCustody().size());
         }
     }
 
