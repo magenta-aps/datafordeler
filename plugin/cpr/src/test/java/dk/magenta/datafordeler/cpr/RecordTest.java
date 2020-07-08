@@ -16,7 +16,6 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
-import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
@@ -144,7 +143,7 @@ public class RecordTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
-            this.loadPerson("/personWithChildren.txt", importMetadata);
+            this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
 
             PersonRecordQuery query = new PersonRecordQuery();
             query.setPersonnummer("0101011234");
@@ -152,6 +151,10 @@ public class RecordTest {
             PersonEntity personEntity = entities.get(0);
             Assert.assertEquals(4, personEntity.getChildren().size());
             Assert.assertEquals(0, personEntity.getCustody().size());
+            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101001234")));
+            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101121234")));
+            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101141234")));
+            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101161234")));
 
             query = new PersonRecordQuery();
             query.setPersonnummer("0101141234");
@@ -159,6 +162,7 @@ public class RecordTest {
             personEntity = entities.get(0);
             Assert.assertEquals(0, personEntity.getChildren().size());
             Assert.assertEquals(1, personEntity.getCustody().size());
+            Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101991234")));
 
             query = new PersonRecordQuery();
             query.setPersonnummer("0101131234");
@@ -166,6 +170,7 @@ public class RecordTest {
             personEntity = entities.get(0);
             Assert.assertEquals(0, personEntity.getChildren().size());
             Assert.assertEquals(1, personEntity.getCustody().size());
+            Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101011234")));
         }
     }
 
