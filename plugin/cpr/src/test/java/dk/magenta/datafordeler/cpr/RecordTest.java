@@ -12,10 +12,13 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
+import dk.magenta.datafordeler.cpr.records.person.data.ChildrenDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
@@ -50,6 +53,9 @@ public class RecordTest {
 
     @Autowired
     private PersonEntityManager personEntityManager;
+
+    @Autowired
+    private PersonCustodyRelationsManager custodyManager;
 
     @Autowired
     private PersonRecordOutputWrapper personRecordOutputWrapper;
@@ -125,6 +131,7 @@ public class RecordTest {
     }
 
     /**
+     * Tests specifically created and matched with data from 'personWithChildrenAndCustodyChange'
      * One person with cpr=0101011234 has 4 children
      * -0101001234
      * -0101121234
@@ -134,6 +141,18 @@ public class RecordTest {
      * Another child with cpr=0101131234 gets custody handed over to person with cpr=0101011234
      *
      * The person with cpr=0101011234 now has lost custody of one child, but gains custody of another child
+     *
+     *
+     * After calculations the person with cpr=0101011234 has custody over
+     * -0101001234
+     * -0101121234
+     * -0101131234
+     * -0101161234
+     *
+     * The person with cpr=0101991234 now has custody over
+     * -0101141234
+     *
+     *
      *
      * @throws DataFordelerException
      * @throws IOException
@@ -156,6 +175,7 @@ public class RecordTest {
             Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101141234")));
             Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101161234")));
 
+            //Find a child and from that the person who has custody over the child
             query = new PersonRecordQuery();
             query.setPersonnummer("0101141234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
@@ -164,6 +184,7 @@ public class RecordTest {
             Assert.assertEquals(1, personEntity.getCustody().size());
             Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101991234")));
 
+            //Find a child and from that the person who has custody over the child
             query = new PersonRecordQuery();
             query.setPersonnummer("0101131234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
@@ -172,13 +193,35 @@ public class RecordTest {
             Assert.assertEquals(1, personEntity.getCustody().size());
             Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101011234")));
 
+            //Find a parent-ish and from that the child-ish custody relation
             query = new PersonRecordQuery();
             query.addCustodyPnr("0101991234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            System.out.println(entities.size());
             personEntity = entities.get(0);
-            System.out.println(personEntity);
             Assert.assertEquals("0101141234", personEntity.getPersonnummer());
+
+            //Find a parent-ish and from that the child-ish custody relation
+            query = new PersonRecordQuery();
+            query.addCustodyPnr("0101011234");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+            Assert.assertEquals("0101131234", personEntity.getPersonnummer());
+
+            //Find collective custody of the person '0101011234'
+            //0101001234
+            //0101121234
+            //0101131234
+            //0101161234
+            List<String> custodyList = custodyManager.findRelations("0101011234");
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101001234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101121234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101131234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101161234")));
+
+            //Find collective custody of the person '0101011234'
+            //0101001234
+            custodyList = custodyManager.findRelations("0101011234");
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101001234")));
         }
     }
 
