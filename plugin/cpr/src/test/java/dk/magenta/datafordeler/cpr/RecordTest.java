@@ -171,6 +171,14 @@ public class RecordTest {
             Assert.assertEquals(0, personEntity.getChildren().size());
             Assert.assertEquals(1, personEntity.getCustody().size());
             Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101011234")));
+
+            query = new PersonRecordQuery();
+            query.addCustodyPnr("0101991234");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            System.out.println(entities.size());
+            personEntity = entities.get(0);
+            System.out.println(personEntity);
+            Assert.assertEquals("0101141234", personEntity.getPersonnummer());
         }
     }
 
