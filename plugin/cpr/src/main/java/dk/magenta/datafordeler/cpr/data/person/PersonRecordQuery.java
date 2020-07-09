@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cpr.records.person.PersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 
 import java.time.OffsetDateTime;
@@ -28,6 +29,7 @@ public class PersonRecordQuery extends BaseQuery {
     public static final String FLOOR = AddressDataRecord.IO_FIELD_FLOOR;
     public static final String HOUSENO = AddressDataRecord.IO_FIELD_HOUSENUMBER;
     public static final String BUILDINGNO = AddressDataRecord.IO_FIELD_BUILDING_NUMBER;
+    public static final String CUSTODYPNR = CustodyDataRecord.IO_FIELD_RELATION_PNR;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
     private List<String> personnumre = new ArrayList<>();
@@ -201,7 +203,29 @@ public class PersonRecordQuery extends BaseQuery {
         }
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = CUSTODYPNR)
+    private List<String> custodyPnr = new ArrayList<>();
 
+    public Collection<String> getCustodyPnr() {
+        return this.custodyPnr;
+    }
+
+    public void addCustodyPnr(String custodyPnr) {
+        this.custodyPnr.add(custodyPnr);
+        this.updatedParameters();
+    }
+
+    public void clearCustodyPnr() {
+        this.custodyPnr.clear();
+        this.updatedParameters();
+    }
+    public void setCustodyPnr(Collection<String> custodyPnr) {
+        this.clearCustodyPnr();
+        if (custodyPnr != null) {
+            this.custodyPnr.addAll(custodyPnr);
+            this.updatedParameters();
+        }
+    }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = FLOOR)
     private List<String> floors = new ArrayList<>();
@@ -328,8 +352,8 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("door", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR);
         joinHandles.put("housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("bnr", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER);
-
         joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
+        joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + LookupDefinition.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
     }
 
     @Override
@@ -348,6 +372,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("housenumber", this.houseNos);
         this.addCondition("bnr", this.buildingNos);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
+        this.addCondition("custodyPnr", this.custodyPnr);
     }
 
 

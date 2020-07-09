@@ -27,9 +27,9 @@ public class CustodyRecord extends PersonDataRecord {
         this.temporality = new CprBitemporality(
                 this.getOffsetDateTime("start_ts"),
                 null,
-                this.getOffsetDateTime("start_dt-umyndig"),
-                this.getMarking("start_dt_umrk-umyndig"),
-                this.getOffsetDateTime("slet_dt-umyndig"),
+                this.getOffsetDateTime("start_dt-foraldremyn"),
+                this.getMarking("start_dt_umrk-foraldremyn"),
+                this.getOffsetDateTime("slet_dt-foraldremyn"),
                 false
         );
     }
@@ -37,11 +37,11 @@ public class CustodyRecord extends PersonDataRecord {
     public static final Mapping traditionalMapping = new Mapping();
     static {
         traditionalMapping.add("start_ts", 14, 12);
-        traditionalMapping.add("umyn_reltyp", 26, 4);//ok
-        traditionalMapping.add("start_mynkod-umyndig", 30, 4);//ok
-        traditionalMapping.add("start_dt-umyndig", 34, 10);//ok
-        traditionalMapping.add("start_dt_umrk-umyndig", 44, 1);//ok
-        traditionalMapping.add("slet_dt-umyndig", 45, 10);//ok
+        traditionalMapping.add("reltyp_ctforaldre_myn", 26, 4);//ok
+        traditionalMapping.add("start_mynkod-foraldremyn", 30, 4);//ok
+        traditionalMapping.add("start_dt-foraldremyn", 34, 10);//ok
+        traditionalMapping.add("start_dt_umrk-foraldremyn", 44, 1);//ok
+        traditionalMapping.add("slet_dt-foraldremyn", 45, 10);//ok
         traditionalMapping.add("reltyp-relpnr_pnr", 55, 4);//ok
         traditionalMapping.add("start_mynkod-relpnr_pnr", 59, 4);//ok
         traditionalMapping.add("relpnr", 63, 10);//ok
@@ -59,20 +59,11 @@ public class CustodyRecord extends PersonDataRecord {
         ArrayList<CprBitemporalRecord> records = new ArrayList<>();
 
         records.add(new CustodyDataRecord(
-            this.getInt("umyn_reltyp"),
-            this.getInt("reltyp-relpnr_pnr"),
+            this.getInt("reltyp_ctforaldre_myn"),
+            this.getInt("start_mynkod-foraldremyn"),
             this.getInt("start_mynkod-relpnr_pnr"),
             this.getString("relpnr", false),
-            this.getDate("start_dt-relpnr_pnr"),
-            this.getInt("reltyp-relpnr_txt"),
-            this.getInt("start_mynkod-relpnr_txt"),
-            this.getString("reladrsat_relpnr_txt", false),
-            this.getDate("start_dt-relpnr_txt"),
-            this.getString("reltxt1", false),
-            this.getString("reltxt2", false),
-            this.getString("reltxt3", false),
-            this.getString("reltxt4", false),
-            this.getString("reltxt5", false)
+            this.getDate("start_dt-relpnr_pnr")
         ).setAuthority(
             this.getInt("start_mynkod-umyndig")
         ).setBitemporality(
