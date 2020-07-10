@@ -220,8 +220,8 @@ public class RecordTest {
 
             //Find collective custody of the person '0101011234'
             //0101001234
-            custodyList = custodyManager.findRelations("0101011234");
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101001234")));
+            custodyList = custodyManager.findRelations("0101991234");
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101141234")));
         }
     }
 
