@@ -9,13 +9,11 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ChildrenDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 import static java.util.Comparator.naturalOrder;
@@ -23,7 +21,7 @@ import static java.util.Comparator.naturalOrder;
 /**
  * This module construct at list of CPR-numbers that another CPR-number has custody over.
  * The custody of a CPR-number can come from either having a child,
- * getting custidy tranferred by record 046 or the costidy can by lost when the child passes 18 years old
+ * getting custody tranferred by record 046 or the custody can by lost when the child passes 18 years old
  */
 @Component
 public class PersonCustodyRelationsManager {
@@ -41,48 +39,51 @@ public class PersonCustodyRelationsManager {
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
         query.addPersonnummer(pnr);
-        List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
-        List<String> custodyArrayList = new ArrayList<String>();
-        if(entities.isEmpty()) {
-            return custodyArrayList;
+        List<PersonEntity> recuestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
+        List<String> collectiveCustodyArrayList = new ArrayList<String>();
+        //Empty list is the person is not found in datafordeler
+        if(recuestedInstancesOfPerson.isEmpty()) {
+            return collectiveCustodyArrayList;
         }
         //there can not be more then one person with that cpr-number
-        //Store all children of the person
-        for(ChildrenDataRecord child : entities.get(0).getChildren()) {
-            custodyArrayList.add(child.getChildCprNumber());
+        //Find all children of the person
+        List<String> childCprArrayList = new ArrayList<String>();
+        for(ChildrenDataRecord child : recuestedInstancesOfPerson.get(0).getChildren()) {
+            childCprArrayList.add(child.getChildCprNumber());
         }
 
         //Lookup all the found children
         query = new PersonRecordQuery();
-        for(String item : custodyArrayList) {
+        for(String item : childCprArrayList) {
             query.addPersonnummer(item);
         }
-        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
-        for(PersonEntity child : entities) {
-            //If the child has no custodys registered there is no need to do any removings
-            if(child.getCustody().size()==0) {
-                break;
-            }
-            BirthTimeDataRecord birthTime = findNewestUnclosed(child.getBirthTime());
-            if(LocalDateTime.now().minusYears(18).isAfter(birthTime.getBirthDatetime().minusYears(18))) {
-                custodyArrayList.remove(child.getPersonnummer());
-            }
+        if(!childCprArrayList.isEmpty()) {
+            List<PersonEntity> childrenOfTheRequestedPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            for (PersonEntity child : childrenOfTheRequestedPerson) {
+                BirthTimeDataRecord birthTime = findNewestUnclosed(child.getBirthTime());
 
-            //If the child got another custody assigned remove the child from the list
-            CustodyDataRecord custody = findNewestUnclosed(child.getCustody());
-            if(!custody.getRelationPnr().equals(pnr)) {
-                custodyArrayList.remove(child.getPersonnummer());
+                if (LocalDateTime.now().minusYears(18).isAfter(birthTime.getBirthDatetime())) {
+                    //If the child is more then 18 years old, it should not be added to the list of custody
+
+                } else if (child.getCustody().size() == 0) {
+                    //If there is no registration of custody the child should be added to the parent
+                    collectiveCustodyArrayList.add(child.getPersonnummer());
+                } else if (findNewestUnclosed(child.getCustody()).getRelationPnr().equals(pnr)) {
+                    //If there is a registration of custody on the child, and it is the same as the parent, add it
+                    collectiveCustodyArrayList.add(child.getPersonnummer());
+                }
+                //TODO: we still need some father/mother logic
             }
         }
 
         //Find other persons that the person in quest has custody over
         query = new PersonRecordQuery();
         query.addCustodyPnr(pnr);
-        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+        List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
         for(PersonEntity personEntityItem : entities) {
-            custodyArrayList.add(personEntityItem.getPersonnummer());
+            collectiveCustodyArrayList.add(personEntityItem.getPersonnummer());
         }
-        return custodyArrayList;
+        return collectiveCustodyArrayList;
     }
 
     /**

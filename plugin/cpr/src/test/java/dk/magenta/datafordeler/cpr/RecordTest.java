@@ -144,7 +144,7 @@ public class RecordTest {
      *
      *
      * After calculations the person with cpr=0101011234 has custody over
-     * -0101001234
+     * -0101001234 (Should not be returned since the child is more then 18 years old)
      * -0101121234
      * -0101131234
      * -0101161234
@@ -159,6 +159,7 @@ public class RecordTest {
      */
     @Test
     public void testImportPersonWithChildren() throws DataFordelerException, IOException {
+        //TODO: we still need to make this test run after the testdata of minors is not minor any more
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
@@ -208,20 +209,22 @@ public class RecordTest {
             Assert.assertEquals("0101131234", personEntity.getPersonnummer());
 
             //Find collective custody of the person '0101011234'
-            //0101001234
+            //0101001234 (Should not be returned since the child is more then 18 years old)
             //0101121234
             //0101131234
             //0101161234
             List<String> custodyList = custodyManager.findRelations("0101011234");
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101001234")));
+            Assert.assertEquals(3, custodyList.size());
+            //Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101001234")));
             Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101121234")));
             Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101131234")));
             Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101161234")));
 
             //Find collective custody of the person '0101011234'
             //0101001234
-            custodyList = custodyManager.findRelations("0101991234");
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101141234")));
+            List<String> custodyList2 = custodyManager.findRelations("0101991234");
+            Assert.assertEquals(1, custodyList2.size());
+            Assert.assertTrue(custodyList2.stream().anyMatch(child -> child.equals("0101141234")));
         }
     }
 
