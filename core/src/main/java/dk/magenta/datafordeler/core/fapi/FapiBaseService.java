@@ -454,6 +454,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      */
     // TODO: How to use DafoUserDetails with SOAP requests?
     @WebMethod(operationName = "search")
+    @Deprecated
     public Envelope searchSoap(@WebParam(name="query") @XmlElement(required = true) Q query) throws DataFordelerException {
         Session session = this.getSessionManager().getSessionFactory().openSession();
         Envelope envelope = new Envelope();
@@ -582,15 +583,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                     output.put(key, value.isNull() ? null : value.asText());
                 }
             }
-        }
-        return output;
-    }
-
-    private static Map<String, Object> replaceValues(Map<String, Object> input, Object subject, Object replace) {
-        Map<String, Object> output = new HashMap<>();
-        for (String key : input.keySet()) {
-            Object value = input.get(key);
-            output.put(key, Objects.equals(value, subject) ? replace : value);
         }
         return output;
     }
