@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.core.fapi;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 
+@Deprecated
 public class SoapServiceDescriptor extends ServiceDescriptor {
 
     public SoapServiceDescriptor(Plugin plugin, String serviceName, String metaAddress, Class<? extends BaseQuery> queryClass) {

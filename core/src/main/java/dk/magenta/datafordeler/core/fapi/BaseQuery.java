@@ -554,6 +554,7 @@ public abstract class BaseQuery {
      * the attribute in question, and values are set from the query.
      * @return
      */
+    @Deprecated
     public abstract BaseLookupDefinition getLookupDefinition();
 
     public OutputWrapper.Mode getMode() {

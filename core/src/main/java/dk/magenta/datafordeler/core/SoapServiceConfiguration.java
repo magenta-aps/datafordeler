@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Configuration
+@Deprecated
 public class SoapServiceConfiguration {
 
     @Autowired
