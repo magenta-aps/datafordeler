@@ -159,7 +159,7 @@ public class RecordTest {
      */
     @Test
     public void testImportPersonWithChildren() throws DataFordelerException, IOException {
-        //TODO: we still need to make this test run after the testdata of minors is not minor any more
+        //This test will start failing in year 2030 when the children in this test is no longer children
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
