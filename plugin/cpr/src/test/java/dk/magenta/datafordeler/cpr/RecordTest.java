@@ -19,14 +19,17 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.data.ChildrenDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
+import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -227,6 +230,60 @@ public class RecordTest {
             Assert.assertFalse(custodyList2.stream().anyMatch(child -> child.equals("0101981234")));
             Assert.assertTrue(custodyList2.stream().anyMatch(child -> child.equals("0101141234")));
         }
+    }
+
+
+
+    @Test
+    public void testCallCustodyService() throws Exception {
+        //This test will start failing in year 2030 when the children in this test is no longer children
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+        }
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        //Try fetching with no cpr access rights
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/cpr/person/custody/1/rest/" + "0101011234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+        //Try fetching with cpr access rights
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/cpr/person/custody/1/rest/" + "0101011234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(3, objectMapper.readTree(response.getBody()).size());
+        JSONAssert.assertEquals("[\"0101121234\",\"0101161234\",\"0101131234\"]",response.getBody(),false);
+
+
+        //Try fetching other persons custody
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/cpr/person/custody/1/rest/" + "0101991234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).size());
+        JSONAssert.assertEquals("[\"0101141234\"]",response.getBody(),false);
+
     }
 
 
