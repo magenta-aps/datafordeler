@@ -61,6 +61,8 @@ public class PersonCustodyRelationsManager {
             List<PersonEntity> childrenOfTheRequestedPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
             for (PersonEntity child : childrenOfTheRequestedPerson) {
                 BirthTimeDataRecord birthTime = findNewestUnclosed(child.getBirthTime());
+                String childsFather = findNewestUnclosed(child.getFather()).getCprNumber();
+                String childsMother = findNewestUnclosed(child.getMother()).getCprNumber();
 
                 if (LocalDateTime.now().minusYears(18).isAfter(birthTime.getBirthDatetime())) {
                     //If the child is more then 18 years old, it should not be added to the list of custody
@@ -68,11 +70,16 @@ public class PersonCustodyRelationsManager {
                 } else if (child.getCustody().size() == 0) {
                     //If there is no registration of custody the child should be added to the parent
                     collectiveCustodyArrayList.add(child.getPersonnummer());
-                } else if (findNewestUnclosed(child.getCustody()).getRelationPnr().equals(pnr)) {
-                    //If there is a registration of custody on the child, and it is the same as the parent, add it
-                    collectiveCustodyArrayList.add(child.getPersonnummer());
+                } else {
+                    boolean motherhasCustody = child.getCustody().stream().anyMatch(r -> r.getBitemporality().registrationTo == null &&
+                            r.getBitemporality().effectTo == null && r.getRelationType()==3);
+                    boolean fatherhasCustody = child.getCustody().stream().anyMatch(r -> r.getBitemporality().registrationTo == null &&
+                            r.getBitemporality().effectTo == null && r.getRelationType()==4);
+
+                    if(motherhasCustody && childsMother.equals(pnr) || fatherhasCustody && childsFather.equals(pnr)) {
+                        collectiveCustodyArrayList.add(child.getPersonnummer());
+                    }
                 }
-                //TODO: we still need some father/mother logic
             }
         }
 

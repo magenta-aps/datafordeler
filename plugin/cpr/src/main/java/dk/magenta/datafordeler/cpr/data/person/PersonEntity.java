@@ -1107,7 +1107,10 @@ public class PersonEntity extends CprRecordEntity {
                 boolean hasAnyUnclosed = items.stream().anyMatch(item -> item.getRegistrationTo() == null && item.getEffectTo() == null);
 
                 //Does this person allready have a recordtype which is of same type, and which is unclosed, then close the old one
-                if(hasAnyUnclosed && newItem.getRegistrationTo()==null && newItem.getEffectTo()==null) {
+                if(hasAnyUnclosed && newItem.getRegistrationTo()==null && newItem.getEffectTo()==null &&
+                        //Specifically for custordyRecord there can be more than one at the same time
+                        //This might be correct to do for all recordtypes but is has not been tested good yet
+                        !(newItem instanceof CustodyDataRecord)) {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                 }
