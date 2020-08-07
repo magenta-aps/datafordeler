@@ -185,7 +185,7 @@ public class RecordTest {
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
             Assert.assertEquals(0, personEntity.getChildren().size());
-            Assert.assertEquals(1, personEntity.getCustody().size());
+            Assert.assertEquals(2, personEntity.getCustody().size());
             Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101991234")));
 
             //Find a child and from that the person who has custody over the child
@@ -222,6 +222,13 @@ public class RecordTest {
             Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101121234")));
             Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101131234")));
             Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101161234")));
+
+            List<String> custodyListFather = custodyManager.findRelations("0101011235");
+            //Assert.assertEquals(3, custodyListFather.size());
+            Assert.assertFalse(custodyListFather.stream().anyMatch(child -> child.equals("0101981234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.equals("0101121234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.equals("0101141234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.equals("0101161234")));
 
             //Find collective custody of the person '0101011234'
             //0101981234
