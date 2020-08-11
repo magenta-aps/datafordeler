@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.Mapping;
 import dk.magenta.datafordeler.cpr.records.person.data.ChildrenDataRecord;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,15 @@ public class ChildrenRecord extends PersonDataRecord {
         @Override
     public String getRecordType() {
         return RECORDTYPE_CHILDREN;
+    }
+
+
+    public String getPnrChild() {
+        return this.getString("pnrchild", false);
+    }
+
+    public OffsetDateTime getEffectDateTime() {
+        return childrenTemporality.effectFrom;
     }
 
     @Override
