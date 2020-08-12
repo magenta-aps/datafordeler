@@ -61,9 +61,9 @@ public class GeoRegisterManager extends RegisterManager {
     }
 
     /**
-    * RegisterManager initialization; set up dk.magenta.datafordeler.geo.configuration and source fetcher.
-    * We store fetched data in a local cache, so create a random folder for that.
-    */
+     * RegisterManager initialization; set up dk.magenta.datafordeler.geo.configuration and source fetcher.
+     * We store fetched data in a local cache, so create a random folder for that.
+     */
     @PostConstruct
     public void init() throws IOException {
         if (this.localCopyFolder == null || this.localCopyFolder.isEmpty()) {
@@ -232,36 +232,21 @@ public class GeoRegisterManager extends RegisterManager {
                             int count = 1000;
 
                             String query = eventInterface.getQuery();
-
-
-
-
                             query = query.replace("%{count}", Integer.toString(count));
                             URL tokenUrl = new URL(configuration.getTokenService());
-                            System.out.println(tokenUrl);
                             String token = this.getToken(tokenUrl, configuration.getUsername(), configuration.getPassword());
-                            System.out.println(token);
                             Map<String, String> headers = Collections.singletonMap("Authorization", "Bearer " + token);
                             for (int offset = 0; offset < 1000000000; offset += count) {
                                 String offsetQuery = URLDecoder.decode(query.replace("%{offset}", Integer.toString(offset)), "utf-8");
                                 eventInterface = new URI(eventInterface.getScheme(), eventInterface.getUserInfo(), eventInterface.getHost(), eventInterface.getPort(), eventInterface.getPath(), offsetQuery, eventInterface.getFragment());
 
-                                System.out.println("UUURRRLLL "+eventInterface.toString());
-
-
                                 responseBody = communicator.get(eventInterface, headers);
                                 try {
                                     String data = InputStreamReader.readInputStream(responseBody, charset.name());
-                                    System.out.println("--1--");
-                                    System.out.println(data);
-                                    System.out.println("--2--");
                                     long responseCount = GeoEntityManager.parseJsonStream(data, "features", this.objectMapper, null);
-                                    System.out.println(responseCount);
                                     if (responseCount == 0) {
                                         break;
                                     }
-                                    System.out.println("--3--");
-                                    System.out.println(offset);
                                     if (offset > 0) {
                                         fileWriter.append(",\n");
                                     }
@@ -278,7 +263,7 @@ public class GeoRegisterManager extends RegisterManager {
                             fileWriter.close();
                         } catch (Exception e) {
                             fileWriter.close();
-                            //cacheFile.delete();
+                            cacheFile.delete();
                             throw e;
                         }
                     } else {
