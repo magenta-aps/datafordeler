@@ -65,7 +65,7 @@ public class PersonEntityCustodyService {
                 for(String custody : custodyList) {
                     cprList.add(custody);
                 }
-                return objectMapper.writeValueAsString(cvrList);
+                return objectMapper.writeValueAsString(cprList);
             }
         }
         return null;
