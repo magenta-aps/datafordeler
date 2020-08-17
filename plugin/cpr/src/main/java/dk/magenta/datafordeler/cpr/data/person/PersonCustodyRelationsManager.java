@@ -42,7 +42,7 @@ public class PersonCustodyRelationsManager {
         List<PersonEntity> requestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
         List<String> collectiveCustodyArrayList = new ArrayList<String>();
         //Empty list is the person is not found in datafordeler
-        if(recuestedInstancesOfPerson.isEmpty()) {
+        if(requestedInstancesOfPerson.isEmpty()) {
             return collectiveCustodyArrayList;
         }
         //there can not be more then one person with that cpr-number
