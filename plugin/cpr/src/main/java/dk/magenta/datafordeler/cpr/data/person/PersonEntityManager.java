@@ -273,7 +273,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                     String serverCurrentCentury = Integer.toString(yearOfServerTime).substring(0, 2);
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     LocalDate parsedBirthDateBasedOnCpr = LocalDate.parse(serverCurrentCentury+childBirthDYear+"-"+childBirthMonth+"-"+childBirthDay, formatter);
-                    //The child that gets passed is born before the timestamp of the server, this means that if the child i born after the current timestamp it is in the last century.
+                    //The child that gets passed is born before the timestamp of the server, this means that if the child is born after the current timestamp it is in the last century.
                     if(parsedBirthDateBasedOnCpr.isAfter(now)) {
                         //If we make a calculation that this child is born after current time
                         parsedBirthDateBasedOnCpr = parsedBirthDateBasedOnCpr.minusYears(100);
