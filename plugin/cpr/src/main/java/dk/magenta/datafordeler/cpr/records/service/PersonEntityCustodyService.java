@@ -63,7 +63,7 @@ public class PersonEntityCustodyService {
                 ArrayNode cprList = objectMapper.createArrayNode();
                 List<String> custodyList = custodyManager.findRelations(cpr);
                 for(String custody : custodyList) {
-                    cvrList.add(custody);
+                    cprList.add(custody);
                 }
                 return objectMapper.writeValueAsString(cvrList);
             }
