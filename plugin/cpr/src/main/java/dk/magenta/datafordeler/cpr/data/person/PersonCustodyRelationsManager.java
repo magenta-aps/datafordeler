@@ -48,7 +48,7 @@ public class PersonCustodyRelationsManager {
         //there can not be more then one person with that cpr-number
         //Find all children of the person
         List<String> childCprArrayList = new ArrayList<String>();
-        for(ChildrenDataRecord child : recuestedInstancesOfPerson.get(0).getChildren()) {
+        for(ChildrenDataRecord child : requestedInstancesOfPerson.get(0).getChildren()) {
             childCprArrayList.add(child.getChildCprNumber());
         }
 
