@@ -39,7 +39,7 @@ public class PersonCustodyRelationsManager {
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
         query.addPersonnummer(pnr);
-        List<PersonEntity> recuestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
+        List<PersonEntity> requestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
         List<String> collectiveCustodyArrayList = new ArrayList<String>();
         //Empty list is the person is not found in datafordeler
         if(recuestedInstancesOfPerson.isEmpty()) {
