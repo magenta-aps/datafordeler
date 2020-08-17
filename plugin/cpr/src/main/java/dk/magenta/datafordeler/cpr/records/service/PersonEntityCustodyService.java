@@ -60,7 +60,7 @@ public class PersonEntityCustodyService {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             if (cpr != null && !cpr.isEmpty()) {
-                ArrayNode cvrList = objectMapper.createArrayNode();
+                ArrayNode cprList = objectMapper.createArrayNode();
                 List<String> custodyList = custodyManager.findRelations(cpr);
                 for(String custody : custodyList) {
                     cvrList.add(custody);
