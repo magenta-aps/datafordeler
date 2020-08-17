@@ -271,7 +271,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                     LocalDate now = LocalDate.now();
                     int yearOfServerTime = now.get(ChronoField.YEAR);
                     String serverCurrentCentury = Integer.toString(yearOfServerTime).substring(0, 2);
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");//org.joda.time.format.
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     LocalDate parsedBirthDateBasedOnCpr = LocalDate.parse(serverCurrentCentury+childBirthDYear+"-"+childBirthMonth+"-"+childBirthDay, formatter);
                     //The child that gets passed is born before the timestamp of the server, this means that if the child i born after the current timestamp it is in the last century.
                     if(parsedBirthDateBasedOnCpr.isAfter(now)) {
