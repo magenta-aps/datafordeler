@@ -255,7 +255,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
                 /// We only create a subscription on a child if the child is less then 18 years old.
                 // We make a lot of assumptions while figuring out if this the case.
-                // This logic is used for deciding if there is needed a subscribtion of someones child
+                // This logic is used for deciding if there is needed a subscription of someones child
 
                 // This case is a very rare cornercase to make sure that if someone from greenland datafordeler
                 // has minor children that does not exist in datafordeler, we create a subscribtion on thease children.
