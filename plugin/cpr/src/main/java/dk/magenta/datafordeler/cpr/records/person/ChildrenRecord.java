@@ -33,7 +33,7 @@ public class ChildrenRecord extends PersonDataRecord {
         traditionalMapping.add("haenstart-barn", 26, 12);
     }
 
-        @Override
+    @Override
     public String getRecordType() {
         return RECORDTYPE_CHILDREN;
     }
