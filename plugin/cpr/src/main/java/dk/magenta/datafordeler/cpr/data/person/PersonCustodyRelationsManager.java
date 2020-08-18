@@ -39,16 +39,16 @@ public class PersonCustodyRelationsManager {
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
         query.addPersonnummer(pnr);
-        List<PersonEntity> recuestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
+        List<PersonEntity> requestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
         List<String> collectiveCustodyArrayList = new ArrayList<String>();
         //Empty list is the person is not found in datafordeler
-        if(recuestedInstancesOfPerson.isEmpty()) {
+        if(requestedInstancesOfPerson.isEmpty()) {
             return collectiveCustodyArrayList;
         }
         //there can not be more then one person with that cpr-number
         //Find all children of the person
         List<String> childCprArrayList = new ArrayList<String>();
-        for(ChildrenDataRecord child : recuestedInstancesOfPerson.get(0).getChildren()) {
+        for(ChildrenDataRecord child : requestedInstancesOfPerson.get(0).getChildren()) {
             childCprArrayList.add(child.getChildCprNumber());
         }
 

@@ -59,7 +59,7 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
 
 
     public static final String DB_FIELD_AUTHORITY_CODE_START = "startAuthoritycodeCustody";
-    public static final String IO_FIELD_AUTHORITY_CODE_START = "startAuthoritycodeCustody";
+    public static final String IO_FIELD_AUTHORITY_CODE_START = "startMyndighedskodeVaerge";
     @Column(name = DB_FIELD_AUTHORITY_CODE_START)
     @JsonProperty(value = IO_FIELD_AUTHORITY_CODE_START)
     @XmlElement(name = IO_FIELD_AUTHORITY_CODE_START)

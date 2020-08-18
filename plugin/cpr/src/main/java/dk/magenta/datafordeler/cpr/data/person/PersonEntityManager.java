@@ -202,6 +202,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         } finally {
             this.nonGreenlandicCprNumbers.clear();
             this.nonGreenlandicFatherCprNumbers.clear();
+            this.nonGreenlandicChildrenCprNumbers.clear();
         }
     }
 
@@ -252,34 +253,33 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 this.nonGreenlandicCprNumbers.add(foreignAddressRecord.getCprNumber());
             } else if (record instanceof ChildrenRecord) {
 
-                /// We only create a subscribtion on a child if the child is less then 18 years old.
+                /// We only create a subscription on a child if the child is less then 18 years old.
                 // We make a lot of assumptions while figuring out if this the case.
-                // This logic is used for deciding if there is needed a subscribtion of someones child
+                // This logic is used for deciding if there is needed a subscription of someones child
 
                 // This case is a very rare cornercase to make sure that if someone from greenland datafordeler
-                // has minor children that does not exist in datafordeler, we create a subscribtion on thease children.
-                // The birthtime of the childe is unknown since we only has the record of them beeing someones child.
-                // The decision is that if bothe the effect from time of the birth-record and the cpr-number indicate that the child is not 18 years old yet we vill make a subscribtion
+                // has minor children that does not exist in datafordeler, we create a subscription on thease children.
+                // The birthtime of the child is unknown since we only has the record of them being someones child.
+                // The decision is that if both the effect from time of the birth-record and the cpr-number indicate that the child is not 18 years old yet we will make a subscription
                 ChildrenRecord childRecord = (ChildrenRecord) record;
 
                 //The effecttime of the child is the same time as the birthtime, if 18 years after the birthtime is after now, we need to create a subscribtion on the child
                 if(OffsetDateTime.now().minusYears(18).isBefore(Optional.ofNullable(childRecord.getEffectDateTime()).orElse(OffsetDateTime.MIN))) {
-                    String childPnr = childRecord.getPnrChild();
-                    String childBirthDay = childPnr.substring(0, 2);
-                    String childBirthMonth = childPnr.substring(2, 4);
-                    String childBirthDYear = childPnr.substring(4, 6);
+                    String childBirthDay = childRecord.getPnrChild().substring(0, 2);
+                    String childBirthMonth = childRecord.getPnrChild().substring(2, 4);
+                    String childBirthDYear = childRecord.getPnrChild().substring(4, 6);
                     LocalDate now = LocalDate.now();
                     int yearOfServerTime = now.get(ChronoField.YEAR);
                     String serverCurrentCentury = Integer.toString(yearOfServerTime).substring(0, 2);
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");//org.joda.time.format.
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     LocalDate parsedBirthDateBasedOnCpr = LocalDate.parse(serverCurrentCentury+childBirthDYear+"-"+childBirthMonth+"-"+childBirthDay, formatter);
-                    //The child that gets passed is born before the timestamp of the server, this means that if the child i born after the current timestamp it is in the last century.
+                    //The child that gets passed is born before the timestamp of the server, this means that if the child is born after the current timestamp it is in the last century.
                     if(parsedBirthDateBasedOnCpr.isAfter(now)) {
                         //If we make a calculation that this child is born after current time
                         parsedBirthDateBasedOnCpr = parsedBirthDateBasedOnCpr.minusYears(100);
                     }
 
-                    if(parsedBirthDateBasedOnCpr.plusYears(18).isAfter(LocalDate.now())) {
+                    if(parsedBirthDateBasedOnCpr.plusYears(18).isAfter(now)) {
                         nonGreenlandicChildrenCprNumbers.add(childRecord.getPnrChild());
                     }
                 }

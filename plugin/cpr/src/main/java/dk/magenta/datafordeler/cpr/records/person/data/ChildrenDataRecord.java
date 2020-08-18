@@ -15,7 +15,6 @@ import java.util.*;
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + ChildrenDataRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ChildrenDataRecord.TABLE_NAME + CprBitemporalPersonRecord.DB_FIELD_ENTITY, columnList = CprBitemporalPersonRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ChildrenDataRecord.TABLE_NAME + CprBitemporalPersonRecord.DB_FIELD_ENTITY, columnList = ChildrenDataRecord.DB_FIELD_CHILD_CPR_NUMBER),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ChildrenDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ChildrenDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ChildrenDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
@@ -54,8 +53,12 @@ public class ChildrenDataRecord extends CprBitemporalPersonRecord<ChildrenDataRe
 
     public static final String DB_FIELD_STATUS = "status";
     @Column(name = DB_FIELD_STATUS)
+    @JsonIgnore
+    @XmlTransient
     private int status;
 
+    @JsonIgnore
+    @XmlTransient
     public int getStatus() {
         return this.status;
     }
