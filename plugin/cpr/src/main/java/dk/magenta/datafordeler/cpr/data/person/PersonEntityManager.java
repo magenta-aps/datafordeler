@@ -202,7 +202,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         } finally {
             this.nonGreenlandicCprNumbers.clear();
             this.nonGreenlandicFatherCprNumbers.clear();
-            this.nonGreenlandicChildrenCprNumbers.clear();
         }
     }
 

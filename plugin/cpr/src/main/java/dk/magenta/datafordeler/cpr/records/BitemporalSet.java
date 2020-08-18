@@ -87,8 +87,8 @@ public class BitemporalSet<R extends CprBitemporalRecord> implements Set<R> {
     }
 
     @Override
-    public boolean add(R geoMonotemporalRecord) {
-        return this.inner.add(geoMonotemporalRecord);
+    public boolean add(R record) {
+        return this.inner.add(record);
     }
 
     @Override

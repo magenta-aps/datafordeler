@@ -33,7 +33,7 @@ public class ChildrenRecord extends PersonDataRecord {
         traditionalMapping.add("haenstart-barn", 26, 12);
     }
 
-        @Override
+    @Override
     public String getRecordType() {
         return RECORDTYPE_CHILDREN;
     }
@@ -54,7 +54,7 @@ public class ChildrenRecord extends PersonDataRecord {
 
         records.add(new ChildrenDataRecord(
                 this.getString("pnrchild", false), 1
-        ).setBitemporality(
+            ).setBitemporality(
                 this.childrenTemporality
         ));
 
