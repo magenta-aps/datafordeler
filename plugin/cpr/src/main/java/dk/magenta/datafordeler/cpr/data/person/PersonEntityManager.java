@@ -265,9 +265,10 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
                 //The effecttime of the child is the same time as the birthtime, if 18 years after the birthtime is after now, we need to create a subscribtion on the child
                 if(OffsetDateTime.now().minusYears(18).isBefore(Optional.ofNullable(childRecord.getEffectDateTime()).orElse(OffsetDateTime.MIN))) {
-                    String childBirthDay = childRecord.getPnrChild().substring(0, 2);
-                    String childBirthMonth = childRecord.getPnrChild().substring(2, 4);
-                    String childBirthDYear = childRecord.getPnrChild().substring(4, 6);
+                    String childPnr = childRecord.getPnrChild().substring(0, 2);
+                    String childBirthDay = childPnr.substring(0, 2);
+                    String childBirthMonth = childPnr.substring(2, 4);
+                    String childBirthDYear = childPnr.substring(4, 6);
                     LocalDate now = LocalDate.now();
                     int yearOfServerTime = now.get(ChronoField.YEAR);
                     String serverCurrentCentury = Integer.toString(yearOfServerTime).substring(0, 2);

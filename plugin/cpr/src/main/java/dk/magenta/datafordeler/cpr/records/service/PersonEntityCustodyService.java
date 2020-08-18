@@ -58,15 +58,13 @@ public class PersonEntityCustodyService {
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         this.checkAndLogAccess(loggerHelper);
 
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            if (cpr != null && !cpr.isEmpty()) {
-                ArrayNode cprList = objectMapper.createArrayNode();
-                List<String> custodyList = custodyManager.findRelations(cpr);
-                for(String custody : custodyList) {
-                    cprList.add(custody);
-                }
-                return objectMapper.writeValueAsString(cprList);
+        if (cpr != null && !cpr.isEmpty()) {
+            ArrayNode cprList = objectMapper.createArrayNode();
+            List<String> custodyList = custodyManager.findRelations(cpr);
+            for (String custody : custodyList) {
+                cprList.add(custody);
             }
+            return objectMapper.writeValueAsString(cprList);
         }
         return null;
     }
