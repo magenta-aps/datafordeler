@@ -253,7 +253,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 this.nonGreenlandicCprNumbers.add(foreignAddressRecord.getCprNumber());
             } else if (record instanceof ChildrenRecord) {
 
-                /// We only create a subscribtion on a child if the child is less then 18 years old.
+                /// We only create a subscription on a child if the child is less then 18 years old.
                 // We make a lot of assumptions while figuring out if this the case.
                 // This logic is used for deciding if there is needed a subscribtion of someones child
 
