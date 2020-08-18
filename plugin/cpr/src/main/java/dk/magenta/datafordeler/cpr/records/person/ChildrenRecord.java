@@ -54,7 +54,7 @@ public class ChildrenRecord extends PersonDataRecord {
 
         records.add(new ChildrenDataRecord(
                 this.getString("pnrchild", false), 1
-        ).setBitemporality(
+            ).setBitemporality(
                 this.childrenTemporality
         ));
 
