@@ -1110,7 +1110,8 @@ public class PersonEntity extends CprRecordEntity {
                 if(hasAnyUnclosed && newItem.getRegistrationTo()==null && newItem.getEffectTo()==null &&
                         //Specifically for custordyRecord there can be more than one at the same time
                         //This might be correct to do for all recordtypes but is has not been tested good yet
-                        !(newItem instanceof CustodyDataRecord)) {
+                        !(newItem instanceof CustodyDataRecord) &&
+                        !(newItem instanceof ProtectionDataRecord)) {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                 }
