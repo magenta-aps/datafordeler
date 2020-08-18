@@ -279,7 +279,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                         parsedBirthDateBasedOnCpr = parsedBirthDateBasedOnCpr.minusYears(100);
                     }
 
-                    if(parsedBirthDateBasedOnCpr.plusYears(18).isAfter(LocalDate.now())) {
+                    if(parsedBirthDateBasedOnCpr.plusYears(18).isAfter(now)) {
                         nonGreenlandicChildrenCprNumbers.add(childRecord.getPnrChild());
                     }
                 }
