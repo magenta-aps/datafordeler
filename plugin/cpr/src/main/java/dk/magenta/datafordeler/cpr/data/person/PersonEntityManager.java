@@ -259,7 +259,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
                 // This case is a very rare cornercase to make sure that if someone from greenland datafordeler
                 // has minor children that does not exist in datafordeler, we create a subscription on thease children.
-                // The birthtime of the childe is unknown since we only has the record of them beeing someones child.
+                // The birthtime of the child is unknown since we only has the record of them being someones child.
                 // The decision is that if bothe the effect from time of the birth-record and the cpr-number indicate that the child is not 18 years old yet we vill make a subscribtion
                 ChildrenRecord childRecord = (ChildrenRecord) record;
 
