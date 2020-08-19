@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.util.FixedQueueMap;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
+import dk.magenta.datafordeler.cpr.records.BitemporalSet;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprMonotemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
@@ -317,8 +318,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CUSTODY)
     Set<CustodyDataRecord> custody = new HashSet<>();
 
-    public Set<CustodyDataRecord> getCustody() {
-        return this.custody;
+    public BitemporalSet<CustodyDataRecord> getCustody() {
+        return new BitemporalSet<>(this.custody);
     }
 
 

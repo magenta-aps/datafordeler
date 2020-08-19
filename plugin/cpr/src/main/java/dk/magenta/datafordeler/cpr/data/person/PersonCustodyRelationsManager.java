@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ChildrenDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -71,10 +72,9 @@ public class PersonCustodyRelationsManager {
                     //If there is no registration of custody the child should be added to the parent
                     collectiveCustodyArrayList.add(child.getPersonnummer());
                 } else {
-                    boolean motherhasCustody = child.getCustody().stream().anyMatch(r -> r.getBitemporality().registrationTo == null &&
-                            r.getBitemporality().effectTo == null && r.getRelationType()==3);
-                    boolean fatherhasCustody = child.getCustody().stream().anyMatch(r -> r.getBitemporality().registrationTo == null &&
-                            r.getBitemporality().effectTo == null && r.getRelationType()==4);
+                    List<CustodyDataRecord> currentCustodyList = child.getCustody().current();
+                    boolean motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3);
+                    boolean fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4);
 
                     if(motherhasCustody && childsMother.equals(pnr) || fatherhasCustody && childsFather.equals(pnr)) {
                         collectiveCustodyArrayList.add(child.getPersonnummer());
