@@ -118,7 +118,8 @@ test-statistik:
   before_script:
     - cd /app/plugin/statistik
   script:
-    - mvn --batch-mode -T 2C test
+    # Some day we need to solve that the tests only passes at this timezone
+    - mvn --batch-mode -T 2C test -Duser.timezone=Europe/Copenhagen
   artifacts:
     reports:
       junit:
