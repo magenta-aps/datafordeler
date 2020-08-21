@@ -87,6 +87,7 @@ public class SameAddressTest extends TestBase {
         InputStream testData = SameAddressTest.class.getResourceAsStream("/person.txt");
         InputStream testData2 = SameAddressTest.class.getResourceAsStream("/person2.txt");
         InputStream testData3 = SameAddressTest.class.getResourceAsStream("/person3.txt");
+        InputStream testDataPersonAdmin = SameAddressTest.class.getResourceAsStream("/personAdminAdd.txt");
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
         importMetadata.setSession(session);
@@ -95,11 +96,13 @@ public class SameAddressTest extends TestBase {
         personEntityManager.parseData(testData, importMetadata);
         personEntityManager.parseData(testData2, importMetadata);
         personEntityManager.parseData(testData3, importMetadata);
+        personEntityManager.parseData(testDataPersonAdmin, importMetadata);
         transaction.commit();
         session.close();
         testData.close();
         testData2.close();
         testData3.close();
+        testDataPersonAdmin.close();
     }
 
     public void loadManyPersons(int count) throws Exception {
@@ -191,6 +194,15 @@ public class SameAddressTest extends TestBase {
                     String.class
             );
             Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+            Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+
+            response = restTemplate.exchange(
+                    "/prisme/sameaddress/1/" + "0101005551",
+                    HttpMethod.GET,
+                    httpEntity,
+                    String.class
+            );
+            Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"roadName\":\"Administrativ\""));
             Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
 

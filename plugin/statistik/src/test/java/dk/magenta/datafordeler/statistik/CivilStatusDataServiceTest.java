@@ -11,10 +11,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.statistik.services.CivilStatusDataService;
 import org.hibernate.Session;
 import org.json.JSONException;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -154,7 +151,7 @@ public class CivilStatusDataServiceTest extends TestBase {
 
 
     @Test
-    public void testCivilStateChangeWithPnr0101011234() throws JsonProcessingException {
+    public void testCivilStateChangeWithPnr0101011234() throws JsonProcessingException, JSONException {
 
         civilStatusDataService.setWriteToLocalFile(false);
         testUserDetails = new TestUserDetails();
@@ -170,14 +167,14 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"09-08-2019\";;\"09-08-2019\";\"0101011234\";\"1111111112\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
                 "\"G\";\"09-08-2019\";;\"03-09-2019\";\"0101011234\";\"1111111114\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"";
 
-        Assert.assertEquals(
+        JSONAssert.assertEquals(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim())
+                testUtil.csvToJsonString(response.getBody().trim()), JSONCompareMode.LENIENT
         );
     }
 
     @Test
-    public void testCivilStateChangeWithPnr0101011235() throws JsonProcessingException {
+    public void testCivilStateChangeWithPnr0101011235() throws JsonProcessingException, JSONException {
 
         civilStatusDataService.setWriteToLocalFile(false);
         testUserDetails = new TestUserDetails();
@@ -192,9 +189,9 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"15-03-2018\";;\"15-03-2018\";\"0101011235\";\"1111111111\";\"340\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"\n" +
                 "\"F\";\"16-12-2018\";;\"16-12-2018\";\"0101011235\";\"1111111111\";\"1350\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"";
 
-        Assert.assertEquals(
+        JSONAssert.assertEquals(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim())
+                testUtil.csvToJsonString(response.getBody().trim()), JSONCompareMode.LENIENT
         );
     }
 }

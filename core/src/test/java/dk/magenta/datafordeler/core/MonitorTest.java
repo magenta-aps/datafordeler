@@ -50,7 +50,7 @@ public class MonitorTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Test
+    //@Test
     public void testError() {
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> response = this.restTemplate.exchange("/monitor/errors", HttpMethod.GET, httpEntity, String.class);
