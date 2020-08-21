@@ -741,8 +741,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_STATUS)
     Set<PersonStatusDataRecord> status = new HashSet<>();
 
-    public Set<PersonStatusDataRecord> getStatus() {
-        return this.status;
+    public BitemporalSet<PersonStatusDataRecord> getStatus() {
+        return new BitemporalSet<>(this.status);
     }
 
     public static final String DB_FIELD_PROTECTION = "protection";

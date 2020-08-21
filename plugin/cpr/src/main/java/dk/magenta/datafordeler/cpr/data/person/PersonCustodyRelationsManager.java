@@ -35,26 +35,33 @@ public class PersonCustodyRelationsManager {
     @Autowired
     private SessionManager sessionManager;
 
-    public List<String> findRelations(String pnr) {
+    public List<ChildInfo> findRelations(String pnr) {
 
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
         query.addPersonnummer(pnr);
         List<PersonEntity> requestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
-        List<String> collectiveCustodyArrayList = new ArrayList<String>();
+        List<ChildInfo> collectiveCustodyArrayList = new ArrayList<ChildInfo>();
         //Empty list is the person is not found in datafordeler
         if(requestedInstancesOfPerson.isEmpty()) {
             return collectiveCustodyArrayList;
         }
+
+
+
         //there can not be more then one person with that cpr-number
         //Find all children of the person
         List<String> childCprArrayList = new ArrayList<String>();
-        for(ChildrenDataRecord child : requestedInstancesOfPerson.get(0).getChildren()) {
+
+        Set<ChildrenDataRecord>  childrenList = requestedInstancesOfPerson.get(0).getChildren();
+
+        for(ChildrenDataRecord child : childrenList) {
             childCprArrayList.add(child.getChildCprNumber());
         }
 
         //Lookup all the found children
         query = new PersonRecordQuery();
+        query.setPageSize(40);
         for(String item : childCprArrayList) {
             query.addPersonnummer(item);
         }
@@ -70,14 +77,14 @@ public class PersonCustodyRelationsManager {
 
                 } else if (child.getCustody().size() == 0) {
                     //If there is no registration of custody the child should be added to the parent
-                    collectiveCustodyArrayList.add(child.getPersonnummer());
+                    collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), childrenList.stream().filter(c -> c.getChildCprNumber().equals(child.getPersonnummer())).findAny().get().getStatus()));
                 } else {
                     List<CustodyDataRecord> currentCustodyList = child.getCustody().current();
                     boolean motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3);
                     boolean fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4);
 
                     if(motherhasCustody && childsMother.equals(pnr) || fatherhasCustody && childsFather.equals(pnr)) {
-                        collectiveCustodyArrayList.add(child.getPersonnummer());
+                        collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), childrenList.stream().filter(c -> c.getChildCprNumber().equals(child.getPersonnummer())).findAny().get().getStatus()));
                     }
                 }
             }
@@ -88,10 +95,42 @@ public class PersonCustodyRelationsManager {
         query.addCustodyPnr(pnr);
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
         for(PersonEntity personEntityItem : entities) {
-            collectiveCustodyArrayList.add(personEntityItem.getPersonnummer());
+            collectiveCustodyArrayList.add(new ChildInfo(personEntityItem.getPersonnummer(), personEntityItem.getStatus().current().get(0).getStatus()));
         }
         return collectiveCustodyArrayList;
     }
+
+
+
+    public class ChildInfo {
+        String pnr;
+        int status;
+
+
+        public ChildInfo(String pnr, int status) {
+            this.pnr =pnr;
+            this.status = status;
+        }
+
+
+        public String getPnr() {
+            return pnr;
+        }
+
+        public void setPnr(String pnr) {
+            this.pnr = pnr;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+    }
+
+
 
     /**
      * Find the newest unclosed record from the list of records

@@ -3,9 +3,11 @@ package dk.magenta.datafordeler.cpr.records.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
@@ -59,12 +61,18 @@ public class PersonEntityCustodyService {
         this.checkAndLogAccess(loggerHelper);
 
         if (cpr != null && !cpr.isEmpty()) {
+            ObjectNode root = objectMapper.createObjectNode();
+            root.put("parent", cpr);
             ArrayNode cprList = objectMapper.createArrayNode();
-            List<String> custodyList = custodyManager.findRelations(cpr);
-            for (String custody : custodyList) {
-                cprList.add(custody);
+
+            List<PersonCustodyRelationsManager.ChildInfo> custodyList = custodyManager.findRelations(cpr);
+            for (PersonCustodyRelationsManager.ChildInfo custody : custodyList) {
+                cprList.addPOJO(custody);
             }
-            return objectMapper.writeValueAsString(cprList);
+
+            root.putPOJO("children", cprList);
+
+            return objectMapper.writeValueAsString(root);
         }
         return null;
     }

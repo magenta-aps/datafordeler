@@ -29,7 +29,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over PCR-numre som denne person har forældremyndighed over. Forældremyndigheden beregnes ud fra fremsøgning af en liste over personens børn. Herefter fratrækkes børn som er blevet tildelt en ny forældremyndighed, og der tilføjes børn som denne person har fået tildelt forældremyndigheden over. Børn som er blevet over 18 år fremsøges ikke da forældreemyndigheden dermed er udløbet.",
+            "description": "Liste over PCR-numre som denne person har forældremyndighed over. Udovere CPR-nummeret leveres statuskoden for barnet. Statuskoden benyttes generelt til at indikere en status på personer i CPR-registeret. Dek kan være bopæl i Grønland/Danmark eller at personen er forsvundet eller dødForældremyndigheden beregnes ud fra fremsøgning af en liste over personens børn. Herefter fratrækkes børn som er blevet tildelt en ny forældremyndighed, og der tilføjes børn som denne person har fået tildelt forældremyndigheden over. Børn som er blevet over 18 år fremsøges ikke da forældreemyndigheden dermed er udløbet. Der kan læses om statuskoder på dette link: https://kaqa.gl/Anvendelse/Brugervejledning/Folkeregister/CPR-koder",
             "content": {
               "application/json": {
                 "schema": {

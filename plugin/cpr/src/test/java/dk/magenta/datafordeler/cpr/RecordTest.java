@@ -216,26 +216,26 @@ public class RecordTest {
             //0101121234
             //0101131234
             //0101161234
-            List<String> custodyList = custodyManager.findRelations("0101011234");
+            List<PersonCustodyRelationsManager.ChildInfo> custodyList = custodyManager.findRelations("0101011234");
             Assert.assertEquals(3, custodyList.size());
-            Assert.assertFalse(custodyList.stream().anyMatch(child -> child.equals("0101981234")));
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101121234")));
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101131234")));
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.equals("0101161234")));
+            Assert.assertFalse(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101121234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101131234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101161234")));
 
-            List<String> custodyListFather = custodyManager.findRelations("0101011235");
+            List<PersonCustodyRelationsManager.ChildInfo> custodyListFather = custodyManager.findRelations("0101011235");
             //Assert.assertEquals(3, custodyListFather.size());
-            Assert.assertFalse(custodyListFather.stream().anyMatch(child -> child.equals("0101981234")));
-            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.equals("0101121234")));
-            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.equals("0101141234")));
-            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.equals("0101161234")));
+            Assert.assertFalse(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101121234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101161234")));
 
             //Find collective custody of the person '0101011234'
             //0101981234
-            List<String> custodyList2 = custodyManager.findRelations("0101991234");
+            List<PersonCustodyRelationsManager.ChildInfo> custodyList2 = custodyManager.findRelations("0101991234");
             Assert.assertEquals(1, custodyList2.size());
-            Assert.assertFalse(custodyList2.stream().anyMatch(child -> child.equals("0101981234")));
-            Assert.assertTrue(custodyList2.stream().anyMatch(child -> child.equals("0101141234")));
+            Assert.assertFalse(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assert.assertTrue(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
         }
     }
 
@@ -274,8 +274,9 @@ public class RecordTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(3, objectMapper.readTree(response.getBody()).size());
-        JSONAssert.assertEquals("[\"0101121234\",\"0101161234\",\"0101131234\"]",response.getBody(),false);
+        Assert.assertEquals(3, objectMapper.readTree(response.getBody()).get("children").size());
+        JSONAssert.assertEquals("{\"parent\":\"0101011234\",\"children\":[{\"pnr\":\"0101161234\",\"status\":1},{\"pnr\":\"0101121234\",\"status\":1},{\"pnr\":\"0101131234\",\"status\":1}]}",response.getBody(),false);
+
 
 
         //Try fetching other persons custody
@@ -288,9 +289,8 @@ public class RecordTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).size());
-        JSONAssert.assertEquals("[\"0101141234\"]",response.getBody(),false);
-
+        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("children").size());
+        JSONAssert.assertEquals("{\"parent\":\"0101991234\",\"children\":[{\"pnr\":\"0101141234\",\"status\":1}]}",response.getBody(),false);
     }
 
 
