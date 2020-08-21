@@ -47,33 +47,83 @@ test-core:
       junit:
         - /app/core/target/surefire-reports/TEST-*.xml
 
-test-plugins:
+test-cpr:
   <<: *test-default
   before_script:
-    - cd /app/plugin
+    - cd /app/plugin/cpr
   script:
-    - |
-      cd cpr
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd geo
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd cvr
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd ger
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd eboks
-      mvn --batch-mode -T 2C test
-      cd ..
-      cd prisme
-      mvn --batch-mode -T 2C test
-      cd ..
-
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
-        - /app/plugin/*/target/surefire-reports/TEST-*.xml
+        - /app/plugin/cpr/target/surefire-reports/TEST-*.xml
+
+test-geo:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/geo
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/geo/target/surefire-reports/TEST-*.xml
+
+test-cvr:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/cvr
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/cvr/target/surefire-reports/TEST-*.xml
+
+test-ger:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/ger
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/ger/target/surefire-reports/TEST-*.xml
+
+test-eboks:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/eboks
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/eboks/target/surefire-reports/TEST-*.xml
+
+test-prisme:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/prisme
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/prisme/target/surefire-reports/TEST-*.xml
+
+test-statistik:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/statistik
+  script:
+    # Some day we need to solve that the tests only passes at this timezone
+    - mvn --batch-mode -T 2C test -Duser.timezone=Europe/Copenhagen
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/statistik/target/surefire-reports/TEST-*.xml
+
+
 
