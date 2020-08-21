@@ -33,10 +33,7 @@ RUN mvn --batch-mode -T 2C package install -DskipTests
 
 #TODO WE NEED TO FIX TESTS OF STATISTICS
 WORKDIR /app/plugin/statistik
-RUN mvn --batch-mode -T 2C package install -DskipTests -Duser.timezone=Europe/Copenhagen
-
-WORKDIR /app/ci
-ENTRYPOINT ["./entrypoint.sh"]
+RUN mvn --batch-mode -T 2C package install -DskipTests
 
 
 
