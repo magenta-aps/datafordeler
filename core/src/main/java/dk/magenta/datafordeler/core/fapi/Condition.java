@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 
-import java.util.List;
 import java.util.Map;
 
 public abstract class Condition {
@@ -23,12 +22,12 @@ public abstract class Condition {
         }
     }
 
-    private Condition parent;
+    private MultiCondition parent;
 
     public Condition() {
     }
 
-    public Condition(Condition parent) throws QueryBuildException {
+    public Condition(MultiCondition parent) throws QueryBuildException {
         for (Condition p = parent; p != null; p = p.parent) {
             if (p == this) {
                 throw new QueryBuildException("Cyclic reference");
@@ -37,7 +36,30 @@ public abstract class Condition {
         this.parent = parent;
     }
 
+    protected MultiCondition getParent() {
+        return this.parent;
+    }
+
     public abstract String toHql();
 
     public abstract Map<String, Object> getParameters();
+
+    public abstract boolean isEmpty();
+
+    public abstract int size();
+
+
+    public MultiCondition asMultiCondition() {
+        MultiCondition multiCondition;
+        try {
+            multiCondition = new MultiCondition(this.getParent());
+        } catch (QueryBuildException e) {
+            e.printStackTrace();
+            return null;
+        }
+        this.getParent().add(multiCondition);
+        this.getParent().remove(this);
+        multiCondition.add(this);
+        return multiCondition;
+    }
 }

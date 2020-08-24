@@ -2,8 +2,9 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * A single field somewhere in the query structure, being compared to null
@@ -12,7 +13,7 @@ public class NullCondition extends Condition {
     private String left;
     private Operator operator;
 
-    public NullCondition(Condition parent, String left, Operator operator) throws QueryBuildException {
+    public NullCondition(MultiCondition parent, String left, Operator operator) throws QueryBuildException {
         super(parent);
         this.left = left;
         if (operator == Operator.EQ || operator == Operator.NE) {
@@ -35,6 +36,16 @@ public class NullCondition extends Condition {
 
     public Map<String, Object> getParameters() {
         return Collections.emptyMap();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return 1;
     }
 
 }

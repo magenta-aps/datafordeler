@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.cpr;
 
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;

@@ -16,8 +16,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 @RunWith(OrderedRunner.class)

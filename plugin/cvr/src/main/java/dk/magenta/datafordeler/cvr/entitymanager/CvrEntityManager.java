@@ -129,46 +129,12 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return this.commonFetcher;
     }
 
-    @Override
-    protected Communicator getReceiptSender() {
-        return this.commonFetcher;
-    }
-
     /**
      * Return the base endpoint, which points to the external source
      */
     @Override
     public URI getBaseEndpoint() {
         return this.getRegisterManager().getBaseEndpoint();
-    }
-
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return null;
-    }
-
-    /*
-     * Returns the reference URI based on a RegistrationReference, basically unpacking it
-     */
-    @Override
-    public URI getRegistrationInterface(RegistrationReference reference) throws WrongSubclassException {
-        if (!this.managedRegistrationReferenceClass.isInstance(reference)) {
-            throw new WrongSubclassException(this.managedRegistrationReferenceClass, reference);
-        }
-        if (reference.getURI() != null) {
-            return reference.getURI();
-        }
-        return null;
-    }
-
-    @Override
-    protected URI getListChecksumInterface(OffsetDateTime fromDate) {
-        return this.getRegisterManager().getListChecksumInterface(this.getSchema(), fromDate);
-    }
-
-    @Override
-    protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        return ItemInputStream.parseJsonStream(responseContent, this.managedEntityReferenceClass, "items", this.getObjectMapper());
     }
 
     @Override
@@ -454,18 +420,4 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
-    @Override
-    public RegistrationReference parseReference(InputStream inputStream) throws IOException {
-        return null;
-    }
-
-    @Override
-    public RegistrationReference parseReference(String s, String s1) throws IOException {
-        return null;
-    }
-
-    @Override
-    public RegistrationReference parseReference(URI uri) {
-        return null;
-    }
 }
