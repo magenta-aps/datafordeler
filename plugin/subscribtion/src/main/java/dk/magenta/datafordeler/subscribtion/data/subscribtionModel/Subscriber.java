@@ -20,6 +20,10 @@ public class Subscriber extends DatabaseEntry {
     @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
     public static final String schema = "Company";
 
+
+    public Subscriber() {
+    }
+
     public Subscriber(String userId) {
         this.userId = userId;
     }

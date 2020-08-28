@@ -1,29 +1,34 @@
 package dk.magenta.datafordeler.subscribtion.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.*;
+
+import static org.mockito.Mockito.when;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,10 +52,64 @@ public class SubscribtionTest {
 
 
 
+
+    @Test
+    public void testCallForEmptyList() throws Exception {
+
+        dk.magenta.datafordeler.eboks.TestUserDetails testUserDetails = new dk.magenta.datafordeler.eboks.TestUserDetails();
+
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        ArrayList cprList = new ArrayList();
+        ArrayList cvrList = new ArrayList();
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        String cprs = String.join(",", cprList);
+        String cvrs = String.join(",", cvrList);
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/eboks/recipient/lookup",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
+    }
+
+    private void applyAccess(dk.magenta.datafordeler.eboks.TestUserDetails testUserDetails) {
+        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
+    }
+
+
+
+
     @Test
     public void testSubscribtion() throws Exception {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            Transaction transaction = session.beginTransaction();
+
+
+
+
+            //Transaction tx = session.getTransaction();
+
 
             session.save(new Subscriber("testing"));
 
@@ -71,15 +130,26 @@ public class SubscribtionTest {
             Assert.assertEquals(0, subscriptions.get(0).getDataEventSubscribtion().size());
             Assert.assertEquals(1, subscriptions.get(1).getDataEventSubscribtion().size());
 
+            transaction.commit();
 
+
+
+        }
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            //tx.commit();
+
+            List<Subscriber> subscriptions = QueryManager.getAllItems(session, Subscriber.class);
 
 
 
 
             HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
-            TestUserDetails testUserDetails = new TestUserDetails();
-            //this.applyAccess(testUserDetails);
+            dk.magenta.datafordeler.eboks.TestUserDetails testUserDetails = new dk.magenta.datafordeler.eboks.TestUserDetails();
+            testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+            testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+            this.applyAccess(testUserDetails);
 
             //Try fetching with no cpr access rights
             ResponseEntity<String> response = restTemplate.exchange(

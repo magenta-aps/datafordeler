@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = BusinessEventSubscribtion.TABLE_NAME, indexes = {
+@Table(name = CvrList.TABLE_NAME, indexes = {
 
 
 })
 public class CvrList {
 
-    public static final String TABLE_NAME = "cpr_list";
+    public static final String TABLE_NAME = "cvr_list";
 
     @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
     public static final String schema = "Company";
