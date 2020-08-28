@@ -42,7 +42,7 @@ public class Subscriber extends DatabaseEntry {
 
 
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="EMPLOYEE_ID")
     Set<BusinessEventSubscribtion> businessEventSubscribtion = new HashSet<>();
 
@@ -55,7 +55,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="EMPLOYEE_ID")
     Set<DataEventSubscribtion> dataEventSubscribtion = new HashSet<>();
 

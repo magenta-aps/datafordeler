@@ -8,8 +8,6 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
-import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
@@ -50,48 +48,7 @@ public class SubscribtionTest {
 
 
 
-
-
-
-    @Test
-    public void testCallForEmptyList() throws Exception {
-
-        dk.magenta.datafordeler.eboks.TestUserDetails testUserDetails = new dk.magenta.datafordeler.eboks.TestUserDetails();
-
-        ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-
-        ArrayList cprList = new ArrayList();
-        ArrayList cvrList = new ArrayList();
-        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-
-        String cprs = String.join(",", cprList);
-        String cvrs = String.join(",", cvrList);
-
-        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        this.applyAccess(testUserDetails);
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
-                HttpMethod.GET,
-                httpEntity,
-                String.class, cprs, cvrs
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
-
-        response = restTemplate.exchange(
-                "/eboks/recipient/lookup",
-                HttpMethod.GET,
-                httpEntity,
-                String.class, cprs, cvrs
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
-    }
-
-    private void applyAccess(dk.magenta.datafordeler.eboks.TestUserDetails testUserDetails) {
+    private void applyAccess(dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
@@ -104,12 +61,6 @@ public class SubscribtionTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             Transaction transaction = session.beginTransaction();
-
-
-
-
-            //Transaction tx = session.getTransaction();
-
 
             session.save(new Subscriber("testing"));
 
@@ -137,18 +88,15 @@ public class SubscribtionTest {
         }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            //tx.commit();
 
             List<Subscriber> subscriptions = QueryManager.getAllItems(session, Subscriber.class);
 
 
-
-
             HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
-            dk.magenta.datafordeler.eboks.TestUserDetails testUserDetails = new dk.magenta.datafordeler.eboks.TestUserDetails();
-            testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-            testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+            dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+            //testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+            //testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
             this.applyAccess(testUserDetails);
 
             //Try fetching with no cpr access rights
@@ -161,16 +109,6 @@ public class SubscribtionTest {
 
 
             System.out.println(response);
-
-
-
-
-
-
-
-
-
-
 
 
         } finally {
