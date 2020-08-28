@@ -311,10 +311,14 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         List<T> items = this.parseNode(jsonNode);
         timer.measure(TASK_PARSE);
         for (T item : items) {
-            item.setDafoUpdateOnTree(importMetadata.getImportTime());
+            this.beforeParseSave(item, importMetadata, session);
             item.save(session);
         }
         return items.size();
+    }
+
+    protected void beforeParseSave(T item, ImportMetadata importMetadata, Session session) {
+        item.setDafoUpdateOnTree(importMetadata.getImportTime());
     }
 
     public List<T> parseNode(JsonNode jsonNode) {
