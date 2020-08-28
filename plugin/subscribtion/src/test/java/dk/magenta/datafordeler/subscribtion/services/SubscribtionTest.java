@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion;
+package dk.magenta.datafordeler.subscribtion.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.*;
@@ -66,6 +70,39 @@ public class SubscribtionTest {
 
             Assert.assertEquals(0, subscriptions.get(0).getDataEventSubscribtion().size());
             Assert.assertEquals(1, subscriptions.get(1).getDataEventSubscribtion().size());
+
+
+
+
+
+
+            HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+            TestUserDetails testUserDetails = new TestUserDetails();
+            //this.applyAccess(testUserDetails);
+
+            //Try fetching with no cpr access rights
+            ResponseEntity<String> response = restTemplate.exchange(
+                    "/subscribtion/v1/manager",
+                    HttpMethod.GET,
+                    httpEntity,
+                    String.class
+            );
+
+
+            System.out.println(response);
+
+
+
+
+
+
+
+
+
+
+
+
         } finally {
 
         }

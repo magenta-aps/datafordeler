@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion;
+package dk.magenta.datafordeler.subscribtion.services;
 
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.role.SystemRole;
