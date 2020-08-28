@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
@@ -162,8 +163,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<SecNameRecord> getNames() {
-        return this.names;
+    public BitemporalSet<SecNameRecord> getNames() {
+        return new BitemporalSet<>(this.names);
     }
 
 
@@ -203,8 +204,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<AddressRecord> getLocationAddress() {
-        return this.locationAddress;
+    public BitemporalSet<AddressRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress);
     }
 
 
@@ -244,8 +245,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<AddressRecord> getPostalAddress() {
-        return this.postalAddress;
+    public BitemporalSet<AddressRecord> getPostalAddress() {
+        return new BitemporalSet<>(this.postalAddress);
     }
 
 
@@ -285,8 +286,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<AddressRecord> getBusinessAddress() {
-        return this.businessAddress;
+    public BitemporalSet<AddressRecord> getBusinessAddress() {
+        return new BitemporalSet<>(this.businessAddress);
     }
 
 
@@ -327,8 +328,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getPhoneNumber() {
-        return this.phoneNumber;
+    public BitemporalSet<ContactRecord> getPhoneNumber() {
+        return new BitemporalSet<>(this.phoneNumber);
     }
 
 
@@ -369,8 +370,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getFaxNumber() {
-        return this.faxNumber;
+    public BitemporalSet<ContactRecord> getFaxNumber() {
+        return new BitemporalSet<>(this.faxNumber);
     }
 
 
@@ -411,8 +412,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getEmailAddress() {
-        return this.emailAddress;
+    public BitemporalSet<ContactRecord> getEmailAddress() {
+        return new BitemporalSet<>(this.emailAddress);
     }
 
 
@@ -526,8 +527,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         this.addCompanyRelation(otherRecord);
     }
 
-    public Set<CompanyParticipantRelationRecord> getCompanyRelation() {
-        return this.companyRelation;
+    public BitemporalSet<CompanyParticipantRelationRecord> getCompanyRelation() {
+        return new BitemporalSet<>(this.companyRelation);
     }
 
 
