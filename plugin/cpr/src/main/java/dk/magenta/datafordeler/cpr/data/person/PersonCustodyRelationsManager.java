@@ -77,14 +77,18 @@ public class PersonCustodyRelationsManager {
 
                 } else if (child.getCustody().size() == 0) {
                     //If there is no registration of custody the child should be added to the parent
-                    collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), childrenList.stream().filter(c -> c.getChildCprNumber().equals(child.getPersonnummer())).findAny().get().getStatus()));
+                    query = new PersonRecordQuery();
+                    query.setPersonnummer(child.getPersonnummer());
+                    collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), QueryManager.getAllEntities(session, query, PersonEntity.class).get(0).getStatus().current().get(0).getStatus()));
                 } else {
                     List<CustodyDataRecord> currentCustodyList = child.getCustody().current();
                     boolean motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3);
                     boolean fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4);
 
                     if(motherhasCustody && childsMother.equals(pnr) || fatherhasCustody && childsFather.equals(pnr)) {
-                        collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), childrenList.stream().filter(c -> c.getChildCprNumber().equals(child.getPersonnummer())).findAny().get().getStatus()));
+                        query = new PersonRecordQuery();
+                        query.setPersonnummer(child.getPersonnummer());
+                        collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), QueryManager.getAllEntities(session, query, PersonEntity.class).get(0).getStatus().current().get(0).getStatus()));
                     }
                 }
             }
