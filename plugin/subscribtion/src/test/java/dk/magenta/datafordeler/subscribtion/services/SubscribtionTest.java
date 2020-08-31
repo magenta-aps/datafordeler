@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -24,9 +25,13 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import java.util.*;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,6 +53,20 @@ public class SubscribtionTest {
 
 
 
+    MockMvc mvc;
+
+
+
+    @Before
+    public void setUp() throws Exception {
+        initMocks(this);
+        ManageSubscribtion controller = new ManageSubscribtion();
+        mvc = MockMvcBuilders.standaloneSetup(controller).build();
+    }
+
+
+
+
     private void applyAccess(dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
@@ -58,15 +77,17 @@ public class SubscribtionTest {
     @Test
     public void testSubscribtion() throws Exception {
 
+        //Initiate a list of subscribtions
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             Transaction transaction = session.beginTransaction();
 
-            session.save(new Subscriber("testing"));
-
             List<Subscriber> subscriptions = QueryManager.getAllItems(session, Subscriber.class);
 
-            subscriptions.add(new Subscriber("ww"));
+            subscriptions.add(new Subscriber("user1"));
+            subscriptions.add(new Subscriber("user2"));
+            subscriptions.add(new Subscriber("user3"));
+            subscriptions.add(new Subscriber("user4"));
 
             subscriptions.get(0).addBusinessEventSubscribtion(new BusinessEventSubscribtion("ww"));
             subscriptions.get(1).addDataEventSubscribtion(new DataEventSubscribtion("ww"));
@@ -74,41 +95,71 @@ public class SubscribtionTest {
             //There is 5 fathers in the test-file
             //One should not be added to subscribtion becrause the child is more than 18 years old.
             //One person should not be added becrause the father allready exists as a person.
-            Assert.assertEquals(2, subscriptions.size());
+            Assert.assertEquals(4, subscriptions.size());
             Assert.assertEquals(1, subscriptions.get(0).getBusinessEventSubscribtion().size());
             Assert.assertEquals(0, subscriptions.get(1).getBusinessEventSubscribtion().size());
 
             Assert.assertEquals(0, subscriptions.get(0).getDataEventSubscribtion().size());
             Assert.assertEquals(1, subscriptions.get(1).getDataEventSubscribtion().size());
 
+            for(Subscriber subscriber : subscriptions) {
+                session.save(subscriber);
+            }
+
             transaction.commit();
-
-
-
         }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
-            List<Subscriber> subscriptions = QueryManager.getAllItems(session, Subscriber.class);
-
-
             HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-
             dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
-            //testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-            //testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
             this.applyAccess(testUserDetails);
 
             //Try fetching with no cpr access rights
             ResponseEntity<String> response = restTemplate.exchange(
-                    "/subscribtion/v1/manager",
+                    "/subscribtionplugin/v1/manager/list",
                     HttpMethod.GET,
                     httpEntity,
                     String.class
             );
-
-
             System.out.println(response);
+
+            httpEntity = new HttpEntity<String>("", new HttpHeaders());
+            testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+            this.applyAccess(testUserDetails);
+
+            //Try fetching with no cpr access rights
+            response = restTemplate.exchange(
+                    "/subscribtionplugin/v1/manager/subscriber/user1",
+                    HttpMethod.GET,
+                    httpEntity,
+                    String.class
+            );
+            System.out.println(response);
+
+
+
+
+
+
+
+            httpEntity = new HttpEntity<String>("{\"subscriberId\":\"user7\",\"businessEventSubscribtion\":[{\"cprList\":null,\"businessEventIdId\":\"ww\"}],\"dataEventSubscribtion\":[]}", new HttpHeaders());
+            testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+            this.applyAccess(testUserDetails);
+
+
+            //Try fetching with no cpr access rights
+            response = restTemplate.exchange(
+                    "/subscribtionplugin/v1/manager/subscriber/create/",
+                    HttpMethod.POST,
+                    httpEntity,
+                    String.class
+            );
+            System.out.println(response);
+
+
+
+
 
 
         } finally {

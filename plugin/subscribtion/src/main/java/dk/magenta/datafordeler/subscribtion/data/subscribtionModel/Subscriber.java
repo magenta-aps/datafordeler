@@ -24,20 +24,20 @@ public class Subscriber extends DatabaseEntry {
     public Subscriber() {
     }
 
-    public Subscriber(String userId) {
-        this.userId = userId;
+    public Subscriber(String subscriberId) {
+        this.subscriberId = subscriberId;
     }
 
-    @Column(name="userId", nullable=false)
+    @Column(name="subscriberId", nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-    private String userId;
+    private String subscriberId;
 
-    public String getUserId() {
-        return userId;
+    public String getSubscriberId() {
+        return subscriberId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSubscriberId(String subscriberId) {
+        this.subscriberId = subscriberId;
     }
 
 
