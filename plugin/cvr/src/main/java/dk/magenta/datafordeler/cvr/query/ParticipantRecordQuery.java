@@ -195,6 +195,8 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.setNavn(parameters.getI(NAVN));
         this.setKommuneKode(parameters.getI(KOMMUNEKODE));
     }
+
+    @Deprecated
     @Override
     public BaseLookupDefinition getLookupDefinition() {
         BaseLookupDefinition lookupDefinition = new CvrRecordLookupDefinition(this);

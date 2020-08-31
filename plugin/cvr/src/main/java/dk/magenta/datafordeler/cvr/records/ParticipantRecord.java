@@ -104,6 +104,11 @@ public class ParticipantRecord extends CvrEntityRecord {
         return this.confidentialEnriched;
     }
 
+    public void setConfidentialEnriched(Boolean confidentialEnriched) {
+        this.confidentialEnriched = confidentialEnriched;
+    }
+
+
 
     public static final String DB_FIELD_BUSINESS_KEY = "businessKey";
     public static final String IO_FIELD_BUSINESS_KEY = "forretningsnoegle";

@@ -14,12 +14,18 @@ import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 @Component
 public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord> {
@@ -104,10 +110,11 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
     }
 
     private boolean enrichParticipantRecord(ParticipantRecord participantRecord) {
-        if (participantRecord.getUnitNumber() != 0 && (participantRecord.getBusinessKey() == null || participantRecord.getBusinessKey() == 0) && !participantRecord.getConfidentialEnriched()) {
+        if (participantRecord.getUnitNumber() != 0 && (participantRecord.getBusinessKey() == null || participantRecord.getBusinessKey() == 0) && participantRecord.getConfidentialEnriched() == null) {
             try {
                 ParticipantRecord confidentialRecord = directLookup.participantLookup(Long.toString(participantRecord.getUnitNumber()));
                 participantRecord.setBusinessKey(confidentialRecord.getBusinessKey());
+                participantRecord.setConfidentialEnriched(true);
                 System.out.println("Enriched ParticipantEntity "+participantRecord.getUnitNumber()+" with businessKey "+confidentialRecord.getBusinessKey());
                 return true;
             } catch (DataFordelerException e) {
@@ -115,6 +122,32 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
             }
         }
         return false;
+    }
+
+
+    public void enrichAllParticipantRecords() {
+        Session session = sessionManager.getSessionFactory().openSession();
+        Query<Long> countQuery = session.createQuery("select count(ALL) from " + ParticipantRecord.class, Long.class);
+        Long rowCount = countQuery.getSingleResult();
+
+        for (int i=0; i<rowCount/1000; i++) {
+            Transaction transaction = session.beginTransaction();
+            Query<ParticipantRecord> query = session.createQuery("from " + ParticipantRecord.class, ParticipantRecord.class);
+            query.setFirstResult(i * 1000);
+            query.setMaxResults(1000);
+            List<ParticipantRecord> records = query.getResultList();
+            if (!records.isEmpty()) {
+                records.forEach(participantRecord -> {
+                    ParticipantEntityManager.this.enrichParticipantRecord(participantRecord);
+                    session.save(participantRecord);
+                });
+                transaction.commit();
+                session.flush();
+                session.clear();
+            } else {
+                break;
+            }
+        }
     }
 
 }
