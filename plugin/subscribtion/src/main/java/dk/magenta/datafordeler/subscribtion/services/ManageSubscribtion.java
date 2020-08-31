@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -109,28 +111,37 @@ public class ManageSubscribtion {
         }
 
     }
-
+/*
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody String product) {
+    public ResponseEntity create(@Valid @RequestBody Subscriber subscriber) {
 
         return ResponseEntity.ok("");
 
-        /*try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             return ResponseEntity.ok(session.save(new Subscriber("testing")));
-        }*/
-    }
+        }
+    }*/
 
-/*    @GetMapping("/{id}")
-    public ResponseEntity<Subscriber> findById(@PathVariable Long id) {
-        Optional<Subscriber> stock = productService.findById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Subscriber> findById(@PathVariable Long userId) {
+
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            Query q = session.createQuery(" from "+ Subscriber.class.getName() +" where userId = :userId", Subscriber.class);
+            q.sets
+        }
+
+        /*Optional<Subscriber> stock = productService.findById(id);
         if (!stock.isPresent()) {
             log.error("Id " + id + " is not existed");
             ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(stock.get());
-    }*/
+        return ResponseEntity.ok(stock.get());*/
+        return null;
+    }
 
 /*    @PutMapping("/{id}")
     public ResponseEntity<Subscriber> update(@PathVariable Long id, @Valid @RequestBody Subscriber product) {
