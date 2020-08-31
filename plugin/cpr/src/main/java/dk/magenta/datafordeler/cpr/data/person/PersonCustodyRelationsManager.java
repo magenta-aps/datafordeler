@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cpr.data.person;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.util.BitemporalityComparator;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
@@ -35,7 +36,7 @@ public class PersonCustodyRelationsManager {
     @Autowired
     private SessionManager sessionManager;
 
-    public List<ChildInfo> findRelations(String pnr) {
+    public List<ChildInfo> findRelations(String pnr) throws HttpNotFoundException {
 
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
@@ -44,7 +45,7 @@ public class PersonCustodyRelationsManager {
         List<ChildInfo> collectiveCustodyArrayList = new ArrayList<ChildInfo>();
         //Empty list is the person is not found in datafordeler
         if(requestedInstancesOfPerson.isEmpty()) {
-            return collectiveCustodyArrayList;
+            throw new HttpNotFoundException("No entity with CPR number " + pnr + " was found");
         }
 
 
@@ -69,8 +70,14 @@ public class PersonCustodyRelationsManager {
             List<PersonEntity> childrenOfTheRequestedPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
             for (PersonEntity child : childrenOfTheRequestedPerson) {
                 BirthTimeDataRecord birthTime = findNewestUnclosed(child.getBirthTime());
-                String childsFather = findNewestUnclosed(child.getFather()).getCprNumber();
-                String childsMother = findNewestUnclosed(child.getMother()).getCprNumber();
+                String childsFather = "";
+                if(child.getFather().size()>0) {
+                       childsFather = findNewestUnclosed(child.getFather()).getCprNumber();
+                }
+                String childsMother = "";
+                if(child.getMother().size()>0) {
+                    childsMother = findNewestUnclosed(child.getMother()).getCprNumber();
+                }
 
                 if (LocalDateTime.now().minusYears(18).isAfter(birthTime.getBirthDatetime())) {
                     //If the child is more then 18 years old, it should not be added to the list of custody
