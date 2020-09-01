@@ -106,7 +106,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
     @Override
     protected void beforeParseSave(ParticipantRecord item, ImportMetadata importMetadata, Session session) {
         super.beforeParseSave(item, importMetadata, session);
-        this.enrichParticipantRecord(item);
+        //this.enrichParticipantRecord(item);
     }
 
     private boolean enrichParticipantRecord(ParticipantRecord participantRecord) {

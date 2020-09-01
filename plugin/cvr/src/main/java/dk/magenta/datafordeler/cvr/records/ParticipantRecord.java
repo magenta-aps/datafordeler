@@ -97,13 +97,14 @@ public class ParticipantRecord extends CvrEntityRecord {
     public static final String IO_FIELD_CONFIDENTIAL_ENRICHED = "fortroligBeriget";
 
     @Column(name = DB_FIELD_CONFIDENTIAL_ENRICHED)
-    @JsonProperty(value = IO_FIELD_CONFIDENTIAL_ENRICHED)
     private Boolean confidentialEnriched;
 
+    @JsonIgnore
     public Boolean getConfidentialEnriched() {
         return this.confidentialEnriched;
     }
 
+    @JsonProperty(value = IO_FIELD_CONFIDENTIAL_ENRICHED)
     public void setConfidentialEnriched(Boolean confidentialEnriched) {
         this.confidentialEnriched = confidentialEnriched;
     }
