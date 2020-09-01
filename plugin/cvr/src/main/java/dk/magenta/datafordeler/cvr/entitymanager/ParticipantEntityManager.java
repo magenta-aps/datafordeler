@@ -114,9 +114,12 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
         if (participantRecord.getUnitNumber() != 0 && (participantRecord.getBusinessKey() == null || participantRecord.getBusinessKey() == 0) && participantRecord.getConfidentialEnriched() == null) {
             try {
                 ParticipantRecord confidentialRecord = directLookup.participantLookup(Long.toString(participantRecord.getUnitNumber()));
-                participantRecord.setBusinessKey(confidentialRecord.getBusinessKey());
-                participantRecord.setConfidentialEnriched(true);
-                System.out.println("Enriched ParticipantEntity "+participantRecord.getUnitNumber()+" with businessKey "+confidentialRecord.getBusinessKey());
+                if (confidentialRecord.getBusinessKey() != null) {
+                    participantRecord.setBusinessKey(confidentialRecord.getBusinessKey());
+                    participantRecord.setConfidentialEnriched(true);
+                } else {
+                    participantRecord.setConfidentialEnriched(false);
+                }
                 return true;
             } catch (DataFordelerException e) {
                 e.printStackTrace();
