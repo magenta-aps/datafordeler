@@ -66,6 +66,10 @@ public class CompanyRecord extends CvrEntityRecord {
         return this.cvrNumber;
     }
 
+    public String getCvrNumberString() {
+        return String.format("%08d", this.cvrNumber);
+    }
+
     @JsonIgnore
     public Map<String, Object> getIdentifyingFilter() {
         return Collections.singletonMap(DB_FIELD_CVR_NUMBER, this.cvrNumber);
