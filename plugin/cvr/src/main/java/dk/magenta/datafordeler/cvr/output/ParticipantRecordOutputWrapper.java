@@ -55,9 +55,10 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
         container.addNontemporal(ParticipantRecord.IO_FIELD_UNIT_NUMBER, record.getUnitNumber());
         container.addNontemporal(ParticipantRecord.IO_FIELD_UNIT_TYPE, record.getUnitType());
         container.addNontemporal(ParticipantRecord.IO_FIELD_POSITION, record.getPosition());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_BUSINESS_KEY, record.getBusinessKey());
         container.addNontemporal(ParticipantRecord.IO_FIELD_STATUS_CODE, record.getStatusCode());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_CONFIDENTIAL_ENRICHED, record.getConfidentialEnriched());
+        
+        //container.addNontemporal(ParticipantRecord.IO_FIELD_BUSINESS_KEY, record.getBusinessKey());
+        //container.addNontemporal(ParticipantRecord.IO_FIELD_CONFIDENTIAL_ENRICHED, record.getConfidentialEnriched());
 
         container.addCvrBitemporal("navn", record.getNames(), true);
         container.addCvrBitemporal(ParticipantRecord.IO_FIELD_LOCATION_ADDRESS, record.getLocationAddress(), this::createAddressNode);
