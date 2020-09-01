@@ -19,6 +19,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -124,30 +125,40 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
         return false;
     }
 
-
+    //@PostConstruct
     public void enrichAllParticipantRecords() {
         Session session = sessionManager.getSessionFactory().openSession();
-        Query<Long> countQuery = session.createQuery("select count(ALL) from " + ParticipantRecord.class, Long.class);
+        Query<Long> countQuery = session.createQuery(
+                "select count(ALL id) from " + ParticipantRecord.class.getCanonicalName(),
+                Long.class
+        );
         Long rowCount = countQuery.getSingleResult();
 
-        for (int i=0; i<rowCount/1000; i++) {
+        for (int i=0; i<=rowCount/1000; i++) {
             Transaction transaction = session.beginTransaction();
-            Query<ParticipantRecord> query = session.createQuery("from " + ParticipantRecord.class, ParticipantRecord.class);
+            Query<ParticipantRecord> query = session.createQuery(
+                    "from " + ParticipantRecord.class.getCanonicalName(),
+                    ParticipantRecord.class
+            );
             query.setFirstResult(i * 1000);
             query.setMaxResults(1000);
             List<ParticipantRecord> records = query.getResultList();
             if (!records.isEmpty()) {
-                records.forEach(participantRecord -> {
-                    ParticipantEntityManager.this.enrichParticipantRecord(participantRecord);
-                    session.save(participantRecord);
-                });
-                transaction.commit();
+                for (ParticipantRecord participantRecord : records) {
+                    boolean updated = ParticipantEntityManager.this.enrichParticipantRecord(participantRecord);
+                    if (updated) {
+                        session.save(participantRecord);
+                    }
+                };
                 session.flush();
+                transaction.commit();
                 session.clear();
             } else {
                 break;
             }
         }
     }
+
+
 
 }
