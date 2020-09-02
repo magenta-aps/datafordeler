@@ -7,6 +7,8 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.AccessRequiredException;
+import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
+import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -61,7 +63,8 @@ public class ManageSubscribtion {
      */
     @GetMapping("/subscriber/list")
     //@RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<Subscriber>> findAll() {
+    public ResponseEntity<List<Subscriber>> findAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             List<Subscriber> subscribtionList = QueryManager.getAllItems(session, Subscriber.class);
             return ResponseEntity.ok(subscribtionList);
@@ -74,6 +77,21 @@ public class ManageSubscribtion {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber = objectMapper.readValue(subscriberContent, Subscriber.class);
+            session.save(subscriber);
+            transaction.commit();
+            return ResponseEntity.ok(subscriber);
+        }
+    }
+
+
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/createMy/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity createMySubscriber(HttpServletRequest request) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+
+        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Subscriber subscriber = new Subscriber(user.getIdentity());
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);

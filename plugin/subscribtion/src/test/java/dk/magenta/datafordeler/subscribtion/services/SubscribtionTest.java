@@ -226,6 +226,34 @@ public class SubscribtionTest {
                 "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"createdUser1\",\"businessEventSubscribtion\":[]," +
                 "\"dataEventSubscribtion\":[]}]", response.getBody(), false);
 
+
+
+        testUserDetails.setIdentity("myCreatedUser");
+        this.applyAccess(testUserDetails);
+
+        //Try fetching with no cpr access rights
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/createMy/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"myCreatedUser\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"createdUser1\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]}]", response.getBody(), false);
+
     }
 
 

@@ -37,9 +37,16 @@ public class TestUserDetails extends DafoUserDetails {
         return "testing";
     }
 
+
+    String identity = "tester";
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
     @Override
     public String getIdentity() {
-        return "tester";
+        return identity;
     }
 
     @Override
