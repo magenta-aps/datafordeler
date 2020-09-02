@@ -11,7 +11,6 @@ import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.cvr.records.SecNameRecord;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
-import org.apache.commons.math3.analysis.function.Add;
 
 import java.util.*;
 
