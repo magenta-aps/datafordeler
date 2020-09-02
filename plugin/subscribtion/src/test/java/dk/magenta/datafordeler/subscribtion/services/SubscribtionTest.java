@@ -229,6 +229,60 @@ public class SubscribtionTest {
     }
 
 
+    /**
+     * Test that it is possible to delete a new subscribtion
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteSubscribtion() throws Exception {
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]}]", response.getBody(), false);
+
+        httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", new HttpHeaders());
+        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        //Try fetching with no cpr access rights
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/delete/user2",
+                HttpMethod.DELETE,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]}]", response.getBody(), false);
+    }
+
+
+
+
+
 
 
     //@Test

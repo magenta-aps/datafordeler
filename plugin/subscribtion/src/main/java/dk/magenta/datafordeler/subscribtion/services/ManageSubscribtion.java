@@ -69,7 +69,7 @@ public class ManageSubscribtion {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity create(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException {
+    public ResponseEntity createSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -81,7 +81,7 @@ public class ManageSubscribtion {
     }
 
     @GetMapping("/subscriber/{subscriberId}")
-    public ResponseEntity<Subscriber> createBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
+    public ResponseEntity<Subscriber> getBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", subscriberId);
@@ -89,6 +89,23 @@ public class ManageSubscribtion {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                return ResponseEntity.ok(subscriber);
+            }
+        }
+    }
+
+    @DeleteMapping("/subscriber/delete/{subscriberId}")
+    public ResponseEntity<Subscriber> deleteBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            query.setParameter("subscriberId", subscriberId);
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                session.delete(subscriber);
+                transaction.commit();
                 return ResponseEntity.ok(subscriber);
             }
         }
