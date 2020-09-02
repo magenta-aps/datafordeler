@@ -103,32 +103,135 @@ public class SubscribtionTest {
     }
 
 
-
-
+    /**
+     * Test that it is possible to call a service that deliveres a list of subscribtion that has been created in datafordeler
+     */
     @Test
-    public void testGetSubscribtionList() throws Exception {
+    public void testGetSubscribtionList() {
 
-            HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-            dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
-            this.applyAccess(testUserDetails);
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
 
-            //Try fetching with no cpr access rights
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "/subscribtionplugin/v1/manager/subscriber/list",
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]}]", response.getBody(), false);
 
-            JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}]", response.getBody(), false);
+    }
+
+    /**
+     * Test that it is possible to find a specific subscribtion
+     * @throws Exception
+     */
+    @Test
+    public void testGetSpecificSubscribtions() throws Exception {
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/user1",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
+
+
+        httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/user2",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
+
+        httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        //Try fetching with no cpr access rights
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/nonExistingUser",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+    }
+
+    /**
+     * Test that it is possible to create a new subscribtion
+     * @throws Exception
+     */
+    @Test
+    public void testCreateSubscribtion() throws Exception {
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]}]", response.getBody(), false);
+
+        httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", new HttpHeaders());
+        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        //Try fetching with no cpr access rights
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/create/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]},{\"subscriberId\":\"createdUser1\",\"businessEventSubscribtion\":[]," +
+                "\"dataEventSubscribtion\":[]}]", response.getBody(), false);
+
     }
 
 
 
 
-
-
-    @Test
+    //@Test
     public void testGetSubscribtionListkk() throws Exception {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());

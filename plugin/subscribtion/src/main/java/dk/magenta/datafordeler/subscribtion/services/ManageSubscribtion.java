@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.core.exception.AccessRequiredException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.cpr.CprAccessChecker;
 import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +18,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -84,8 +85,12 @@ public class ManageSubscribtion {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", subscriberId);
-            Subscriber subscriber = (Subscriber)query.getResultList().get(0);
-            return ResponseEntity.ok(subscriber);
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                return ResponseEntity.ok(subscriber);
+            }
         }
     }
 
@@ -135,7 +140,7 @@ public class ManageSubscribtion {
 
 
     protected void checkAccess(DafoUserDetails dafoUserDetails) throws AccessDeniedException, AccessRequiredException {
-        CprAccessChecker.checkAccess(dafoUserDetails);
+        //CprAccessChecker.checkAccess(dafoUserDetails);
     }
 
 
