@@ -348,6 +348,12 @@ public abstract class BaseQuery {
     }
 
 
+    public void setRegistrationAt(OffsetDateTime at) {
+        this.setRegistrationFromBefore(at);
+        this.setRegistrationToAfter(at);
+    }
+
+
 
     public OffsetDateTime getEffectFrom() {
         return this.effectFromBefore;
@@ -500,6 +506,13 @@ public abstract class BaseQuery {
 
     public void setEffectTo(String EffectTo, OffsetDateTime fallback) throws DateTimeParseException {
         this.setEffectToAfter(EffectTo, fallback);
+    }
+
+
+
+    public void setEffectAt(OffsetDateTime at) {
+        this.setEffectFromBefore(at);
+        this.setEffectToAfter(at);
     }
 
 
