@@ -472,6 +472,44 @@ public class CompanyRecordQuery extends BaseQuery {
         this.updatedParameters();
     }
 
+    
+
+    private List<String> organizationType = new ArrayList<>();
+
+    public Collection<String> getOrganizationType() {
+        return this.organizationType;
+    }
+
+    public void addOrganizationType(String organizationType) {
+        if (organizationType != null) {
+            this.organizationType.add(organizationType);
+            this.updatedParameters();
+        }
+    }
+
+    public void setOrganizationType(int organizationType) {
+        this.organizationType.clear();
+        this.addOrganizationType(Integer.toString(organizationType));
+    }
+    public void setOrganizationType(String organizationType) {
+        this.organizationType.clear();
+        this.addOrganizationType(organizationType);
+    }
+
+    public void setOrganizationType(Collection<String> organizationTypes) {
+        this.clearOrganizationType();
+        if (organizationType != null) {
+            for (String organizationType : organizationTypes) {
+                this.addOrganizationType(organizationType);
+            }
+        }
+    }
+
+    public void clearOrganizationType() {
+        this.organizationType.clear();
+        this.updatedParameters();
+    }
+
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = LASTUPDATED)
     private String lastUpdated;
@@ -623,6 +661,10 @@ public class CompanyRecordQuery extends BaseQuery {
         joinHandles.put("floor", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_FLOOR);
         joinHandles.put("door", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_DOOR);
 
+
+        joinHandles.put("participantUnitNumber", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
+        joinHandles.put("participantOrganizationType", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_ORGANIZATIONS + BaseQuery.separator + OrganizationRecord.DB_FIELD_MAIN_TYPE);
+
         joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
     }
 
@@ -654,6 +696,10 @@ public class CompanyRecordQuery extends BaseQuery {
             multiCondition.add(rangeCondition);
             this.makeCondition(rangeCondition, "housenumberfrom", Condition.Operator.LTE, this.husnummer, Integer.class, false);
             this.makeCondition(rangeCondition, "housenumberto", Condition.Operator.GTE, this.husnummer, Integer.class, false);
+        }
+
+        if (this.organizationType != null) {
+            this.addCondition("participantOrganizationType", this.organizationType);
         }
 
         if (this.lastUpdated != null) {

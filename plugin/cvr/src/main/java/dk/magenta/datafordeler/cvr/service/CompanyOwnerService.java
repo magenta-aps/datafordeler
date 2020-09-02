@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
@@ -13,12 +14,12 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.cvr.records.*;
-import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
+import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
-import java.util.StringJoiner;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/cvr/owner/")
@@ -43,6 +44,7 @@ public class CompanyOwnerService {
 
     private Logger log = LogManager.getLogger(CompanyOwnerService.class.getCanonicalName());
 
+
     @RequestMapping(
             path = {"/{cpr}"},
             produces = {"application/json"}
@@ -53,10 +55,25 @@ public class CompanyOwnerService {
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
         this.checkAndLogAccess(loggerHelper);
         Session session = sessionManager.getSessionFactory().openSession();
+
         OffsetDateTime now = OffsetDateTime.now();
         this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
         this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_AFTER, Bitemporal.FILTERPARAM_EFFECTTO_AFTER, now);
 
+        CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
+        companyRecordQuery.setVirksomhedsform(10);
+        companyRecordQuery.setOrganizationType("FULDT_ANSVARLIG_DELTAGERE");
+
+        ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
+        participantRecordQuery.setBusinessKey(cpr);
+
+        companyRecordQuery.addRelated(participantRecordQuery, Collections.singletonMap("participantUnitNumber", "unit"));
+
+        companyRecordQuery.setRegistrationAt(now);
+        companyRecordQuery.setEffectAt(now);
+        companyRecordQuery.applyFilters(session);
+
+        /*
         StringJoiner condition = new StringJoiner(" ");
         condition.add("select distinct companyRecord from");
         condition.add(ParticipantRecord.class.getCanonicalName()+" participantRecord,");
@@ -83,8 +100,11 @@ public class CompanyOwnerService {
         query.setParameter("cpr", Long.parseLong(cpr));
         query.setParameter("formcode", "10");
         query.setParameter("organizationtype", "FULDT_ANSVARLIG_DELTAGERE");
+        */
+
         ArrayNode arrayNode = objectMapper.createArrayNode();
-        query.getResultStream().map(companyRecord -> companyRecord.getCvrNumber()).forEach(id -> arrayNode.add(id));
+        QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class)
+                .forEach(companyRecord -> arrayNode.add(companyRecord.getCvrNumber()));
 
         try {
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayNode);
