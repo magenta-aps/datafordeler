@@ -127,9 +127,6 @@ public class ParticipantRecord extends CvrEntityRecord {
         return this.businessKey;
     }
 
-    public void setBusinessKey(Long businessKey) {
-        this.businessKey = businessKey;
-    }
 
 
     public static final String DB_FIELD_STATUS_CODE = "statusCode";
