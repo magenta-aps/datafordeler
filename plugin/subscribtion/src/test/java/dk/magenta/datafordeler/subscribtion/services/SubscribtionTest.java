@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,9 +35,12 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class SubscribtionTest {
 
     @Autowired
@@ -53,15 +57,42 @@ public class SubscribtionTest {
 
 
 
-    MockMvc mvc;
 
 
 
     @Before
     public void setUp() throws Exception {
-        initMocks(this);
-        ManageSubscribtion controller = new ManageSubscribtion();
-        mvc = MockMvcBuilders.standaloneSetup(controller).build();
+        //Initiate a list of subscribtions
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            Transaction transaction = session.beginTransaction();
+
+            List<Subscriber> subscriptions = QueryManager.getAllItems(session, Subscriber.class);
+
+            subscriptions.add(new Subscriber("user1"));
+            subscriptions.add(new Subscriber("user2"));
+            subscriptions.add(new Subscriber("user3"));
+            subscriptions.add(new Subscriber("user4"));
+
+            /*subscriptions.get(0).addBusinessEventSubscribtion(new BusinessEventSubscribtion("ww"));
+            subscriptions.get(1).addDataEventSubscribtion(new DataEventSubscribtion("ww"));
+
+            //There is 5 fathers in the test-file
+            //One should not be added to subscribtion becrause the child is more than 18 years old.
+            //One person should not be added becrause the father allready exists as a person.
+            Assert.assertEquals(4, subscriptions.size());
+            Assert.assertEquals(1, subscriptions.get(0).getBusinessEventSubscribtion().size());
+            Assert.assertEquals(0, subscriptions.get(1).getBusinessEventSubscribtion().size());
+
+            Assert.assertEquals(0, subscriptions.get(0).getDataEventSubscribtion().size());
+            Assert.assertEquals(1, subscriptions.get(1).getDataEventSubscribtion().size());*/
+
+            for(Subscriber subscriber : subscriptions) {
+                session.save(subscriber);
+            }
+
+            transaction.commit();
+        }
     }
 
 
@@ -75,41 +106,7 @@ public class SubscribtionTest {
 
 
     @Test
-    public void testSubscribtion() throws Exception {
-
-        //Initiate a list of subscribtions
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-
-            Transaction transaction = session.beginTransaction();
-
-            List<Subscriber> subscriptions = QueryManager.getAllItems(session, Subscriber.class);
-
-            subscriptions.add(new Subscriber("user1"));
-            subscriptions.add(new Subscriber("user2"));
-            subscriptions.add(new Subscriber("user3"));
-            subscriptions.add(new Subscriber("user4"));
-
-            subscriptions.get(0).addBusinessEventSubscribtion(new BusinessEventSubscribtion("ww"));
-            subscriptions.get(1).addDataEventSubscribtion(new DataEventSubscribtion("ww"));
-
-            //There is 5 fathers in the test-file
-            //One should not be added to subscribtion becrause the child is more than 18 years old.
-            //One person should not be added becrause the father allready exists as a person.
-            Assert.assertEquals(4, subscriptions.size());
-            Assert.assertEquals(1, subscriptions.get(0).getBusinessEventSubscribtion().size());
-            Assert.assertEquals(0, subscriptions.get(1).getBusinessEventSubscribtion().size());
-
-            Assert.assertEquals(0, subscriptions.get(0).getDataEventSubscribtion().size());
-            Assert.assertEquals(1, subscriptions.get(1).getDataEventSubscribtion().size());
-
-            for(Subscriber subscriber : subscriptions) {
-                session.save(subscriber);
-            }
-
-            transaction.commit();
-        }
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+    public void testGetSubscribtionList() throws Exception {
 
             HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
             dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
@@ -117,24 +114,36 @@ public class SubscribtionTest {
 
             //Try fetching with no cpr access rights
             ResponseEntity<String> response = restTemplate.exchange(
-                    "/subscribtionplugin/v1/manager/list",
+                    "/subscribtionplugin/v1/manager/subscriber/list",
                     HttpMethod.GET,
                     httpEntity,
                     String.class
             );
-            System.out.println(response);
 
-            httpEntity = new HttpEntity<String>("", new HttpHeaders());
-            testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+            JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}]", response.getBody(), false);
+    }
+
+
+
+
+
+
+    @Test
+    public void testGetSubscribtionListkk() throws Exception {
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
             this.applyAccess(testUserDetails);
 
             //Try fetching with no cpr access rights
-            response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                     "/subscribtionplugin/v1/manager/subscriber/user1",
                     HttpMethod.GET,
                     httpEntity,
                     String.class
             );
+
+        JSONAssert.assertEquals("{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
             System.out.println(response);
 
 
@@ -159,11 +168,24 @@ public class SubscribtionTest {
 
 
 
+            /*try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+                HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+                ResponseEntity<String> response = restTemplate.exchange(
+                    "/subscribtionplugin/v1/manager/subscriber/list",
+                    HttpMethod.GET,
+                    httpEntity,
+                    String.class
+            );
+            System.out.println(response);
+
+
+
 
 
 
         } finally {
 
-        }
+        }*/
     }
 }
