@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
@@ -31,6 +32,7 @@ public class CompanyRecordQuery extends BaseQuery {
     public static final String HUSNUMMER = "husnummer";
     public static final String ETAGE = AddressRecord.IO_FIELD_FLOOR;
     public static final String DOOR = AddressRecord.IO_FIELD_DOOR;
+    public static final String LASTUPDATED = CvrBitemporalRecord.IO_FIELD_LAST_UPDATED;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CVRNUMMER)
     private List<String> cvrNumre = new ArrayList<>();
