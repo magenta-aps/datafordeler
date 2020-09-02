@@ -30,7 +30,7 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 
 @RestController
-@RequestMapping("/cvr/owner/")
+@RequestMapping("/cvr/owned_by/")
 public class CompanyOwnerService {
 
     @Autowired
@@ -72,35 +72,6 @@ public class CompanyOwnerService {
         companyRecordQuery.setRegistrationAt(now);
         companyRecordQuery.setEffectAt(now);
         companyRecordQuery.applyFilters(session);
-
-        /*
-        StringJoiner condition = new StringJoiner(" ");
-        condition.add("select distinct companyRecord from");
-        condition.add(ParticipantRecord.class.getCanonicalName()+" participantRecord,");
-        condition.add(CompanyRecord.class.getCanonicalName()+" companyRecord");
-
-        condition.add("join companyRecord."+CompanyRecord.DB_FIELD_PARTICIPANTS+" companyParticipantRelationRecord");
-        condition.add("join companyParticipantRelationRecord."+CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION+" relationParticipantRecord");
-
-        condition.add("join companyRecord."+CompanyRecord.DB_FIELD_FORM+" companyForm");
-        condition.add("join companyForm."+ FormRecord.DB_FIELD_FORM+" form");
-        condition.add("join companyParticipantRelationRecord."+CompanyParticipantRelationRecord.DB_FIELD_ORGANIZATIONS+" organizations");
-
-        condition.add("where relationParticipantRecord."+RelationParticipantRecord.DB_FIELD_UNITNUMBER+" = participantRecord."+ParticipantRecord.DB_FIELD_UNIT_NUMBER);
-
-        condition.add("and form."+ CompanyForm.DB_FIELD_CODE+" = :formcode");
-        condition.add("and organizations."+OrganizationRecord.DB_FIELD_MAIN_TYPE+" = :organizationtype");
-
-        condition.add("and participantRecord."+ParticipantRecord.DB_FIELD_BUSINESS_KEY+" = :cpr");
-
-        Query<CompanyRecord> query = session.createQuery(
-                condition.toString(),
-                CompanyRecord.class
-        );
-        query.setParameter("cpr", Long.parseLong(cpr));
-        query.setParameter("formcode", "10");
-        query.setParameter("organizationtype", "FULDT_ANSVARLIG_DELTAGERE");
-        */
 
         ArrayNode arrayNode = objectMapper.createArrayNode();
         QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class)
