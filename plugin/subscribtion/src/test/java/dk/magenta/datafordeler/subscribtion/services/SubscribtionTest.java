@@ -283,6 +283,63 @@ public class SubscribtionTest {
 
 
 
+    /**
+     * Test that it is possible to find a specific subscribtion
+     * @throws Exception
+     */
+    @Test
+    public void testGetSubscribtions() throws Exception {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Subscriber subscriber =  new Subscriber("user77");
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3"));
+            session.save(subscriber);
+            transaction.commit();
+        }
+
+
+
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/list/user77",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"},{\"cprList\":null,\"businessEventId\":\"subscribtion1\"},{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //@Test

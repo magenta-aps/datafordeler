@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,8 +28,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -110,6 +110,75 @@ public class ManageSubscribtion {
             }
         }
     }
+
+
+    /**
+     * Get a list of all businessEventSubscribtions
+     * @return
+     */
+    @GetMapping("/subscriber/businessEventSubscribtion/list/{subscriberId}")
+    public ResponseEntity<List<BusinessEventSubscribtion>> businessEventSubscribtionfindAll(@PathVariable("subscriberId") String subscriberId) {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            query.setParameter("subscriberId", subscriberId);
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                Iterator<BusinessEventSubscribtion> subscribtions = subscriber.getBusinessEventSubscribtion().iterator();
+                List <BusinessEventSubscribtion> list = new ArrayList <BusinessEventSubscribtion>();
+                while(subscribtions.hasNext()) {
+                    list.add(subscribtions.next());
+                }
+
+                return ResponseEntity.ok(list);
+            }
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Subscriber subscriber = objectMapper.readValue(subscriberContent, Subscriber.class);
+            session.save(subscriber);
+            transaction.commit();
+            return ResponseEntity.ok(subscriber);
+        }
+    }
+
+    @GetMapping("/subscriber/businessEventSubscribtion/{subscriberId}")
+    public ResponseEntity<Subscriber> businessEventSubscribtiongetBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            query.setParameter("subscriberId", subscriberId);
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                return ResponseEntity.ok(subscriber);
+            }
+        }
+    }
+
+    @DeleteMapping("/subscriber/businessEventSubscribtion/delete/{subscriberId}")
+    public ResponseEntity<Subscriber> businessEventSubscribtiondeleteBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            query.setParameter("subscriberId", subscriberId);
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                session.delete(subscriber);
+                transaction.commit();
+                return ResponseEntity.ok(subscriber);
+            }
+        }
+    }
+
 
 /*
     @PutMapping("/{id}")
