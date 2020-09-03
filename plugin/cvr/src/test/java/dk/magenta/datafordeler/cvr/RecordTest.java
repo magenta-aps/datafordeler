@@ -44,6 +44,8 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -914,4 +916,26 @@ public class RecordTest {
 
         }
     }
+
+    @SpyBean
+    private DirectLookup directLookup;
+
+    @Test
+    public void testEnrich() throws IOException, DataFordelerException {
+        ParticipantRecord mockParticipant = new ParticipantRecord();
+        mockParticipant.setBusinessKey(1234567890L);
+        doReturn(mockParticipant).when(directLookup).participantLookup(anyString());
+
+        loadParticipant("/person.json");
+        Session session = sessionManager.getSessionFactory().openSession();
+        ParticipantRecordQuery query = new ParticipantRecordQuery();
+        query.setNavn("Morten*");
+        List<ParticipantRecord> records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
+        Assert.assertEquals(1, records.size());
+        ParticipantRecord record = records.get(0);
+        Assert.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
+    }
+
+
+
 }
