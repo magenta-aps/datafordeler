@@ -134,11 +134,12 @@ public class ManageSubscribtion {
      * Get a list of all businessEventSubscribtions
      * @return
      */
-    @GetMapping("/subscriber/businessEventSubscribtion/list/{subscriberId}")
-    public ResponseEntity<List<BusinessEventSubscribtion>> businessEventSubscribtionfindAll(@PathVariable("subscriberId") String subscriberId) {
+    @GetMapping("/subscriber/businessEventSubscribtion/list")
+    public ResponseEntity<List<BusinessEventSubscribtion>> businessEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", subscriberId);
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            query.setParameter("subscriberId", user.getIdentity());
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -154,12 +155,14 @@ public class ManageSubscribtion {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/create/{subscriberContent}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber = objectMapper.readValue(subscriberContent, Subscriber.class);
+
+
+            BusinessEventSubscribtion subscriber = new BusinessEventSubscribtion(subscriberContent);
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
@@ -167,10 +170,13 @@ public class ManageSubscribtion {
     }
 
     @GetMapping("/subscriber/businessEventSubscribtion/{subscriberId}")
-    public ResponseEntity<Subscriber> businessEventSubscribtiongetBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
+    public ResponseEntity<Subscriber> businessEventSubscribtiongetBySubscriberId(@PathVariable("subscriberId") String subscriberId, HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", subscriberId);
+            //query.setParameter("subscriberId", subscriberId);
+
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            query.setParameter("subscriberId", user.getIdentity());
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -181,11 +187,14 @@ public class ManageSubscribtion {
     }
 
     @DeleteMapping("/subscriber/businessEventSubscribtion/delete/{subscriberId}")
-    public ResponseEntity<Subscriber> businessEventSubscribtiondeleteBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
+    public ResponseEntity<Subscriber> businessEventSubscribtiondeleteBySubscriberId(@PathVariable("subscriberId") String subscriberIdss/*, HttpServletRequest request*/) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", subscriberId);
+
+
+            //DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+           // query.setParameter("subscriberId", user.getIdentity());
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {

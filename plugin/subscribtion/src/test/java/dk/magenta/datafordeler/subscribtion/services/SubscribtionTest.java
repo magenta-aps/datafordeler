@@ -107,7 +107,7 @@ public class SubscribtionTest {
      * Test that it is possible to call a service that deliveres a list of subscribtion that has been created in datafordeler
      */
     @Test
-    public void testGetSubscribtionList() {
+    public void testGetSubscriberList() {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
@@ -132,7 +132,7 @@ public class SubscribtionTest {
      * @throws Exception
      */
     @Test
-    public void testGetSpecificSubscribtions() throws Exception {
+    public void testGetSpecificSubscriber() throws Exception {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
@@ -181,7 +181,7 @@ public class SubscribtionTest {
      * @throws Exception
      */
     @Test
-    public void testCreateSubscribtion() throws Exception {
+    public void testCreateSubscriber() throws Exception {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
@@ -262,7 +262,7 @@ public class SubscribtionTest {
      * @throws Exception
      */
     @Test
-    public void testDeleteSubscribtion() throws Exception {
+    public void testDeleteSubscriber() throws Exception {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
@@ -320,7 +320,7 @@ public class SubscribtionTest {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("user77");
+            Subscriber subscriber =  new Subscriber("myUser");
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3"));
@@ -333,17 +333,38 @@ public class SubscribtionTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        testUserDetails.setIdentity("myUser");
         this.applyAccess(testUserDetails);
 
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/list/user77",
+                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"},{\"cprList\":null,\"businessEventId\":\"subscribtion1\"},{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+
+
+
+
+
+        httpEntity = new HttpEntity<String>("{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\"}", new HttpHeaders());
+        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        //Try fetching with no cpr access rights
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/create/besub1",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+
+
+        System.out.println(response.getBody());
+
 
 
     }
