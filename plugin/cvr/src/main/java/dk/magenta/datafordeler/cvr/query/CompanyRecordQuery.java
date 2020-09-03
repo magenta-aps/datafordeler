@@ -656,11 +656,8 @@ public class CompanyRecordQuery extends BaseQuery {
         joinHandles.put("email", CompanyRecord.DB_FIELD_EMAIL + BaseQuery.separator + ContactRecord.DB_FIELD_DATA);
         joinHandles.put("municipalitycode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
         joinHandles.put("roadcode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
-
-
         joinHandles.put("housenumberfrom", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_HOUSE_FROM);
         joinHandles.put("housenumberto", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_HOUSE_TO);
-
         joinHandles.put("floor", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_FLOOR);
         joinHandles.put("door", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_DOOR);
 
