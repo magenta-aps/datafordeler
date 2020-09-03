@@ -924,18 +924,26 @@ public class RecordTest {
 
     @Test
     public void testEnrich() throws IOException, DataFordelerException {
+        loadParticipant("/person.json");
+        ParticipantRecordQuery query = new ParticipantRecordQuery();
+        query.setNavn("Morten*");
+        Session session = sessionManager.getSessionFactory().openSession();
+        List<ParticipantRecord> records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
+        session.close();
+        Assert.assertEquals(1, records.size());
+        ParticipantRecord record = records.get(0);
+        Assert.assertEquals(null, record.getBusinessKey());
         ParticipantRecord mockParticipant = new ParticipantRecord();
         mockParticipant.setBusinessKey(1234567890L);
         doReturn(mockParticipant).when(directLookup).participantLookup(anyString());
 
         loadParticipant("/person.json");
-        Session session = sessionManager.getSessionFactory().openSession();
-        ParticipantRecordQuery query = new ParticipantRecordQuery();
-        query.setNavn("Morten*");
-        List<ParticipantRecord> records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
+        session = sessionManager.getSessionFactory().openSession();
+        records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
         Assert.assertEquals(1, records.size());
-        ParticipantRecord record = records.get(0);
+        record = records.get(0);
         Assert.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
+        session.close();
     }
 
 

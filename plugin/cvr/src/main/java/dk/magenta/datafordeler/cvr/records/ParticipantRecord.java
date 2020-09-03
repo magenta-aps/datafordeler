@@ -620,6 +620,9 @@ public class ParticipantRecord extends CvrEntityRecord {
     public boolean merge(CvrEntityRecord other) {
         if (other != null && !Objects.equals(this.getId(), other.getId()) && other instanceof ParticipantRecord) {
             ParticipantRecord otherRecord = (ParticipantRecord) other;
+            if (this.getBusinessKey() == null && otherRecord.getBusinessKey() != null) {
+                this.setBusinessKey(otherRecord.getBusinessKey());
+            }
             for (SecNameRecord nameRecord : otherRecord.getNames()) {
                 this.addName(nameRecord);
             }
