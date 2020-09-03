@@ -68,6 +68,10 @@ public class PersonParser extends CprSubParser<PersonDataRecord> {
                     return new GuardianRecord(line);
                 case PersonDataRecord.RECORDTYPE_HISTORIC_CPRNUMBER:
                     return new HistoricCprNumberRecord(line);
+                case PersonDataRecord.RECORDTYPE_CHILDREN:
+                    return new ChildrenRecord(line);
+                case PersonDataRecord.RECORDTYPE_CUSTODY:
+                    return new CustodyRecord(line);
                 case PersonDataRecord.RECORDTYPE_EVENTTYPE:
                     return new PersonEventRecord(line);
                 // TODO: Add one of these for each type...

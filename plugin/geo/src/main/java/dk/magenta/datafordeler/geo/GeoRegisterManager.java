@@ -61,9 +61,9 @@ public class GeoRegisterManager extends RegisterManager {
     }
 
     /**
-    * RegisterManager initialization; set up dk.magenta.datafordeler.geo.configuration and source fetcher.
-    * We store fetched data in a local cache, so create a random folder for that.
-    */
+     * RegisterManager initialization; set up dk.magenta.datafordeler.geo.configuration and source fetcher.
+     * We store fetched data in a local cache, so create a random folder for that.
+     */
     @PostConstruct
     public void init() throws IOException {
         if (this.localCopyFolder == null || this.localCopyFolder.isEmpty()) {

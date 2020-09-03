@@ -12,6 +12,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
@@ -20,10 +21,12 @@ import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -52,6 +55,9 @@ public class RecordTest {
     private PersonEntityManager personEntityManager;
 
     @Autowired
+    private PersonCustodyRelationsManager custodyManager;
+
+    @Autowired
     private PersonRecordOutputWrapper personRecordOutputWrapper;
 
     @Autowired
@@ -77,13 +83,6 @@ public class RecordTest {
         personEntityManager.parseData(testData, importMetadata);
         testData.close();
     }
-/*
-    @After
-    public void clean() {
-        Session session = sessionManager.getSessionFactory().openSession();
-
-        session.close();
-    }*/
 
     @Test
     public void testPerson() throws DataFordelerException, IOException {
@@ -130,6 +129,167 @@ public class RecordTest {
             session.close();
         }
     }
+
+    /**
+     * Tests specifically created and matched with data from 'personWithChildrenAndCustodyChange'
+     * One person with cpr=0101011234 has 4 children
+     * -0101981234
+     * -0101121234
+     * -0101141234
+     * -0101161234
+     * The child with cpr=0101141234 gets custody handed over to person with cpr=0101991234
+     * Another child with cpr=0101131234 gets custody handed over to person with cpr=0101011234
+     *
+     * The person with cpr=0101011234 now has lost custody of one child, but gains custody of another child
+     *
+     *
+     * After calculations the person with cpr=0101011234 has custody over
+     * -0101981234 (Should not be returned since the child is more then 18 years old)
+     * -0101121234
+     * -0101131234
+     * -0101161234
+     *
+     * The person with cpr=0101991234 now has custody over
+     * -0101141234
+     *
+     *
+     *
+     * @throws DataFordelerException
+     * @throws IOException
+     */
+    @Test
+    public void testImportPersonWithChildren() throws DataFordelerException, IOException {
+        //This test will start failing in year 2030 when the children in this test is no longer children
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("0101011234");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+            Assert.assertEquals(4, personEntity.getChildren().size());
+            Assert.assertEquals(0, personEntity.getCustody().size());
+            //Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101981234")));
+            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101121234")));
+            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101141234")));
+            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101161234")));
+
+            //Find a child and from that the person who has custody over the child
+            query = new PersonRecordQuery();
+            query.setPersonnummer("0101141234");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+            Assert.assertEquals(0, personEntity.getChildren().size());
+            Assert.assertEquals(2, personEntity.getCustody().size());
+            Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101991234")));
+
+            //Find a child and from that the person who has custody over the child
+            query = new PersonRecordQuery();
+            query.setPersonnummer("0101131234");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+            Assert.assertEquals(0, personEntity.getChildren().size());
+            Assert.assertEquals(1, personEntity.getCustody().size());
+            Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101011234")));
+
+            //Find a parent-ish and from that the child-ish custody relation
+            query = new PersonRecordQuery();
+            query.addCustodyPnr("0101991234");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+            Assert.assertEquals("0101141234", personEntity.getPersonnummer());
+
+            //Find a parent-ish and from that the child-ish custody relation
+            query = new PersonRecordQuery();
+            query.addCustodyPnr("0101011234");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+            Assert.assertEquals("0101131234", personEntity.getPersonnummer());
+
+            //Find collective custody of the person '0101011234'
+            //0101981234 (Should not be returned since the child is more then 18 years old)
+            //0101121234
+            //0101131234
+            //0101161234
+            List<PersonCustodyRelationsManager.ChildInfo> custodyList = custodyManager.findRelations("0101011234");
+            Assert.assertEquals(3, custodyList.size());
+            Assert.assertFalse(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101121234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101131234")));
+            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101161234")));
+
+            List<PersonCustodyRelationsManager.ChildInfo> custodyListFather = custodyManager.findRelations("0101011235");
+            //Assert.assertEquals(3, custodyListFather.size());
+            Assert.assertFalse(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101121234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
+            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101161234")));
+
+            //Find collective custody of the person '0101011234'
+            //0101981234
+            List<PersonCustodyRelationsManager.ChildInfo> custodyList2 = custodyManager.findRelations("0101991234");
+            Assert.assertEquals(1, custodyList2.size());
+            Assert.assertFalse(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assert.assertTrue(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
+        }
+    }
+
+
+
+    @Test
+    public void testCallCustodyService() throws Exception {
+        //This test will start failing in year 2030 when the children in this test is no longer children
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+        }
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        //Try fetching with no cpr access rights
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/cpr/person/custody/1/rest/" + "0101011234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+        //Try fetching with cpr access rights
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/cpr/person/custody/1/rest/" + "0101011234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(3, objectMapper.readTree(response.getBody()).get("children").size());
+        JSONAssert.assertEquals("{\"parent\":\"0101011234\",\"children\":[{\"pnr\":\"0101161234\",\"status\":1},{\"pnr\":\"0101121234\",\"status\":1},{\"pnr\":\"0101131234\",\"status\":1}]}",response.getBody(),false);
+
+
+
+        //Try fetching other persons custody
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/cpr/person/custody/1/rest/" + "0101991234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("children").size());
+        JSONAssert.assertEquals("{\"parent\":\"0101991234\",\"children\":[{\"pnr\":\"0101141234\",\"status\":1}]}",response.getBody(),false);
+    }
+
 
 
     @Test
