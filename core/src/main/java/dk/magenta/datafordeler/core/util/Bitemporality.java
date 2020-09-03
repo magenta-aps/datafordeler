@@ -7,7 +7,6 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.TemporalAccessor;
-import java.util.Objects;
 
 public class Bitemporality implements Comparable<Bitemporality> {
     public OffsetDateTime registrationFrom;

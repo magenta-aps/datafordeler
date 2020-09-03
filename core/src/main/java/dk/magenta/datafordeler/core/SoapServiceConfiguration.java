@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.core;
 
 import dk.magenta.datafordeler.core.exception.InvalidServiceOwnerDefinitionException;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
-import dk.magenta.datafordeler.core.fapi.FapiService;
 import dk.magenta.datafordeler.core.fapi.SoapHandler;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Configuration
+@Deprecated
 public class SoapServiceConfiguration {
 
     @Autowired

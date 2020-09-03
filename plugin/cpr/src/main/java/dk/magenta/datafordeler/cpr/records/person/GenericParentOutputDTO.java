@@ -2,8 +2,6 @@ package dk.magenta.datafordeler.cpr.records.person;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.Nontemporal;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 

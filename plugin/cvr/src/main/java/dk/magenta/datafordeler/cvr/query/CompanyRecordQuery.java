@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
 import dk.magenta.datafordeler.cvr.DirectLookup;
@@ -12,6 +13,8 @@ import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -31,6 +34,7 @@ public class CompanyRecordQuery extends BaseQuery {
     public static final String HUSNUMMER = "husnummer";
     public static final String ETAGE = AddressRecord.IO_FIELD_FLOOR;
     public static final String DOOR = AddressRecord.IO_FIELD_DOOR;
+    public static final String LASTUPDATED = CvrBitemporalRecord.IO_FIELD_LAST_UPDATED;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CVRNUMMER)
     private List<String> cvrNumre = new ArrayList<>();
@@ -469,6 +473,13 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = LASTUPDATED)
+    private String lastUpdated;
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+
 
 
     @Override
@@ -486,6 +497,7 @@ public class CompanyRecordQuery extends BaseQuery {
         map.put(HUSNUMMER, this.husnummer);
         map.put(ETAGE, this.etage);
         map.put(DOOR, this.door);
+        map.put(LASTUPDATED, this.lastUpdated);
         return map;
     }
 
@@ -503,6 +515,7 @@ public class CompanyRecordQuery extends BaseQuery {
         this.setHusnummer(parameters.getI(HUSNUMMER));
         this.setEtage(parameters.getI(ETAGE));
         this.setDoor(parameters.getI(DOOR));
+        this.setLastUpdated(parameters.getFirst(LASTUPDATED));
     }
 
 
@@ -609,6 +622,8 @@ public class CompanyRecordQuery extends BaseQuery {
 
         joinHandles.put("floor", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_FLOOR);
         joinHandles.put("door", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_DOOR);
+
+        joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
     }
 
     @Override
@@ -639,6 +654,10 @@ public class CompanyRecordQuery extends BaseQuery {
             multiCondition.add(rangeCondition);
             this.makeCondition(rangeCondition, "housenumberfrom", Condition.Operator.LTE, this.husnummer, Integer.class, false);
             this.makeCondition(rangeCondition, "housenumberto", Condition.Operator.GTE, this.husnummer, Integer.class, false);
+        }
+
+        if (this.lastUpdated != null) {
+            this.addCondition("lastUpdated", Condition.Operator.GT, Collections.singletonList(this.lastUpdated), OffsetDateTime.class, false);
         }
     }
 

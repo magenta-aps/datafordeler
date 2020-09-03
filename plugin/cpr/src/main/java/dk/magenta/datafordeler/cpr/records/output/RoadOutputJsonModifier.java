@@ -5,15 +5,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
-import dk.magenta.datafordeler.core.util.DoubleListHashMap;
-import dk.magenta.datafordeler.core.util.ListHashMap;
-import dk.magenta.datafordeler.cpr.records.road.RoadPostcodeRecord;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadCityBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadNameBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadPostalcodeBitemporalRecord;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 

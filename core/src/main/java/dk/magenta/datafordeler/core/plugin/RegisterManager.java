@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.core.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.core.database.EntityReference;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportInputStream;
@@ -14,19 +13,20 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.web.util.UriUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * Manager for a Plugin's connection to its data source, through e series of EntityManagers
+ * Manager for a Plugin's connection to its data source, through a series of EntityManagers
  */
 public abstract class RegisterManager {
 
@@ -172,8 +172,6 @@ public abstract class RegisterManager {
         return new ImportInputStream(inputStream, cacheFiles);
     }
 
-    public abstract boolean pullsEventsCommonly();
-
     public ItemInputStream<? extends PluginSourceData> pullEvents(ImportMetadata importMetadata) throws DataFordelerException {
         /*HashMap<EntityManager, ItemInputStream<? extends PluginSourceData>> streams = new HashMap<>();
         for (EntityManager entityManager : this.getEntityManagers()) {
@@ -201,53 +199,6 @@ public abstract class RegisterManager {
     public String getPullCronSchedule() {
         return null;
     }
-
-    /** Checksum fetching **/
-
-    /**
-     * Plugins must return a Fetcher instance from this method
-     * @return
-     */
-    protected abstract Communicator getChecksumFetcher();
-
-    public abstract URI getListChecksumInterface(String schema, OffsetDateTime from);
-
-    /**
-     * Fetches checksum data (for synchronization) from the register. Plugins are free to implement their own version
-     * @param fromDate
-     * @return
-     * @throws DataFordelerException
-     */
-    public ItemInputStream<? extends EntityReference> listRegisterChecksums(String schema, OffsetDateTime fromDate) throws DataFordelerException {
-        URI checksumInterface = this.getListChecksumInterface(schema, fromDate);
-        this.getLog().info(
-                "Getting " + (fromDate==null ? "all " : "") + "checksums for " +
-                (schema==null ? "all schemas":("schema "+schema)) +
-                (fromDate!=null ? (" since "+fromDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)):"") +
-                " from address "+checksumInterface);
-        // TODO: Do this in a thread?
-        InputStream responseBody = this.getChecksumFetcher().fetch(checksumInterface);
-        if (schema != null) {
-            EntityManager entityManager = this.getEntityManager(schema);
-            if (entityManager != null) {
-                return entityManager.parseChecksumResponse(responseBody);
-            }
-        }
-        return this.parseChecksumResponse(responseBody);
-    }
-
-    protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        HashMap<String, Class<? extends EntityReference>> classMap = new HashMap<>();
-        for (EntityManager entityManager : this.entityManagers) {
-            classMap.put(entityManager.getSchema(), entityManager.getManagedEntityReferenceClass());
-        }
-        return ItemInputStream.parseJsonStream(responseContent, classMap, "items", "type", this.getObjectMapper());
-    }
-
-
-
-
-
 
     /**
      * Utility method to be used by subclasses

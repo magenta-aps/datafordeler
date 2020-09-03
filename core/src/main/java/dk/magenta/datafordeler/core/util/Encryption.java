@@ -1,10 +1,7 @@
 package dk.magenta.datafordeler.core.util;
+
+import com.google.crypto.tink.*;
 import com.google.crypto.tink.aead.AeadConfig;
-import com.google.crypto.tink.Aead;
-import com.google.crypto.tink.CleartextKeysetHandle;
-import com.google.crypto.tink.JsonKeysetReader;
-import com.google.crypto.tink.JsonKeysetWriter;
-import com.google.crypto.tink.KeysetHandle;
 import com.google.crypto.tink.aead.AeadFactory;
 import com.google.crypto.tink.aead.AeadKeyTemplates;
 

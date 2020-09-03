@@ -1,14 +1,12 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.io.Receipt;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.cpr.direct.CprDirectPasswordUpdate;
@@ -16,6 +14,9 @@ import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.parsers.PersonParser;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.*;
+import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cpr.records.service.PersonEntityRecordService;
 import dk.magenta.datafordeler.cpr.synchronization.SubscribtionTimerTask;
@@ -39,6 +40,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 @Component
 public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord, PersonEntity> {
@@ -94,7 +96,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     private static PersonEntityManager instance;
 
     public PersonEntityManager() {
-        this.managedRegistrationReferenceClass = PersonRegistrationReference.class;
         instance = this;
     }
 
@@ -132,11 +133,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     @Override
     public String getSchema() {
         return PersonEntity.schema;
-    }
-
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return null;
     }
 
     private HashSet<String> nonGreenlandicCprNumbers = new HashSet<>();

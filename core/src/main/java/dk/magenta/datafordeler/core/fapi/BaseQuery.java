@@ -1,11 +1,15 @@
 package dk.magenta.datafordeler.core.fapi;
 
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -550,7 +554,8 @@ public abstract class BaseQuery {
      * the attribute in question, and values are set from the query.
      * @return
      */
-    public abstract BaseLookupDefinition getLookupDefinition();
+    @Deprecated
+    public BaseLookupDefinition getLookupDefinition() {return null;}
 
     public OutputWrapper.Mode getMode() {
         return this.mode;
@@ -820,40 +825,56 @@ public abstract class BaseQuery {
         return map;
     }
 
-    public void addCondition(Condition condition) {
+    public Condition addCondition(Condition condition) {
         this.finalizedConditions = false;
         this.condition.add(condition);
+        return condition;
     }
 
-    public void addCondition(String handle, List<String> value) throws QueryBuildException {
-        this.addCondition(handle, value, String.class);
+    public SingleCondition addCondition(String handle, List values) throws QueryBuildException {
+        return this.addCondition(handle, values, String.class);
     }
-
-    public void addCondition(String handle, List<String> value, Class type) throws QueryBuildException {
-        if (value != null && !value.isEmpty()) {
-            this.addCondition(handle, Condition.Operator.EQ, value, type, false);
+    public SingleCondition addCondition(String handle, List values, Class type) throws QueryBuildException {
+        if (values != null && !values.isEmpty()) {
+            return this.addCondition(handle, Condition.Operator.EQ, values, type);
         }
+        return null;
     }
 
-    public void addCondition(String handle, Condition.Operator operator, List<String> value, Class type, boolean orNull) throws QueryBuildException {
+    public SingleCondition addCondition(String handle, Condition.Operator operator, Object value, Class type) throws QueryBuildException {
         this.finalizedConditions = false;
-        this.makeCondition(this.condition, handle, operator, value, type, orNull);
+        return (SingleCondition) this.makeCondition(this.condition, handle, operator, Collections.singletonList(value), type, false);
+    }
+
+    public Condition addCondition(String handle, Condition.Operator operator, Object value, Class type, boolean orNull) throws QueryBuildException {
+        this.finalizedConditions = false;
+        return this.makeCondition(this.condition, handle, operator, Collections.singletonList(value), type, orNull);
+    }
+
+    public SingleCondition addCondition(String handle, Condition.Operator operator, List values, Class type) throws QueryBuildException {
+        this.finalizedConditions = false;
+        return (SingleCondition) this.makeCondition(this.condition, handle, operator, values, type, false);
+    }
+
+    public Condition addCondition(String handle, Condition.Operator operator, List values, Class type, boolean orNull) throws QueryBuildException {
+        this.finalizedConditions = false;
+        return this.makeCondition(this.condition, handle, operator, values, type, orNull);
     }
 
 
-    public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List<String> value, Class type, boolean orNull) throws QueryBuildException {
+    public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List values, Class type, boolean orNull) throws QueryBuildException {
         String member = this.useJoinHandle(handle);
         String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
-        if (member != null && value != null && !value.isEmpty()) {
+        if (member != null && values != null && !values.isEmpty()) {
             try {
                 if (orNull) {
                     MultiCondition multiCondition = new MultiCondition(parent, "OR");
-                    multiCondition.add(new SingleCondition(multiCondition, member, value, operator, placeholder, type));
+                    multiCondition.add(new SingleCondition(multiCondition, member, values, operator, placeholder, type));
                     multiCondition.add(new NullCondition(multiCondition, member, Condition.Operator.EQ));
                     parent.add(multiCondition);
                     return multiCondition;
                 } else {
-                    SingleCondition condition = new SingleCondition(parent, member, value, operator, placeholder, type);
+                    SingleCondition condition = new SingleCondition(parent, member, values, operator, placeholder, type);
                     parent.add(condition);
                     return condition;
                 }

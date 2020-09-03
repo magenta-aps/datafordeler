@@ -21,8 +21,6 @@ import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
-import dk.magenta.datafordeler.core.database.Entity;
-
 /**
  * A Registration defines the time range in which a piece of data is "registered",
  * that is, when did it enter into the records of our data source, and when was it 

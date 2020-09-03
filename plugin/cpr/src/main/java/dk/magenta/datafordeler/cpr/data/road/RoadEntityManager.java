@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.io.Receipt;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.parsers.RoadParser;
@@ -17,7 +16,6 @@ import dk.magenta.datafordeler.cpr.records.service.RoadEntityRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.UUID;
@@ -37,7 +35,6 @@ public class RoadEntityManager extends CprRecordEntityManager<RoadDataRecord, Ro
     private static RoadEntityManager instance;
 
     public RoadEntityManager() {
-        this.managedRegistrationReferenceClass = RoadRegistrationReference.class;
         instance = this;
     }
 
@@ -59,11 +56,6 @@ public class RoadEntityManager extends CprRecordEntityManager<RoadDataRecord, Ro
     @Override
     public String getSchema() {
         return RoadEntity.schema;
-    }
-
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return null;
     }
 
     @Override
