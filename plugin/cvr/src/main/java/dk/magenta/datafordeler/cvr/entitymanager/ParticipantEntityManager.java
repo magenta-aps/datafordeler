@@ -122,7 +122,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
                 }
                 return true;
             } catch (DataFordelerException e) {
-                e.printStackTrace();
+                log.warn(e);
             }
         }
         return false;
