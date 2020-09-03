@@ -243,6 +243,12 @@ function generate_openapi_documentation
     cp $SPHINX_SOURCE/openapi/openapi.html $OUTPUT_FOLDER/html/da/openapi/
     cp $SPHINX_SOURCE/openapi/openapi.json $OUTPUT_FOLDER/html/da/openapi/
 
+    # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    cp $SPHINX_SOURCE/openapi/prismeapi.html $OUTPUT_FOLDER/html/da/openapi/
+    cp $SPHINX_SOURCE/openapi/prismeapi.json $OUTPUT_FOLDER/html/da/openapi/
+
+
+
 
     # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
     cp $SPHINX_SOURCE/openapi/cprapi.html $OUTPUT_FOLDER/html/da/openapi/

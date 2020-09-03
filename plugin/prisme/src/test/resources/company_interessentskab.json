@@ -1,0 +1,713 @@
+{
+  "_scroll_id": "DnF1ZXJ5VGhlbkZldGNoBgAAAAAArEPmFmw5UlF5VVhVVHRxUW5NYnI3YkxLNlEAAAAAAKxD5RZsOVJReVVYVVR0cVFuTWJyN2JMSzZRAAAAAACsQ-cWbDlSUXlVWFVUdHFRbk1icjdiTEs2UQAAAAADGjEAFnJJU1NwRnh2VGkyWTBtQVJPckZlZ0EAAAAAAxoxAhZySVNTcEZ4dlRpMlkwbUFST3JGZWdBAAAAAAMaMQEWcklTU3BGeHZUaTJZMG1BUk9yRmVnQQ==",
+  "took": 8,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 8593,
+    "max_score": 2.0,
+    "hits": [
+      {
+        "_index": "cvr-v-20200115",
+        "_type": "_doc",
+        "_id": "4007438382",
+        "_score": 2.0,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 88888885,
+            "regNummer": [],
+            "brancheAnsvarskode": null,
+            "reklamebeskyttet": false,
+            "navne": [
+              {
+                "navn": "Testinterresentskab",
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              }
+            ],
+            "binavne": [],
+            "postadresse": [],
+            "beliggenhedsadresse": [
+              {
+                "landekode": "GL",
+                "fritekst": null,
+                "vejkode": 213,
+                "kommune": {
+                  "kommuneKode": 960,
+                  "kommuneNavn": "AVANNAATA",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2018-02-02T12:12:37.000+01:00"
+                },
+                "husnummerFra": 47,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": "266",
+                "vejnavn": "Nuisariannguaq",
+                "bynavn": null,
+                "postnummer": 3952,
+                "postdistrikt": "Ilulissat",
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-07-11T14:02:53.000+02:00"
+              }
+            ],
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "943046",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "sekundaertTelefonNummer": [
+              {
+                "kontaktoplysning": "562146 / 520503",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              }
+            ],
+            "sekundaertTelefaxNummer": [],
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "a_and@andeby.gl",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-16T09:30:53.000+01:00"
+              }
+            ],
+            "hjemmeside": [],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              }
+            ],
+            "hovedbranche": [
+              {
+                "branchekode": "432100",
+                "branchetekst": "El-installation",
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              }
+            ],
+            "bibranche1": [],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [],
+            "virksomhedsform": [
+              {
+                "virksomhedsformkode": 30,
+                "kortBeskrivelse": "I/S",
+                "langBeskrivelse": "Interessentskab",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              }
+            ],
+            "aarsbeskaeftigelse": [],
+            "kvartalsbeskaeftigelse": [],
+            "maanedsbeskaeftigelse": [],
+            "erstMaanedsbeskaeftigelse": [],
+            "attributter": [
+              {
+                "sekvensnr": 0,
+                "type": "BYGNINGSNUMMER",
+                "vaerditype": "string",
+                "vaerdier": [
+                  {
+                    "vaerdi": "1322",
+                    "periode": {
+                      "gyldigFra": "2013-09-01",
+                      "gyldigTil": "2018-05-08"
+                    },
+                    "sidstOpdateret": "2018-05-09T14:49:35.000+02:00"
+                  },
+                  {
+                    "vaerdi": "1322",
+                    "periode": {
+                      "gyldigFra": "2018-05-09",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2018-05-09T14:49:35.000+02:00"
+                  }
+                ]
+              }
+            ],
+            "penheder": [
+              {
+                "pNummer": 1007238254,
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:40.000+01:00"
+              }
+            ],
+            "deltagerRelation": [
+              {
+                "deltager": {
+                  "enhedsNummer": 4000000000,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": null,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2020-04-09T03:21:34.831+02:00",
+                  "sidstOpdateret": "2019-06-12T02:30:02.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Jens Lyn",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "adresseHemmelig": false,
+                  "adresseHemmeligUndtagelse": false,
+                  "adresseOpdateringOphoert": false,
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "GL",
+                      "fritekst": null,
+                      "vejkode": 213,
+                      "kommune": {
+                        "kommuneKode": 960,
+                        "kommuneNavn": "AVANNAATA",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2018-02-02T11:12:37.000Z"
+                      },
+                      "husnummerFra": 47,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Nuisariannguaq",
+                      "bynavn": null,
+                      "postnummer": 3952,
+                      "postdistrikt": "Ilulissat",
+                      "periode": {
+                        "gyldigFra": "1990-03-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2019-06-12T00:30:02.000Z"
+                    }
+                  ],
+                  "postadresse": []
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Interessenter",
+                            "periode": {
+                              "gyldigFra": "2013-09-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": null
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "INTERESSENTER",
+                                "periode": {
+                                  "gyldigFra": "2015-07-24",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 4000000001,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": null,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2020-04-09T03:21:34.831+02:00",
+                  "sidstOpdateret": "2020-01-10T11:16:41.000+01:00",
+                  "navne": [
+                    {
+                      "navn": "Batman",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "adresseHemmelig": false,
+                  "adresseHemmeligUndtagelse": false,
+                  "adresseOpdateringOphoert": false,
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "GL",
+                      "fritekst": null,
+                      "vejkode": 312,
+                      "kommune": {
+                        "kommuneKode": 956,
+                        "kommuneNavn": "SERMERSOOQ",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-03-06T23:00:00.000Z"
+                      },
+                      "husnummerFra": 17,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": "601",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Suloraq",
+                      "bynavn": null,
+                      "postnummer": 3905,
+                      "postdistrikt": "Nuussuaq",
+                      "periode": {
+                        "gyldigFra": "2019-03-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2020-01-10T10:16:41.000Z"
+                    }
+                  ],
+                  "postadresse": []
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Interessenter",
+                            "periode": {
+                              "gyldigFra": "2013-09-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": null
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "INTERESSENTER",
+                                "periode": {
+                                  "gyldigFra": "2015-07-24",
+                                  "gyldigTil": "2018-09-01"
+                                },
+                                "sidstOpdateret": "2018-10-31T12:22:17.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 4000395354,
+                  "enhedstype": "VIRKSOMHED",
+                  "forretningsnoegle": 73585511,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2020-04-09T05:06:28.454+02:00",
+                  "sidstOpdateret": "2020-04-06T10:18:04.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "TESTCOMPANY A/S",
+                      "periode": {
+                        "gyldigFra": "2013-01-17",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2013-01-28T15:00:32.000+01:00"
+                    }
+                  ],
+                  "adresseHemmelig": null,
+                  "adresseHemmeligUndtagelse": null,
+                  "adresseOpdateringOphoert": null,
+                  "beliggenhedsadresse": [
+                    {
+
+                      "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+                    }
+                  ],
+                  "postadresse": []
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Interessenter",
+                            "periode": {
+                              "gyldigFra": "2015-03-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": null
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "INTERESSENTER",
+                                "periode": {
+                                  "gyldigFra": "2015-03-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2018-01-02T14:56:18.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 4000000002,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": null,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2020-04-09T03:21:34.831+02:00",
+                  "sidstOpdateret": "2019-06-06T16:36:07.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Catwoman",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "adresseHemmelig": false,
+                  "adresseHemmeligUndtagelse": false,
+                  "adresseOpdateringOphoert": false,
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "GL",
+                      "fritekst": null,
+                      "vejkode": 213,
+                      "kommune": {
+                        "kommuneKode": 960,
+                        "kommuneNavn": "AVANNAATA",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2018-02-02T11:12:37.000Z"
+                      },
+                      "husnummerFra": 47,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Nuisariannguaq",
+                      "bynavn": null,
+                      "postnummer": 3952,
+                      "postdistrikt": "Ilulissat",
+                      "periode": {
+                        "gyldigFra": "1990-03-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2019-06-06T14:36:07.000Z"
+                    }
+                  ],
+                  "postadresse": []
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Interessenter",
+                            "periode": {
+                              "gyldigFra": "2013-09-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": null
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "INTERESSENTER",
+                                "periode": {
+                                  "gyldigFra": "2018-09-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2018-10-31T12:22:17.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "fusioner": [],
+            "spaltninger": [],
+            "virksomhedMetadata": {
+              "nyesteNavn": {
+                "navn": "Testinterresentskab",
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              },
+              "nyesteBinavne": [],
+              "nyesteVirksomhedsform": {
+                "virksomhedsformkode": 30,
+                "kortBeskrivelse": "I/S",
+                "langBeskrivelse": "Interessentskab",
+                "ansvarligDataleverandoer": "GER",
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "landekode": "GL",
+                "fritekst": null,
+                "vejkode": 213,
+                "kommune": {
+                  "kommuneKode": 960,
+                  "kommuneNavn": "AVANNAATA",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2018-02-02T12:12:37.000+01:00"
+                },
+                "husnummerFra": 47,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": "266",
+                "vejnavn": "Nuisariannguaq",
+                "bynavn": null,
+                "postnummer": 3952,
+                "postdistrikt": "Ilulissat",
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2019-07-11T14:02:53.000+02:00"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "432100",
+                "branchetekst": "El-installation",
+                "periode": {
+                  "gyldigFra": "2013-09-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2018-01-02T11:54:39.000+01:00"
+              },
+              "nyesteBibranche1": null,
+              "nyesteBibranche2": null,
+              "nyesteBibranche3": null,
+              "nyesteStatus": null,
+              "nyesteKontaktoplysninger": [
+                "test@test.gl"
+              ],
+              "antalPenheder": 1,
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteKvartalsbeskaeftigelse": null,
+              "nyesteMaanedsbeskaeftigelse": null,
+              "nyesteErstMaanedsbeskaeftigelse": null,
+              "sammensatStatus": "Aktiv",
+              "stiftelsesDato": "2013-09-01",
+              "virkningsDato": "2013-09-01"
+            },
+            "samtId": 6,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4007438382,
+            "enhedstype": "VIRKSOMHED",
+            "sidstIndlaest": "2020-04-09T03:21:34.831+02:00",
+            "sidstOpdateret": "2020-01-10T11:16:41.000+01:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "PO"
+          }
+        }
+      }
+    ]
+  }
+}
