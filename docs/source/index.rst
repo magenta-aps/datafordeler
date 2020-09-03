@@ -32,6 +32,7 @@ Indholdsfortegnelse
    autogen-api-prisme/javadoc-prisme
    autogen-api-statistik/javadoc-statistik
    openapi/openapi
+   openapi/cprapi
    openapi/prismeapi
 
    wordlist
