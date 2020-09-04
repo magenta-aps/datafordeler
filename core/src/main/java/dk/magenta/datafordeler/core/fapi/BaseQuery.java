@@ -568,7 +568,7 @@ public abstract class BaseQuery {
      * @return
      */
     @Deprecated
-    public abstract BaseLookupDefinition getLookupDefinition();
+    public BaseLookupDefinition getLookupDefinition() {return null;}
 
     public OutputWrapper.Mode getMode() {
         return this.mode;

@@ -131,7 +131,6 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
 
-
     public static final String DB_FIELD_STATUS_CODE = "statusCode";
     public static final String IO_FIELD_STATUS_CODE = "statusKode";
 
@@ -617,6 +616,9 @@ public class ParticipantRecord extends CvrEntityRecord {
     public boolean merge(CvrEntityRecord other) {
         if (other != null && !Objects.equals(this.getId(), other.getId()) && other instanceof ParticipantRecord) {
             ParticipantRecord otherRecord = (ParticipantRecord) other;
+            if (this.getBusinessKey() == null && otherRecord.getBusinessKey() != null) {
+                this.setBusinessKey(otherRecord.getBusinessKey());
+            }
             for (SecNameRecord nameRecord : otherRecord.getNames()) {
                 this.addName(nameRecord);
             }
