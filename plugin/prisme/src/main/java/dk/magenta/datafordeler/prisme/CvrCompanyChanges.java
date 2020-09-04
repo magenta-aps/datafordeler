@@ -85,7 +85,10 @@ public class CvrCompanyChanges {
             //Get the companies
             List<CompanyRecord> companyrecords =  QueryManager.getAllEntities(session, query, CompanyRecord.class);
             for(CompanyRecord company : companyrecords) {
-                companyChanges.add(company.getCvrNumber());
+                FormRecord formRecord = company.getMetadata().getNewestForm().stream().findFirst().orElse(null);
+                if(formRecord!=null) {
+                    companyChanges.add(company.getCvrNumber());
+                }
             }
 
             root.putArray("cvrs", companyChanges);

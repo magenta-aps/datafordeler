@@ -302,6 +302,7 @@ public class AdresseService {
 
             if (localityCode != null && (code != 0 || name != null)) {
                 RoadQuery query = new RoadQuery();
+                query.setPageSize(500);
                 query.setLocality(localityCode);
                 if (code != 0) {
                     query.setCode(Integer.toString(code));
