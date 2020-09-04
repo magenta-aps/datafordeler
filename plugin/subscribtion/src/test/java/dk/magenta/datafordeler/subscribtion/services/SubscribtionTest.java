@@ -346,16 +346,9 @@ public class SubscribtionTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"},{\"cprList\":null,\"businessEventId\":\"subscribtion1\"},{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
-
-
-
-
-
-        this.applyAccess(testUserDetails);
-
-        //Try fetching with no cpr access rights
+        httpEntity = new HttpEntity<String>("newBusinessEventId", new HttpHeaders());
         response = restTemplate.exchange(
-                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/create/besub1",
+                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/create/",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -370,8 +363,7 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        //TODO: This fails
-        //JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\"},{\"cprList\":null,\"businessEventId\":\"subscribtion3\"},{\"cprList\":null,\"businessEventId\":\"subscribtion1\"},{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\"},{\"cprList\":null,\"businessEventId\":\"subscribtion3\"},{\"cprList\":null,\"businessEventId\":\"subscribtion1\"},{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
 
 
