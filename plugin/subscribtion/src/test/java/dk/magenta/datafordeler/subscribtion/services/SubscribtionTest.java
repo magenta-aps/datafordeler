@@ -324,6 +324,9 @@ public class SubscribtionTest {
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));
             session.save(subscriber);
             transaction.commit();
         }
@@ -344,7 +347,9 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"},{\"cprList\":null,\"businessEventId\":\"subscribtion1\"},{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion1\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
         httpEntity = new HttpEntity<String>("newBusinessEventId", new HttpHeaders());
         response = restTemplate.exchange(
@@ -363,9 +368,33 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\"},{\"cprList\":null,\"businessEventId\":\"subscribtion3\"},{\"cprList\":null,\"businessEventId\":\"subscribtion1\"},{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion1\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
 
+        httpEntity = new HttpEntity<String>("newDataEventId", new HttpHeaders());
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/dataEventSubscribtion/create/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/dataEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"newDataEventId\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscribtion3\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscribtion1\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
 
     }

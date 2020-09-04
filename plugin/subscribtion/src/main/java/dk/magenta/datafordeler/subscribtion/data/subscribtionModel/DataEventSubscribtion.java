@@ -34,11 +34,11 @@ public class DataEventSubscribtion extends DatabaseEntry {
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String dataEventId;
 
-    public String getBusinessEventIdId() {
+    public String getDataEventId() {
         return dataEventId;
     }
 
-    public void setBusinessEventIdId(String dataEventId) {
+    public void setDataEventId(String dataEventId) {
         this.dataEventId = dataEventId;
     }
 

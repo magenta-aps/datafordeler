@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -165,7 +166,6 @@ public class ManageSubscribtion {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("subscriberId", user.getIdentity());
 
-
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscribtion subscribtion = new BusinessEventSubscribtion(subscriberContent);
             subscriber.addBusinessEventSubscribtion(subscribtion);
@@ -175,6 +175,54 @@ public class ManageSubscribtion {
             return ResponseEntity.ok(subscriber);
         }
     }
+
+    /**
+     * Get a list of all dataEventSubscribtions
+     * @return
+     */
+    @GetMapping("/subscriber/dataEventSubscribtion/list")
+    public ResponseEntity<List<DataEventSubscribtion>> dataEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            query.setParameter("subscriberId", user.getIdentity());
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                Iterator<DataEventSubscribtion> subscribtions = subscriber.getDataEventSubscribtion().iterator();
+                List <DataEventSubscribtion> list = new ArrayList <DataEventSubscribtion>();
+                while(subscribtions.hasNext()) {
+                    list.add(subscribtions.next());
+                }
+
+                return ResponseEntity.ok(list);
+            }
+        }
+    }
+
+
+
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity dataEventSubscribtioncreateSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            query.setParameter("subscriberId", user.getIdentity());
+
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            DataEventSubscribtion subscribtion = new DataEventSubscribtion(subscriberContent);
+            subscriber.addDataEventSubscribtion(subscribtion);
+
+            session.update(subscriber);
+            transaction.commit();
+            return ResponseEntity.ok(subscriber);
+        }
+    }
+
 
     @GetMapping("/subscriber/businessEventSubscribtion/{subscriberId}")
     public ResponseEntity<Subscriber> businessEventSubscribtiongetBySubscriberId(@PathVariable("subscriberId") String subscriberId, HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
