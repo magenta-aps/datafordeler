@@ -156,14 +156,21 @@ public class ManageSubscribtion {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/create/{subscriberContent}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException {
+    public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            query.setParameter("subscriberId", user.getIdentity());
 
 
-            BusinessEventSubscribtion subscriber = new BusinessEventSubscribtion(subscriberContent);
-            session.save(subscriber);
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            BusinessEventSubscribtion subscribtion = new BusinessEventSubscribtion(subscriberContent);
+            subscriber.addBusinessEventSubscribtion(subscribtion);
+
+            session.update(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
         }

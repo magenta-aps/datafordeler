@@ -350,8 +350,7 @@ public class SubscribtionTest {
 
 
 
-        httpEntity = new HttpEntity<String>("{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\"}", new HttpHeaders());
-        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+
         this.applyAccess(testUserDetails);
 
         //Try fetching with no cpr access rights
@@ -363,7 +362,17 @@ public class SubscribtionTest {
         );
 
 
-        System.out.println(response.getBody());
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        //TODO: This fails
+        //JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\"},{\"cprList\":null,\"businessEventId\":\"subscribtion3\"},{\"cprList\":null,\"businessEventId\":\"subscribtion1\"},{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+
 
 
 
