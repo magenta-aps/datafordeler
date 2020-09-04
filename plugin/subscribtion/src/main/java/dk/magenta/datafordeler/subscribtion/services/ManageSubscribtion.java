@@ -262,28 +262,42 @@ public class ManageSubscribtion {
     }
 
 
-/*
-    @PutMapping("/{id}")
-    public ResponseEntity<Subscriber> update(@PathVariable Long id, @Valid @RequestBody Subscriber product) {
-        if (!productService.findById(id).isPresent()) {
-            log.error("Id " + id + " is not existed");
-            ResponseEntity.badRequest().build();
-        }
 
-        return ResponseEntity.ok(productService.save(product));
+
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/cpr/create/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity dataEventSubscribtionCprcreateSubscriber(HttpServletRequest request, @RequestBody DataEventSubscribtion subscriberContent) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+
+        //TODO: Fix the storing of modified objects
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            /*Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            query.setParameter("subscriberId", user.getIdentity());
+
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+
+            DataEventSubscribtion foundDataEvent = null;
+
+            Iterator<DataEventSubscribtion> it = subscriber.getDataEventSubscribtion().iterator();
+            while(it.hasNext()) {
+                foundDataEvent = it.next();
+                if(subscriberContent.getDataEventId().equals(foundDataEvent.getDataEventId())) {
+                    break;
+                }
+            }
+            //foundDataEvent.setCprList(subscriberContent.getCprList());
+            subscriber.addDataEventSubscribtion(foundDataEvent);
+
+
+            session.update(subscriber);
+            transaction.commit();*/
+            return ResponseEntity.ok(null);
+        }
     }
 
-/*    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
-        if (!productService.findById(id).isPresent()) {
-            log.error("Id " + id + " is not existed");
-            ResponseEntity.badRequest().build();
-        }
 
-        productService.deleteById(id);
 
-        return ResponseEntity.ok().build();
-    }*/
 
 
 

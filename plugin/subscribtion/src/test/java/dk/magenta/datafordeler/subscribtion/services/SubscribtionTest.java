@@ -6,13 +6,16 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,14 +30,18 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.*;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,13 +62,19 @@ public class SubscribtionTest {
     @SpyBean
     private DafoUserManager dafoUserManager;
 
-
-
+    MockMvc mvc;
 
 
 
     @Before
     public void setUp() throws Exception {
+
+        initMocks(this);
+        ManageSubscribtion controller = new ManageSubscribtion();
+        mvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+
+
         //Initiate a list of subscribtions
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
@@ -101,6 +114,43 @@ public class SubscribtionTest {
     private void applyAccess(dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
+
+
+    @Test
+    public void testModifications() {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+
+            query.setParameter("subscriberId", "user2");
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("TWST"));
+
+            session.update(subscriber);
+            transaction.commit();
+        }
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+
+            query.setParameter("subscriberId", "user2");
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            DataEventSubscribtion dd = subscriber.getDataEventSubscribtion().iterator().next();
+
+            dd.setCprList(new CprList("listId"));
+
+
+            session.update(subscriber);
+            transaction.commit();
+        }
+
+
+
+    }
+
+
 
 
     /**
@@ -397,6 +447,12 @@ public class SubscribtionTest {
                 "{\"cprList\":null,\"dataEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
 
+        DataEventSubscribtion dDes = new DataEventSubscribtion("dDes");
+
+        ResponseEntity<DataEventSubscribtion> responseEntity = restTemplate.postForEntity("/subscribtionplugin/v1/manager/subscriber/dataEventSubscribtion/cpr/create/", dDes, DataEventSubscribtion.class);
+        System.out.println("This is the response as a String" + responseEntity.getBody());
+
+
     }
 
 
@@ -407,78 +463,4 @@ public class SubscribtionTest {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //@Test
-    public void testGetSubscribtionListkk() throws Exception {
-
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
-            this.applyAccess(testUserDetails);
-
-            //Try fetching with no cpr access rights
-        ResponseEntity<String> response = restTemplate.exchange(
-                    "/subscribtionplugin/v1/manager/subscriber/user1",
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-
-        JSONAssert.assertEquals("{\"subscriberId\":\"user1\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
-            System.out.println(response);
-
-
-
-
-
-
-
-            httpEntity = new HttpEntity<String>("{\"subscriberId\":\"user7\",\"businessEventSubscribtion\":[{\"cprList\":null,\"businessEventIdId\":\"ww\"}],\"dataEventSubscribtion\":[]}", new HttpHeaders());
-            testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
-            this.applyAccess(testUserDetails);
-
-
-            //Try fetching with no cpr access rights
-            response = restTemplate.exchange(
-                    "/subscribtionplugin/v1/manager/subscriber/create/",
-                    HttpMethod.POST,
-                    httpEntity,
-                    String.class
-            );
-            System.out.println(response);
-
-
-
-            /*try(Session session = sessionManager.getSessionFactory().openSession()) {
-
-                HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-                ResponseEntity<String> response = restTemplate.exchange(
-                    "/subscribtionplugin/v1/manager/subscriber/list",
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            System.out.println(response);
-
-
-
-
-
-
-        } finally {
-
-        }*/
-    }
 }
