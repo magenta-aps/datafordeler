@@ -516,7 +516,7 @@ public class CompanyRecordQuery extends BaseQuery {
     private String lastUpdated;
     public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
-    }
+    }    
 
 
 
@@ -660,7 +660,6 @@ public class CompanyRecordQuery extends BaseQuery {
         joinHandles.put("door", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_DOOR);
         joinHandles.put("participantUnitNumber", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
         joinHandles.put("participantOrganizationType", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_ORGANIZATIONS + BaseQuery.separator + OrganizationRecord.DB_FIELD_MAIN_TYPE);
-
         joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
     }
 
@@ -697,7 +696,6 @@ public class CompanyRecordQuery extends BaseQuery {
         if (this.organizationType != null) {
             this.addCondition("participantOrganizationType", this.organizationType);
         }
-
         if (this.lastUpdated != null) {
             this.addCondition("lastUpdated", Condition.Operator.GT, Collections.singletonList(this.lastUpdated), OffsetDateTime.class, false);
         }
