@@ -3,6 +3,8 @@ package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = CprList.TABLE_NAME, indexes = {
@@ -41,14 +43,23 @@ public class CprList extends DatabaseEntry {
         this.listId = listId;
     }
 
-
-    @OneToOne(mappedBy = "cprList")
+    @OneToOne
     private BusinessEventSubscribtion businessSubscribtion;
 
 
-    @OneToOne(mappedBy = "cvrList")
+    @OneToOne
     private DataEventSubscribtion dataSubscribtion;
 
 
+    @ElementCollection
+    private List<String> nrps = new ArrayList<String>();
 
+
+    public List<String> getNrps() {
+        return nrps;
+    }
+
+    public void setNrps(List<String> nrps) {
+        this.nrps = nrps;
+    }
 }
