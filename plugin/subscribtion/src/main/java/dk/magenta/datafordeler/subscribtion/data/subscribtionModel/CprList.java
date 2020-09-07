@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = CprList.TABLE_NAME, indexes = {
@@ -43,12 +45,14 @@ public class CprList extends DatabaseEntry {
         this.listId = listId;
     }
 
-    @OneToOne
-    private BusinessEventSubscribtion businessSubscribtion;
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="BS_ID")
+    private Set<BusinessEventSubscribtion> businessSubscribtion = new HashSet<>();
 
 
-    @OneToOne
-    private DataEventSubscribtion dataSubscribtion;
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="DS_ID")
+    private Set<DataEventSubscribtion> dataSubscribtion;
 
 
     @ElementCollection

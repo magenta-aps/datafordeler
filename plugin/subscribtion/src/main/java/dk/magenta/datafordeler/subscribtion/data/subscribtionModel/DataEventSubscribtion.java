@@ -47,9 +47,7 @@ public class DataEventSubscribtion extends DatabaseEntry {
     private Subscriber subscriber;
 
 
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cprList", referencedColumnName = "listId")
+    @ManyToOne
     private CprList cprList;
 
     public CprList getCprList() {
@@ -60,14 +58,8 @@ public class DataEventSubscribtion extends DatabaseEntry {
         this.cprList = cprList;
     }
 
-
-
-
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cvrList", referencedColumnName = "listId")
+    @ManyToOne
     private CvrList cvrList;
-
     public CvrList getCvrList() {
         return cvrList;
     }

@@ -50,9 +50,7 @@ public class BusinessEventSubscribtion extends DatabaseEntry  {
 
 
 
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cprList", referencedColumnName = "listId")
+    @ManyToOne
     private CprList cprList;
 
     public CprList getCprList() {

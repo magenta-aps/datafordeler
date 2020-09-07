@@ -51,10 +51,6 @@ public class CvrList {
     }
 
 
-    @OneToOne(mappedBy = "cprList")
-    private BusinessEventSubscribtion businessSubscribtion;
-
-
     @OneToOne(mappedBy = "cvrList")
     private DataEventSubscribtion dataSubscribtion;
 

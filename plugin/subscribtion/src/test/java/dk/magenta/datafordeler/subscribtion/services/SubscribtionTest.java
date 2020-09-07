@@ -224,14 +224,13 @@ public class SubscribtionTest {
         }
 
 
+        //Add pnrList into businessEventSubscribtion
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
             query.setParameter("listId", "cprList2");
 
             CprList pnrList = (CprList) query.getResultList().get(0);
-
-
             Query query2 = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             query2.setParameter("subscriberId", "user2");
@@ -243,15 +242,17 @@ public class SubscribtionTest {
             transaction.commit();
         }
 
-        /*try(Session session = sessionManager.getSessionFactory().openSession()) {
+        //Confirm that the pnrList has been added to businessEventSubscribtion
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query2 = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             query2.setParameter("subscriberId", "user2");
 
             Subscriber subscriber = (Subscriber) query2.getResultList().get(0);
             BusinessEventSubscribtion businessEventSubscribtion = subscriber.getBusinessEventSubscribtion().iterator().next();
+            Assert.assertEquals(3, businessEventSubscribtion.getCprList().getNrps().size());
             transaction.commit();
-        }*/
+        }
 
 
     }
