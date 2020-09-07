@@ -23,6 +23,7 @@ public class CvrList {
 
 
 
+
     @Id
     @Column(name="userId", nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)

@@ -125,7 +125,7 @@ public class SubscribtionTest {
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("TWST"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("de1"));
 
             session.update(subscriber);
             transaction.commit();
@@ -137,14 +137,59 @@ public class SubscribtionTest {
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            DataEventSubscribtion dd = subscriber.getDataEventSubscribtion().iterator().next();
+            DataEventSubscribtion dataEventSubscribtion = subscriber.getDataEventSubscribtion().iterator().next();
+            CprList cprList = new CprList("listId");
+            //dataEventSubscribtion.setCprList(cprList);
+            session.update(subscriber);
+            transaction.commit();
+        }
 
-            dd.setCprList(new CprList("listId"));
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
+            query.setParameter("subscriberId", "user2");
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("be1"));
 
             session.update(subscriber);
             transaction.commit();
         }
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+
+            query.setParameter("subscriberId", "user2");
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            BusinessEventSubscribtion businessEventSubscribtion = subscriber.getBusinessEventSubscribtion().iterator().next();
+            CprList cprList = new CprList("listId");
+            //businessEventSubscribtion.setCprList(cprList);
+            session.update(subscriber);
+            transaction.commit();
+        }
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery("select a from "+ Subscriber.class.getName() +" a where a.subscriberId = :subscriberId", Subscriber.class);
+
+            query.setParameter("subscriberId", "user2");
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            Assert.assertEquals(1, subscriber.getBusinessEventSubscribtion().size());
+            Assert.assertEquals(1, subscriber.getDataEventSubscribtion().size());
+
+            transaction.commit();
+        }
+
+
+/*        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery("select a from "+ CprList.class.getName() +" a where a.listId = :listId", CprList.class);
+
+            query.setParameter("listId", "listId");
+            CprList subscriber = (CprList) query.getResultList().get(0);
+            transaction.commit();
+        }*/
 
 
 

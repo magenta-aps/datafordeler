@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 
@@ -12,6 +13,12 @@ public class CprList extends DatabaseEntry {
 
 
     public static final String TABLE_NAME = "cpr_list";
+
+    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    public static final String schema = "CprList";
+
+
+    public static final String DB_FIELD_ENTITY = "entity";
 
     public CprList() {
     }
@@ -41,4 +48,7 @@ public class CprList extends DatabaseEntry {
 
     @OneToOne(mappedBy = "cvrList")
     private DataEventSubscribtion dataSubscribtion;
+
+
+
 }
