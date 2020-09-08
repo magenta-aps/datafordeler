@@ -118,8 +118,6 @@ public class SubscribtionTest {
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("de1"));
-
-            session.update(subscriber);
             transaction.commit();
         }
 
@@ -131,8 +129,8 @@ public class SubscribtionTest {
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             DataEventSubscribtion dataEventSubscribtion = subscriber.getDataEventSubscribtion().iterator().next();
             CprList cprList = new CprList("listId");
-            //dataEventSubscribtion.setCprList(cprList);
-            session.update(subscriber);
+            session.save(cprList);
+            dataEventSubscribtion.setCprList(cprList);
             transaction.commit();
         }
 
@@ -144,7 +142,6 @@ public class SubscribtionTest {
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("be1"));
 
-            session.update(subscriber);
             transaction.commit();
         }
 
@@ -156,8 +153,8 @@ public class SubscribtionTest {
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscribtion businessEventSubscribtion = subscriber.getBusinessEventSubscribtion().iterator().next();
             CprList cprList = new CprList("listId");
-            //businessEventSubscribtion.setCprList(cprList);
-            session.update(subscriber);
+            session.save(cprList);
+            businessEventSubscribtion.setCprList(cprList);
             transaction.commit();
         }
 
@@ -206,7 +203,7 @@ public class SubscribtionTest {
             list.add("1234");
             list.add("1235");
             list.add("1236");
-            pnrList.setNrps(list);
+            pnrList.setCprs(list);
             Assert.assertEquals(1, query.getResultList().size());
             transaction.commit();
         }
@@ -219,7 +216,7 @@ public class SubscribtionTest {
 
             CprList pnrList = (CprList) query.getResultList().get(0);
 
-            Assert.assertEquals(3, pnrList.getNrps().size());
+            Assert.assertEquals(3, pnrList.getCpr().size());
             transaction.commit();
         }
 
@@ -250,7 +247,7 @@ public class SubscribtionTest {
 
             Subscriber subscriber = (Subscriber) query2.getResultList().get(0);
             BusinessEventSubscribtion businessEventSubscribtion = subscriber.getBusinessEventSubscribtion().iterator().next();
-            Assert.assertEquals(3, businessEventSubscribtion.getCprList().getNrps().size());
+            Assert.assertEquals(3, businessEventSubscribtion.getCprList().getCpr().size());
             transaction.commit();
         }
 

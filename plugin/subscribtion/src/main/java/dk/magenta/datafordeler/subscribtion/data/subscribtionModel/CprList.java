@@ -56,14 +56,14 @@ public class CprList extends DatabaseEntry {
 
 
     @ElementCollection
-    private List<String> nrps = new ArrayList<String>();
+    private List<String> cprs = new ArrayList<String>();
 
 
-    public List<String> getNrps() {
-        return nrps;
+    public List<String> getCpr() {
+        return cprs;
     }
 
-    public void setNrps(List<String> nrps) {
-        this.nrps = nrps;
+    public void setCprs(List<String> cprs) {
+        this.cprs = cprs;
     }
 }
