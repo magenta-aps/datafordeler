@@ -28,8 +28,22 @@ public class CprList extends DatabaseEntry {
     }
 
 
-    public CprList(String listId) {
+    public CprList(String listId, String subscriberId) {
         this.listId = listId;
+        this.subscriberId = subscriberId;
+    }
+
+
+    @Column(name="subscriberId", nullable=false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    private String subscriberId;
+
+    public String getSubscriberId() {
+        return subscriberId;
+    }
+
+    public void setSubscriberId(String subscriberId) {
+        this.subscriberId = subscriberId;
     }
 
 

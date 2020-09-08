@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = CvrList.TABLE_NAME, indexes = {
@@ -19,6 +20,24 @@ public class CvrList {
 
 
     public CvrList() {
+    }
+
+    public CvrList(String listId, String subscriberId) {
+        this.listId = listId;
+        this.subscriberId = subscriberId;
+    }
+
+
+    @Column(name="subscriberId", nullable=false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    private String subscriberId;
+
+    public String getSubscriberId() {
+        return subscriberId;
+    }
+
+    public void setSubscriberId(String subscriberId) {
+        this.subscriberId = subscriberId;
     }
 
 
@@ -51,7 +70,8 @@ public class CvrList {
     }
 
 
-    @OneToOne(mappedBy = "cvrList")
-    private DataEventSubscribtion dataSubscribtion;
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="DS_ID")
+    private Set<DataEventSubscribtion> dataSubscribtion;
 
 }
