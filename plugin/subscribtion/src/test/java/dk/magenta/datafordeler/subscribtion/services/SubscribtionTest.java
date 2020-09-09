@@ -466,11 +466,11 @@ public class SubscribtionTest {
 
 
     /**
-     * Test that it is possible to find a specific subscribtion
+     * Test that it is possible to find a specific subscribtion and add new subscribtions
      * @throws Exception
      */
     @Test
-    public void testGetSubscribtions() throws Exception {
+    public void testGetandAddSubscribtions() throws Exception {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -484,8 +484,6 @@ public class SubscribtionTest {
             session.save(subscriber);
             transaction.commit();
         }
-
-
 
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -551,11 +549,107 @@ public class SubscribtionTest {
                 "{\"cprList\":null,\"dataEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
 
-        DataEventSubscribtion dDes = new DataEventSubscribtion("dDes");
+    }
 
-        ResponseEntity<DataEventSubscribtion> responseEntity = restTemplate.postForEntity("/subscribtionplugin/v1/manager/subscriber/dataEventSubscribtion/cpr/create/", dDes, DataEventSubscribtion.class);
-        System.out.println("This is the response as a String" + responseEntity.getBody());
 
+
+
+
+    /**
+     * Test that it is possible to find a specific subscribtion and add new subscribtions
+     * @throws Exception
+     */
+    @Test
+    public void testGetandAddStuff() throws Exception {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Subscriber subscriber =  new Subscriber("myUser");
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));
+            session.save(subscriber);
+            transaction.commit();
+        }
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        testUserDetails.setIdentity("myUser");
+        this.applyAccess(testUserDetails);
+
+        //Confirm that the CPR-list is empty
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/cprList/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[]", response.getBody(), false);
+
+        //ADD an element to the CPR-list
+        httpEntity = new HttpEntity<String>("cprTestList1", new HttpHeaders());
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/cprList/create/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+
+        //Confirm that the CPR-list has one element
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/cprList/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[{\"subscriberId\":\"myUser\",\"listId\":\"cprTestList1\"}]", response.getBody(), false);
+
+        //ADD an element to the CPR-list
+        httpEntity = new HttpEntity<String>("cprTestList2", new HttpHeaders());
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/cprList/create/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+
+        //Confirm that the CPR-list has two elements
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/cprList/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[{\"subscriberId\":\"myUser\",\"listId\":\"cprTestList1\"}," +
+                "{\"subscriberId\":\"myUser\",\"listId\":\"cprTestList2\"}]", response.getBody(), false);
+
+
+        //Add CPR-numbers to the CPR-list
+        List<String> cprList = new ArrayList<String>();
+        cprList.add("1111111110");
+        cprList.add("1111111111");
+        cprList.add("1111111112");
+        cprList.add("1111111113");
+        cprList.add("1111111114");
+        cprList.add("1111111115");
+        CprList dDes= new CprList("cprTestList1", null);
+        dDes.setCprs(cprList);
+        ResponseEntity<CprList> responseEntity = restTemplate.postForEntity("/subscribtionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, CprList.class);
+
+        //Add CPR-numbers to the CPR-list
+        cprList = new ArrayList<String>();
+        cprList.add("1111111116");
+        cprList.add("1111111117");
+        cprList.add("1111111118");
+        dDes= new CprList("cprTestList1", null);
+        dDes.setCprs(cprList);
+        responseEntity = restTemplate.postForEntity("/subscribtionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, CprList.class);
 
     }
 

@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
 import org.apache.logging.log4j.LogManager;
@@ -217,7 +218,6 @@ public class ManageSubscribtion {
             DataEventSubscribtion subscribtion = new DataEventSubscribtion(subscriberContent);
             subscriber.addDataEventSubscribtion(subscribtion);
 
-            session.update(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
         }
@@ -242,7 +242,7 @@ public class ManageSubscribtion {
     }
 
     @DeleteMapping("/subscriber/businessEventSubscribtion/delete/{subscriberId}")
-    public ResponseEntity<Subscriber> businessEventSubscribtiondeleteBySubscriberId(@PathVariable("subscriberId") String subscriberIdss/*, HttpServletRequest request*/) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<Subscriber> businessEventSubscribtiondeleteBySubscriberId(@PathVariable("subscriberId") String subscriberId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
@@ -261,42 +261,77 @@ public class ManageSubscribtion {
         }
     }
 
-
-
-
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/cpr/create/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity dataEventSubscribtionCprcreateSubscriber(HttpServletRequest request, @RequestBody DataEventSubscribtion subscriberContent) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-
-        //TODO: Fix the storing of modified objects
+    /**
+     * Create a cprList
+     * @param request
+     * @param cprList
+     * @return
+     * @throws IOException
+     * @throws AccessDeniedException
+     * @throws InvalidTokenException
+     * @throws InvalidCertificateException
+     */
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/create/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity cprListCreate(HttpServletRequest request, @RequestBody String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        CprList cprCreateList = new CprList(cprList, user.getIdentity());
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            /*Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Transaction transaction = session.beginTransaction();
+            session.save(cprCreateList);
+            transaction.commit();
+            return ResponseEntity.ok(cprCreateList);
+        }
+    }
 
+    /**
+     * Get a list of all cprList
+     * @return
+     */
+    @GetMapping("/subscriber/cprList/list")
+    public ResponseEntity<List<CprList>> cprListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId", CprList.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("subscriberId", user.getIdentity());
-
-            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-
-            DataEventSubscribtion foundDataEvent = null;
-
-            Iterator<DataEventSubscribtion> it = subscriber.getDataEventSubscribtion().iterator();
-            while(it.hasNext()) {
-                foundDataEvent = it.next();
-                if(subscriberContent.getDataEventId().equals(foundDataEvent.getDataEventId())) {
-                    break;
-                }
-            }
-            //foundDataEvent.setCprList(subscriberContent.getCprList());
-            subscriber.addDataEventSubscribtion(foundDataEvent);
-
-
-            session.update(subscriber);
-            transaction.commit();*/
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(query.getResultList());
         }
     }
 
 
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/cpr/add/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<CprList> cprListCprCreate(HttpServletRequest request, @RequestBody CprList cprNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId and listId = :listId ", CprList.class);
+            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("listId", cprNo.getListId());
+            CprList foundList = (CprList)query.getResultList().get(0);
+            foundList.addCprs(cprNo.getCpr());
+            transaction.commit();
+            return ResponseEntity.ok(foundList);
+        }
+    }
+
+    /**
+     * Get a list of all CPR-numbers in a list
+     * @return
+     */
+    @GetMapping("/subscriber/cprList/cpr/list")
+    public ResponseEntity<List<String>> cprListCprfindAll(HttpServletRequest request/*, @PathVariable("subscriberId") String listId*/) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId and  listId = :listId", CprList.class);
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("listId", "cprTestList1");
+            CprList foundList = (CprList)query.getResultList().get(0);
+            return ResponseEntity.ok(foundList.getCpr());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 

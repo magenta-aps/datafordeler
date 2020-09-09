@@ -1,5 +1,7 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
@@ -13,6 +15,7 @@ import java.util.Set;
 
 
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CprList extends DatabaseEntry {
 
 
@@ -70,14 +73,19 @@ public class CprList extends DatabaseEntry {
 
 
     @ElementCollection
+    @JsonIgnore
     private List<String> cprs = new ArrayList<String>();
 
-
+    @JsonIgnore
     public List<String> getCpr() {
         return cprs;
     }
 
     public void setCprs(List<String> cprs) {
         this.cprs = cprs;
+    }
+
+    public void addCprs(List<String> cprs) {
+        this.cprs.addAll(cprs);
     }
 }
