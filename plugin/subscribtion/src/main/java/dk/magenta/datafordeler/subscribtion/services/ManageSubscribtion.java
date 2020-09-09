@@ -4,19 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-
+import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
-import dk.magenta.datafordeler.core.exception.AccessRequiredException;
 import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
-import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -26,12 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 
@@ -299,17 +296,17 @@ public class ManageSubscribtion {
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/cpr/add/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CprList> cprListCprCreate(HttpServletRequest request, @RequestBody CprList cprNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public void cprListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cprNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId and listId = :listId ", CprList.class);
             query.setParameter("subscriberId", user.getIdentity());
-            query.setParameter("listId", cprNo.getListId());
+            query.setParameter("listId", cprNo.getKey());
             CprList foundList = (CprList)query.getResultList().get(0);
-            foundList.addCprs(cprNo.getCpr());
+            foundList.addCprs(cprNo.getValues());
             transaction.commit();
-            return ResponseEntity.ok(foundList);
+            //return (ResponseEntity) ResponseEntity.ok();
         }
     }
 
@@ -318,50 +315,46 @@ public class ManageSubscribtion {
      * @return
      */
     @GetMapping("/subscriber/cprList/cpr/list")
-    public ResponseEntity<List<String>> cprListCprfindAll(HttpServletRequest request/*, @PathVariable("subscriberId") String listId*/) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<dk.magenta.datafordeler.core.fapi.Envelope> cprListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+
+        String pageSize = requestParams.getFirst("pageSize");
+        String page = requestParams.getFirst("page");
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId and  listId = :listId", CprList.class);
+            if(pageSize != null) {
+                query.setMaxResults(Integer.valueOf(pageSize));
+            } else {
+                query.setMaxResults(10);
+            }
+            if(page != null) {
+                int pageIndex = (Integer.valueOf(page)-1)*query.getMaxResults();
+                query.setFirstResult(pageIndex);
+            } else {
+                query.setFirstResult(0);
+            }
+
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("subscriberId", user.getIdentity());
             query.setParameter("listId", "cprTestList1");
             CprList foundList = (CprList)query.getResultList().get(0);
-            return ResponseEntity.ok(foundList.getCpr());
-        } catch(Exception e) {
-            e.printStackTrace();
+
+            Envelope envelope = new Envelope();
+            envelope.setPageSize(query.getMaxResults());
+            envelope.setPage(query.getFirstResult()+1);
+            envelope.setPath(request.getServletPath());
+            envelope.setResponseTimestamp(OffsetDateTime.now());
+            envelope.setResults(foundList.getCpr());
+
+            return ResponseEntity.ok(envelope);
         }
-        return null;
     }
 
 
-
-
-    public int getVersion() {
-        return 1;
+    private static void setHeaders(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Content-Type", "application/json; charset=utf-8");
+        response.setStatus(200);
     }
 
-
-    public String getServiceName() {
-        return "subscribtionservices";
-    }
-
-
-    protected Class<Subscriber> getEntityClass() {
-        return Subscriber.class;
-    }
-
-
-    public Plugin getPlugin() {
-        return null;
-    }
-
-
-    protected void checkAccess(DafoUserDetails dafoUserDetails) throws AccessDeniedException, AccessRequiredException {
-        //CprAccessChecker.checkAccess(dafoUserDetails);
-    }
-
-
-    protected RoadRecordQuery getEmptyQuery() {
-        return new RoadRecordQuery();
-    }
 }

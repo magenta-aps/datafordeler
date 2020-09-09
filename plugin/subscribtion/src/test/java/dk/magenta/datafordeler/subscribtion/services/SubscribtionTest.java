@@ -1,15 +1,15 @@
 package dk.magenta.datafordeler.subscribtion.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -556,11 +556,11 @@ public class SubscribtionTest {
 
 
     /**
-     * Test that it is possible to find a specific subscribtion and add new subscribtions
+     * Test that it is possible to find a specific CPR-list and add new items
      * @throws Exception
      */
     @Test
-    public void testGetandAddStuff() throws Exception {
+    public void testGetandCprList() throws Exception {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -638,18 +638,34 @@ public class SubscribtionTest {
         cprList.add("1111111113");
         cprList.add("1111111114");
         cprList.add("1111111115");
-        CprList dDes= new CprList("cprTestList1", null);
-        dDes.setCprs(cprList);
-        ResponseEntity<CprList> responseEntity = restTemplate.postForEntity("/subscribtionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, CprList.class);
+        StringValuesDto dDes= new StringValuesDto("cprTestList1", null);
+        dDes.setValues(cprList);
+        ResponseEntity responseEntity = restTemplate.postForEntity("/subscribtionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         //Add CPR-numbers to the CPR-list
         cprList = new ArrayList<String>();
         cprList.add("1111111116");
         cprList.add("1111111117");
         cprList.add("1111111118");
-        dDes= new CprList("cprTestList1", null);
-        dDes.setCprs(cprList);
-        responseEntity = restTemplate.postForEntity("/subscribtionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, CprList.class);
+        dDes= new StringValuesDto("cprTestList1", null);
+        dDes.setValues(cprList);
+        responseEntity = restTemplate.postForEntity("/subscribtionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        //Confirm that the CPR-list has two elements
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/cprList/cpr/list?pageSize=4",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        JsonNode results = responseContent.get("results");
+        Assert.assertEquals(9, results.size());
 
     }
 
