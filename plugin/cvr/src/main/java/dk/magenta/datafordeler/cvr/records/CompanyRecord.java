@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.hibernate.Session;
@@ -65,6 +66,10 @@ public class CompanyRecord extends CvrEntityRecord {
         return this.cvrNumber;
     }
 
+    public String getCvrNumberString() {
+        return String.format("%08d", this.cvrNumber);
+    }
+
     @JsonIgnore
     public Map<String, Object> getIdentifyingFilter() {
         return Collections.singletonMap(DB_FIELD_CVR_NUMBER, this.cvrNumber);
@@ -104,8 +109,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyRegNumberRecord> getRegNumber() {
-        return this.regNumber;
+    public BitemporalSet<CompanyRegNumberRecord> getRegNumber() {
+        return new BitemporalSet<>(this.regNumber);
     }
 
 
@@ -177,8 +182,8 @@ public class CompanyRecord extends CvrEntityRecord {
     @JsonProperty(value = IO_FIELD_NAMES)
     private Set<SecNameRecord> names = new HashSet<>();
 
-    public Set<SecNameRecord> getNames() {
-        return this.names;
+    public BitemporalSet<SecNameRecord> getNames() {
+        return new BitemporalSet<>(this.names);
     }
 
     public void setNames(Set<SecNameRecord> names) {
@@ -218,8 +223,8 @@ public class CompanyRecord extends CvrEntityRecord {
     @JsonProperty(value = IO_FIELD_SECONDARY_NAMES)
     private Set<SecNameRecord> secondaryNames = new HashSet<>();
 
-    public Set<SecNameRecord> getSecondaryNames() {
-        return this.secondaryNames;
+    public BitemporalSet<SecNameRecord> getSecondaryNames() {
+        return new BitemporalSet<>(this.secondaryNames);
     }
 
     public void setSecondaryNames(Set<SecNameRecord> secondaryNames) {
@@ -275,8 +280,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<AddressRecord> getLocationAddress() {
-        return this.locationAddress;
+    public BitemporalSet<AddressRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress);
     }
 
 
@@ -316,8 +321,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<AddressRecord> getPostalAddress() {
-        return this.postalAddress;
+    public BitemporalSet<AddressRecord> getPostalAddress() {
+        return new BitemporalSet<>(this.postalAddress);
     }
 
 
@@ -359,8 +364,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getPhoneNumber() {
-        return this.phoneNumber;
+    public BitemporalSet<ContactRecord> getPhoneNumber() {
+        return new BitemporalSet<>(this.phoneNumber);
     }
 
 
@@ -402,8 +407,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getSecondaryPhoneNumber() {
-        return this.secondaryPhoneNumber;
+    public BitemporalSet<ContactRecord> getSecondaryPhoneNumber() {
+        return new BitemporalSet<>(this.secondaryPhoneNumber);
     }
 
 
@@ -445,8 +450,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getFaxNumber() {
-        return this.faxNumber;
+    public BitemporalSet<ContactRecord> getFaxNumber() {
+        return new BitemporalSet<>(this.faxNumber);
     }
 
 
@@ -488,8 +493,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getSecondaryFaxNumber() {
-        return this.secondaryFaxNumber;
+    public BitemporalSet<ContactRecord> getSecondaryFaxNumber() {
+        return new BitemporalSet<>(this.secondaryFaxNumber);
     }
 
 
@@ -529,8 +534,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getEmailAddress() {
-        return this.emailAddress;
+    public BitemporalSet<ContactRecord> getEmailAddress() {
+        return new BitemporalSet<>(this.emailAddress);
     }
 
 
@@ -570,8 +575,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getHomepage() {
-        return this.homepage;
+    public BitemporalSet<ContactRecord> getHomepage() {
+        return new BitemporalSet<>(this.homepage);
     }
 
 
@@ -611,8 +616,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<ContactRecord> getMandatoryEmailAddress() {
-        return this.mandatoryEmailAddress;
+    public BitemporalSet<ContactRecord> getMandatoryEmailAddress() {
+        return new BitemporalSet<>(this.mandatoryEmailAddress);
     }
 
 
@@ -649,8 +654,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<LifecycleRecord> getLifecycle() {
-        return this.lifecycle;
+    public BitemporalSet<LifecycleRecord> getLifecycle() {
+        return new BitemporalSet<>(this.lifecycle);
     }
 
 
@@ -690,8 +695,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyIndustryRecord> getPrimaryIndustry() {
-        return this.primaryIndustry;
+    public BitemporalSet<CompanyIndustryRecord> getPrimaryIndustry() {
+        return new BitemporalSet<>(this.primaryIndustry);
     }
 
 
@@ -731,8 +736,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyIndustryRecord> getSecondaryIndustry1() {
-        return this.secondaryIndustry1;
+    public BitemporalSet<CompanyIndustryRecord> getSecondaryIndustry1() {
+        return new BitemporalSet<>(this.secondaryIndustry1);
     }
 
 
@@ -772,8 +777,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyIndustryRecord> getSecondaryIndustry2() {
-        return this.secondaryIndustry2;
+    public BitemporalSet<CompanyIndustryRecord> getSecondaryIndustry2() {
+        return new BitemporalSet<>(this.secondaryIndustry2);
     }
 
 
@@ -813,8 +818,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyIndustryRecord> getSecondaryIndustry3() {
-        return this.secondaryIndustry3;
+    public BitemporalSet<CompanyIndustryRecord> getSecondaryIndustry3() {
+        return new BitemporalSet<>(this.secondaryIndustry3);
     }
 
 
@@ -851,8 +856,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<StatusRecord> getStatus() {
-        return this.status;
+    public BitemporalSet<StatusRecord> getStatus() {
+        return new BitemporalSet<>(this.status);
     }
 
 
@@ -890,8 +895,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyStatusRecord> getCompanyStatus() {
-        return this.companyStatus;
+    public BitemporalSet<CompanyStatusRecord> getCompanyStatus() {
+        return new BitemporalSet<>(this.companyStatus);
     }
 
 
@@ -928,8 +933,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<FormRecord> getCompanyForm() {
-        return this.companyForm;
+    public BitemporalSet<FormRecord> getCompanyForm() {
+        return new BitemporalSet<>(this.companyForm);
     }
 
 
@@ -966,8 +971,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyYearlyNumbersRecord> getYearlyNumbers() {
-        return this.yearlyNumbers;
+    public BitemporalSet<CompanyYearlyNumbersRecord> getYearlyNumbers() {
+        return new BitemporalSet<>(this.yearlyNumbers);
     }
 
 
@@ -1004,8 +1009,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyQuarterlyNumbersRecord> getQuarterlyNumbers() {
-        return this.quarterlyNumbers;
+    public BitemporalSet<CompanyQuarterlyNumbersRecord> getQuarterlyNumbers() {
+        return new BitemporalSet<>(this.quarterlyNumbers);
     }
 
 
@@ -1042,8 +1047,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyMonthlyNumbersRecord> getMonthlyNumbers() {
-        return this.monthlyNumbers;
+    public BitemporalSet<CompanyMonthlyNumbersRecord> getMonthlyNumbers() {
+        return new BitemporalSet<>(this.monthlyNumbers);
     }
 
 
@@ -1121,8 +1126,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyUnitLinkRecord> getProductionUnits() {
-        return this.productionUnits;
+    public BitemporalSet<CompanyUnitLinkRecord> getProductionUnits() {
+        return new BitemporalSet<>(this.productionUnits);
     }
 
 
@@ -1173,8 +1178,8 @@ public class CompanyRecord extends CvrEntityRecord {
         this.addParticipant(otherRecord);
     }
 
-    public Set<CompanyParticipantRelationRecord> getParticipants() {
-        return this.participants;
+    public BitemporalSet<CompanyParticipantRelationRecord> getParticipants() {
+        return new BitemporalSet<>(this.participants);
     }
 
 

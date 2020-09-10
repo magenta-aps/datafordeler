@@ -1,23 +1,20 @@
 package dk.magenta.datafordeler.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.dump.Dump;
 import dk.magenta.datafordeler.core.dump.Dump.Task;
 import dk.magenta.datafordeler.core.dump.DumpConfiguration;
-import dk.magenta.datafordeler.core.exception.*;
-import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.io.PluginSourceData;
-import dk.magenta.datafordeler.core.io.Receipt;
-import dk.magenta.datafordeler.core.plugin.EntityManager;
+import dk.magenta.datafordeler.core.exception.ConfigurationException;
+import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.util.CronUtil;
-import dk.magenta.datafordeler.core.util.ItemInputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +29,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @Component
 public class Engine {
@@ -95,132 +90,6 @@ public class Engine {
     public boolean isCronEnabled() {
         return this.cronEnabled;
     }
-
-    public <E extends Entity<E, R>, R extends Registration<E, R, V>, V extends Effect<R, V, D>, D extends DataItem<V, D>> boolean handleEvent(PluginSourceData event, ImportMetadata importMetadata) {
-        return this.handleEvent(event, null, importMetadata);
-    }
-
-    /**
-     * Entry point for incoming events from the GAPI.
-     * A registrationreference in the incoming event will be parsed, and the corresponding registration fetched
-     * When a registration is at hand, it is saved and a receipt is sent to the entitymanager that handles the registration
-     * @param event Event to be handled
-     * */
-    public <E extends Entity<E, R>, R extends Registration<E, R, V>, V extends Effect<R, V, D>, D extends DataItem<V, D>> boolean handleEvent(PluginSourceData event, Plugin plugin, ImportMetadata importMetadata) {
-        log.info("Handling event '" + event.getId() + "'");
-        OffsetDateTime eventReceived = OffsetDateTime.now();
-        Receipt receipt;
-        EntityManager entityManager = null;
-        boolean success;
-        Session session = null;
-        try {
-            List<? extends Registration> registrations;
-
-            if (event.getData() == null) {
-                String referenceData = event.getReference();
-                if (referenceData == null) {
-                    throw new MissingReferenceException(event);
-                }
-
-                log.info("Event contains a reference to a registration");
-                // If the event is only a reference, request the actual object through the plugin
-                URI referenceURI;
-                try {
-                    referenceURI = new URI(referenceData);
-                } catch (URISyntaxException e) {
-                    throw new InvalidReferenceException(referenceData);
-                }
-                if (plugin == null) {
-                    plugin = pluginManager.getPluginForURI(referenceURI);
-                }
-                if (plugin == null) {
-                    throw new PluginNotFoundException(referenceURI);
-                }
-                log.info("Handled by plugin " + plugin.getClass().getCanonicalName());
-                entityManager = plugin.getEntityManager(referenceURI);
-                if (entityManager == null) {
-                    throw new EntityManagerNotFoundException(referenceURI);
-                }
-
-                try {
-                    RegistrationReference reference = entityManager.parseReference(referenceURI);
-                    log.info("Parsed reference: " + entityManager.getRegistrationInterface(reference));
-                    registrations = entityManager.fetchRegistration(reference, importMetadata);
-                    log.info("Referenced registration fetched");
-                } catch (IOException e) {
-                    throw new DataStreamException(e);
-                }
-            } else {
-                log.info("Event contains a full registration");
-                String schema = event.getSchema();
-                if (plugin == null) {
-                    plugin = pluginManager.getPluginForSchema(schema);
-                }
-                if (plugin == null) {
-                    throw new PluginNotFoundException(schema, true);
-                }
-                log.info("Handled by plugin " + plugin.getClass().getCanonicalName());
-                entityManager = plugin.getEntityManager(schema);
-                if (entityManager == null) {
-                    throw new EntityManagerNotFoundException(schema);
-                }
-                log.info("entityManager: "+entityManager.getClass().getCanonicalName());
-                registrations = entityManager.parseData(event, importMetadata);
-            }
-/*
-            for (Registration registration : registrations) {
-                session = sessionManager.getSessionFactory().openSession();
-                Transaction transaction = session.beginTransaction();
-                queryManager.saveRegistration(session, registration.getEntity(), registration, true, true);
-                transaction.commit();
-                session.close();
-            }*/
-
-            if (!entityManager.handlesOwnSaves()) {
-                session = importMetadata.getSession();
-                boolean createSession = (session == null);
-                Transaction transaction = null;
-                if (createSession) {
-                    session = sessionManager.getSessionFactory().openSession();
-                    transaction = session.beginTransaction();
-                }
-                for (Registration registration : registrations) {
-                    QueryManager.saveRegistration(
-                            session, null, (R) registration,
-                            false, false, true
-                    );
-                }
-                if (createSession) {
-                    transaction.commit();
-                    session.close();
-                    session = null;
-                }
-            }
-
-            receipt = new Receipt(event.getId(), eventReceived);
-            success = true;
-        } catch (DataFordelerException e) {
-            log.error("Error handling event", e);
-            receipt = new Receipt(event.getId(), eventReceived, e);
-            success = false;
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        if (entityManager == null) {
-            log.error("No EntityManager found for event; cannot send receipt");
-        } else {
-            try {
-               entityManager.sendReceipt(receipt);
-            } catch (DataFordelerException | IOException e) {
-                log.error("Failed sending receipt", e);
-                e.printStackTrace();
-            }
-        }
-        return success;
-    }
-
 
     /**
      * Pull
@@ -423,71 +292,6 @@ public class Engine {
                 e.printStackTrace();
             }
         }
-    }
-
-
-    /** Synchronization **/
-
-    /**
-     * Synchronizes with the register, pulling a list of registration checksums and comparing it with what we already have.
-     * For each registration we haven't seen before, pull the whole registration and store it in DB
-     * @param session A database session to work on
-     * @param plugin The plugin whose registermanager we interface with
-     * @param from Optional date; only pull registration checksums after this date
-     * @return New registrations added by this process
-     * @throws DataFordelerException
-     */
-    public <E extends Entity<E, R>, R extends Registration<E, R, V>, V extends Effect<R, V, D>, D extends DataItem<V, D>, P extends RegistrationReference> List<R> synchronize(Session session, Plugin plugin, OffsetDateTime from) throws DataFordelerException {
-        this.log.info("Synchronizing with plugin " + plugin.getClass().getCanonicalName());
-        RegisterManager registerManager = plugin.getRegisterManager();
-        ArrayList<R> newRegistrations = new ArrayList<R>();
-        if (registerManager != null) {
-            ItemInputStream<? extends EntityReference> entityReferences = registerManager.listRegisterChecksums(null, from);
-            EntityReference<E, P> entityReference;
-            ImportMetadata importMetadata = new ImportMetadata();
-            try {
-                while ((entityReference = entityReferences.next()) != null) {
-                    Class<E> entityClass = entityReference.getEntityClass();
-                    EntityManager entityManager = registerManager.getEntityManager(entityClass);
-                    E entity = QueryManager.getEntity(session, entityReference.getObjectId(), entityClass);
-                    HashSet<String> knownChecksums = new HashSet<>();
-                    if (entity != null) {
-                        for (Object oRegistration : entity.getRegistrations()) {
-                            R registration = (R) oRegistration;
-                            String checksum = registration.getRegisterChecksum();
-                            this.log.debug("Checksum " + checksum + " is already known");
-                            knownChecksums.add(checksum);
-                        }
-                    }
-
-                    // We need to find all registrations that we don't already have in the database
-                    ArrayList<P> missingRegistrationReferences = new ArrayList<P>();
-                    for (P registrationReference : entityReference.getRegistrationReferences()) {
-                        String checksum = registrationReference.getChecksum();
-                        if (!knownChecksums.contains(checksum)) {
-                            this.log.debug("Checksum " + checksum + " is not already known, adding to list of registrations to fetch");
-                            missingRegistrationReferences.add(registrationReference);
-                        }
-                    }
-
-                    for (P registrationReference : missingRegistrationReferences) {
-                        List<? extends Registration> registrations = entityManager.fetchRegistration(registrationReference, importMetadata);
-                        if (!entityManager.handlesOwnSaves()) {
-                            for (Registration registration : registrations) {
-                                registration.setLastImportTime(importMetadata.getImportTime());
-                                QueryManager.saveRegistration(session, entity, (R) registration);
-                                newRegistrations.add((R) registration);
-                            }
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (DataFordelerException e) {
-                this.log.error("Synchronization with plugin " + plugin.getClass().getCanonicalName() + " failed", e);
-            }
-        }
-        return newRegistrations;
     }
 
     public void handleRequest(HttpServletRequest request,

@@ -1,6 +1,9 @@
 package dk.magenta.datafordeler.core.fapi;
 
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.DataItem;
+import dk.magenta.datafordeler.core.database.Entity;
+import dk.magenta.datafordeler.core.database.Identification;
+import dk.magenta.datafordeler.core.database.LookupDefinition;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

@@ -103,24 +103,8 @@ public class CvrRegisterManager extends RegisterManager {
         return this.objectMapper;
     }
 
-
-    @Override
-    protected Communicator getChecksumFetcher() {
-        return this.getEventFetcher();
-    }
-
-    @Override
-    public URI getListChecksumInterface(String schema, OffsetDateTime from) {
-        return null;
-    }
-
     public String getPullCronSchedule() {
         return this.configurationManager.getConfiguration().getPullCronSchedule();
-    }
-
-    @Override
-    public boolean pullsEventsCommonly() {
-        return false;
     }
 
 

@@ -1,12 +1,9 @@
 package dk.magenta.datafordeler.cpr.direct;
 
 import dk.magenta.datafordeler.core.AbstractTask;
-import dk.magenta.datafordeler.core.Engine;
-import dk.magenta.datafordeler.core.Pull;
 import dk.magenta.datafordeler.core.command.Worker;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
-import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import org.quartz.JobDataMap;
 

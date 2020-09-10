@@ -26,7 +26,6 @@ import java.io.*;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -113,21 +112,6 @@ public class CprRegisterManager extends RegisterManager {
             return configuration.getRegisterURI(entityManager);
         }
         return null;
-    }
-
-    @Override
-    protected Communicator getChecksumFetcher() {
-        return null;
-    }
-
-    @Override
-    public URI getListChecksumInterface(String schema, OffsetDateTime from) {
-        return null;
-    }
-
-    @Override
-    public boolean pullsEventsCommonly() {
-        return false;
     }
 
     public String getPullCronSchedule() {

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
 import dk.magenta.datafordeler.cvr.DirectLookup;
@@ -12,6 +14,8 @@ import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -31,6 +35,7 @@ public class CompanyRecordQuery extends BaseQuery {
     public static final String HUSNUMMER = "husnummer";
     public static final String ETAGE = AddressRecord.IO_FIELD_FLOOR;
     public static final String DOOR = AddressRecord.IO_FIELD_DOOR;
+    public static final String LASTUPDATED = CvrBitemporalRecord.IO_FIELD_LAST_UPDATED;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CVRNUMMER)
     private List<String> cvrNumre = new ArrayList<>();
@@ -468,6 +473,51 @@ public class CompanyRecordQuery extends BaseQuery {
         this.updatedParameters();
     }
 
+    
+
+    private List<String> organizationType = new ArrayList<>();
+
+    public Collection<String> getOrganizationType() {
+        return this.organizationType;
+    }
+
+    public void addOrganizationType(String organizationType) {
+        if (organizationType != null) {
+            this.organizationType.add(organizationType);
+            this.updatedParameters();
+        }
+    }
+
+    public void setOrganizationType(int organizationType) {
+        this.organizationType.clear();
+        this.addOrganizationType(Integer.toString(organizationType));
+    }
+    public void setOrganizationType(String organizationType) {
+        this.organizationType.clear();
+        this.addOrganizationType(organizationType);
+    }
+
+    public void setOrganizationType(Collection<String> organizationTypes) {
+        this.clearOrganizationType();
+        if (organizationType != null) {
+            for (String organizationType : organizationTypes) {
+                this.addOrganizationType(organizationType);
+            }
+        }
+    }
+
+    public void clearOrganizationType() {
+        this.organizationType.clear();
+        this.updatedParameters();
+    }
+
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = LASTUPDATED)
+    private String lastUpdated;
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }    
+
 
 
 
@@ -486,6 +536,7 @@ public class CompanyRecordQuery extends BaseQuery {
         map.put(HUSNUMMER, this.husnummer);
         map.put(ETAGE, this.etage);
         map.put(DOOR, this.door);
+        map.put(LASTUPDATED, this.lastUpdated);
         return map;
     }
 
@@ -503,6 +554,7 @@ public class CompanyRecordQuery extends BaseQuery {
         this.setHusnummer(parameters.getI(HUSNUMMER));
         this.setEtage(parameters.getI(ETAGE));
         this.setDoor(parameters.getI(DOOR));
+        this.setLastUpdated(parameters.getFirst(LASTUPDATED));
     }
 
 
@@ -602,13 +654,13 @@ public class CompanyRecordQuery extends BaseQuery {
         joinHandles.put("email", CompanyRecord.DB_FIELD_EMAIL + BaseQuery.separator + ContactRecord.DB_FIELD_DATA);
         joinHandles.put("municipalitycode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
         joinHandles.put("roadcode", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
-
-
         joinHandles.put("housenumberfrom", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_HOUSE_FROM);
         joinHandles.put("housenumberto", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_HOUSE_TO);
-
         joinHandles.put("floor", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_FLOOR);
         joinHandles.put("door", CompanyRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_DOOR);
+        joinHandles.put("participantUnitNumber", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
+        joinHandles.put("participantOrganizationType", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_ORGANIZATIONS + BaseQuery.separator + OrganizationRecord.DB_FIELD_MAIN_TYPE);
+        joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
     }
 
     @Override
@@ -639,6 +691,13 @@ public class CompanyRecordQuery extends BaseQuery {
             multiCondition.add(rangeCondition);
             this.makeCondition(rangeCondition, "housenumberfrom", Condition.Operator.LTE, this.husnummer, Integer.class, false);
             this.makeCondition(rangeCondition, "housenumberto", Condition.Operator.GTE, this.husnummer, Integer.class, false);
+        }
+
+        if (this.organizationType != null) {
+            this.addCondition("participantOrganizationType", this.organizationType);
+        }
+        if (this.lastUpdated != null) {
+            this.addCondition("lastUpdated", Condition.Operator.GT, Collections.singletonList(this.lastUpdated), OffsetDateTime.class, false);
         }
     }
 

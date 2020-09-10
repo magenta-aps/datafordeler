@@ -188,8 +188,6 @@ public class CvrTest extends TestBase {
         loadManyCompanies(cvrPlugin, sessionManager, 5, 5);
         OffsetDateTime end = OffsetDateTime.now();
 
-        OffsetDateTime companyUpdate = OffsetDateTime.parse("2017-04-10T09:01:06.000+02:00");
-
         try {
             TestUserDetails testUserDetails = new TestUserDetails();
 
@@ -264,8 +262,8 @@ public class CvrTest extends TestBase {
             cvrList.add("10000008");
             cvrList.add("10000009");
             body.set("cvrNumber", cvrList);
-            //body.put("updatedSince", start.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            body.put("updatedSince", companyUpdate.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            // "updatedSince" matches on dafoUpdated field, not on lastUpdated field
+            body.put("updatedSince", start.minusSeconds(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
             httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
             response = restTemplate.exchange(
                     "/prisme/cvr/1/",
@@ -290,8 +288,7 @@ public class CvrTest extends TestBase {
             cvrList.add("10000008");
             cvrList.add("10000009");
             body.set("cvrNumber", cvrList);
-            //body.put("updatedSince", end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-            body.put("updatedSince", companyUpdate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            body.put("updatedSince", end.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
             httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
             response = restTemplate.exchange(
                     "/prisme/cvr/1/",

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -16,7 +15,6 @@ import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +41,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Service container to be subclassed for each Entity class, serving REST and SOAP
@@ -457,6 +454,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      */
     // TODO: How to use DafoUserDetails with SOAP requests?
     @WebMethod(operationName = "search")
+    @Deprecated
     public Envelope searchSoap(@WebParam(name="query") @XmlElement(required = true) Q query) throws DataFordelerException {
         Session session = this.getSessionManager().getSessionFactory().openSession();
         Envelope envelope = new Envelope();
@@ -585,15 +583,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                     output.put(key, value.isNull() ? null : value.asText());
                 }
             }
-        }
-        return output;
-    }
-
-    private static Map<String, Object> replaceValues(Map<String, Object> input, Object subject, Object replace) {
-        Map<String, Object> output = new HashMap<>();
-        for (String key : input.keySet()) {
-            Object value = input.get(key);
-            output.put(key, Objects.equals(value, subject) ? replace : value);
         }
         return output;
     }

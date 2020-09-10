@@ -11,7 +11,6 @@ import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.cvr.records.SecNameRecord;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
-import org.apache.commons.math3.analysis.function.Add;
 
 import java.util.*;
 
@@ -176,6 +175,38 @@ public class ParticipantRecordQuery extends BaseQuery {
 
 
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
+    private List<String> businessKey = new ArrayList<>();
+
+    public List<String> getBusinessKey() {
+        return this.businessKey;
+    }
+
+    public void addBusinessKey(String businessKey) {
+        if (businessKey != null) {
+            this.businessKey.add(businessKey);
+            this.updatedParameters();
+        }
+    }
+
+    public void setBusinessKey(String businessKey) {
+        this.clearBusinessKey();
+        this.addBusinessKey(businessKey);
+    }
+
+    public void setBusinessKey(Collection<String> businessKeys) {
+        this.clearBusinessKey();
+        if (businessKeys != null) {
+            for (String businessKey : businessKeys) {
+                this.addBusinessKey(businessKey);
+            }
+        }
+    }
+
+    public void clearBusinessKey() {
+        this.businessKey.clear();
+        this.updatedParameters();
+    }
 
 
 
@@ -195,6 +226,8 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.setNavn(parameters.getI(NAVN));
         this.setKommuneKode(parameters.getI(KOMMUNEKODE));
     }
+
+    @Deprecated
     @Override
     public BaseLookupDefinition getLookupDefinition() {
         BaseLookupDefinition lookupDefinition = new CvrRecordLookupDefinition(this);
@@ -256,6 +289,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("name", ParticipantRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME);
         joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
         joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
+        joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
     }
 
     @Override
@@ -269,5 +303,6 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.addCondition("municipalitycode", this.kommunekode, Integer.class);
         this.addCondition("roadcode", this.vejkode, Integer.class);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
+        this.addCondition("businessKey", this.getBusinessKey(), Long.class);
     }
 }
