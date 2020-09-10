@@ -941,10 +941,6 @@ public class PersonEntity extends CprRecordEntity {
                 return set.add((E) newItem);
             }
 
-            if (newItem.line == null || set.stream().anyMatch(item -> StringUtils.equals(newItem.line, item.line))) {
-                //If this specific line with excatcly the same information has allready been read it should be ignored
-                return false;
-            }
 
             E correctedRecord = null;
             E correctingRecord = null;
@@ -1016,7 +1012,7 @@ public class PersonEntity extends CprRecordEntity {
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         return set.add((E) newItem);
 
-                    } else if (
+                    } else if ( !oldItem.isUndone() &&
                             Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
                                     (Equality.cprDomainEqualDate(newItem.getRegistrationTo(), oldItem.getRegistrationTo()) || newItem.getRegistrationTo() == null) &&
                                     Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom())
