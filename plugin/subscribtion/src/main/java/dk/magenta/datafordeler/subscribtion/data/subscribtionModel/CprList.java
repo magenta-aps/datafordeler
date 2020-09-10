@@ -76,6 +76,7 @@ public class CprList extends DatabaseEntry {
     @JsonIgnore
     private List<String> cprs = new ArrayList<String>();
 
+    @Column(name="cpr", nullable=false)
     @JsonIgnore
     public List<String> getCpr() {
         return cprs;

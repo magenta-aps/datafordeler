@@ -108,6 +108,9 @@ public class SubscribtionTest {
     }
 
 
+    /**
+     * Confirm that the datamodel accepts specified modifications to the datamodel
+     */
     @Test
     public void testModifications() {
 
@@ -470,7 +473,7 @@ public class SubscribtionTest {
      * @throws Exception
      */
     @Test
-    public void testGetandAddSubscribtions() throws Exception {
+    public void testGetAddSubscribtions() throws Exception {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -552,6 +555,68 @@ public class SubscribtionTest {
     }
 
 
+    /**
+     * Test that it is possible to delete a new subscribtion
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteSubscribtion() throws Exception {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Subscriber subscriber =  new Subscriber("myUser");
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));
+            session.save(subscriber);
+            transaction.commit();
+        }
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        testUserDetails.setIdentity("myUser");
+        this.applyAccess(testUserDetails);
+
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion1\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+
+
+        //Try fetching with no cpr access rights
+        /*response = restTemplate.exchange(
+
+                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/delete/subscribtion1",
+                HttpMethod.DELETE,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        //JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);*/
+
+    }
+
+
 
 
 
@@ -560,7 +625,7 @@ public class SubscribtionTest {
      * @throws Exception
      */
     @Test
-    public void testGetandCprList() throws Exception {
+    public void testGetAndAddCprList() throws Exception {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();

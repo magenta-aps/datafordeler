@@ -1,7 +1,10 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -74,4 +77,20 @@ public class CvrList {
     @JoinColumn(name="DS_ID")
     private Set<DataEventSubscribtion> dataSubscribtion;
 
+    @ElementCollection
+    @JsonIgnore
+    private List<String> cvrs = new ArrayList<String>();
+
+    @JsonIgnore
+    public List<String> getCvr() {
+        return cvrs;
+    }
+
+    public void setCvrs(List<String> cvrs) {
+        this.cvrs = cvrs;
+    }
+
+    public void addCvrs(List<String> cvrs) {
+        this.cvrs.addAll(cvrs);
+    }
 }

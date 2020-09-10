@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 
@@ -60,7 +61,7 @@ public class PnumberList extends DatabaseEntry {
     @JoinColumn(name = "DS_ID")
     private Set<DataEventSubscribtion> dataSubscribtion;
 
-
+    @JsonIgnore
     @ElementCollection
     private List<String> pNumbers = new ArrayList<String>();
 
