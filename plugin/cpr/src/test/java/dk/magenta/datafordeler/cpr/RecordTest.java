@@ -291,6 +291,38 @@ public class RecordTest {
     }
 
 
+    /**
+     * Vi tester en special case hvor en person med et undone navn, får tildelt dette navn igen
+     *
+     * Ret / fortryd markering (ANNKOR) kan være:
+     * K = Ret
+     * A = Fortryd
+     * Æ = Teknisk ændring
+     * @throws DataFordelerException
+     * @throws IOException
+     */
+    @Test
+    public void testPersonUndoRedoName() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        importMetadata.setSession(session);
+        this.loadPerson("/personUndoRedoName.txt", importMetadata);
+        try {
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("1111111111");
+            //query.setPersonnummer("2503633089");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+            Assert.assertTrue("Validate that when setting a name and undoing that name, it must be possible to set that same name again ",
+                    personEntity.getName().stream().anyMatch(name -> !name.isUndone()));
+
+        } finally {
+            session.close();
+        }
+    }
+
+
 
     @Test
     public void testPersonAddressSearch() throws DataFordelerException, IOException {
