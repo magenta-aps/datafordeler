@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 
@@ -10,13 +11,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Entity
+@Table(name = PnumberList.TABLE_NAME, indexes = {
+
+
+})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PnumberList extends DatabaseEntry {
 
 
-    public static final String TABLE_NAME = "cpr_list";
+    public static final String TABLE_NAME = "pno_list";
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
-    public static final String schema = "CprList";
+    public static final String schema = "PnoList";
 
 
     public static final String DB_FIELD_ENTITY = "entity";
