@@ -594,8 +594,7 @@ public class SubscribtionTest {
 
 
         //Try fetching with no cpr access rights
-        /*response = restTemplate.exchange(
-
+        response = restTemplate.exchange(
                 "/subscribtionplugin/v1/manager/subscriber/businessEventSubscribtion/delete/subscribtion1",
                 HttpMethod.DELETE,
                 httpEntity,
@@ -612,7 +611,40 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);*/
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/dataEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"subscribtion3\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscribtion1\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscribtion2\"}]", response.getBody(), false);
+
+
+        //Try fetching with no cpr access rights
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/dataEventSubscribtion/delete/subscribtion1",
+                HttpMethod.DELETE,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        //JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/manager/subscriber/dataEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"subscribtion3\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscribtion2\"}]", response.getBody(), false);
+
 
     }
 

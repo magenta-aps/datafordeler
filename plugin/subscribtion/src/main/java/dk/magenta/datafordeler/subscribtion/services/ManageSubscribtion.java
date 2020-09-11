@@ -129,6 +129,7 @@ public class ManageSubscribtion {
     }
 
 
+
     /**
      * Get a list of all businessEventSubscribtions
      * @return
@@ -171,6 +172,44 @@ public class ManageSubscribtion {
             session.update(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
+        }
+    }
+
+    @GetMapping("/subscriber/businessEventSubscribtion/{subscriberId}")
+    public ResponseEntity<Subscriber> businessEventSubscribtiongetBySubscriberId(@PathVariable("subscriberId") String subscriberId, HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            //query.setParameter("subscriberId", subscriberId);
+
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            query.setParameter("subscriberId", user.getIdentity());
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                return ResponseEntity.ok(subscriber);
+            }
+        }
+    }
+
+    @DeleteMapping("/subscriber/businessEventSubscribtion/delete/{subscriberId}")
+    public ResponseEntity<BusinessEventSubscribtion> businessEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscriberId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ BusinessEventSubscribtion.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscribtion.class);
+            query.setParameter("businessEventId", subscribtionId);
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                BusinessEventSubscribtion subscribtion = (BusinessEventSubscribtion) query.getResultList().get(0);
+                //TODO: validate ownership
+                session.delete(subscribtion);
+                transaction.commit();
+                return ResponseEntity.ok(subscribtion);
+            }
+        } catch (Exception e) {
+            log.error("Failed acessing webservice: ", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -220,9 +259,8 @@ public class ManageSubscribtion {
         }
     }
 
-
-    @GetMapping("/subscriber/businessEventSubscribtion/{subscriberId}")
-    public ResponseEntity<Subscriber> businessEventSubscribtiongetBySubscriberId(@PathVariable("subscriberId") String subscriberId, HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @GetMapping("/subscriber/dataEventSubscribtion/{subscriberId}")
+    public ResponseEntity<Subscriber> dataEventSubscribtiongetBySubscriberId(@PathVariable("subscriberId") String subscriberId, HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             //query.setParameter("subscriberId", subscriberId);
@@ -238,25 +276,31 @@ public class ManageSubscribtion {
         }
     }
 
-    @DeleteMapping("/subscriber/businessEventSubscribtion/delete/{subscriberId}")
-    public ResponseEntity<Subscriber> businessEventSubscribtiondeleteBySubscriberId(@PathVariable("subscriberId") String subscriberId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @DeleteMapping("/subscriber/dataEventSubscribtion/delete/{subscriberId}")
+    public ResponseEntity<DataEventSubscribtion> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscriberId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-
-
-            //DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-           // query.setParameter("subscriberId", user.getIdentity());
+            Query query = session.createQuery(" from "+ DataEventSubscribtion.class.getName() +" where dataEventId = :dataEventId", DataEventSubscribtion.class);
+            query.setParameter("dataEventId", subscribtionId);
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-                session.delete(subscriber);
+                DataEventSubscribtion subscribtion = (DataEventSubscribtion) query.getResultList().get(0);
+                //TODO: validate ownership
+                session.delete(subscribtion);
                 transaction.commit();
-                return ResponseEntity.ok(subscriber);
+                return ResponseEntity.ok(subscribtion);
             }
+        } catch (Exception e) {
+            log.error("Failed acessing webservice: ", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+
+
 
     /**
      * Create a cprList
