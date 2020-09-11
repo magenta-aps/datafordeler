@@ -311,7 +311,6 @@ public class RecordTest {
 
             PersonRecordQuery query = new PersonRecordQuery();
             query.setPersonnummer("1111111111");
-            //query.setPersonnummer("2503633089");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
             Assert.assertTrue("Validate that when setting a name and undoing that name, it must be possible to set that same name again ",
