@@ -112,7 +112,7 @@ public class CprCvrPnumberListTest {
             query.setParameter("listId", "myList1");
             CprList subscriber = (CprList) query.getResultList().get(0);
 
-            subscriber.addCprs(Arrays.asList(new String[]{"1111111111", "1111111112"}));
+            subscriber.addCprStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
             transaction.commit();
         }
 
@@ -123,9 +123,20 @@ public class CprCvrPnumberListTest {
             query.setParameter("listId", "myList1");
             CprList subscriber = (CprList) query.getResultList().get(0);
 
-            subscriber.addCprs(Arrays.asList(new String[]{"1111111113", "1111111114"}));
+            subscriber.addCprStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
             transaction.commit();
         }
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+
+            query.setParameter("listId", "myList1");
+            CprList subscriber = (CprList) query.getResultList().get(0);
+            Assert.assertEquals(4, subscriber.getCpr().size());
+        }
+
+
 
         //TODO: Start removing and modifying
 

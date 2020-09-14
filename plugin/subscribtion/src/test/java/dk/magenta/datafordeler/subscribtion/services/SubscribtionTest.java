@@ -1,9 +1,6 @@
 package dk.magenta.datafordeler.subscribtion.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -202,10 +199,13 @@ public class SubscribtionTest {
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
             query.setParameter("listId", "cprList2");
             CprList pnrList = (CprList) query.getResultList().get(0);
-            List<String> list = new ArrayList<String>();
-            list.add("1234");
-            list.add("1235");
-            list.add("1236");
+            List<SubscribedCprNumber> list = new ArrayList<SubscribedCprNumber>();
+            SubscribedCprNumber prn1 = new SubscribedCprNumber("1234");
+            SubscribedCprNumber prn2 = new SubscribedCprNumber("1234");
+            SubscribedCprNumber prn3 = new SubscribedCprNumber("1234");
+            list.add(prn1);
+            list.add(prn2);
+            list.add(prn3);
             pnrList.setCprs(list);
             Assert.assertEquals(1, query.getResultList().size());
             transaction.commit();

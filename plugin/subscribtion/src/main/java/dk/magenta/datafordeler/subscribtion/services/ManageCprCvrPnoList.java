@@ -99,7 +99,13 @@ public class ManageCprCvrPnoList {
             query.setParameter("subscriberId", user.getIdentity());
             query.setParameter("listId", cprNo.getKey());
             CprList foundList = (CprList)query.getResultList().get(0);
-            foundList.addCprs(cprNo.getValues());
+
+
+            for(String cpr : cprNo.getValues()) {
+
+                foundList.addCprString(cpr);
+            }
+
             transaction.commit();
             //return (ResponseEntity) ResponseEntity.ok();
         }

@@ -74,19 +74,31 @@ public class CprList extends DatabaseEntry {
 
     @ElementCollection
     @JsonIgnore
-    private List<String> cprs = new ArrayList<String>();
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="CPR_ID")
+    private List<SubscribedCprNumber> cprs = new ArrayList<SubscribedCprNumber>();
 
     @Column(name="cpr", nullable=false)
     @JsonIgnore
-    public List<String> getCpr() {
+    public List<SubscribedCprNumber> getCpr() {
         return cprs;
     }
 
-    public void setCprs(List<String> cprs) {
+    public void setCprs(List<SubscribedCprNumber> cprs) {
         this.cprs = cprs;
     }
 
-    public void addCprs(List<String> cprs) {
+    public void addCprs(List<SubscribedCprNumber> cprs) {
         this.cprs.addAll(cprs);
+    }
+
+    public void addCprStrings(List<String> cprs) {
+        for(String cpr : cprs) {
+            this.cprs.add(new SubscribedCprNumber(cpr));
+        }
+    }
+
+    public void addCprString(String cpr) {
+        this.cprs.add(new SubscribedCprNumber(cpr));
     }
 }
