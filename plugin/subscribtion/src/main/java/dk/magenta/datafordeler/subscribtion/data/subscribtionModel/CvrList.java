@@ -79,18 +79,28 @@ public class CvrList {
 
     @ElementCollection
     @JsonIgnore
-    private List<String> cvrs = new ArrayList<String>();
+    private List<SubscribedCvrNumber> cvrs = new ArrayList<SubscribedCvrNumber>();
 
     @JsonIgnore
-    public List<String> getCvr() {
+    public List<SubscribedCvrNumber> getCvr() {
         return cvrs;
     }
 
-    public void setCvrs(List<String> cvrs) {
+    public void setCvrs(List<SubscribedCvrNumber> cvrs) {
         this.cvrs = cvrs;
     }
 
-    public void addCvrs(List<String> cvrs) {
+    public void addCvrs(List<SubscribedCvrNumber> cvrs) {
         this.cvrs.addAll(cvrs);
+    }
+
+    public void setCvrsStrings(List<String> cprs) {
+        for(String cpr : cprs) {
+            this.cvrs.add(new SubscribedCvrNumber(cpr));
+        }
+    }
+
+    public void addCvrsString(String cpr) {
+        this.cvrs.add(new SubscribedCvrNumber(cpr));
     }
 }

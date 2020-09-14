@@ -70,14 +70,24 @@ public class PnumberList extends DatabaseEntry {
 
     @JsonIgnore
     @ElementCollection
-    private List<String> pNumbers = new ArrayList<String>();
+    private List<SubscribedPNumber> pNumbers = new ArrayList<SubscribedPNumber>();
 
 
-    public List<String> getPNumbers() {
+    public List<SubscribedPNumber> getPNumbers() {
         return pNumbers;
     }
 
-    public void setPNumbers(List<String> pNumbers) {
+    public void setPNumbers(List<SubscribedPNumber> pNumbers) {
         this.pNumbers = pNumbers;
+    }
+
+    public void setPNumbersStrings(List<String> cprs) {
+        for(String cpr : cprs) {
+            this.pNumbers.add(new SubscribedPNumber(cpr));
+        }
+    }
+
+    public void addPNumbersString(String cpr) {
+        this.pNumbers.add(new SubscribedPNumber(cpr));
     }
 }

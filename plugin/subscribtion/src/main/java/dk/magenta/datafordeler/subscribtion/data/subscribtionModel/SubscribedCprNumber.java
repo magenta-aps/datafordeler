@@ -23,7 +23,7 @@ public class SubscribedCprNumber extends DatabaseEntry {
     public static final String DB_FIELD_ENTITY = "entity";
 
 
-    @Column(name="subscriberId", nullable=false)
+    @Column(name="cprNumber", nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String cprNumber;
 
