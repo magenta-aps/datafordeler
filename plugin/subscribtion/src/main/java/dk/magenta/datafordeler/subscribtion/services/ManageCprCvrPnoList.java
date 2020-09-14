@@ -16,6 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -110,6 +111,22 @@ public class ManageCprCvrPnoList {
             //return (ResponseEntity) ResponseEntity.ok();
         }
     }
+
+    @DeleteMapping("/subscriber/cprList/cpr/remove/{listId}")
+    public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId and listId = :listId ", CprList.class);
+            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("listId", listId);
+            CprList foundList = (CprList)query.getResultList().get(0);
+            foundList.getCpr().removeIf(item -> cprs.contains(item.getCprNumber()));
+            transaction.commit();
+            return (ResponseEntity) ResponseEntity.ok();
+        }
+    }
+
 
     /**
      * Get a list of all CPR-numbers in a list

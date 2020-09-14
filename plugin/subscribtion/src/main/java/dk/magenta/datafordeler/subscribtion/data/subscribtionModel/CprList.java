@@ -101,4 +101,8 @@ public class CprList extends DatabaseEntry {
     public void addCprString(String cpr) {
         this.cprs.add(new SubscribedCprNumber(cpr));
     }
+
+    public void removeCpr(String cpr) {
+        this.cprs.removeIf(f -> cpr.equals(f.getCprNumber()));
+    }
 }

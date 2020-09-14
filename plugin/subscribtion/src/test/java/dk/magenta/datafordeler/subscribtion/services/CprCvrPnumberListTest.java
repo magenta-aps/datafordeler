@@ -108,10 +108,8 @@ public class CprCvrPnumberListTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-
             query.setParameter("listId", "myList1");
             CprList subscriber = (CprList) query.getResultList().get(0);
-
             subscriber.addCprStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
             transaction.commit();
         }
@@ -119,10 +117,8 @@ public class CprCvrPnumberListTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-
             query.setParameter("listId", "myList1");
             CprList subscriber = (CprList) query.getResultList().get(0);
-
             subscriber.addCprStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
             transaction.commit();
         }
@@ -130,17 +126,43 @@ public class CprCvrPnumberListTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-
             query.setParameter("listId", "myList1");
             CprList subscriber = (CprList) query.getResultList().get(0);
             Assert.assertEquals(4, subscriber.getCpr().size());
         }
 
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            query.setParameter("listId", "myList1");
+            CprList subscriber = (CprList) query.getResultList().get(0);
+            subscriber.getCpr().removeIf(f -> "1111111113".equals(f.getCprNumber()));
+            transaction.commit();;
+        }
 
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            query.setParameter("listId", "myList1");
+            CprList subscriber = (CprList) query.getResultList().get(0);
+            Assert.assertEquals(3, subscriber.getCpr().size());
+        }
 
-        //TODO: Start removing and modifying
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            query.setParameter("listId", "myList1");
+            CprList subscriber = (CprList) query.getResultList().get(0);
+            session.delete(subscriber);
+            transaction.commit();;
+        }
 
-
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            query.setParameter("listId", "myList1");
+            Assert.assertEquals(0, query.getResultList().size());
+        }
 
     }
 
@@ -252,17 +274,42 @@ public class CprCvrPnumberListTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/list?pageSize=4",
+                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-
-
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
         Assert.assertEquals(9, results.size());
+
+
+        //Try fetching with no cpr access rights
+        response = restTemplate.exchange(
+                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/remove/cprTestList1?cpr=1111111115,1111111117",
+                HttpMethod.DELETE,
+                httpEntity,
+                String.class
+        );
+
+        System.out.println(response);
+
+        response = restTemplate.exchange(
+                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(7, results.size());
+
+        System.out.println(response);
+
+
+
 
     }
 
