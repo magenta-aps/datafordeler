@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.accessaddress;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;

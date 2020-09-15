@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.statistik.queries;
 
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.SingleCondition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
@@ -25,9 +25,9 @@ public class PersonStatusQuery extends PersonStatisticsQuery {
     private static HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
-        joinHandles.put("municipalitycode", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE);
+        joinHandles.put("municipalitycode", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE);
         joinHandles.putAll(getBitemporalHandles("municipalitycode", PersonEntity.DB_FIELD_ADDRESS));
-        joinHandles.put("undone", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_UNDONE);
+        joinHandles.put("undone", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_UNDONE);
     }
 
     @Override

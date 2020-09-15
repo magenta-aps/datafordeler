@@ -1,7 +1,5 @@
 package dk.magenta.datafordeler.cvr.query;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -286,9 +284,9 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     static {
         joinHandles.put("unit", ParticipantRecord.DB_FIELD_UNIT_NUMBER);
-        joinHandles.put("name", ParticipantRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME);
-        joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
-        joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
+        joinHandles.put("name", ParticipantRecord.DB_FIELD_NAMES + BaseQuery.separator + SecNameRecord.DB_FIELD_NAME);
+        joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
+        joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
         joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
     }
 

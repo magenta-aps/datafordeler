@@ -875,8 +875,8 @@ public abstract class BaseQuery {
 
     public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List values, Class type, boolean orNull) throws QueryBuildException {
         String member = this.useJoinHandle(handle);
-        String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
         if (member != null && values != null && !values.isEmpty() && values.stream().anyMatch( f -> f!=null)) {
+            String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
             try {
                 if (orNull) {
                     MultiCondition multiCondition = new MultiCondition(parent, "OR");
@@ -971,6 +971,8 @@ public abstract class BaseQuery {
                 if (this.recordAfter != null) {
                     this.addCondition("dafoUpdated", Condition.Operator.GT, Collections.singletonList(this.recordAfter.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)), OffsetDateTime.class, false);
                 }
+
+                this.addCondition("uuid", this.uuid);
             } catch (QueryBuildException e) {
                 log.error(e);
             }

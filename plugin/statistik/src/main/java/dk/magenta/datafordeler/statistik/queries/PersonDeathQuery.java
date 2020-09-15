@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.statistik.queries;
 
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.SingleCondition;

@@ -205,7 +205,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     @Override
     public Map<String, String> getJoinHandles(String entityIdentifier) {
         HashMap<String, String> handles = new HashMap<>();
-        final String sep = BaseLookupDefinition.separator;
+        final String sep = BaseBaseQuery.separator;
         handles.put(
                 "municipalitycode",
                 BaseLookupDefinition.getParameterPath(entityIdentifier, entityIdentifier, CompanyRecord.DB_FIELD_LOCATION_ADDRESS + sep + AddressRecord.DB_FIELD_MUNICIPALITY) + sep +
