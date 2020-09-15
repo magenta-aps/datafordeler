@@ -7,11 +7,6 @@ import java.util.*;
 
 @Entity
 @Table(name = Subscriber.TABLE_NAME, indexes = {
-        /*@Index(
-                name = Subscriber.TABLE_NAME + Subscriber.DB_FIELD_USERID,
-                columnList = Subscriber.DB_FIELD_USERID
-        )*/
-
 })
 public class Subscriber extends DatabaseEntry {
 

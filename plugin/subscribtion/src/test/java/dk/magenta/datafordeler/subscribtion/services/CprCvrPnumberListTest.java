@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
@@ -68,24 +67,12 @@ public class CprCvrPnumberListTest {
         ManageSubscribtion controller = new ManageSubscribtion();
         mvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             CprList cprList1 = new CprList("myList1", "myUser");
             session.save(cprList1);
             CprList cprList2 = new CprList("myList2", "myUser");
             session.save(cprList2);
-
-            CvrList cvrList1 = new CvrList("myList3", "myUser");
-            session.save(cvrList1);
-            CvrList cvrList2 = new CvrList("myList4", "myUser");
-            session.save(cvrList2);
-
-            PnumberList pList1 = new PnumberList("myList5", "myUser");
-            session.save(pList1);
-            PnumberList pList2 = new PnumberList("myList6", "myUser");
-            session.save(pList2);
-
             transaction.commit();
         }
 
@@ -234,6 +221,7 @@ public class CprCvrPnumberListTest {
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
@@ -284,7 +272,6 @@ public class CprCvrPnumberListTest {
         JsonNode results = responseContent.get("results");
         Assert.assertEquals(9, results.size());
 
-
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/cpr/remove/cprTestList1?cpr=1111111115,1111111117",
@@ -292,8 +279,7 @@ public class CprCvrPnumberListTest {
                 httpEntity,
                 String.class
         );
-
-        System.out.println(response);
+        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/cpr/list",
@@ -305,17 +291,6 @@ public class CprCvrPnumberListTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(7, results.size());
-
-        System.out.println(response);
-
-
-
-
     }
-
-
-
-
-
 
 }

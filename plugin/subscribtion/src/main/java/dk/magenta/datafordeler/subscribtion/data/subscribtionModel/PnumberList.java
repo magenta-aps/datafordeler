@@ -81,13 +81,13 @@ public class PnumberList extends DatabaseEntry {
         this.pNumbers = pNumbers;
     }
 
-    public void setPNumbersStrings(List<String> cprs) {
-        for(String cpr : cprs) {
-            this.pNumbers.add(new SubscribedPNumber(cpr));
+    public void setPNumbersStrings(List<String> pnos) {
+        for(String pno : pnos) {
+            this.pNumbers.add(new SubscribedPNumber(pno));
         }
     }
 
-    public void addPNumbersString(String cpr) {
-        this.pNumbers.add(new SubscribedPNumber(cpr));
+    public void addPNumbersString(String pno) {
+        this.pNumbers.add(new SubscribedPNumber(pno));
     }
 }

@@ -24,7 +24,7 @@ public class SubscribedCvrNumber extends DatabaseEntry {
 
 
     @Column(name="cvrNumber", nullable=false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String cvrNumber;
 
     public String getCvrNumber() {
@@ -46,6 +46,6 @@ public class SubscribedCvrNumber extends DatabaseEntry {
 
 
     @ManyToOne
-    private CprList cprList;
+    private CvrList cvrList;
 
 }

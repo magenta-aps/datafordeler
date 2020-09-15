@@ -46,6 +46,6 @@ public class SubscribedPNumber extends DatabaseEntry {
 
 
     @ManyToOne
-    private CprList cprList;
+    private PnumberList pnoList;
 
 }

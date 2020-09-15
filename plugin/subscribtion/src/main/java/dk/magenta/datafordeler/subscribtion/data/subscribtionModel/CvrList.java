@@ -94,9 +94,9 @@ public class CvrList {
         this.cvrs.addAll(cvrs);
     }
 
-    public void setCvrsStrings(List<String> cprs) {
-        for(String cpr : cprs) {
-            this.cvrs.add(new SubscribedCvrNumber(cpr));
+    public void setCvrsStrings(List<String> cvrs) {
+        for(String cvr : cvrs) {
+            this.cvrs.add(new SubscribedCvrNumber(cvr));
         }
     }
 
