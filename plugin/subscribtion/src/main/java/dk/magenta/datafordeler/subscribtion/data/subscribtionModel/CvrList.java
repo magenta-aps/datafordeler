@@ -30,6 +30,11 @@ public class CvrList {
         this.subscriberId = subscriberId;
     }
 
+    @Id
+    @Column(name="id", nullable=false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    private Long id;
+
 
     @Column(name="subscriberId", nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
@@ -41,22 +46,6 @@ public class CvrList {
 
     public void setSubscriberId(String subscriberId) {
         this.subscriberId = subscriberId;
-    }
-
-
-
-
-    @Id
-    @Column(name="userId", nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-    private long userId;
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        userId = userId;
     }
 
 
@@ -79,8 +68,11 @@ public class CvrList {
 
     @ElementCollection
     @JsonIgnore
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="CPR_ID")
     private List<SubscribedCvrNumber> cvrs = new ArrayList<SubscribedCvrNumber>();
 
+    @Column(name="cpr", nullable=false)
     @JsonIgnore
     public List<SubscribedCvrNumber> getCvr() {
         return cvrs;
@@ -94,7 +86,7 @@ public class CvrList {
         this.cvrs.addAll(cvrs);
     }
 
-    public void setCvrsStrings(List<String> cvrs) {
+    public void addCvrsStrings(List<String> cvrs) {
         for(String cvr : cvrs) {
             this.cvrs.add(new SubscribedCvrNumber(cvr));
         }

@@ -91,7 +91,7 @@ public class ManageCvrList {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/cvr/add/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/cvr/add/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void cvrListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cvrNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -112,8 +112,8 @@ public class ManageCvrList {
         }
     }
 
-    @DeleteMapping("/subscriber/cvrList/cpr/remove/{listId}")
-    public ResponseEntity cvrListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @DeleteMapping("/subscriber/cvrList/cvr/remove/{listId}")
+    public ResponseEntity cvrListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -121,9 +121,12 @@ public class ManageCvrList {
             query.setParameter("subscriberId", user.getIdentity());
             query.setParameter("listId", listId);
             CvrList foundList = (CvrList)query.getResultList().get(0);
-            foundList.getCvr().removeIf(item -> cprs.contains(item.getCvrNumber()));
+            foundList.getCvr().removeIf(item -> cvrs.contains(item.getCvrNumber()));
             transaction.commit();
             return (ResponseEntity) ResponseEntity.ok();
+        } catch (Exception e) {
+            log.error("FAILED REMOVING ELEMENT", e);
+            return ResponseEntity.status(500).build();
         }
     }
 
@@ -154,7 +157,7 @@ public class ManageCvrList {
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("subscriberId", user.getIdentity());
-            query.setParameter("listId", "cprTestList1");
+            query.setParameter("listId", "cvrTestList1");
             CvrList foundList = (CvrList)query.getResultList().get(0);
 
             Envelope envelope = new Envelope();

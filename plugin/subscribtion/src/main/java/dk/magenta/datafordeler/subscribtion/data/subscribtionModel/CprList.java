@@ -36,6 +36,11 @@ public class CprList extends DatabaseEntry {
         this.subscriberId = subscriberId;
     }
 
+    @Id
+    @Column(name="id", nullable=false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    private Long id;
+
 
     @Column(name="subscriberId", nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)

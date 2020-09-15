@@ -124,6 +124,9 @@ public class ManagePnoList {
             foundList.getPNumbers().removeIf(item -> cprs.contains(item.getPNumber()));
             transaction.commit();
             return (ResponseEntity) ResponseEntity.ok();
+        } catch (Exception e) {
+            log.error("FAILED REMOVING ELEMENT", e);
+            return ResponseEntity.status(500).build();
         }
     }
 
