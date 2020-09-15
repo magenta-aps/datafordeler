@@ -50,18 +50,6 @@ public class DemoRecordQuery extends BaseQuery {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition();
-        if (this.postnr != null) {
-            lookupDefinition.put(BaseLookupDefinition.entityref + BaseLookupDefinition.separator + "postnr", this.postnr, Integer.class);
-        }
-        if (this.bynavn != null) {
-            lookupDefinition.put(DemoEntityRecord.DB_FIELD_NAME + BaseLookupDefinition.separator + DemoDataRecord.DB_FIELD_NAME, this.bynavn, String.class);
-        }
-        return lookupDefinition;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return this.postnr.isEmpty() && this.bynavn.isEmpty();
     }

@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 /**
  * Query object specifying a search, with basic filter parameters
  * Subclasses should specify further searchable parameters, annotated with @QueryField.
- * SOAP clients should pass a serialized instance of a Query class to the SOAP interface
  */
 public abstract class BaseQuery {
 
@@ -558,15 +557,6 @@ public abstract class BaseQuery {
 
     public abstract Map<String, Object> getSearchParameters();
 
-    /**
-     * Obtain a LookupDefinition object that describes the query in that form.
-     * This means a definition where keys are set to the full lookup path for
-     * the attribute in question, and values are set from the query.
-     * @return
-     */
-    @Deprecated
-    public BaseLookupDefinition getLookupDefinition() {return null;}
-
     public OutputWrapper.Mode getMode() {
         return this.mode;
     }
@@ -929,9 +919,6 @@ public abstract class BaseQuery {
         this.finalizeConditions();
         StringJoiner s = new StringJoiner(" \n");
 
-//        s.add("SELECT DISTINCT " + this.getEntityIdentifier());
-//        s.add("FROM " + this.getEntityClassname() + " " + this.getEntityIdentifier());
-
         s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
         s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
 
@@ -969,7 +956,13 @@ public abstract class BaseQuery {
                 }
 
                 if (this.recordAfter != null) {
-                    this.addCondition("dafoUpdated", Condition.Operator.GT, Collections.singletonList(this.recordAfter.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)), OffsetDateTime.class, false);
+                    this.addCondition(
+                            "dafoUpdated",
+                            Condition.Operator.GT,
+                            Collections.singletonList(this.recordAfter.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)),
+                            OffsetDateTime.class,
+                            false
+                    );
                 }
 
                 this.addCondition("uuid", this.uuid);

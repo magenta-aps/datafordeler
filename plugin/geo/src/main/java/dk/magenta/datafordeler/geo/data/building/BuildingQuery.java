@@ -73,18 +73,6 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.anr != null && !this.anr.isEmpty()) {
-            lookupDefinition.put(BuildingEntity.DB_FIELD_ANR, this.anr, String.class);
-        }
-        if (this.bnr != null && !this.bnr.isEmpty()) {
-            lookupDefinition.put(BuildingEntity.DB_FIELD_BNR, this.bnr, String.class);
-        }
-        return lookupDefinition;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return super.isEmpty() && this.anr.isEmpty() && this.bnr.isEmpty();
     }

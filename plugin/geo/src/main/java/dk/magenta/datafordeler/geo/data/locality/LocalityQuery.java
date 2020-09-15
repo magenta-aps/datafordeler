@@ -93,21 +93,6 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.code != null && !this.code.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_CODE, this.code, String.class);
-        }
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_NAME, this.name, String.class);
-        }
-        if (this.municipality != null && !this.municipality.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + LocalityMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
-        }
-        return lookupDefinition;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return super.isEmpty() && this.code.isEmpty() && this.name.isEmpty() && this.municipality.isEmpty();
     }

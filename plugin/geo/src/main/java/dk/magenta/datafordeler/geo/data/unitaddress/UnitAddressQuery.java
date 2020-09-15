@@ -200,24 +200,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        /*if (this.bnr != null && !this.bnr.isEmpty()) {
-            lookupDefinition.put(UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + AccessAddressEntity.DB_FIELD_BNR, this.bnr, String.class);
-        }*/
-        /*if (this.houseNumber != null && !this.houseNumber.isEmpty()) {
-            lookupDefinition.put(UnitAddressEntity.DB_ + BaseLookupDefinition.separator + AccessAddressHouseNumberRecord.DB_FIELD_NAME, this.houseNumber, String.class);
-        }*/
-        /*if (this.road != null && !this.road.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_CODE, this.road, Integer.class);
-        }
-        if (this.municipality != null && !this.municipality.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + AccessAddressMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
-        }*/
-        return lookupDefinition;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return this.floor.isEmpty() && this.door.isEmpty() && this.bnr.isEmpty();
     }

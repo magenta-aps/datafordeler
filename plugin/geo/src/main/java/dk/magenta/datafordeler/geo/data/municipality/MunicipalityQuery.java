@@ -76,18 +76,6 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.code != null && !this.code.isEmpty()) {
-            lookupDefinition.put(GeoMunicipalityEntity.DB_FIELD_CODE, this.code, Integer.class);
-        }
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(GeoMunicipalityEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + MunicipalityNameRecord.DB_FIELD_NAME, this.name, String.class);
-        }
-        return lookupDefinition;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return super.isEmpty() && this.code.isEmpty() && this.name.isEmpty();
     }

@@ -76,21 +76,6 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(UnitEntity.DB_FIELD_NAME , this.name, String.class);
-        }
-        if (this.deid != null && !this.deid.isEmpty()) {
-            lookupDefinition.put(UnitEntity.DB_FIELD_DEID, this.deid, UUID.class);
-        }
-        if (!this.getGerNr().isEmpty()) {
-            lookupDefinition.put(UnitEntity.DB_FIELD_GERNR, this.getGerNr(), Integer.class);
-        }
-        return lookupDefinition;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return super.isEmpty() && this.name.isEmpty() && this.deid.isEmpty();
     }
