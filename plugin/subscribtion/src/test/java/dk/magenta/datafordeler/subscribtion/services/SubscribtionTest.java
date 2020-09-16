@@ -140,7 +140,7 @@ public class SubscribtionTest {
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("be1"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("be1", "A01"));
 
             transaction.commit();
         }
@@ -478,9 +478,9 @@ public class SubscribtionTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1", "A01"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2", "A01"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3", "A01"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));
@@ -523,10 +523,10 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion1\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"DUMMY\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion3\",\"kodeId\":\"A01\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion1\",\"kodeId\":\"A01\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\",\"kodeId\":\"A01\"}]", response.getBody(), false);
 
 
         httpEntity = new HttpEntity<String>("newDataEventId", new HttpHeaders());
@@ -565,9 +565,9 @@ public class SubscribtionTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1", "A01"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2", "A01"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3", "A01"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));

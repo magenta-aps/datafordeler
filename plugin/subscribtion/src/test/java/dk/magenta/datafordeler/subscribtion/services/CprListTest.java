@@ -38,7 +38,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class CprCvrPnumberListTest {
+public class CprListTest {
 
     @Autowired
     TestRestTemplate restTemplate;
@@ -166,9 +166,9 @@ public class CprCvrPnumberListTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1", "A01"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2", "A02"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3", "A03"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
             subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));

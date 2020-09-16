@@ -31,6 +31,11 @@ public class BusinessEventSubscribtion extends DatabaseEntry  {
         this.businessEventId = businessEventId;
     }
 
+    public BusinessEventSubscribtion(String businessEventId, String kodeId) {
+        this.businessEventId = businessEventId;
+        this.kodeId = kodeId;
+    }
+
 
     @Column(name="businessEventId", nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
@@ -44,9 +49,25 @@ public class BusinessEventSubscribtion extends DatabaseEntry  {
         this.businessEventId = businessEventId;
     }
 
+    @Column(name="kodeId", nullable=false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    private String kodeId;
+
+    public String getKodeId() {
+        return kodeId;
+    }
+
+    public void setKodeId(String kodeId) {
+        this.kodeId = kodeId;
+    }
+
 
     @ManyToOne
     private Subscriber subscriber;
+
+    public Subscriber getSubscriber() {
+        return subscriber;
+    }
 
 
 
