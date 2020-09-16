@@ -153,7 +153,9 @@ public class ManageSubscribtion {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request,
+                                                                    @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
+                                                                    @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -163,7 +165,7 @@ public class ManageSubscribtion {
             query.setParameter("subscriberId", user.getIdentity());
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            BusinessEventSubscribtion subscribtion = new BusinessEventSubscribtion(subscriberContent, "DUMMY");
+            BusinessEventSubscribtion subscribtion = new BusinessEventSubscribtion(businessEventId, kodeId);
             subscriber.addBusinessEventSubscribtion(subscribtion);
 
             session.update(subscriber);
@@ -236,7 +238,8 @@ public class ManageSubscribtion {
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity dataEventSubscribtioncreateSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity dataEventSubscribtioncreateSubscriber(HttpServletRequest request,
+                                                                @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -246,7 +249,7 @@ public class ManageSubscribtion {
             query.setParameter("subscriberId", user.getIdentity());
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            DataEventSubscribtion subscribtion = new DataEventSubscribtion(subscriberContent);
+            DataEventSubscribtion subscribtion = new DataEventSubscribtion(businessEventId);
             subscriber.addDataEventSubscribtion(subscribtion);
 
             transaction.commit();
