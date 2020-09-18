@@ -71,6 +71,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
 
 
     public static final String DB_FIELD_EVENT = "eventId";
+    public static final String IO_FIELD_EVENT = "eventId";
     @Column(name = DB_FIELD_EVENT)
     @JsonIgnore
     @XmlTransient

@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
+import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
@@ -17,6 +18,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
+import org.hamcrest.Matchers;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,6 +38,8 @@ import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
+
 
 import static org.mockito.Mockito.when;
 
@@ -481,6 +485,55 @@ public class RecordTest {
             session.close();
         }
     }
+
+
+
+
+
+    /**
+     * This unittest validates that it is possible to filter out addresschanges that do not happen based on the eventtype A01
+     * @throws DataFordelerException
+     * @throws IOException
+     */
+    @Test
+    public void testPersonLoadAndFindEvent() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        importMetadata.setSession(session);
+        this.loadPerson("/personsWithEvents.txt", importMetadata);
+        session.close();
+
+        session = sessionManager.getSessionFactory().openSession();
+        PersonRecordQuery query = new PersonRecordQuery();
+        query.setPageSize(100);
+        query.setEvent("A01");
+        query.applyFilters(session);
+        List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        List<String> pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a1Events = Arrays.asList("0101011234", "0101011235", "0101011236", "0101011237", "0101011238"
+                , "0101011239", "0101011240");
+        Collections.sort(a1Events);
+        Collections.sort(pnrList);
+        Assert.assertTrue(a1Events.equals(pnrList));
+
+
+        query = new PersonRecordQuery();
+        query.setEvent("A02");
+        query.setRegistrationFromAfter(Query.parseDateTime("2000-01-01"));
+        query.applyFilters(session);
+        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a2Events = Arrays.asList("0101011240", "0101011241", "0101011242", "0101011243");
+        Collections.sort(a1Events);
+        Collections.sort(pnrList);
+        Assert.assertThat(pnrList, Matchers.is(a2Events));
+    }
+
+
 
     @Test
     public void testPersonIdempotence() throws Exception {
