@@ -25,8 +25,9 @@ public class DataEventSubscribtion extends DatabaseEntry {
 
 
 
-    public DataEventSubscribtion(String dataEventId) {
+    public DataEventSubscribtion(String dataEventId, String kodeId) {
         this.dataEventId = dataEventId;
+        this.kodeId = kodeId;
     }
 
 
@@ -42,6 +43,17 @@ public class DataEventSubscribtion extends DatabaseEntry {
         this.dataEventId = dataEventId;
     }
 
+    @Column(name="kodeId", nullable=false)
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    private String kodeId;
+
+    public String getKodeId() {
+        return kodeId;
+    }
+
+    public void setKodeId(String kodeId) {
+        this.kodeId = kodeId;
+    }
 
     @ManyToOne
     private Subscriber subscriber;

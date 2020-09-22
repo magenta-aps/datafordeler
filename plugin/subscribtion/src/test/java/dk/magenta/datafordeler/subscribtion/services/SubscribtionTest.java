@@ -117,7 +117,7 @@ public class SubscribtionTest {
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("de1"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("de1", ""));
             transaction.commit();
         }
 
@@ -481,9 +481,9 @@ public class SubscribtionTest {
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1", "A01"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2", "A02"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3", "A03"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3", ""));
             session.save(subscriber);
             transaction.commit();
         }
@@ -565,9 +565,9 @@ public class SubscribtionTest {
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1", "A01"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2", "A01"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3", "A01"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3", ""));
             session.save(subscriber);
             transaction.commit();
         }

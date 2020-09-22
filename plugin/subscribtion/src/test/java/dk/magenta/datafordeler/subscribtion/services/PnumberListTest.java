@@ -167,9 +167,9 @@ public class PnumberListTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3", ""));
             session.save(subscriber);
             transaction.commit();
         }

@@ -249,7 +249,7 @@ public class ManageSubscribtion {
             query.setParameter("subscriberId", user.getIdentity());
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            DataEventSubscribtion subscribtion = new DataEventSubscribtion(businessEventId);
+            DataEventSubscribtion subscribtion = new DataEventSubscribtion(businessEventId, "");
             subscriber.addDataEventSubscribtion(subscribtion);
 
             transaction.commit();
