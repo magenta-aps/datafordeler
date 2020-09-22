@@ -3,9 +3,13 @@ package dk.magenta.datafordeler.cpr.data.person;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
+
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -24,6 +28,7 @@ public class PersonRecordQuery extends BaseQuery {
     public static final String BUILDINGNO = AddressDataRecord.IO_FIELD_BUILDING_NUMBER;
     public static final String CUSTODYPNR = CustodyDataRecord.IO_FIELD_RELATION_PNR;
     public static final String PERSONEVENT = PersonEventDataRecord.IO_FIELD_EVENT;
+    public static final String PERSONEVENTTIME = PersonEventDataRecord.DB_FIELD_TIMESTAMP;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
     private List<String> personnumre = new ArrayList<>();
@@ -327,6 +332,13 @@ public class PersonRecordQuery extends BaseQuery {
         }
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONEVENTTIME)
+    private OffsetDateTime personeventTimeAfter;
+
+    public void setEventTimeAfter(String personeventTimeAfter) {
+        this.personeventTimeAfter = OffsetDateTime.parse(personeventTimeAfter, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
@@ -340,6 +352,7 @@ public class PersonRecordQuery extends BaseQuery {
         map.put(HOUSENO, this.houseNos);
         map.put(BUILDINGNO, this.buildingNos);
         map.put(PERSONEVENT, this.personevents);
+        map.put(PERSONEVENTTIME, this.personeventTimeAfter);
         return map;
     }
 
@@ -354,6 +367,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.setFloors(parameters.get(FLOOR));
         this.setHouseNos(parameters.get(HOUSENO));
         this.setBuildingNos(parameters.get(BUILDINGNO));
+        this.setEvents(parameters.get(PERSONEVENT));
     }
 
     @Override
@@ -382,6 +396,7 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + LookupDefinition.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
         joinHandles.put("personevent", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_EVENT);
+        joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override
@@ -406,6 +421,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
         this.addCondition("custodyPnr", this.custodyPnr);
         this.addCondition("personevent", this.personevents);
+        this.addCondition("personeventTime.GTE", Condition.Operator.GTE, this.personeventTimeAfter, OffsetDateTime.class, true);
     }
 
 

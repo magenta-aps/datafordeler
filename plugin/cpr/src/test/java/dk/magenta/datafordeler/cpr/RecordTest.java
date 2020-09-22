@@ -507,6 +507,7 @@ public class RecordTest {
         PersonRecordQuery query = new PersonRecordQuery();
         query.setPageSize(100);
         query.setEvent("A01");
+        query.setEventTimeAfter("2016-10-26T12:00-06:00");
         query.applyFilters(session);
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
 
@@ -521,7 +522,7 @@ public class RecordTest {
 
         query = new PersonRecordQuery();
         query.setEvent("A02");
-        query.setRegistrationFromAfter(Query.parseDateTime("2000-01-01"));
+        query.setEventTimeAfter("2016-10-26T12:00-06:00");
         query.applyFilters(session);
         entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
 
@@ -531,6 +532,45 @@ public class RecordTest {
         Collections.sort(a1Events);
         Collections.sort(pnrList);
         Assert.assertThat(pnrList, Matchers.is(a2Events));
+
+        query = new PersonRecordQuery();
+        query.setEvent("A01");
+        query.setEventTimeAfter("2020-09-01T12:00-06:00");
+        query.applyFilters(session);
+        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a1Events1 = Arrays.asList("0101011238", "0101011239");
+        Collections.sort(a1Events1);
+        Collections.sort(pnrList);
+        Assert.assertThat(pnrList, Matchers.is(a1Events1));
+
+        query = new PersonRecordQuery();
+        query.setEvent("A01");
+        query.setEventTimeAfter("2020-09-05T12:00-06:00");
+        query.applyFilters(session);
+        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a1Events2 = Arrays.asList("0101011239");
+        Collections.sort(a1Events2);
+        Collections.sort(pnrList);
+        Assert.assertThat(pnrList, Matchers.is(a1Events2));
+
+        query = new PersonRecordQuery();
+        query.setEvent("A01");
+        query.setEventTimeAfter("2020-09-10T12:00-06:00");
+        query.applyFilters(session);
+        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a1Events3 = Arrays.asList();
+        Collections.sort(a1Events3);
+        Collections.sort(pnrList);
+        Assert.assertThat(pnrList, Matchers.is(a1Events3));
     }
 
 
