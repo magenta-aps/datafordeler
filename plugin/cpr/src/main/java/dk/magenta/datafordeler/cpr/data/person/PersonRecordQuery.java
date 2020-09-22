@@ -428,7 +428,7 @@ public class PersonRecordQuery extends BaseQuery {
 
     @Override
     protected boolean isEmpty() {
-        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() && this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() && this.personevents.isEmpty();
+        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() && this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() && this.personevents.isEmpty() && this.personeventTimeAfter == null;
     }
 
 }
