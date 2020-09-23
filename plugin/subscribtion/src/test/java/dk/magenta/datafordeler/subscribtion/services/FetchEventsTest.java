@@ -100,9 +100,17 @@ public class FetchEventsTest {
             subscribtionT2.setCprList(cprList);
             subscribtionT3.setCprList(cprList);
 
+            subscribtionDE1.setCprList(cprList);
+            subscribtionDE2.setCprList(cprList);
+            subscribtionDE3.setCprList(cprList);
+
             subscriber.addBusinessEventSubscribtion(subscribtionT1);
             subscriber.addBusinessEventSubscribtion(subscribtionT2);
             subscriber.addBusinessEventSubscribtion(subscribtionT3);
+
+            subscriber.addDataEventSubscribtion(subscribtionDE1);
+            subscriber.addDataEventSubscribtion(subscribtionDE2);
+            subscriber.addDataEventSubscribtion(subscribtionDE3);
             session.save(subscriber);
             tx.commit();
         } catch (IOException e) {
@@ -124,7 +132,7 @@ public class FetchEventsTest {
      * Test that it is possible to call a service that deliveres a list of subscribtion that has been created in datafordeler
      */
     @Test
-    public void testGetSubscriberList() throws IOException {
+    public void testGetCPRBusinessEvents() throws IOException {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
@@ -225,6 +233,115 @@ public class FetchEventsTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(0, results.size());
+
+    }
+
+
+    /**
+     * Test that it is possible to call a service that deliveres a list of subscribtion that has been created in datafordeler
+     */
+    @Test
+    public void testGetCPRDataEvents() throws IOException {
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        TestUserDetails testUserDetails = new TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2016-10-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        JsonNode results = responseContent.get("results");
+/*        Assert.assertEquals(6, results.size());
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(6, results.size());
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp=2016-10-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(4, results.size());
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE3&timestamp=2016-10-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(0, results.size());
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE4&timestamp=2016-10-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2016-10-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(6, results.size());
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-09-01T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(2, results.size());
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-09-05T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(1, results.size());
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-09-10T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(0, results.size());*/
 
     }
 
