@@ -321,6 +321,27 @@ public class RecordTest {
         }
     }
 
+    @Test
+    public void testPersonWithUndoneNewAddress() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        importMetadata.setSession(session);
+        this.loadPerson("/undoneNewAdress.txt", importMetadata);
+        try {
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("0101011234");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+
+            Assert.assertTrue("Validate that the address is still correct after undoing a new adress ",
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null && add.getDoor().equals("114")));
+
+        } finally {
+            session.close();
+        }
+    }
+
 
 
     @Test
