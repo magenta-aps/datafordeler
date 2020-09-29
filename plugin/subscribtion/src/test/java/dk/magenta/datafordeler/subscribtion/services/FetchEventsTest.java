@@ -4,11 +4,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
+import dk.magenta.datafordeler.subscribtion.queries.PersonAddressChangeQuery;
+import dk.magenta.datafordeler.subscribtion.queries.PersonCivilStatusQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -27,6 +33,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -62,6 +70,10 @@ public class FetchEventsTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             InputStream testData = FindCprBusinessEvent.class.getResourceAsStream("/personsWithEvents.txt");
+            personEntityManager.parseData(testData, importMetadata);
+            testData.close();
+
+            testData = FindCprBusinessEvent.class.getResourceAsStream("/personsChangingAdresses.txt");
             personEntityManager.parseData(testData, importMetadata);
             testData.close();
 
@@ -123,6 +135,18 @@ public class FetchEventsTest {
 
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
+    }
+
+    @Test
+    public void testTt() {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPageSize(100);
+            List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
+            System.out.println(entities);
+
+        }
     }
 
 
@@ -248,7 +272,7 @@ public class FetchEventsTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2016-10-26T12:00-06:00&pageSize=100",
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2006-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -256,7 +280,7 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
-/*        Assert.assertEquals(6, results.size());
+        Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&pageSize=100",
@@ -269,16 +293,19 @@ public class FetchEventsTest {
         results = responseContent.get("results");
         Assert.assertEquals(6, results.size());
 
-        response = restTemplate.exchange(
+/*        ResponseEntity<String> response2 = restTemplate.exchange(
                 "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp=2016-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        results = responseContent.get("results");
-        Assert.assertEquals(4, results.size());
+        Assert.assertEquals(HttpStatus.OK, response2.getStatusCode());
+        ObjectNode responseContent2 = (ObjectNode) objectMapper.readTree(response2.getBody());
+        JsonNode results3 = responseContent2.get("results");
+        Assert.assertEquals(4, results3.size());
+
+        System.out.println("3----------------------------------------------------------------------------------------------------------------------------------------------------");
+
 
         response = restTemplate.exchange(
                 "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE3&timestamp=2016-10-26T12:00-06:00&pageSize=100",

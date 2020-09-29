@@ -13,10 +13,10 @@ import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
+import dk.magenta.datafordeler.subscribtion.queries.PersonAddressChangeQuery;
+import dk.magenta.datafordeler.subscribtion.queries.PersonGeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,14 +85,18 @@ public class FindCprDataEvent {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscribtion subscribtion = (DataEventSubscribtion) eventQuery.getResultList().get(0);
-                PersonRecordQuery query = new PersonRecordQuery();
+                PersonGeneralQuery query = PersonGeneralQuery.getPersonQuery(subscribtion.getKodeId());
                 List<SubscribedCprNumber> theList = subscribtion.getCprList().getCpr();
                 List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
-                query.setEvent(subscribtion.getKodeId());
-                if(timestamp!=null) {
-                    query.setEventTimeAfter(timestamp);
-                }
                 query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
+                if(timestamp==null) {
+                    query.setRegistrationTimeAfter(OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0)));
+                } else {
+                    query.setRegistrationTimeAfter(dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestamp));
+                }
+
+
+
                 query.setPageSize(pageSize);
                 query.setPage(page);
                 List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
