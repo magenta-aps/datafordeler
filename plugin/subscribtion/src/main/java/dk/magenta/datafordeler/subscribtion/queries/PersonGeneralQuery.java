@@ -272,16 +272,24 @@ public class PersonGeneralQuery extends PersonRecordQuery {
     }
 
 
-    public static PersonGeneralQuery getPersonQuery(String queryType) {
+    public static PersonRecordQuery getPersonQuery(String queryType, OffsetDateTime timestamp) {
         switch(queryType) {
-            case "person.adress":
-                return new PersonAddressChangeQuery();
+            case "person.address":
+                PersonAddressChangeQuery addressQuery = new PersonAddressChangeQuery();
+                addressQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
+                return addressQuery;
             case "person.civil":
-                return new PersonCivilStatusQuery();
+                PersonCivilStatusQuery civilstatusQuery = new PersonCivilStatusQuery();
+                civilstatusQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
+                return civilstatusQuery;
             case "person.name":
-                return new PersonDeathQuery();
+                PersonDeathQuery deathQuery = new PersonDeathQuery();
+                deathQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
+                return deathQuery;
             default:
-                return null;
+                PersonRecordQuery personQuery = new PersonRecordQuery();
+                personQuery.setRecordAfter(timestamp);
+                return personQuery;
         }
     }
 

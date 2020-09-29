@@ -33,7 +33,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -85,8 +88,8 @@ public class FetchEventsTest {
             BusinessEventSubscribtion subscribtionT2 = new BusinessEventSubscribtion("BE2", "A02");
             BusinessEventSubscribtion subscribtionT3 = new BusinessEventSubscribtion("BE3", "A03");
 
-            DataEventSubscribtion subscribtionDE1 = new DataEventSubscribtion("DE1", "person.adress");
-            DataEventSubscribtion subscribtionDE2 = new DataEventSubscribtion("DE2", "person.civil");
+            DataEventSubscribtion subscribtionDE1 = new DataEventSubscribtion("DE1", "person.address");
+            DataEventSubscribtion subscribtionDE2 = new DataEventSubscribtion("DE2", "person.anything");
             DataEventSubscribtion subscribtionDE3 = new DataEventSubscribtion("DE3", "person.name");
 
             CprList cprList = new CprList("L1", "user1");
@@ -138,7 +141,7 @@ public class FetchEventsTest {
     }
 
     @Test
-    public void testTt() {
+    public void testPrintLoadedPersons() {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
@@ -153,7 +156,7 @@ public class FetchEventsTest {
 
 
     /**
-     * Test that it is possible to call a service that deliveres a list of subscribtion that has been created in datafordeler
+     * Test that it is possible to call a service for fetching events
      */
     @Test
     public void testGetCPRBusinessEvents() throws IOException {
@@ -262,10 +265,10 @@ public class FetchEventsTest {
 
 
     /**
-     * Test that it is possible to call a service that deliveres a list of subscribtion that has been created in datafordeler
+     * Test that it is possible to call a service for fetching events
      */
     @Test
-    public void testGetCPRDataEvents() throws IOException {
+    public void testGetCPRDataAddressChangeEvents() throws IOException {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
@@ -293,52 +296,8 @@ public class FetchEventsTest {
         results = responseContent.get("results");
         Assert.assertEquals(6, results.size());
 
-/*        ResponseEntity<String> response2 = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp=2016-10-26T12:00-06:00&pageSize=100",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response2.getStatusCode());
-        ObjectNode responseContent2 = (ObjectNode) objectMapper.readTree(response2.getBody());
-        JsonNode results3 = responseContent2.get("results");
-        Assert.assertEquals(4, results3.size());
-
-        System.out.println("3----------------------------------------------------------------------------------------------------------------------------------------------------");
-
-
         response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE3&timestamp=2016-10-26T12:00-06:00&pageSize=100",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());
-
-        response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE4&timestamp=2016-10-26T12:00-06:00&pageSize=100",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-
-        response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2016-10-26T12:00-06:00&pageSize=100",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        results = responseContent.get("results");
-        Assert.assertEquals(6, results.size());
-
-        response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-09-01T12:00-06:00&pageSize=100",
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-01-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -349,7 +308,7 @@ public class FetchEventsTest {
         Assert.assertEquals(2, results.size());
 
         response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-09-05T12:00-06:00&pageSize=100",
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -357,10 +316,35 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(1, results.size());
+        Assert.assertEquals(0, results.size());
+    }
+
+    /**
+     * Test that it is possible to call a service for fetching events
+     */
+    @Test
+    public void testGetCPRDataAnythingChangeEvents() throws IOException {
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        TestUserDetails testUserDetails = new TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        OffsetDateTime timestamp = OffsetDateTime.now(ZoneOffset.UTC);
+
+        String nowTimestamp = OffsetDateTime.now(ZoneOffset.UTC).toString();
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp="+timestamp.toString()+"&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        JsonNode results = responseContent.get("results");
+        Assert.assertEquals(0, results.size());
 
         response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-09-10T12:00-06:00&pageSize=100",
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -368,8 +352,18 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());*/
+        Assert.assertEquals(16, results.size());
 
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp=2020-09-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(16, results.size());
     }
 
 }

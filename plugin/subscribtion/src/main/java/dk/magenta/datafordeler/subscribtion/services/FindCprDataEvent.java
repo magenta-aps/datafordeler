@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscribtion;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscribtion.queries.PersonAddressChangeQuery;
@@ -77,6 +78,8 @@ public class FindCprDataEvent {
         String timestamp = requestParams.getFirst("timestamp");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
+
+
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             Query eventQuery = session.createQuery(" from "+ DataEventSubscribtion.class.getName() +" where dataEventId = :dataEventId", DataEventSubscribtion.class);
@@ -85,17 +88,17 @@ public class FindCprDataEvent {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscribtion subscribtion = (DataEventSubscribtion) eventQuery.getResultList().get(0);
-                PersonGeneralQuery query = PersonGeneralQuery.getPersonQuery(subscribtion.getKodeId());
+                OffsetDateTime offsetTimestamp;
+                if(timestamp==null) {
+                    offsetTimestamp = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
+                } else {
+                    offsetTimestamp = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestamp);
+                }
+
+                PersonRecordQuery query = PersonGeneralQuery.getPersonQuery(subscribtion.getKodeId(), offsetTimestamp);
                 List<SubscribedCprNumber> theList = subscribtion.getCprList().getCpr();
                 List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
                 query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
-                if(timestamp==null) {
-                    query.setRegistrationTimeAfter(OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0)));
-                } else {
-                    query.setRegistrationTimeAfter(dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestamp));
-                }
-
-
 
                 query.setPageSize(pageSize);
                 query.setPage(page);
