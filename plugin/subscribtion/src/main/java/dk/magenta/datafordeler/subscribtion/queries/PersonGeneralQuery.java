@@ -271,7 +271,7 @@ public class PersonGeneralQuery extends PersonRecordQuery {
                 civilstatusQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
                 return civilstatusQuery;
             case "person.death":
-                PersonStatusQuery deathQuery = new PersonStatusQuery();
+                PersonDeathQuery deathQuery = new PersonDeathQuery();
                 deathQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
                 return deathQuery;
             default:
