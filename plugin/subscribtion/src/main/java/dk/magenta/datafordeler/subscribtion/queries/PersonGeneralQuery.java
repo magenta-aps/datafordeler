@@ -51,13 +51,6 @@ public class PersonGeneralQuery extends PersonRecordQuery {
         this.setRegistrationTimeAfter(Query.parseDateTime(request.getParameter(REGISTRATION_AFTER)));
         this.setEffectTimeBefore(Query.parseDateTime(request.getParameter(BEFORE_DATE_PARAMETER)));
         this.setEffectTimeAfter(Query.parseDateTime(request.getParameter(AFTER_DATE_PARAMETER)));
-        /*this.setOriginTimeBefore(LocalDate.parse(request.getParameter(ORIGIN_BEFORE)));
-        this.setOriginTimeAfter(LocalDate.parse(request.getParameter(ORIGIN_AFTER)));*/
-        String pnr = request.getParameter("pnr");
-        if (pnr != null) {
-            this.setPersonnummer(pnr);
-        }
-        this.setPageSize(1000000);
     }
 
 
@@ -70,12 +63,7 @@ public class PersonGeneralQuery extends PersonRecordQuery {
         this.setEffectAt(this.effectAt);
         this.setOriginTimeBefore(this.originBefore);
         this.setOriginTimeAfter(this.originAfter);
-        /*if (this.onlyPnr != null) {
-            for (String pnr : this.onlyPnr) {
-                this.addPersonnummer(pnr);
-            }
-        }*/
-        this.setPageSize(1000000);
+
     }
 
 
@@ -282,8 +270,8 @@ public class PersonGeneralQuery extends PersonRecordQuery {
                 PersonCivilStatusQuery civilstatusQuery = new PersonCivilStatusQuery();
                 civilstatusQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
                 return civilstatusQuery;
-            case "person.name":
-                PersonDeathQuery deathQuery = new PersonDeathQuery();
+            case "person.death":
+                PersonStatusQuery deathQuery = new PersonStatusQuery();
                 deathQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
                 return deathQuery;
             default:

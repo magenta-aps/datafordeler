@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -65,6 +66,8 @@ public class FetchEventsTest {
     @Autowired
     private PersonEntityManager personEntityManager;
 
+    private OffsetDateTime timestampInitial = OffsetDateTime.now(ZoneOffset.UTC);
+
     @Before
     public void setUp() throws Exception {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -90,7 +93,7 @@ public class FetchEventsTest {
 
             DataEventSubscribtion subscribtionDE1 = new DataEventSubscribtion("DE1", "person.address");
             DataEventSubscribtion subscribtionDE2 = new DataEventSubscribtion("DE2", "person.anything");
-            DataEventSubscribtion subscribtionDE3 = new DataEventSubscribtion("DE3", "person.name");
+            DataEventSubscribtion subscribtionDE3 = new DataEventSubscribtion("DE3", "person.death");
 
             CprList cprList = new CprList("L1", "user1");
             cprList.addCprString("0101011235");
@@ -331,9 +334,8 @@ public class FetchEventsTest {
 
         OffsetDateTime timestamp = OffsetDateTime.now(ZoneOffset.UTC);
 
-        String nowTimestamp = OffsetDateTime.now(ZoneOffset.UTC).toString();
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp="+timestamp.toString()+"&pageSize=100",
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp=2020-09-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -341,7 +343,7 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());
+        Assert.assertEquals(16, results.size());
 
         response = restTemplate.exchange(
                 "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&pageSize=100",
@@ -355,7 +357,7 @@ public class FetchEventsTest {
         Assert.assertEquals(16, results.size());
 
         response = restTemplate.exchange(
-                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp=2020-09-26T12:00-06:00&pageSize=100",
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp="+timestamp.toString()+"&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -363,7 +365,30 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(16, results.size());
+        Assert.assertEquals(0, results.size());
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            InputStream testData = FindCprBusinessEvent.class.getResourceAsStream("/personsChangingAdressesAppend.txt");
+            personEntityManager.parseData(testData, importMetadata);
+            testData.close();
+        } catch (DataFordelerException e) {
+            e.printStackTrace();
+        }
+
+        response = restTemplate.exchange(
+                "/subscribtionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp="+timestamp.toString()+"&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(2, results.size());
     }
+
 
 }
