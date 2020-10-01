@@ -7,7 +7,6 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -71,7 +70,7 @@ public class PnumberList extends DatabaseEntry {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "DS_ID")
-    private Set<DataEventSubscribtion> dataSubscribtion;
+    private Set<DataEventSubscription> dataSubscribtion;
 
     @JsonIgnore
     @ElementCollection

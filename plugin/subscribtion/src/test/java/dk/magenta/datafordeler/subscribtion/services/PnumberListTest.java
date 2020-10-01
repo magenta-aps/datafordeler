@@ -1,20 +1,15 @@
 package dk.magenta.datafordeler.subscribtion.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -25,10 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -167,9 +158,9 @@ public class PnumberListTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
             session.save(subscriber);
             transaction.commit();
         }

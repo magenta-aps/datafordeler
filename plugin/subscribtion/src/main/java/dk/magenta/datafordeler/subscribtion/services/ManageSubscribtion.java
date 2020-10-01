@@ -30,7 +30,7 @@ import java.util.*;
 
 
 @RestController
-@RequestMapping("/subscribtionplugin/v1/manager")
+@RequestMapping("/subscriptionplugin/v1/manager")
 public class ManageSubscribtion {
 
     @Autowired
@@ -132,7 +132,7 @@ public class ManageSubscribtion {
      * @return
      */
     @GetMapping("/subscriber/businessEventSubscribtion/list")
-    public ResponseEntity<List<BusinessEventSubscribtion>> businessEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<List<BusinessEventSubscription>> businessEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -141,8 +141,8 @@ public class ManageSubscribtion {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-                Iterator<BusinessEventSubscribtion> subscribtions = subscriber.getBusinessEventSubscribtion().iterator();
-                List <BusinessEventSubscribtion> list = new ArrayList <BusinessEventSubscribtion>();
+                Iterator<BusinessEventSubscription> subscribtions = subscriber.getBusinessEventSubscription().iterator();
+                List <BusinessEventSubscription> list = new ArrayList <BusinessEventSubscription>();
                 while(subscribtions.hasNext()) {
                     list.add(subscribtions.next());
                 }
@@ -165,7 +165,7 @@ public class ManageSubscribtion {
             query.setParameter("subscriberId", user.getIdentity());
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            BusinessEventSubscribtion subscribtion = new BusinessEventSubscribtion(businessEventId, kodeId);
+            BusinessEventSubscription subscribtion = new BusinessEventSubscription(businessEventId, kodeId);
             subscriber.addBusinessEventSubscribtion(subscribtion);
 
             session.update(subscriber);
@@ -191,15 +191,15 @@ public class ManageSubscribtion {
     }
 
     @DeleteMapping("/subscriber/businessEventSubscribtion/delete/{subscribtionId}")
-    public ResponseEntity<BusinessEventSubscribtion> businessEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ BusinessEventSubscribtion.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscribtion.class);
+            Query query = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             query.setParameter("businessEventId", subscribtionId);
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                BusinessEventSubscribtion subscribtion = (BusinessEventSubscribtion) query.getResultList().get(0);
+                BusinessEventSubscription subscribtion = (BusinessEventSubscription) query.getResultList().get(0);
                 //TODO: validate ownership
                 session.delete(subscribtion);
                 transaction.commit();
@@ -216,7 +216,7 @@ public class ManageSubscribtion {
      * @return
      */
     @GetMapping("/subscriber/dataEventSubscribtion/list")
-    public ResponseEntity<List<DataEventSubscribtion>> dataEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<List<DataEventSubscription>> dataEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -225,8 +225,8 @@ public class ManageSubscribtion {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-                Iterator<DataEventSubscribtion> subscribtions = subscriber.getDataEventSubscribtion().iterator();
-                List <DataEventSubscribtion> list = new ArrayList <DataEventSubscribtion>();
+                Iterator<DataEventSubscription> subscribtions = subscriber.getDataEventSubscription().iterator();
+                List <DataEventSubscription> list = new ArrayList <DataEventSubscription>();
                 while(subscribtions.hasNext()) {
                     list.add(subscribtions.next());
                 }
@@ -249,7 +249,7 @@ public class ManageSubscribtion {
             query.setParameter("subscriberId", user.getIdentity());
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            DataEventSubscribtion subscribtion = new DataEventSubscribtion(businessEventId, "");
+            DataEventSubscription subscribtion = new DataEventSubscription(businessEventId, "");
             subscriber.addDataEventSubscribtion(subscribtion);
 
             transaction.commit();
@@ -275,15 +275,15 @@ public class ManageSubscribtion {
     }
 
     @DeleteMapping("/subscriber/dataEventSubscribtion/delete/{subscribtionId}")
-    public ResponseEntity<DataEventSubscribtion> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ DataEventSubscribtion.class.getName() +" where dataEventId = :dataEventId", DataEventSubscribtion.class);
+            Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             query.setParameter("dataEventId", subscribtionId);
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                DataEventSubscribtion subscribtion = (DataEventSubscribtion) query.getResultList().get(0);
+                DataEventSubscription subscribtion = (DataEventSubscription) query.getResultList().get(0);
                 //TODO: validate ownership
                 session.delete(subscribtion);
                 transaction.commit();

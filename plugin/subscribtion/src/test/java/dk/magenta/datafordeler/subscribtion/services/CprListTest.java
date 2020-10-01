@@ -166,12 +166,12 @@ public class CprListTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion1", "A01"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion2", "A02"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscribtion("subscribtion3", "A03"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion1", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion2", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscribtion("subscribtion3", ""));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion2", "A02"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion3", "A03"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
             session.save(subscriber);
             transaction.commit();
         }

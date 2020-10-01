@@ -69,12 +69,12 @@ public class CprList extends DatabaseEntry {
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="BS_ID")
-    private Set<BusinessEventSubscribtion> businessSubscribtion = new HashSet<>();
+    private Set<BusinessEventSubscription> businessSubscribtion = new HashSet<>();
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="DS_ID")
-    private Set<DataEventSubscribtion> dataSubscribtion;
+    private Set<DataEventSubscription> dataSubscribtion;
 
 
     @ElementCollection

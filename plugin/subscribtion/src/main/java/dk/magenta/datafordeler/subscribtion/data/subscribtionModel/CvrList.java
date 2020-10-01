@@ -64,7 +64,7 @@ public class CvrList {
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="DS_ID")
-    private Set<DataEventSubscribtion> dataSubscribtion;
+    private Set<DataEventSubscription> dataSubscribtion;
 
     @ElementCollection
     @JsonIgnore

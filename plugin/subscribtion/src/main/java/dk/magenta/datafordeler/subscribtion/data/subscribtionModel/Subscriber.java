@@ -39,26 +39,26 @@ public class Subscriber extends DatabaseEntry {
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="BE_SUBSCRIBTION_ID")
-    Set<BusinessEventSubscribtion> businessEventSubscribtion = new HashSet<>();
+    Set<BusinessEventSubscription> businessEventSubscription = new HashSet<>();
 
-    public Set<BusinessEventSubscribtion> getBusinessEventSubscribtion() {
-        return this.businessEventSubscribtion;
+    public Set<BusinessEventSubscription> getBusinessEventSubscription() {
+        return this.businessEventSubscription;
     }
 
-    public void addBusinessEventSubscribtion(BusinessEventSubscribtion record) {
-        this.businessEventSubscribtion.add(record);
+    public void addBusinessEventSubscribtion(BusinessEventSubscription record) {
+        this.businessEventSubscription.add(record);
     }
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="DE_SUBSCRIBTION_ID")
-    Set<DataEventSubscribtion> dataEventSubscribtion = new HashSet<>();
+    Set<DataEventSubscription> dataEventSubscription = new HashSet<>();
 
-    public Set<DataEventSubscribtion> getDataEventSubscribtion() {
-        return this.dataEventSubscribtion;
+    public Set<DataEventSubscription> getDataEventSubscription() {
+        return this.dataEventSubscription;
     }
 
-    public void addDataEventSubscribtion(DataEventSubscribtion record) {
-        this.dataEventSubscribtion.add(record);
+    public void addDataEventSubscribtion(DataEventSubscription record) {
+        this.dataEventSubscription.add(record);
     }
 }

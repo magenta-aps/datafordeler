@@ -6,14 +6,14 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 
 @Entity
-@Table(name = BusinessEventSubscribtion.TABLE_NAME, indexes = {
+@Table(name = BusinessEventSubscription.TABLE_NAME, indexes = {
 
 
 })
-public class BusinessEventSubscribtion extends DatabaseEntry  {
+public class BusinessEventSubscription extends DatabaseEntry  {
 
 
-    public static final String TABLE_NAME = "subscribtion_businessevent";
+    public static final String TABLE_NAME = "subscription_businessevent";
 
     @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
     public static final String schema = "Company";
@@ -22,16 +22,16 @@ public class BusinessEventSubscribtion extends DatabaseEntry  {
     public static final String DB_FIELD_ENTITY = "entity";
 
 
-    public BusinessEventSubscribtion() {
+    public BusinessEventSubscription() {
     }
 
 
 
-    public BusinessEventSubscribtion(String businessEventId) {
+    public BusinessEventSubscription(String businessEventId) {
         this.businessEventId = businessEventId;
     }
 
-    public BusinessEventSubscribtion(String businessEventId, String kodeId) {
+    public BusinessEventSubscription(String businessEventId, String kodeId) {
         this.businessEventId = businessEventId;
         this.kodeId = kodeId;
     }

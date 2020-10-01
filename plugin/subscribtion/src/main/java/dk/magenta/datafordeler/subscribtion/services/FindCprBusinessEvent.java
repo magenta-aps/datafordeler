@@ -14,7 +14,7 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscribtion;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/subscribtionplugin/v1/findCprBusinessEvent")
+@RequestMapping("/subscriptionplugin/v1/findCprBusinessEvent")
 public class FindCprBusinessEvent {
 
     @Autowired
@@ -73,12 +73,12 @@ public class FindCprBusinessEvent {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
-            Query eventQuery = session.createQuery(" from "+ BusinessEventSubscribtion.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscribtion.class);
+            Query eventQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             eventQuery.setParameter("businessEventId", businessEventId);
             if(eventQuery.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                BusinessEventSubscribtion subscribtion = (BusinessEventSubscribtion) eventQuery.getResultList().get(0);
+                BusinessEventSubscription subscribtion = (BusinessEventSubscription) eventQuery.getResultList().get(0);
                 PersonRecordQuery query = new PersonRecordQuery();
                 List<SubscribedCprNumber> theList = subscribtion.getCprList().getCpr();
                 List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());

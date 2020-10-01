@@ -5,13 +5,13 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 
 @Entity
-@Table(name = DataEventSubscribtion.TABLE_NAME, indexes = {
+@Table(name = DataEventSubscription.TABLE_NAME, indexes = {
 
 
 })
-public class DataEventSubscribtion extends DatabaseEntry {
+public class DataEventSubscription extends DatabaseEntry {
 
-    public static final String TABLE_NAME = "subscribtion_dataevent";
+    public static final String TABLE_NAME = "subscription_dataevent";
 
     @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
     public static final String schema = "Company";
@@ -20,12 +20,12 @@ public class DataEventSubscribtion extends DatabaseEntry {
     public static final String DB_FIELD_ENTITY = "entity";
 
 
-    public DataEventSubscribtion() {
+    public DataEventSubscription() {
     }
 
 
 
-    public DataEventSubscribtion(String dataEventId, String kodeId) {
+    public DataEventSubscription(String dataEventId, String kodeId) {
         this.dataEventId = dataEventId;
         this.kodeId = kodeId;
     }
