@@ -1092,7 +1092,7 @@ public class PersonEntity extends CprRecordEntity {
                         clone.setEntity(oldestNewerItem.getEntity());
                         newItem.setReplacedby(clone);
                         set.add(clone);
-                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newestOlderItem.getId(), newItem.getId()));
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newItem.getId(), clone.getId()));
                     }
                 }
             }

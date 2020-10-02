@@ -376,8 +376,8 @@ public class PersonRecordQuery extends BaseQuery {
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENTTIME)
     private OffsetDateTime persondataeventTimeAfter;
 
-    public void setDataEventTimeAfter(String personeventTimeAfter) {
-        this.persondataeventTimeAfter = OffsetDateTime.parse(personeventTimeAfter, DateTimeFormatter.ISO_DATE_TIME);
+    public void setDataEventTimeAfter(OffsetDateTime personeventTimeAfter) {
+        this.persondataeventTimeAfter = personeventTimeAfter;
     }
 
     @Override
