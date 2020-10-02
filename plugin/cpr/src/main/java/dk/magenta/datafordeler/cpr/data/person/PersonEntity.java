@@ -804,6 +804,23 @@ public class PersonEntity extends CprRecordEntity {
         record.setEntity(this);
     }
 
+    public static final String DB_FIELD_DATAEVENT = "dataevent";
+    public static final String IO_FIELD_DATAEVENT = "dataevent";
+    @OneToMany(mappedBy = ChangeRevision.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @JsonProperty(IO_FIELD_DATAEVENT)
+    Set<ChangeRevision> dataevent = new HashSet<>();
+
+    public Set<ChangeRevision> getDataEvent() {
+        return this.dataevent;
+    }
+
+    public void addDataEvent(ChangeRevision record) {
+        this.dataevent.add(record);
+        record.setEntity(this);
+    }
+
+
+
 
     public void addBitemporalRecord(CprBitemporalPersonRecord record, Session session) {
         this.addBitemporalRecord(record, session, true);
@@ -1003,6 +1020,7 @@ public class PersonEntity extends CprRecordEntity {
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         newItem.setSameAs(oldItem);
                         session.saveOrUpdate(oldItem);
+                        entity.addDataEvent(new ChangeRevision(newItem.getRegistrationFrom(), oldItem.getId(), newItem.getId()));
                         return set.add((E) newItem);
 
 
@@ -1014,6 +1032,7 @@ public class PersonEntity extends CprRecordEntity {
                         // Special case for addresses: Municipality codes may have changed without us getting a change record (AnnKor: Æ)
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
+                        entity.addDataEvent(new ChangeRevision(newItem.getRegistrationFrom(), oldItem.getId(), newItem.getId()));
                         return set.add((E) newItem);
 
                     } else if (
