@@ -272,6 +272,21 @@ public class PersonGeneralQuery extends PersonRecordQuery {
                 PersonDeathQuery deathQuery = new PersonDeathQuery();
                 deathQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
                 return deathQuery;
+            case "cpr.cpr_person_address_record":
+                PersonAddressDataeventQuery addressEventQuery = new PersonAddressDataeventQuery();
+                addressEventQuery.setDataEvent("cpr_person_address_record");
+                //addressEventQuery.setRecordAfter(timestamp);
+                addressEventQuery.setDataEventTimeAfter(timestamp);//TODO: consider joining this on DB-level
+                return addressEventQuery;
+
+
+
+
+
+
+
+
+
             default:
                 PersonRecordQuery personQuery = new PersonRecordQuery();
                 personQuery.setRecordAfter(timestamp);

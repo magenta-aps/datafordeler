@@ -86,9 +86,9 @@ public class FetchEventsTest {
             BusinessEventSubscription subscribtionT2 = new BusinessEventSubscription("BE2", "A02");
             BusinessEventSubscription subscribtionT3 = new BusinessEventSubscription("BE3", "A03");
 
-            DataEventSubscription subscribtionDE1 = new DataEventSubscription("DE1", "person.address");
-            DataEventSubscription subscribtionDE2 = new DataEventSubscription("DE2", "person.anything");
-            DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "person.death");
+            DataEventSubscription subscribtionDE1 = new DataEventSubscription("DE1", "cpr.cpr_person_address_record");
+            DataEventSubscription subscribtionDE2 = new DataEventSubscription("DE2", "cpr.cpr_person_civil_record");
+            DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "cpr.cpr_person_civil_record");
 
             CprList cprList = new CprList("L1", "user1");
             cprList.addCprString("0101011235");
@@ -273,7 +273,7 @@ public class FetchEventsTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscriptionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2006-10-26T12:00-06:00&pageSize=100",
+                "/subscriptionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp=2010-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
