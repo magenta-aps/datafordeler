@@ -28,8 +28,9 @@ public class ChangeRevision extends CprRecordEntity {
     public ChangeRevision() {
     }
 
-    public ChangeRevision(OffsetDateTime timestamp, Long oldItem, Long newItem) {
+    public ChangeRevision(OffsetDateTime timestamp, String field, Long oldItem, Long newItem) {
         this.timestamp = timestamp;
+        this.field = field;
         this.oldItem = oldItem;
         this.newItem = newItem;
     }

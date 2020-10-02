@@ -53,6 +53,10 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
         this.startAuthority = startAuthority;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
 
 
     public static final String DB_FIELD_MUNICIPALITY_CODE = "municipalityCode";

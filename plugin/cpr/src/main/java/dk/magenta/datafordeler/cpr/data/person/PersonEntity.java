@@ -1020,7 +1020,7 @@ public class PersonEntity extends CprRecordEntity {
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         newItem.setSameAs(oldItem);
                         session.saveOrUpdate(oldItem);
-                        entity.addDataEvent(new ChangeRevision(newItem.getRegistrationFrom(), oldItem.getId(), newItem.getId()));
+                        entity.addDataEvent(new ChangeRevision(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId()));
                         return set.add((E) newItem);
 
 
@@ -1032,7 +1032,7 @@ public class PersonEntity extends CprRecordEntity {
                         // Special case for addresses: Municipality codes may have changed without us getting a change record (AnnKor: Æ)
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
-                        entity.addDataEvent(new ChangeRevision(newItem.getRegistrationFrom(), oldItem.getId(), newItem.getId()));
+                        entity.addDataEvent(new ChangeRevision(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId()));
                         return set.add((E) newItem);
 
                     } else if (
