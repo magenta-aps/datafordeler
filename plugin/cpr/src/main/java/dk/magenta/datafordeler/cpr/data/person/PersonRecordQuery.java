@@ -29,6 +29,8 @@ public class PersonRecordQuery extends BaseQuery {
     public static final String CUSTODYPNR = CustodyDataRecord.IO_FIELD_RELATION_PNR;
     public static final String PERSONEVENT = PersonEventDataRecord.IO_FIELD_EVENT;
     public static final String PERSONEVENTTIME = PersonEventDataRecord.DB_FIELD_TIMESTAMP;
+    public static final String PERSONDATAEVENT = PersonDataEventDataRecord.DB_FIELD_FIELD;
+    public static final String PERSONDATAEVENTTIME = PersonDataEventDataRecord.DB_FIELD_TIMESTAMP;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
     private List<String> personnumre = new ArrayList<>();
@@ -339,6 +341,45 @@ public class PersonRecordQuery extends BaseQuery {
         this.personeventTimeAfter = OffsetDateTime.parse(personeventTimeAfter, DateTimeFormatter.ISO_DATE_TIME);
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENT)
+    private List<String> persondataevents = new ArrayList<>();
+
+    public Collection<String> getDataEvents() {
+        return this.persondataevents;
+    }
+
+    public void addDataEvent(String persondataevent) {
+        this.persondataevents.add(persondataevent);
+        if (persondataevent != null) {
+            this.updatedParameters();
+        }
+    }
+
+    public void setDataEvent(String personevent) {
+        this.clearDataEvents();
+        this.addDataEvent(personevent);
+    }
+
+    public void clearDataEvents() {
+        this.persondataevents.clear();
+        this.updatedParameters();
+    }
+
+    public void setDataEvents(Collection<String> personevent) {
+        this.clearEvents();
+        if (personevent != null) {
+            this.persondataevents.addAll(personevent);
+            this.updatedParameters();
+        }
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENTTIME)
+    private OffsetDateTime persondataeventTimeAfter;
+
+    public void setDataEventTimeAfter(String personeventTimeAfter) {
+        this.persondataeventTimeAfter = OffsetDateTime.parse(personeventTimeAfter, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
@@ -352,7 +393,7 @@ public class PersonRecordQuery extends BaseQuery {
         map.put(HOUSENO, this.houseNos);
         map.put(BUILDINGNO, this.buildingNos);
         map.put(PERSONEVENT, this.personevents);
-        map.put(PERSONEVENTTIME, this.personeventTimeAfter);
+        map.put(PERSONDATAEVENT, this.persondataevents);
         return map;
     }
 
@@ -368,6 +409,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.setHouseNos(parameters.get(HOUSENO));
         this.setBuildingNos(parameters.get(BUILDINGNO));
         this.setEvents(parameters.get(PERSONEVENT));
+        this.setDataEvents(parameters.get(PERSONDATAEVENT));
     }
 
     @Override
@@ -397,6 +439,8 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + LookupDefinition.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
         joinHandles.put("personevent", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_EVENT);
         joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("persondataevent", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_FIELD);
+        joinHandles.put("persondataeventTime.GTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override
@@ -422,13 +466,15 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("custodyPnr", this.custodyPnr);
         this.addCondition("personevent", this.personevents);
         this.addCondition("personeventTime.GTE", Condition.Operator.GTE, this.personeventTimeAfter, OffsetDateTime.class, true);
+        this.addCondition("persondataevent", this.persondataevents);
+        this.addCondition("persondataeventTime.GTE", Condition.Operator.GTE, this.persondataeventTimeAfter, OffsetDateTime.class, true);
     }
 
 
 
     @Override
     protected boolean isEmpty() {
-        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() && this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() && this.personevents.isEmpty() && this.personeventTimeAfter == null;
+        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() && this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() && this.personevents.isEmpty() && this.personeventTimeAfter == null && this.persondataevents.isEmpty() && this.personeventTimeAfter == null;
     }
 
 }

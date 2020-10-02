@@ -573,6 +573,29 @@ public class RecordTest {
         Assert.assertThat(pnrList, Matchers.is(a1Events3));
     }
 
+    /**
+     * This unittest validates that it is possible to filter out addresschanges that do not happen based on the eventtype A01
+     * @throws DataFordelerException
+     * @throws IOException
+     */
+    @Test
+    public void testPersonLoadAndFindDataEvent() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        importMetadata.setSession(session);
+        this.loadPerson("/personsWithNewAdresses.txt", importMetadata);
+        session.close();
+
+        session = sessionManager.getSessionFactory().openSession();
+        PersonRecordQuery query = new PersonRecordQuery();
+        query.setPersonnummer("0101011234");
+        query.setDataEvent("cpr_person_address_record");
+        query.applyFilters(session);
+        List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        Assert.assertEquals(2, entities.get(0).getDataEvent().size());
+    }
+
 
 
     @Test

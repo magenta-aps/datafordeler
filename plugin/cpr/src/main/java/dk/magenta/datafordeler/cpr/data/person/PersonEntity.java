@@ -806,15 +806,15 @@ public class PersonEntity extends CprRecordEntity {
 
     public static final String DB_FIELD_DATAEVENT = "dataevent";
     public static final String IO_FIELD_DATAEVENT = "dataevent";
-    @OneToMany(mappedBy = ChangeRevision.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = PersonDataEventDataRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @JsonProperty(IO_FIELD_DATAEVENT)
-    Set<ChangeRevision> dataevent = new HashSet<>();
+    Set<PersonDataEventDataRecord> dataevent = new HashSet<>();
 
-    public Set<ChangeRevision> getDataEvent() {
+    public Set<PersonDataEventDataRecord> getDataEvent() {
         return this.dataevent;
     }
 
-    public void addDataEvent(ChangeRevision record) {
+    public void addDataEvent(PersonDataEventDataRecord record) {
         this.dataevent.add(record);
         record.setEntity(this);
     }
@@ -1020,10 +1020,9 @@ public class PersonEntity extends CprRecordEntity {
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         newItem.setSameAs(oldItem);
                         session.saveOrUpdate(oldItem);
-                        entity.addDataEvent(new ChangeRevision(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId()));
-                        return set.add((E) newItem);
-
-
+                        boolean success = set.add((E) newItem);
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId()));
+                        return success;
                     } else if (
                                 newItem.getBitemporality().equals(oldItem.getBitemporality()) &&
                                                 (newItem instanceof AddressDataRecord) &&
@@ -1032,8 +1031,9 @@ public class PersonEntity extends CprRecordEntity {
                         // Special case for addresses: Municipality codes may have changed without us getting a change record (AnnKor: Æ)
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
-                        entity.addDataEvent(new ChangeRevision(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId()));
-                        return set.add((E) newItem);
+                        boolean success = set.add((E) newItem);
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId()));
+                        return success;
 
                     } else if (
                             Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
@@ -1081,6 +1081,7 @@ public class PersonEntity extends CprRecordEntity {
                     clone.setEntity(newestOlderItem.getEntity());
                     newestOlderItem.setReplacedby(clone);
                     set.add(clone);
+                    entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newestOlderItem.getId(), newItem.getId()));
                 }
                 if (oldestNewerItem != null) {
                     if (newItem.getRegistrationTo() == null) {
@@ -1091,6 +1092,7 @@ public class PersonEntity extends CprRecordEntity {
                         clone.setEntity(oldestNewerItem.getEntity());
                         newItem.setReplacedby(clone);
                         set.add(clone);
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newestOlderItem.getId(), newItem.getId()));
                     }
                 }
             }
@@ -1133,9 +1135,14 @@ public class PersonEntity extends CprRecordEntity {
                         !(newItem instanceof ProtectionDataRecord)) {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
+                    boolean success = set.add((E) newItem);
+                    entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), newItem.getId()));
+                    return success;
+                } else {
+                    return set.add((E) newItem);
                 }
 
-                return set.add((E) newItem);
+
             }
         }
         return false;

@@ -16,19 +16,20 @@ import java.util.Collection;
 
 
 @Entity
-@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + ChangeRevision.TABLE_NAME, indexes = {
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ChangeRevision.TABLE_NAME + ChangeRevision.DB_FIELD_ENTITY, columnList = ChangeRevision.DB_FIELD_ENTITY + DatabaseEntry.REF)
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonDataEventDataRecord.TABLE_NAME, indexes = {
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonDataEventDataRecord.TABLE_NAME + PersonDataEventDataRecord.DB_FIELD_ENTITY, columnList = PersonDataEventDataRecord.DB_FIELD_ENTITY + DatabaseEntry.REF)
 })
-public class ChangeRevision extends CprRecordEntity {
+public class PersonDataEventDataRecord extends CprRecordEntity {
 
 
     public static final String TABLE_NAME = "cpr_person_data_event_record";
     public static final String DB_FIELD_ENTITY = "entity";
 
-    public ChangeRevision() {
+    public PersonDataEventDataRecord() {
     }
 
-    public ChangeRevision(OffsetDateTime timestamp, String field, Long oldItem, Long newItem) {
+    public PersonDataEventDataRecord(OffsetDateTime timestamp, String field, Long oldItem, Long newItem) {
+        this.setDafoUpdated(OffsetDateTime.now());
         this.timestamp = timestamp;
         this.field = field;
         this.oldItem = oldItem;
