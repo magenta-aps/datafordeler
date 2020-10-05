@@ -28,6 +28,10 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
 
     public static final String DB_FIELD_SPLIT = "split";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_SPLIT)
     @JsonIgnore
     private boolean split;

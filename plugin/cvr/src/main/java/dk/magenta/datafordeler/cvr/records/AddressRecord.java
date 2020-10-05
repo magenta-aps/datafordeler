@@ -51,6 +51,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public static final int TYPE_POSTAL = 1;
     public static final int TYPE_BUSINESS = 2;
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
 
     public static final String DB_FIELD_OFFICE_UNIT = "officeUnitRecord";
 

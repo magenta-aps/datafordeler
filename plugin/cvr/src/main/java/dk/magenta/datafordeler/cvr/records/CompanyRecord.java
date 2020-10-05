@@ -48,6 +48,10 @@ public class CompanyRecord extends CvrEntityRecord {
 
     public static final String schema = "virksomhed";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Override
     @JsonIgnore
     protected String getDomain() {
@@ -1284,6 +1288,31 @@ public class CompanyRecord extends CvrEntityRecord {
         return this.metadata;
     }
 
+
+    public static final String DB_FIELD_DATAEVENT = "dataevent";
+    public static final String IO_FIELD_DATAEVENT = "dataevent";
+
+    @OneToMany(targetEntity = CompanyDataEventRecord.class, mappedBy = CompanyDataEventRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonProperty(value = IO_FIELD_DATAEVENT)
+    private Set<CompanyDataEventRecord> dataevent = new HashSet<>();
+
+    public void setDataEventRecord(Set<CompanyDataEventRecord> dataevent) {
+        this.dataevent = (dataevent == null) ? new HashSet<>() : new HashSet<>(dataevent);
+        for (CompanyDataEventRecord record : this.dataevent) {
+            record.setCompanyRecord(this);
+        }
+    }
+
+    public void addDataEventRecord(CompanyDataEventRecord record) {
+        if (record != null) {
+            record.setCompanyRecord(this);
+            this.dataevent.add(record);
+        }
+    }
+
+    public BitemporalSet<CompanyDataEventRecord> getDataevent() {
+        return new BitemporalSet<>(this.dataevent);
+    }
 
     @JsonIgnore
     @Override

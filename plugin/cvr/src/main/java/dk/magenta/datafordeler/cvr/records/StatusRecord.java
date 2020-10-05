@@ -30,6 +30,10 @@ public class StatusRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_STATUSTEXT = "statusText";
     public static final String IO_FIELD_STATUSTEXT = "statustekst";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_STATUSTEXT)
     @JsonProperty(value = IO_FIELD_STATUSTEXT)
     private String statusText;
