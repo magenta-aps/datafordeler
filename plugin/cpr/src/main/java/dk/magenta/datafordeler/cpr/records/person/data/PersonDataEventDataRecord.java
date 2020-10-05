@@ -36,6 +36,9 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
         this.newItem = newItem;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = DB_FIELD_ENTITY + DatabaseEntry.REF)

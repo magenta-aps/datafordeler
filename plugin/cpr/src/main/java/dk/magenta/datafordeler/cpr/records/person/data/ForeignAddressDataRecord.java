@@ -43,6 +43,10 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
         this.addressLine5 = addressLine5;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_ADDRESS_LINE1 = "addressLine1";
     public static final String IO_FIELD_ADDRESS_LINE1 = "adresselinie1";
     @Column(name = DB_FIELD_ADDRESS_LINE1)

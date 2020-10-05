@@ -37,6 +37,10 @@ public class BirthPlaceDataRecord extends CprBitemporalPersonRecord<BirthPlaceDa
         this.birthPlaceName = birthPlaceName;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     // Myndighed tekst myndighed
     public static final String DB_FIELD_BIRTH_PLACE_CODE = "birthPlaceCode";
     public static final String IO_FIELD_BIRTH_PLACE_CODE = "cprFødselsregistreringsstedskode";

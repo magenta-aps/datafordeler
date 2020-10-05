@@ -43,6 +43,10 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
         this.inDatetimeUncertain = inDatetimeUncertain;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_OUT_DATETIME = "outDatetime";
     public static final String IO_FIELD_OUT_DATETIME = "fraflytningsdatoKommune";
     @Column(name = DB_FIELD_OUT_DATETIME)

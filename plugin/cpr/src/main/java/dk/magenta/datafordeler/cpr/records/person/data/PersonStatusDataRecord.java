@@ -37,6 +37,10 @@ public class PersonStatusDataRecord extends CprBitemporalPersonRecord<PersonStat
         this.status = status;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_STATUS = "status";
     public static final String IO_FIELD_STATUS = "status";
     @Column(name = DB_FIELD_STATUS)

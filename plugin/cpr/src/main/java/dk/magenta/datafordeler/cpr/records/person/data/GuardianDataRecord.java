@@ -50,6 +50,9 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
         this.relationText5 = relationText5;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
     public static final String DB_FIELD_GUARDIAN_RELATION_TYPE = "guardianRelationType";
     public static final String IO_FIELD_GUARDIAN_RELATION_TYPE = "værgeRelationsType";

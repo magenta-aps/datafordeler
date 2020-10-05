@@ -45,6 +45,10 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
         this.egetEfternavnMarkering = egetEfternavnMarkering;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_ADDRESSING_NAME = "addressingName";
     public static final String IO_FIELD_ADDRESSING_NAME = "adresseringsnavn";
     @Column(name = DB_FIELD_ADDRESSING_NAME)

@@ -39,6 +39,10 @@ public class CivilStatusVerificationDataRecord extends VerificationDataRecord<Ci
         this.correctionMarking = correctionMarking;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_CORRECTION_MARKING = "correctionMarking";
     public static final String IO_FIELD_CORRECTION_MARKING = "retFortrydMarkering";
     @Column(name = DB_FIELD_CORRECTION_MARKING, length = 1)

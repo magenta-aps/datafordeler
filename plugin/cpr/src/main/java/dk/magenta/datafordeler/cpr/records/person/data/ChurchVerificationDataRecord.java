@@ -32,7 +32,9 @@ public class ChurchVerificationDataRecord extends VerificationDataRecord<ChurchV
         super(verified);
     }
 
-
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
