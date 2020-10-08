@@ -1032,7 +1032,6 @@ public class PersonEntity extends CprRecordEntity {
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         boolean success = set.add((E) newItem);
-                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId()));
                         return success;
 
                     } else if (
@@ -1136,7 +1135,9 @@ public class PersonEntity extends CprRecordEntity {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                     boolean success = set.add((E) newItem);
-                    entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), newItem.getId()));
+                    if(newItem.getRegistrationFrom()!=null) {
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), newItem.getId()));
+                    }
                     return success;
                 } else {
                     return set.add((E) newItem);
