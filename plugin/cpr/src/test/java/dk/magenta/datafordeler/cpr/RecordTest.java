@@ -496,7 +496,7 @@ public class RecordTest {
      * @throws IOException
      */
     @Test
-    public void testPersonLoadAndFindEvent() throws DataFordelerException, IOException {
+    public void testPersonLoadAndFindBusinessEvent() throws DataFordelerException, IOException {
         Session session = sessionManager.getSessionFactory().openSession();
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
@@ -596,7 +596,28 @@ public class RecordTest {
         Assert.assertEquals(2, entities.get(0).getDataEvent().size());
     }
 
+    /**
+     * Confirm that new children does not generate events
+     * @throws Exception
+     */
+    @Test
+    public void testPersonWithChildrenAndConfirmNoChildrenEvents() throws Exception {
+        //This test will start failing in year 2030 when the children in this test is no longer children
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+        }
 
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("0101011234");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(1, entities.size());
+            Assert.assertEquals(4, entities.get(0).getChildren().size());
+            Assert.assertEquals(0, entities.get(0).getDataEvent().size());
+        }
+    }
 
     @Test
     public void testPersonIdempotence() throws Exception {
