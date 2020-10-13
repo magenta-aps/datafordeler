@@ -279,14 +279,6 @@ public class PersonGeneralQuery extends PersonRecordQuery {
                 addressEventQuery.setDataEventTimeAfter(timestamp);//TODO: consider joining this on DB-level
                 return addressEventQuery;
 
-
-
-
-
-
-
-
-
             default:
                 PersonRecordQuery personQuery = new PersonRecordQuery();
                 personQuery.setRecordAfter(timestamp);

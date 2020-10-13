@@ -13,6 +13,12 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
+import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -33,7 +39,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.Scanner;
 
 import static org.mockito.Mockito.when;
 
@@ -57,11 +66,21 @@ public class FetchEventsTest {
     @SpyBean
     private DafoUserManager dafoUserManager;
 
+    @Autowired
+    private CvrPlugin plugin;
+
 
     @Autowired
     private PersonEntityManager personEntityManager;
 
     private OffsetDateTime timestampInitial = OffsetDateTime.now(ZoneOffset.UTC);
+
+    private static HashMap<String, String> schemaMap = new HashMap<>();
+    static {
+        schemaMap.put("_doc", CompanyRecord.schema);
+        schemaMap.put("produktionsenhed", CompanyUnitRecord.schema);
+        schemaMap.put("deltager", ParticipantRecord.schema);
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -77,6 +96,10 @@ public class FetchEventsTest {
             testData = FindCprBusinessEvent.class.getResourceAsStream("/personsChangingAdresses.txt");
             personEntityManager.parseData(testData, importMetadata);
             testData.close();
+
+            loadCompany("/company_in.json");
+            loadCompany("/company_in2.json");
+            loadCompany("/company_in3.json");
 
             Transaction tx = session.beginTransaction();
 
@@ -109,6 +132,10 @@ public class FetchEventsTest {
             cprList.addCprString("0101011250");
             session.save(cprList);
 
+            CvrList cvrList = new CvrList("L2", "user1");
+            cvrList.addCvrsString("25052943");
+            session.save(cvrList);
+
             subscribtionT1.setCprList(cprList);
             subscribtionT2.setCprList(cprList);
             subscribtionT3.setCprList(cprList);
@@ -116,6 +143,10 @@ public class FetchEventsTest {
             subscribtionDE1.setCprList(cprList);
             subscribtionDE2.setCprList(cprList);
             subscribtionDE3.setCprList(cprList);
+
+            subscribtionDE1.setCvrList(cvrList);
+            subscribtionDE2.setCvrList(cvrList);
+            subscribtionDE3.setCvrList(cvrList);
 
             subscriber.addBusinessEventSubscribtion(subscribtionT1);
             subscriber.addBusinessEventSubscribtion(subscribtionT2);
@@ -383,6 +414,120 @@ public class FetchEventsTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(2, results.size());
+    }
+
+    /**
+     * Test that it is possible to call a service for fetching events
+     */
+    @Test
+    public void testGetCVRDataAddressChangeEvents() throws IOException {
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        TestUserDetails testUserDetails = new TestUserDetails();
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE1&timestamp=1980-11-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        JsonNode results = responseContent.get("results");
+        Assert.assertEquals(1, results.size());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE1&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(1, results.size());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-01-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(1, results.size());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE1&timestamp=2020-10-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(1, results.size());
+    }
+
+    private HashMap<Integer, JsonNode> loadCompany(String resource) throws IOException, DataFordelerException {
+        InputStream input = FetchEventsTest.class.getResourceAsStream(resource);
+        if (input == null) {
+            throw new MissingResourceException("Missing resource \""+resource+"\"", resource, "key");
+        }
+        return loadCompany(input, false);
+    }
+
+    private HashMap<Integer, JsonNode> loadCompany(InputStream input, boolean linedFile) throws IOException, DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        HashMap<Integer, JsonNode> companies = new HashMap<>();
+        try {
+            importMetadata.setSession(session);
+
+            if (linedFile) {
+                int lineNumber = 0;
+                Scanner lineScanner = new Scanner(input, "UTF-8").useDelimiter("\n");
+                while (lineScanner.hasNext()) {
+                    String data = lineScanner.next();
+
+                    JsonNode root = objectMapper.readTree(data);
+                    JsonNode itemList = root.get("hits").get("hits");
+                    Assert.assertTrue(itemList.isArray());
+                    for (JsonNode item : itemList) {
+                        String type = item.get("_type").asText();
+                        CompanyEntityManager entityManager = (CompanyEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                        JsonNode companyInputNode = item.get("_source").get("Vrvirksomhed");
+                        entityManager.parseData(companyInputNode, importMetadata, session);
+                        companies.put(companyInputNode.get("cvrNummer").asInt(), companyInputNode);
+                    }
+                    lineNumber++;
+                    if (lineNumber % 100 == 0) {
+                        System.out.println("loaded line " + lineNumber);
+                    }
+                }
+            } else {
+                JsonNode root = objectMapper.readTree(input);
+                JsonNode itemList = root.get("hits").get("hits");
+                Assert.assertTrue(itemList.isArray());
+                for (JsonNode item : itemList) {
+                    String type = item.get("_type").asText();
+                    CompanyEntityManager entityManager = (CompanyEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                    JsonNode companyInputNode = item.get("_source").get("Vrvirksomhed");
+                    entityManager.parseData(companyInputNode, importMetadata, session);
+                    companies.put(companyInputNode.get("cvrNummer").asInt(), companyInputNode);
+                }
+            }
+            transaction.commit();
+        } finally {
+            session.close();
+            QueryManager.clearCaches();
+            input.close();
+        }
+        return companies;
     }
 
 

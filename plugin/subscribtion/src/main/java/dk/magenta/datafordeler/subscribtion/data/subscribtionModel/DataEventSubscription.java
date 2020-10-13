@@ -76,7 +76,7 @@ public class DataEventSubscription extends DatabaseEntry {
         return cvrList;
     }
 
-    public void setCvrList(CvrList cprList) {
+    public void setCvrList(CvrList cvrList) {
         this.cvrList = cvrList;
     }
 
