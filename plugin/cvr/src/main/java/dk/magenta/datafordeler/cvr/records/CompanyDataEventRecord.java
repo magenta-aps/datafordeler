@@ -1,12 +1,9 @@
 package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 
-import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
-//import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 
 
@@ -14,10 +11,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 @Entity
@@ -28,7 +22,7 @@ public class CompanyDataEventRecord extends CvrBitemporalDataRecord {
 
 
     public static final String TABLE_NAME = "company_data_event_record";
-    public static final String DB_FIELD_ENTITY = "entity";
+    public static final String DB_FIELD_ENTITY = "companyRecord";
 
     public CompanyDataEventRecord() {
     }
@@ -45,8 +39,11 @@ public class CompanyDataEventRecord extends CvrBitemporalDataRecord {
         return TABLE_NAME;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = DB_FIELD_ENTITY + DatabaseEntry.REF)
+
+    public static final String DB_FIELD_DATAEVENT_RELATION = "dataeventRecord";
+
+    @ManyToOne(targetEntity = CompanyRecord.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = DB_FIELD_DATAEVENT_RELATION + DatabaseEntry.REF)
     @JsonIgnore
     @XmlTransient
     private CompanyRecord entity;
@@ -101,7 +98,58 @@ public class CompanyDataEventRecord extends CvrBitemporalDataRecord {
     @XmlTransient
     private Long newItem;
 
+    public String getField() {
+        return field;
+    }
 
+    public void setField(String field) {
+        this.field = field;
+    }
 
+    public String getText() {
+        return text;
+    }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setTimestamp(OffsetDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Long getOldItem() {
+        return oldItem;
+    }
+
+    public void setOldItem(Long oldItem) {
+        this.oldItem = oldItem;
+    }
+
+    public Long getNewItem() {
+        return newItem;
+    }
+
+    public void setNewItem(Long newItem) {
+        this.newItem = newItem;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CompanyDataEventRecord that = (CompanyDataEventRecord) o;
+        return Objects.equals(field, that.field) &&
+                Objects.equals(text, that.text) &&
+                Objects.equals(oldItem, that.oldItem) &&
+                Objects.equals(newItem, that.newItem) &&
+                Objects.equals(timestamp, that.timestamp) &&
+                Objects.equals(getDafoUpdated(), that.getDafoUpdated());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), field, text, oldItem, newItem, timestamp, getDafoUpdated());
+    }
 }

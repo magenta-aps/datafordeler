@@ -16,6 +16,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1310,8 +1311,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<CompanyDataEventRecord> getDataevent() {
-        return new BitemporalSet<>(this.dataevent);
+    public Set<CompanyDataEventRecord> getDataevent() {
+        return this.dataevent;
     }
 
     @JsonIgnore
@@ -1513,6 +1514,8 @@ public class CompanyRecord extends CvrEntityRecord {
                 //this.addSplit(fusionSplitRecord);
                 this.mergeSplit(fusionSplitRecord);
             }
+
+            this.addDataEventRecord(new CompanyDataEventRecord(otherRecord.getRegistrationFrom(), otherRecord.getFieldName(), otherRecord.getId(), otherRecord.getId()));
             this.metadata.merge(otherRecord.getMetadata());
             return true;
         }
