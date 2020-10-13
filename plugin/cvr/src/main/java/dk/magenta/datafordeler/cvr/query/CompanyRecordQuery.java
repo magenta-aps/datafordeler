@@ -4,18 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
-import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -36,6 +34,8 @@ public class CompanyRecordQuery extends BaseQuery {
     public static final String ETAGE = AddressRecord.IO_FIELD_FLOOR;
     public static final String DOOR = AddressRecord.IO_FIELD_DOOR;
     public static final String LASTUPDATED = CvrBitemporalRecord.IO_FIELD_LAST_UPDATED;
+    public static final String COMPANYDATAEVENT = PersonDataEventDataRecord.DB_FIELD_FIELD;
+    public static final String COMPANYDATAEVENTTIME = PersonDataEventDataRecord.DB_FIELD_TIMESTAMP;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CVRNUMMER)
     private List<String> cvrNumre = new ArrayList<>();
@@ -516,8 +516,50 @@ public class CompanyRecordQuery extends BaseQuery {
     private String lastUpdated;
     public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
-    }    
+    }
 
+
+
+
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = COMPANYDATAEVENT)
+    private List<String> companydataevents = new ArrayList<>();
+
+    public Collection<String> getDataEvents() {
+        return this.companydataevents;
+    }
+
+    public void addDataEvent(String persondataevent) {
+        this.companydataevents.add(persondataevent);
+        if (persondataevent != null) {
+            this.updatedParameters();
+        }
+    }
+
+    public void setDataEvent(String personevent) {
+        this.clearDataEvents();
+        this.addDataEvent(personevent);
+    }
+
+    public void clearDataEvents() {
+        this.companydataevents.clear();
+        this.updatedParameters();
+    }
+
+    public void setDataEvents(Collection<String> personevent) {
+        this.clearDataEvents();
+        if (personevent != null) {
+            this.companydataevents.addAll(personevent);
+            this.updatedParameters();
+        }
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = COMPANYDATAEVENTTIME)
+    private OffsetDateTime companyrecordeventTimeAfter;
+
+    public void setDataEventTimeAfter(OffsetDateTime companyrecordeventTimeAfter) {
+        this.companyrecordeventTimeAfter = companyrecordeventTimeAfter;
+    }
 
 
 
@@ -661,6 +703,7 @@ public class CompanyRecordQuery extends BaseQuery {
         joinHandles.put("participantUnitNumber", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
         joinHandles.put("participantOrganizationType", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_ORGANIZATIONS + BaseQuery.separator + OrganizationRecord.DB_FIELD_MAIN_TYPE);
         joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
+        joinHandles.put("companyrecordeventTime.GTE", CompanyRecord.DB_FIELD_DATAEVENT + LookupDefinition.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override
@@ -699,6 +742,7 @@ public class CompanyRecordQuery extends BaseQuery {
         if (this.lastUpdated != null) {
             this.addCondition("lastUpdated", Condition.Operator.GT, Collections.singletonList(this.lastUpdated), OffsetDateTime.class, false);
         }
+        this.addCondition("companyrecordeventTime.GTE", Condition.Operator.GTE, this.companyrecordeventTimeAfter, OffsetDateTime.class, true);
     }
 
 
