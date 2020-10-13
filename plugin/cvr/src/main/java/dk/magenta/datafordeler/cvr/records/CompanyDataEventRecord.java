@@ -21,7 +21,7 @@ import java.util.*;
 public class CompanyDataEventRecord extends CvrBitemporalDataRecord {
 
 
-    public static final String TABLE_NAME = "cvr_company_data_event_record";
+    public static final String TABLE_NAME = "cvr_record_company_data_event_record";
     public static final String DB_FIELD_ENTITY = "companyRecord";
 
     public CompanyDataEventRecord() {
