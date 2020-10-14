@@ -18,8 +18,7 @@ import java.util.*;
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyDataEventRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyDataEventRecord.TABLE_NAME + CompanyDataEventRecord.DB_FIELD_ENTITY, columnList = CompanyDataEventRecord.DB_FIELD_ENTITY + DatabaseEntry.REF)
 })
-public class CompanyDataEventRecord extends CvrBitemporalDataRecord {
-
+public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
     public static final String TABLE_NAME = "cvr_record_company_data_event_record";
     public static final String DB_FIELD_ENTITY = "companyRecord";
@@ -40,24 +39,19 @@ public class CompanyDataEventRecord extends CvrBitemporalDataRecord {
     }
 
 
-    public static final String DB_FIELD_DATAEVENT_RELATION = "dataeventRecord";
+    public static final String DB_FIELD_COMPANY = "companyRecord";
 
-    @ManyToOne(targetEntity = CompanyRecord.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = DB_FIELD_DATAEVENT_RELATION + DatabaseEntry.REF)
     @JsonIgnore
-    @XmlTransient
-    private CompanyRecord entity;
+    @ManyToOne(targetEntity = CompanyRecord.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = DB_FIELD_COMPANY + DatabaseEntry.REF)
+    private CompanyRecord companyRecord;
 
-    public CompanyRecord getEntity() {
-        return this.entity;
+    public void setCompanyRecord(CompanyRecord companyRecord) {
+        this.companyRecord = companyRecord;
     }
 
-    public void setEntity(CompanyRecord entity) {
-        this.entity = entity;
-    }
-
-    public void setEntity(IdentifiedEntity entity) {
-        this.entity = (CompanyRecord) entity;
+    public CompanyRecord getCompanyRecord() {
+        return this.companyRecord;
     }
 
 
