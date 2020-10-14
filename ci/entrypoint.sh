@@ -26,7 +26,7 @@ mvn test
 cd /app/plugin/prisme
 mvn test
 
-cd /app/plugin/subscribtion
+cd /app/plugin/subscription
 mvn test
 
 cd /app/plugin/statistik

@@ -31,7 +31,7 @@ RUN mvn --batch-mode -T 2C package install -DskipTests
 WORKDIR /app/plugin/prisme
 RUN mvn --batch-mode -T 2C package install -DskipTests
 
-WORKDIR /app/plugin/subscribtion
+WORKDIR /app/plugin/subscription
 RUN mvn --batch-mode -T 2C package install -DskipTests
 
 #TODO WE NEED TO FIX TESTS OF STATISTICS
