@@ -19,7 +19,7 @@ import java.util.Set;
 public class PnumberList extends DatabaseEntry {
 
 
-    public static final String TABLE_NAME = "pno_list";
+    public static final String TABLE_NAME = "subscription_pno_list";
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "PnoList";

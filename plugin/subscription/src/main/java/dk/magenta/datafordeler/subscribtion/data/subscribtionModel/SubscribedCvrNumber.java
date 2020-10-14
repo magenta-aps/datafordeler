@@ -14,7 +14,7 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubscribedCvrNumber extends DatabaseEntry {
 
-    public static final String TABLE_NAME = "cvr_number_subscribed";
+    public static final String TABLE_NAME = "subscription_cvr_number_subscribed";
 
     @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
     public static final String schema = "CvrList";

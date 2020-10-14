@@ -260,7 +260,7 @@ public class PersonGeneralQuery extends PersonRecordQuery {
 
     public static PersonRecordQuery getPersonQuery(String queryType, OffsetDateTime timestamp) {
         switch(queryType) {
-            case "person.address":
+            /*case "person.address":
                 PersonAddressChangeQuery addressQuery = new PersonAddressChangeQuery();
                 addressQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
                 return addressQuery;
@@ -271,9 +271,9 @@ public class PersonGeneralQuery extends PersonRecordQuery {
             case "person.death":
                 PersonDeathQuery deathQuery = new PersonDeathQuery();
                 deathQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
-                return deathQuery;
+                return deathQuery;*/
             case "cpr.cpr_person_address_record":
-                PersonAddressDataeventQuery addressEventQuery = new PersonAddressDataeventQuery();
+                PersonDataeventQuery addressEventQuery = new PersonDataeventQuery();
                 addressEventQuery.setDataEvent("cpr_person_address_record");
                 //addressEventQuery.setRecordAfter(timestamp);
                 addressEventQuery.setDataEventTimeAfter(timestamp);//TODO: consider joining this on DB-level

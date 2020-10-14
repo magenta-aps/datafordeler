@@ -4,16 +4,14 @@ import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.MultiCondition;
 import dk.magenta.datafordeler.core.fapi.QueryField;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersonAddressDataeventQuery extends PersonGeneralQuery {
+public class PersonDataeventQuery extends PersonGeneralQuery {
 
 
     @QueryField(
@@ -24,11 +22,11 @@ public class PersonAddressDataeventQuery extends PersonGeneralQuery {
 
 
 
-    public PersonAddressDataeventQuery() {
+    public PersonDataeventQuery() {
         super();
     }
 
-    public PersonAddressDataeventQuery(HttpServletRequest request) {
+    public PersonDataeventQuery(HttpServletRequest request) {
         super(request);
     }
 
@@ -47,7 +45,7 @@ public class PersonAddressDataeventQuery extends PersonGeneralQuery {
     @Override
     protected Map<String, String> joinHandles() {
         HashMap<String, String> joinHandles = new HashMap<>(super.joinHandles());
-        joinHandles.putAll(PersonAddressDataeventQuery.joinHandles);
+        joinHandles.putAll(PersonDataeventQuery.joinHandles);
         return joinHandles;
     }
 

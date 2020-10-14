@@ -14,7 +14,7 @@ import java.util.Set;
 })
 public class CvrList {
 
-    public static final String TABLE_NAME = "cvr_list";
+    public static final String TABLE_NAME = "subscription_cvr_list";
 
     @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
     public static final String schema = "Company";
