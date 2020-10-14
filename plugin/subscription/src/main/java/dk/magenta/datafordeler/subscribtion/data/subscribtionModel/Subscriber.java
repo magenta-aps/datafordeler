@@ -23,7 +23,7 @@ public class Subscriber extends DatabaseEntry {
         this.subscriberId = subscriberId;
     }
 
-    @Column(name="subscriberId", nullable=false)
+    @Column(name="subscriberId", unique = true, nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String subscriberId;
 

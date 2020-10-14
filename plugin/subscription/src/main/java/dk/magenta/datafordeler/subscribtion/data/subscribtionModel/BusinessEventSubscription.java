@@ -37,7 +37,7 @@ public class BusinessEventSubscription extends DatabaseEntry  {
     }
 
 
-    @Column(name="businessEventId", nullable=false)
+    @Column(name="businessEventId", unique = true, nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String businessEventId;
 

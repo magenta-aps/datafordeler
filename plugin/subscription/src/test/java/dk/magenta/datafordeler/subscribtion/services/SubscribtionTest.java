@@ -152,7 +152,7 @@ public class SubscribtionTest {
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscription businessEventSubscription = subscriber.getBusinessEventSubscription().iterator().next();
-            CprList cprList = new CprList("listId", "user2");
+            CprList cprList = new CprList("listId1", "user2");
             session.save(cprList);
             businessEventSubscription.setCprList(cprList);
             transaction.commit();

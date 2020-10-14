@@ -31,7 +31,7 @@ public class CvrList {
     }
 
     @Id
-    @Column(name="id", nullable=false)
+    @Column(name="id", unique = true, nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private Long id;
 

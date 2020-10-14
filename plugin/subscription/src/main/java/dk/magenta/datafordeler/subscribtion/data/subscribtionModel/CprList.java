@@ -55,7 +55,7 @@ public class CprList extends DatabaseEntry {
     }
 
 
-    @Column(name="listId", nullable=false)
+    @Column(name="listId", unique = true, nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String listId;
 

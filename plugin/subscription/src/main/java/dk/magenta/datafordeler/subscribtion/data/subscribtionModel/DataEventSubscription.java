@@ -31,7 +31,7 @@ public class DataEventSubscription extends DatabaseEntry {
     }
 
 
-    @Column(name="dataEventId", nullable=false)
+    @Column(name="dataEventId", unique = true, nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String dataEventId;
 
