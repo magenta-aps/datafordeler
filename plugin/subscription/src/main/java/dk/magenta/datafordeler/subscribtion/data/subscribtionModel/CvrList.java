@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +14,6 @@ import java.util.Set;
 public class CvrList {
 
     public static final String TABLE_NAME = "subscription_cvr_list";
-
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
-    public static final String schema = "Company";
 
     public static final String DB_FIELD_ENTITY = "businessevententity";
 
@@ -37,7 +33,6 @@ public class CvrList {
 
 
     @Column(name="subscriberId", nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String subscriberId;
 
     public String getSubscriberId() {
@@ -49,8 +44,7 @@ public class CvrList {
     }
 
 
-    @Column(name="listId", nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @Column(name="listId", unique = true, nullable=false)
     private String listId;
 
     public String getListId() {

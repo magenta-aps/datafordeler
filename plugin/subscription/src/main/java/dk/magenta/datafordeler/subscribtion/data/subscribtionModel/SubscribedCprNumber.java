@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 
 import javax.persistence.*;
@@ -16,15 +15,11 @@ public class SubscribedCprNumber extends DatabaseEntry {
 
     public static final String TABLE_NAME = "subscription_cpr_number_subscribed";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
-    public static final String schema = "CprList";
-
 
     public static final String DB_FIELD_ENTITY = "entity";
 
 
     @Column(name="cprNumber", nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String cprNumber;
 
     public String getCprNumber() {

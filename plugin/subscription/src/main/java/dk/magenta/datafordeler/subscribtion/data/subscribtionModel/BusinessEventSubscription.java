@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -12,15 +11,7 @@ import javax.persistence.Entity;
 })
 public class BusinessEventSubscription extends DatabaseEntry  {
 
-
     public static final String TABLE_NAME = "subscription_businessevent";
-
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
-    public static final String schema = "Company";
-
-
-    public static final String DB_FIELD_ENTITY = "entity";
-
 
     public BusinessEventSubscription() {
     }

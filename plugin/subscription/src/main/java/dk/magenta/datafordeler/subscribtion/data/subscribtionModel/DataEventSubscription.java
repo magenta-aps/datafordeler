@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 
@@ -12,10 +11,6 @@ import javax.persistence.*;
 public class DataEventSubscription extends DatabaseEntry {
 
     public static final String TABLE_NAME = "subscription_dataevent";
-
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
-    public static final String schema = "Company";
-
 
     public static final String DB_FIELD_ENTITY = "entity";
 
@@ -32,7 +27,6 @@ public class DataEventSubscription extends DatabaseEntry {
 
 
     @Column(name="dataEventId", unique = true, nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String dataEventId;
 
     public String getDataEventId() {
@@ -44,7 +38,6 @@ public class DataEventSubscription extends DatabaseEntry {
     }
 
     @Column(name="kodeId", nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String kodeId;
 
     public String getKodeId() {

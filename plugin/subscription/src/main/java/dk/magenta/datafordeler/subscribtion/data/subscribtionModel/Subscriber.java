@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 import java.util.*;
@@ -11,10 +10,6 @@ import java.util.*;
 public class Subscriber extends DatabaseEntry {
 
     public static final String TABLE_NAME = "subscription_subscriber";
-
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
-    public static final String schema = "Company";
-
 
     public Subscriber() {
     }
@@ -38,7 +33,7 @@ public class Subscriber extends DatabaseEntry {
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="BE_SUBSCRIBTION_ID")
+    @JoinColumn(name="businesssubscribtion_id")
     Set<BusinessEventSubscription> businessEventSubscription = new HashSet<>();
 
     public Set<BusinessEventSubscription> getBusinessEventSubscription() {
@@ -51,7 +46,7 @@ public class Subscriber extends DatabaseEntry {
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="DE_SUBSCRIBTION_ID")
+    @JoinColumn(name="dataevetsubscribtion_id")
     Set<DataEventSubscription> dataEventSubscription = new HashSet<>();
 
     public Set<DataEventSubscription> getDataEventSubscription() {
