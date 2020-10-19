@@ -1021,7 +1021,6 @@ public class PersonEntity extends CprRecordEntity {
                         newItem.setSameAs(oldItem);
                         session.saveOrUpdate(oldItem);
                         boolean success = set.add((E) newItem);
-                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId(), "change1"));
                         return success;
                     } else if (
                                 newItem.getBitemporality().equals(oldItem.getBitemporality()) &&
