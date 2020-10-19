@@ -334,7 +334,7 @@ public class SubscribtionTest {
     }
 
     /**
-     * Test that it is possible to create a new subscription
+     * Test that it is possible to create a new subscriber
      * @throws Exception
      */
     @Test

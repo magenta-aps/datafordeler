@@ -155,10 +155,23 @@ public class ManageSubscribtion {
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request,
                                                                     @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
-                                                                    @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                                    @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
+                                                                    @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
+            CprList cprListItem = null;
+            if(!"".equals(cprList)) {
+                Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+                cprListQuery.setParameter("listId", cprList);
+
+                if(cprListQuery.getResultList().isEmpty()) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                } else {
+                    cprListItem = (CprList) cprListQuery.getResultList().get(0);
+                }
+            }
+
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -166,6 +179,7 @@ public class ManageSubscribtion {
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscription subscribtion = new BusinessEventSubscription(businessEventId, kodeId);
+            subscribtion.setCprList(cprListItem);
             subscriber.addBusinessEventSubscribtion(subscribtion);
 
             session.update(subscriber);
