@@ -264,13 +264,17 @@ public class RecordTest {
             Assert.assertEquals(12, companyRecord.getParticipants().size());
             Assert.assertEquals(1, companyRecord.getFusions().size());
 
-            Assert.assertEquals(1, companyRecord.getDataevent().size());
+            Set<CompanyDataEventRecord> listOfdataevents = companyRecord.getDataevent();
+
+            long adressEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).count();
+            Assert.assertEquals(6, adressEvents);
+
+            long nameEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_company_status")).count();
+            Assert.assertEquals(1, nameEvents);
 
             Assert.assertEquals(2, companyRecord.getFusions().iterator().next().getName().size());
             Assert.assertEquals(1, companyRecord.getFusions().iterator().next().getIncoming().size());
             Assert.assertEquals(2, companyRecord.getFusions().iterator().next().getIncoming().iterator().next().getValues().size());
-
-
 
             Assert.assertEquals(1, companyRecord.getSplits().size());
             Assert.assertEquals(2, companyRecord.getMetadata().getNewestName().size());
@@ -337,7 +341,10 @@ public class RecordTest {
             List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
             CompanyRecord companyRecord = records.get(0);
 
-            Assert.assertEquals(2, companyRecord.getDataevent().size());
+            Set<CompanyDataEventRecord> listOfdataevents = companyRecord.getDataevent();
+
+            long adressEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).count();
+            Assert.assertEquals(7, adressEvents);
 
         }
 
