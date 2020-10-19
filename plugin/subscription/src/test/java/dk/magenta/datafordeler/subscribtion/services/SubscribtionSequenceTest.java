@@ -69,7 +69,7 @@ public class SubscribtionSequenceTest {
      * @throws Exception
      */
     @Test
-    public void testCreateSubscriber() throws Exception {
+    public void testSequenceToBePerformedWithCustomer() throws Exception {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
@@ -143,17 +143,49 @@ public class SubscribtionSequenceTest {
                 String.class
         );
 
-        //Confirm that the CPR-list has one element
+        //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
+
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[" +
                 "{\"listId\":\"list01\"},{\"listId\":\"list02\"}]", response.getBody(), false);
 
+        //ADD an element to the CPR-list
+        httpEntity = new HttpEntity<String>("list01", new HttpHeaders());
+        response = restTemplate.exchange(
+                "/cvrlistplugin/v1/manager/subscriber/cvrList/create/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+
+        //ADD an element to the CPR-list
+        httpEntity = new HttpEntity<String>("list02", new HttpHeaders());
+        response = restTemplate.exchange(
+                "/cvrlistplugin/v1/manager/subscriber/cvrList/create/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+
+        //Confirm that the CPR-list has two elements
+        response = restTemplate.exchange(
+                "/cvrlistplugin/v1/manager/subscriber/cvrList/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[" +
+                "{\"listId\":\"list01\"},{\"listId\":\"list02\"}]", response.getBody(), false);
+
+        //Manage businesseventsubscribtions
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/?businessEventId=newBusinessEventId&kodeId=A04&cprList=list01",
                 HttpMethod.POST,
@@ -173,6 +205,86 @@ public class SubscribtionSequenceTest {
 
         JSONAssert.assertEquals("[" +
                 "{\"cprList\":{\"listId\":\"list01\"},\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A04\"}]", response.getBody(), false);
+
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/?businessEventId=newBusinessEventId&kodeId=A05&cprList=list02",
+                HttpMethod.PUT,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        JSONAssert.assertEquals("[" +
+                "{\"cprList\":{\"listId\":\"list02\"},\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A05\"}]", response.getBody(), false);
+
+        //Manage dataeventsubscribtions
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/?dataEventId=newDataEventId&kodeId=A04&cprList=list01",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        JSONAssert.assertEquals("[" +
+                "{\"cprList\":{\"listId\":\"list01\"},\"dataEventId\":\"newDataEventId\",\"kodeId\":\"A04\"}]", response.getBody(), false);
+
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/?dataEventId=newDataEventId&kodeId=A05&cprList=list02",
+                HttpMethod.PUT,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        JSONAssert.assertEquals("[" +
+                "{\"cprList\":{\"listId\":\"list02\"},\"dataEventId\":\"newDataEventId\",\"kodeId\":\"A05\"}]", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/?dataEventId=newDataEventId&kodeId=A05&cvrList=list02",
+                HttpMethod.PUT,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        JSONAssert.assertEquals("[" +
+                "{\"cprList\":{\"listId\":\"list02\"},\"cvrList\":{\"listId\":\"list02\"},\"dataEventId\":\"newDataEventId\",\"kodeId\":\"A05\"}]", response.getBody(), false);
 
     }
 

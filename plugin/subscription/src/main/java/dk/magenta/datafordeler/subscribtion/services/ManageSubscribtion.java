@@ -153,7 +153,7 @@ public class ManageSubscribtion {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request,
+    public ResponseEntity businessEventSubscribtionCreate(HttpServletRequest request,
                                                                     @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
                                                                     @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
                                                                     @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
@@ -185,6 +185,41 @@ public class ManageSubscribtion {
             session.update(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/businessEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity businessEventSubscribtionUpdate(HttpServletRequest request,
+                                                                    @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
+                                                                    @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
+                                                                    @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            Query subscribtionQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
+            subscribtionQuery.setParameter("businessEventId", businessEventId);
+            if(subscribtionQuery.getResultList().isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                BusinessEventSubscription subscribtion = (BusinessEventSubscription) subscribtionQuery.getResultList().get(0);
+                subscribtion.setKodeId(kodeId);
+                CprList cprListItem = null;
+                if(!"".equals(cprList)) {
+                    Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+                    cprListQuery.setParameter("listId", cprList);
+
+                    if(cprListQuery.getResultList().isEmpty()) {
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    } else {
+                        cprListItem = (CprList) cprListQuery.getResultList().get(0);
+                        subscribtion.setCprList(cprListItem);
+                    }
+                }
+                session.update(subscribtion);
+                transaction.commit();
+                return ResponseEntity.ok(subscribtion);
+            }
         }
     }
 
@@ -252,7 +287,7 @@ public class ManageSubscribtion {
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity dataEventSubscribtioncreateSubscriber(HttpServletRequest request,
+    public ResponseEntity dataEventSubscribtionCreate(HttpServletRequest request,
                                                                 @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
                                                                 @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
                                                                 @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
@@ -272,14 +307,14 @@ public class ManageSubscribtion {
                 }
             }
             CvrList cvrListItem = null;
-            if(!"".equals(cprList)) {
-                Query cprListQuery = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
-                cprListQuery.setParameter("listId", cvrList);
+            if(!"".equals(cvrList)) {
+                Query cvrListQuery = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+                cvrListQuery.setParameter("listId", cvrList);
 
-                if(cprListQuery.getResultList().isEmpty()) {
+                if(cvrListQuery.getResultList().isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 } else {
-                    cvrListItem = (CvrList) cprListQuery.getResultList().get(0);
+                    cvrListItem = (CvrList) cvrListQuery.getResultList().get(0);
                 }
             }
 
@@ -297,6 +332,54 @@ public class ManageSubscribtion {
             session.update(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/dataEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity dataEventSubscribtionUpdate(HttpServletRequest request,
+                                                      @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
+                                                      @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
+                                                      @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
+                                                      @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            Query subscribtionQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
+            subscribtionQuery.setParameter("dataEventId", dataEventId);
+            if(subscribtionQuery.getResultList().isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                DataEventSubscription subscribtion = (DataEventSubscription) subscribtionQuery.getResultList().get(0);
+                subscribtion.setKodeId(kodeId);
+                CprList cprListItem = null;
+                if(!"".equals(cprList)) {
+                    Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+                    cprListQuery.setParameter("listId", cprList);
+
+                    if(cprListQuery.getResultList().isEmpty()) {
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    } else {
+                        cprListItem = (CprList) cprListQuery.getResultList().get(0);
+                        subscribtion.setCprList(cprListItem);
+                    }
+                }
+                CvrList cvrListItem = null;
+                if(!"".equals(cvrList)) {
+                    Query cvrListQuery = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+                    cvrListQuery.setParameter("listId", cvrList);
+
+                    if(cvrListQuery.getResultList().isEmpty()) {
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    } else {
+                        cvrListItem = (CvrList) cvrListQuery.getResultList().get(0);
+                        subscribtion.setCvrList(cvrListItem);
+                    }
+                }
+                session.update(subscribtion);
+                transaction.commit();
+                return ResponseEntity.ok(subscribtion);
+            }
         }
     }
 
