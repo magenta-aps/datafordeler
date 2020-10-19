@@ -187,8 +187,8 @@ public class CvrListTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"subscriberId\":\"myUser\",\"listId\":\"myList1\"}," +
-                "{\"subscriberId\":\"myUser\",\"listId\":\"myList2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
+                "{\"listId\":\"myList2\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("cvrTestList1", new HttpHeaders());
@@ -207,9 +207,9 @@ public class CvrListTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"subscriberId\":\"myUser\",\"listId\":\"myList1\"}," +
-                "{\"subscriberId\":\"myUser\",\"listId\":\"myList2\"}," +
-                "{\"subscriberId\":\"myUser\",\"listId\":\"cvrTestList1\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
+                "{\"listId\":\"myList2\"}," +
+                "{\"listId\":\"cvrTestList1\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("cvrTestList2", new HttpHeaders());
@@ -229,10 +229,10 @@ public class CvrListTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"subscriberId\":\"myUser\",\"listId\":\"myList1\"}," +
-                "{\"subscriberId\":\"myUser\",\"listId\":\"myList2\"}," +
-                "{\"subscriberId\":\"myUser\",\"listId\":\"cvrTestList1\"}," +
-                "{\"subscriberId\":\"myUser\",\"listId\":\"cvrTestList2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
+                "{\"listId\":\"myList2\"}," +
+                "{\"listId\":\"cvrTestList1\"}," +
+                "{\"listId\":\"cvrTestList2\"}]", response.getBody(), false);
 
 
         //Add CPR-numbers to the CPR-list

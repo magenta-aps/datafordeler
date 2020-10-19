@@ -31,7 +31,7 @@ public class CvrList {
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private Long id;
 
-
+    @JsonIgnore
     @Column(name="subscriberId", nullable=false)
     private String subscriberId;
 

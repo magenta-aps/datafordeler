@@ -125,31 +125,17 @@ public class SubscribtionSequenceTest {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
 
-
-
+        //ADD an element to the CPR-list
+        httpEntity = new HttpEntity<String>("list01", new HttpHeaders());
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/list",
-                HttpMethod.GET,
+                "/cprlistplugin/v1/manager/subscriber/cprList/create/",
+                HttpMethod.POST,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-
-/*        JSONAssert.assertEquals("[" +
-                "{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A04\"}]", response.getBody(), false);
-
-        //Confirm that the CPR-list is empty
-        response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/list",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cprTestList1", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("list02", new HttpHeaders());
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/create/",
                 HttpMethod.POST,
@@ -166,8 +152,28 @@ public class SubscribtionSequenceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[" +
-                "{\"subscriberId\":\"myCreatedUser\",\"listId\":\"cprTestList1\"}]", response.getBody(), false);
-*/
+                "{\"listId\":\"list01\"},{\"listId\":\"list02\"}]", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/create/?businessEventId=newBusinessEventId&kodeId=A04&cprList=list01",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        JSONAssert.assertEquals("[" +
+                "{\"cprList\":{\"listId\":\"list01\"},\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A04\"}]", response.getBody(), false);
+
     }
 
 
