@@ -1021,7 +1021,7 @@ public class PersonEntity extends CprRecordEntity {
                         newItem.setSameAs(oldItem);
                         session.saveOrUpdate(oldItem);
                         boolean success = set.add((E) newItem);
-                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId()));
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), oldItem.getId(), newItem.getId(), "change1"));
                         return success;
                     } else if (
                                 newItem.getBitemporality().equals(oldItem.getBitemporality()) &&
@@ -1080,7 +1080,7 @@ public class PersonEntity extends CprRecordEntity {
                     clone.setEntity(newestOlderItem.getEntity());
                     newestOlderItem.setReplacedby(clone);
                     set.add(clone);
-                    entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newestOlderItem.getId(), newItem.getId()));
+                    entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newestOlderItem.getId(), newItem.getId(), "change2"));
                 }
                 if (oldestNewerItem != null) {
                     if (newItem.getRegistrationTo() == null) {
@@ -1091,7 +1091,7 @@ public class PersonEntity extends CprRecordEntity {
                         clone.setEntity(oldestNewerItem.getEntity());
                         newItem.setReplacedby(clone);
                         set.add(clone);
-                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newItem.getId(), clone.getId()));
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newItem.getId(), clone.getId(), "change3"));
                     }
                 }
             }
@@ -1136,7 +1136,7 @@ public class PersonEntity extends CprRecordEntity {
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                     boolean success = set.add((E) newItem);
                     if(newItem.getRegistrationFrom()!=null) {
-                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), newItem.getId()));
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), newItem.getId(), "change4"));
                     }
                     return success;
                 } else {
