@@ -28,12 +28,13 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     public PersonDataEventDataRecord() {
     }
 
-    public PersonDataEventDataRecord(OffsetDateTime timestamp, String field, Long oldItem, Long newItem) {
+    public PersonDataEventDataRecord(OffsetDateTime timestamp, String field, Long oldItem, Long newItem, String text) {
         this.setDafoUpdated(OffsetDateTime.now());
         this.timestamp = timestamp;
         this.field = field;
         this.oldItem = oldItem;
         this.newItem = newItem;
+        this.text = text;
     }
 
     public String getFieldName() {
