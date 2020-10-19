@@ -152,7 +152,7 @@ public class ManageSubscribtion {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity businessEventSubscribtioncreateSubscriber(HttpServletRequest request,
                                                                     @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
                                                                     @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
@@ -251,21 +251,50 @@ public class ManageSubscribtion {
 
 
 
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity dataEventSubscribtioncreateSubscriber(HttpServletRequest request,
-                                                                @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                                @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
+                                                                @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
+                                                                @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
+                                                                @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
+            CprList cprListItem = null;
+            if(!"".equals(cprList)) {
+                Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+                cprListQuery.setParameter("listId", cprList);
+
+                if(cprListQuery.getResultList().isEmpty()) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                } else {
+                    cprListItem = (CprList) cprListQuery.getResultList().get(0);
+                }
+            }
+            CvrList cvrListItem = null;
+            if(!"".equals(cprList)) {
+                Query cprListQuery = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+                cprListQuery.setParameter("listId", cvrList);
+
+                if(cprListQuery.getResultList().isEmpty()) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                } else {
+                    cvrListItem = (CvrList) cprListQuery.getResultList().get(0);
+                }
+            }
+
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("subscriberId", user.getIdentity());
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            DataEventSubscription subscribtion = new DataEventSubscription(businessEventId, "");
+            DataEventSubscription subscribtion = new DataEventSubscription(dataEventId, kodeId);
+            subscribtion.setCprList(cprListItem);
+            subscribtion.setCvrList(cvrListItem);
             subscriber.addDataEventSubscribtion(subscribtion);
 
+            session.update(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
         }

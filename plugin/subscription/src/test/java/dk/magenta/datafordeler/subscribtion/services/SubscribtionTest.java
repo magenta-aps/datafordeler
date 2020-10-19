@@ -507,7 +507,7 @@ public class SubscribtionTest {
                 "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/create/?businessEventId=newBusinessEventId&kodeId=A04",
+                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/?businessEventId=newBusinessEventId&kodeId=A04",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -528,7 +528,7 @@ public class SubscribtionTest {
                 "{\"cprList\":null,\"businessEventId\":\"subscribtion2\",\"kodeId\":\"A02\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/create/?businessEventId=newDataEventId",
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/?dataEventId=newDataEventId",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
