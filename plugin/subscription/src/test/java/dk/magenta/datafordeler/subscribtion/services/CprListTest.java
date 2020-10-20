@@ -195,11 +195,12 @@ public class CprListTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("cprTestList1", new HttpHeaders());
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/create/",
+                "/cprlistplugin/v1/manager/subscriber/cprList/",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has one element
         response = restTemplate.exchange(
@@ -216,7 +217,7 @@ public class CprListTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("cprTestList2", new HttpHeaders());
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/create/",
+                "/cprlistplugin/v1/manager/subscriber/cprList/",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -274,7 +275,7 @@ public class CprListTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/remove/cprTestList1?cpr=1111111115,1111111117",
+                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/cprTestList1?cpr=1111111115,1111111117",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class

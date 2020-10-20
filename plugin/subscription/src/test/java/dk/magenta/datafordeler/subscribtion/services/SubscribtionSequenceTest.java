@@ -129,20 +129,22 @@ public class SubscribtionSequenceTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("list01", new HttpHeaders());
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/create/",
+                "/cprlistplugin/v1/manager/subscriber/cprList/",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("list02", new HttpHeaders());
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/create/",
+                "/cprlistplugin/v1/manager/subscriber/cprList/",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
@@ -159,20 +161,22 @@ public class SubscribtionSequenceTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("list01", new HttpHeaders());
         response = restTemplate.exchange(
-                "/cvrlistplugin/v1/manager/subscriber/cvrList/create/",
+                "/cvrlistplugin/v1/manager/subscriber/cvrList/",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("list02", new HttpHeaders());
         response = restTemplate.exchange(
-                "/cvrlistplugin/v1/manager/subscriber/cvrList/create/",
+                "/cvrlistplugin/v1/manager/subscriber/cvrList/",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(

@@ -63,7 +63,7 @@ public class ManageCprList {
      * @throws InvalidTokenException
      * @throws InvalidCertificateException
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/create/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cprListCreate(HttpServletRequest request, @RequestBody String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         CprList cprCreateList = new CprList(cprList, user.getIdentity());
@@ -111,7 +111,7 @@ public class ManageCprList {
         }
     }
 
-    @DeleteMapping("/subscriber/cprList/cpr/remove/{listId}")
+    @DeleteMapping("/subscriber/cprList/cpr/{listId}")
     public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {

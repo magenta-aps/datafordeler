@@ -57,14 +57,14 @@ public class ManageCvrList {
     /**
      * Create a cprList
      * @param request
-     * @param cprList
+     * @param cvrList
      * @return
      * @throws IOException
      * @throws AccessDeniedException
      * @throws InvalidTokenException
      * @throws InvalidCertificateException
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/create/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestBody String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         CvrList cvrCreateList = new CvrList(cvrList, user.getIdentity());
@@ -112,7 +112,7 @@ public class ManageCvrList {
         }
     }
 
-    @DeleteMapping("/subscriber/cvrList/cvr/remove/{listId}")
+    @DeleteMapping("/subscriber/cvrList/cvr/{listId}")
     public ResponseEntity cvrListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
