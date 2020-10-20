@@ -104,6 +104,9 @@ public class FindCprDataEvent {
                 }
 
                 query.setPageSize(pageSize);
+                if(query.getPageSize()>1000) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
                 query.setPage(page);
                 List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
                 Envelope envelope = new Envelope();

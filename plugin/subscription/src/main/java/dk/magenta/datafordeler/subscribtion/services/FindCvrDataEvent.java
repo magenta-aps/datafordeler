@@ -76,8 +76,6 @@ public class FindCvrDataEvent {
         String timestamp = requestParams.getFirst("timestamp");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
-
-
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             Query eventQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
@@ -99,6 +97,9 @@ public class FindCvrDataEvent {
                 query.setCvrNumre(cvrFilterList);//TODO: consider joining this on DB-level
                 query.setDataEventTimeAfter(offsetTimestamp);
                 query.setPageSize(pageSize);
+                if(query.getPageSize()>1000) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
                 query.setPage(page);
                 List<ResultSet<CompanyRecord>> entities = QueryManager.getAllEntitySets(session, query, CompanyRecord.class);
                 Envelope envelope = new Envelope();
