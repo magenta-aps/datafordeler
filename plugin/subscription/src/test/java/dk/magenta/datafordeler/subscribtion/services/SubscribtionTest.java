@@ -552,12 +552,26 @@ public class SubscribtionTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion2", "A01"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion3", "A01"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
+            BusinessEventSubscription bs1 = new BusinessEventSubscription("subscribtion1", "A01");
+            BusinessEventSubscription bs2 = new BusinessEventSubscription("subscribtion2", "A01");
+            BusinessEventSubscription bs3 = new BusinessEventSubscription("subscribtion3", "A01");
+            bs1.setSubscriber(subscriber);
+            bs2.setSubscriber(subscriber);
+            bs3.setSubscriber(subscriber);
+            subscriber.addBusinessEventSubscribtion(bs1);
+            subscriber.addBusinessEventSubscribtion(bs2);
+            subscriber.addBusinessEventSubscribtion(bs3);
+
+            DataEventSubscription ds1 = new DataEventSubscription("subscribtion1", "");
+            DataEventSubscription ds2 = new DataEventSubscription("subscribtion2", "");
+            DataEventSubscription ds3 = new DataEventSubscription("subscribtion3", "");
+            ds1.setSubscriber(subscriber);
+            ds2.setSubscriber(subscriber);
+            ds3.setSubscriber(subscriber);
+
+            subscriber.addDataEventSubscribtion(ds1);
+            subscriber.addDataEventSubscribtion(ds2);
+            subscriber.addDataEventSubscribtion(ds3);
             session.save(subscriber);
             transaction.commit();
         }

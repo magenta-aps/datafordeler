@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 
@@ -48,11 +49,16 @@ public class DataEventSubscription extends DatabaseEntry {
         this.kodeId = kodeId;
     }
 
+    @JsonIgnore
     @ManyToOne
     private Subscriber subscriber;
 
     public Subscriber getSubscriber() {
         return subscriber;
+    }
+
+    public void setSubscriber(Subscriber subscriber) {
+        this.subscriber = subscriber;
     }
 
     @ManyToOne

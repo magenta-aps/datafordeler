@@ -44,6 +44,10 @@ public class Subscriber extends DatabaseEntry {
         this.businessEventSubscription.add(record);
     }
 
+    public void removeBusinessEventSubscribtion(BusinessEventSubscription record) {
+        this.businessEventSubscription.remove(record);
+    }
+
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="dataevetsubscribtion_id")
@@ -55,5 +59,9 @@ public class Subscriber extends DatabaseEntry {
 
     public void addDataEventSubscribtion(DataEventSubscription record) {
         this.dataEventSubscription.add(record);
+    }
+
+    public void removeDataEventSubscribtion(DataEventSubscription record) {
+        this.dataEventSubscription.remove(record);
     }
 }

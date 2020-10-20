@@ -160,9 +160,9 @@ public class ManageSubscribtion {
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity businessEventSubscribtionCreate(HttpServletRequest request,
-                                                                    @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
-                                                                    @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                                    @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                          @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
+                                                          @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
+                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -196,9 +196,9 @@ public class ManageSubscribtion {
 
     @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/businessEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity businessEventSubscribtionUpdate(HttpServletRequest request,
-                                                                    @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
-                                                                    @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                                    @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                          @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
+                                                          @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
+                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -255,10 +255,15 @@ public class ManageSubscribtion {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) query.getResultList().get(0);
-                //TODO: validate ownership
-                session.delete(subscribtion);
-                transaction.commit();
-                return ResponseEntity.ok(subscribtion);
+                DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+                if(subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                    subscribtion.getSubscriber().removeBusinessEventSubscribtion(subscribtion);
+                    transaction.commit();
+                    return ResponseEntity.ok(subscribtion);
+                } else {
+                    transaction.rollback();
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
             }
         } catch (Exception e) {
             log.error("Failed acessing webservice: ", e);
@@ -294,10 +299,10 @@ public class ManageSubscribtion {
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity dataEventSubscribtionCreate(HttpServletRequest request,
-                                                                @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
-                                                                @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                                @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
-                                                                @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                      @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
+                                                      @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
+                                                      @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
+                                                      @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -415,11 +420,17 @@ public class ManageSubscribtion {
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
+
                 DataEventSubscription subscribtion = (DataEventSubscription) query.getResultList().get(0);
-                //TODO: validate ownership
-                session.delete(subscribtion);
-                transaction.commit();
-                return ResponseEntity.ok(subscribtion);
+                DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+                if(subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                    subscribtion.getSubscriber().removeDataEventSubscribtion(subscribtion);
+                    transaction.commit();
+                    return ResponseEntity.ok(subscribtion);
+                } else {
+                    transaction.rollback();
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
             }
         } catch (Exception e) {
             log.error("Failed acessing webservice: ", e);

@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -53,6 +54,7 @@ public class BusinessEventSubscription extends DatabaseEntry  {
     }
 
 
+    @JsonIgnore
     @ManyToOne
     private Subscriber subscriber;
 
@@ -60,7 +62,9 @@ public class BusinessEventSubscription extends DatabaseEntry  {
         return subscriber;
     }
 
-
+    public void setSubscriber(Subscriber subscriber) {
+        this.subscriber = subscriber;
+    }
 
     @ManyToOne
     private CprList cprList;
