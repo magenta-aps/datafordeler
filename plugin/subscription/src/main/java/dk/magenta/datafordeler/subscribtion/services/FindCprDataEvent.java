@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscribtion.queries.PersonGeneralQuery;
@@ -95,9 +96,12 @@ public class FindCprDataEvent {
                 }
 
                 PersonRecordQuery query = PersonGeneralQuery.getPersonQuery(subscribtion.getKodeId(), offsetTimestamp);
-                List<SubscribedCprNumber> theList = subscribtion.getCprList().getCpr();
-                List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
-                query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
+                CprList cprList = subscribtion.getCprList();
+                if(cprList!=null) {
+                    List<SubscribedCprNumber> theList = cprList.getCpr();
+                    List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
+                    query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
+                }
 
                 query.setPageSize(pageSize);
                 query.setPage(page);
