@@ -356,6 +356,7 @@ public class SubscribtionTest {
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/list",
@@ -378,11 +379,12 @@ public class SubscribtionTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/createMy/",
+                "/subscriptionplugin/v1/manager/subscriber/",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/list",
@@ -558,6 +560,15 @@ public class SubscribtionTest {
             subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
             session.save(subscriber);
             transaction.commit();
+        }
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            Transaction transaction = session.beginTransaction();
+
+            List<BusinessEventSubscription> subscriptions = QueryManager.getAllItems(session, BusinessEventSubscription.class);
+            System.out.println(subscriptions);
+
         }
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());

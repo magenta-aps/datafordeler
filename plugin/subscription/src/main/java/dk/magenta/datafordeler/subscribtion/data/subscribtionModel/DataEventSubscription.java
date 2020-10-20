@@ -51,6 +51,9 @@ public class DataEventSubscription extends DatabaseEntry {
     @ManyToOne
     private Subscriber subscriber;
 
+    public Subscriber getSubscriber() {
+        return subscriber;
+    }
 
     @ManyToOne
     private CprList cprList;
