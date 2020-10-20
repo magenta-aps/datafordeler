@@ -279,7 +279,7 @@ public class CprListTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/cpr/list",

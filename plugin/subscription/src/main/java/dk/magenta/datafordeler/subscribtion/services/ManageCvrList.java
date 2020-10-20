@@ -123,7 +123,7 @@ public class ManageCvrList {
             CvrList foundList = (CvrList)query.getResultList().get(0);
             foundList.getCvr().removeIf(item -> cvrs.contains(item.getCvrNumber()));
             transaction.commit();
-            return (ResponseEntity) ResponseEntity.ok();
+            return ResponseEntity.ok(listId);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();

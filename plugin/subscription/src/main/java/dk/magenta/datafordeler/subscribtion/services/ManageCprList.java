@@ -122,7 +122,7 @@ public class ManageCprList {
             CprList foundList = (CprList)query.getResultList().get(0);
             foundList.getCpr().removeIf(item -> cprs.contains(item.getCprNumber()));
             transaction.commit();
-            return (ResponseEntity) ResponseEntity.ok();
+            return ResponseEntity.ok(listId);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();

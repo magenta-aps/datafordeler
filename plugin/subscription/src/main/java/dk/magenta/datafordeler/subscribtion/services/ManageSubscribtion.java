@@ -108,7 +108,7 @@ public class ManageSubscribtion {
         }
     }
 
-    @DeleteMapping("/subscriber/delete/{subscriberId}")
+    @DeleteMapping("/subscriber/{subscriberId}")
     public ResponseEntity<Subscriber> deleteBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -239,7 +239,7 @@ public class ManageSubscribtion {
         }
     }
 
-    @DeleteMapping("/subscriber/businessEventSubscribtion/delete/{subscribtionId}")
+    @DeleteMapping("/subscriber/businessEventSubscribtion/{subscribtionId}")
     public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -400,7 +400,7 @@ public class ManageSubscribtion {
         }
     }
 
-    @DeleteMapping("/subscriber/dataEventSubscribtion/delete/{subscribtionId}")
+    @DeleteMapping("/subscriber/dataEventSubscribtion/{subscribtionId}")
     public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();

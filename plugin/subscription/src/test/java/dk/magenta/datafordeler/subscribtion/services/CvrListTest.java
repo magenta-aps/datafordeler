@@ -277,7 +277,7 @@ public class CvrListTest {
                 httpEntity,
                 String.class
         );
-        //Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/cvrlistplugin/v1/manager/subscriber/cvrList/cvr/list",

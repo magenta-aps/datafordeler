@@ -76,18 +76,6 @@ public class SubscribtionTest {
             subscriptions.add(new Subscriber("user3"));
             subscriptions.add(new Subscriber("user4"));
 
-            /*subscriptions.get(0).addBusinessEventSubscribtion(new BusinessEventSubscribtion("ww"));
-            subscriptions.get(1).addDataEventSubscribtion(new DataEventSubscribtion("ww"));
-
-            //There is 5 fathers in the test-file
-            //One should not be added to subscribtion becrause the child is more than 18 years old.
-            //One person should not be added becrause the father allready exists as a person.
-            Assert.assertEquals(4, subscriptions.size());
-            Assert.assertEquals(1, subscriptions.get(0).getBusinessEventSubscribtion().size());
-            Assert.assertEquals(0, subscriptions.get(1).getBusinessEventSubscribtion().size());
-
-            Assert.assertEquals(0, subscriptions.get(0).getDataEventSubscribtion().size());
-            Assert.assertEquals(1, subscriptions.get(1).getDataEventSubscribtion().size());*/
 
             for(Subscriber subscriber : subscriptions) {
                 session.save(subscriber);
@@ -444,7 +432,7 @@ public class SubscribtionTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/delete/user2",
+                "/subscriptionplugin/v1/manager/subscriber/user2",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
@@ -592,7 +580,7 @@ public class SubscribtionTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/delete/subscribtion1",
+                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/subscribtion1",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
@@ -624,7 +612,7 @@ public class SubscribtionTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/delete/subscribtion1",
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/subscribtion1",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
