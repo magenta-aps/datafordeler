@@ -561,6 +561,12 @@ public class CompanyRecordQuery extends BaseQuery {
         this.companyrecordeventTimeAfter = companyrecordeventTimeAfter;
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = COMPANYDATAEVENTTIME)
+    private OffsetDateTime companyrecordeventTimeBefore;
+
+    public void setDataEventTimeBefore(OffsetDateTime companyrecordeventTimeBefore) {
+        this.companyrecordeventTimeBefore = companyrecordeventTimeBefore;
+    }
 
 
     @Override
@@ -704,6 +710,7 @@ public class CompanyRecordQuery extends BaseQuery {
         joinHandles.put("participantOrganizationType", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_ORGANIZATIONS + BaseQuery.separator + OrganizationRecord.DB_FIELD_MAIN_TYPE);
         joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
         joinHandles.put("companyrecordeventTime.GTE", CompanyRecord.DB_FIELD_DATAEVENT + LookupDefinition.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("companyrecordeventTime.LTE", CompanyRecord.DB_FIELD_DATAEVENT + LookupDefinition.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override
@@ -743,6 +750,7 @@ public class CompanyRecordQuery extends BaseQuery {
             this.addCondition("lastUpdated", Condition.Operator.GT, Collections.singletonList(this.lastUpdated), OffsetDateTime.class, false);
         }
         this.addCondition("companyrecordeventTime.GTE", Condition.Operator.GTE, this.companyrecordeventTimeAfter, OffsetDateTime.class, true);
+        this.addCondition("companyrecordeventTime.LTE", Condition.Operator.LTE, this.companyrecordeventTimeBefore, OffsetDateTime.class, true);
     }
 
 

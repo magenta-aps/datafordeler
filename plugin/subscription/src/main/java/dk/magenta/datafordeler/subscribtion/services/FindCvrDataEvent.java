@@ -105,6 +105,7 @@ public class FindCvrDataEvent {
                 List<String> cvrFilterList = theList.stream().map(x -> x.getCvrNumber()).collect(Collectors.toList());
                 query.setCvrNumre(cvrFilterList);//TODO: consider joining this on DB-level
                 query.setDataEventTimeAfter(offsetTimestampGTE);
+                query.setDataEventTimeBefore(offsetTimestampLTE);
                 query.setPageSize(pageSize);
                 if(query.getPageSize()>1000) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);

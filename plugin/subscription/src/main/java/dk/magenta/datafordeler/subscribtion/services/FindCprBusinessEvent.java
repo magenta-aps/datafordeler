@@ -69,7 +69,8 @@ public class FindCprBusinessEvent {
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
         String businessEventId = requestParams.getFirst("subscribtion");
-        String timestamp = requestParams.getFirst("timestamp");
+        String timestampGTE = requestParams.getFirst("timestamp.GTE");
+        String timestampLTE = requestParams.getFirst("timestamp.LTE");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -88,8 +89,11 @@ public class FindCprBusinessEvent {
                     query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
                 }
                 query.setEvent(subscribtion.getKodeId());
-                if(timestamp!=null) {
-                    query.setEventTimeAfter(timestamp);
+                if(timestampGTE!=null) {
+                    query.setEventTimeAfter(timestampGTE);
+                }
+                if(timestampLTE!=null) {
+                    //query.setEventTimeBefore(timestampLTE);
                 }
                 query.setPageSize(pageSize);
                 if(query.getPageSize()>1000) {
