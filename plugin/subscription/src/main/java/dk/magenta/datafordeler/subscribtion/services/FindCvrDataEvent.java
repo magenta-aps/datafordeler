@@ -84,6 +84,9 @@ public class FindCvrDataEvent {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscribtion = (DataEventSubscription) eventQuery.getResultList().get(0);
+                if(!subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
                 OffsetDateTime offsetTimestamp;
                 if(timestamp==null) {
                     offsetTimestamp = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));

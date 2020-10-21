@@ -106,12 +106,18 @@ public class FetchEventsTest {
             Subscriber subscriber = new Subscriber("user1");
 
             BusinessEventSubscription subscribtionT1 = new BusinessEventSubscription("BE1", "A01");
+            subscribtionT1.setSubscriber(subscriber);
             BusinessEventSubscription subscribtionT2 = new BusinessEventSubscription("BE2", "A02");
+            subscribtionT2.setSubscriber(subscriber);
             BusinessEventSubscription subscribtionT3 = new BusinessEventSubscription("BE3", "A03");
+            subscribtionT3.setSubscriber(subscriber);
 
             DataEventSubscription subscribtionDE1 = new DataEventSubscription("DE1", "cpr.cpr_person_address_record");
+            subscribtionDE1.setSubscriber(subscriber);
             DataEventSubscription subscribtionDE2 = new DataEventSubscription("DE2", "cpr.cpr_person_civil_record");
+            subscribtionDE2.setSubscriber(subscriber);
             DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "cpr.cpr_person_civil_record");
+            subscribtionDE3.setSubscriber(subscriber);
 
             CprList cprList = new CprList("L1", "user1");
             cprList.addCprString("0101011235");
@@ -301,6 +307,7 @@ public class FetchEventsTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.setIdentity("user1");
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -356,6 +363,7 @@ public class FetchEventsTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.setIdentity("user1");
         this.applyAccess(testUserDetails);
 
         OffsetDateTime timestamp = OffsetDateTime.now(ZoneOffset.UTC);
@@ -424,6 +432,7 @@ public class FetchEventsTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.setIdentity("user1");
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
