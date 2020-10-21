@@ -75,7 +75,8 @@ public class FindCprDataEvent {
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
         String dataEventId = requestParams.getFirst("subscribtion");
-        String timestamp = requestParams.getFirst("timestamp");
+        String timestampGTE = requestParams.getFirst("timestamp.GTE");
+        String timestampLTE = requestParams.getFirst("timestamp.LTE");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
 
@@ -91,14 +92,19 @@ public class FindCprDataEvent {
                 if(!subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
-                OffsetDateTime offsetTimestamp;
-                if(timestamp==null) {
-                    offsetTimestamp = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
+                OffsetDateTime offsetTimestampGTE;
+                if(timestampGTE==null) {
+                    offsetTimestampGTE = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
                 } else {
-                    offsetTimestamp = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestamp);
+                    offsetTimestampGTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampGTE);
                 }
 
-                PersonRecordQuery query = PersonGeneralQuery.getPersonQuery(subscribtion.getKodeId(), offsetTimestamp);
+                OffsetDateTime offsetTimestampLTE=null;
+                if(timestampLTE!=null) {
+                    offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
+                }
+
+                PersonRecordQuery query = PersonGeneralQuery.getPersonQuery(subscribtion.getKodeId(), offsetTimestampGTE, offsetTimestampLTE);
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
                     List<SubscribedCprNumber> theList = cprList.getCpr();

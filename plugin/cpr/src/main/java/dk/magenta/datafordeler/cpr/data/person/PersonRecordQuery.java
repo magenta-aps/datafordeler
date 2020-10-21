@@ -380,6 +380,13 @@ public class PersonRecordQuery extends BaseQuery {
         this.persondataeventTimeAfter = personeventTimeAfter;
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENTTIME)
+    private OffsetDateTime persondataeventTimeBefore;
+
+    public void setDataEventTimeBefore(OffsetDateTime personeventTimeBefore) {
+        this.persondataeventTimeBefore = personeventTimeBefore;
+    }
+
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
@@ -441,6 +448,7 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
         joinHandles.put("persondataevent", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_FIELD);
         joinHandles.put("persondataeventTime.GTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("persondataeventTime.LTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override
@@ -468,6 +476,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("personeventTime.GTE", Condition.Operator.GTE, this.personeventTimeAfter, OffsetDateTime.class, true);
         this.addCondition("persondataevent", this.persondataevents);
         this.addCondition("persondataeventTime.GTE", Condition.Operator.GTE, this.persondataeventTimeAfter, OffsetDateTime.class, true);
+        this.addCondition("persondataeventTime.LTE", Condition.Operator.LTE, this.persondataeventTimeBefore, OffsetDateTime.class, true);
     }
 
 
