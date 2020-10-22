@@ -4,6 +4,7 @@ import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.MultiCondition;
 import dk.magenta.datafordeler.core.fapi.QueryField;
+import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
@@ -11,7 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersonDataeventQuery extends PersonGeneralQuery {
+public class PersonDataeventQuery extends PersonRecordQuery {
     //TODO: REFACTOR THIS SHIT
 
 
@@ -27,16 +28,9 @@ public class PersonDataeventQuery extends PersonGeneralQuery {
         super();
     }
 
-    public PersonDataeventQuery(HttpServletRequest request) {
-        super(request);
-    }
 
     private static HashMap<String, String> joinHandles = new HashMap<>();
 
-    static {
-        joinHandles.putAll(getBitemporalHandles("dataeventfield", "dataevent.field"));
-
-    }
 
 
 

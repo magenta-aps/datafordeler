@@ -17,7 +17,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
-import dk.magenta.datafordeler.subscribtion.queries.PersonGeneralQuery;
+import dk.magenta.datafordeler.subscribtion.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -109,7 +109,7 @@ public class FindCprDataEvent {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
 
-                PersonRecordQuery query = PersonGeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
+                PersonRecordQuery query = GeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
                     List<SubscribedCprNumber> theList = cprList.getCpr();

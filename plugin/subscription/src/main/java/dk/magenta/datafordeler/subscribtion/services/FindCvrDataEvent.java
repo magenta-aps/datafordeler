@@ -16,6 +16,7 @@ import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCvrNumber;
+import dk.magenta.datafordeler.subscribtion.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -105,13 +106,10 @@ public class FindCvrDataEvent {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
 
-                CompanyRecordQuery query = new CompanyRecordQuery();
                 List<SubscribedCvrNumber> theList = subscribtion.getCvrList().getCvr();
                 List<String> cvrFilterList = theList.stream().map(x -> x.getCvrNumber()).collect(Collectors.toList());
-                query.setDataEvent(subscribtionKodeId[2]);
+                CompanyRecordQuery query = GeneralQuery.getCompanyQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
                 query.setCvrNumre(cvrFilterList);//TODO: consider joining this on DB-level
-                query.setDataEventTimeAfter(offsetTimestampGTE);
-                query.setDataEventTimeBefore(offsetTimestampLTE);
                 query.setPageSize(pageSize);
                 if(query.getPageSize()>1000) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
