@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class PersonGeneralQuery extends PersonRecordQuery {
+    //TODO: REFACTOR THIS SHIT
 
 
     public static final String BEFORE_DATE_PARAMETER = "beforeDate";

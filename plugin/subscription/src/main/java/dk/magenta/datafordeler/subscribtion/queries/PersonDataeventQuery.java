@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PersonDataeventQuery extends PersonGeneralQuery {
+    //TODO: REFACTOR THIS SHIT
 
 
     @QueryField(
@@ -53,25 +54,8 @@ public class PersonDataeventQuery extends PersonGeneralQuery {
         super.setupConditions();
         MultiCondition condition = new MultiCondition(this.getCondition());
 
-
-
-
-
-
-
-        //if (this.recordAfter != null) {
-       // condition.add(this.addCondition("timestamp", Condition.Operator.GT, Collections.singletonList(this.timestamp.plusDays(10)), OffsetDateTime.class, false));
-
-
         condition.add(this.addCondition("dataeventfield", Condition.Operator.EQ, "Collections.singletonList(this.timestamp)", String.class, false));
         condition.add(this.addCondition("dafoUpdated", Condition.Operator.GT, Collections.singletonList(this.timestamp.plusDays(10)), OffsetDateTime.class, false));
-
-        this.setRecordAfter(OffsetDateTime.now().plusYears(5));
-
-
-        //}
-
-
         this.addCondition(condition);
     }
 

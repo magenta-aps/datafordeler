@@ -100,9 +100,15 @@ public class FindCvrDataEvent {
                     offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
                 }
 
+                String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
+                if(!"cvr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
+
                 CompanyRecordQuery query = new CompanyRecordQuery();
                 List<SubscribedCvrNumber> theList = subscribtion.getCvrList().getCvr();
                 List<String> cvrFilterList = theList.stream().map(x -> x.getCvrNumber()).collect(Collectors.toList());
+                query.setDataEvent(subscribtionKodeId[2]);
                 query.setCvrNumre(cvrFilterList);//TODO: consider joining this on DB-level
                 query.setDataEventTimeAfter(offsetTimestampGTE);
                 query.setDataEventTimeBefore(offsetTimestampLTE);
