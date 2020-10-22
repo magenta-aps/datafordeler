@@ -93,7 +93,7 @@ public class FindCprBusinessEvent {
                     query.setEventTimeAfter(timestampGTE);
                 }
                 if(timestampLTE!=null) {
-                    //query.setEventTimeBefore(timestampLTE);
+                    query.setEventTimeBefore(timestampLTE);
                 }
                 query.setPageSize(pageSize);
                 if(query.getPageSize()>1000) {

@@ -341,6 +341,13 @@ public class PersonRecordQuery extends BaseQuery {
         this.personeventTimeAfter = OffsetDateTime.parse(personeventTimeAfter, DateTimeFormatter.ISO_DATE_TIME);
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONEVENTTIME)
+    private OffsetDateTime personeventTimeBefore;
+
+    public void setEventTimeBefore(String personeventTimeBefore) {
+        this.personeventTimeAfter = OffsetDateTime.parse(personeventTimeBefore, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENT)
     private List<String> persondataevents = new ArrayList<>();
 
@@ -446,6 +453,7 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + LookupDefinition.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
         joinHandles.put("personevent", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_EVENT);
         joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("personeventTime.LTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
         joinHandles.put("persondataevent", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_FIELD);
         joinHandles.put("persondataeventTime.GTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
         joinHandles.put("persondataeventTime.LTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
@@ -474,6 +482,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("custodyPnr", this.custodyPnr);
         this.addCondition("personevent", this.personevents);
         this.addCondition("personeventTime.GTE", Condition.Operator.GTE, this.personeventTimeAfter, OffsetDateTime.class, true);
+        this.addCondition("personeventTime.LTE", Condition.Operator.GTE, this.personeventTimeBefore, OffsetDateTime.class, true);
         this.addCondition("persondataevent", this.persondataevents);
         this.addCondition("persondataeventTime.GTE", Condition.Operator.GTE, this.persondataeventTimeAfter, OffsetDateTime.class, true);
         this.addCondition("persondataeventTime.LTE", Condition.Operator.LTE, this.persondataeventTimeBefore, OffsetDateTime.class, true);
