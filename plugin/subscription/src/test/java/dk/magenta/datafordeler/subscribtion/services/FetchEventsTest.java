@@ -105,18 +105,18 @@ public class FetchEventsTest {
 
             Subscriber subscriber = new Subscriber("user1");
 
-            BusinessEventSubscription subscribtionT1 = new BusinessEventSubscription("BE1", "A01");
+            BusinessEventSubscription subscribtionT1 = new BusinessEventSubscription("BE1", "cpr.businessevent.A01");
             subscribtionT1.setSubscriber(subscriber);
-            BusinessEventSubscription subscribtionT2 = new BusinessEventSubscription("BE2", "A02");
+            BusinessEventSubscription subscribtionT2 = new BusinessEventSubscription("BE2", "cpr.businessevent.A02");
             subscribtionT2.setSubscriber(subscriber);
-            BusinessEventSubscription subscribtionT3 = new BusinessEventSubscription("BE3", "A03");
+            BusinessEventSubscription subscribtionT3 = new BusinessEventSubscription("BE3", "cpr.businessevent.A03");
             subscribtionT3.setSubscriber(subscriber);
 
-            DataEventSubscription subscribtionDE1 = new DataEventSubscription("DE1", "cpr.cpr_person_address_record");
+            DataEventSubscription subscribtionDE1 = new DataEventSubscription("DE1", "cpr.dataevent.cpr_person_address_record");
             subscribtionDE1.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE2 = new DataEventSubscription("DE2", "cpr.cpr_person_civil_record");
+            DataEventSubscription subscribtionDE2 = new DataEventSubscription("DE2", "cpr.dataevent.anything");
             subscribtionDE2.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "cpr.cpr_person_civil_record");
+            DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "cpr.dataevent.cpr_person_civil_record");
             subscribtionDE3.setSubscriber(subscriber);
 
             CprList cprList = new CprList("L1", "user1");

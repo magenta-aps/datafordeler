@@ -17,6 +17,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
+import dk.magenta.datafordeler.subscribtion.queries.PersonGeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -88,7 +89,12 @@ public class FindCprBusinessEvent {
                     List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
                     query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
                 }
-                query.setEvent(subscribtion.getKodeId());
+                String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
+                if(!"cpr".equals(subscribtionKodeId[0]) && !"businessevent".equals(subscribtionKodeId[1])) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
+
+                query.setEvent(subscribtionKodeId[2]);
                 if(timestampGTE!=null) {
                     query.setEventTimeAfter(timestampGTE);
                 }

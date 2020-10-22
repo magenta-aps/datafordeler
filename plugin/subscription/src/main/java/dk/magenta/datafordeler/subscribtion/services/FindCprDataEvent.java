@@ -104,7 +104,12 @@ public class FindCprDataEvent {
                     offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
                 }
 
-                PersonRecordQuery query = PersonGeneralQuery.getPersonQuery(subscribtion.getKodeId(), offsetTimestampGTE, offsetTimestampLTE);
+                String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
+                if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
+
+                PersonRecordQuery query = PersonGeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
                     List<SubscribedCprNumber> theList = cprList.getCpr();

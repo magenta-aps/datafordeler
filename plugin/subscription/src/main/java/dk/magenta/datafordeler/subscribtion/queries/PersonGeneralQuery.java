@@ -260,30 +260,17 @@ public class PersonGeneralQuery extends PersonRecordQuery {
 
     public static PersonRecordQuery getPersonQuery(String queryType, OffsetDateTime timestampGTE, OffsetDateTime timestampLTE) {
         switch(queryType) {
-            /*case "person.address":
-                PersonAddressChangeQuery addressQuery = new PersonAddressChangeQuery();
-                addressQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
-                return addressQuery;
-            case "person.civil":
-                PersonCivilStatusQuery civilstatusQuery = new PersonCivilStatusQuery();
-                civilstatusQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
-                return civilstatusQuery;
-            case "person.death":
-                PersonDeathQuery deathQuery = new PersonDeathQuery();
-                deathQuery.setRegistrationTimeAfter(timestamp);//TODO: consider joining this on DB-level
-                return deathQuery;*/
-            case "cpr.cpr_person_address_record":
+            case "anything":
+                PersonRecordQuery personQuery = new PersonRecordQuery();
+                personQuery.setRecordAfter(timestampGTE);
+                return personQuery;
+            default:
                 PersonDataeventQuery addressEventQuery = new PersonDataeventQuery();
                 addressEventQuery.setDataEvent("cpr_person_address_record");
                 //addressEventQuery.setRecordAfter(timestamp);
                 addressEventQuery.setDataEventTimeAfter(timestampGTE);//TODO: consider joining this on DB-level
                 addressEventQuery.setDataEventTimeBefore(timestampLTE);
                 return addressEventQuery;
-
-            default:
-                PersonRecordQuery personQuery = new PersonRecordQuery();
-                personQuery.setRecordAfter(timestampGTE);
-                return personQuery;
         }
     }
 
