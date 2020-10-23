@@ -36,6 +36,39 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="cprList_id")
+    Set<CprList> cprLists = new HashSet<>();
+
+    public Set<CprList> getCprLists() {
+        return this.cprLists;
+    }
+
+    public void addCvrList(CprList cprList) {
+        this.cprLists.add(cprList);
+    }
+
+    public void removeCprList(CprList cprList) {
+        this.cprLists.remove(cprList);
+    }
+
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="cvrList_id")
+    Set<CvrList> cvrLists = new HashSet<>();
+
+    public Set<CvrList> getCvrLists() {
+        return this.cvrLists;
+    }
+
+    public void addCvrList(CvrList cvrList) {
+        this.cvrLists.add(cvrList);
+    }
+
+    public void removeCprList(CvrList cvrList) {
+        this.cvrLists.remove(cvrList);
+    }
+
+
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name=JOIN_BUSINESS_COLUMN)

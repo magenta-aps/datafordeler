@@ -16,6 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -66,12 +68,21 @@ public class ManageCprList {
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cprListCreate(HttpServletRequest request, @RequestBody String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        CprList cprCreateList = new CprList(cprList, user.getIdentity());
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.save(cprCreateList);
-            transaction.commit();
-            return ResponseEntity.ok(cprCreateList);
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            query.setParameter("subscriberId", user.getIdentity());
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                CprList cprCreateList = new CprList(cprList, subscriber);
+                session.save(cprCreateList);
+                subscriber.addCvrList(cprCreateList);
+
+                transaction.commit();
+                return ResponseEntity.ok(cprCreateList);
+            }
         }
     }
 
@@ -81,33 +92,41 @@ public class ManageCprList {
      */
     @GetMapping("/subscriber/cprList/list")
     public ResponseEntity<List<CprList>> cprListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId", CprList.class);
-            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", user.getIdentity());
-            return ResponseEntity.ok(query.getResultList());
+            if(query.getResultList().size()==0) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                return ResponseEntity.ok(subscriber.getCprLists().stream().collect(Collectors.toList()));
+            }
         }
     }
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/cpr/add/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void cprListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cprNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cprListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cprNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId and listId = :listId ", CprList.class);
-            query.setParameter("subscriberId", user.getIdentity());
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
             query.setParameter("listId", cprNo.getKey());
             CprList foundList = (CprList)query.getResultList().get(0);
-
-
+            if(!foundList.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
             for(String cpr : cprNo.getValues()) {
-
                 foundList.addCprString(cpr);
             }
 
             transaction.commit();
-            //return (ResponseEntity) ResponseEntity.ok();
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch(Exception e) {
+            log.error("FAILED REMOVING ELEMENT", e);
+            return ResponseEntity.status(500).build();
         }
     }
 
@@ -116,10 +135,12 @@ public class ManageCprList {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId and listId = :listId ", CprList.class);
-            query.setParameter("subscriberId", user.getIdentity());
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
             query.setParameter("listId", listId);
             CprList foundList = (CprList)query.getResultList().get(0);
+            if(!foundList.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
             foundList.getCpr().removeIf(item -> cprs.contains(item.getCprNumber()));
             transaction.commit();
             return ResponseEntity.ok(listId);
@@ -141,7 +162,7 @@ public class ManageCprList {
         String page = requestParams.getFirst("page");
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where subscriberId = :subscriberId and  listId = :listId", CprList.class);
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where  listId = :listId", CprList.class);
             if(pageSize != null) {
                 query.setMaxResults(Integer.valueOf(pageSize));
             } else {
@@ -155,9 +176,11 @@ public class ManageCprList {
             }
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", user.getIdentity());
             query.setParameter("listId", "cprTestList1");
             CprList foundList = (CprList)query.getResultList().get(0);
+            if(!foundList.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
 
             Envelope envelope = new Envelope();
             envelope.setPageSize(query.getMaxResults());
@@ -167,6 +190,9 @@ public class ManageCprList {
             envelope.setResults(foundList.getCpr());
 
             return ResponseEntity.ok(envelope);
+        } catch (Exception e) {
+            log.error("FAILED REMOVING ELEMENT", e);
+            return ResponseEntity.status(500).build();
         }
     }
 

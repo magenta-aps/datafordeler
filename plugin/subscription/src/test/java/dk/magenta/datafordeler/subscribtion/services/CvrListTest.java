@@ -70,10 +70,18 @@ public class CvrListTest {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            CvrList cvrList1 = new CvrList("myList1", "myUser");
+            Subscriber subscriber =  new Subscriber("myUser");
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
+
+            CvrList cvrList1 = new CvrList("myList1");
+            subscriber.addCvrList(cvrList1);
             session.save(cvrList1);
-            CvrList cvrList2 = new CvrList("myList2", "myUser");
+            CvrList cvrList2 = new CvrList("myList2");
+            subscriber.addCvrList(cvrList2);
             session.save(cvrList2);
+            session.save(subscriber);
             transaction.commit();
         }
 
@@ -97,8 +105,8 @@ public class CvrListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
-            CvrList subscriber = (CvrList) query.getResultList().get(0);
-            subscriber.addCvrsStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
+            CvrList cvrList = (CvrList) query.getResultList().get(0);
+            cvrList.addCvrsStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
             transaction.commit();
         }
 
@@ -106,8 +114,8 @@ public class CvrListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
-            CvrList subscriber = (CvrList) query.getResultList().get(0);
-            subscriber.addCvrsStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
+            CvrList cvrList = (CvrList) query.getResultList().get(0);
+            cvrList.addCvrsStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
             transaction.commit();
         }
 
@@ -115,8 +123,8 @@ public class CvrListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
-            CvrList subscriber = (CvrList) query.getResultList().get(0);
-            Assert.assertEquals(4, subscriber.getCvr().size());
+            CvrList cvrList = (CvrList) query.getResultList().get(0);
+            Assert.assertEquals(4, cvrList.getCvr().size());
         }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -140,8 +148,8 @@ public class CvrListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
-            CvrList subscriber = (CvrList) query.getResultList().get(0);
-            session.delete(subscriber);
+            CvrList cvrList = (CvrList) query.getResultList().get(0);
+            session.delete(cvrList);
             transaction.commit();;
         }
 
@@ -162,17 +170,7 @@ public class CvrListTest {
      * @throws Exception
      */
     @Test
-    public void testGetAndAddCprList() throws Exception {
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
-            session.save(subscriber);
-            transaction.commit();
-        }
+    public void testGetAndAddCvrList() throws Exception {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();

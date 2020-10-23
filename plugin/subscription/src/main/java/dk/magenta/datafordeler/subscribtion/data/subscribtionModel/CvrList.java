@@ -21,9 +21,13 @@ public class CvrList {
     public CvrList() {
     }
 
-    public CvrList(String listId, String subscriberId) {
+    public CvrList(String listId) {
         this.listId = listId;
-        this.subscriberId = subscriberId;
+    }
+
+    public CvrList(String listId, Subscriber subscriber) {
+        this.listId = listId;
+        this.subscriber = subscriber;
     }
 
     @Id
@@ -31,18 +35,19 @@ public class CvrList {
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private Long id;
 
+
     @JsonIgnore
-    @Column(name="subscriberId", nullable=false)
-    private String subscriberId;
+    @ManyToOne
+    @JoinColumn(name="subscriber_id")
+    private Subscriber subscriber;
 
-    public String getSubscriberId() {
-        return subscriberId;
+    public Subscriber getSubscriber() {
+        return subscriber;
     }
 
-    public void setSubscriberId(String subscriberId) {
-        this.subscriberId = subscriberId;
+    public void setSubscriber(Subscriber subscriber) {
+        this.subscriber = subscriber;
     }
-
 
     @Column(name="listId", unique = true, nullable=false)
     private String listId;

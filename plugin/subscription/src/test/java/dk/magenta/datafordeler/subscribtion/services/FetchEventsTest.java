@@ -119,7 +119,7 @@ public class FetchEventsTest {
             DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "cvr.dataevent.anything");
             subscribtionDE3.setSubscriber(subscriber);
 
-            CprList cprList = new CprList("L1", "user1");
+            CprList cprList = new CprList("L1");
             cprList.addCprString("0101011235");
             cprList.addCprString("0101011236");
             cprList.addCprString("0101011237");
@@ -138,7 +138,7 @@ public class FetchEventsTest {
             cprList.addCprString("0101011250");
             session.save(cprList);
 
-            CvrList cvrList = new CvrList("L2", "user1");
+            CvrList cvrList = new CvrList("L2");
             cvrList.addCvrsString("25052943");
             session.save(cvrList);
 

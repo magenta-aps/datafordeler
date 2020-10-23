@@ -67,12 +67,25 @@ public class CprListTest {
         ManageSubscribtion controller = new ManageSubscribtion();
         mvc = MockMvcBuilders.standaloneSetup(controller).build();
 
+
         try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Subscriber subscriber = new Subscriber("myUser");
             Transaction transaction = session.beginTransaction();
-            CprList cprList1 = new CprList("myList1", "myUser");
+
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion2", "A02"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion3", "A03"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
+
+            CprList cprList1 = new CprList("myList1");
             session.save(cprList1);
-            CprList cprList2 = new CprList("myList2", "myUser");
+            CprList cprList2 = new CprList("myList2");
             session.save(cprList2);
+            subscriber.addCvrList(cprList1);
+            subscriber.addCvrList(cprList2);
+            session.save(subscriber);
             transaction.commit();
         }
 
@@ -96,8 +109,8 @@ public class CprListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
-            CprList subscriber = (CprList) query.getResultList().get(0);
-            subscriber.addCprStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
+            CprList cprList = (CprList) query.getResultList().get(0);
+            cprList.addCprStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
             transaction.commit();
         }
 
@@ -105,8 +118,8 @@ public class CprListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
-            CprList subscriber = (CprList) query.getResultList().get(0);
-            subscriber.addCprStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
+            CprList cprList = (CprList) query.getResultList().get(0);
+            cprList.addCprStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
             transaction.commit();
         }
 
@@ -114,16 +127,16 @@ public class CprListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
-            CprList subscriber = (CprList) query.getResultList().get(0);
-            Assert.assertEquals(4, subscriber.getCpr().size());
+            CprList cprList = (CprList) query.getResultList().get(0);
+            Assert.assertEquals(4, cprList.getCpr().size());
         }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
-            CprList subscriber = (CprList) query.getResultList().get(0);
-            subscriber.getCpr().removeIf(f -> "1111111113".equals(f.getCprNumber()));
+            CprList cprList = (CprList) query.getResultList().get(0);
+            cprList.getCpr().removeIf(f -> "1111111113".equals(f.getCprNumber()));
             transaction.commit();;
         }
 
@@ -131,16 +144,16 @@ public class CprListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
-            CprList subscriber = (CprList) query.getResultList().get(0);
-            Assert.assertEquals(3, subscriber.getCpr().size());
+            CprList cprList = (CprList) query.getResultList().get(0);
+            Assert.assertEquals(3, cprList.getCpr().size());
         }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
-            CprList subscriber = (CprList) query.getResultList().get(0);
-            session.delete(subscriber);
+            CprList cprList = (CprList) query.getResultList().get(0);
+            session.delete(cprList);
             transaction.commit();;
         }
 
@@ -162,19 +175,6 @@ public class CprListTest {
      */
     @Test
     public void testGetAndAddCprList() throws Exception {
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("myUser");
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion2", "A02"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion3", "A03"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
-            session.save(subscriber);
-            transaction.commit();
-        }
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();

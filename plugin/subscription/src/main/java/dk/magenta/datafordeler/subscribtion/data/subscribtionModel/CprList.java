@@ -25,10 +25,13 @@ public class CprList extends DatabaseEntry {
     public CprList() {
     }
 
-
-    public CprList(String listId, String subscriberId) {
+    public CprList(String listId) {
         this.listId = listId;
-        this.subscriberId = subscriberId;
+    }
+
+    public CprList(String listId, Subscriber subscriber) {
+        this.listId = listId;
+        this.subscriber = subscriber;
     }
 
     @Id
@@ -36,16 +39,19 @@ public class CprList extends DatabaseEntry {
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
-    @Column(name="subscriberId", nullable=false)
-    private String subscriberId;
 
-    public String getSubscriberId() {
-        return subscriberId;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="subscriber_id")
+    private Subscriber subscriber;
+
+    public Subscriber getSubscriber() {
+        return subscriber;
     }
 
-    public void setSubscriberId(String subscriberId) {
-        this.subscriberId = subscriberId;
+    public void setSubscriber(Subscriber subscriber) {
+        this.subscriber = subscriber;
     }
 
 

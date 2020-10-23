@@ -116,7 +116,7 @@ public class SubscribtionTest {
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             DataEventSubscription dataEventSubscription = subscriber.getDataEventSubscription().iterator().next();
-            CprList cprList = new CprList("listId", "user2");
+            CprList cprList = new CprList("listId");
             session.save(cprList);
             dataEventSubscription.setCprList(cprList);
             transaction.commit();
@@ -140,7 +140,7 @@ public class SubscribtionTest {
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscription businessEventSubscription = subscriber.getBusinessEventSubscription().iterator().next();
-            CprList cprList = new CprList("listId1", "user2");
+            CprList cprList = new CprList("listId1");
             session.save(cprList);
             businessEventSubscription.setCprList(cprList);
             transaction.commit();
@@ -159,7 +159,7 @@ public class SubscribtionTest {
         //Create cprList1
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            CprList pnrList = new CprList("cprList1", "user2");
+            CprList pnrList = new CprList("cprList1");
             session.save(pnrList);
             transaction.commit();
         }
@@ -167,7 +167,7 @@ public class SubscribtionTest {
         //Create cprList2
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            CprList pnrList = new CprList("cprList2", "user2");
+            CprList pnrList = new CprList("cprList2");
             session.save(pnrList);
             transaction.commit();
         }
