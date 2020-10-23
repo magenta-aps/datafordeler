@@ -4,16 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.AccessDeniedException;
-import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
-import dk.magenta.datafordeler.core.exception.InvalidTokenException;
+import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.LoggerHelper;
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
@@ -73,7 +73,11 @@ public class FindCprBusinessEvent {
         String timestampLTE = requestParams.getFirst("timestamp.LTE");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+
         try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            this.checkAndLogAccess(loggerHelper);
 
             Query eventQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             eventQuery.setParameter("businessEventId", businessEventId);
@@ -81,6 +85,9 @@ public class FindCprBusinessEvent {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) eventQuery.getResultList().get(0);
+                if(!subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
                 PersonRecordQuery query = new PersonRecordQuery();
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
@@ -111,13 +118,24 @@ public class FindCprBusinessEvent {
                 envelope.setResults(pnrList);
                 return ResponseEntity.ok(envelope);
             }
+        } catch (AccessRequiredException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } catch(Exception e) {
             log.error("Failed pulling events from subscribtion", e);
         }
         return ResponseEntity.status(500).build();
     }
 
-
+    protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
+        try {
+            loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
+            loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
+        }
+        catch (AccessDeniedException e) {
+            loggerHelper.info("Access denied: " + e.getMessage());
+            throw(e);
+        }
+    }
 
     private static void setHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");

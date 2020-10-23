@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.AccessDeniedException;
-import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
-import dk.magenta.datafordeler.core.exception.InvalidTokenException;
+import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.LoggerHelper;
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
@@ -78,7 +78,11 @@ public class FindCvrDataEvent {
         String timestampLTE = requestParams.getFirst("timestamp.LTE");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+
         try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            this.checkAndLogAccess(loggerHelper);
 
             Query eventQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
@@ -121,13 +125,24 @@ public class FindCvrDataEvent {
                 envelope.setResults(pnrList);
                 return ResponseEntity.ok(envelope);
             }
+        } catch (AccessRequiredException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } catch(Exception e) {
             log.error("Failed pulling events from subscribtion", e);
         }
         return ResponseEntity.status(500).build();
     }
 
-
+    protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
+        try {
+            loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
+            loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
+        }
+        catch (AccessDeniedException e) {
+            loggerHelper.info("Access denied: " + e.getMessage());
+            throw(e);
+        }
+    }
 
     private static void setHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");

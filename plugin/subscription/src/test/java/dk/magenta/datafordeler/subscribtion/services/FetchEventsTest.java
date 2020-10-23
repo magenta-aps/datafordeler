@@ -10,10 +10,12 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -195,6 +197,9 @@ public class FetchEventsTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.setIdentity("user1");
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -305,6 +310,8 @@ public class FetchEventsTest {
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.setIdentity("user1");
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -360,6 +367,8 @@ public class FetchEventsTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         testUserDetails.setIdentity("user1");
         this.applyAccess(testUserDetails);
 
@@ -429,6 +438,8 @@ public class FetchEventsTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         testUserDetails.setIdentity("user1");
         this.applyAccess(testUserDetails);
 

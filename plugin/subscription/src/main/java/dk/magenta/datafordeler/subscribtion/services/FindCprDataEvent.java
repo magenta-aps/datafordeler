@@ -4,16 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.AccessDeniedException;
-import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
-import dk.magenta.datafordeler.core.exception.InvalidTokenException;
+import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.LoggerHelper;
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
@@ -79,9 +79,11 @@ public class FindCprDataEvent {
         String timestampLTE = requestParams.getFirst("timestamp.LTE");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
-
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            this.checkAndLogAccess(loggerHelper);
 
             Query eventQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
@@ -128,10 +130,23 @@ public class FindCprDataEvent {
                 envelope.setResults(pnrList);
                 return ResponseEntity.ok(envelope);
             }
+        } catch (AccessRequiredException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } catch(Exception e) {
             log.error("Failed pulling events from subscribtion", e);
         }
         return ResponseEntity.status(500).build();
+    }
+
+    protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
+        try {
+            loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
+            loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
+        }
+        catch (AccessDeniedException e) {
+            loggerHelper.info("Access denied: " + e.getMessage());
+            throw(e);
+        }
     }
 
 
