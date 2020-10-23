@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 @Entity
 @Table(name = BusinessEventSubscription.TABLE_NAME, indexes = {
 
-
 })
 public class BusinessEventSubscription extends DatabaseEntry  {
 
@@ -42,7 +41,6 @@ public class BusinessEventSubscription extends DatabaseEntry  {
     }
 
     @Column(name="kodeId", nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String kodeId;
 
     public String getKodeId() {
@@ -56,6 +54,7 @@ public class BusinessEventSubscription extends DatabaseEntry  {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name="subscriber_id")
     private Subscriber subscriber;
 
     public Subscriber getSubscriber() {

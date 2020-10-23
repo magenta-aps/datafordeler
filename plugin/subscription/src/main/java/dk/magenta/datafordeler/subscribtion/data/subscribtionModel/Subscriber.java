@@ -11,6 +11,11 @@ public class Subscriber extends DatabaseEntry {
 
     public static final String TABLE_NAME = "subscription_subscriber";
 
+
+    public static final String JOIN_BUSINESS_COLUMN = "businesssubscribtion_id";
+    public static final String JOIN_DATA_COLUMN = "dataevetsubscribtion_id";
+    public static final String SUBSCRIBER_COLUMN = "subscriberId";
+
     public Subscriber() {
     }
 
@@ -18,7 +23,7 @@ public class Subscriber extends DatabaseEntry {
         this.subscriberId = subscriberId;
     }
 
-    @Column(name="subscriberId", unique = true, nullable=false)
+    @Column(name=SUBSCRIBER_COLUMN, unique = true, nullable=false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String subscriberId;
 
@@ -33,7 +38,7 @@ public class Subscriber extends DatabaseEntry {
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="businesssubscribtion_id")
+    @JoinColumn(name=JOIN_BUSINESS_COLUMN)
     Set<BusinessEventSubscription> businessEventSubscription = new HashSet<>();
 
     public Set<BusinessEventSubscription> getBusinessEventSubscription() {
@@ -50,7 +55,7 @@ public class Subscriber extends DatabaseEntry {
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="dataevetsubscribtion_id")
+    @JoinColumn(name=JOIN_DATA_COLUMN)
     Set<DataEventSubscription> dataEventSubscription = new HashSet<>();
 
     public Set<DataEventSubscription> getDataEventSubscription() {

@@ -16,9 +16,8 @@ public class GeneralQuery extends PersonRecordQuery {
                 personQuery.setRecordAfter(timestampGTE);
                 return personQuery;
             default:
-                PersonDataeventQuery addressEventQuery = new PersonDataeventQuery();
-                addressEventQuery.setDataEvent("cpr_person_address_record");
-                //addressEventQuery.setRecordAfter(timestamp);
+                PersonRecordQuery addressEventQuery = new PersonRecordQuery();
+                addressEventQuery.setDataEvent(queryType);
                 addressEventQuery.setDataEventTimeAfter(timestampGTE);//TODO: consider joining this on DB-level
                 addressEventQuery.setDataEventTimeBefore(timestampLTE);
                 return addressEventQuery;
