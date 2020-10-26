@@ -15,6 +15,7 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -144,7 +145,17 @@ public class CvrCompanyOwnerHistory {
                     if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
                         //A company can be owned by a person, then we need to find the persons cpr-number from live-lookup
                         try {
-                            deltagerPnr = participant.getRelationParticipantRecord().getBusinessKey();
+
+                            ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
+                            participantRecordQuery.setEnhedsNummer(participantNumber.toString());
+                            List<ParticipantRecord> participantList = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
+                            if(participantList.size()>0) {
+                                deltagerPnr = participantList.get(0).getBusinessKey();
+                            } else {
+                                deltagerPnr = directLookup.participantLookup(participantNumber.toString()).getBusinessKey();
+                            }
+
+                            //deltagerPnr = participantRecord.getBusinessKey();
                             Iterator<OrganizationRecord> orgRecordList = participant.getOrganizations().iterator();
                             while (orgRecordList.hasNext()) {
                                 OrganizationRecord orgRecord = orgRecordList.next();

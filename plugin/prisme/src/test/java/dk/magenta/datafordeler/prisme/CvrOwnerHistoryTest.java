@@ -123,6 +123,14 @@ public class CvrOwnerHistoryTest extends TestBase {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
 
+        response = restTemplate.exchange(
+                "/prisme/cvr/ownerhistory/1/" + 88888885,
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+
         ParticipantRecord participant3 = new ParticipantRecord();
         participant3.setBusinessKey(1111111113L);
         Mockito.doReturn(participant3).when(directLookup).participantLookup(ArgumentMatchers.eq("4000000002"));
@@ -136,11 +144,13 @@ public class CvrOwnerHistoryTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("{\"cvrNummer\":\"88888885\",\"virksomhedsformkode\":\"30\"," +
-                        "\"shortDescription\":\"I/S\",\"longDescription\":\"Interessentskab\",\"pnrs\":[" +
-                        "{\"pnr\":\"      null\",\"enhedDetaljer\":{\"enhedsNummer\":4000000000,\"gyldigFra\":\"2013-09-01\",\"gyldigTil\":null}}," +
-                        "{\"pnr\":\"      null\",\"enhedDetaljer\":{\"enhedsNummer\":4000000001,\"gyldigFra\":\"2013-09-01\",\"gyldigTil\":null}}," +
-                        "{\"pnr\":\"      null\",\"enhedDetaljer\":{\"enhedsNummer\":4000000002,\"gyldigFra\":\"2013-09-01\",\"gyldigTil\":null}}]" +
-                        ",\"cvrs\":[{\"cvr\":73585511,\"enhedDetaljer\":{\"enhedsNummer\":4000395354,\"gyldigFra\":\"2015-03-01\",\"gyldigTil\":null}}]}",
+                        "\"shortDescription\":\"I/S\",\"longDescription\":\"Interessentskab\",\"pnrs\":[{\"pnr\":" +
+                        "\"1111111111\",\"enhedDetaljer\":{\"enhedsNummer\":4000000000,\"gyldigFra\":\"2013-09-01\"," +
+                        "\"gyldigTil\":null}},{\"pnr\":\"1111111112\",\"enhedDetaljer\":{\"enhedsNummer\":4000000001," +
+                        "\"gyldigFra\":\"2013-09-01\",\"gyldigTil\":null}},{\"pnr\":\"1111111113\",\"enhedDetaljer\":{" +
+                        "\"enhedsNummer\":4000000002,\"gyldigFra\":\"2013-09-01\",\"gyldigTil\":null}}],\"cvrs\":[{" +
+                        "\"cvr\":73585511,\"enhedDetaljer\":{\"enhedsNummer\":4000395354,\"gyldigFra\":\"2015-03-01\"," +
+                        "\"gyldigTil\":null}}]}",
                 response.getBody().trim(), JSONCompareMode.LENIENT
         );
 
