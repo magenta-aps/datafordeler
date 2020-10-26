@@ -144,13 +144,11 @@ public class CvrCompanyOwnerHistory {
                     if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
                         //A company can be owned by a person, then we need to find the persons cpr-number from live-lookup
                         try {
-                            ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
-
-                            deltagerPnr = participantRecord.getBusinessKey();
+                            deltagerPnr = participant.getRelationParticipantRecord().getBusinessKey();
                             Iterator<OrganizationRecord> orgRecordList = participant.getOrganizations().iterator();
                             while (orgRecordList.hasNext()) {
                                 OrganizationRecord orgRecord = orgRecordList.next();
-                                Iterator<AttributeRecord> attributeList = orgRecord.getAttributes().iterator();//.next().getValues().iterator().next();
+                                Iterator<AttributeRecord> attributeList = orgRecord.getAttributes().iterator();
                                 while (attributeList.hasNext()) {
                                     AttributeRecord attribute = attributeList.next();
 
@@ -168,7 +166,7 @@ public class CvrCompanyOwnerHistory {
                             throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                         }
                     } else if("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {
-                        //A company can be owned by a person, then we need to find the companys cvr-number from the database
+                        //A company can be owned by a company, then we need to find the companys cvr-number from the database
                         Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
                         if (orgRecord.hasNext()) {
                             AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
