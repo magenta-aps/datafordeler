@@ -77,7 +77,6 @@ public class CvrCompanyOwnerHistory {
     @PostConstruct
     public void init() {
         this.monitorService.addAccessCheckPoint("/prisme/cvr/ownerhistory/1/1234");
-        this.monitorService.addAccessCheckPoint("POST", "/prisme/cvr/ownerhistory/1/", "{}");
     }
 
 
