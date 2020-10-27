@@ -44,7 +44,6 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = DB_FIELD_ENTITY + DatabaseEntry.REF)
     @JsonIgnore
-    @XmlTransient
     private PersonEntity entity;
 
     public PersonEntity getEntity() {
@@ -67,34 +66,33 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     public static final String DB_FIELD_FIELD = "field";
     @Column(name = DB_FIELD_FIELD)
     @JsonIgnore
-    @XmlElement(name = DB_FIELD_FIELD)
     private String field;
 
 
     public static final String DB_FIELD_TEXT = "text";
     @Column(name = DB_FIELD_TEXT)
     @JsonIgnore
-    @XmlElement(name = DB_FIELD_TEXT)
     private String text;
 
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
     @Column(name = DB_FIELD_TIMESTAMP)
     @JsonIgnore
-    @XmlElement(name = DB_FIELD_TIMESTAMP)
     private OffsetDateTime timestamp;
 
 
     public static final String DB_FIELD_OLD_ITEM = "oldItem";
     @Column(name = DB_FIELD_OLD_ITEM)
     @JsonIgnore
-    @XmlTransient
     private Long oldItem;
+
+    public long getOldItem() {
+        return oldItem;
+    }
 
     public static final String DB_FIELD_NEW_ITEM = "newItem";
     @Column(name = DB_FIELD_NEW_ITEM)
     @JsonIgnore
-    @XmlTransient
     private Long newItem;
 
 

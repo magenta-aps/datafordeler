@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.output;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -9,6 +10,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.person.GenericParentOutputDTO;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -118,6 +120,51 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         container.addBitemporal(PersonEntity.IO_FIELD_STATUS, record.getStatus(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_GUARDIAN, record.getGuardian(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_PROTECTION, record.getProtection());
+    }
+
+    /**
+     * Construction of diff for subscription
+     * @param record
+     * @param fieldname
+     * @return
+     */
+    public ObjectNode fillContainer(PersonEntity record, String fieldname)  {
+
+        ObjectNode root = this.getObjectMapper().createObjectNode();
+        ObjectMapper mapper = new ObjectMapper();
+        root.put(PersonEntity.IO_FIELD_CPR_NUMBER, record.getPersonnummer());
+
+        JsonNode node = null;
+
+        switch(fieldname) {
+            case NameDataRecord.TABLE_NAME:
+                node = mapper.convertValue(record.getName().current().get(0), JsonNode.class);
+            case AddressDataRecord.TABLE_NAME:
+                node = mapper.convertValue(record.getAddress().current().get(0), JsonNode.class);
+        }
+        if(node != null) {
+            ((ObjectNode) node).remove("cnt");
+            ((ObjectNode) node).remove("sidstOpdateret");
+            ((ObjectNode) node).remove("undone");
+            ((ObjectNode) node).remove("origin");
+            ((ObjectNode) node).remove("originDate");
+            ((ObjectNode) node).remove("technicalCorrection");
+            ((ObjectNode) node).remove("undo");
+            ((ObjectNode) node).remove("correctors");
+            ((ObjectNode) node).remove("fieldName");
+            ((ObjectNode) node).remove("sameAs");
+            ((ObjectNode) node).remove("replacesId");
+            ((ObjectNode) node).remove("replacedById");
+            ((ObjectNode) node).remove("myndighed");
+            ((ObjectNode) node).remove("registreringFra");
+            ((ObjectNode) node).remove("registreringTil");
+            ((ObjectNode) node).remove("virkningFraUsikker");
+            ((ObjectNode) node).remove("virkningTil");
+            ((ObjectNode) node).remove("virkningTilUsikker");
+            ((ObjectNode) node).remove("virkningFra");
+        }
+        root.put(fieldname, node);
+        return root;
     }
 
 
