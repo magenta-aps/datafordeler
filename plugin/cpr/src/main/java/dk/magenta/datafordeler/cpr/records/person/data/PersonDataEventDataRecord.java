@@ -86,7 +86,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     @JsonIgnore
     private Long oldItem;
 
-    public long getOldItem() {
+    public Long getOldItem() {
         return oldItem;
     }
 
