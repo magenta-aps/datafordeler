@@ -21,7 +21,7 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
@@ -66,6 +66,9 @@ public class FindCprDataEvent {
 
     @Autowired
     private PersonRecordOutputWrapper personRecordOutputWrapper;
+
+    @Autowired
+    private PersonRecordMetadataWrapper personRecordOutputWrapperStuff;
 
 
     @Autowired
@@ -144,21 +147,40 @@ public class FindCprDataEvent {
 
                 List otherList = new ArrayList<ObjectNode>();
 
+                AddressDataRecord adds1;
+
+                AddressDataRecord adds2;
+
+
                 if(includeMeta) {
                     for(ResultSet<PersonEntity> entity : entities) {
-                        Set<PersonDataEventDataRecord> events = entity.getPrimaryEntity().getDataEvent();
-
                         CprBitemporalPersonRecord oldValues = null;
+                        CprBitemporalPersonRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity.getPrimaryEntity());
+                        Set<PersonDataEventDataRecord> events = entity.getPrimaryEntity().getDataEvent();
                         if(events.size()>0) {
                             PersonDataEventDataRecord eventRecord = events.iterator().next();
                             if(eventRecord.getOldItem() != null) {
-                                String queryPreviousItem = PersonRecordQuery.getQueryPersonValueObjectFromId(subscribtionKodeId[2]);
+                                String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
                                 oldValues = (CprBitemporalPersonRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
                             }
                         }
 
-                        ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity(), subscribtionKodeId[2], oldValues);
-                        otherList.add(node);
+                        if(subscribtionKodeId.length>=5) {
+                            if(subscribtionKodeId[3].equals("before")) {
+                                if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], oldValues)) {
+                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(),subscribtionKodeId[2],oldValues,newValues);
+                                    otherList.add(node);
+                                }
+                            } else if(subscribtionKodeId[3].equals("after")) {
+                                if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], newValues)) {
+                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(),subscribtionKodeId[2],oldValues,newValues);
+                                    otherList.add(node);
+                                }
+                            }
+                        } else {
+                            ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(),subscribtionKodeId[2],oldValues,newValues);
+                            otherList.add(node);
+                        }
                     }
                 } else {
                     otherList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
@@ -185,6 +207,37 @@ public class FindCprDataEvent {
             loggerHelper.info("Access denied: " + e.getMessage());
             throw(e);
         }
+    }
+
+    private CprBitemporalPersonRecord getActualValueRecord(String fieldname, PersonEntity personEntity) {
+
+        switch(fieldname) {
+            case NameDataRecord.TABLE_NAME:
+                return personEntity.getName().current().get(0);
+            case AddressDataRecord.TABLE_NAME:
+                return personEntity.getAddress().current().get(0);
+            case AddressConameDataRecord.TABLE_NAME:
+                return personEntity.getConame().current().get(0);
+            case AddressNameDataRecord.TABLE_NAME:
+                return personEntity.getAddressName().current().get(0);
+            case CitizenshipDataRecord.TABLE_NAME:
+                return personEntity.getCitizenship().current().get(0);
+            case CivilStatusDataRecord.TABLE_NAME:
+                return personEntity.getCivilstatus().current().get(0);
+            default:
+                return null;
+        }
+    }
+
+    private boolean validateIt(String fieldname, String logic, CprBitemporalPersonRecord personEntity) {
+
+        if("cpr_person_address_record".equals(fieldname)) {
+            String[] splitLogic = logic.split("=");
+            if("kommunekode".equals(splitLogic[0])) {
+                return ((AddressDataRecord)personEntity).getMunicipalityCode() == Integer.parseInt(splitLogic[1]);
+            }
+        }
+        return false;
     }
 
     private static Comparator bitemporalComparator = Comparator.comparing(FindCprDataEvent::getBitemporality, BitemporalityComparator.ALL)

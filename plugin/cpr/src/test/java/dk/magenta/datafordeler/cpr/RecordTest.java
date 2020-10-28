@@ -18,7 +18,10 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
+import dk.magenta.datafordeler.cpr.records.person.NameRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import org.hamcrest.Matchers;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
@@ -128,6 +131,34 @@ public class RecordTest {
 
             query.setEfternavn("Testersen");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+
+
+
+            Criteria criteria = session.createCriteria(NameDataRecord.class);
+            List l = criteria.list();
+
+
+
+            List<Long> ids = Arrays.asList(new Long[]{1L, 2L, 3L});
+            List<PersonEntity> persons = session.createQuery("SELECT p FROM NameDataRecord p WHERE p.id IN :ids").setParameter("ids", ids).getResultList();
+
+
+
+            String hql = "SELECT DISTINCT nameRecord " +
+                    "FROM "+ NameRecord.class.getCanonicalName()+" nameRecord " +
+                    "";
+
+                    //" WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
+
+
+
+
+
+            org.hibernate.Query query2 = session.createQuery(hql);
+            List results = query2.list();
+
+            System.out.println(results);
+
 
         } finally {
             session.close();

@@ -120,7 +120,7 @@ public class FetchEventsTest {
             subscribtionDE2.setSubscriber(subscriber);
             DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "cvr.dataevent.anything");
             subscribtionDE3.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.befor.munipialicity=955");
+            DataEventSubscription subscribtionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.after.kommunekode=957");
             subscribtionDE4.setSubscriber(subscriber);
 
             CprList cprList = new CprList("L1");
@@ -152,6 +152,7 @@ public class FetchEventsTest {
 
             subscribtionDE1.setCprList(cprList);
             subscribtionDE2.setCprList(cprList);
+            subscribtionDE4.setCprList(cprList);
 
             subscribtionDE3.setCvrList(cvrList);
 
@@ -162,6 +163,7 @@ public class FetchEventsTest {
             subscriber.addDataEventSubscribtion(subscribtionDE1);
             subscriber.addDataEventSubscribtion(subscribtionDE2);
             subscriber.addDataEventSubscribtion(subscribtionDE3);
+            subscriber.addDataEventSubscribtion(subscribtionDE4);
             session.save(subscriber);
             tx.commit();
         } catch (IOException e) {
@@ -445,6 +447,46 @@ public class FetchEventsTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(2, results.size());
+    }
+
+
+    /**
+     * Test that it is possible to call a service for fetching events
+     */
+    @Test
+    public void testGetCPRDataWithMetadataEvents() throws IOException {
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.setIdentity("user1");
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE4&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        JsonNode results = responseContent.get("results");
+
+        Assert.assertEquals(6, results.size());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE4&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+
+        Assert.assertEquals(4, results.size());
+
     }
 
     /**

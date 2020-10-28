@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.subscribtion.queries;
 
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import java.time.OffsetDateTime;
 
@@ -38,6 +39,27 @@ public class GeneralQuery extends PersonRecordQuery {
                 return query;
         }
     }
+
+
+    public static String getQueryPersonValueObjectFromIdInEvent(String tableName) {
+        switch(tableName) {
+            case AddressConameDataRecord.TABLE_NAME:
+                return "SELECT p FROM AddressConameDataRecord p WHERE p.id IN :id";
+            case AddressDataRecord.TABLE_NAME:
+                return "SELECT p FROM AddressDataRecord p WHERE p.id IN :id";
+            case AddressNameDataRecord.TABLE_NAME:
+                return "SELECT p FROM AddressNameDataRecord p WHERE p.id IN :id";
+            case CitizenshipDataRecord.TABLE_NAME:
+                return "SELECT p FROM CitizenshipDataRecord p WHERE p.id IN :id";
+            case CivilStatusDataRecord.TABLE_NAME:
+                return "SELECT p FROM CivilStatusDataRecord p WHERE p.id IN :id";
+            case NameDataRecord.TABLE_NAME:
+                return "SELECT p FROM NameDataRecord p WHERE p.id IN :id";
+            default:
+                return "";
+        }
+    }
+
 
 
 }
