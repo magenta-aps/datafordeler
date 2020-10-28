@@ -1,21 +1,36 @@
 package dk.magenta.datafordeler.subscribtion.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.Envelope;
+import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
+import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.BitemporalityComparator;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
+import dk.magenta.datafordeler.cpr.records.CprBitemporality;
+import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
+import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
+import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.PersonOutputWrapperPrisme;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscribtion.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
@@ -36,8 +51,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.Comparator.naturalOrder;
 
 
 @RestController
@@ -52,6 +69,13 @@ public class FindCprDataEvent {
 
     @Autowired
     private DafoUserManager dafoUserManager;
+
+    @Autowired
+    private PersonOutputWrapperPrisme personWrapper;
+
+    @Autowired
+    private PersonRecordOutputWrapper personRecordOutputWrapper;
+
 
     @Autowired
     protected MonitorService monitorService;
@@ -77,6 +101,7 @@ public class FindCprDataEvent {
         String dataEventId = requestParams.getFirst("subscribtion");
         String timestampGTE = requestParams.getFirst("timestamp.GTE");
         String timestampLTE = requestParams.getFirst("timestamp.LTE");
+        Boolean includeMeta = Boolean.parseBoolean(requestParams.getFirst("includeMeta"));
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -125,9 +150,31 @@ public class FindCprDataEvent {
                 }
                 query.setPage(page);
                 List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
+
+                List otherList = new ArrayList<ObjectNode>();
+
+                if(includeMeta) {
+                    for(ResultSet<PersonEntity> entity : entities) {
+                        Set<PersonDataEventDataRecord> events = entity.getPrimaryEntity().getDataEvent();
+
+                        CprBitemporalPersonRecord oldValues = null;
+                        if(events.size()>0) {
+                            PersonDataEventDataRecord eventRecord = events.iterator().next();
+                            if(eventRecord.getOldItem() != null) {
+                                String queryPreviousItem = PersonRecordQuery.getQueryPersonValueObjectFromId(subscribtionKodeId[2]);
+                                oldValues = (CprBitemporalPersonRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
+                            }
+                        }
+
+                        ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity(), subscribtionKodeId[2], oldValues);
+                        otherList.add(node);
+                    }
+                } else {
+                    otherList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
+                }
                 Envelope envelope = new Envelope();
-                List<String> pnrList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
-                envelope.setResults(pnrList);
+
+                envelope.setResults(otherList);
                 return ResponseEntity.ok(envelope);
             }
         } catch (AccessRequiredException e) {
@@ -147,6 +194,28 @@ public class FindCprDataEvent {
             loggerHelper.info("Access denied: " + e.getMessage());
             throw(e);
         }
+    }
+
+    private static Comparator bitemporalComparator = Comparator.comparing(FindCprDataEvent::getBitemporality, BitemporalityComparator.ALL)
+            .thenComparing(CprNontemporalRecord::getOriginDate, Comparator.nullsLast(naturalOrder()))
+            .thenComparing(CprNontemporalRecord::getDafoUpdated)
+            .thenComparing(DatabaseEntry::getId);
+
+
+    public static CprBitemporality getBitemporality(CprBitemporalRecord record) {
+        return record.getBitemporality();
+    }
+
+    /**
+     * Find the newest unclosed record from the list of records
+     * Records with a missing OriginDate is also removed since they are considered invalid
+     * @param records
+     * @param <R>
+     * @return
+     */
+    public static <R extends CprBitemporalRecord> R findNewestUnclosedOnRegistartionAndEffect(Collection<R> records) {
+        return (R) records.stream().filter(r -> r.getBitemporality().registrationTo == null &&
+                r.getBitemporality().effectTo == null).max(bitemporalComparator).orElse(null);
     }
 
 

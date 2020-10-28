@@ -323,6 +323,21 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
+
+        System.out.println(results);
+        Assert.assertEquals(6, results.size());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE1&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+
+        System.out.println(results);
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
