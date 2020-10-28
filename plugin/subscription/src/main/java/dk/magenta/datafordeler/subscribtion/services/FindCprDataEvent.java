@@ -1,8 +1,6 @@
 package dk.magenta.datafordeler.subscribtion.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
@@ -10,9 +8,7 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.Envelope;
-import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
-import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.BitemporalityComparator;
@@ -25,12 +21,10 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.PersonOutputWrapperPrisme;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscribtion.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
@@ -69,9 +63,6 @@ public class FindCprDataEvent {
 
     @Autowired
     private DafoUserManager dafoUserManager;
-
-    @Autowired
-    private PersonOutputWrapperPrisme personWrapper;
 
     @Autowired
     private PersonRecordOutputWrapper personRecordOutputWrapper;
