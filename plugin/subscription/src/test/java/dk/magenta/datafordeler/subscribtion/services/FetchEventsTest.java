@@ -120,6 +120,8 @@ public class FetchEventsTest {
             subscribtionDE2.setSubscriber(subscriber);
             DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "cvr.dataevent.anything");
             subscribtionDE3.setSubscriber(subscriber);
+            DataEventSubscription subscribtionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.befor.munipialicity=955");
+            subscribtionDE4.setSubscriber(subscriber);
 
             CprList cprList = new CprList("L1");
             cprList.addCprString("0101011235");
