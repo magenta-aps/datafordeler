@@ -28,12 +28,11 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     public PersonDataEventDataRecord() {
     }
 
-    public PersonDataEventDataRecord(OffsetDateTime timestamp, String field, Long oldItem, Long newItem, String text) {
+    public PersonDataEventDataRecord(OffsetDateTime timestamp, String field, Long oldItem, String text) {
         this.setDafoUpdated(OffsetDateTime.now());
         this.timestamp = timestamp;
         this.field = field;
         this.oldItem = oldItem;
-        this.newItem = newItem;
         this.text = text;
     }
 
@@ -89,12 +88,6 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     public Long getOldItem() {
         return oldItem;
     }
-
-    public static final String DB_FIELD_NEW_ITEM = "newItem";
-    @Column(name = DB_FIELD_NEW_ITEM)
-    @JsonIgnore
-    private Long newItem;
-
 
     @JsonProperty(value = "id")
     public Long getId() {

@@ -1084,7 +1084,7 @@ public class PersonEntity extends CprRecordEntity {
                     clone.setEntity(newestOlderItem.getEntity());
                     newestOlderItem.setReplacedby(clone);
                     set.add(clone);
-                    entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newestOlderItem.getId(), newItem.getId(), "change2"));
+                    entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newestOlderItem.getId(), "newestOlderItem_replaced"));
                 }
                 if (oldestNewerItem != null) {
                     if (newItem.getRegistrationTo() == null) {
@@ -1095,7 +1095,7 @@ public class PersonEntity extends CprRecordEntity {
                         clone.setEntity(oldestNewerItem.getEntity());
                         newItem.setReplacedby(clone);
                         set.add(clone);
-                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newItem.getId(), clone.getId(), "change3"));
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), clone.getId(), "oldestNewerItem_replaced"));
                     }
                 }
             }
@@ -1140,7 +1140,7 @@ public class PersonEntity extends CprRecordEntity {
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                     boolean success = set.add((E) newItem);
                     if(newItem.getRegistrationFrom()!=null) {
-                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), newItem.getId(), "change4"));
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), "sametype_closed"));
                     }
                     return success;
                 } else {
