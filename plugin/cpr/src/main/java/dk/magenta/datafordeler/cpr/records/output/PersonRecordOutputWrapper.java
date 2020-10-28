@@ -8,10 +8,9 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
+import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.GenericParentOutputDTO;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
@@ -124,46 +123,67 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
 
     /**
      * Construction of diff for subscription
-     * @param record
+     * @param personEntity
      * @param fieldname
      * @return
      */
-    public ObjectNode fillContainer(PersonEntity record, String fieldname)  {
+    public ObjectNode fillContainer(PersonEntity personEntity, String fieldname, CprBitemporalPersonRecord valueBeforeEvent)  {
 
         ObjectNode root = this.getObjectMapper().createObjectNode();
         ObjectMapper mapper = new ObjectMapper();
-        root.put(PersonEntity.IO_FIELD_CPR_NUMBER, record.getPersonnummer());
+        root.put(PersonEntity.IO_FIELD_CPR_NUMBER, personEntity.getPersonnummer());
 
-        JsonNode node = null;
+        JsonNode nodeBeforeDataEvent = null;
+        JsonNode nodeAfterDataEvent = null;
+
+        if(valueBeforeEvent!=null) {
+            nodeBeforeDataEvent = mapper.convertValue(valueBeforeEvent, JsonNode.class);
+        }
 
         switch(fieldname) {
             case NameDataRecord.TABLE_NAME:
-                node = mapper.convertValue(record.getName().current().get(0), JsonNode.class);
+                nodeAfterDataEvent = mapper.convertValue(personEntity.getName().current().get(0), JsonNode.class);
+                break;
             case AddressDataRecord.TABLE_NAME:
-                node = mapper.convertValue(record.getAddress().current().get(0), JsonNode.class);
+                nodeAfterDataEvent = mapper.convertValue(personEntity.getAddress().current().get(0), JsonNode.class);
+                break;
+            case AddressConameDataRecord.TABLE_NAME:
+                nodeAfterDataEvent = mapper.convertValue(personEntity.getConame().current().get(0), JsonNode.class);
+                break;
+            case AddressNameDataRecord.TABLE_NAME:
+                nodeAfterDataEvent = mapper.convertValue(personEntity.getAddressName().current().get(0), JsonNode.class);
+                break;
+            case CitizenshipDataRecord.TABLE_NAME:
+                nodeAfterDataEvent = mapper.convertValue(personEntity.getCitizenship().current().get(0), JsonNode.class);
+                break;
+            case CivilStatusDataRecord.TABLE_NAME:
+                nodeAfterDataEvent = mapper.convertValue(personEntity.getCivilstatus().current().get(0), JsonNode.class);
+                break;
         }
-        if(node != null) {
-            ((ObjectNode) node).remove("cnt");
-            ((ObjectNode) node).remove("sidstOpdateret");
-            ((ObjectNode) node).remove("undone");
-            ((ObjectNode) node).remove("origin");
-            ((ObjectNode) node).remove("originDate");
-            ((ObjectNode) node).remove("technicalCorrection");
-            ((ObjectNode) node).remove("undo");
-            ((ObjectNode) node).remove("correctors");
-            ((ObjectNode) node).remove("fieldName");
-            ((ObjectNode) node).remove("sameAs");
-            ((ObjectNode) node).remove("replacesId");
-            ((ObjectNode) node).remove("replacedById");
-            ((ObjectNode) node).remove("myndighed");
-            ((ObjectNode) node).remove("registreringFra");
-            ((ObjectNode) node).remove("registreringTil");
-            ((ObjectNode) node).remove("virkningFraUsikker");
-            ((ObjectNode) node).remove("virkningTil");
-            ((ObjectNode) node).remove("virkningTilUsikker");
-            ((ObjectNode) node).remove("virkningFra");
+
+        if(nodeAfterDataEvent != null) {
+            ((ObjectNode) nodeAfterDataEvent).remove("cnt");
+            ((ObjectNode) nodeAfterDataEvent).remove("sidstOpdateret");
+            ((ObjectNode) nodeAfterDataEvent).remove("undone");
+            ((ObjectNode) nodeAfterDataEvent).remove("origin");
+            ((ObjectNode) nodeAfterDataEvent).remove("originDate");
+            ((ObjectNode) nodeAfterDataEvent).remove("technicalCorrection");
+            ((ObjectNode) nodeAfterDataEvent).remove("undo");
+            ((ObjectNode) nodeAfterDataEvent).remove("correctors");
+            ((ObjectNode) nodeAfterDataEvent).remove("fieldName");
+            ((ObjectNode) nodeAfterDataEvent).remove("sameAs");
+            ((ObjectNode) nodeAfterDataEvent).remove("replacesId");
+            ((ObjectNode) nodeAfterDataEvent).remove("replacedById");
+            ((ObjectNode) nodeAfterDataEvent).remove("myndighed");
+            ((ObjectNode) nodeAfterDataEvent).remove("registreringFra");
+            ((ObjectNode) nodeAfterDataEvent).remove("registreringTil");
+            ((ObjectNode) nodeAfterDataEvent).remove("virkningFraUsikker");
+            ((ObjectNode) nodeAfterDataEvent).remove("virkningTil");
+            ((ObjectNode) nodeAfterDataEvent).remove("virkningTilUsikker");
+            ((ObjectNode) nodeAfterDataEvent).remove("virkningFra");
         }
-        root.put(fieldname, node);
+        root.put("before_"+fieldname, nodeBeforeDataEvent);
+        root.put("after_"+fieldname, nodeAfterDataEvent);
         return root;
     }
 
