@@ -134,32 +134,6 @@ public class RecordTest {
 
 
 
-            Criteria criteria = session.createCriteria(NameDataRecord.class);
-            List l = criteria.list();
-
-
-
-            List<Long> ids = Arrays.asList(new Long[]{1L, 2L, 3L});
-            List<PersonEntity> persons = session.createQuery("SELECT p FROM NameDataRecord p WHERE p.id IN :ids").setParameter("ids", ids).getResultList();
-
-
-
-            String hql = "SELECT DISTINCT nameRecord " +
-                    "FROM "+ NameRecord.class.getCanonicalName()+" nameRecord " +
-                    "";
-
-                    //" WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
-
-
-
-
-
-            org.hibernate.Query query2 = session.createQuery(hql);
-            List results = query2.list();
-
-            System.out.println(results);
-
-
         } finally {
             session.close();
         }

@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
@@ -22,12 +23,14 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -41,10 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.Scanner;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 
@@ -99,6 +99,10 @@ public class FetchEventsTest {
             personEntityManager.parseData(testData, importMetadata);
             testData.close();
 
+            testData = FindCprBusinessEvent.class.getResourceAsStream("/personsChangingAdressesAppend2.txt");
+            personEntityManager.parseData(testData, importMetadata);
+            testData.close();
+
             loadCompany("/company_in.json");
             loadCompany("/company_in2.json");
             loadCompany("/company_in3.json");
@@ -122,6 +126,9 @@ public class FetchEventsTest {
             subscribtionDE3.setSubscriber(subscriber);
             DataEventSubscription subscribtionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.after.kommunekode=957");
             subscribtionDE4.setSubscriber(subscriber);
+
+            DataEventSubscription subscribtionDE5 = new DataEventSubscription("DE5", "cvr.dataevent.cpr_person_address_record.before.kommunekode=957");
+            subscribtionDE5.setSubscriber(subscriber);
 
             CprList cprList = new CprList("L1");
             cprList.addCprString("0101011235");
@@ -153,6 +160,7 @@ public class FetchEventsTest {
             subscribtionDE1.setCprList(cprList);
             subscribtionDE2.setCprList(cprList);
             subscribtionDE4.setCprList(cprList);
+            subscribtionDE5.setCprList(cprList);
 
             subscribtionDE3.setCvrList(cvrList);
 
@@ -164,6 +172,7 @@ public class FetchEventsTest {
             subscriber.addDataEventSubscribtion(subscribtionDE2);
             subscriber.addDataEventSubscribtion(subscribtionDE3);
             subscriber.addDataEventSubscribtion(subscribtionDE4);
+            subscriber.addDataEventSubscribtion(subscribtionDE5);
             session.save(subscriber);
             tx.commit();
         } catch (IOException e) {
@@ -485,7 +494,28 @@ public class FetchEventsTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
 
-        Assert.assertEquals(4, results.size());
+        Assert.assertEquals(3, results.size());
+        List pnrs = Arrays.asList("0101011238", "0101011237", "0101011240");
+        Assert.assertTrue(pnrs.contains(results.get(0).get("pnr").asText()));
+        Assert.assertTrue(pnrs.contains(results.get(1).get("pnr").asText()));
+        Assert.assertTrue(pnrs.contains(results.get(2).get("pnr").asText()));
+
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCprDataEvent/fetchEvents?subscribtion=DE5&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+
+        Assert.assertEquals(5, results.size());
+        pnrs = Arrays.asList("0101011239", "0101011238", "0101011237", "0101011236", "0101011235");
+        Assert.assertTrue(pnrs.contains(results.get(0).get("pnr").asText()));
+        Assert.assertTrue(pnrs.contains(results.get(1).get("pnr").asText()));
+        Assert.assertTrue(pnrs.contains(results.get(2).get("pnr").asText()));
 
     }
 
