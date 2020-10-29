@@ -2,11 +2,7 @@ package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
-import dk.magenta.datafordeler.core.database.IdentifiedEntity;
-
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -26,12 +22,11 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     public CompanyDataEventRecord() {
     }
 
-    public CompanyDataEventRecord(OffsetDateTime timestamp, String field, Long oldItem, Long newItem) {
+    public CompanyDataEventRecord(OffsetDateTime timestamp, String field, Long oldItem) {
         this.setDafoUpdated(OffsetDateTime.now());
         this.timestamp = timestamp;
         this.field = field;
         this.oldItem = oldItem;
-        this.newItem = newItem;
     }
 
     public String getFieldName() {
@@ -86,12 +81,6 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     @XmlTransient
     private Long oldItem;
 
-    public static final String DB_FIELD_NEW_ITEM = "newItem";
-    @Column(name = DB_FIELD_NEW_ITEM)
-    @JsonIgnore
-    @XmlTransient
-    private Long newItem;
-
     public String getField() {
         return field;
     }
@@ -120,14 +109,6 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
         this.oldItem = oldItem;
     }
 
-    public Long getNewItem() {
-        return newItem;
-    }
-
-    public void setNewItem(Long newItem) {
-        this.newItem = newItem;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,13 +118,12 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
         return Objects.equals(field, that.field) &&
                 Objects.equals(text, that.text) &&
                 Objects.equals(oldItem, that.oldItem) &&
-                Objects.equals(newItem, that.newItem) &&
                 Objects.equals(timestamp, that.timestamp) &&
                 Objects.equals(getDafoUpdated(), that.getDafoUpdated());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), field, text, oldItem, newItem, timestamp, getDafoUpdated());
+        return Objects.hash(super.hashCode(), field, text, oldItem, timestamp, getDafoUpdated());
     }
 }

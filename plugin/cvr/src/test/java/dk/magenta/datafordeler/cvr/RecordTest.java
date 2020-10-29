@@ -271,7 +271,8 @@ public class RecordTest {
 
             CompanyDataEventRecord record = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).findFirst().get();
             System.out.println(record.getOldItem());
-            System.out.println(record.getNewItem());
+
+
 
 
             long nameEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_company_status")).count();
