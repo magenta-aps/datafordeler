@@ -142,7 +142,18 @@ public class FindCvrDataEvent {
                             CompanyDataEventRecord eventRecord = events.iterator().next();
                             if(eventRecord.getOldItem() != null) {
                                 String queryPreviousItem = GeneralQuery.getQueryCompanyValueObjectFromIdInEvent(subscribtionKodeId[2]);
+
+                                System.out.println(eventRecord.getOldItem());
+
+
                                 oldValues = (CvrBitemporalDataMetaRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
+
+
+                                System.out.println(oldValues);
+
+                                System.out.println(((AddressRecord)oldValues).getMunicipality().getMunicipalityCode());
+
+
                             }
                         }
 
