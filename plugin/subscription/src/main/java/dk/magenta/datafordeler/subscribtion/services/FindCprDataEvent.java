@@ -147,11 +147,6 @@ public class FindCprDataEvent {
 
                 List otherList = new ArrayList<ObjectNode>();
 
-                AddressDataRecord adds1;
-
-                AddressDataRecord adds2;
-
-
                 if(includeMeta) {
                     for(ResultSet<PersonEntity> entity : entities) {
                         CprBitemporalPersonRecord oldValues = null;

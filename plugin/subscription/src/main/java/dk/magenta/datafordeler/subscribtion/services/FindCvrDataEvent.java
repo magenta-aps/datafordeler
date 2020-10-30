@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.subscribtion.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -11,9 +12,12 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCvrNumber;
 import dk.magenta.datafordeler.subscribtion.queries.GeneralQuery;
@@ -35,7 +39,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -51,6 +57,9 @@ public class FindCvrDataEvent {
 
     @Autowired
     private DafoUserManager dafoUserManager;
+
+    @Autowired
+    private PersonRecordMetadataWrapper personRecordOutputWrapperStuff;
 
     @Autowired
     protected MonitorService monitorService;
@@ -76,6 +85,7 @@ public class FindCvrDataEvent {
         String dataEventId = requestParams.getFirst("subscribtion");
         String timestampGTE = requestParams.getFirst("timestamp.GTE");
         String timestampLTE = requestParams.getFirst("timestamp.LTE");
+        Boolean includeMeta = Boolean.parseBoolean(requestParams.getFirst("includeMeta"));
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -121,8 +131,43 @@ public class FindCvrDataEvent {
                 query.setPage(page);
                 List<ResultSet<CompanyRecord>> entities = QueryManager.getAllEntitySets(session, query, CompanyRecord.class);
                 Envelope envelope = new Envelope();
-                List<String> pnrList = entities.stream().map(x -> x.getPrimaryEntity().getCvrNumberString()).collect(Collectors.toList());
-                envelope.setResults(pnrList);
+
+                List otherList = new ArrayList<ObjectNode>();
+                if(includeMeta) {
+                    for(ResultSet<CompanyRecord> entity : entities) {
+                        CvrBitemporalDataRecord oldValues = null;
+                        CvrBitemporalDataRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity.getPrimaryEntity());
+                        Set<CompanyDataEventRecord> events = entity.getPrimaryEntity().getDataevent();
+                        if(events.size()>0) {
+                            CompanyDataEventRecord eventRecord = events.iterator().next();
+                            if(eventRecord.getOldItem() != null) {
+                                String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
+                                oldValues = (CvrBitemporalDataMetaRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
+                            }
+                        }
+
+                        if(subscribtionKodeId.length>=5) {
+                            if(subscribtionKodeId[3].equals("before")) {
+                                if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], oldValues)) {
+                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getCvrNumberString(), subscribtionKodeId[2], oldValues, newValues);
+                                    otherList.add(node);
+                                }
+                            } else if(subscribtionKodeId[3].equals("after")) {
+                                if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], newValues)) {
+                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getCvrNumberString(), subscribtionKodeId[2], oldValues, newValues);
+                                    otherList.add(node);
+                                }
+                            }
+                        } else {
+                            ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getCvrNumberString(),subscribtionKodeId[2], oldValues, newValues);
+                            otherList.add(node);
+                        }
+                    }
+                } else {
+                    otherList = entities.stream().map(x -> x.getPrimaryEntity().getCvrNumberString()).collect(Collectors.toList());
+                }
+
+                envelope.setResults(otherList);
                 return ResponseEntity.ok(envelope);
             }
         } catch (AccessRequiredException e) {
@@ -131,6 +176,33 @@ public class FindCvrDataEvent {
             log.error("Failed pulling events from subscribtion", e);
         }
         return ResponseEntity.status(500).build();
+    }
+
+
+    private boolean validateIt(String fieldname, String logic, CvrBitemporalDataRecord companyEntity) {
+
+        if("cpr_person_address_record".equals(fieldname)) {
+            String[] splitLogic = logic.split("=");
+            if("kommunekode".equals(splitLogic[0])) {
+                return ((AddressRecord)companyEntity).getMunicipality().getMunicipalityCode() == Integer.parseInt(splitLogic[1]);
+            }
+        }
+        return false;
+    }
+
+
+    private CvrBitemporalDataRecord getActualValueRecord(String fieldname, CompanyRecord companyEntity) {
+
+        switch(fieldname) {
+            case SecNameRecord.TABLE_NAME:
+                return companyEntity.getNames().current().stream().reduce((first, second) -> second).orElse(null);
+            case AddressRecord.TABLE_NAME:
+                return companyEntity.getPostalAddress().current().stream().reduce((first, second) -> second).orElse(null);
+            case StatusRecord.TABLE_NAME:
+                return companyEntity.getStatus().current().stream().reduce((first, second) -> second).orElse(null);
+            default:
+                return null;
+        }
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
