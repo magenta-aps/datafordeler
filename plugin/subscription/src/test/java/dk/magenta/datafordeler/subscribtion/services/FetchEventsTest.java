@@ -126,9 +126,14 @@ public class FetchEventsTest {
             subscribtionDE3.setSubscriber(subscriber);
             DataEventSubscription subscribtionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.after.kommunekode=957");
             subscribtionDE4.setSubscriber(subscriber);
-
             DataEventSubscription subscribtionDE5 = new DataEventSubscription("DE5", "cvr.dataevent.cpr_person_address_record.before.kommunekode=957");
             subscribtionDE5.setSubscriber(subscriber);
+            DataEventSubscription subscribtionDE7 = new DataEventSubscription("DE6", "cvr.dataevent.cvr_record_address");
+            subscribtionDE7.setSubscriber(subscriber);
+            DataEventSubscription subscribtionDE6 = new DataEventSubscription("DE7", "cvr.dataevent.cvr_record_address.before.kommunekode=957");
+            subscribtionDE6.setSubscriber(subscriber);
+            DataEventSubscription subscribtionDE8 = new DataEventSubscription("DE8", "cvr.dataevent.cvr_record_address.after.kommunekode=957");
+            subscribtionDE8.setSubscriber(subscriber);
 
             CprList cprList = new CprList("L1");
             cprList.addCprString("0101011235");
@@ -163,6 +168,9 @@ public class FetchEventsTest {
             subscribtionDE5.setCprList(cprList);
 
             subscribtionDE3.setCvrList(cvrList);
+            subscribtionDE6.setCvrList(cvrList);
+            subscribtionDE7.setCvrList(cvrList);
+            subscribtionDE8.setCvrList(cvrList);
 
             subscriber.addBusinessEventSubscribtion(subscribtionT1);
             subscriber.addBusinessEventSubscribtion(subscribtionT2);
@@ -173,6 +181,9 @@ public class FetchEventsTest {
             subscriber.addDataEventSubscribtion(subscribtionDE3);
             subscriber.addDataEventSubscribtion(subscribtionDE4);
             subscriber.addDataEventSubscribtion(subscribtionDE5);
+            subscriber.addDataEventSubscribtion(subscribtionDE6);
+            subscriber.addDataEventSubscribtion(subscribtionDE7);
+            subscriber.addDataEventSubscribtion(subscribtionDE8);
             session.save(subscriber);
             tx.commit();
         } catch (IOException e) {
@@ -532,7 +543,7 @@ public class FetchEventsTest {
         testUserDetails.setIdentity("user1");
         this.applyAccess(testUserDetails);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        /*ResponseEntity<String> response = restTemplate.exchange(
                 "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE3&timestamp.GTE=1980-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
@@ -574,7 +585,40 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
+        Assert.assertEquals(0, results.size());*/
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE6&includeMeta=true&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        JsonNode results = responseContent.get("results");
+        Assert.assertEquals(1, results.size());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE7&includeMeta=true&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
         Assert.assertEquals(0, results.size());
+
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE8&includeMeta=true&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(1, results.size());
     }
 
     private HashMap<Integer, JsonNode> loadCompany(String resource) throws IOException, DataFordelerException {

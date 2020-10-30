@@ -226,7 +226,7 @@ public class FindCprDataEvent {
 
     private boolean validateIt(String fieldname, String logic, CprBitemporalPersonRecord personEntity) {
 
-        if("cpr_person_address_record".equals(fieldname)) {
+        if(AddressDataRecord.TABLE_NAME.equals(fieldname)) {
             String[] splitLogic = logic.split("=");
             if("kommunekode".equals(splitLogic[0])) {
                 return ((AddressDataRecord)personEntity).getMunicipalityCode() == Integer.parseInt(splitLogic[1]);

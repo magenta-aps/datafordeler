@@ -141,7 +141,7 @@ public class FindCvrDataEvent {
                         if(events.size()>0) {
                             CompanyDataEventRecord eventRecord = events.iterator().next();
                             if(eventRecord.getOldItem() != null) {
-                                String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
+                                String queryPreviousItem = GeneralQuery.getQueryCompanyValueObjectFromIdInEvent(subscribtionKodeId[2]);
                                 oldValues = (CvrBitemporalDataMetaRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
                             }
                         }
@@ -181,7 +181,7 @@ public class FindCvrDataEvent {
 
     private boolean validateIt(String fieldname, String logic, CvrBitemporalDataRecord companyEntity) {
 
-        if("cpr_person_address_record".equals(fieldname)) {
+        if(AddressRecord.TABLE_NAME.equals(fieldname)) {
             String[] splitLogic = logic.split("=");
             if("kommunekode".equals(splitLogic[0])) {
                 return ((AddressRecord)companyEntity).getMunicipality().getMunicipalityCode() == Integer.parseInt(splitLogic[1]);
@@ -194,12 +194,12 @@ public class FindCvrDataEvent {
     private CvrBitemporalDataRecord getActualValueRecord(String fieldname, CompanyRecord companyEntity) {
 
         switch(fieldname) {
-            case SecNameRecord.TABLE_NAME:
-                return companyEntity.getNames().current().stream().reduce((first, second) -> second).orElse(null);
+            case BaseNameRecord.TABLE_NAME:
+                return companyEntity.getNames().stream().reduce((first, second) -> second).orElse(null);
             case AddressRecord.TABLE_NAME:
-                return companyEntity.getPostalAddress().current().stream().reduce((first, second) -> second).orElse(null);
+                return companyEntity.getPostalAddress().stream().reduce((first, second) -> second).orElse(null);
             case StatusRecord.TABLE_NAME:
-                return companyEntity.getStatus().current().stream().reduce((first, second) -> second).orElse(null);
+                return companyEntity.getStatus().stream().reduce((first, second) -> second).orElse(null);
             default:
                 return null;
         }
