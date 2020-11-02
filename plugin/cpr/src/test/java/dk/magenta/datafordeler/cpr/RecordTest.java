@@ -589,6 +589,8 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/personsWithNewAdresses.txt", importMetadata);
+        this.loadPerson("/personsWithNewAdresses2.txt", importMetadata);
+        this.loadPerson("/personsWithNewAdresses3.txt", importMetadata);
         session.close();
 
         session = sessionManager.getSessionFactory().openSession();

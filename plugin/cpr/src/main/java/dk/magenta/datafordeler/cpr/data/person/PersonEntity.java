@@ -1136,12 +1136,11 @@ public class PersonEntity extends CprRecordEntity {
                         //This might be correct to do for all recordtypes but is has not been tested good yet
                         !(newItem instanceof CustodyDataRecord) &&
                         !(newItem instanceof ProtectionDataRecord) &&
-                        !(newItem instanceof ChildrenDataRecord) &&
-                        !(newItem instanceof VerificationDataRecord)) {
+                        !(newItem instanceof ChildrenDataRecord)) {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                     boolean success = set.add((E) newItem);
-                    if(newItem.getRegistrationFrom()!=null) {
+                    if(newItem.getRegistrationFrom()!=null && correctedRecord.getId()!=null) {
                         entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), "sametype_closed"));
                     }
                     return success;
