@@ -69,7 +69,7 @@ public class CprListTest {
 
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            Subscriber subscriber = new Subscriber("myUser");
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services");
             Transaction transaction = session.beginTransaction();
 
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
@@ -176,9 +176,12 @@ public class CprListTest {
     @Test
     public void testGetAndAddCprList() throws Exception {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
-        testUserDetails.setIdentity("myUser");
+        testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
         //Confirm that the CPR-list is empty
@@ -193,7 +196,7 @@ public class CprListTest {
                 "{\"listId\":\"myList2\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cprTestList1", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("cprTestList1", httpHeaders);
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/",
                 HttpMethod.POST,
@@ -215,7 +218,7 @@ public class CprListTest {
                 "{\"listId\":\"cprTestList1\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cprTestList2", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("cprTestList2", httpHeaders);
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/",
                 HttpMethod.POST,

@@ -31,6 +31,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -85,7 +86,7 @@ public class FindCprBusinessEvent {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) eventQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
                 PersonRecordQuery query = new PersonRecordQuery();

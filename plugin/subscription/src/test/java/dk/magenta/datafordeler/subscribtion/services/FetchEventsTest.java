@@ -109,7 +109,7 @@ public class FetchEventsTest {
 
             Transaction tx = session.beginTransaction();
 
-            Subscriber subscriber = new Subscriber("user1");
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services");
 
             BusinessEventSubscription subscribtionT1 = new BusinessEventSubscription("BE1", "cpr.businessevent.A01");
             subscribtionT1.setSubscriber(subscriber);
@@ -219,9 +219,12 @@ public class FetchEventsTest {
     @Test
     public void testGetCPRBusinessEvents() throws IOException {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();
-        testUserDetails.setIdentity("user1");
+        //testUserDetails.setIdentity("user1");
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
@@ -331,9 +334,12 @@ public class FetchEventsTest {
     @Test
     public void testGetCPRDataAddressChangeEvents() throws IOException {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();
-        testUserDetails.setIdentity("user1");
+        //testUserDetails.setIdentity("user1");
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
@@ -404,11 +410,14 @@ public class FetchEventsTest {
     @Test
     public void testGetCPRDataAnythingChangeEvents() throws IOException {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-        testUserDetails.setIdentity("user1");
+        testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
         OffsetDateTime timestamp = OffsetDateTime.now(ZoneOffset.UTC);
@@ -476,9 +485,12 @@ public class FetchEventsTest {
     @Test
     public void testGetCPRDataWithMetadataEvents() throws IOException {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();
-        testUserDetails.setIdentity("user1");
+        //testUserDetails.setIdentity("user1");
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
@@ -534,13 +546,16 @@ public class FetchEventsTest {
      * Test that it is possible to call a service for fetching events
      */
     @Test
-    public void testGetCVRDataAddressChangeEvents() throws IOException {
+    public void testGetCVRDataAddressChangeEvents() throws IOException, InterruptedException {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-        testUserDetails.setIdentity("user1");
+        testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -598,27 +613,6 @@ public class FetchEventsTest {
         results = responseContent.get("results");
         Assert.assertEquals(1, results.size());
 
-        response = restTemplate.exchange(
-                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE7&includeMeta=true&pageSize=100",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        results = responseContent.get("results");
-        Assert.assertEquals(1, results.size());
-
-        response = restTemplate.exchange(
-                "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents?subscribtion=DE8&includeMeta=true&pageSize=100",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());
     }
 
     private HashMap<Integer, JsonNode> loadCompany(String resource) throws IOException, DataFordelerException {

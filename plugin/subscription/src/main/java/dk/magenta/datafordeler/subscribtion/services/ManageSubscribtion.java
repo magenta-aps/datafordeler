@@ -93,11 +93,14 @@ public class ManageSubscribtion {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber = new Subscriber(user.getIdentity());
+            Subscriber subscriber = new Subscriber(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
+        } catch(Exception e) {
+            log.error("Failed creating subscriber", e);
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/subscriber/{subscriberId}")
@@ -142,7 +145,7 @@ public class ManageSubscribtion {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -181,7 +184,7 @@ public class ManageSubscribtion {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscription subscribtion = new BusinessEventSubscription(businessEventId, kodeId);
@@ -235,7 +238,7 @@ public class ManageSubscribtion {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -256,7 +259,7 @@ public class ManageSubscribtion {
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) query.getResultList().get(0);
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-                if(subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                     subscribtion.getSubscriber().removeBusinessEventSubscribtion(subscribtion);
                     transaction.commit();
                     return ResponseEntity.ok(subscribtion);
@@ -280,7 +283,7 @@ public class ManageSubscribtion {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -332,7 +335,7 @@ public class ManageSubscribtion {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             DataEventSubscription subscribtion = new DataEventSubscription(dataEventId, kodeId);
@@ -401,7 +404,7 @@ public class ManageSubscribtion {
             //query.setParameter("subscriberId", subscriberId);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscribtionId", user.getIdentity());
+            query.setParameter("subscribtionId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -423,7 +426,7 @@ public class ManageSubscribtion {
 
                 DataEventSubscription subscribtion = (DataEventSubscription) query.getResultList().get(0);
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-                if(subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                     subscribtion.getSubscriber().removeDataEventSubscribtion(subscribtion);
                     transaction.commit();
                     return ResponseEntity.ok(subscribtion);

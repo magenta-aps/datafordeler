@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -73,7 +74,7 @@ public class ManageCvrList {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -98,7 +99,7 @@ public class ManageCvrList {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", user.getIdentity());
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -117,7 +118,7 @@ public class ManageCvrList {
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
             query.setParameter("listId", cvrNo.getKey());
             CvrList foundList = (CvrList)query.getResultList().get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
@@ -142,7 +143,7 @@ public class ManageCvrList {
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
             query.setParameter("listId", listId);
             CvrList foundList = (CvrList)query.getResultList().get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             foundList.getCvr().removeIf(item -> cvrs.contains(item.getCvrNumber()));
@@ -182,7 +183,7 @@ public class ManageCvrList {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("listId", "cvrTestList1");
             CvrList foundList = (CvrList)query.getResultList().get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 

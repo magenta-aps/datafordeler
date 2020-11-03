@@ -41,6 +41,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -100,7 +101,7 @@ public class FindCvrDataEvent {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscribtion = (DataEventSubscription) eventQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(user.getIdentity())) {
+                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
                 OffsetDateTime offsetTimestampGTE;
@@ -142,18 +143,7 @@ public class FindCvrDataEvent {
                             CompanyDataEventRecord eventRecord = events.iterator().next();
                             if(eventRecord.getOldItem() != null) {
                                 String queryPreviousItem = GeneralQuery.getQueryCompanyValueObjectFromIdInEvent(subscribtionKodeId[2]);
-
-                                System.out.println(eventRecord.getOldItem());
-
-
                                 oldValues = (CvrBitemporalDataMetaRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
-
-
-                                System.out.println(oldValues);
-
-                                System.out.println(((AddressRecord)oldValues).getMunicipality().getMunicipalityCode());
-
-
                             }
                         }
 

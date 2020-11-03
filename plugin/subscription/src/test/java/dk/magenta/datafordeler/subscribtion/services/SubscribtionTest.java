@@ -328,7 +328,10 @@ public class SubscribtionTest {
     @Test
     public void testCreateSubscriber() throws Exception {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
@@ -345,7 +348,7 @@ public class SubscribtionTest {
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]}]", response.getBody(), false);
 
-        httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", httpHeaders);
         testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
@@ -374,7 +377,7 @@ public class SubscribtionTest {
 
 
 
-        testUserDetails.setIdentity("myCreatedUser");
+        //testUserDetails.setIdentity("myCreatedUser");
         this.applyAccess(testUserDetails);
 
         //Try fetching with no cpr access rights
@@ -397,7 +400,7 @@ public class SubscribtionTest {
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"myCreatedUser\",\"businessEventSubscription\":[]," +
+                "\"dataEventSubscription\":[]},{\"subscriberId\":\"PITU/GOV/DIA/magenta_services\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]}]", response.getBody(), false);
 
@@ -467,7 +470,7 @@ public class SubscribtionTest {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("myUser");
+            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services");
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion2", "A02"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion3", "A03"));
@@ -478,10 +481,12 @@ public class SubscribtionTest {
             transaction.commit();
         }
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
-        testUserDetails.setIdentity("myUser");
+        //testUserDetails.setIdentity("myUser");
         this.applyAccess(testUserDetails);
 
 
@@ -551,7 +556,7 @@ public class SubscribtionTest {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("myUser");
+            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services");
             BusinessEventSubscription bs1 = new BusinessEventSubscription("subscribtion1", "A01");
             BusinessEventSubscription bs2 = new BusinessEventSubscription("subscribtion2", "A01");
             BusinessEventSubscription bs3 = new BusinessEventSubscription("subscribtion3", "A01");
@@ -585,9 +590,12 @@ public class SubscribtionTest {
 
         }
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
-        testUserDetails.setIdentity("myUser");
+        testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
 

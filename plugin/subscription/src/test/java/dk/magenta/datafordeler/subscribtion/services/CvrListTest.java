@@ -70,7 +70,7 @@ public class CvrListTest {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("myUser");
+            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services");
             subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
             subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
             subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
@@ -172,9 +172,12 @@ public class CvrListTest {
     @Test
     public void testGetAndAddCvrList() throws Exception {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();
-        testUserDetails.setIdentity("myUser");
+        testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
         //Confirm that the CPR-list is empty
@@ -189,7 +192,7 @@ public class CvrListTest {
                 "{\"listId\":\"myList2\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cvrTestList1", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("cvrTestList1", httpHeaders);
         response = restTemplate.exchange(
                 "/cvrlistplugin/v1/manager/subscriber/cvrList/",
                 HttpMethod.POST,
@@ -211,7 +214,7 @@ public class CvrListTest {
                 "{\"listId\":\"cvrTestList1\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cvrTestList2", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("cvrTestList2", httpHeaders);
         response = restTemplate.exchange(
                 "/cvrlistplugin/v1/manager/subscriber/cvrList/",
                 HttpMethod.POST,

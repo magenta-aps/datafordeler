@@ -71,7 +71,10 @@ public class SubscribtionSequenceTest {
     @Test
     public void testSequenceToBePerformedWithCustomer() throws Exception {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();
         this.applyAccess(testUserDetails);
 
@@ -84,7 +87,7 @@ public class SubscribtionSequenceTest {
 
         JSONAssert.assertEquals("[]", response.getBody(), false);
 
-        testUserDetails.setIdentity("myCreatedUser");
+        //testUserDetails.setIdentity("myCreatedUser");
         this.applyAccess(testUserDetails);
 
         //Try fetching with no cpr access rights
@@ -103,7 +106,7 @@ public class SubscribtionSequenceTest {
                 String.class
         );
 
-        JSONAssert.assertEquals("[{\"subscriberId\":\"myCreatedUser\",\"businessEventSubscription\":[]," +
+        JSONAssert.assertEquals("[{\"subscriberId\":\"PITU/GOV/DIA/magenta_services\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]}]", response.getBody(), false);
 
         response = restTemplate.exchange(
@@ -127,7 +130,7 @@ public class SubscribtionSequenceTest {
 
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("list01", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("list01", httpHeaders);
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/",
                 HttpMethod.POST,
@@ -137,7 +140,7 @@ public class SubscribtionSequenceTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("list02", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("list02", httpHeaders);
         response = restTemplate.exchange(
                 "/cprlistplugin/v1/manager/subscriber/cprList/",
                 HttpMethod.POST,
@@ -159,7 +162,7 @@ public class SubscribtionSequenceTest {
                 "{\"listId\":\"list01\"},{\"listId\":\"list02\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("list01", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("list01", httpHeaders);
         response = restTemplate.exchange(
                 "/cvrlistplugin/v1/manager/subscriber/cvrList/",
                 HttpMethod.POST,
@@ -169,7 +172,7 @@ public class SubscribtionSequenceTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("list02", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("list02", httpHeaders);
         response = restTemplate.exchange(
                 "/cvrlistplugin/v1/manager/subscriber/cvrList/",
                 HttpMethod.POST,
