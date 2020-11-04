@@ -99,8 +99,8 @@ public class ManageSubscribtion {
             return ResponseEntity.ok(subscriber);
         } catch(Exception e) {
             log.error("Failed creating subscriber", e);
+            return new ResponseEntity("Failed creating subscriber", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/subscriber/{subscriberId}")

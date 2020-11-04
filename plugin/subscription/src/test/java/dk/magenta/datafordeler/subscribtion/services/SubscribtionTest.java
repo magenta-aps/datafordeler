@@ -361,6 +361,16 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
+        //Try fetching with no cpr access rights
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/create/",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+
+
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/list",
                 HttpMethod.GET,
