@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/cvrlistplugin/v1/manager")
+@RequestMapping("/subscriptionplugin/v1/manager")
 public class ManageCvrList {
 
     @Autowired

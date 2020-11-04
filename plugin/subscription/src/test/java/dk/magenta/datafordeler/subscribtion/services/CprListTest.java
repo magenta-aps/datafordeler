@@ -186,7 +186,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list is empty
         ResponseEntity<String> response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -198,7 +198,7 @@ public class CprListTest {
         //ADD an element to the CPR-list  cprTestList1
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/?cprList=cprTestList1",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/?cprList=cprTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -207,7 +207,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has one element
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -220,7 +220,7 @@ public class CprListTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/?cprList=cprTestList2",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/?cprList=cprTestList2",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -229,7 +229,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -251,7 +251,7 @@ public class CprListTest {
         cprList.add("1111111115");
         StringValuesDto dDes= new StringValuesDto("cprTestList1", null);
         dDes.setValues(cprList);
-        ResponseEntity responseEntity = restTemplate.postForEntity("/cprlistplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
+        ResponseEntity responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         //Add CPR-numbers to the CPR-list
@@ -261,12 +261,12 @@ public class CprListTest {
         cprList.add("1111111118");
         dDes= new StringValuesDto("cprTestList1", null);
         dDes.setValues(cprList);
-        responseEntity = restTemplate.postForEntity("/cprlistplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
+        responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -278,7 +278,7 @@ public class CprListTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/cprTestList1?cpr=1111111115,1111111117",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/cprTestList1?cpr=1111111115,1111111117",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
@@ -286,7 +286,7 @@ public class CprListTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/cpr/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

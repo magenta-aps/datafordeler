@@ -137,11 +137,22 @@ public class SubscribtionSequenceTest {
         );
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
+        //Confirm that the CPR-list has two elements
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/cprList/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("[]", response.getBody(), false);
+
 
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/?cprList=list01",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/?cprList=list01",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -151,7 +162,7 @@ public class SubscribtionSequenceTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/?cprList=list02",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/?cprList=list02",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -160,7 +171,7 @@ public class SubscribtionSequenceTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -173,7 +184,7 @@ public class SubscribtionSequenceTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cvrlistplugin/v1/manager/subscriber/cvrList/?cvrList=list01",
+                "/subscriptionplugin/v1/manager/subscriber/cvrList/?cvrList=list01",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -183,7 +194,7 @@ public class SubscribtionSequenceTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cvrlistplugin/v1/manager/subscriber/cvrList/?cvrList=list02",
+                "/subscriptionplugin/v1/manager/subscriber/cvrList/?cvrList=list02",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -192,7 +203,7 @@ public class SubscribtionSequenceTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/cvrlistplugin/v1/manager/subscriber/cvrList/list",
+                "/subscriptionplugin/v1/manager/subscriber/cvrList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
