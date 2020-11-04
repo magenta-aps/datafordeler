@@ -195,10 +195,10 @@ public class CprListTest {
         JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
                 "{\"listId\":\"myList2\"}]", response.getBody(), false);
 
-        //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cprTestList1", httpHeaders);
+        //ADD an element to the CPR-list  cprTestList1
+        httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/",
+                "/cprlistplugin/v1/manager/subscriber/cprList/?cprList=cprTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -218,9 +218,9 @@ public class CprListTest {
                 "{\"listId\":\"cprTestList1\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cprTestList2", httpHeaders);
+        httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cprlistplugin/v1/manager/subscriber/cprList/",
+                "/cprlistplugin/v1/manager/subscriber/cprList/?cprList=cprTestList2",
                 HttpMethod.POST,
                 httpEntity,
                 String.class

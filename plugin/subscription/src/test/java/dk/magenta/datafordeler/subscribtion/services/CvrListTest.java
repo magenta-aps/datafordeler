@@ -192,9 +192,9 @@ public class CvrListTest {
                 "{\"listId\":\"myList2\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cvrTestList1", httpHeaders);
+        httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cvrlistplugin/v1/manager/subscriber/cvrList/",
+                "/cvrlistplugin/v1/manager/subscriber/cvrList/?cvrList=cvrTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -214,9 +214,9 @@ public class CvrListTest {
                 "{\"listId\":\"cvrTestList1\"}]", response.getBody(), false);
 
         //ADD an element to the CPR-list
-        httpEntity = new HttpEntity<String>("cvrTestList2", httpHeaders);
+        httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/cvrlistplugin/v1/manager/subscriber/cvrList/",
+                "/cvrlistplugin/v1/manager/subscriber/cvrList/?cvrList=cvrTestList2",
                 HttpMethod.POST,
                 httpEntity,
                 String.class

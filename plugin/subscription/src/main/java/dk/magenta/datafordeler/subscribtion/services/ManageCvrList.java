@@ -69,7 +69,7 @@ public class ManageCvrList {
      * @throws InvalidCertificateException
      */
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestBody String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
