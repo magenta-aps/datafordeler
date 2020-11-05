@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.persistence.PersistenceException;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
@@ -182,6 +183,7 @@ public class SubscribtionTest {
         }
 
         //Add cprs to cprList2
+        boolean requiredExeptionHit = false;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
@@ -189,8 +191,8 @@ public class SubscribtionTest {
             CprList pnrList = (CprList) query.getResultList().get(0);
             List<SubscribedCprNumber> list = new ArrayList<SubscribedCprNumber>();
             SubscribedCprNumber prn1 = new SubscribedCprNumber("1234");
-            SubscribedCprNumber prn2 = new SubscribedCprNumber("1234");
-            SubscribedCprNumber prn3 = new SubscribedCprNumber("1234");
+            SubscribedCprNumber prn2 = new SubscribedCprNumber("1235");
+            SubscribedCprNumber prn3 = new SubscribedCprNumber("1236");
             list.add(prn1);
             list.add(prn2);
             list.add(prn3);

@@ -12,8 +12,10 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +25,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -111,8 +115,9 @@ public class ManageCprList {
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/cpr/add/", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cprListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cprNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        Transaction transaction = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
             query.setParameter("listId", cprNo.getKey());
             CprList foundList = (CprList)query.getResultList().get(0);
@@ -126,6 +131,10 @@ public class ManageCprList {
 
             transaction.commit();
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch(PersistenceException e) {
+            transaction.rollback();
+            log.error("Elements does allready exist", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();

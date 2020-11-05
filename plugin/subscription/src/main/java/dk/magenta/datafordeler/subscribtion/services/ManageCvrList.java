@@ -25,6 +25,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -113,8 +114,9 @@ public class ManageCvrList {
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/cvr/add/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cvrListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cvrNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        Transaction transaction = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
             query.setParameter("listId", cvrNo.getKey());
             CvrList foundList = (CvrList)query.getResultList().get(0);
@@ -123,12 +125,15 @@ public class ManageCvrList {
             }
 
             for(String cvr : cvrNo.getValues()) {
-
                 foundList.addCvrsString(cvr);
             }
 
             transaction.commit();
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch(PersistenceException e) {
+            transaction.rollback();
+            log.error("Elements does allready exist", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();

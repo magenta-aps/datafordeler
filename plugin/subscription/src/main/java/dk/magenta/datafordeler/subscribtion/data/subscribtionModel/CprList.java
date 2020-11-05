@@ -67,19 +67,19 @@ public class CprList extends DatabaseEntry {
     }
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="BS_ID")
+    @JoinColumn(name="businessevent_id")
     private Set<BusinessEventSubscription> businessSubscribtion = new HashSet<>();
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="DS_ID")
+    @JoinColumn(name="dataevent_id")
     private Set<DataEventSubscription> dataSubscribtion;
 
 
     @ElementCollection
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="CPR_ID")
+    @JoinColumn(name="cprlist_id")
     private List<SubscribedCprNumber> cprs = new ArrayList<SubscribedCprNumber>();
 
     @Column(name="cpr", nullable=false)

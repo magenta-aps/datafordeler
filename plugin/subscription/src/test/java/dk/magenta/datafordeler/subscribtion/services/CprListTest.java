@@ -251,8 +251,51 @@ public class CprListTest {
         cprList.add("1111111115");
         StringValuesDto dDes= new StringValuesDto("cprTestList1", null);
         dDes.setValues(cprList);
+
+
+        String jsonString = objectMapper.writeValueAsString(dDes);
+        System.out.println(jsonString);
+
         ResponseEntity responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        //Confirm that the CPR-list has 6 elements
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        JsonNode results = responseContent.get("results");
+        Assert.assertEquals(6, results.size());
+
+        //Add CPR-numbers to the CPR-list
+        cprList = new ArrayList<String>();
+        cprList.add("1111111110");
+        cprList.add("1111111111");
+        cprList.add("1111111112");
+        cprList.add("1111111113");
+        cprList.add("1111111114");
+        cprList.add("1111111115");
+        dDes= new StringValuesDto("cprTestList1", null);
+        dDes.setValues(cprList);
+
+        responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
+        Assert.assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+
+        //Confirm that the CPR-list has still 6 elements
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(6, results.size());
 
         //Add CPR-numbers to the CPR-list
         cprList = new ArrayList<String>();
@@ -264,7 +307,7 @@ public class CprListTest {
         responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        //Confirm that the CPR-list has two elements
+        //Confirm that the CPR-list has 9 elements
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
                 HttpMethod.GET,
@@ -272,8 +315,8 @@ public class CprListTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        JsonNode results = responseContent.get("results");
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
         Assert.assertEquals(9, results.size());
 
         //Try fetching with no cpr access rights
