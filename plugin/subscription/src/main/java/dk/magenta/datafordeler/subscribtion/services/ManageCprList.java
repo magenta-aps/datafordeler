@@ -17,6 +17,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -132,12 +133,17 @@ public class ManageCprList {
             transaction.commit();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch(PersistenceException e) {
-            transaction.rollback();
-            log.error("Elements does allready exist", e);
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            String errorMessage = "Elements does allready exist";
+            JSONObject obj = new JSONObject();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
-            log.error("FAILED REMOVING ELEMENT", e);
-            return ResponseEntity.status(500).build();
+            String errorMessage = "Failure";
+            JSONObject obj = new JSONObject();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity<>(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

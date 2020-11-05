@@ -256,7 +256,7 @@ public class CprListTest {
         String jsonString = objectMapper.writeValueAsString(dDes);
         System.out.println(jsonString);
 
-        ResponseEntity responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
+        ResponseEntity responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, String.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         //Confirm that the CPR-list has 6 elements
@@ -282,7 +282,7 @@ public class CprListTest {
         dDes= new StringValuesDto("cprTestList1", null);
         dDes.setValues(cprList);
 
-        responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
+        responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, String.class);
         Assert.assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
 
         //Confirm that the CPR-list has still 6 elements
@@ -304,7 +304,7 @@ public class CprListTest {
         cprList.add("1111111118");
         dDes= new StringValuesDto("cprTestList1", null);
         dDes.setValues(cprList);
-        responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, StringValuesDto.class);
+        responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cprList/cpr/add/", dDes, String.class);
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         //Confirm that the CPR-list has 9 elements
