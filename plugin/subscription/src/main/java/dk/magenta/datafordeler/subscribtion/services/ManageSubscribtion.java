@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,10 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 
 
@@ -90,16 +93,25 @@ public class ManageSubscribtion {
     public ResponseEntity createMySubscriber(HttpServletRequest request) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-
+        Transaction transaction = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+            transaction = session.beginTransaction();
             Subscriber subscriber = new Subscriber(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
-        } catch(Exception e) {
-            log.error("Failed creating subscriber", e);
-            return new ResponseEntity("Failed creating subscriber", HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch(PersistenceException e) {
+            String errorMessage = "Failed creating subscriber";
+            JSONObject obj = new JSONObject();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }  catch(Exception e) {
+            String errorMessage = "Failed creating subscriber";
+            JSONObject obj = new JSONObject();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
