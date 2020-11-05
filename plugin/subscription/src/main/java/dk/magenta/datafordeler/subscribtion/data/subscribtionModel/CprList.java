@@ -79,7 +79,7 @@ public class CprList extends DatabaseEntry {
     @ElementCollection
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="cprlist_id")
+    @JoinColumn(name="cprlistId")
     private List<SubscribedCprNumber> cprs = new ArrayList<SubscribedCprNumber>();
 
     @Column(name="cpr", nullable=false)

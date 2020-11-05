@@ -5,7 +5,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 
 @Entity
-@Table(name = SubscribedCvrNumber.TABLE_NAME, indexes = {
+@Table(name = SubscribedCvrNumber.TABLE_NAME, uniqueConstraints=@UniqueConstraint(columnNames={"cvrNumber", "cvrlistId"}), indexes = {
 
 
 })

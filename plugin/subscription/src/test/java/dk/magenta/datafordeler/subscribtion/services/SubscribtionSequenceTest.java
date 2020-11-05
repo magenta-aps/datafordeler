@@ -106,7 +106,7 @@ public class SubscribtionSequenceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/list",

@@ -68,10 +68,10 @@ public class CvrList {
     @ElementCollection
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="CPR_ID")
+    @JoinColumn(name="cvrlistId")
     private List<SubscribedCvrNumber> cvrs = new ArrayList<SubscribedCvrNumber>();
 
-    @Column(name="cpr", nullable=false)
+    @Column(name="cvr", nullable=false)
     @JsonIgnore
     public List<SubscribedCvrNumber> getCvr() {
         return cvrs;
