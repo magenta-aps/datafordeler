@@ -105,7 +105,7 @@ public class ManageSubscribtion {
             JSONObject obj = new JSONObject();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
         }  catch(Exception e) {
             String errorMessage = "Failed creating subscriber";
             JSONObject obj = new JSONObject();
