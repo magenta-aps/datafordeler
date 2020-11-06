@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CvrList;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.StringValuesDto;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -113,6 +115,10 @@ public class ManageCvrList {
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/cvr/add/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cvrListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cvrNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        if(true) {
+            //For now this functionality should not be used, the specification about how it should work is unclear, Fujitsu is probably going to need the functionality
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         Transaction transaction = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -160,6 +166,33 @@ public class ManageCvrList {
         }
     }
 
+    @PostMapping("/subscriber/cvrList/cvr/{listId}")
+    public ResponseEntity cvrListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
+            query.setParameter("listId", listId);
+            CvrList foundList = (CvrList)query.getResultList().get(0);
+            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            for(String cvr : cvrs) {
+                foundList.addCvrsString(cvr);
+            }
+            transaction.commit();
+            return ResponseEntity.ok(listId);
+        } catch(PersistenceException e) {
+            String errorMessage = "Elements does allready exist";
+            JSONObject obj = new JSONObject();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            log.error("FAILED REMOVING ELEMENT", e);
+            return ResponseEntity.status(500).build();
+        }
+    }
 
     /**
      * Get a list of all CPR-numbers in a list

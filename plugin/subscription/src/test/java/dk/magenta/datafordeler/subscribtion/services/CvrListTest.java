@@ -238,27 +238,21 @@ public class CvrListTest {
 
 
         //Add CPR-numbers to the CPR-list
-        List<String> cvrList = new ArrayList<String>();
-        cvrList.add("1111111110");
-        cvrList.add("1111111111");
-        cvrList.add("1111111112");
-        cvrList.add("1111111113");
-        cvrList.add("1111111114");
-        cvrList.add("1111111115");
-        StringValuesDto dDes= new StringValuesDto("cvrTestList1", null);
-        dDes.setValues(cvrList);
-        ResponseEntity responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/add/", dDes, StringValuesDto.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111110,1111111111,1111111112,1111111113,1111111114,1111111115",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Add CPR-numbers to the CPR-list
-        cvrList = new ArrayList<String>();
-        cvrList.add("1111111116");
-        cvrList.add("1111111117");
-        cvrList.add("1111111118");
-        dDes= new StringValuesDto("cvrTestList1", null);
-        dDes.setValues(cvrList);
-        responseEntity = restTemplate.postForEntity("/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/add/", dDes, StringValuesDto.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111116,1111111117,1111111118",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
