@@ -261,7 +261,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has 6 elements
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -287,7 +287,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has still 6 elements
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -309,7 +309,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has 9 elements
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -329,7 +329,7 @@ public class CprListTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list",
+                "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

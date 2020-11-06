@@ -170,6 +170,7 @@ public class ManageCvrList {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
+        String listId = requestParams.getFirst("listId");
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
@@ -186,7 +187,7 @@ public class ManageCvrList {
             }
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("listId", "cvrTestList1");
+            query.setParameter("listId", listId);
             CvrList foundList = (CvrList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);

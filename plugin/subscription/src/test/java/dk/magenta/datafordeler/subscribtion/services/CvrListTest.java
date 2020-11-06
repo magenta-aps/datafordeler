@@ -262,7 +262,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/list",
+                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/list/?listId=cvrTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -282,7 +282,7 @@ public class CvrListTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/list",
+                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/list/?listId=cvrTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

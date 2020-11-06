@@ -177,6 +177,7 @@ public class ManageCprList {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
+        String listId = requestParams.getFirst("listId");
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where  listId = :listId", CprList.class);
@@ -193,7 +194,7 @@ public class ManageCprList {
             }
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("listId", "cprTestList1");
+            query.setParameter("listId", listId);
             CprList foundList = (CprList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
