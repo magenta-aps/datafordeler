@@ -12,10 +12,8 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,6 @@ import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -152,7 +149,7 @@ public class ManageCprList {
     }
 
     @DeleteMapping("/subscriber/cprList/cpr/{listId}")
-    public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -172,7 +169,7 @@ public class ManageCprList {
     }
 
     @PostMapping("/subscriber/cprList/cpr/{listId}")
-    public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
