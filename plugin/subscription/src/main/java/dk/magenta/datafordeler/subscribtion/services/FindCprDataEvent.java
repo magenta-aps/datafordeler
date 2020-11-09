@@ -156,24 +156,24 @@ public class FindCprDataEvent {
                             PersonDataEventDataRecord eventRecord = events.iterator().next();
                             if(eventRecord.getOldItem() != null) {
                                 String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
-                                oldValues = (CprBitemporalPersonRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
+                                oldValues = (CprBitemporalPersonRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem().longValue()).getResultList().get(0);
                             }
                         }
 
                         if(subscribtionKodeId.length>=5) {
                             if(subscribtionKodeId[3].equals("before")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], oldValues)) {
-                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(),subscribtionKodeId[2],oldValues,newValues);
+                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             } else if(subscribtionKodeId[3].equals("after")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], newValues)) {
-                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(),subscribtionKodeId[2],oldValues,newValues);
+                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             }
                         } else {
-                            ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(),subscribtionKodeId[2],oldValues,newValues);
+                            ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                             otherList.add(node);
                         }
                     }
