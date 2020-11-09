@@ -236,7 +236,7 @@ public class SubscribtionSequenceTest {
 
 
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/?businessEventId=newBusinessEventId&kodeId=A05&cprList=list02",
+                "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/newBusinessEventId/?kodeId=A05&cprList=list02",
                 HttpMethod.PUT,
                 httpEntity,
                 String.class
@@ -277,7 +277,7 @@ public class SubscribtionSequenceTest {
 
 
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/?dataEventId=newDataEventId&kodeId=A05&cprList=list02",
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/newDataEventId/?kodeId=A05&cprList=list02",
                 HttpMethod.PUT,
                 httpEntity,
                 String.class
@@ -296,7 +296,7 @@ public class SubscribtionSequenceTest {
                 "{\"cprList\":{\"listId\":\"list02\"},\"dataEventId\":\"newDataEventId\",\"kodeId\":\"A05\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/?dataEventId=newDataEventId&kodeId=A05&cvrList=list02",
+                "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/newDataEventId/?kodeId=A05&cvrList=list02",
                 HttpMethod.PUT,
                 httpEntity,
                 String.class

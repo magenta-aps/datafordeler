@@ -177,7 +177,7 @@ public class ManageSubscribtion {
     public ResponseEntity businessEventSubscribtionCreate(HttpServletRequest request,
                                                           @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
                                                           @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -209,11 +209,10 @@ public class ManageSubscribtion {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/businessEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity businessEventSubscribtionUpdate(HttpServletRequest request,
-                                                          @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
+    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/businessEventSubscribtion/{businessEventId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity businessEventSubscribtionUpdate(HttpServletRequest request, @PathVariable("businessEventId") String businessEventId,
                                                           @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -361,9 +360,8 @@ public class ManageSubscribtion {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/dataEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity dataEventSubscribtionUpdate(HttpServletRequest request,
-                                                      @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
+    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/dataEventSubscribtion/{dataEventId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity dataEventSubscribtionUpdate(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId,
                                                       @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
                                                       @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
                                                       @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
