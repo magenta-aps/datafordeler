@@ -15,6 +15,7 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -76,7 +77,6 @@ public class CvrCompanyOwnerHistory {
     @PostConstruct
     public void init() {
         this.monitorService.addAccessCheckPoint("/prisme/cvr/ownerhistory/1/1234");
-        this.monitorService.addAccessCheckPoint("POST", "/prisme/cvr/ownerhistory/1/", "{}");
     }
 
 
@@ -144,23 +144,35 @@ public class CvrCompanyOwnerHistory {
                     if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
                         //A company can be owned by a person, then we need to find the persons cpr-number from live-lookup
                         try {
-                            ParticipantRecord participantRecord = directLookup.participantLookup(participantNumber.toString());
 
-                            deltagerPnr = participantRecord.getBusinessKey();
+                            ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
+                            participantRecordQuery.setEnhedsNummer(participantNumber.toString());
+                            List<ParticipantRecord> participantList = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
+                            if(participantList.size()>0) {
+                                deltagerPnr = participantList.get(0).getBusinessKey();
+                            } else {
+                                deltagerPnr = directLookup.participantLookup(participantNumber.toString()).getBusinessKey();
+                            }
+
+                            //deltagerPnr = participantRecord.getBusinessKey();
                             Iterator<OrganizationRecord> orgRecordList = participant.getOrganizations().iterator();
                             while (orgRecordList.hasNext()) {
                                 OrganizationRecord orgRecord = orgRecordList.next();
-                                Iterator<AttributeRecord> attributeList = orgRecord.getAttributes().iterator();//.next().getValues().iterator().next();
-                                while (attributeList.hasNext()) {
-                                    AttributeRecord attribute = attributeList.next();
+                                Iterator<OrganizationMemberdataRecord> memberdataIterator = orgRecord.getMemberData().iterator();
+                                while (memberdataIterator.hasNext()) {
+                                    OrganizationMemberdataRecord memberdata = memberdataIterator.next();
 
-                                    Iterator<AttributeValueRecord> attributeValueList = attribute.getValues().iterator();
-                                    while (attributeValueList.hasNext()) {
-                                        AttributeValueRecord attValue = attributeValueList.next();
-                                        from = Optional.ofNullable(attValue.getValidFrom()).map(o -> o.toString()).orElse(null);
-                                        to = Optional.ofNullable(attValue.getValidTo()).map(o -> o.toString()).orElse(null);
-                                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
-                                        personalOwnerList.add(ownerItem);
+                                    Iterator<AttributeRecord> attributeList = memberdata.getAttributes().iterator();
+                                    while (attributeList.hasNext()) {
+                                        AttributeRecord attribute = attributeList.next();
+                                        Iterator<AttributeValueRecord> attributeValueList = attribute.getValues().iterator();
+                                        while (attributeValueList.hasNext()) {
+                                            AttributeValueRecord attValue = attributeValueList.next();
+                                            from = Optional.ofNullable(attValue.getValidFrom()).map(o -> o.toString()).orElse(null);
+                                            to = Optional.ofNullable(attValue.getValidTo()).map(o -> o.toString()).orElse(null);
+                                            CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
+                                            personalOwnerList.add(ownerItem);
+                                        }
                                     }
                                 }
                             }
@@ -168,7 +180,7 @@ public class CvrCompanyOwnerHistory {
                             throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                         }
                     } else if("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {
-                        //A company can be owned by a person, then we need to find the companys cvr-number from the database
+                        //A company can be owned by a company, then we need to find the companys cvr-number from the database
                         Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
                         if (orgRecord.hasNext()) {
                             AttributeValueRecord attributes = orgRecord.next().getAttributes().iterator().next().getValues().iterator().next();
