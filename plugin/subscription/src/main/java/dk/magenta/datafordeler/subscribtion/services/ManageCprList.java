@@ -186,7 +186,10 @@ public class ManageCprList {
                 foundList.addCprString(cpr);
             }
             transaction.commit();
-            return ResponseEntity.ok(listId);
+            String errorMessage = "Elements was added";
+            JSONObject obj = new JSONObject();
+            obj.put("message", errorMessage);
+            return new ResponseEntity(obj.toString(), HttpStatus.OK);
         } catch(PersistenceException e) {
             String errorMessage = "Elements does allready exist";
             JSONObject obj = new JSONObject();
