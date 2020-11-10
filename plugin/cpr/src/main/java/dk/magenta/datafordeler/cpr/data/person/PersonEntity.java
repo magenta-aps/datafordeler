@@ -821,7 +821,7 @@ public class PersonEntity extends CprRecordEntity {
      * @return
      */
     public PersonDataEventDataRecord getDataEvent(String fieldName) {
-        return this.dataevent.stream().filter(event -> event.getField().equals(fieldName)).reduce((first, second) -> second).orElse(null);
+        return this.dataevent.stream().filter(event -> event.getField().equals(fieldName)).max(Comparator.comparingLong(s -> s.getTimestamp().toEpochSecond())).orElse(null);
 
     }
 
