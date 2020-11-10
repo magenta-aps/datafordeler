@@ -144,16 +144,14 @@ public class FindCprDataEvent {
                 }
                 query.setPage(page);
                 List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
-
                 List otherList = new ArrayList<ObjectNode>();
 
                 if(includeMeta) {
                     for(ResultSet<PersonEntity> entity : entities) {
                         CprBitemporalPersonRecord oldValues = null;
                         CprBitemporalPersonRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity.getPrimaryEntity());
-                        Set<PersonDataEventDataRecord> events = entity.getPrimaryEntity().getDataEvent();
-                        if(events.size()>0) {
-                            PersonDataEventDataRecord eventRecord = events.iterator().next();
+                        PersonDataEventDataRecord eventRecord = entity.getPrimaryEntity().getDataEvent(subscribtionKodeId[2]);
+                        if(eventRecord != null) {
                             if(eventRecord.getOldItem() != null) {
                                 String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
                                 oldValues = (CprBitemporalPersonRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem().longValue()).getResultList().get(0);
@@ -228,7 +226,7 @@ public class FindCprDataEvent {
 
         if(AddressDataRecord.TABLE_NAME.equals(fieldname)) {
             String[] splitLogic = logic.split("=");
-            if("kommunekode".equals(splitLogic[0])) {
+            if(personEntity!=null && "kommunekode".equals(splitLogic[0])) {
                 return ((AddressDataRecord)personEntity).getMunicipalityCode() == Integer.parseInt(splitLogic[1]);
             }
         }

@@ -815,8 +815,14 @@ public class PersonEntity extends CprRecordEntity {
         return this.dataevent;
     }
 
-    public Set<PersonDataEventDataRecord> getDataEvent(String fieldName) {
-        return this.dataevent.stream().filter(event -> event.getFieldName().equals(fieldName)).collect(Collectors.toSet());
+    /**
+     *
+     * @param fieldName
+     * @return
+     */
+    public PersonDataEventDataRecord getDataEvent(String fieldName) {
+        return this.dataevent.stream().filter(event -> event.getField().equals(fieldName)).reduce((first, second) -> second).orElse(null);
+
     }
 
     public void addDataEvent(PersonDataEventDataRecord record) {

@@ -67,6 +67,10 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     @JsonIgnore
     private String field;
 
+    public String getField() {
+        return field;
+    }
+
 
     public static final String DB_FIELD_TEXT = "text";
     @Column(name = DB_FIELD_TEXT)
