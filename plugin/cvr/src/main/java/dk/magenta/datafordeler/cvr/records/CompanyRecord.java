@@ -111,7 +111,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (record != null) {
             record.setCompanyRecord(this);
             if(!regNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.regNumber.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.regNumber.stream().reduce((first, second) -> second).get().getId()));
             }
             this.regNumber.add(record);
         }
@@ -207,7 +207,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setSecondary(false);
             record.setCompanyRecord(this);
             if(!names.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.names.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.names.stream().reduce((first, second) -> second).get().getId()));
             }
             this.names.add(record);
         }
@@ -251,7 +251,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setSecondary(true);
             record.setCompanyRecord(this);
             if(!secondaryNames.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.secondaryNames.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.secondaryNames.stream().reduce((first, second) -> second).get().getId()));
             }
             this.secondaryNames.add(record);
         }
@@ -291,7 +291,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setType(AddressRecord.TYPE_LOCATION);
             record.setCompanyRecord(this);
             if(!locationAddress.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.locationAddress.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.locationAddress.stream().reduce((first, second) -> second).get().getId()));
             }
             this.locationAddress.add(record);
         }
@@ -335,7 +335,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setType(AddressRecord.TYPE_POSTAL);
             record.setCompanyRecord(this);
             if(!postalAddress.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.postalAddress.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.postalAddress.stream().reduce((first, second) -> second).get().getId()));
             }
             this.postalAddress.add(record);
         }
@@ -381,7 +381,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setCompanyRecord(this);
             record.setSecondary(false);
             if(!phoneNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.phoneNumber.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.phoneNumber.stream().reduce((first, second) -> second).get().getId()));
             }
             this.phoneNumber.add(record);
         }
@@ -427,7 +427,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setCompanyRecord(this);
             record.setSecondary(true);
             if(!phoneNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.phoneNumber.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.phoneNumber.stream().reduce((first, second) -> second).get().getId()));
             }
             this.phoneNumber.add(record);
         }
@@ -473,7 +473,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setCompanyRecord(this);
             record.setSecondary(false);
             if(!faxNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.faxNumber.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.faxNumber.stream().reduce((first, second) -> second).get().getId()));
             }
             this.faxNumber.add(record);
         }
@@ -519,7 +519,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setCompanyRecord(this);
             record.setSecondary(true);
             if(!faxNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.faxNumber.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.faxNumber.stream().reduce((first, second) -> second).get().getId()));
             }
             this.faxNumber.add(record);
         }
@@ -563,7 +563,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setType(ContactRecord.TYPE_EMAILADRESSE);
             record.setCompanyRecord(this);
             if(!emailAddress.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.emailAddress.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.emailAddress.stream().reduce((first, second) -> second).get().getId()));
             }
             this.emailAddress.add(record);
         }
@@ -607,7 +607,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setType(ContactRecord.TYPE_HJEMMESIDE);
             record.setCompanyRecord(this);
             if(!homepage.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.homepage.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.homepage.stream().reduce((first, second) -> second).get().getId()));
             }
             this.homepage.add(record);
         }
@@ -651,7 +651,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setType(ContactRecord.TYPE_OBLIGATORISK_EMAILADRESSE);
             record.setCompanyRecord(this);
             if(!mandatoryEmailAddress.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.mandatoryEmailAddress.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.mandatoryEmailAddress.stream().reduce((first, second) -> second).get().getId()));
             }
             this.mandatoryEmailAddress.add(record);
         }
@@ -692,7 +692,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (record != null) {
             record.setCompanyRecord(this);
             if(!lifecycle.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.lifecycle.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.lifecycle.stream().reduce((first, second) -> second).get().getId()));
             }
             this.lifecycle.add(record);
         }
@@ -736,7 +736,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setIndex(0);
             record.setCompanyRecord(this);
             if(!primaryIndustry.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.primaryIndustry.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.primaryIndustry.stream().reduce((first, second) -> second).get().getId()));
             }
             this.primaryIndustry.add(record);
         }
@@ -780,7 +780,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setIndex(1);
             record.setCompanyRecord(this);
             if(!secondaryIndustry1.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.secondaryIndustry1.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.secondaryIndustry1.stream().reduce((first, second) -> second).get().getId()));
             }
             this.secondaryIndustry1.add(record);
         }
@@ -824,7 +824,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setIndex(2);
             record.setCompanyRecord(this);
             if(!secondaryIndustry2.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.secondaryIndustry2.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.secondaryIndustry2.stream().reduce((first, second) -> second).get().getId()));
             }
             this.secondaryIndustry2.add(record);
         }
@@ -868,7 +868,7 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setIndex(3);
             record.setCompanyRecord(this);
             if(!secondaryIndustry3.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.secondaryIndustry3.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.secondaryIndustry3.stream().reduce((first, second) -> second).get().getId()));
             }
             this.secondaryIndustry3.add(record);
         }
@@ -909,7 +909,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (record != null) {
             record.setCompanyRecord(this);
             if(!status.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.status.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.status.stream().reduce((first, second) -> second).get().getId()));
             }
             this.status.add(record);
         }
@@ -951,7 +951,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (record != null) {
             record.setCompanyRecord(this);
             if(!companyStatus.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.companyStatus.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.companyStatus.stream().reduce((first, second) -> second).get().getId()));
             }
             this.companyStatus.add(record);
         }
@@ -992,7 +992,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (record != null) {
             record.setCompanyRecord(this);
             if(!companyForm.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.companyForm.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.companyForm.stream().reduce((first, second) -> second).get().getId()));
             }
             this.companyForm.add(record);
         }
@@ -1188,7 +1188,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (record != null) {
             record.setCompanyRecord(this);
             if(!productionUnits.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.productionUnits.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.productionUnits.stream().reduce((first, second) -> second).get().getId()));
             }
             this.productionUnits.add(record);
         }
@@ -1229,7 +1229,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (record != null) {
             record.setCompanyRecord(this);
             if(!participants.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getRegistrationFrom(), record.getFieldName(), this.participants.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.participants.stream().reduce((first, second) -> second).get().getId()));
             }
             this.participants.add(record);
         }
