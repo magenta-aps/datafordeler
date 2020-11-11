@@ -159,9 +159,16 @@ public class ManageCprList {
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            foundList.getCpr().removeIf(item -> cprs.contains(item.getCprNumber()));
+            List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
+            for(SubscribedCprNumber subscribed : subscribedList) {
+                session.delete(subscribed);
+                foundList.getCpr().remove(subscribed);
+            }
             transaction.commit();
-            return ResponseEntity.ok(listId);
+            String errorMessage = "Elements was removed";
+            JSONObject obj = new JSONObject();
+            obj.put("message", errorMessage);
+            return new ResponseEntity(obj.toString(), HttpStatus.OK);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
