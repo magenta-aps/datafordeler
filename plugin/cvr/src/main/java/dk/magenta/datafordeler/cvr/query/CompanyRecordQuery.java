@@ -559,6 +559,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void setDataEventTimeAfter(OffsetDateTime companyrecordeventTimeAfter) {
         this.companyrecordeventTimeAfter = companyrecordeventTimeAfter;
+        this.updatedParameters();
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = COMPANYDATAEVENTTIME)
@@ -566,6 +567,7 @@ public class CompanyRecordQuery extends BaseQuery {
 
     public void setDataEventTimeBefore(OffsetDateTime companyrecordeventTimeBefore) {
         this.companyrecordeventTimeBefore = companyrecordeventTimeBefore;
+        this.updatedParameters();
     }
 
 
@@ -749,8 +751,12 @@ public class CompanyRecordQuery extends BaseQuery {
         if (this.lastUpdated != null) {
             this.addCondition("lastUpdated", Condition.Operator.GT, Collections.singletonList(this.lastUpdated), OffsetDateTime.class, false);
         }
-        this.addCondition("companyrecordeventTime.GTE", Condition.Operator.GTE, this.companyrecordeventTimeAfter, OffsetDateTime.class, true);
-        this.addCondition("companyrecordeventTime.LTE", Condition.Operator.LTE, this.companyrecordeventTimeBefore, OffsetDateTime.class, true);
+        if (this.companyrecordeventTimeAfter != null) {
+            this.addCondition("companyrecordeventTime.GTE", Condition.Operator.GTE, this.companyrecordeventTimeAfter, OffsetDateTime.class, false);
+        }
+        if (this.companyrecordeventTimeBefore != null) {
+            this.addCondition("companyrecordeventTime.LTE", Condition.Operator.LTE, this.companyrecordeventTimeBefore, OffsetDateTime.class, false);
+        }
     }
 
 
