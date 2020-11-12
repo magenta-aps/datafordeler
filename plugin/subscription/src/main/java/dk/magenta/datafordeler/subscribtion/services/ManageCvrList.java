@@ -9,10 +9,7 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CvrList;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.StringValuesDto;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.Subscriber;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -157,9 +154,17 @@ public class ManageCvrList {
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            foundList.getCvr().removeIf(item -> cvrs.contains(item.getCvrNumber()));
+            List<SubscribedCvrNumber> subscribedList = foundList.getCvr().stream().filter(item -> cvrs.contains(item.getCvrNumber())).collect(Collectors.toList());
+            for(SubscribedCvrNumber subscribed : subscribedList) {
+                session.delete(subscribed);
+                foundList.getCvr().remove(subscribed);
+            }
             transaction.commit();
-            return ResponseEntity.ok(listId);
+            String errorMessage = "Elements was removed";
+            JSONObject obj = new JSONObject();
+            obj.put("message", errorMessage);
+            return new ResponseEntity(obj.toString(), HttpStatus.OK);
+
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
@@ -181,7 +186,10 @@ public class ManageCvrList {
                 foundList.addCvrsString(cvr);
             }
             transaction.commit();
-            return ResponseEntity.ok(listId);
+            String errorMessage = "Elements was added";
+            JSONObject obj = new JSONObject();
+            obj.put("message", errorMessage);
+            return new ResponseEntity(obj.toString(), HttpStatus.OK);
         } catch(PersistenceException e) {
             String errorMessage = "Elements does allready exist";
             JSONObject obj = new JSONObject();
