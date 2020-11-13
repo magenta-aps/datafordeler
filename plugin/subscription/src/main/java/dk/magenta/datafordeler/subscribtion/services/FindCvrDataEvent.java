@@ -95,6 +95,10 @@ public class FindCvrDataEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
+            String hql = "SELECT max(event.timestamp) FROM "+ CompanyDataEventRecord.class.getCanonicalName()+" event ";
+            Query timestampQuery = session.createQuery(hql);
+            OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
+
             Query eventQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
             if(eventQuery.getResultList().size()==0) {
@@ -171,6 +175,7 @@ public class FindCvrDataEvent {
                 }
 
                 envelope.setResults(otherList);
+                envelope.setNewestResultTimestamp(newestEventTimestamp);
                 return ResponseEntity.ok(envelope);
             }
         } catch (AccessRequiredException e) {

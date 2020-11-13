@@ -13,6 +13,9 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.PersonEventRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscription;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,6 +84,10 @@ public class FindCprBusinessEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
+            String hql = "SELECT max(event.timestamp) FROM "+ PersonEventDataRecord.class.getCanonicalName()+" event ";
+            Query timestampQuery = session.createQuery(hql);
+            OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
+
             Query eventQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             eventQuery.setParameter("businessEventId", businessEventId);
             if(eventQuery.getResultList().size()==0) {
@@ -117,6 +125,7 @@ public class FindCprBusinessEvent {
                 Envelope envelope = new Envelope();
                 List<String> pnrList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
                 envelope.setResults(pnrList);
+                envelope.setNewestResultTimestamp(newestEventTimestamp);
                 return ResponseEntity.ok(envelope);
             }
         } catch (AccessRequiredException e) {

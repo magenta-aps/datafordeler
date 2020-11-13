@@ -19,7 +19,6 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
-import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
@@ -65,10 +64,7 @@ public class FindCprDataEvent {
     private DafoUserManager dafoUserManager;
 
     @Autowired
-    private PersonRecordOutputWrapper personRecordOutputWrapper;
-
-    @Autowired
-    private PersonRecordMetadataWrapper personRecordOutputWrapperStuff;
+    private PersonRecordMetadataWrapper personRecordOutputWrapper;
 
 
     @Autowired
@@ -104,6 +100,10 @@ public class FindCprDataEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
+            String hql = "SELECT max(event.timestamp) FROM "+ PersonDataEventDataRecord.class.getCanonicalName()+" event ";
+            Query timestampQuery = session.createQuery(hql);
+            OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
+
             Query eventQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
             if(eventQuery.getResultList().size()==0) {
@@ -135,7 +135,7 @@ public class FindCprDataEvent {
                 if(cprList!=null) {
                     List<SubscribedCprNumber> theList = cprList.getCpr();
                     List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
-                    query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
+                    query.setPersonnumre(pnrFilterList);
                 }
 
                 query.setPageSize(pageSize);
@@ -161,17 +161,17 @@ public class FindCprDataEvent {
                         if(subscribtionKodeId.length>=5) {
                             if(subscribtionKodeId[3].equals("before")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], oldValues)) {
-                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             } else if(subscribtionKodeId[3].equals("after")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], newValues)) {
-                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             }
                         } else {
-                            ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                            ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                             otherList.add(node);
                         }
                     }
@@ -181,6 +181,7 @@ public class FindCprDataEvent {
                 Envelope envelope = new Envelope();
 
                 envelope.setResults(otherList);
+                envelope.setNewestResultTimestamp(newestEventTimestamp);
                 return ResponseEntity.ok(envelope);
             }
         } catch (AccessRequiredException e) {
