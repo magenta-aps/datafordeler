@@ -121,7 +121,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<AddressConameDataRecord> coname = new HashSet<>();
 
     public BitemporalSet<AddressConameDataRecord> getConame() {
-        return new BitemporalSet<>( this.coname);
+        return new BitemporalSet<>(this.coname);
     }
 
     public static final String DB_FIELD_ADDRESS = "address";
@@ -143,7 +143,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<AddressDataRecord> address = new HashSet<>();
 
     public BitemporalSet<AddressDataRecord> getAddress() {
-        return new BitemporalSet<>( this.address);
+        return new BitemporalSet<>(this.address);
     }
 
     public static final String DB_FIELD_ADDRESS_NAME = "addressName";
@@ -165,7 +165,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<AddressNameDataRecord> addressName = new HashSet<>();
 
     public BitemporalSet<AddressNameDataRecord> getAddressName() {
-        return new BitemporalSet<>( this.addressName);
+        return new BitemporalSet<>(this.addressName);
     }
 
     public static final String DB_FIELD_BIRTHPLACE = "birthPlace";
@@ -187,7 +187,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<BirthPlaceDataRecord> birthPlace = new HashSet<>();
 
     public BitemporalSet<BirthPlaceDataRecord> getBirthPlace() {
-        return new BitemporalSet<>( this.birthPlace);
+        return new BitemporalSet<>(this.birthPlace);
     }
 
     public static final String DB_FIELD_BIRTHPLACE_VERIFICATION = "birthPlaceVerification";
@@ -209,7 +209,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<BirthPlaceVerificationDataRecord> birthPlaceVerification = new HashSet<>();
 
     public BitemporalSet<BirthPlaceVerificationDataRecord> getBirthPlaceVerification() {
-        return new BitemporalSet<>( this.birthPlaceVerification);
+        return new BitemporalSet<>(this.birthPlaceVerification);
     }
 
     public static final String DB_FIELD_BIRTHTIME = "birthTime";
@@ -231,7 +231,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<BirthTimeDataRecord> birthTime = new HashSet<>();
 
     public BitemporalSet<BirthTimeDataRecord> getBirthTime() {
-        return new BitemporalSet<>( this.birthTime);
+        return new BitemporalSet<>(this.birthTime);
     }
 
     public static final String DB_FIELD_CHURCH = "churchRelation";
@@ -253,7 +253,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<ChurchDataRecord> churchRelation = new HashSet<>();
 
     public BitemporalSet<ChurchDataRecord> getChurchRelation() {
-        return new BitemporalSet<>( this.churchRelation);
+        return new BitemporalSet<>(this.churchRelation);
     }
 
     public static final String DB_FIELD_CHURCH_VERIFICATION = "churchRelationVerification";
@@ -275,7 +275,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<ChurchVerificationDataRecord> churchRelationVerification = new HashSet<>();
 
     public BitemporalSet<ChurchVerificationDataRecord> getChurchRelationVerification() {
-        return new BitemporalSet<>( this.churchRelationVerification);
+        return new BitemporalSet<>(this.churchRelationVerification);
     }
 
     public static final String DB_FIELD_CHILDREN = "children";
@@ -297,7 +297,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<ChildrenDataRecord> children = new HashSet<>();
 
     public BitemporalSet<ChildrenDataRecord> getChildren() {
-        return new BitemporalSet<>( this.children);
+        return new BitemporalSet<>(this.children);
     }
 
     public static final String DB_FIELD_CUSTODY = "custody";
@@ -342,7 +342,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<CitizenshipDataRecord> citizenship = new HashSet<>();
 
     public BitemporalSet<CitizenshipDataRecord> getCitizenship() {
-        return new BitemporalSet<>( this.citizenship);
+        return new BitemporalSet<>(this.citizenship);
     }
 
     public static final String DB_FIELD_CITIZENSHIP_VERIFICATION = "citizenshipVerification";
@@ -364,7 +364,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<CitizenshipVerificationDataRecord> citizenshipVerification = new HashSet<>();
 
     public BitemporalSet<CitizenshipVerificationDataRecord> getCitizenshipVerification() {
-        return new BitemporalSet<>( this.citizenshipVerification);
+        return new BitemporalSet<>(this.citizenshipVerification);
     }
 
     public static final String DB_FIELD_CIVILSTATUS = "civilstatus";
@@ -386,7 +386,7 @@ public class PersonEntity extends CprRecordEntity {
     Set<CivilStatusDataRecord> civilstatus = new HashSet<>();
 
     public BitemporalSet<CivilStatusDataRecord> getCivilstatus() {
-        return new BitemporalSet<>( this.civilstatus);
+        return new BitemporalSet<>(this.civilstatus);
     }
 
     public static final String DB_FIELD_CIVILSTATUS_AUTHORITYTEXT = "civilstatusAuthorityText";
