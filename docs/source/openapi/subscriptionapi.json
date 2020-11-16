@@ -137,29 +137,44 @@
           }
         }
       },
-      "get": {
-        "summary": "Hen en subscription",
-        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
+      "delete": {
+        "summary": "Slet en subscription",
+        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link",
         "parameters": [
-          {
-            "name": "businessEventId",
-            "description": "The unique id of the eventId to get created",
-            "example": "eventId1"
-          },
-          {
-            "name": "kodeId",
-            "description": "The Id to use to compare the events",
-            "example": "cpr.businessevent.A01"
-          },
-          {
-            "name": "cprList",
-            "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
-            "example": "list01"
-          }
         ],
         "responses": {
           "200": {
             "description": "",
+            "content": {
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Hen en subscription",
+        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/list": {
+      "get": {
+        "summary": "Der returneres en liste over alle subscriptions i datafordeleren",
+        "description": "Der returneres en liste over alle subscriptions i datafordeleren",
+        "parameters": [
+          {
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
             "content": {
             }
           }
@@ -184,6 +199,11 @@
           {
             "name": "cprList",
             "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
+            "example": "list01"
+          },
+          {
+            "name": "cvrList",
+            "description": "The list to use in order to filter out CVR-numbers that is not relevant to the data-consumer",
             "example": "list01"
           }
         ],
@@ -213,7 +233,25 @@
             "name": "cprList",
             "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
             "example": "list01"
+          },
+          {
+            "name": "cvrList",
+            "description": "The list to use in order to filter out CVR-numbers that is not relevant to the data-consumer",
+            "example": "list01"
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Slet en subscription",
+        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link",
+        "parameters": [
         ],
         "responses": {
           "200": {
@@ -227,25 +265,210 @@
         "summary": "Hen en subscription",
         "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
         "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/cprList/list/": {
+      "get": {
+        "summary": "Der returneres en liste over alle CPR-lister",
+        "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "parameters": [
           {
-            "name": "businessEventId",
-            "description": "The unique id of the eventId to get created",
-            "example": "eventId1"
-          },
-          {
-            "name": "kodeId",
-            "description": "The Id to use to compare the events",
-            "example": "cpr.dataevent.cpr_person_address_record"
-          },
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CPR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/cprList/": {
+      "post": {
+        "summary": "Der returneres en liste over alle CPR-lister",
+        "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "parameters": [
           {
             "name": "cprList",
-            "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
+            "description": "The unique id of the list to get created",
+            "example": "listId1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CPR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/{listId}": {
+      "post": {
+        "summary": "Der returneres en liste over alle CPR-lister",
+        "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "parameters": [
+          {
+            "name": "cpr",
+            "description": "A list of CPR-numbers to add to the list",
+            "example": "1111111111,1111111112,111111113,1111111114"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CPR-lister",
+            "content": {
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Der slettes en liste",
+        "description": "Der slettes en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CPR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list": {
+      "post": {
+        "summary": "Der tilføjes CPR-numre til listen",
+        "description": "Der tilføjes CPR-numre til listen til brug for subscriptions i datafordeleren",
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "The pagesize to use in case it is a long list",
+            "example": "100"
+          },
+          {
+            "name": "page",
+            "description": "The page to find in case it is a long list",
+            "example": "1"
+          },
+          {
+            "name": "listId",
+            "description": "The identification of the list to find",
             "example": "list01"
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Liste over CPR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/cvrList/list/": {
+      "get": {
+        "summary": "Der returneres en liste over alle CPR-lister",
+        "description": "Der returneres en liste over alle CVR-lister til brug for subscriptions i datafordeleren",
+        "parameters": [
+          {
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CVR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/cvrList/": {
+      "post": {
+        "summary": "Der returneres en liste over alle CVR-lister",
+        "description": "Der returneres en liste over alle CVR-lister til brug for subscriptions i datafordeleren",
+        "parameters": [
+          {
+            "name": "cvrList",
+            "description": "The unique id of the list to get created",
+            "example": "listId1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CVR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/{listId}": {
+      "post": {
+        "summary": "Der tilføjes CVR-numre til listen",
+        "description": "Der tilføjes CVR-numre til listen til brug for subscriptions i datafordeleren",
+        "parameters": [
+          {
+            "name": "cvr",
+            "description": "A list of CPR-numbers to add to the list",
+            "example": "11111111,11111112,1111113,11111114"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CVR-lister",
+            "content": {
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Der slettes en liste",
+        "description": "Der slettes en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CVR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/list": {
+      "post": {
+        "summary": "Der returneres en liste over alle CVR-numre i en liste",
+        "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "The pagesize to use in case it is a long list",
+            "example": "100"
+          },
+          {
+            "name": "page",
+            "description": "The page to find in case it is a long list",
+            "example": "1"
+          },
+          {
+            "name": "listId",
+            "description": "The identification of the list to find",
+            "example": "list01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CVR-lister",
             "content": {
             }
           }
