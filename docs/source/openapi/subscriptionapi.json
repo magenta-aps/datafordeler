@@ -1,0 +1,256 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Datafordeler - abonnementsløsning",
+    "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere der har brug for at trække data fra datafordeleren, sekundært Selvstyrets og Digitaliseringsstyrelsens medarbejdere med relation til ERP-projektet. For at få adgang til datafordelerens abonnementsløsning skal brugeren oprettes i Pitu. Der refereres i dette dokument til dafo-testserverens endpoint, der findes tilsvarende for prodmiljøet ved adgang til prodmiljøet skal .test – delen udelades i url’en",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://dafo.test.data.gl"
+    }
+  ],
+  "paths": {
+    "/subscriptionplugin/v1/manager/subscriber": {
+      "post": {
+        "summary": "Administration af subscribere i datafordeleren",
+        "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald mes POST til denne service medfører en fejl",
+        "parameters": [
+          {
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/list": {
+      "get": {
+        "summary": "Der returneres en liste over alle subscribere i datafordeleren",
+        "description": "Der returneres en liste over alle subscribere i datafordeleren",
+
+        "parameters": [
+          {
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Der returneres en liste over alle subscribere i datafordeleren",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/{subscriberId}": {
+      "get": {
+        "summary": "Der returneres en liste over alle subscribere i datafordeleren",
+        "description": "Der returneres en liste over alle subscribere i datafordeleren",
+        "parameters": [
+          {
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/list": {
+      "get": {
+        "summary": "Der returneres en liste over alle subscriptions i datafordeleren",
+        "description": "Der returneres en liste over alle subscriptions i datafordeleren",
+        "parameters": [
+          {
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/{subscriberId}": {
+      "post": {
+        "summary": "Opret en subscription",
+        "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne",
+        "parameters": [
+          {
+            "name": "businessEventId",
+            "description": "The unique id of the eventId to get created",
+            "example": "eventId1"
+          },
+          {
+            "name": "kodeId",
+            "description": "The Id to use to compare the events",
+            "example": "cpr.businessevent.A01"
+          },
+          {
+            "name": "cprList",
+            "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
+            "example": "list01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Modificer en subscription",
+        "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
+        "parameters": [
+          {
+            "name": "businessEventId",
+            "description": "The unique id of the eventId to get created",
+            "example": "eventId1"
+          },
+          {
+            "name": "kodeId",
+            "description": "The Id to use to compare the events",
+            "example": "cpr.businessevent.A01"
+          },
+          {
+            "name": "cprList",
+            "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
+            "example": "list01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Hen en subscription",
+        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
+        "parameters": [
+          {
+            "name": "businessEventId",
+            "description": "The unique id of the eventId to get created",
+            "example": "eventId1"
+          },
+          {
+            "name": "kodeId",
+            "description": "The Id to use to compare the events",
+            "example": "cpr.businessevent.A01"
+          },
+          {
+            "name": "cprList",
+            "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
+            "example": "list01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/{subscriberId}": {
+      "post": {
+        "summary": "Opret en subscription",
+        "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne",
+        "parameters": [
+          {
+            "name": "businessEventId",
+            "description": "The unique id of the eventId to get created",
+            "example": "eventId1"
+          },
+          {
+            "name": "kodeId",
+            "description": "The Id to use to compare the events",
+            "example": "cpr.dataevent.cpr_person_address_record"
+          },
+          {
+            "name": "cprList",
+            "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
+            "example": "list01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Modificer en subscription",
+        "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
+        "parameters": [
+          {
+            "name": "businessEventId",
+            "description": "The unique id of the eventId to get created",
+            "example": "eventId1"
+          },
+          {
+            "name": "kodeId",
+            "description": "The Id to use to compare the events",
+            "example": "cpr.dataevent.cpr_person_address_record"
+          },
+          {
+            "name": "cprList",
+            "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
+            "example": "list01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Hen en subscription",
+        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
+        "parameters": [
+          {
+            "name": "businessEventId",
+            "description": "The unique id of the eventId to get created",
+            "example": "eventId1"
+          },
+          {
+            "name": "kodeId",
+            "description": "The Id to use to compare the events",
+            "example": "cpr.dataevent.cpr_person_address_record"
+          },
+          {
+            "name": "cprList",
+            "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
+            "example": "list01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      }
+    }
+  }
+}
