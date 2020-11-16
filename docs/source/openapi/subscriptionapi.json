@@ -474,6 +474,126 @@
           }
         }
       }
+    },
+    "/subscriptionplugin/v1/findCprBusinessEvent/fetchEvents/": {
+      "post": {
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "The pagesize to use in case it is a long list",
+            "example": "100"
+          },
+          {
+            "name": "page",
+            "description": "The page to find in case it is a long list",
+            "example": "1"
+          },
+          {
+            "name": "subscribtion",
+            "description": "The unique ID of the subscription",
+            "example": "subscriptionId01"
+          },
+          {
+            "name": "timestamp.GTE",
+            "description": "Timestamp 'greater-than-or-equals'",
+            "example": "2020-10-26T12:00-03:00"
+          },
+          {
+            "name": "timestamp.LTE",
+            "description": "Timestamp 'less-than-or-equals'",
+            "example": "2020-10-26T12:00-03:00"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CVR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/findCprDataEvent/fetchEvents/": {
+      "post": {
+        "summary": "Der returneres en liste over alle CVR-numre i en liste",
+        "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "The pagesize to use in case it is a long list",
+            "example": "100"
+          },
+          {
+            "name": "page",
+            "description": "The page to find in case it is a long list",
+            "example": "1"
+          },
+          {
+            "name": "subscribtion",
+            "description": "The unique ID of the subscription",
+            "example": "subscriptionId01"
+          },
+          {
+            "name": "timestamp.GTE",
+            "description": "Timestamp 'greater-than-or-equals'",
+            "example": "2020-10-26T12:00-03:00"
+          },
+          {
+            "name": "timestamp.LTE",
+            "description": "Timestamp 'less-than-or-equals'",
+            "example": "2020-10-26T12:00-03:00"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CVR-lister",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents/": {
+      "post": {
+        "summary": "Der returneres en liste over alle CVR-numre i en liste",
+        "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "The pagesize to use in case it is a long list",
+            "example": "100"
+          },
+          {
+            "name": "page",
+            "description": "The page to find in case it is a long list",
+            "example": "1"
+          },
+          {
+            "name": "subscribtion",
+            "description": "The unique ID of the subscription",
+            "example": "subscriptionId01"
+          },
+          {
+            "name": "timestamp.GTE",
+            "description": "Timestamp 'greater-than-or-equals'",
+            "example": "2020-10-26T12:00-03:00"
+          },
+          {
+            "name": "timestamp.LTE",
+            "description": "Timestamp 'less-than-or-equals'",
+            "example": "2020-10-26T12:00-03:00"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over CVR-lister",
+            "content": {
+            }
+          }
+        }
+      }
     }
   }
 }
