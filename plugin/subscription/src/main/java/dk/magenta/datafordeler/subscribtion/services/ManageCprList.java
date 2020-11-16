@@ -74,7 +74,7 @@ public class ManageCprList {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -99,7 +99,7 @@ public class ManageCprList {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -124,7 +124,7 @@ public class ManageCprList {
             query.setParameter("listId", cprNo.getKey());
             CprList foundList = (CprList)query.getResultList().get(0);
 
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             for(String cpr : cprNo.getValues()) {
@@ -156,7 +156,7 @@ public class ManageCprList {
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
             query.setParameter("listId", listId);
             CprList foundList = (CprList)query.getResultList().get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
@@ -183,7 +183,7 @@ public class ManageCprList {
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
             query.setParameter("listId", listId);
             CprList foundList = (CprList)query.getResultList().get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             for(String cpr : cprs) {
@@ -235,7 +235,7 @@ public class ManageCprList {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("listId", listId);
             CprList foundList = (CprList)query.getResultList().get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 

@@ -401,7 +401,6 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        //Try fetching with no cpr access rights
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/",
                 HttpMethod.POST,
@@ -416,12 +415,12 @@ public class SubscribtionTest {
                 httpEntity,
                 String.class
         );
-
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"PITU/GOV/DIA/magenta_services\",\"businessEventSubscription\":[]," +
+                "\"dataEventSubscription\":[]},{\"subscriberId\":\"PITU_GOV_DIA_magenta_services\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]}]", response.getBody(), false);
 
@@ -491,7 +490,7 @@ public class SubscribtionTest {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services");
+            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion2", "A02"));
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion3", "A03"));
@@ -577,7 +576,7 @@ public class SubscribtionTest {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services");
+            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
             BusinessEventSubscription bs1 = new BusinessEventSubscription("subscribtion1", "A01");
             BusinessEventSubscription bs2 = new BusinessEventSubscription("subscribtion2", "A01");
             BusinessEventSubscription bs3 = new BusinessEventSubscription("subscribtion3", "A01");

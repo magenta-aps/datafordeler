@@ -105,7 +105,7 @@ public class FindCvrDataEvent {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscribtion = (DataEventSubscription) eventQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
                 OffsetDateTime offsetTimestampGTE;

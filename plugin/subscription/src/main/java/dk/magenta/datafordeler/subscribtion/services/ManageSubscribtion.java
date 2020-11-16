@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URLEncoder;
 import java.util.*;
 
 
@@ -96,7 +97,7 @@ public class ManageSubscribtion {
         Transaction transaction = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            Subscriber subscriber = new Subscriber(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            Subscriber subscriber = new Subscriber(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
@@ -157,7 +158,7 @@ public class ManageSubscribtion {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -196,7 +197,7 @@ public class ManageSubscribtion {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscription subscribtion = new BusinessEventSubscription(businessEventId, kodeId);
@@ -226,7 +227,7 @@ public class ManageSubscribtion {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) subscribtionQuery.getResultList().get(0);
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
                 if(!"".equals(kodeId)) {
@@ -257,7 +258,7 @@ public class ManageSubscribtion {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -278,7 +279,7 @@ public class ManageSubscribtion {
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) query.getResultList().get(0);
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-                if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+                if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     subscribtion.getSubscriber().removeBusinessEventSubscribtion(subscribtion);
                     transaction.commit();
                     return ResponseEntity.ok(subscribtion);
@@ -302,7 +303,7 @@ public class ManageSubscribtion {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -354,7 +355,7 @@ public class ManageSubscribtion {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             DataEventSubscription subscribtion = new DataEventSubscription(dataEventId, kodeId);
@@ -385,7 +386,7 @@ public class ManageSubscribtion {
             } else {
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
                 DataEventSubscription subscribtion = (DataEventSubscription) subscribtionQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
                 if(!"".equals(kodeId)) {
@@ -429,7 +430,7 @@ public class ManageSubscribtion {
             //query.setParameter("subscriberId", subscriberId);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscribtionId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()));
+            query.setParameter("subscribtionId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -451,7 +452,7 @@ public class ManageSubscribtion {
 
                 DataEventSubscription subscribtion = (DataEventSubscription) query.getResultList().get(0);
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-                if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()))) {
+                if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     subscribtion.getSubscriber().removeDataEventSubscribtion(subscribtion);
                     transaction.commit();
                     return ResponseEntity.ok(subscribtion);

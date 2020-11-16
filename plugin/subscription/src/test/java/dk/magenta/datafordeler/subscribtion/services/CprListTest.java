@@ -69,7 +69,7 @@ public class CprListTest {
 
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services");
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
             Transaction transaction = session.beginTransaction();
 
             subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));

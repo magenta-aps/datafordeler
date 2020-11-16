@@ -109,7 +109,7 @@ public class FetchEventsTest {
 
             Transaction tx = session.beginTransaction();
 
-            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services");
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
 
             BusinessEventSubscription subscribtionT1 = new BusinessEventSubscription("BE1", "cpr.businessevent.A01");
             subscribtionT1.setSubscriber(subscriber);

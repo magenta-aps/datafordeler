@@ -72,7 +72,7 @@ public class SubscribtionSequenceTest {
     public void testSequenceToBePerformedWithCustomer() throws Exception {
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();
@@ -115,7 +115,7 @@ public class SubscribtionSequenceTest {
                 String.class
         );
 
-        JSONAssert.assertEquals("[{\"subscriberId\":\"PITU/GOV/DIA/magenta_services\",\"businessEventSubscription\":[]," +
+        JSONAssert.assertEquals("[{\"subscriberId\":\"PITU_GOV_DIA_magenta_services\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]}]", response.getBody(), false);
 
         response = restTemplate.exchange(
