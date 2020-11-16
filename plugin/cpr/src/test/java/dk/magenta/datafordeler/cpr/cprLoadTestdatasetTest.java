@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -92,9 +93,12 @@ public class cprLoadTestdatasetTest {
     public void test_A_LoadingOfDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
             ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setTransactionInProgress(true);
             importMetadata.setSession(session);
             this.loadPersonWithOrigin(importMetadata);
+            tx.commit();
             session.close();
         }
 
