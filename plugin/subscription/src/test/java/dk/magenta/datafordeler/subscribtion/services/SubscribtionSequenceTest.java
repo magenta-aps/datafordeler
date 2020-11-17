@@ -87,7 +87,6 @@ public class SubscribtionSequenceTest {
 
         JSONAssert.assertEquals("[]", response.getBody(), false);
 
-        //testUserDetails.setIdentity("myCreatedUser");
         this.applyAccess(testUserDetails);
 
         //Try fetching with no cpr access rights
@@ -149,7 +148,7 @@ public class SubscribtionSequenceTest {
         JSONAssert.assertEquals("[]", response.getBody(), false);
 
 
-        //ADD an element to the CPR-list
+        //ADD a new CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/cprList/?cprList=list01",

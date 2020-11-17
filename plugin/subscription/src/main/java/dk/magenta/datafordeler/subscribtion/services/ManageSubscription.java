@@ -119,10 +119,11 @@ public class ManageSubscription {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", subscriberId);
-            if(query.getResultList().size()==0) {
+            List<Subscriber> subscribers = query.getResultList();
+            if(subscribers.size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                Subscriber subscriber = subscribers.get(0);
                 return ResponseEntity.ok(subscriber);
             }
         }
@@ -135,11 +136,12 @@ public class ManageSubscription {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-            if(query.getResultList().isEmpty()) {
+            List<Subscriber> subscribers = query.getResultList();
+            if(subscribers.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Transaction transaction = session.beginTransaction();
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                Subscriber subscriber = subscribers.get(0);
                 session.delete(subscriber);
                 transaction.commit();
                 return ResponseEntity.ok(subscriber);

@@ -121,6 +121,19 @@ public class CprListTest {
             transaction.commit();
         }
 
+        boolean exception = false;
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            query.setParameter("listId", "myList1");
+            CprList cprList = (CprList) query.getResultList().get(0);
+            cprList.addCprStrings(Arrays.asList(new String[]{"1111111113"}));
+            transaction.commit();
+        } catch(Exception e) {
+            exception = true;
+        }
+        Assert.assertTrue(exception);
+
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
@@ -308,6 +321,9 @@ public class CprListTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         //Confirm that the CPR-list has 9 elements
+        results = responseContent.get("results");
+        Assert.assertEquals(6, results.size());
+
         response = restTemplate.exchange(
                 "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
                 HttpMethod.GET,

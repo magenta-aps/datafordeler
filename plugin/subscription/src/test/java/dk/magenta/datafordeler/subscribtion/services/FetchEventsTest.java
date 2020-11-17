@@ -198,20 +198,6 @@ public class FetchEventsTest {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    @Test
-    public void testPrintLoadedPersons() {
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            PersonRecordQuery query = new PersonRecordQuery();
-            query.setPageSize(100);
-            List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
-            System.out.println(entities);
-
-        }
-    }
-
-
-
 
     /**
      * Test that it is possible to call a service for fetching events
@@ -367,7 +353,6 @@ public class FetchEventsTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
 
-        System.out.println(results);
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(

@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.subscribtion.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -154,12 +155,12 @@ public class ManageCvrList {
             }
             transaction.commit();
             String errorMessage = "Elements was added";
-            JSONObject obj = new JSONObject();
+            ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("message", errorMessage);
             return new ResponseEntity(obj.toString(), HttpStatus.OK);
         } catch(PersistenceException e) {
             String errorMessage = "Elements does allready exist";
-            JSONObject obj = new JSONObject();
+            ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.NOT_ACCEPTABLE);

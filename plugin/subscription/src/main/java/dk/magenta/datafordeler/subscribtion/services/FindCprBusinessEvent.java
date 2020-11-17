@@ -83,25 +83,25 @@ public class FindCprBusinessEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
-            String hql = "SELECT max(event.timestamp) FROM "+ PersonEventDataRecord.class.getCanonicalName()+" event ";
-            Query timestampQuery = session.createQuery(hql);
-            OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
-
             Query eventQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             eventQuery.setParameter("businessEventId", businessEventId);
-            if(eventQuery.getResultList().size()==0) {
+            if(eventQuery.getResultList().isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) eventQuery.getResultList().get(0);
                 if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
+                String hql = "SELECT max(event.timestamp) FROM "+ PersonEventDataRecord.class.getCanonicalName()+" event ";
+                Query timestampQuery = session.createQuery(hql);
+                OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
+
                 PersonRecordQuery query = new PersonRecordQuery();
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
                     Collection<SubscribedCprNumber> theList = cprList.getCpr();
                     List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
-                    query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
+                    query.setPersonnumre(pnrFilterList);
                 }
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
                 if(!"cpr".equals(subscribtionKodeId[0]) && !"businessevent".equals(subscribtionKodeId[1])) {
