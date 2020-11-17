@@ -110,39 +110,6 @@ public class ManageCvrList {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/cvr/add/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity cvrListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cvrNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-        if(true) {
-            //For now this functionality should not be used, the specification about how it should work is unclear, Fujitsu is probably going to need the functionality
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        Transaction transaction = null;
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
-            query.setParameter("listId", cvrNo.getKey());
-            CvrList foundList = (CvrList)query.getResultList().get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-
-            for(String cvr : cvrNo.getValues()) {
-                foundList.addCvrsString(cvr);
-            }
-
-            transaction.commit();
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch(PersistenceException e) {
-            transaction.rollback();
-            log.error("Elements does allready exist", e);
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } catch(Exception e) {
-            log.error("FAILED REMOVING ELEMENT", e);
-            return ResponseEntity.status(500).build();
-        }
-    }
-
     @DeleteMapping("/subscriber/cvrList/cvr/{listId}")
     public ResponseEntity cvrListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -63,11 +64,11 @@ public class CvrList extends DatabaseEntry {
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="cvrlistId")
-    private List<SubscribedCvrNumber> cvrs = new ArrayList<SubscribedCvrNumber>();
+    private Collection<SubscribedCvrNumber> cvrs = new ArrayList<SubscribedCvrNumber>();
 
     @Column(name="cvr", nullable=false)
     @JsonIgnore
-    public List<SubscribedCvrNumber> getCvr() {
+    public Collection<SubscribedCvrNumber> getCvr() {
         return cvrs;
     }
 

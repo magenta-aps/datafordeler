@@ -110,44 +110,6 @@ public class ManageCprList {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/cpr/add/", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity cprListCprCreate(HttpServletRequest request, @RequestBody StringValuesDto cprNo) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-        if(true) {
-            //For now this functionality should not be used, the specification about how it should work is unclear, Fujitsu is probably going to need the functionality
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        Transaction transaction = null;
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
-            query.setParameter("listId", cprNo.getKey());
-            CprList foundList = (CprList)query.getResultList().get(0);
-
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-            for(String cpr : cprNo.getValues()) {
-                foundList.addCprString(cpr);
-            }
-
-            transaction.commit();
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch(PersistenceException e) {
-            String errorMessage = "Elements does allready exist";
-            JSONObject obj = new JSONObject();
-            obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
-        } catch(Exception e) {
-            String errorMessage = "Failure";
-            JSONObject obj = new JSONObject();
-            obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity<>(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @DeleteMapping("/subscriber/cprList/cpr/{listId}")
     public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);

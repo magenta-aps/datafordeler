@@ -24,7 +24,6 @@ public class Subscriber extends DatabaseEntry {
     }
 
     @Column(name=SUBSCRIBER_COLUMN, unique = true, nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String subscriberId;
 
     public String getSubscriberId() {

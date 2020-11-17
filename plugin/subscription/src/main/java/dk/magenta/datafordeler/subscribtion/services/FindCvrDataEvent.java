@@ -13,13 +13,13 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.DataEventSubscription;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCvrNumber;
+import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
 import dk.magenta.datafordeler.subscribtion.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,10 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -125,10 +122,14 @@ public class FindCvrDataEvent {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
 
-                List<SubscribedCvrNumber> theList = subscribtion.getCvrList().getCvr();
-                List<String> cvrFilterList = theList.stream().map(x -> x.getCvrNumber()).collect(Collectors.toList());
                 CompanyRecordQuery query = GeneralQuery.getCompanyQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
-                query.setCvrNumre(cvrFilterList);//TODO: consider joining this on DB-level
+                CvrList cvrList = subscribtion.getCvrList();
+                if(cvrList!=null) {
+                    Collection<SubscribedCvrNumber> theList = cvrList.getCvr();
+                    List<String> pnrFilterList = theList.stream().map(x -> x.getCvrNumber()).collect(Collectors.toList());
+                    query.setCvrNumre(pnrFilterList);
+                }
+
                 query.setPageSize(pageSize);
                 if(query.getPageSize()>1000) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
