@@ -64,7 +64,7 @@ public class FindCprDataEvent {
     private DafoUserManager dafoUserManager;
 
     @Autowired
-    private PersonRecordMetadataWrapper personRecordOutputWrapper;
+    private RecordMetadataWrapper personRecordOutputWrapper;
 
 
     @Autowired

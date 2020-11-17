@@ -12,10 +12,6 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
@@ -57,7 +53,7 @@ public class FindCvrDataEvent {
     private DafoUserManager dafoUserManager;
 
     @Autowired
-    private PersonRecordMetadataWrapper personRecordOutputWrapperStuff;
+    private RecordMetadataWrapper personRecordOutputWrapperStuff;
 
     @Autowired
     protected MonitorService monitorService;

@@ -132,16 +132,13 @@ public class ManageSubscription {
     public ResponseEntity<Subscriber> deleteBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-
-            String tt =  Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_");
 
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             if(query.getResultList().isEmpty()) {
-                transaction.rollback();
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
+                Transaction transaction = session.beginTransaction();
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
                 session.delete(subscriber);
                 transaction.commit();
@@ -253,17 +250,17 @@ public class ManageSubscription {
         }
     }
 
-    @GetMapping("/subscriber/businessEventSubscribtion/{subscriberId}")
-    public ResponseEntity<Subscriber> businessEventSubscribtiongetBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @GetMapping("/subscriber/businessEventSubscribtion/{subscribtionId}")
+    public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscribtionId = :subscribtionId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
+            query.setParameter("subscribtionId", subscribtionId);
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                BusinessEventSubscription subscriber = (BusinessEventSubscription) query.getResultList().get(0);
                 return ResponseEntity.ok(subscriber);
             }
         }
@@ -275,13 +272,14 @@ public class ManageSubscription {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             query.setParameter("businessEventId", subscribtionId);
-            if(query.getResultList().size()==0) {
+            if(query.getResultList().isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) query.getResultList().get(0);
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
                 if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     subscribtion.getSubscriber().removeBusinessEventSubscribtion(subscribtion);
+                    session.delete(subscribtion);
                     transaction.commit();
                     return ResponseEntity.ok(subscribtion);
                 } else {
@@ -305,15 +303,12 @@ public class ManageSubscription {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-            if(query.getResultList().size()==0) {
+            if(query.getResultList().isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
                 Iterator<DataEventSubscription> subscribtions = subscriber.getDataEventSubscription().iterator();
-                List <DataEventSubscription> list = new ArrayList <DataEventSubscription>();
-                while(subscribtions.hasNext()) {
-                    list.add(subscribtions.next());
-                }
+                List <DataEventSubscription> list = new ArrayList <DataEventSubscription>(subscriber.getDataEventSubscription());
                 return ResponseEntity.ok(list);
             }
         }
@@ -329,9 +324,9 @@ public class ManageSubscription {
                                                       @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             CprList cprListItem = null;
-            if(!"".equals(cprList)) {
+            if(!cprList.isEmpty()) {
                 Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
                 cprListQuery.setParameter("listId", cprList);
 
@@ -342,7 +337,7 @@ public class ManageSubscription {
                 }
             }
             CvrList cvrListItem = null;
-            if(!"".equals(cvrList)) {
+            if(!cvrList.isEmpty()) {
                 Query cvrListQuery = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
                 cvrListQuery.setParameter("listId", cvrList);
 
@@ -352,10 +347,9 @@ public class ManageSubscription {
                     cvrListItem = (CvrList) cvrListQuery.getResultList().get(0);
                 }
             }
-
+            Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
-            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
@@ -425,36 +419,37 @@ public class ManageSubscription {
     }
 
     @GetMapping("/subscriber/dataEventSubscribtion/{subscribtionId}")
-    public ResponseEntity<Subscriber> dataEventSubscribtiongetBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<DataEventSubscription> dataEventSubscribtiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscribtionId = :subscribtionId", Subscriber.class);
-            //query.setParameter("subscriberId", subscriberId);
+            Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where subscribtionId = :subscribtionId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscribtionId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
+            query.setParameter("subscribtionId", subscribtionId);
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                DataEventSubscription subscriber = (DataEventSubscription) query.getResultList().get(0);
                 return ResponseEntity.ok(subscriber);
             }
         }
     }
 
-    @DeleteMapping("/subscriber/dataEventSubscribtion/{subscribtionId}")
-    public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @DeleteMapping("/subscriber/dataEventSubscribtion/{dataEventId}")
+    public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+
             Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
-            query.setParameter("dataEventId", subscribtionId);
+            query.setParameter("dataEventId", dataEventId);
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
 
                 DataEventSubscription subscribtion = (DataEventSubscription) query.getResultList().get(0);
-                DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+                Transaction transaction = session.beginTransaction();
                 if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     subscribtion.getSubscriber().removeDataEventSubscribtion(subscribtion);
+                    session.delete(subscribtion);
                     transaction.commit();
                     return ResponseEntity.ok(subscribtion);
                 } else {
@@ -466,13 +461,6 @@ public class ManageSubscription {
             log.error("Failed acessing webservice: ", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-
-    private static void setHeaders(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Content-Type", "application/json; charset=utf-8");
-        response.setStatus(200);
     }
 
 }
