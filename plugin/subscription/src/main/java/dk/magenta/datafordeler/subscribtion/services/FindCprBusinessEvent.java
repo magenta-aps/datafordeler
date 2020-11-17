@@ -13,8 +13,6 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.person.PersonEventRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscription;
@@ -34,6 +32,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -100,7 +99,7 @@ public class FindCprBusinessEvent {
                 PersonRecordQuery query = new PersonRecordQuery();
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
-                    List<SubscribedCprNumber> theList = cprList.getCpr();
+                    Collection<SubscribedCprNumber> theList = cprList.getCpr();
                     List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
                     query.setPersonnumre(pnrFilterList);//TODO: consider joining this on DB-level
                 }

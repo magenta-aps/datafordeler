@@ -28,14 +28,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.net.URLEncoder;
 import java.util.*;
 
 
 @RestController
 @RequestMapping("/subscriptionplugin/v1/manager")
-public class ManageSubscribtion {
+public class ManageSubscription {
 
     @Autowired
     SessionManager sessionManager;
@@ -49,7 +47,7 @@ public class ManageSubscribtion {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(ManageSubscribtion.class.getCanonicalName());
+    private Logger log = LogManager.getLogger(ManageSubscription.class.getCanonicalName());
 
 
     @PostConstruct

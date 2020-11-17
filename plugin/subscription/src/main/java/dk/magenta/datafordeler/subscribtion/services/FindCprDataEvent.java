@@ -133,7 +133,7 @@ public class FindCprDataEvent {
                 PersonRecordQuery query = GeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
-                    List<SubscribedCprNumber> theList = cprList.getCpr();
+                    Collection<SubscribedCprNumber> theList = cprList.getCpr();
                     List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
                     query.setPersonnumre(pnrFilterList);
                 }

@@ -26,9 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -64,7 +62,7 @@ public class CprListTest {
     public void setUp() throws Exception {
 
         initMocks(this);
-        ManageSubscribtion controller = new ManageSubscribtion();
+        ManageSubscription controller = new ManageSubscription();
         mvc = MockMvcBuilders.standaloneSetup(controller).build();
 
 

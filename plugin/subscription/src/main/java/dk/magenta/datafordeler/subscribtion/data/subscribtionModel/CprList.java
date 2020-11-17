@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = CprList.TABLE_NAME, indexes = {
@@ -33,13 +30,6 @@ public class CprList extends DatabaseEntry {
         this.listId = listId;
         this.subscriber = subscriber;
     }
-
-    @Id
-    @Column(name="id", nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-    private Long id;
-
-
 
     @JsonIgnore
     @ManyToOne
@@ -67,12 +57,10 @@ public class CprList extends DatabaseEntry {
     }
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="businessevent_id")
     private Set<BusinessEventSubscription> businessSubscribtion = new HashSet<>();
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="dataevent_id")
     private Set<DataEventSubscription> dataSubscribtion;
 
 
@@ -80,15 +68,15 @@ public class CprList extends DatabaseEntry {
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="cprlistId")
-    private List<SubscribedCprNumber> cprs = new ArrayList<SubscribedCprNumber>();
+    private Collection<SubscribedCprNumber> cprs = new ArrayList<SubscribedCprNumber>();
 
     @Column(name="cpr", nullable=false)
     @JsonIgnore
-    public List<SubscribedCprNumber> getCpr() {
+    public Collection<SubscribedCprNumber> getCpr() {
         return cprs;
     }
 
-    public void setCprs(List<SubscribedCprNumber> cprs) {
+    public void setCprs(Collection<SubscribedCprNumber> cprs) {
         this.cprs = cprs;
     }
 

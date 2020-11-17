@@ -26,7 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.persistence.PersistenceException;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
@@ -60,7 +59,7 @@ public class SubscribtionTest {
     public void setUp() throws Exception {
 
         initMocks(this);
-        ManageSubscribtion controller = new ManageSubscribtion();
+        ManageSubscription controller = new ManageSubscription();
         mvc = MockMvcBuilders.standaloneSetup(controller).build();
 
 

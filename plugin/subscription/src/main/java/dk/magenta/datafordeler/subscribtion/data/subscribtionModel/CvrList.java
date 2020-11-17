@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 
 })
-public class CvrList {
+public class CvrList extends DatabaseEntry {
 
     public static final String TABLE_NAME = "subscription_cvr_list";
 
@@ -29,12 +30,6 @@ public class CvrList {
         this.listId = listId;
         this.subscriber = subscriber;
     }
-
-    @Id
-    @Column(name="id", unique = true, nullable=false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-    private Long id;
-
 
     @JsonIgnore
     @ManyToOne
@@ -62,7 +57,6 @@ public class CvrList {
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="DS_ID")
     private Set<DataEventSubscription> dataSubscribtion;
 
     @ElementCollection
