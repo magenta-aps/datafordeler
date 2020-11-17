@@ -433,7 +433,9 @@ public class SubscribtionTest {
     @Test
     public void testDeleteSubscriber() throws Exception {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "user2");
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
@@ -450,13 +452,13 @@ public class SubscribtionTest {
                 "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
                 "\"dataEventSubscription\":[]}]", response.getBody(), false);
 
-        httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", new HttpHeaders());
+        httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", httpHeaders);
         testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/user2",
+                "/subscriptionplugin/v1/manager/subscriber/",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class

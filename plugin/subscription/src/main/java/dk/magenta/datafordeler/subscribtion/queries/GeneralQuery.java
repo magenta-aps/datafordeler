@@ -29,15 +29,13 @@ public class GeneralQuery extends PersonRecordQuery {
 
     public static CompanyRecordQuery getCompanyQuery(String queryType, OffsetDateTime timestampGTE, OffsetDateTime timestampLTE) {
         CompanyRecordQuery query = new CompanyRecordQuery();
+        query.setDataEventTimeAfter(timestampGTE);
+        query.setDataEventTimeBefore(timestampLTE);
         switch(queryType) {
             case "anything":
-                query.setDataEventTimeAfter(timestampGTE);
-                query.setDataEventTimeBefore(timestampLTE);
                 return query;
             default:
                 query.setDataEvent(queryType);
-                query.setDataEventTimeAfter(timestampGTE);
-                query.setDataEventTimeBefore(timestampLTE);
                 return query;
         }
     }
@@ -46,17 +44,17 @@ public class GeneralQuery extends PersonRecordQuery {
     public static String getQueryPersonValueObjectFromIdInEvent(String tableName) {
         switch(tableName) {
             case AddressConameDataRecord.TABLE_NAME:
-                return "SELECT p FROM AddressConameDataRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+AddressConameDataRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             case AddressDataRecord.TABLE_NAME:
-                return "SELECT p FROM AddressDataRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+AddressDataRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             case AddressNameDataRecord.TABLE_NAME:
-                return "SELECT p FROM AddressNameDataRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+AddressNameDataRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             case CitizenshipDataRecord.TABLE_NAME:
-                return "SELECT p FROM CitizenshipDataRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+CitizenshipDataRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             case CivilStatusDataRecord.TABLE_NAME:
-                return "SELECT p FROM CivilStatusDataRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+CivilStatusDataRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             case NameDataRecord.TABLE_NAME:
-                return "SELECT p FROM NameDataRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+NameDataRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             default:
                 return "";
         }
@@ -65,11 +63,11 @@ public class GeneralQuery extends PersonRecordQuery {
     public static String getQueryCompanyValueObjectFromIdInEvent(String tableName) {
         switch(tableName) {
             case BaseNameRecord.TABLE_NAME:
-                return "SELECT p FROM BaseNameRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+BaseNameRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             case AddressRecord.TABLE_NAME:
-                return "SELECT p FROM AddressRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+AddressRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             case StatusRecord.TABLE_NAME:
-                return "SELECT p FROM StatusRecord p WHERE p.id IN :id";
+                return "SELECT p FROM "+StatusRecord.class.getCanonicalName()+" p WHERE p.id IN :id";
             default:
                 return "";
         }
