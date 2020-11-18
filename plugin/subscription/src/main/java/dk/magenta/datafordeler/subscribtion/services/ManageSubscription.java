@@ -58,7 +58,7 @@ public class ManageSubscription {
      * Get a list of all subscribtions
      * @return
      */
-    @GetMapping("/subscriber/list")
+    @GetMapping("/subscriber")
     public ResponseEntity<List<Subscriber>> findAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -154,7 +154,7 @@ public class ManageSubscription {
      * Get a list of all businessEventSubscribtions
      * @return
      */
-    @GetMapping("/subscriber/businessEventSubscribtion/list")
+    @GetMapping("/subscriber/subscription/businesseventSubscription")
     public ResponseEntity<List<BusinessEventSubscription>> businessEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
@@ -175,7 +175,7 @@ public class ManageSubscription {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/businessEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/subscription/businesseventSubscription/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity businessEventSubscribtionCreate(HttpServletRequest request,
                                                           @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
                                                           @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
@@ -211,7 +211,7 @@ public class ManageSubscription {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/businessEventSubscribtion/{businessEventId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/subscription/businesseventSubscription/{businessEventId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity businessEventSubscribtionUpdate(HttpServletRequest request, @PathVariable("businessEventId") String businessEventId,
                                                           @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
                                                           @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
@@ -251,7 +251,7 @@ public class ManageSubscription {
         }
     }
 
-    @GetMapping("/subscriber/businessEventSubscribtion/{subscribtionId}")
+    @GetMapping("/subscriber/subscription/businesseventSubscription/{subscribtionId}")
     public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscribtionId = :subscribtionId", Subscriber.class);
@@ -267,7 +267,7 @@ public class ManageSubscription {
         }
     }
 
-    @DeleteMapping("/subscriber/businessEventSubscribtion/{subscribtionId}")
+    @DeleteMapping("/subscriber/subscription/businesseventSubscription/{subscribtionId}")
     public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -298,7 +298,7 @@ public class ManageSubscription {
      * Get a list of all dataEventSubscribtions
      * @return
      */
-    @GetMapping("/subscriber/dataEventSubscribtion/list")
+    @GetMapping("/subscriber/subscription/dataeventSubscription")
     public ResponseEntity<List<DataEventSubscription>> dataEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
@@ -317,7 +317,7 @@ public class ManageSubscription {
 
 
 
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/dataEventSubscribtion/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/subscription/dataeventSubscription/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity dataEventSubscribtionCreate(HttpServletRequest request,
                                                       @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
                                                       @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
@@ -366,7 +366,7 @@ public class ManageSubscription {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/dataEventSubscribtion/{dataEventId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/subscription/dataeventSubscription/{dataEventId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity dataEventSubscribtionUpdate(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId,
                                                       @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
                                                       @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
@@ -419,7 +419,7 @@ public class ManageSubscription {
         }
     }
 
-    @GetMapping("/subscriber/dataEventSubscribtion/{subscribtionId}")
+    @GetMapping("/subscriber/subscription/dataeventSubscription/{subscribtionId}")
     public ResponseEntity<DataEventSubscription> dataEventSubscribtiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where subscribtionId = :subscribtionId", Subscriber.class);
@@ -435,7 +435,7 @@ public class ManageSubscription {
         }
     }
 
-    @DeleteMapping("/subscriber/dataEventSubscribtion/{dataEventId}")
+    @DeleteMapping("/subscriber/subscription/dataeventSubscription/{dataEventId}")
     public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {

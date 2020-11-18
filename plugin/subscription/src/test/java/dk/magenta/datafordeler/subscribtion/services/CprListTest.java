@@ -197,7 +197,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list is empty
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/list",
+                "/subscription/1/manager/subscriber/cprList",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -218,7 +218,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has one element
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/list",
+                "/subscription/1/manager/subscriber/cprList",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -240,7 +240,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/list",
+                "/subscription/1/manager/subscriber/cprList",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -281,7 +281,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has 6 elements
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
+                "/subscription/1/manager/subscriber/cprList/cpr/?listId=cprTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -302,7 +302,7 @@ public class CprListTest {
 
         //Confirm that the CPR-list has still 6 elements
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
+                "/subscription/1/manager/subscriber/cprList/cpr/?listId=cprTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -325,7 +325,7 @@ public class CprListTest {
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
+                "/subscription/1/manager/subscriber/cprList/cpr/?listId=cprTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -345,7 +345,7 @@ public class CprListTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/cpr/list/?listId=cprTestList1",
+                "/subscription/1/manager/subscriber/cprList/cpr/?listId=cprTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

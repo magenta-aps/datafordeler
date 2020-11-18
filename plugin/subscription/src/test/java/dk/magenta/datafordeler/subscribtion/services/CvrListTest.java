@@ -180,7 +180,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list is empty
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cvrList/list",
+                "/subscription/1/manager/subscriber/cvrList",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -201,7 +201,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list has one element
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cvrList/list",
+                "/subscription/1/manager/subscriber/cvrList",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -223,7 +223,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cvrList/list",
+                "/subscription/1/manager/subscriber/cvrList",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -254,7 +254,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cvrList/cvr/list/?listId=cvrTestList1",
+                "/subscription/1/manager/subscriber/cvrList/cvr/?listId=cvrTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -274,7 +274,7 @@ public class CvrListTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cvrList/cvr/list/?listId=cvrTestList1",
+                "/subscription/1/manager/subscriber/cvrList/cvr/?listId=cvrTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

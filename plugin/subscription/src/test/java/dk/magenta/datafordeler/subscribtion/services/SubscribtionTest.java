@@ -260,7 +260,7 @@ public class SubscribtionTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/list",
+                "/subscription/1/manager/subscriber",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -337,7 +337,7 @@ public class SubscribtionTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/list",
+                "/subscription/1/manager/subscriber",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -373,7 +373,7 @@ public class SubscribtionTest {
 
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/list",
+                "/subscription/1/manager/subscriber",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -409,7 +409,7 @@ public class SubscribtionTest {
         Assert.assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/list",
+                "/subscription/1/manager/subscriber",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -440,7 +440,7 @@ public class SubscribtionTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/list",
+                "/subscription/1/manager/subscriber",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -467,7 +467,7 @@ public class SubscribtionTest {
         JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/list",
+                "/subscription/1/manager/subscriber",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -512,7 +512,7 @@ public class SubscribtionTest {
 
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/businessEventSubscribtion/list",
+                "/subscription/1/manager/subscriber/subscription/businesseventSubscription",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -523,7 +523,7 @@ public class SubscribtionTest {
                 "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/businessEventSubscribtion/?businessEventId=newBusinessEventId&kodeId=A04",
+                "/subscription/1/manager/subscriber/subscription/businesseventSubscription/?businessEventId=newBusinessEventId&kodeId=A04",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -531,7 +531,7 @@ public class SubscribtionTest {
 
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/businessEventSubscribtion/list",
+                "/subscription/1/manager/subscriber/subscription/businesseventSubscription",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -544,7 +544,7 @@ public class SubscribtionTest {
                 "{\"cprList\":null,\"businessEventId\":\"subscribtion2\",\"kodeId\":\"A02\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/dataEventSubscribtion/?dataEventId=newDataEventId",
+                "/subscription/1/manager/subscriber/subscription/dataeventSubscription/?dataEventId=newDataEventId",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -552,7 +552,7 @@ public class SubscribtionTest {
 
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/dataEventSubscribtion/list",
+                "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -621,7 +621,7 @@ public class SubscribtionTest {
 
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/businessEventSubscribtion/list",
+                "/subscription/1/manager/subscriber/subscription/businesseventSubscription",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -634,16 +634,15 @@ public class SubscribtionTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/businessEventSubscribtion/subscribtion1",
+                "/subscription/1/manager/subscriber/subscription/businesseventSubscription/subscribtion1",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        //JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/businessEventSubscribtion/list",
+                "/subscription/1/manager/subscriber/subscription/businesseventSubscription",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -653,7 +652,7 @@ public class SubscribtionTest {
                 "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/dataEventSubscribtion/list",
+                "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -666,7 +665,7 @@ public class SubscribtionTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/dataEventSubscribtion/subscribtion1",
+                "/subscription/1/manager/subscriber/subscription/dataeventSubscription/subscribtion1",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
@@ -675,7 +674,7 @@ public class SubscribtionTest {
         //JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/dataEventSubscribtion/list",
+                "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

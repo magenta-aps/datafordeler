@@ -94,7 +94,7 @@ public class ManageCvrList {
      * Get a list of all cprList
      * @return
      */
-    @GetMapping("/subscriber/cvrList/list")
+    @GetMapping("/subscriber/cvrList")
     public ResponseEntity<List<CvrList>> cvrListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -174,7 +174,7 @@ public class ManageCvrList {
      * Get a list of all CPR-numbers in a list
      * @return
      */
-    @GetMapping("/subscriber/cvrList/cvr/list")
+    @GetMapping("/subscriber/cvrList/cvr")
     public ResponseEntity<Envelope> cvrListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");

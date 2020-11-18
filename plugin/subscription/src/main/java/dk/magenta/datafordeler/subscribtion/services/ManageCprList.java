@@ -93,7 +93,7 @@ public class ManageCprList {
      * Get a list of all cprList
      * @return
      */
-    @GetMapping("/subscriber/cprList/list")
+    @GetMapping("/subscriber/cprList")
     public ResponseEntity<List<CprList>> cprListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -173,7 +173,7 @@ public class ManageCprList {
      * Get a list of all CPR-numbers in a list
      * @return
      */
-    @GetMapping("/subscriber/cprList/cpr/list")
+    @GetMapping("/subscriber/cprList/cpr")
     public ResponseEntity<dk.magenta.datafordeler.core.fapi.Envelope> cprListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");
