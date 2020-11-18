@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscription.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -146,7 +148,7 @@ public class ManageCprList {
     }
 
     @PostMapping("/subscriber/cprList/cpr/{listId}")
-    public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -156,8 +158,10 @@ public class ManageCprList {
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            for(String cpr : cprs) {
-                foundList.addCprString(cpr);
+            JsonNode requestBody = objectMapper.readTree(request.getInputStream());
+            Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
+            while(cprBodyIterator.hasNext()) {
+                foundList.addCprString(cprBodyIterator.next().textValue());
             }
             transaction.commit();
             String errorMessage = "Elements were added";

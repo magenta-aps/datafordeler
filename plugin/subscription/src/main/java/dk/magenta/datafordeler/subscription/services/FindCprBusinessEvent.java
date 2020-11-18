@@ -103,6 +103,7 @@ public class FindCprBusinessEvent {
                     List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
                     query.setPersonnumre(pnrFilterList);
                 }
+                //TODO: dette skal oprettes med opsplitning i forskellige attributter med betydning
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
                 if(!"cpr".equals(subscribtionKodeId[0]) && !"businessevent".equals(subscribtionKodeId[1])) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);

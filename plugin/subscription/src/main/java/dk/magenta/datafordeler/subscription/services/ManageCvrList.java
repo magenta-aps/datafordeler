@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscription.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -147,7 +149,7 @@ public class ManageCvrList {
     }
 
     @PostMapping("/subscriber/cvrList/cvr/{listId}")
-    public ResponseEntity cvrListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cvrListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -157,8 +159,10 @@ public class ManageCvrList {
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            for(String cvr : cvrs) {
-                foundList.addCvrsString(cvr);
+            JsonNode requestBody = objectMapper.readTree(request.getInputStream());
+            Iterator<JsonNode> cprBodyIterator = requestBody.get("cvr").iterator();
+            while(cprBodyIterator.hasNext()) {
+                foundList.addCvrsString(cprBodyIterator.next().textValue());
             }
             transaction.commit();
             String errorMessage = "Elements were added";

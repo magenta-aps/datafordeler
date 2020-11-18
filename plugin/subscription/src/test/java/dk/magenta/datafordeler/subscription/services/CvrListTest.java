@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -234,23 +235,45 @@ public class CvrListTest {
                 "{\"listId\":\"cvrTestList1\"}," +
                 "{\"listId\":\"cvrTestList2\"}]", response.getBody(), false);
 
+        ObjectNode body;
+        ArrayNode cprList;
+
+        body = objectMapper.createObjectNode();
+        cprList = objectMapper.createArrayNode();
+        cprList.add("11111110");
+        cprList.add("11111111");
+        cprList.add("11111112");
+        cprList.add("11111113");
+        cprList.add("11111114");
+        cprList.add("11111115");
+        body.set("cvr", cprList);
+        httpEntity = new HttpEntity<String>(body.toString(), httpHeaders);
 
         //Add CPR-numbers to the CPR-list
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111110,1111111111,1111111112,1111111113,1111111114,1111111115",
+                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
+        body = objectMapper.createObjectNode();
+        cprList = objectMapper.createArrayNode();
+        cprList.add("11111116");
+        cprList.add("11111117");
+        cprList.add("11111118");
+        body.set("cvr", cprList);
+        httpEntity = new HttpEntity<String>(body.toString(), httpHeaders);
+
         //Add CPR-numbers to the CPR-list
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111116,1111111117,1111111118",
+                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
@@ -266,7 +289,7 @@ public class CvrListTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111115,1111111117",
+                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=11111115,11111117",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class

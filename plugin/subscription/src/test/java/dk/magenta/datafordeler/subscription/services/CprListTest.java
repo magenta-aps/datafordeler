@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -252,27 +253,23 @@ public class CprListTest {
                 "{\"listId\":\"cprTestList2\"}]", response.getBody(), false);
 
 
-        //Add CPR-numbers to the CPR-list
-        /*List<String> cprList = new ArrayList<String>();
+        //Try fetching with no cpr access rights
+        ObjectNode body;
+        ArrayNode cprList;
+
+        body = objectMapper.createObjectNode();
+        cprList = objectMapper.createArrayNode();
         cprList.add("1111111110");
         cprList.add("1111111111");
         cprList.add("1111111112");
         cprList.add("1111111113");
         cprList.add("1111111114");
         cprList.add("1111111115");
-        StringValuesDto dDes= new StringValuesDto("cprTestList1", null);
-        dDes.setValues(cprList);
+        body.set("cpr", cprList);
+        httpEntity = new HttpEntity<String>(body.toString(), httpHeaders);
 
-
-        String jsonString = objectMapper.writeValueAsString(dDes);
-        System.out.println(jsonString);
-
-        ResponseEntity responseEntity = restTemplate.postForEntity("/subscription/1/manager/subscriber/cprList/cpr/add/", dDes, String.class);
-        Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());*/
-
-        //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/cpr/cprTestList1?cpr=1111111110,1111111111,1111111112,1111111113,1111111114,1111111115",
+                "/subscription/1/manager/subscriber/cprList/cpr/cprTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -291,9 +288,20 @@ public class CprListTest {
         JsonNode results = responseContent.get("results");
         Assert.assertEquals(6, results.size());
 
+        body = objectMapper.createObjectNode();
+        cprList = objectMapper.createArrayNode();
+        cprList.add("1111111110");
+        cprList.add("1111111111");
+        cprList.add("1111111112");
+        cprList.add("1111111113");
+        cprList.add("1111111114");
+        cprList.add("1111111115");
+        body.set("cpr", cprList);
+        httpEntity = new HttpEntity<String>(body.toString(), httpHeaders);
+
         //Add CPR-numbers to the CPR-list
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/cpr/cprTestList1?cpr=1111111110,1111111111,1111111112,1111111113,1111111114,1111111115",
+                "/subscription/1/manager/subscriber/cprList/cpr/cprTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -312,9 +320,17 @@ public class CprListTest {
         results = responseContent.get("results");
         Assert.assertEquals(6, results.size());
 
+        body = objectMapper.createObjectNode();
+        cprList = objectMapper.createArrayNode();
+        cprList.add("1111111116");
+        cprList.add("1111111117");
+        cprList.add("1111111118");
+        body.set("cpr", cprList);
+        httpEntity = new HttpEntity<String>(body.toString(), httpHeaders);
+
         //Add CPR-numbers to the CPR-list
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/cprList/cpr/cprTestList1?cpr=1111111116,1111111117,1111111118",
+                "/subscription/1/manager/subscriber/cprList/cpr/cprTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -334,6 +350,13 @@ public class CprListTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(9, results.size());
+
+        body = objectMapper.createObjectNode();
+        cprList = objectMapper.createArrayNode();
+        cprList.add("1111111115");
+        cprList.add("1111111117");
+        body.set("cpr", cprList);
+        httpEntity = new HttpEntity<String>(body.toString(), httpHeaders);
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
