@@ -25,14 +25,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 
 
 @RestController
-@RequestMapping("/subscriptionplugin/v1/manager")
+@RequestMapping("/subscription/1/manager")
 public class ManageSubscription {
 
     @Autowired

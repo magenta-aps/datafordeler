@@ -51,7 +51,7 @@ import static java.util.Comparator.naturalOrder;
 
 
 @RestController
-@RequestMapping("/subscriptionplugin/v1/findCprDataEvent")
+@RequestMapping("/subscription/1/findCprDataEvent")
 public class FindCprDataEvent {
 
     @Autowired

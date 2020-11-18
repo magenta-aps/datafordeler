@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/subscriptionplugin/v1/manager")
+@RequestMapping("/subscription/1/manager")
 public class ManageCprList {
 
     @Autowired

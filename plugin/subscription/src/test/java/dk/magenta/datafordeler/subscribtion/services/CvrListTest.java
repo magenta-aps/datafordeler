@@ -180,7 +180,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list is empty
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/list",
+                "/subscription/1/manager/subscriber/cvrList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -192,7 +192,7 @@ public class CvrListTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/?cvrList=cvrTestList1",
+                "/subscription/1/manager/subscriber/cvrList/?cvrList=cvrTestList1",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -201,7 +201,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list has one element
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/list",
+                "/subscription/1/manager/subscriber/cvrList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -214,7 +214,7 @@ public class CvrListTest {
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/?cvrList=cvrTestList2",
+                "/subscription/1/manager/subscriber/cvrList/?cvrList=cvrTestList2",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -223,7 +223,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/list",
+                "/subscription/1/manager/subscriber/cvrList/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -237,7 +237,7 @@ public class CvrListTest {
 
         //Add CPR-numbers to the CPR-list
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111110,1111111111,1111111112,1111111113,1111111114,1111111115",
+                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111110,1111111111,1111111112,1111111113,1111111114,1111111115",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -246,7 +246,7 @@ public class CvrListTest {
 
         //Add CPR-numbers to the CPR-list
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111116,1111111117,1111111118",
+                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111116,1111111117,1111111118",
                 HttpMethod.POST,
                 httpEntity,
                 String.class
@@ -254,7 +254,7 @@ public class CvrListTest {
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/list/?listId=cvrTestList1",
+                "/subscription/1/manager/subscriber/cvrList/cvr/list/?listId=cvrTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -266,7 +266,7 @@ public class CvrListTest {
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111115,1111111117",
+                "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=1111111115,1111111117",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
@@ -274,7 +274,7 @@ public class CvrListTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/list/?listId=cvrTestList1",
+                "/subscription/1/manager/subscriber/cvrList/cvr/list/?listId=cvrTestList1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

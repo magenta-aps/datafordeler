@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/subscriptionplugin/v1/findCprBusinessEvent")
+@RequestMapping("/subscription/1/findCprBusinessEvent")
 public class FindCprBusinessEvent {
 
     @Autowired

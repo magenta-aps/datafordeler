@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/subscriptionplugin/v1/findCvrDataEvent")
+@RequestMapping("/subscription/1/findCvrDataEvent")
 public class FindCvrDataEvent {
 
     @Autowired
