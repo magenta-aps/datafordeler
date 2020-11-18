@@ -165,18 +165,18 @@ public class FetchEventsTest {
             subscriptionDE7.setCvrList(cvrList);
             subscriptionDE8.setCvrList(cvrList);
 
-            subscriber.addBusinessEventSubscribtion(subscriptionT1);
-            subscriber.addBusinessEventSubscribtion(subscriptionT2);
-            subscriber.addBusinessEventSubscribtion(subscriptionT3);
+            subscriber.addBusinessEventSubscription(subscriptionT1);
+            subscriber.addBusinessEventSubscription(subscriptionT2);
+            subscriber.addBusinessEventSubscription(subscriptionT3);
 
-            subscriber.addDataEventSubscribtion(subscriptionDE1);
-            subscriber.addDataEventSubscribtion(subscriptionDE2);
-            subscriber.addDataEventSubscribtion(subscriptionDE3);
-            subscriber.addDataEventSubscribtion(subscriptionDE4);
-            subscriber.addDataEventSubscribtion(subscriptionDE5);
-            subscriber.addDataEventSubscribtion(subscriptionDE6);
-            subscriber.addDataEventSubscribtion(subscriptionDE7);
-            subscriber.addDataEventSubscribtion(subscriptionDE8);
+            subscriber.addDataEventSubscription(subscriptionDE1);
+            subscriber.addDataEventSubscription(subscriptionDE2);
+            subscriber.addDataEventSubscription(subscriptionDE3);
+            subscriber.addDataEventSubscription(subscriptionDE4);
+            subscriber.addDataEventSubscription(subscriptionDE5);
+            subscriber.addDataEventSubscription(subscriptionDE6);
+            subscriber.addDataEventSubscription(subscriptionDE7);
+            subscriber.addDataEventSubscription(subscriptionDE8);
             session.save(subscriber);
             tx.commit();
         } catch (IOException e) {
@@ -209,7 +209,7 @@ public class FetchEventsTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE1&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -220,7 +220,7 @@ public class FetchEventsTest {
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE1&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -231,7 +231,7 @@ public class FetchEventsTest {
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE2&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE2&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -242,7 +242,7 @@ public class FetchEventsTest {
         Assert.assertEquals(4, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE3&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE3&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -253,7 +253,7 @@ public class FetchEventsTest {
         Assert.assertEquals(0, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE4&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE4&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -261,7 +261,7 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE1&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -272,7 +272,7 @@ public class FetchEventsTest {
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE1&timestamp.GTE=2020-09-01T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2020-09-01T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -283,7 +283,7 @@ public class FetchEventsTest {
         Assert.assertEquals(2, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE1&timestamp.GTE=2020-09-05T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2020-09-05T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -294,7 +294,7 @@ public class FetchEventsTest {
         Assert.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprBusinessEvent/fetchEvents?subscribtion=BE1&timestamp.GTE=2020-09-10T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2020-09-10T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -324,7 +324,7 @@ public class FetchEventsTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -337,7 +337,7 @@ public class FetchEventsTest {
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE1&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -349,7 +349,7 @@ public class FetchEventsTest {
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE1&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -360,7 +360,7 @@ public class FetchEventsTest {
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp.GTE=2020-01-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=2020-01-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -371,7 +371,7 @@ public class FetchEventsTest {
         Assert.assertEquals(2, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE1&timestamp.GTE=2020-10-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=2020-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -401,7 +401,7 @@ public class FetchEventsTest {
         OffsetDateTime timestamp = OffsetDateTime.now(ZoneOffset.UTC);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp.GTE=2020-09-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=2020-09-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -412,7 +412,7 @@ public class FetchEventsTest {
         Assert.assertEquals(16, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE2&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -423,7 +423,7 @@ public class FetchEventsTest {
         Assert.assertEquals(16, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp.GTE="+timestamp.toString()+"&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE="+timestamp.toString()+"&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -445,7 +445,7 @@ public class FetchEventsTest {
         }
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE2&timestamp.GTE="+timestamp.toString()+"&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE="+timestamp.toString()+"&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -474,7 +474,7 @@ public class FetchEventsTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE4&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE4&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -486,7 +486,7 @@ public class FetchEventsTest {
         Assert.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE4&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE4&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -503,7 +503,7 @@ public class FetchEventsTest {
 
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscribtion=DE5&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -537,7 +537,7 @@ public class FetchEventsTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/findCvrDataEvent/fetchEvents?subscribtion=DE3&timestamp.GTE=1980-11-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=1980-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -548,7 +548,7 @@ public class FetchEventsTest {
         Assert.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCvrDataEvent/fetchEvents?subscribtion=DE3&pageSize=100",
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -559,7 +559,7 @@ public class FetchEventsTest {
         Assert.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCvrDataEvent/fetchEvents?subscribtion=DE3&timestamp.GTE=2010-01-20T12:00-06:00&pageSize=100",
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=2010-01-20T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -570,7 +570,7 @@ public class FetchEventsTest {
         Assert.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCvrDataEvent/fetchEvents?subscribtion=DE3&timestamp.GTE=2020-10-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=2020-10-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -581,7 +581,7 @@ public class FetchEventsTest {
         Assert.assertEquals(0, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCvrDataEvent/fetchEvents?subscribtion=DE6&includeMeta=true&pageSize=100",
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE6&includeMeta=true&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

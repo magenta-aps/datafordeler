@@ -75,7 +75,7 @@ public class FindCvrDataEvent {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
-        String dataEventId = requestParams.getFirst("subscribtion");
+        String dataEventId = requestParams.getFirst("subscription");
         String timestampGTE = requestParams.getFirst("timestamp.GTE");
         String timestampLTE = requestParams.getFirst("timestamp.LTE");
         Boolean includeMeta = Boolean.parseBoolean(requestParams.getFirst("includeMeta"));

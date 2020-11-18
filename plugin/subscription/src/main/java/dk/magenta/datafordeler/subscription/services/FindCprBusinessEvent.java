@@ -72,7 +72,7 @@ public class FindCprBusinessEvent {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
-        String businessEventId = requestParams.getFirst("subscribtion");
+        String businessEventId = requestParams.getFirst("subscription");
         String timestampGTE = requestParams.getFirst("timestamp.GTE");
         String timestampLTE = requestParams.getFirst("timestamp.LTE");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);

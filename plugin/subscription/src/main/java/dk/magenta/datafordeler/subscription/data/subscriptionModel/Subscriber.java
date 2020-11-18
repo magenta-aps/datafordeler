@@ -76,11 +76,11 @@ public class Subscriber extends DatabaseEntry {
         return this.businessEventSubscription;
     }
 
-    public void addBusinessEventSubscribtion(BusinessEventSubscription record) {
+    public void addBusinessEventSubscription(BusinessEventSubscription record) {
         this.businessEventSubscription.add(record);
     }
 
-    public void removeBusinessEventSubscribtion(BusinessEventSubscription record) {
+    public void removeBusinessEventSubscription(BusinessEventSubscription record) {
         this.businessEventSubscription.remove(record);
     }
 
@@ -92,11 +92,11 @@ public class Subscriber extends DatabaseEntry {
         return this.dataEventSubscription;
     }
 
-    public void addDataEventSubscribtion(DataEventSubscription record) {
+    public void addDataEventSubscription(DataEventSubscription record) {
         this.dataEventSubscription.add(record);
     }
 
-    public void removeDataEventSubscribtion(DataEventSubscription record) {
+    public void removeDataEventSubscription(DataEventSubscription record) {
         this.dataEventSubscription.remove(record);
     }
 }

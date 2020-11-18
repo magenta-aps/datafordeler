@@ -64,7 +64,7 @@ public class SubscribtionTest {
 
 
 
-        //Initiate a list of subscribtions
+        //Initiate a list of subscriptions
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             Transaction transaction = session.beginTransaction();
@@ -105,7 +105,7 @@ public class SubscribtionTest {
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("de1", ""));
+            subscriber.addDataEventSubscription(new DataEventSubscription("de1", ""));
             transaction.commit();
         }
 
@@ -128,7 +128,7 @@ public class SubscribtionTest {
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("be1", "A01"));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("be1", "A01"));
 
             transaction.commit();
         }
@@ -427,7 +427,7 @@ public class SubscribtionTest {
 
 
     /**
-     * Test that it is possible to delete a new subscribtion
+     * Test that it is possible to delete a new subscription
      * @throws Exception
      */
     @Test
@@ -492,12 +492,12 @@ public class SubscribtionTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion2", "A02"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion3", "A03"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription1", "A01"));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription2", "A02"));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription3", "A03"));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", ""));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", ""));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", ""));
             session.save(subscriber);
             transaction.commit();
         }
@@ -518,9 +518,9 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion1\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscription3\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription1\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription2\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription/?businessEventId=newBusinessEventId&kodeId=A04",
@@ -539,9 +539,9 @@ public class SubscribtionTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A04\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion3\",\"kodeId\":\"A03\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion1\",\"kodeId\":\"A01\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\",\"kodeId\":\"A02\"}]", response.getBody(), false);
+                "{\"cprList\":null,\"businessEventId\":\"subscription3\",\"kodeId\":\"A03\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription1\",\"kodeId\":\"A01\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription2\",\"kodeId\":\"A02\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription/?dataEventId=newDataEventId",
@@ -560,9 +560,9 @@ public class SubscribtionTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"newDataEventId\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscribtion3\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscribtion1\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscribtion2\"}]", response.getBody(), false);
+                "{\"cprList\":null,\"dataEventId\":\"subscription3\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscription1\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscription2\"}]", response.getBody(), false);
 
 
     }
@@ -578,26 +578,26 @@ public class SubscribtionTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
-            BusinessEventSubscription bs1 = new BusinessEventSubscription("subscribtion1", "A01");
-            BusinessEventSubscription bs2 = new BusinessEventSubscription("subscribtion2", "A01");
-            BusinessEventSubscription bs3 = new BusinessEventSubscription("subscribtion3", "A01");
+            BusinessEventSubscription bs1 = new BusinessEventSubscription("subscription1", "A01");
+            BusinessEventSubscription bs2 = new BusinessEventSubscription("subscription2", "A01");
+            BusinessEventSubscription bs3 = new BusinessEventSubscription("subscription3", "A01");
             bs1.setSubscriber(subscriber);
             bs2.setSubscriber(subscriber);
             bs3.setSubscriber(subscriber);
-            subscriber.addBusinessEventSubscribtion(bs1);
-            subscriber.addBusinessEventSubscribtion(bs2);
-            subscriber.addBusinessEventSubscribtion(bs3);
+            subscriber.addBusinessEventSubscription(bs1);
+            subscriber.addBusinessEventSubscription(bs2);
+            subscriber.addBusinessEventSubscription(bs3);
 
-            DataEventSubscription ds1 = new DataEventSubscription("subscribtion1", "");
-            DataEventSubscription ds2 = new DataEventSubscription("subscribtion2", "");
-            DataEventSubscription ds3 = new DataEventSubscription("subscribtion3", "");
+            DataEventSubscription ds1 = new DataEventSubscription("subscription1", "");
+            DataEventSubscription ds2 = new DataEventSubscription("subscription2", "");
+            DataEventSubscription ds3 = new DataEventSubscription("subscription3", "");
             ds1.setSubscriber(subscriber);
             ds2.setSubscriber(subscriber);
             ds3.setSubscriber(subscriber);
 
-            subscriber.addDataEventSubscribtion(ds1);
-            subscriber.addDataEventSubscribtion(ds2);
-            subscriber.addDataEventSubscribtion(ds3);
+            subscriber.addDataEventSubscription(ds1);
+            subscriber.addDataEventSubscription(ds2);
+            subscriber.addDataEventSubscription(ds3);
             session.save(subscriber);
             transaction.commit();
         }
@@ -627,14 +627,14 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion1\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscription3\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription1\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription2\"}]", response.getBody(), false);
 
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/subscription/businesseventSubscription/subscribtion1",
+                "/subscription/1/manager/subscriber/subscription/businesseventSubscription/subscription1",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
@@ -648,8 +648,8 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscribtion3\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscription3\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription2\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
@@ -658,20 +658,20 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"subscribtion3\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscribtion1\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"subscription3\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscription1\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscription2\"}]", response.getBody(), false);
 
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
-                "/subscription/1/manager/subscriber/subscription/dataeventSubscription/subscribtion1",
+                "/subscription/1/manager/subscriber/subscription/dataeventSubscription/subscription1",
                 HttpMethod.DELETE,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        //JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscribtion\":[],\"dataEventSubscribtion\":[]}", response.getBody(), false);
+        //JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
@@ -680,8 +680,8 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"subscribtion3\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscribtion2\"}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"subscription3\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscription2\"}]", response.getBody(), false);
 
 
     }

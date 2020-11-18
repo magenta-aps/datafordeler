@@ -201,7 +201,7 @@ public class SubscribtionSequenceTest {
         JSONAssert.assertEquals("[" +
                 "{\"listId\":\"list01\"},{\"listId\":\"list02\"}]", response.getBody(), false);
 
-        //Manage businesseventsubscribtions
+        //Manage businesseventsubscriptions
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription/?businessEventId=newBusinessEventId&kodeId=A04&cprList=list01",
                 HttpMethod.POST,
@@ -242,7 +242,7 @@ public class SubscribtionSequenceTest {
         JSONAssert.assertEquals("[" +
                 "{\"cprList\":{\"listId\":\"list02\"},\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A05\"}]", response.getBody(), false);
 
-        //Manage dataeventsubscribtions
+        //Manage dataeventsubscriptions
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription/?dataEventId=newDataEventId&kodeId=A04&cprList=list01",
                 HttpMethod.POST,
