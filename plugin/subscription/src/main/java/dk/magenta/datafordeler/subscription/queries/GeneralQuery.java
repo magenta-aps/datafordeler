@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.queries;
+package dk.magenta.datafordeler.subscription.queries;
 
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.*;

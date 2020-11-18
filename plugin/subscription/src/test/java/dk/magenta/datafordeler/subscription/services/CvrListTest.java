@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;

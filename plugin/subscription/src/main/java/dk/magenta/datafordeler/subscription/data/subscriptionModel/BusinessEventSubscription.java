@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
+package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.*;

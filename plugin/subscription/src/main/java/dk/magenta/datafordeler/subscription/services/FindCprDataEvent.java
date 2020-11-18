@@ -1,8 +1,9 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
@@ -10,13 +11,21 @@ import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.BitemporalityComparator;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
+import dk.magenta.datafordeler.cpr.records.CprBitemporality;
+import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
+import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.*;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
-import dk.magenta.datafordeler.subscribtion.queries.GeneralQuery;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
+import dk.magenta.datafordeler.subscription.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -29,6 +38,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,10 +47,12 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.naturalOrder;
+
 
 @RestController
-@RequestMapping("/subscription/1/findCvrDataEvent")
-public class FindCvrDataEvent {
+@RequestMapping("/subscription/1/findCprDataEvent")
+public class FindCprDataEvent {
 
     @Autowired
     SessionManager sessionManager;
@@ -52,12 +64,13 @@ public class FindCvrDataEvent {
     private DafoUserManager dafoUserManager;
 
     @Autowired
-    private RecordMetadataWrapper personRecordOutputWrapperStuff;
+    private RecordMetadataWrapper personRecordOutputWrapper;
+
 
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(FindCvrDataEvent.class.getCanonicalName());
+    private Logger log = LogManager.getLogger(FindCprDataEvent.class.getCanonicalName());
 
 
     @PostConstruct
@@ -87,7 +100,7 @@ public class FindCvrDataEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
-            String hql = "SELECT max(event.timestamp) FROM "+ CompanyDataEventRecord.class.getCanonicalName()+" event ";
+            String hql = "SELECT max(event.timestamp) FROM "+ PersonDataEventDataRecord.class.getCanonicalName()+" event ";
             Query timestampQuery = session.createQuery(hql);
             OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
 
@@ -113,16 +126,16 @@ public class FindCvrDataEvent {
                 }
 
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
-                if(!"cvr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
+                if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
 
-                CompanyRecordQuery query = GeneralQuery.getCompanyQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
-                CvrList cvrList = subscribtion.getCvrList();
-                if(cvrList!=null) {
-                    Collection<SubscribedCvrNumber> theList = cvrList.getCvr();
-                    List<String> pnrFilterList = theList.stream().map(x -> x.getCvrNumber()).collect(Collectors.toList());
-                    query.setCvrNumre(pnrFilterList);
+                PersonRecordQuery query = GeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
+                CprList cprList = subscribtion.getCprList();
+                if(cprList!=null) {
+                    Collection<SubscribedCprNumber> theList = cprList.getCpr();
+                    List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
+                    query.setPersonnumre(pnrFilterList);
                 }
 
                 query.setPageSize(pageSize);
@@ -130,45 +143,42 @@ public class FindCvrDataEvent {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
                 query.setPage(page);
-                List<ResultSet<CompanyRecord>> entities = QueryManager.getAllEntitySets(session, query, CompanyRecord.class);
-                Envelope envelope = new Envelope();
-
+                List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
                 List otherList = new ArrayList<ObjectNode>();
+
                 if(includeMeta) {
-                    for(ResultSet<CompanyRecord> entity : entities) {
-                        CvrBitemporalDataRecord oldValues = null;
-                        CvrBitemporalDataRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity.getPrimaryEntity());
-                        Set<CompanyDataEventRecord> events = entity.getPrimaryEntity().getDataevent();
-                        if(events.size()>0) {
-                            CompanyDataEventRecord eventRecord = events.iterator().next();
+                    for(ResultSet<PersonEntity> entity : entities) {
+                        CprBitemporalPersonRecord oldValues = null;
+                        CprBitemporalPersonRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity.getPrimaryEntity());
+                        PersonDataEventDataRecord eventRecord = entity.getPrimaryEntity().getDataEvent(subscribtionKodeId[2]);
+                        if(eventRecord != null) {
                             if(eventRecord.getOldItem() != null) {
-                                String queryPreviousItem = GeneralQuery.getQueryCompanyValueObjectFromIdInEvent(subscribtionKodeId[2]);
-                                if(eventRecord.getOldItem()!=null) {
-                                    oldValues = (CvrBitemporalDataMetaRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
-                                }
+                                String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
+                                oldValues = (CprBitemporalPersonRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem().longValue()).getResultList().get(0);
                             }
                         }
 
                         if(subscribtionKodeId.length>=5) {
                             if(subscribtionKodeId[3].equals("before")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], oldValues)) {
-                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getCvrNumberString(), subscribtionKodeId[2], oldValues, newValues);
+                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             } else if(subscribtionKodeId[3].equals("after")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], newValues)) {
-                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getCvrNumberString(), subscribtionKodeId[2], oldValues, newValues);
+                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             }
                         } else {
-                            ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getPrimaryEntity().getCvrNumberString(),subscribtionKodeId[2], oldValues, newValues);
+                            ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                             otherList.add(node);
                         }
                     }
                 } else {
-                    otherList = entities.stream().map(x -> x.getPrimaryEntity().getCvrNumberString()).collect(Collectors.toList());
+                    otherList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
                 }
+                Envelope envelope = new Envelope();
 
                 envelope.setResults(otherList);
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
@@ -182,33 +192,6 @@ public class FindCvrDataEvent {
         return ResponseEntity.status(500).build();
     }
 
-
-    private boolean validateIt(String fieldname, String logic, CvrBitemporalDataRecord companyEntity) {
-
-        if(AddressRecord.TABLE_NAME.equals(fieldname)) {
-            String[] splitLogic = logic.split("=");
-            if("kommunekode".equals(splitLogic[0])) {
-                return ((AddressRecord)companyEntity).getMunicipality().getMunicipalityCode() == Integer.parseInt(splitLogic[1]);
-            }
-        }
-        return false;
-    }
-
-
-    private CvrBitemporalDataRecord getActualValueRecord(String fieldname, CompanyRecord companyEntity) {
-
-        switch(fieldname) {
-            case BaseNameRecord.TABLE_NAME:
-                return companyEntity.getNames().stream().reduce((first, second) -> second).orElse(null);
-            case AddressRecord.TABLE_NAME:
-                return companyEntity.getPostalAddress().stream().reduce((first, second) -> second).orElse(null);
-            case StatusRecord.TABLE_NAME:
-                return companyEntity.getStatus().stream().reduce((first, second) -> second).orElse(null);
-            default:
-                return null;
-        }
-    }
-
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
@@ -219,6 +202,61 @@ public class FindCvrDataEvent {
             throw(e);
         }
     }
+
+    private CprBitemporalPersonRecord getActualValueRecord(String fieldname, PersonEntity personEntity) {
+
+        switch(fieldname) {
+            case NameDataRecord.TABLE_NAME:
+                return personEntity.getName().current().get(0);
+            case AddressDataRecord.TABLE_NAME:
+                return personEntity.getAddress().current().get(0);
+            case AddressConameDataRecord.TABLE_NAME:
+                return personEntity.getConame().current().get(0);
+            case AddressNameDataRecord.TABLE_NAME:
+                return personEntity.getAddressName().current().get(0);
+            case CitizenshipDataRecord.TABLE_NAME:
+                return personEntity.getCitizenship().current().get(0);
+            case CivilStatusDataRecord.TABLE_NAME:
+                return personEntity.getCivilstatus().current().get(0);
+            default:
+                return null;
+        }
+    }
+
+    private boolean validateIt(String fieldname, String logic, CprBitemporalPersonRecord personEntity) {
+
+        if(AddressDataRecord.TABLE_NAME.equals(fieldname)) {
+            String[] splitLogic = logic.split("=");
+            if(personEntity!=null && "kommunekode".equals(splitLogic[0])) {
+                return ((AddressDataRecord)personEntity).getMunicipalityCode() == Integer.parseInt(splitLogic[1]);
+            }
+        }
+        return false;
+    }
+
+    private static Comparator bitemporalComparator = Comparator.comparing(FindCprDataEvent::getBitemporality, BitemporalityComparator.ALL)
+            .thenComparing(CprNontemporalRecord::getOriginDate, Comparator.nullsLast(naturalOrder()))
+            .thenComparing(CprNontemporalRecord::getDafoUpdated)
+            .thenComparing(DatabaseEntry::getId);
+
+
+    public static CprBitemporality getBitemporality(CprBitemporalRecord record) {
+        return record.getBitemporality();
+    }
+
+    /**
+     * Find the newest unclosed record from the list of records
+     * Records with a missing OriginDate is also removed since they are considered invalid
+     * @param records
+     * @param <R>
+     * @return
+     */
+    public static <R extends CprBitemporalRecord> R findNewestUnclosedOnRegistartionAndEffect(Collection<R> records) {
+        return (R) records.stream().filter(r -> r.getBitemporality().registrationTo == null &&
+                r.getBitemporality().effectTo == null).max(bitemporalComparator).orElse(null);
+    }
+
+
 
     private static void setHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");

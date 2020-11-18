@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
+package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -57,11 +57,11 @@ public class CprList extends DatabaseEntry {
     }
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<BusinessEventSubscription> businessSubscribtion = new HashSet<>();
+    private Set<BusinessEventSubscription> businessSubscription = new HashSet<>();
 
 
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<DataEventSubscription> dataSubscribtion;
+    private Set<DataEventSubscription> dataSubscription;
 
 
     @ElementCollection

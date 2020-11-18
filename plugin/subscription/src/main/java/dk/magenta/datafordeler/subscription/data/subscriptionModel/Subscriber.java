@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.data.subscribtionModel;
+package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
@@ -12,8 +12,8 @@ public class Subscriber extends DatabaseEntry {
     public static final String TABLE_NAME = "subscription_subscriber";
 
 
-    public static final String JOIN_BUSINESS_COLUMN = "businesssubscribtion_id";
-    public static final String JOIN_DATA_COLUMN = "dataevetsubscribtion_id";
+    public static final String JOIN_BUSINESS_COLUMN = "businesssubscription_id";
+    public static final String JOIN_DATA_COLUMN = "dataevetsubscription_id";
     public static final String SUBSCRIBER_COLUMN = "subscriberId";
 
     public Subscriber() {

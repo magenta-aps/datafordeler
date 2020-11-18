@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

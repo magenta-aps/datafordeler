@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.MonitorService;
@@ -15,9 +15,9 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.BusinessEventSubscription;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.CprList;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.SubscribedCprNumber;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.BusinessEventSubscription;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;

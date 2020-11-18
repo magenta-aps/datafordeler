@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -10,7 +10,7 @@ import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;

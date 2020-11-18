@@ -1,6 +1,7 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -9,7 +10,7 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/subscription/1/manager")
-public class ManageCprList {
+public class ManageCvrList {
 
     @Autowired
     SessionManager sessionManager;
@@ -50,7 +51,7 @@ public class ManageCprList {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(ManageCprList.class.getCanonicalName());
+    private Logger log = LogManager.getLogger(ManageCvrList.class.getCanonicalName());
 
 
     @PostConstruct
@@ -61,15 +62,15 @@ public class ManageCprList {
     /**
      * Create a cprList
      * @param request
-     * @param cprList
+     * @param cvrList
      * @return
      * @throws IOException
      * @throws AccessDeniedException
      * @throws InvalidTokenException
      * @throws InvalidCertificateException
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity cprListCreate(HttpServletRequest request, @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -79,12 +80,12 @@ public class ManageCprList {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-                CprList cprCreateList = new CprList(cprList, subscriber);
-                session.save(cprCreateList);
-                subscriber.addCvrList(cprCreateList);
+                CvrList cvrCreateList = new CvrList(cvrList, subscriber);
+                session.save(cvrCreateList);
+                subscriber.addCvrList(cvrCreateList);
 
                 transaction.commit();
-                return ResponseEntity.ok(cprCreateList);
+                return ResponseEntity.ok(cvrCreateList);
             }
         }
     }
@@ -93,8 +94,8 @@ public class ManageCprList {
      * Get a list of all cprList
      * @return
      */
-    @GetMapping("/subscriber/cprList")
-    public ResponseEntity<List<CprList>> cprListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @GetMapping("/subscriber/cvrList")
+    public ResponseEntity<List<CvrList>> cvrListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
@@ -104,61 +105,62 @@ public class ManageCprList {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-                return ResponseEntity.ok(subscriber.getCprLists().stream().collect(Collectors.toList()));
+                return ResponseEntity.ok(subscriber.getCvrLists().stream().collect(Collectors.toList()));
             }
         }
     }
 
 
-    @DeleteMapping("/subscriber/cprList/cpr/{listId}")
-    public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @DeleteMapping("/subscriber/cvrList/cvr/{listId}")
+    public ResponseEntity cvrListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
+            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
             query.setParameter("listId", listId);
-            CprList foundList = (CprList)query.getResultList().get(0);
+            CvrList foundList = (CvrList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
-            for(SubscribedCprNumber subscribed : subscribedList) {
+            List<SubscribedCvrNumber> subscribedList = foundList.getCvr().stream().filter(item -> cvrs.contains(item.getCvrNumber())).collect(Collectors.toList());
+            for(SubscribedCvrNumber subscribed : subscribedList) {
                 session.delete(subscribed);
-                foundList.getCpr().remove(subscribed);
+                foundList.getCvr().remove(subscribed);
             }
             transaction.commit();
             String errorMessage = "Elements was removed";
             JSONObject obj = new JSONObject();
             obj.put("message", errorMessage);
             return new ResponseEntity(obj.toString(), HttpStatus.OK);
+
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
         }
     }
 
-    @PostMapping("/subscriber/cprList/cpr/{listId}")
-    public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @PostMapping("/subscriber/cvrList/cvr/{listId}")
+    public ResponseEntity cvrListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
+            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
             query.setParameter("listId", listId);
-            CprList foundList = (CprList)query.getResultList().get(0);
+            CvrList foundList = (CvrList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            for(String cpr : cprs) {
-                foundList.addCprString(cpr);
+            for(String cvr : cvrs) {
+                foundList.addCvrsString(cvr);
             }
             transaction.commit();
             String errorMessage = "Elements was added";
-            JSONObject obj = new JSONObject();
+            ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("message", errorMessage);
             return new ResponseEntity(obj.toString(), HttpStatus.OK);
         } catch(PersistenceException e) {
             String errorMessage = "Elements does allready exist";
-            JSONObject obj = new JSONObject();
+            ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
@@ -168,20 +170,19 @@ public class ManageCprList {
         }
     }
 
-
     /**
      * Get a list of all CPR-numbers in a list
      * @return
      */
-    @GetMapping("/subscriber/cprList/cpr")
-    public ResponseEntity<dk.magenta.datafordeler.core.fapi.Envelope> cprListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @GetMapping("/subscriber/cvrList/cvr")
+    public ResponseEntity<Envelope> cvrListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
         String listId = requestParams.getFirst("listId");
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where  listId = :listId", CprList.class);
+            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
             if(pageSize != null) {
                 query.setMaxResults(Integer.valueOf(pageSize));
             } else {
@@ -196,7 +197,7 @@ public class ManageCprList {
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("listId", listId);
-            CprList foundList = (CprList)query.getResultList().get(0);
+            CvrList foundList = (CvrList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
@@ -206,7 +207,7 @@ public class ManageCprList {
             envelope.setPage(query.getFirstResult()+1);
             envelope.setPath(request.getServletPath());
             envelope.setResponseTimestamp(OffsetDateTime.now());
-            envelope.setResults(foundList.getCpr());
+            envelope.setResults(foundList.getCvr());
 
             return ResponseEntity.ok(envelope);
         } catch (Exception e) {

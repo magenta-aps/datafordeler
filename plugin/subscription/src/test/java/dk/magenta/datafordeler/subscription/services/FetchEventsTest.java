@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,30 +7,23 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
-import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
-import org.hibernate.Criteria;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -111,29 +104,29 @@ public class FetchEventsTest {
 
             Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
 
-            BusinessEventSubscription subscribtionT1 = new BusinessEventSubscription("BE1", "cpr.businessevent.A01");
-            subscribtionT1.setSubscriber(subscriber);
-            BusinessEventSubscription subscribtionT2 = new BusinessEventSubscription("BE2", "cpr.businessevent.A02");
-            subscribtionT2.setSubscriber(subscriber);
-            BusinessEventSubscription subscribtionT3 = new BusinessEventSubscription("BE3", "cpr.businessevent.A03");
-            subscribtionT3.setSubscriber(subscriber);
+            BusinessEventSubscription subscriptionT1 = new BusinessEventSubscription("BE1", "cpr.businessevent.A01");
+            subscriptionT1.setSubscriber(subscriber);
+            BusinessEventSubscription subscriptionT2 = new BusinessEventSubscription("BE2", "cpr.businessevent.A02");
+            subscriptionT2.setSubscriber(subscriber);
+            BusinessEventSubscription subscriptionT3 = new BusinessEventSubscription("BE3", "cpr.businessevent.A03");
+            subscriptionT3.setSubscriber(subscriber);
 
-            DataEventSubscription subscribtionDE1 = new DataEventSubscription("DE1", "cpr.dataevent.cpr_person_address_record");
-            subscribtionDE1.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE2 = new DataEventSubscription("DE2", "cpr.dataevent.anything");
-            subscribtionDE2.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE3 = new DataEventSubscription("DE3", "cvr.dataevent.anything");
-            subscribtionDE3.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.after.kommunekode=957");
-            subscribtionDE4.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE5 = new DataEventSubscription("DE5", "cvr.dataevent.cpr_person_address_record.before.kommunekode=957");
-            subscribtionDE5.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE7 = new DataEventSubscription("DE6", "cvr.dataevent.cvr_record_address");
-            subscribtionDE7.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE6 = new DataEventSubscription("DE7", "cvr.dataevent.cvr_record_address.before.kommunekode=956");
-            subscribtionDE6.setSubscriber(subscriber);
-            DataEventSubscription subscribtionDE8 = new DataEventSubscription("DE8", "cvr.dataevent.cvr_record_address.after.kommunekode=956");
-            subscribtionDE8.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE1 = new DataEventSubscription("DE1", "cpr.dataevent.cpr_person_address_record");
+            subscriptionDE1.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE2 = new DataEventSubscription("DE2", "cpr.dataevent.anything");
+            subscriptionDE2.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE3 = new DataEventSubscription("DE3", "cvr.dataevent.anything");
+            subscriptionDE3.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.after.kommunekode=957");
+            subscriptionDE4.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE5 = new DataEventSubscription("DE5", "cvr.dataevent.cpr_person_address_record.before.kommunekode=957");
+            subscriptionDE5.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE7 = new DataEventSubscription("DE6", "cvr.dataevent.cvr_record_address");
+            subscriptionDE7.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE6 = new DataEventSubscription("DE7", "cvr.dataevent.cvr_record_address.before.kommunekode=956");
+            subscriptionDE6.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE8 = new DataEventSubscription("DE8", "cvr.dataevent.cvr_record_address.after.kommunekode=956");
+            subscriptionDE8.setSubscriber(subscriber);
 
             CprList cprList = new CprList("L1");
             cprList.addCprString("0101011235");
@@ -158,32 +151,32 @@ public class FetchEventsTest {
             cvrList.addCvrsString("25052943");
             session.save(cvrList);
 
-            subscribtionT1.setCprList(cprList);
-            subscribtionT2.setCprList(cprList);
-            subscribtionT3.setCprList(cprList);
+            subscriptionT1.setCprList(cprList);
+            subscriptionT2.setCprList(cprList);
+            subscriptionT3.setCprList(cprList);
 
-            subscribtionDE1.setCprList(cprList);
-            subscribtionDE2.setCprList(cprList);
-            subscribtionDE4.setCprList(cprList);
-            subscribtionDE5.setCprList(cprList);
+            subscriptionDE1.setCprList(cprList);
+            subscriptionDE2.setCprList(cprList);
+            subscriptionDE4.setCprList(cprList);
+            subscriptionDE5.setCprList(cprList);
 
-            subscribtionDE3.setCvrList(cvrList);
-            subscribtionDE6.setCvrList(cvrList);
-            subscribtionDE7.setCvrList(cvrList);
-            subscribtionDE8.setCvrList(cvrList);
+            subscriptionDE3.setCvrList(cvrList);
+            subscriptionDE6.setCvrList(cvrList);
+            subscriptionDE7.setCvrList(cvrList);
+            subscriptionDE8.setCvrList(cvrList);
 
-            subscriber.addBusinessEventSubscribtion(subscribtionT1);
-            subscriber.addBusinessEventSubscribtion(subscribtionT2);
-            subscriber.addBusinessEventSubscribtion(subscribtionT3);
+            subscriber.addBusinessEventSubscribtion(subscriptionT1);
+            subscriber.addBusinessEventSubscribtion(subscriptionT2);
+            subscriber.addBusinessEventSubscribtion(subscriptionT3);
 
-            subscriber.addDataEventSubscribtion(subscribtionDE1);
-            subscriber.addDataEventSubscribtion(subscribtionDE2);
-            subscriber.addDataEventSubscribtion(subscribtionDE3);
-            subscriber.addDataEventSubscribtion(subscribtionDE4);
-            subscriber.addDataEventSubscribtion(subscribtionDE5);
-            subscriber.addDataEventSubscribtion(subscribtionDE6);
-            subscriber.addDataEventSubscribtion(subscribtionDE7);
-            subscriber.addDataEventSubscribtion(subscribtionDE8);
+            subscriber.addDataEventSubscribtion(subscriptionDE1);
+            subscriber.addDataEventSubscribtion(subscriptionDE2);
+            subscriber.addDataEventSubscribtion(subscriptionDE3);
+            subscriber.addDataEventSubscribtion(subscriptionDE4);
+            subscriber.addDataEventSubscribtion(subscriptionDE5);
+            subscriber.addDataEventSubscribtion(subscriptionDE6);
+            subscriber.addDataEventSubscribtion(subscriptionDE7);
+            subscriber.addDataEventSubscribtion(subscriptionDE8);
             session.save(subscriber);
             tx.commit();
         } catch (IOException e) {

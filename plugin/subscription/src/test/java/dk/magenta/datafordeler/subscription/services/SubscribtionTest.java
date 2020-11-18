@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
@@ -6,7 +6,7 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -88,7 +88,7 @@ public class SubscribtionTest {
 
 
 
-    private void applyAccess(dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails) {
+    private void applyAccess(dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
@@ -250,13 +250,13 @@ public class SubscribtionTest {
 
 
     /**
-     * Test that it is possible to call a service that deliveres a list of subscribtion that has been created in datafordeler
+     * Test that it is possible to call a service that deliveres a list of subscription that has been created in datafordeler
      */
     @Test
     public void testGetSubscriberList() {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -274,14 +274,14 @@ public class SubscribtionTest {
     }
 
     /**
-     * Test that it is possible to find a specific subscribtion
+     * Test that it is possible to find a specific subscription
      * @throws Exception
      */
     @Test
     public void testGetSpecificSubscriber() throws Exception {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -295,7 +295,7 @@ public class SubscribtionTest {
 
 
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange(
@@ -308,7 +308,7 @@ public class SubscribtionTest {
         JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", response.getBody(), false);
 
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         //Try fetching with no cpr access rights
@@ -333,7 +333,7 @@ public class SubscribtionTest {
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
-        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -350,7 +350,7 @@ public class SubscribtionTest {
                 "\"dataEventSubscription\":[]}]", response.getBody(), false);
 
         httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", httpHeaders);
-        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         //Try fetching with no cpr access rights
@@ -436,7 +436,7 @@ public class SubscribtionTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("uxp-client", "user2");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
-        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -453,7 +453,7 @@ public class SubscribtionTest {
                 "\"dataEventSubscription\":[]}]", response.getBody(), false);
 
         httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", httpHeaders);
-        testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         this.applyAccess(testUserDetails);
 
         //Try fetching with no cpr access rights
@@ -506,7 +506,7 @@ public class SubscribtionTest {
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
-        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         //testUserDetails.setIdentity("myUser");
         this.applyAccess(testUserDetails);
 
@@ -615,7 +615,7 @@ public class SubscribtionTest {
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
-        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 

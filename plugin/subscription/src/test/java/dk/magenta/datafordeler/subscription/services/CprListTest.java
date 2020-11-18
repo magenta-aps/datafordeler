@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.subscribtion.services;
+package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.subscribtion.data.subscribtionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -70,12 +70,12 @@ public class CprListTest {
             Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
             Transaction transaction = session.beginTransaction();
 
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion1", "A01"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion2", "A02"));
-            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscribtion3", "A03"));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion1", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion2", ""));
-            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscribtion3", ""));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscription1", "A01"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscription2", "A02"));
+            subscriber.addBusinessEventSubscribtion(new BusinessEventSubscription("subscription3", "A03"));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscription1", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscription2", ""));
+            subscriber.addDataEventSubscribtion(new DataEventSubscription("subscription3", ""));
 
             CprList cprList1 = new CprList("myList1");
             session.save(cprList1);
@@ -191,7 +191,7 @@ public class CprListTest {
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
-        dk.magenta.datafordeler.subscribtion.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscribtion.services.TestUserDetails();
+        dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
