@@ -35,8 +35,13 @@ public class SubscribedCprNumber extends DatabaseEntry {
     }
 
 
-    public SubscribedCprNumber(String cprNumber) {
+    public SubscribedCprNumber(CprList cprList, String cprNumber) {
+        this.cprList = cprList;
         this.cprNumber = cprNumber;
     }
+
+    @ManyToOne
+    @JoinColumn(name="cprlistId")
+    private CprList cprList;
 
 }

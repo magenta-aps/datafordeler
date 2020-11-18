@@ -67,34 +67,37 @@ public class CprList extends DatabaseEntry {
     @ElementCollection
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="cprlistId")
-    private Collection<SubscribedCprNumber> cprs = new ArrayList<SubscribedCprNumber>();
+    private Set<SubscribedCprNumber> cprs = new HashSet<SubscribedCprNumber>();
 
     @Column(name="cpr", nullable=false)
     @JsonIgnore
-    public Collection<SubscribedCprNumber> getCpr() {
+    public Set<SubscribedCprNumber> getCpr() {
         return cprs;
     }
 
-    public void setCprs(Collection<SubscribedCprNumber> cprs) {
+    public void setCprs(Set<SubscribedCprNumber> cprs) {
         this.cprs = cprs;
     }
 
-    public void addCprs(List<SubscribedCprNumber> cprs) {
+    public void addCprs(Set<SubscribedCprNumber> cprs) {
         this.cprs.addAll(cprs);
     }
 
     public void addCprStrings(List<String> cprs) {
         for(String cpr : cprs) {
-            this.cprs.add(new SubscribedCprNumber(cpr));
+            this.cprs.add(new SubscribedCprNumber(this, cpr));
         }
     }
 
     public void addCprString(String cpr) {
-        this.cprs.add(new SubscribedCprNumber(cpr));
+        this.cprs.add(new SubscribedCprNumber(this, cpr));
     }
 
     public void removeCpr(String cpr) {
         this.cprs.removeIf(f -> cpr.equals(f.getCprNumber()));
+    }
+
+    public void removeAllCpr() {
+        this.cprs = new HashSet<SubscribedCprNumber>();
     }
 }

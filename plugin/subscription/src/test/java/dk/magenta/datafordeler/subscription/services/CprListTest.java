@@ -149,7 +149,7 @@ public class CprListTest {
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
             cprList.getCpr().removeIf(f -> "1111111113".equals(f.getCprNumber()));
-            transaction.commit();;
+            transaction.commit();
         }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -158,12 +158,13 @@ public class CprListTest {
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
             Assert.assertEquals(3, cprList.getCpr().size());
+            transaction.commit();
         }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-            query.setParameter("listId", "myList1");
+            query.setParameter("listId", "myList2");
             CprList cprList = (CprList) query.getResultList().get(0);
             session.delete(cprList);
             transaction.commit();;
@@ -172,8 +173,9 @@ public class CprListTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-            query.setParameter("listId", "myList1");
+            query.setParameter("listId", "myList2");
             Assert.assertEquals(0, query.getResultList().size());
+            transaction.commit();
         }
 
     }

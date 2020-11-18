@@ -148,7 +148,7 @@ public class FetchEventsTest {
             session.save(cprList);
 
             CvrList cvrList = new CvrList("L2");
-            cvrList.addCvrsString("25052943");
+            cvrList.addCvrString("25052943");
             session.save(cvrList);
 
             subscriptionT1.setCprList(cprList);

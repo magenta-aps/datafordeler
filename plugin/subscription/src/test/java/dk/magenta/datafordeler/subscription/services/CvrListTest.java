@@ -105,7 +105,7 @@ public class CvrListTest {
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
-            cvrList.addCvrsStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
+            cvrList.addCvrStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
             transaction.commit();
         }
 
@@ -114,7 +114,7 @@ public class CvrListTest {
             Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
-            cvrList.addCvrsStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
+            cvrList.addCvrStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
             transaction.commit();
         }
 

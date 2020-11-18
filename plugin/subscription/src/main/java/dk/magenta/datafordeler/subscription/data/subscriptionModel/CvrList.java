@@ -3,10 +3,7 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = CvrList.TABLE_NAME, indexes = {
@@ -63,30 +60,37 @@ public class CvrList extends DatabaseEntry {
     @ElementCollection
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="cvrlistId")
-    private Collection<SubscribedCvrNumber> cvrs = new ArrayList<SubscribedCvrNumber>();
+    private Set<SubscribedCvrNumber> cvrs = new HashSet<SubscribedCvrNumber>();
 
     @Column(name="cvr", nullable=false)
     @JsonIgnore
-    public Collection<SubscribedCvrNumber> getCvr() {
+    public Set<SubscribedCvrNumber> getCvr() {
         return cvrs;
     }
 
-    public void setCvrs(List<SubscribedCvrNumber> cvrs) {
+    public void setCvrs(Set<SubscribedCvrNumber> cvrs) {
         this.cvrs = cvrs;
     }
 
-    public void addCvrs(List<SubscribedCvrNumber> cvrs) {
+    public void addCvrs(Set<SubscribedCvrNumber> cvrs) {
         this.cvrs.addAll(cvrs);
     }
 
-    public void addCvrsStrings(List<String> cvrs) {
+    public void addCvrStrings(List<String> cvrs) {
         for(String cvr : cvrs) {
             this.cvrs.add(new SubscribedCvrNumber(cvr));
         }
     }
 
-    public void addCvrsString(String cpr) {
+    public void addCvrString(String cpr) {
         this.cvrs.add(new SubscribedCvrNumber(cpr));
+    }
+
+    public void removeCvr(String cvr) {
+        this.cvrs.removeIf(f -> cvr.equals(f.getCvrNumber()));
+    }
+
+    public void removeAllCvr() {
+        this.cvrs = new HashSet<SubscribedCvrNumber>();
     }
 }

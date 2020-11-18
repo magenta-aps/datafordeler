@@ -39,6 +39,7 @@ public class SubscribedCvrNumber extends DatabaseEntry {
 
 
     @ManyToOne
+    @JoinColumn(name="cvrlistId")
     private CvrList cvrList;
 
 }
