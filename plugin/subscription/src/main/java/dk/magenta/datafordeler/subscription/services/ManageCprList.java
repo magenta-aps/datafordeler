@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +88,12 @@ public class ManageCprList {
                 transaction.commit();
                 return ResponseEntity.ok(cprCreateList);
             }
+        }  catch(ConstraintViolationException e) {
+            String errorMessage = "Elements already exists";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         }
     }
 
@@ -127,7 +135,7 @@ public class ManageCprList {
                 foundList.getCpr().remove(subscribed);
             }
             transaction.commit();
-            String errorMessage = "Elements was removed";
+            String errorMessage = "Elements were removed";
             JSONObject obj = new JSONObject();
             obj.put("message", errorMessage);
             return new ResponseEntity(obj.toString(), HttpStatus.OK);
@@ -152,12 +160,12 @@ public class ManageCprList {
                 foundList.addCprString(cpr);
             }
             transaction.commit();
-            String errorMessage = "Elements was added";
+            String errorMessage = "Elements were added";
             JSONObject obj = new JSONObject();
             obj.put("message", errorMessage);
             return new ResponseEntity(obj.toString(), HttpStatus.OK);
         } catch(PersistenceException e) {
-            String errorMessage = "Elements does allready exist";
+            String errorMessage = "Elements allready exists";
             JSONObject obj = new JSONObject();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);

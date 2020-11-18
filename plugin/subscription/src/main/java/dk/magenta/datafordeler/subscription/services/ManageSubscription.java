@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,6 +84,18 @@ public class ManageSubscription {
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
+        }  catch(ConstraintViolationException e) {
+            String errorMessage = "Elements already exists";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+        }  catch(Exception e) {
+            String errorMessage = "Failed creating subscriber";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -98,7 +111,13 @@ public class ManageSubscription {
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
-        }catch(PersistenceException e) {
+        }  catch(ConstraintViolationException e) {
+            String errorMessage = "Elements already exists";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+        } catch(PersistenceException e) {
             String errorMessage = "Failed creating subscriber";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
@@ -207,7 +226,13 @@ public class ManageSubscription {
 
             session.update(subscriber);
             transaction.commit();
-            return ResponseEntity.ok(subscriber);
+            return ResponseEntity.ok(subscription);
+        }  catch(ConstraintViolationException e) {
+            String errorMessage = "Elements already exists";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         }
     }
 
@@ -354,15 +379,21 @@ public class ManageSubscription {
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            DataEventSubscription subscribtion = new DataEventSubscription(dataEventId, kodeId);
-            subscribtion.setCprList(cprListItem);
-            subscribtion.setCvrList(cvrListItem);
-            subscribtion.setSubscriber(subscriber);
-            subscriber.addDataEventSubscription(subscribtion);
+            DataEventSubscription subscription = new DataEventSubscription(dataEventId, kodeId);
+            subscription.setCprList(cprListItem);
+            subscription.setCvrList(cvrListItem);
+            subscription.setSubscriber(subscriber);
+            subscriber.addDataEventSubscription(subscription);
 
             session.update(subscriber);
             transaction.commit();
-            return ResponseEntity.ok(subscriber);
+            return ResponseEntity.ok(subscription);
+        }  catch(ConstraintViolationException e) {
+            String errorMessage = "Elements already exists";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         }
     }
 

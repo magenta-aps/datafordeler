@@ -278,7 +278,7 @@ public class SubscribtionTest {
      * @throws Exception
      */
     @Test
-    public void testGetSpecificSubscriber() throws Exception {
+    public void testGetSpecificSubscription() throws Exception {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
@@ -369,7 +369,7 @@ public class SubscribtionTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
 
         response = restTemplate.exchange(
@@ -406,7 +406,7 @@ public class SubscribtionTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber",
@@ -528,7 +528,7 @@ public class SubscribtionTest {
                 httpEntity,
                 String.class
         );
-
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription",
@@ -549,7 +549,7 @@ public class SubscribtionTest {
                 httpEntity,
                 String.class
         );
-
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription",

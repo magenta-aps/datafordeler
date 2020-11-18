@@ -94,7 +94,7 @@ public class SubscribtionSequenceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber",
