@@ -223,7 +223,7 @@ public class ManageSubscription {
             transaction.commit();
             return ResponseEntity.ok(subscription);
         }  catch(PersistenceException e) {
-            String errorMessage = "Elements already exists";
+            String errorMessage = "Subscription already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
@@ -390,7 +390,7 @@ public class ManageSubscription {
             transaction.commit();
             return ResponseEntity.ok(subscription);
         }  catch(PersistenceException e) {
-            String errorMessage = "Elements already exists";
+            String errorMessage = "Subscription already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
