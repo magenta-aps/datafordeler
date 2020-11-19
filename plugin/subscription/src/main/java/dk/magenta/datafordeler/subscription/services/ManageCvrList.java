@@ -90,12 +90,18 @@ public class ManageCvrList {
                 transaction.commit();
                 return ResponseEntity.ok(cvrCreateList);
             }
-        }  catch(ConstraintViolationException e) {
-            String errorMessage = "Elements already exists";
+        }  catch(PersistenceException e) {
+            String errorMessage = "cvrList already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+        }  catch(Exception e) {
+            String errorMessage = "Failed creating list";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

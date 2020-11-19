@@ -90,12 +90,18 @@ public class ManageCprList {
                 transaction.commit();
                 return ResponseEntity.ok(cprCreateList);
             }
-        }  catch(ConstraintViolationException e) {
-            String errorMessage = "Elements already exists";
+        }  catch(PersistenceException e) {
+            String errorMessage = "cprList already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+        }  catch(Exception e) {
+            String errorMessage = "Failed creating list";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -175,8 +181,11 @@ public class ManageCprList {
             log.error(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
         } catch (Exception e) {
-            log.error("FAILED REMOVING ELEMENT", e);
-            return ResponseEntity.status(500).build();
+            String errorMessage = "Failure";
+            JSONObject obj = new JSONObject();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

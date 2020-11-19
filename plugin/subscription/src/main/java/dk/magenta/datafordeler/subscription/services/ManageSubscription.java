@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -84,7 +85,7 @@ public class ManageSubscription {
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
-        }  catch(ConstraintViolationException e) {
+        } catch(PersistenceException e) {
             String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
@@ -111,18 +112,12 @@ public class ManageSubscription {
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
-        }  catch(ConstraintViolationException e) {
-            String errorMessage = "Elements already exists";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         } catch(PersistenceException e) {
             String errorMessage = "Failed creating subscriber";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
-            return new ResponseEntity<>(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(obj.toString(), HttpStatus.CONFLICT);
         }  catch(Exception e) {
             String errorMessage = "Failed creating subscriber";
             ObjectNode obj = objectMapper.createObjectNode();
@@ -224,15 +219,21 @@ public class ManageSubscription {
             subscription.setSubscriber(subscriber);
             subscriber.addBusinessEventSubscription(subscription);
 
-            session.update(subscriber);
+            session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscription);
-        }  catch(ConstraintViolationException e) {
+        }  catch(PersistenceException e) {
             String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+        }  catch(Exception e) {
+            String errorMessage = "Failed adding element";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -388,12 +389,18 @@ public class ManageSubscription {
             session.update(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscription);
-        }  catch(ConstraintViolationException e) {
+        }  catch(PersistenceException e) {
             String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+        }  catch(Exception e) {
+            String errorMessage = "Failed adding element";
+            ObjectNode obj = objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.error(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
