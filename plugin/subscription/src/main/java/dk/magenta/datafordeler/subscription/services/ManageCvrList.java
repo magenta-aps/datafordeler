@@ -168,7 +168,8 @@ public class ManageCvrList {
             JsonNode requestBody = objectMapper.readTree(request.getInputStream());
             Iterator<JsonNode> cprBodyIterator = requestBody.get("cvr").iterator();
             while(cprBodyIterator.hasNext()) {
-                foundList.addCvrString(cprBodyIterator.next().textValue());
+                JsonNode node = cprBodyIterator.next();
+                foundList.addCvrString(node.textValue());
             }
             transaction.commit();
             String errorMessage = "Elements were added";
