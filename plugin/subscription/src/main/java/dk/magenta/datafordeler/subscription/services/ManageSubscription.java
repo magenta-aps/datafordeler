@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -105,12 +106,15 @@ public class ManageSubscription {
     public ResponseEntity createMySubscriber(HttpServletRequest request) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        loggerHelper.urlInvokePersistablelogs("subscriber");
         Transaction transaction = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Subscriber subscriber = new Subscriber(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             session.save(subscriber);
             transaction.commit();
+            loggerHelper.urlInvokePersistablelogs("subscriber done");
             return ResponseEntity.ok(subscriber);
         } catch(PersistenceException e) {
             String errorMessage = "Failed creating subscriber";
@@ -145,6 +149,8 @@ public class ManageSubscription {
     @DeleteMapping("/subscriber/")
     public ResponseEntity<Subscriber> deleteBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        loggerHelper.urlInvokePersistablelogs("subscriber");
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
@@ -157,6 +163,7 @@ public class ManageSubscription {
                 Subscriber subscriber = subscribers.get(0);
                 session.delete(subscriber);
                 transaction.commit();
+                loggerHelper.urlInvokePersistablelogs("subscriber done");
                 return ResponseEntity.ok(subscriber);
             }
         }
@@ -174,6 +181,8 @@ public class ManageSubscription {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -183,7 +192,7 @@ public class ManageSubscription {
                 while(subscriptions.hasNext()) {
                     list.add(subscriptions.next());
                 }
-
+                loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
                 return ResponseEntity.ok(list);
             }
         }
@@ -211,6 +220,8 @@ public class ManageSubscription {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
 
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
@@ -221,6 +232,7 @@ public class ManageSubscription {
 
             session.save(subscriber);
             transaction.commit();
+            loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
             return ResponseEntity.ok(subscription);
         }  catch(PersistenceException e) {
             String errorMessage = "Subscription already exists";
@@ -249,6 +261,8 @@ public class ManageSubscription {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+                LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+                loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
                 Transaction transaction = session.beginTransaction();
                 BusinessEventSubscription subscription = (BusinessEventSubscription) subscriptionQuery.getResultList().get(0);
 
@@ -272,6 +286,7 @@ public class ManageSubscription {
                 }
                 session.update(subscription);
                 transaction.commit();
+                loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
                 return ResponseEntity.ok(subscription);
             }
         }
@@ -283,11 +298,14 @@ public class ManageSubscription {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriptionId = :subscriptionId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
             query.setParameter("subscriptionId", subscriptionId);
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscriber = (BusinessEventSubscription) query.getResultList().get(0);
+                loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
                 return ResponseEntity.ok(subscriber);
             }
         }
@@ -304,10 +322,13 @@ public class ManageSubscription {
             } else {
                 BusinessEventSubscription subscription = (BusinessEventSubscription) query.getResultList().get(0);
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+                LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+                loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
                 if(subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     subscription.getSubscriber().removeBusinessEventSubscription(subscription);
                     session.delete(subscription);
                     transaction.commit();
+                    loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
                     return ResponseEntity.ok(subscription);
                 } else {
                     transaction.rollback();
@@ -329,6 +350,8 @@ public class ManageSubscription {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             if(query.getResultList().isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -336,6 +359,7 @@ public class ManageSubscription {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
                 Iterator<DataEventSubscription> subscribtions = subscriber.getDataEventSubscription().iterator();
                 List <DataEventSubscription> list = new ArrayList <DataEventSubscription>(subscriber.getDataEventSubscription());
+                loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
                 return ResponseEntity.ok(list);
             }
         }
@@ -352,6 +376,8 @@ public class ManageSubscription {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             CprList cprListItem = null;
             if(!cprList.isEmpty()) {
                 Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
@@ -388,6 +414,7 @@ public class ManageSubscription {
 
             session.update(subscriber);
             transaction.commit();
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
             return ResponseEntity.ok(subscription);
         }  catch(PersistenceException e) {
             String errorMessage = "Subscription already exists";
@@ -419,6 +446,8 @@ public class ManageSubscription {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+                LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+                loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
                 DataEventSubscription subscribtion = (DataEventSubscription) subscribtionQuery.getResultList().get(0);
                 if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -452,6 +481,7 @@ public class ManageSubscription {
                 }
                 session.update(subscribtion);
                 transaction.commit();
+                loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
                 return ResponseEntity.ok(subscribtion);
             }
         }
@@ -463,11 +493,14 @@ public class ManageSubscription {
             Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where subscribtionId = :subscribtionId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             query.setParameter("subscribtionId", subscribtionId);
             if(query.getResultList().size()==0) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscriber = (DataEventSubscription) query.getResultList().get(0);
+                loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
                 return ResponseEntity.ok(subscriber);
             }
         }
@@ -475,7 +508,7 @@ public class ManageSubscription {
 
     @DeleteMapping("/subscriber/subscription/dataeventSubscription/{dataEventId}")
     public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
@@ -486,10 +519,14 @@ public class ManageSubscription {
 
                 DataEventSubscription subscribtion = (DataEventSubscription) query.getResultList().get(0);
                 Transaction transaction = session.beginTransaction();
+                DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+                LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+                loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
                 if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     subscribtion.getSubscriber().removeDataEventSubscription(subscribtion);
                     session.delete(subscribtion);
                     transaction.commit();
+                    loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
                     return ResponseEntity.ok(subscribtion);
                 } else {
                     transaction.rollback();

@@ -11,10 +11,10 @@
     }
   ],
   "paths": {
-    "/subscriptionplugin/v1/manager/subscriber": {
+    "/subscription/1/manager/subscriber": {
       "post": {
         "summary": "Administration af subscribere i datafordeleren",
-        "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald mes POST til denne service medfører en fejl",
+        "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl",
         "parameters": [
           {
           }
@@ -26,17 +26,10 @@
             }
           }
         }
-      }
-    },
-    "/subscriptionplugin/v1/manager/subscriber/list": {
+      },
       "get": {
         "summary": "Der returneres en liste over alle subscribere i datafordeleren",
         "description": "Der returneres en liste over alle subscribere i datafordeleren",
-
-        "parameters": [
-          {
-          }
-        ],
         "responses": {
           "200": {
             "description": "Der returneres en liste over alle subscribere i datafordeleren",
@@ -46,27 +39,10 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/{subscriberId}": {
+    "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion": {
       "get": {
-        "summary": "Der returneres en liste over alle subscribere i datafordeleren",
-        "description": "Der returneres en liste over alle subscribere i datafordeleren",
-        "parameters": [
-          {
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-            }
-          }
-        }
-      }
-    },
-    "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/list": {
-      "get": {
-        "summary": "Der returneres en liste over alle subscriptions i datafordeleren",
-        "description": "Der returneres en liste over alle subscriptions i datafordeleren",
+        "summary": "Der returneres en liste over alle businesseventSubscription i datafordeleren",
+        "description": "Der returneres en liste over alle businesseventSubscription der eksistere under den bruger som laver kaldet",
         "parameters": [
           {
           }
@@ -80,10 +56,10 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/businessEventSubscribtion/{subscriberId}": {
+    "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion/{subscriberId}": {
       "post": {
         "summary": "Opret en subscription",
-        "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne",
+        "description": "Der oprettes en businesseventSubscribtion i datafordeleren via en post til denne url. Denne subscription bliver tilknyttet den bruger, som opretter denne",
         "parameters": [
           {
             "name": "businessEventId",
@@ -111,7 +87,7 @@
       },
       "put": {
         "summary": "Modificer en subscription",
-        "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
+        "description": "Der rettes en businesseventSubscribtion i datafordeleren via en put til denne url. Denne subscription er tilknyttet den bruger, som oprettede denne",
         "parameters": [
           {
             "name": "businessEventId",
@@ -164,10 +140,10 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/list": {
+    "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion": {
       "get": {
         "summary": "Der returneres en liste over alle subscriptions i datafordeleren",
-        "description": "Der returneres en liste over alle subscriptions i datafordeleren",
+        "description": "Der returneres en liste over alle dataeventSubscribtion i datafordeleren",
         "parameters": [
           {
           }
@@ -181,7 +157,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/dataEventSubscribtion/{subscriberId}": {
+    "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion/{subscriberId}": {
       "post": {
         "summary": "Opret en subscription",
         "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne",
@@ -275,7 +251,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/cprList/list/": {
+    "/subscription/1/manager/subscriber/cprList": {
       "get": {
         "summary": "Der returneres en liste over alle CPR-lister",
         "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
@@ -290,9 +266,7 @@
             }
           }
         }
-      }
-    },
-    "/subscriptionplugin/v1/manager/subscriber/cprList/": {
+      },
       "post": {
         "summary": "Der returneres en liste over alle CPR-lister",
         "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
@@ -312,7 +286,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/{listId}": {
+    "/subscription/1/manager/subscriber/cprList/cpr/{listId}": {
       "post": {
         "summary": "Der returneres en liste over alle CPR-lister",
         "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
@@ -345,7 +319,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/cprList/cpr/list": {
+    "/subscription/1/manager/subscriber/cprList/cpr": {
       "post": {
         "summary": "Der tilføjes CPR-numre til listen",
         "description": "Der tilføjes CPR-numre til listen til brug for subscriptions i datafordeleren",
@@ -375,7 +349,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/cvrList/list/": {
+    "/subscription/1/manager/subscriber/cvrList": {
       "get": {
         "summary": "Der returneres en liste over alle CPR-lister",
         "description": "Der returneres en liste over alle CVR-lister til brug for subscriptions i datafordeleren",
@@ -390,9 +364,7 @@
             }
           }
         }
-      }
-    },
-    "/subscriptionplugin/v1/manager/subscriber/cvrList/": {
+      },
       "post": {
         "summary": "Der returneres en liste over alle CVR-lister",
         "description": "Der returneres en liste over alle CVR-lister til brug for subscriptions i datafordeleren",
@@ -412,7 +384,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/{listId}": {
+    "/subscription/1/manager/subscriber/cvrList/cvr/{listId}": {
       "post": {
         "summary": "Der tilføjes CVR-numre til listen",
         "description": "Der tilføjes CVR-numre til listen til brug for subscriptions i datafordeleren",
@@ -445,7 +417,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/manager/subscriber/cvrList/cvr/list": {
+    "/subscription/1/manager/subscriber/cvrList/cvr": {
       "post": {
         "summary": "Der returneres en liste over alle CVR-numre i en liste",
         "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
@@ -475,7 +447,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/findCprBusinessEvent/fetchEvents/": {
+    "/subscription/1/findCprBusinessEvent/fetchEvents/": {
       "post": {
         "summary": "",
         "description": "",
@@ -515,7 +487,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/findCprDataEvent/fetchEvents/": {
+    "/subscription/1/findCprDataEvent/fetchEvents/": {
       "post": {
         "summary": "Der returneres en liste over alle CVR-numre i en liste",
         "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
@@ -555,7 +527,7 @@
         }
       }
     },
-    "/subscriptionplugin/v1/findCvrDataEvent/fetchEvents/": {
+    "/subscription/1/findCvrDataEvent/fetchEvents/": {
       "post": {
         "summary": "Der returneres en liste over alle CVR-numre i en liste",
         "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
