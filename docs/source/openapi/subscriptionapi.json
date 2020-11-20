@@ -15,10 +15,6 @@
       "post": {
         "summary": "Administration af subscribere i datafordeleren",
         "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl",
-        "parameters": [
-          {
-          }
-        ],
         "responses": {
           "200": {
             "description": "",
@@ -40,23 +36,6 @@
       }
     },
     "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion": {
-      "get": {
-        "summary": "Der returneres en liste over alle businesseventSubscription i datafordeleren",
-        "description": "Der returneres en liste over alle businesseventSubscription der eksistere under den bruger som laver kaldet",
-        "parameters": [
-          {
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
-            "content": {
-            }
-          }
-        }
-      }
-    },
-    "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion/{subscriberId}": {
       "post": {
         "summary": "Opret en subscription",
         "description": "Der oprettes en businesseventSubscribtion i datafordeleren via en post til denne url. Denne subscription bliver tilknyttet den bruger, som opretter denne",
@@ -85,15 +64,23 @@
           }
         }
       },
+      "get": {
+        "summary": "Der returneres en liste over alle businesseventSubscription i datafordeleren",
+        "description": "Der returneres en liste over alle businesseventSubscription der eksistere under den bruger som laver kaldet",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}": {
       "put": {
         "summary": "Modificer en subscription",
         "description": "Der rettes en businesseventSubscribtion i datafordeleren via en put til denne url. Denne subscription er tilknyttet den bruger, som oprettede denne",
         "parameters": [
-          {
-            "name": "businessEventId",
-            "description": "The unique id of the eventId to get created",
-            "example": "eventId1"
-          },
           {
             "name": "kodeId",
             "description": "The Id to use to compare the events",
@@ -116,8 +103,6 @@
       "delete": {
         "summary": "Slet en subscription",
         "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link",
-        "parameters": [
-        ],
         "responses": {
           "200": {
             "description": "",
@@ -129,8 +114,6 @@
       "get": {
         "summary": "Hen en subscription",
         "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
-        "parameters": [
-        ],
         "responses": {
           "200": {
             "description": "",
@@ -141,23 +124,6 @@
       }
     },
     "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion": {
-      "get": {
-        "summary": "Der returneres en liste over alle subscriptions i datafordeleren",
-        "description": "Der returneres en liste over alle dataeventSubscribtion i datafordeleren",
-        "parameters": [
-          {
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
-            "content": {
-            }
-          }
-        }
-      }
-    },
-    "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion/{subscriberId}": {
       "post": {
         "summary": "Opret en subscription",
         "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne",
@@ -191,15 +157,24 @@
           }
         }
       },
+      "get": {
+        "summary": "Der returneres en liste over alle dataeventSubscription i datafordeleren",
+        "description": "Der returneres en liste over alle dataeventSubscription der eksistere under den bruger som laver kaldet",
+        "responses": {
+          "200": {
+            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}": {
+
       "put": {
         "summary": "Modificer en subscription",
         "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne",
         "parameters": [
-          {
-            "name": "businessEventId",
-            "description": "The unique id of the eventId to get created",
-            "example": "eventId1"
-          },
           {
             "name": "kodeId",
             "description": "The Id to use to compare the events",
@@ -253,7 +228,7 @@
     },
     "/subscription/1/manager/subscriber/cprList": {
       "get": {
-        "summary": "Der returneres en liste over alle CPR-lister",
+        "summary": "Hent en liste over alle CPR-lister",
         "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
         "parameters": [
           {
@@ -268,7 +243,7 @@
         }
       },
       "post": {
-        "summary": "Opret ens CPR-liste i datafordeleren",
+        "summary": "Opret en CPR-liste i datafordeleren",
         "description": "CPR-listen kan benyttes af en subscription for filtrering i hvilke CPR-numre der skal informeres om ændringer på",
         "parameters": [
           {
@@ -351,7 +326,7 @@
     },
     "/subscription/1/manager/subscriber/cvrList": {
       "get": {
-        "summary": "Der returneres en liste over alle CPR-lister",
+        "summary": "Hent en liste over alle CPR-lister",
         "description": "Der returneres en liste over alle CVR-lister til brug for subscriptions i datafordeleren",
         "parameters": [
           {
@@ -366,8 +341,8 @@
         }
       },
       "post": {
-        "summary": "Der returneres en liste over alle CVR-lister",
-        "description": "Der returneres en liste over alle CVR-lister til brug for subscriptions i datafordeleren",
+        "summary": "Opret en CVR-liste i datafordeleren",
+        "description": "CPR-listen kan benyttes af en subscription for filtrering i hvilke CPR-numre der skal informeres om ændringer på",,
         "parameters": [
           {
             "name": "cvrList",
@@ -418,7 +393,7 @@
       }
     },
     "/subscription/1/manager/subscriber/cvrList/cvr": {
-      "post": {
+      "get": {
         "summary": "Hent en liste over alle CVR-numre, der er tilføjet til denne CVR-liste",
         "description": "Hent en liste over alle CVR-numre, der er tilføjet til denne CVR-liste. Listen af CVR-numre returneres med pagination",
         "parameters": [
