@@ -132,13 +132,16 @@ public class ManageSubscription {
     }
 
     @GetMapping("/subscriber/{subscriberId}")
-    public ResponseEntity<Subscriber> getBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
+    public ResponseEntity getBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", subscriberId);
             List<Subscriber> subscribers = query.getResultList();
             if(subscribers.size()==0) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Could not find subscriber subscriber";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                return new ResponseEntity<>(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = subscribers.get(0);
                 return ResponseEntity.ok(subscriber);

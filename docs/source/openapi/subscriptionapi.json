@@ -17,19 +17,140 @@
         "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den subscriber, som bliver oprettet ved kaldet, dog under forudsætning af at subscriberen kan oprettes.",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subscriberId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "cprLists": {
+                      "type": "array",
+                      "example": "[]"
+                    },
+                    "cvrLists": {
+                      "type": "array",
+                      "example": "[]"
+                    },
+                    "businessEventSubscription": {
+                      "type": "array",
+                      "example": "[]"
+                    },
+                    "dataEventSubscription": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke kan oprettes en subscriber.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failed creating subscriber"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke kan oprettes en subscriber.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failed creating subscriber"
+                    }
+                  }
+                }
+              }
             }
           }
         }
       },
       "get": {
         "summary": "Der returneres en liste over alle subscribere i datafordeleren",
-        "description": "Der returneres en liste over alle subscribere i datafordeleren",
+        "description": "Der returneres en liste over alle subscribere i datafordeleren.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
-            "description": "Der returneres en liste over alle subscribere i datafordeleren",
+            "description": "Denne service returnere den subscriber, som bliver oprettet ved kaldet, dog under forudsætning af at subscriberen kan oprettes.",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": "[{\n  \"subscriberId\": \"PITU_GOV_DIA_magenta_services1\",\n  \"cprLists\": [],\n  \"cvrLists\": [],\n  \"businessEventSubscription\": [],\n  \"dataEventSubscription\": []\n}, {\n  \"subscriberId\": \"PITU_GOV_DIA_magenta_services2\",\n  \"cprLists\": [],\n  \"cvrLists\": [],\n  \"businessEventSubscription\": [],\n  \"dataEventSubscription\": []\n}]"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscription/1/manager/subscriber/{subscriberId}": {
+      "get": {
+        "summary": "Hens subscriber i datafordeleren",
+        "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "responses": {
+          "200": {
+            "description": "Denne service returnere den subscriber, som bliver oprettet ved kaldet, dog under forudsætning af at subscriberen kan oprettes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subscriberId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "cprLists": {
+                      "type": "array",
+                      "example": "[]"
+                    },
+                    "cvrLists": {
+                      "type": "array",
+                      "example": "[]"
+                    },
+                    "businessEventSubscription": {
+                      "type": "array",
+                      "example": "[]"
+                    },
+                    "dataEventSubscription": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke kan oprettes en subscriber.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failed creating subscriber"
+                    }
+                  }
+                }
+              }
             }
           }
         }
