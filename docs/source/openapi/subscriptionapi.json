@@ -268,8 +268,8 @@
         }
       },
       "post": {
-        "summary": "Der returneres en liste over alle CPR-lister",
-        "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "summary": "Opret ens CPR-liste i datafordeleren",
+        "description": "CPR-listen kan benyttes af en subscription for filtrering i hvilke CPR-numre der skal informeres om ændringer på",
         "parameters": [
           {
             "name": "cprList",
@@ -288,8 +288,8 @@
     },
     "/subscription/1/manager/subscriber/cprList/cpr/{listId}": {
       "post": {
-        "summary": "Der returneres en liste over alle CPR-lister",
-        "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "summary": "Tilføj CPR-numre til en CPR-liste",
+        "description": "Der kan tilføjes CPR-numre til en liste, CPR-numrene kan enten tilføjes en af gangen eller som en liste",
         "parameters": [
           {
             "name": "cpr",
@@ -306,13 +306,13 @@
         }
       },
       "delete": {
-        "summary": "Der slettes en liste",
-        "description": "Der slettes en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "summary": "Slet CPR-numre fra en CPR-liste",
+        "description": "Der slettes CPR-numre fra en CPR-liste",
         "parameters": [
         ],
         "responses": {
           "200": {
-            "description": "Liste over CPR-lister",
+            "description": "Success of failure",
             "content": {
             }
           }
@@ -320,9 +320,9 @@
       }
     },
     "/subscription/1/manager/subscriber/cprList/cpr": {
-      "post": {
-        "summary": "Der tilføjes CPR-numre til listen",
-        "description": "Der tilføjes CPR-numre til listen til brug for subscriptions i datafordeleren",
+      "get": {
+        "summary": "Hent en liste over alle CPR-numre, der er tilføjet til denne CPR-liste",
+        "description": "Hent en liste over alle CPR-numre, der er tilføjet til denne CPR-liste. Listen af CPR-numre returneres med pagination",
         "parameters": [
           {
             "name": "pageSize",
@@ -342,7 +342,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CPR-lister",
+            "description": "Liste over CPR-numre",
             "content": {
             }
           }
@@ -386,8 +386,8 @@
     },
     "/subscription/1/manager/subscriber/cvrList/cvr/{listId}": {
       "post": {
-        "summary": "Der tilføjes CVR-numre til listen",
-        "description": "Der tilføjes CVR-numre til listen til brug for subscriptions i datafordeleren",
+        "summary": "Tilføj CVR-numre til en CVR-liste",
+        "description": "Der kan tilføjes CVR-numre til en liste, CVR-numrene kan enten tilføjes en af gangen eller som en liste",
         "parameters": [
           {
             "name": "cvr",
@@ -404,13 +404,13 @@
         }
       },
       "delete": {
-        "summary": "Der slettes en liste",
-        "description": "Der slettes en liste over alle CPR-lister til brug for subscriptions i datafordeleren",
+        "summary": "Slet CPR-numre fra en CPR-liste",
+        "description": "Der slettes CPR-numre fra en CPR-liste",
         "parameters": [
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-lister",
+            "description": "Success of failure",
             "content": {
             }
           }
@@ -419,8 +419,8 @@
     },
     "/subscription/1/manager/subscriber/cvrList/cvr": {
       "post": {
-        "summary": "Der returneres en liste over alle CVR-numre i en liste",
-        "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
+        "summary": "Hent en liste over alle CVR-numre, der er tilføjet til denne CVR-liste",
+        "description": "Hent en liste over alle CVR-numre, der er tilføjet til denne CVR-liste. Listen af CVR-numre returneres med pagination",
         "parameters": [
           {
             "name": "pageSize",
@@ -440,7 +440,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-lister",
+            "description": "Liste over CVR-numre",
             "content": {
             }
           }
@@ -448,9 +448,9 @@
       }
     },
     "/subscription/1/findCprBusinessEvent/fetchEvents/": {
-      "post": {
-        "summary": "",
-        "description": "",
+      "get": {
+        "summary": "Hent en liste over alle ændringer, som i sket i forhold til det oprettede abonnement",
+        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde businessevents, som er sket på CPR-numre",
         "parameters": [
           {
             "name": "pageSize",
@@ -488,9 +488,9 @@
       }
     },
     "/subscription/1/findCprDataEvent/fetchEvents/": {
-      "post": {
-        "summary": "Der returneres en liste over alle CVR-numre i en liste",
-        "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
+      "get": {
+        "summary": "Hent en liste over alle ændringer, som i sket i forhold til det oprettede abonnement",
+        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde dataevents, som er sket på CPR-numre",
         "parameters": [
           {
             "name": "pageSize",
@@ -528,9 +528,9 @@
       }
     },
     "/subscription/1/findCvrDataEvent/fetchEvents/": {
-      "post": {
-        "summary": "Der returneres en liste over alle CVR-numre i en liste",
-        "description": "Der returneres en liste over alle CVR-numre i en liste til brug for subscriptions i datafordeleren",
+      "get": {
+        "summary": "Hent en liste over alle ændringer, som i sket i forhold til det oprettede abonnement",
+        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde dataevents, som er sket på CVR-numre",
         "parameters": [
           {
             "name": "pageSize",
