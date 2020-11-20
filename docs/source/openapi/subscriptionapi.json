@@ -138,7 +138,7 @@
             }
           },
           "404": {
-            "description": "Denne service returnere en fejlbesked, hvis der ikke kan oprettes en subscriber.",
+            "description": "Denne service returnere en fejlbesked, hvis der ikke kan findes den forespurgte subscriber.",
             "content": {
               "application/json": {
                 "schema": {
@@ -163,36 +163,133 @@
         "parameters": [
           {
             "name": "businessEventId",
+            "in": "query",
             "description": "The unique id of the eventId to get created",
-            "example": "eventId1"
+            "examples": {
+              "Ex1": {
+                "value": "eventId1"
+              }
+            }
           },
           {
             "name": "kodeId",
+            "in": "query",
             "description": "The Id to use to compare the events",
-            "example": "cpr.businessevent.A01"
+            "example": "cpr.businessevent.A01",
+            "examples": {
+              "Ex1": {
+                "value": "cpr.businessevent.A01"
+              },
+              "Ex2": {
+                "value": "cpr.businessevent.A02"
+              },
+              "Ex3": {
+                "value": "cpr.businessevent.A03"
+              },
+              "Ex4": {
+                "value": "cpr.businessevent.A04"
+              }
+            }
           },
           {
             "name": "cprList",
+            "in": "query",
             "description": "The list to use in order to filter out CPR-numbers that is not relevant to the data-consumer",
-            "example": "list01"
+            "examples": {
+              "Ex1": {
+                "value": "list01"
+              }
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den oprettede subscription ved oprettelse",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke kan oprettes en subscription.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription already exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke kan oprettes en subscription.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failed adding element"
+                    }
+                  }
+                }
+              }
             }
           }
         }
       },
       "get": {
         "summary": "Der returneres en liste over alle businesseventSubscription i datafordeleren",
-        "description": "Der returneres en liste over alle businesseventSubscription der eksistere under den bruger som laver kaldet",
+        "description": "Der returneres en liste over alle businesseventSubscription der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den oprettede subscription ved oprettelse",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
             }
+          },
+          "404": {
           }
         }
       }
@@ -223,7 +320,7 @@
       },
       "delete": {
         "summary": "Slet en subscription",
-        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link",
+        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
             "description": "",
@@ -272,8 +369,59 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den oprettede subscription ved oprettelse",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.addresschange"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke kan oprettes en subscription.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription already exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke kan oprettes en subscription.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failed adding element"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -285,7 +433,33 @@
           "200": {
             "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
             "content": {
+              "200": {
+                "description": "Denne service returnere den oprettede subscription ved oprettelse",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "businessEventId": {
+                          "type": "string",
+                          "example": "PITU_GOV_DIA_magenta_services"
+                        },
+                        "kodeId": {
+                          "type": "string",
+                          "example": "cpr.addresschange"
+                        },
+                        "cprList": {
+                          "type": "array",
+                          "example": "[]"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
+          },
+          "404": {
           }
         }
       }
@@ -403,7 +577,7 @@
       },
       "delete": {
         "summary": "Slet CPR-numre fra en CPR-liste",
-        "description": "Der slettes CPR-numre fra en CPR-liste",
+        "description": "Der slettes CPR-numre fra en CPR-liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "parameters": [
         ],
         "responses": {
@@ -501,7 +675,7 @@
       },
       "delete": {
         "summary": "Slet CPR-numre fra en CPR-liste",
-        "description": "Der slettes CPR-numre fra en CPR-liste",
+        "description": "Der slettes CPR-numre fra en CPR-liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "parameters": [
         ],
         "responses": {
