@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -17,7 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -160,7 +158,11 @@ public class ManageSubscription {
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             List<Subscriber> subscribers = query.getResultList();
             if(subscribers.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription could not be found";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.error(errorMessage, errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 Transaction transaction = session.beginTransaction();
                 Subscriber subscriber = subscribers.get(0);
@@ -186,18 +188,15 @@ public class ManageSubscription {
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
-            if(query.getResultList().size()==0) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-                Iterator<BusinessEventSubscription> subscriptions = subscriber.getBusinessEventSubscription().iterator();
-                List <BusinessEventSubscription> list = new ArrayList <BusinessEventSubscription>();
-                while(subscriptions.hasNext()) {
-                    list.add(subscriptions.next());
-                }
-                loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
-                return ResponseEntity.ok(list);
+
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            Iterator<BusinessEventSubscription> subscriptions = subscriber.getBusinessEventSubscription().iterator();
+            List <BusinessEventSubscription> list = new ArrayList <BusinessEventSubscription>();
+            while(subscriptions.hasNext()) {
+                list.add(subscriptions.next());
             }
+            loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
+            return ResponseEntity.ok(list);
         }
     }
 
@@ -214,7 +213,11 @@ public class ManageSubscription {
                 cprListQuery.setParameter("listId", cprList);
 
                 if(cprListQuery.getResultList().isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    String errorMessage = "Subscription could not be found";
+                    ObjectNode obj = objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.error(errorMessage, errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
                 } else {
                     cprListItem = (CprList) cprListQuery.getResultList().get(0);
                 }
@@ -261,7 +264,11 @@ public class ManageSubscription {
             Query subscriptionQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             subscriptionQuery.setParameter("businessEventId", businessEventId);
             if(subscriptionQuery.getResultList().isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription could not be found";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.error(errorMessage, errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
                 LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -281,7 +288,11 @@ public class ManageSubscription {
                     cprListQuery.setParameter("listId", cprList);
 
                     if(cprListQuery.getResultList().isEmpty()) {
-                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                        String errorMessage = "CprList are unknown";
+                        ObjectNode obj = objectMapper.createObjectNode();
+                        obj.put("errorMessage", errorMessage);
+                        log.error(errorMessage, errorMessage);
+                        return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
                     } else {
                         cprListItem = (CprList) cprListQuery.getResultList().get(0);
                         subscription.setCprList(cprListItem);
@@ -305,7 +316,11 @@ public class ManageSubscription {
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
             query.setParameter("subscriptionId", subscriptionId);
             if(query.getResultList().size()==0) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription could not be found";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.error(errorMessage, errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscriber = (BusinessEventSubscription) query.getResultList().get(0);
                 loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
@@ -321,7 +336,11 @@ public class ManageSubscription {
             Query query = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             query.setParameter("businessEventId", subscriptionId);
             if(query.getResultList().isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription could not be found";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.error(errorMessage, errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscription = (BusinessEventSubscription) query.getResultList().get(0);
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -356,15 +375,10 @@ public class ManageSubscription {
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-            if(query.getResultList().isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-                Iterator<DataEventSubscription> subscribtions = subscriber.getDataEventSubscription().iterator();
-                List <DataEventSubscription> list = new ArrayList <DataEventSubscription>(subscriber.getDataEventSubscription());
-                loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-                return ResponseEntity.ok(list);
-            }
+            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            List <DataEventSubscription> list = new ArrayList <DataEventSubscription>(subscriber.getDataEventSubscription());
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
+            return ResponseEntity.ok(list);
         }
     }
 
@@ -387,7 +401,11 @@ public class ManageSubscription {
                 cprListQuery.setParameter("listId", cprList);
 
                 if(cprListQuery.getResultList().isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    String errorMessage = "Subscription could not be found";
+                    ObjectNode obj = objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.error(errorMessage, errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
                 } else {
                     cprListItem = (CprList) cprListQuery.getResultList().get(0);
                 }
@@ -398,7 +416,11 @@ public class ManageSubscription {
                 cvrListQuery.setParameter("listId", cvrList);
 
                 if(cvrListQuery.getResultList().isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    String errorMessage = "CvrList are unknown";
+                    ObjectNode obj = objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.error(errorMessage, errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
                 } else {
                     cvrListItem = (CvrList) cvrListQuery.getResultList().get(0);
                 }
@@ -446,7 +468,11 @@ public class ManageSubscription {
             Query subscribtionQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             subscribtionQuery.setParameter("dataEventId", dataEventId);
             if(subscribtionQuery.getResultList().isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription could not be found";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.error(errorMessage, errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
                 LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -464,7 +490,11 @@ public class ManageSubscription {
                     cprListQuery.setParameter("listId", cprList);
 
                     if(cprListQuery.getResultList().isEmpty()) {
-                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                        String errorMessage = "CprList are unknown";
+                        ObjectNode obj = objectMapper.createObjectNode();
+                        obj.put("errorMessage", errorMessage);
+                        log.error(errorMessage, errorMessage);
+                        return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
                     } else {
                         cprListItem = (CprList) cprListQuery.getResultList().get(0);
                         subscribtion.setCprList(cprListItem);
@@ -476,7 +506,11 @@ public class ManageSubscription {
                     cvrListQuery.setParameter("listId", cvrList);
 
                     if(cvrListQuery.getResultList().isEmpty()) {
-                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                        String errorMessage = "CvrList are unknown";
+                        ObjectNode obj = objectMapper.createObjectNode();
+                        obj.put("errorMessage", errorMessage);
+                        log.error(errorMessage, errorMessage);
+                        return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
                     } else {
                         cvrListItem = (CvrList) cvrListQuery.getResultList().get(0);
                         subscribtion.setCvrList(cvrListItem);
@@ -500,7 +534,11 @@ public class ManageSubscription {
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             query.setParameter("subscribtionId", subscribtionId);
             if(query.getResultList().size()==0) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription could not be found";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.error(errorMessage, errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscriber = (DataEventSubscription) query.getResultList().get(0);
                 loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
@@ -517,7 +555,11 @@ public class ManageSubscription {
             Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             query.setParameter("dataEventId", dataEventId);
             if(query.getResultList().size()==0) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription could not be found";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.error(errorMessage, errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
 
                 DataEventSubscription subscribtion = (DataEventSubscription) query.getResultList().get(0);

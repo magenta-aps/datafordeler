@@ -102,11 +102,11 @@
     },
     "/subscription/1/manager/subscriber/{subscriberId}": {
       "get": {
-        "summary": "Hens subscriber i datafordeleren",
-        "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "summary": "Hent subscriber i datafordeleren",
+        "description": "Ved kald til servicen med en GET, hentes subscriberen. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
-            "description": "Denne service returnere den subscriber, som bliver oprettet ved kaldet, dog under forudsætning af at subscriberen kan oprettes.",
+            "description": "Denne service returnere den subscriber, som er identificeret ved det ID der kaldes med.",
             "content": {
               "application/json": {
                 "schema": {
@@ -175,7 +175,6 @@
             "name": "kodeId",
             "in": "query",
             "description": "The Id to use to compare the events",
-            "example": "cpr.businessevent.A01",
             "examples": {
               "Ex1": {
                 "value": "cpr.businessevent.A01"
@@ -262,8 +261,8 @@
         }
       },
       "get": {
-        "summary": "Der returneres en liste over alle businesseventSubscription i datafordeleren",
-        "description": "Der returneres en liste over alle businesseventSubscription der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "summary": "Returner en liste over alle businesseventSubscription i datafordeleren",
+        "description": "Der returneres en liste over alle businesseventSubscription, der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
             "description": "Denne service returnere den oprettede subscription ved oprettelse",
@@ -288,8 +287,6 @@
                 }
               }
             }
-          },
-          "404": {
           }
         }
       }
@@ -312,8 +309,43 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den modificerede subscription",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke han findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription could not be found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -323,19 +355,89 @@
         "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den slettede subscription",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke han findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription could not be found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
       },
       "get": {
-        "summary": "Hen en subscription",
+        "summary": "Hent en subscription",
         "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den fremfundne subscription",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke han findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription could not be found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
