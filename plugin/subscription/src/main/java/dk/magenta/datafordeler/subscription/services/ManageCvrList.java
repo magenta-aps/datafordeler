@@ -94,7 +94,7 @@ public class ManageCvrList {
             String errorMessage = "cvrList already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
+            log.warn(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         }  catch(Exception e) {
             String errorMessage = "Failed creating list";
@@ -135,7 +135,11 @@ public class ManageCvrList {
             query.setParameter("listId", listId);
             CvrList foundList = (CvrList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                String errorMessage = "No access to this list";
+                ObjectNode obj = this.objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.warn(errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
             List<SubscribedCvrNumber> subscribedList = foundList.getCvr().stream().filter(item -> cvrs.contains(item.getCvrNumber())).collect(Collectors.toList());
             for(SubscribedCvrNumber subscribed : subscribedList) {
@@ -163,7 +167,11 @@ public class ManageCvrList {
             query.setParameter("listId", listId);
             CvrList foundList = (CvrList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                String errorMessage = "No access to this list";
+                ObjectNode obj = this.objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.warn(errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
             JsonNode requestBody = objectMapper.readTree(request.getInputStream());
             Iterator<JsonNode> cprBodyIterator = requestBody.get("cvr").iterator();
@@ -180,8 +188,8 @@ public class ManageCvrList {
             String errorMessage = "Elements allready exists";
             ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
+            log.warn(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
@@ -217,7 +225,11 @@ public class ManageCvrList {
             query.setParameter("listId", listId);
             CvrList foundList = (CvrList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                String errorMessage = "No access to this list";
+                ObjectNode obj = this.objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.warn(errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
 
             Envelope envelope = new Envelope();

@@ -88,7 +88,7 @@ public class ManageSubscription {
             String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
+            log.warn(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         }  catch(Exception e) {
             String errorMessage = "Failed creating subscriber";
@@ -118,7 +118,7 @@ public class ManageSubscription {
             String errorMessage = "Failed creating subscriber";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
+            log.warn(errorMessage, e);
             return new ResponseEntity<>(obj.toString(), HttpStatus.CONFLICT);
         }  catch(Exception e) {
             String errorMessage = "Failed creating subscriber";
@@ -244,7 +244,7 @@ public class ManageSubscription {
             String errorMessage = "Subscription already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
+            log.warn(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         }  catch(Exception e) {
             String errorMessage = "Failed adding element";
@@ -445,7 +445,7 @@ public class ManageSubscription {
             String errorMessage = "Subscription already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
+            log.warn(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         }  catch(Exception e) {
             String errorMessage = "Failed adding element";

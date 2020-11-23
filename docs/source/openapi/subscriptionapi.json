@@ -333,7 +333,7 @@
             }
           },
           "404": {
-            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke han findes.",
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke kan findes.",
             "content": {
               "application/json": {
                 "schema": {
@@ -533,35 +533,28 @@
         "description": "Der returneres en liste over alle dataeventSubscription der eksistere under den bruger som laver kaldet",
         "responses": {
           "200": {
-            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
+            "description": "Denne service returnere den oprettede subscription ved oprettelse",
             "content": {
-              "200": {
-                "description": "Denne service returnere den oprettede subscription ved oprettelse",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "type": "object",
-                      "properties": {
-                        "businessEventId": {
-                          "type": "string",
-                          "example": "PITU_GOV_DIA_magenta_services"
-                        },
-                        "kodeId": {
-                          "type": "string",
-                          "example": "cpr.addresschange"
-                        },
-                        "cprList": {
-                          "type": "array",
-                          "example": "[]"
-                        }
-                      }
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
                     }
                   }
                 }
               }
             }
-          },
-          "404": {
           }
         }
       }
@@ -590,8 +583,43 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den modificerede subscription",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke kan findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription could not be found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -603,8 +631,43 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den slettede subscription",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke han findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription could not be found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -616,8 +679,43 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "Denne service returnere den fremfundne subscription",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "businessEventId": {
+                      "type": "string",
+                      "example": "PITU_GOV_DIA_magenta_services"
+                    },
+                    "kodeId": {
+                      "type": "string",
+                      "example": "cpr.businessevent.A01"
+                    },
+                    "cprList": {
+                      "type": "array",
+                      "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke han findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription could not be found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -633,8 +731,19 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CPR-lister",
+            "description": "Denne service returnere den fremfundne subscription",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "listId": {
+                      "type": "string",
+                      "example": "list01"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -651,8 +760,51 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CPR-lister",
+            "description": "Denne service returnere den fremfundne subscription",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "listId": {
+                      "type": "string",
+                      "example": "list01"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Denne service returnere en fejlbesked, hvis en liste med samme navn allerede er oprettet.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "cprList already exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Denne service returnere en fejlbesked, hvis en generel fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failed creating list"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -671,8 +823,67 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CPR-lister",
+            "description": "Denne service returnere besked om at elementer er tilføjet.",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Elements were added"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang til listen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Denne service returnere en fejlbesked, hvis en fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Elements allready exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Denne service returnere en fejlbesked, hvis en fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failure"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -684,8 +895,67 @@
         ],
         "responses": {
           "200": {
-            "description": "Success of failure",
+            "description": "Denne service returnere besked om at elementer er slettet",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Elements were added"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang til listen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Denne service returnere en fejlbesked, hvis en fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Elements allready exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Denne service returnere en fejlbesked, hvis en fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failure"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -714,8 +984,59 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CPR-numre",
+            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string"
+                    },
+                    "responseTimestamp": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "number"
+                    },
+                    "pageSize": {
+                      "type": "number"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["1111111111","1111111112","1111111113","1111111114"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang til listen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -769,8 +1090,67 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-lister",
+            "description": "Denne service returnere besked om at elementer er tilføjet.",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Elements were added"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang til listen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Denne service returnere en fejlbesked, hvis en fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Elements allready exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Denne service returnere en fejlbesked, hvis en fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failure"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -782,8 +1162,67 @@
         ],
         "responses": {
           "200": {
-            "description": "Success of failure",
+            "description": "Denne service returnere besked om at elementer er slettet",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Elements were added"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang til listen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Denne service returnere en fejlbesked, hvis en fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Elements allready exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Denne service returnere en fejlbesked, hvis en fejl opstår.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Failure"
+                    }
+                  }
+                }
+              }
             }
           }
         }

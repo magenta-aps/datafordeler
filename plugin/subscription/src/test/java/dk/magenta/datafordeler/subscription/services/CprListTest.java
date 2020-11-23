@@ -308,7 +308,7 @@ public class CprListTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
+        Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
         //Confirm that the CPR-list has still 6 elements
         response = restTemplate.exchange(

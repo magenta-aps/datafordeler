@@ -94,7 +94,7 @@ public class ManageCprList {
             String errorMessage = "cprList already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
+            log.warn(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         }  catch(Exception e) {
             String errorMessage = "Failed creating list";
@@ -135,7 +135,11 @@ public class ManageCprList {
             query.setParameter("listId", listId);
             CprList foundList = (CprList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                String errorMessage = "No access to this list";
+                ObjectNode obj = this.objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.warn(errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
             List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
             for(SubscribedCprNumber subscribed : subscribedList) {
@@ -162,7 +166,11 @@ public class ManageCprList {
             query.setParameter("listId", listId);
             CprList foundList = (CprList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                String errorMessage = "No access to this list";
+                ObjectNode obj = this.objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.warn(errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
             JsonNode requestBody = objectMapper.readTree(request.getInputStream());
             Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
@@ -179,8 +187,8 @@ public class ManageCprList {
             String errorMessage = "Elements allready exists";
             JSONObject obj = new JSONObject();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.NOT_ACCEPTABLE);
+            log.warn(errorMessage, e);
+            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
         } catch (Exception e) {
             String errorMessage = "Failure";
             JSONObject obj = new JSONObject();
@@ -220,7 +228,11 @@ public class ManageCprList {
             query.setParameter("listId", listId);
             CprList foundList = (CprList)query.getResultList().get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                String errorMessage = "No access to this list";
+                ObjectNode obj = this.objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.warn(errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
 
             Envelope envelope = new Envelope();
@@ -236,12 +248,4 @@ public class ManageCprList {
             return ResponseEntity.status(500).build();
         }
     }
-
-
-    private static void setHeaders(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Content-Type", "application/json; charset=utf-8");
-        response.setStatus(200);
-    }
-
 }
