@@ -107,11 +107,19 @@ public class FindCprDataEvent {
             Query eventQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
             if(eventQuery.getResultList().size()==0) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription not found";
+                ObjectNode obj = this.objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.warn(errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscribtion = (DataEventSubscription) eventQuery.getResultList().get(0);
                 if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 OffsetDateTime offsetTimestampGTE;
                 if(timestampGTE==null) {
@@ -128,7 +136,11 @@ public class FindCprDataEvent {
                 //TODO: dette skal oprettes med opsplitning i forskellige attributter med betydning
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
                 if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
 
                 PersonRecordQuery query = GeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
@@ -141,7 +153,11 @@ public class FindCprDataEvent {
 
                 query.setPageSize(pageSize);
                 if(query.getPageSize()>1000) {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 query.setPage(page);
                 List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
@@ -187,7 +203,11 @@ public class FindCprDataEvent {
                 return ResponseEntity.ok(envelope);
             }
         } catch (AccessRequiredException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            String errorMessage = "No access to this information";
+            ObjectNode obj = this.objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.warn(errorMessage);
+            return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
         } catch(Exception e) {
             log.error("Failed pulling events from subscribtion", e);
         }

@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -86,11 +87,19 @@ public class FindCprBusinessEvent {
             Query eventQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             eventQuery.setParameter("businessEventId", businessEventId);
             if(eventQuery.getResultList().isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                String errorMessage = "Subscription not found";
+                ObjectNode obj = this.objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                log.warn(errorMessage);
+                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) eventQuery.getResultList().get(0);
                 if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 String hql = "SELECT max(event.timestamp) FROM "+ PersonEventDataRecord.class.getCanonicalName()+" event ";
                 Query timestampQuery = session.createQuery(hql);
@@ -106,7 +115,11 @@ public class FindCprBusinessEvent {
                 //TODO: dette skal oprettes med opsplitning i forskellige attributter med betydning
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
                 if(!"cpr".equals(subscribtionKodeId[0]) && !"businessevent".equals(subscribtionKodeId[1])) {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
 
                 query.setEvent(subscribtionKodeId[2]);
@@ -118,7 +131,11 @@ public class FindCprBusinessEvent {
                 }
                 query.setPageSize(pageSize);
                 if(query.getPageSize()>1000) {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 query.setPage(page);
                 List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
@@ -130,7 +147,11 @@ public class FindCprBusinessEvent {
                 return ResponseEntity.ok(envelope);
             }
         } catch (AccessRequiredException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            String errorMessage = "No access to this information";
+            ObjectNode obj = this.objectMapper.createObjectNode();
+            obj.put("errorMessage", errorMessage);
+            log.warn(errorMessage);
+            return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
         } catch(Exception e) {
             log.error("Failed pulling events from subscribtion", e);
         }

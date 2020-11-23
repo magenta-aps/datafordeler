@@ -60,7 +60,7 @@ public class ManageSubscription {
      * @return
      */
     @GetMapping("/subscriber")
-    public ResponseEntity<List<Subscriber>> findAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<List<Subscriber>> findAll(HttpServletRequest request) {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             List<Subscriber> subscriptionList = QueryManager.getAllItems(session, Subscriber.class);
@@ -136,7 +136,7 @@ public class ManageSubscription {
             query.setParameter("subscriberId", subscriberId);
             List<Subscriber> subscribers = query.getResultList();
             if(subscribers.size()==0) {
-                String errorMessage = "Could not find subscriber subscriber";
+                String errorMessage = "Could not find subscriber";
                 ObjectNode obj = objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
                 return new ResponseEntity<>(obj.toString(), HttpStatus.NOT_FOUND);
@@ -204,7 +204,7 @@ public class ManageSubscription {
     public ResponseEntity businessEventSubscribtionCreate(HttpServletRequest request,
                                                           @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
                                                           @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             CprList cprListItem = null;
@@ -277,7 +277,11 @@ public class ManageSubscription {
                 BusinessEventSubscription subscription = (BusinessEventSubscription) subscriptionQuery.getResultList().get(0);
 
                 if(!subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access to this subscription";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 if(!"".equals(kodeId)) {
                     subscription.setKodeId(kodeId);
@@ -330,7 +334,7 @@ public class ManageSubscription {
     }
 
     @DeleteMapping("/subscriber/subscription/businesseventSubscription/{subscriptionId}")
-    public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
@@ -354,7 +358,11 @@ public class ManageSubscription {
                     return ResponseEntity.ok(subscription);
                 } else {
                     transaction.rollback();
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access to this subscription";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
             }
         } catch (Exception e) {
@@ -389,7 +397,7 @@ public class ManageSubscription {
                                                       @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
                                                       @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
                                                       @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
-                                                      @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+                                                      @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -479,7 +487,11 @@ public class ManageSubscription {
                 loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
                 DataEventSubscription subscribtion = (DataEventSubscription) subscribtionQuery.getResultList().get(0);
                 if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access to this subscription";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 if(!"".equals(kodeId)) {
                     subscribtion.setKodeId(kodeId);
@@ -548,7 +560,7 @@ public class ManageSubscription {
     }
 
     @DeleteMapping("/subscriber/subscription/dataeventSubscription/{dataEventId}")
-    public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
@@ -575,7 +587,11 @@ public class ManageSubscription {
                     return ResponseEntity.ok(subscribtion);
                 } else {
                     transaction.rollback();
-                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                    String errorMessage = "No access to this subscription";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
             }
         } catch (Exception e) {

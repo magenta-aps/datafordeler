@@ -146,7 +146,7 @@
                   "properties": {
                     "errorMessage": {
                       "type": "string",
-                      "example": "Failed creating subscriber"
+                      "example": "Could not find subscriber"
                     }
                   }
                 }
@@ -269,19 +269,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "businessEventId": {
-                      "type": "string",
-                      "example": "PITU_GOV_DIA_magenta_services"
-                    },
-                    "kodeId": {
-                      "type": "string",
-                      "example": "cpr.businessevent.A01"
-                    },
-                    "cprList": {
-                      "type": "array",
-                      "example": "[]"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "businessEventId": {
+                        "type": "string",
+                        "example": "PITU_GOV_DIA_magenta_services"
+                      },
+                      "kodeId": {
+                        "type": "string",
+                        "example": "cpr.businessevent.A01"
+                      },
+                      "cprList": {
+                        "type": "array",
+                        "example": "[]"
+                      }
                     }
                   }
                 }
@@ -332,6 +335,22 @@
               }
             }
           },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang denne subscription",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
             "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke kan findes.",
             "content": {
@@ -372,6 +391,22 @@
                     "cprList": {
                       "type": "array",
                       "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang denne subscription",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
                     }
                   }
                 }
@@ -483,7 +518,7 @@
                     },
                     "kodeId": {
                       "type": "string",
-                      "example": "cpr.addresschange"
+                      "example": "cpr.dataevent.cvr_record_address"
                     },
                     "cprList": {
                       "type": "array",
@@ -537,19 +572,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "businessEventId": {
-                      "type": "string",
-                      "example": "PITU_GOV_DIA_magenta_services"
-                    },
-                    "kodeId": {
-                      "type": "string",
-                      "example": "cpr.businessevent.A01"
-                    },
-                    "cprList": {
-                      "type": "array",
-                      "example": "[]"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "businessEventId": {
+                        "type": "string",
+                        "example": "PITU_GOV_DIA_magenta_services"
+                      },
+                      "kodeId": {
+                        "type": "string",
+                        "example": "cpr.dataevent.cvr_record_address"
+                      },
+                      "cprList": {
+                        "type": "array",
+                        "example": "[]"
+                      }
                     }
                   }
                 }
@@ -606,6 +644,22 @@
               }
             }
           },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang denne subscription",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "404": {
             "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke kan findes.",
             "content": {
@@ -648,6 +702,22 @@
                     "cprList": {
                       "type": "array",
                       "example": "[]"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang denne subscription",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
                     }
                   }
                 }
@@ -731,17 +801,12 @@
         ],
         "responses": {
           "200": {
-            "description": "Denne service returnere den fremfundne subscription",
+            "description": "Denne service returnere en liste over alle CPR-lister",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "listId": {
-                      "type": "string",
-                      "example": "list01"
-                    }
-                  }
+                  "type": "array",
+                  "example": "[{\n  \"listId\": \"list01\",\n  \"listId\": list01\n}]"
                 }
               }
             }
@@ -984,7 +1049,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over virksomheder, som har den forespurgte virksomhedsformkode, og hvor der er sket ændringer siden det forespurgte tidspunkt",
+            "description": "Liste over personer, som er oprettet under den forespurgte liste",
             "content": {
               "application/json": {
                 "schema": {
@@ -1052,8 +1117,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-lister",
+            "description": "Denne service returnere en liste over alle CVR-lister",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": "[{\n  \"listId\": \"list01\",\n  \"listId\": list01\n}]"
+                }
+              }
             }
           }
         }
@@ -1070,8 +1141,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-lister",
+            "description": "Denne service returnere en liste over alle CPR-lister",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "example": "[{\n  \"listId\": \"list01\",\n  \"listId\": list01\n}]"
+                }
+              }
             }
           }
         }
@@ -1251,8 +1328,59 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-numre",
+            "description": "Liste over personer, som er oprettet under den forespurgte liste",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string"
+                    },
+                    "responseTimestamp": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "number"
+                    },
+                    "pageSize": {
+                      "type": "number"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["11111111","11111112","11111113","11111114"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis brugeren ikke har adgang til listen",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access to this list"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -1291,8 +1419,78 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-lister",
+            "description": "Liste over CVR-numre hvor der er sket ændringer i forhold til reglerne defineret i abonnementet",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string"
+                    },
+                    "responseTimestamp": {
+                      "type": "string"
+                    },
+                    "newestResultTimestamp": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "number"
+                    },
+                    "pageSize": {
+                      "type": "number"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["11111111","11111112","11111113","11111114"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke er oprettet adgang",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis denne subscription ikke kan findes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription not found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -1331,8 +1529,78 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-lister",
+            "description": "Liste over CVR-numre hvor der er sket ændringer i forhold til reglerne defineret i abonnementet",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string"
+                    },
+                    "responseTimestamp": {
+                      "type": "string"
+                    },
+                    "newestResultTimestamp": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "number"
+                    },
+                    "pageSize": {
+                      "type": "number"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["11111111","11111112","11111113","11111114"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke er oprettet adgang",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis denne subscription ikke kan findes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription not found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -1371,8 +1639,78 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CVR-lister",
+            "description": "Liste over CVR-numre hvor der er sket ændringer i forhold til reglerne defineret i abonnementet",
             "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string"
+                    },
+                    "responseTimestamp": {
+                      "type": "string"
+                    },
+                    "newestResultTimestamp": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "number"
+                    },
+                    "pageSize": {
+                      "type": "number"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["11111111","11111112","11111113","11111114"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Denne service returnere en fejlbesked, hvis der ikke er oprettet adgang",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "No access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis denne subscription ikke kan findes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Subscription not found"
+                    }
+                  }
+                }
+              }
             }
           }
         }
