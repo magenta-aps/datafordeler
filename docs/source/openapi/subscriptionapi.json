@@ -3,6 +3,8 @@
   "info": {
     "title": "Datafordeler - abonnementsløsning",
     "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere der har brug for at trække data fra datafordeleren, sekundært Selvstyrets og Digitaliseringsstyrelsens medarbejdere med relation til ERP-projektet. For at få adgang til datafordelerens abonnementsløsning skal brugeren oprettes i Pitu. Der refereres i dette dokument til dafo-serverens endpoint, der findes tilsvarende for testmiljø og demomiljø",
+    "href": "./handelseskoder.pdf",
+    "url": "http://petstore.swagger.wordnik.com/oauth/requestToken",
     "version": "1.0.0"
   },
   "servers": [
@@ -164,7 +166,7 @@
           {
             "name": "businessEventId",
             "in": "query",
-            "description": "The unique id of the eventId to get created",
+            "description": "Det unikke ID på den subscription, som skal oprettes",
             "examples": {
               "Ex1": {
                 "value": "eventId1"
@@ -174,19 +176,23 @@
           {
             "name": "kodeId",
             "in": "query",
-            "description": "The Id to use to compare the events",
+            "description": "kodeId benyttes som sammenligning for at identificere om ændringer i datafordeleren matcher den oprettede subscription \n\nKodeId består af 3 dele for businessevents:\n\npart 1: Definere hvilket domæne der observeres på cpr/cvr\n\nPart 2: Definere om der observeres på hændelser af typen businessevent eller dataevent\n\nPart 3: Definere i denne situation hvilket businessevent der observeres på. Businessevents er defineret på dette link: https://doc.test.data.gl/handelseskoder.pdf",
+            "href": "/handelseskoder.pdf",
             "examples": {
-              "Ex1": {
+              "Hvad som helst": {
+                "value": "cpr.businessevent.anything"
+              },
+              "Flytning": {
                 "value": "cpr.businessevent.A01"
               },
-              "Ex2": {
-                "value": "cpr.businessevent.A02"
+              "Navneændring": {
+                "value": "cpr.businessevent.A13"
               },
-              "Ex3": {
-                "value": "cpr.businessevent.A03"
+              "Vielse": {
+                "value": "cpr.businessevent.A19"
               },
-              "Ex4": {
-                "value": "cpr.businessevent.A04"
+              "Dødsfald": {
+                "value": "cpr.businessevent.A21"
               }
             }
           },
@@ -301,8 +307,26 @@
         "parameters": [
           {
             "name": "kodeId",
-            "description": "The Id to use to compare the events",
-            "example": "cpr.businessevent.A01"
+            "in": "query",
+            "description": "kodeId benyttes som sammenligning for at identificere om ændringer i datafordeleren matcher den oprettede subscription \n\nKodeId består af 3 dele for businessevents:\n\npart 1: Definere hvilket domæne der observeres på cpr/cvr\n\nPart 2: Definere om der observeres på hændelser af typen businessevent eller dataevent\n\nPart 3: Definere i denne situation hvilket businessevent der observeres på. Businessevents er defineret på dette link: https://doc.test.data.gl/handelseskoder.pdf",
+            "href": "/handelseskoder.pdf",
+            "examples": {
+              "Hvad som helst": {
+                "value": "cpr.businessevent.anything"
+              },
+              "Flytning": {
+                "value": "cpr.businessevent.A01"
+              },
+              "Navneændring": {
+                "value": "cpr.businessevent.A13"
+              },
+              "Vielse": {
+                "value": "cpr.businessevent.A19"
+              },
+              "Dødsfald": {
+                "value": "cpr.businessevent.A21"
+              }
+            }
           },
           {
             "name": "cprList",
@@ -490,8 +514,28 @@
           },
           {
             "name": "kodeId",
-            "description": "The Id to use to compare the events",
-            "example": "cpr.dataevent.cpr_person_address_record"
+            "in": "query",
+            "description": "kodeId benyttes som sammenligning for at identificere om ændringer i datafordeleren matcher den oprettede subscription \n\nKodeId består af 5 dele for dataevents:\n\npart 1: Definere hvilket domæne der observeres på cpr/cvr\n\nPart 2: Definere om der observeres på hændelser af typen businessevent eller dataevent\n\nPart 3: Definere i denne situation hvilket dataevent der observeres på. \n\nPart 4: before/after\n\nPart 5: Custom logik aftalt mellem leverandør og kunde",
+            "examples": {
+              "hvad som helst": {
+                "value": "cpr.dataevent.anything"
+              },
+              "adresse": {
+                "value": "cpr.dataevent.cpr_person_address_record"
+              },
+              "civilstatus": {
+                "value": "cpr.dataevent.cpr_person_civilstatus_record"
+              },
+              "navn": {
+                "value": "cpr.dataevent.cpr_person_name_record"
+              },
+              "status": {
+                "value": "cpr.cpr_person_status_record"
+              },
+              "kommuneskift": {
+                "value": "cpr.cpr_person_movemunicipality_record"
+              }
+            }
           },
           {
             "name": "cprList",
@@ -598,15 +642,34 @@
       }
     },
     "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}": {
-
       "put": {
         "summary": "Modificer en subscription",
         "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}",
         "parameters": [
           {
             "name": "kodeId",
-            "description": "The Id to use to compare the events",
-            "example": "cpr.dataevent.cpr_person_address_record"
+            "in": "query",
+            "description": "kodeId benyttes som sammenligning for at identificere om ændringer i datafordeleren matcher den oprettede subscription \n\nKodeId består af 5 dele for dataevents:\n\npart 1: Definere hvilket domæne der observeres på cpr/cvr\n\nPart 2: Definere om der observeres på hændelser af typen businessevent eller dataevent\n\nPart 3: Definere i denne situation hvilket dataevent der observeres på. \n\nPart 4: before/after\n\nPart 5: Custom logik aftalt mellem leverandør og kunde",
+            "examples": {
+              "hvad som helst": {
+                "value": "cpr.dataevent.anything"
+              },
+              "adresse": {
+                "value": "cpr.dataevent.cpr_person_address_record"
+              },
+              "civilstatus": {
+                "value": "cpr.dataevent.cpr_person_civilstatus_record"
+              },
+              "navn": {
+                "value": "cpr.dataevent.cpr_person_name_record"
+              },
+              "status": {
+                "value": "cpr.cpr_person_status_record"
+              },
+              "kommuneskift": {
+                "value": "cpr.cpr_person_movemunicipality_record"
+              }
+            }
           },
           {
             "name": "cprList",
