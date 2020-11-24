@@ -14,7 +14,7 @@
     "/subscription/1/manager/subscriber": {
       "post": {
         "summary": "Administration af subscribers i datafordeleren",
-        "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Ved kald til servicen med en POST, oprettes en subscriber tilknyttet den bruger som laver kaldet. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber",
         "responses": {
           "200": {
             "description": "Denne service returnere den subscriber, som bliver oprettet ved kaldet, dog under forudsætning af at subscribers kan oprettes.",
@@ -84,7 +84,7 @@
       },
       "get": {
         "summary": "Der returneres en liste over alle subscribers i datafordeleren",
-        "description": "Der returneres en liste over alle subscribers i datafordeleren.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der returneres en liste over alle subscribers i datafordeleren.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber",
         "responses": {
           "200": {
             "description": "Denne service returnere den subscriber, som bliver oprettet ved kaldet, dog under forudsætning af at subscribers kan oprettes.",
@@ -103,7 +103,7 @@
     "/subscription/1/manager/subscriber/{subscriberId}": {
       "get": {
         "summary": "Hent subscriber i datafordeleren",
-        "description": "Ved kald til servicen med en GET, hentes subscribers. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Ved kald til servicen med en GET, hentes subscribers. Der kan kun eksistere en subscriber, så efterfølgende kald via POST til denne service medfører en fejl.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/{subscriberId}",
         "responses": {
           "200": {
             "description": "Denne service returnere den subscriber, som er identificeret ved det ID der kaldes med.",
@@ -159,7 +159,7 @@
     "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion": {
       "post": {
         "summary": "Opret en subscription",
-        "description": "Der oprettes en businesseventSubscribtion i datafordeleren via en post til denne url. Denne subscription bliver tilknyttet den bruger, som opretter denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der oprettes en businesseventSubscribtion i datafordeleren via en post til denne url. Denne subscription bliver tilknyttet den bruger, som opretter denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion",
         "parameters": [
           {
             "name": "businessEventId",
@@ -262,7 +262,7 @@
       },
       "get": {
         "summary": "Returner en liste over alle businesseventSubscription i datafordeleren",
-        "description": "Der returneres en liste over alle businesseventSubscription, der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der returneres en liste over alle businesseventSubscription, der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion",
         "responses": {
           "200": {
             "description": "Denne service returnere en liste af subscriptions",
@@ -297,7 +297,7 @@
     "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}": {
       "put": {
         "summary": "Modificer en subscription",
-        "description": "Der rettes en businesseventSubscribtion i datafordeleren via en put til denne url. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der rettes en businesseventSubscribtion i datafordeleren via en put til denne url. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}",
         "parameters": [
           {
             "name": "kodeId",
@@ -371,7 +371,7 @@
       },
       "delete": {
         "summary": "Slet en subscription",
-        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}",
         "responses": {
           "200": {
             "description": "Denne service returnere den slettede subscription",
@@ -433,7 +433,7 @@
       },
       "get": {
         "summary": "Hent en subscription",
-        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}",
         "responses": {
           "200": {
             "description": "Denne service returnere den fremfundne subscription",
@@ -481,7 +481,7 @@
     "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion": {
       "post": {
         "summary": "Opret en subscription",
-        "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion",
         "parameters": [
           {
             "name": "businessEventId",
@@ -565,7 +565,7 @@
       },
       "get": {
         "summary": "Der returneres en liste over alle dataeventSubscription i datafordeleren",
-        "description": "Der returneres en liste over alle dataeventSubscription der eksistere under den bruger som laver kaldet",
+        "description": "Der returneres en liste over alle dataeventSubscription der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion",
         "responses": {
           "200": {
             "description": "Denne service returnere en liste af subscriptions",
@@ -601,7 +601,7 @@
 
       "put": {
         "summary": "Modificer en subscription",
-        "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}",
         "parameters": [
           {
             "name": "kodeId",
@@ -680,7 +680,7 @@
       },
       "delete": {
         "summary": "Slet en subscription",
-        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}",
         "parameters": [
         ],
         "responses": {
@@ -744,7 +744,7 @@
       },
       "get": {
         "summary": "Hent en subscription",
-        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}",
         "parameters": [
         ],
         "responses": {
@@ -794,7 +794,7 @@
     "/subscription/1/manager/subscriber/cprList": {
       "get": {
         "summary": "Hent en liste over alle CPR-lister",
-        "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cprList",
         "responses": {
           "200": {
             "description": "Denne service returnere en liste over alle CPR-lister",
@@ -811,7 +811,7 @@
       },
       "post": {
         "summary": "Opret en CPR-liste i datafordeleren",
-        "description": "CPR-listen kan benyttes af en subscription for filtrering i hvilke CPR-numre der skal informeres om ændringer på.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "CPR-listen kan benyttes af en subscription for filtrering i hvilke CPR-numre der skal informeres om ændringer på.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cprList",
         "parameters": [
           {
             "name": "cprList",
@@ -873,7 +873,7 @@
     "/subscription/1/manager/subscriber/cprList/cpr/{listId}": {
       "post": {
         "summary": "Tilføj CPR-numre til en CPR-liste",
-        "description": "Der kan tilføjes CPR-numre til en liste, CPR-numrene kan enten tilføjes en af gangen eller som en liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der kan tilføjes CPR-numre til en liste, CPR-numrene kan enten tilføjes en af gangen eller som en liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cprList/cpr/{listId}",
         "parameters": [
           {
             "in": "body",
@@ -958,7 +958,7 @@
       },
       "delete": {
         "summary": "Slet CPR-numre fra en CPR-liste",
-        "description": "Der slettes CPR-numre fra en CPR-liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der slettes CPR-numre fra en CPR-liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cprList/cpr/{listId}",
         "parameters": [
         ],
         "responses": {
@@ -1032,7 +1032,7 @@
     "/subscription/1/manager/subscriber/cprList/cpr": {
       "get": {
         "summary": "Hent en liste over alle CPR-numre, der er tilføjet til denne CPR-liste",
-        "description": "Hent en liste over alle CPR-numre, der er tilføjet til denne CPR-liste. Listen af CPR-numre returneres med pagination.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Hent en liste over alle CPR-numre, der er tilføjet til denne CPR-liste. Listen af CPR-numre returneres med pagination.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cprList/cpr",
         "parameters": [
           {
             "name": "pageSize",
@@ -1113,7 +1113,7 @@
     "/subscription/1/manager/subscriber/cvrList": {
       "get": {
         "summary": "Hent en liste over alle CPR-lister",
-        "description": "Der returneres en liste over alle CVR-lister til brug for subscriptions i datafordeleren.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der returneres en liste over alle CVR-lister til brug for subscriptions i datafordeleren.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cvrList",
         "responses": {
           "200": {
             "description": "Denne service returnere en liste over alle CVR-lister",
@@ -1130,7 +1130,7 @@
       },
       "post": {
         "summary": "Opret en CVR-liste i datafordeleren",
-        "description": "CPR-listen kan benyttes af en subscription for filtrering i hvilke CPR-numre der skal informeres om ændringer på.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "CPR-listen kan benyttes af en subscription for filtrering i hvilke CPR-numre der skal informeres om ændringer på.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cvrList",
         "parameters": [
           {
             "name": "cvrList",
@@ -1156,7 +1156,7 @@
     "/subscription/1/manager/subscriber/cvrList/cvr/{listId}": {
       "post": {
         "summary": "Tilføj CVR-numre til en CVR-liste",
-        "description": "Der kan tilføjes CVR-numre til en liste, CVR-numrene kan enten tilføjes en af gangen eller som en liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der kan tilføjes CVR-numre til en liste, CVR-numrene kan enten tilføjes en af gangen eller som en liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cvrList/cvr/{listId}",
         "parameters": [
           {
             "in": "body",
@@ -1241,7 +1241,7 @@
       },
       "delete": {
         "summary": "Slet CPR-numre fra en CPR-liste",
-        "description": "Der slettes CPR-numre fra en CPR-liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der slettes CPR-numre fra en CPR-liste.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cvrList/cvr/{listId}",
         "parameters": [
         ],
         "responses": {
@@ -1315,7 +1315,7 @@
     "/subscription/1/manager/subscriber/cvrList/cvr": {
       "get": {
         "summary": "Hent en liste over alle CVR-numre, der er tilføjet til denne CVR-liste",
-        "description": "Hent en liste over alle CVR-numre, der er tilføjet til denne CVR-liste. Listen af CVR-numre returneres med pagination.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Hent en liste over alle CVR-numre, der er tilføjet til denne CVR-liste. Listen af CVR-numre returneres med pagination.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/cvrList/cvr",
         "parameters": [
           {
             "name": "pageSize",
@@ -1396,7 +1396,7 @@
     "/subscription/1/findCprBusinessEvent/fetchEvents/": {
       "get": {
         "summary": "Hent en liste over alle ændringer, som i sket i forhold til det oprettede abonnement",
-        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde businessevents, som er sket på CPR-numre.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde businessevents, som er sket på CPR-numre.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/findCprBusinessEvent/fetchEvents/",
         "parameters": [
           {
             "name": "pageSize",
@@ -1506,7 +1506,7 @@
     "/subscription/1/findCprDataEvent/fetchEvents/": {
       "get": {
         "summary": "Hent en liste over alle ændringer, som i sket i forhold til det oprettede abonnement",
-        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde dataevents, som er sket på CPR-numre.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde dataevents, som er sket på CPR-numre.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/findCprDataEvent/fetchEvents/",
         "parameters": [
           {
             "name": "pageSize",
@@ -1616,7 +1616,7 @@
     "/subscription/1/findCvrDataEvent/fetchEvents/": {
       "get": {
         "summary": "Hent en liste over alle ændringer, som i sket i forhold til det oprettede abonnement",
-        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde dataevents, som er sket på CVR-numre.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "description": "Der returneres en liste over alle CPR-numre i en liste. Denne service er dedikeret til at finde dataevents, som er sket på CVR-numre.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/findCvrDataEvent/fetchEvents/",
         "parameters": [
           {
             "name": "pageSize",
