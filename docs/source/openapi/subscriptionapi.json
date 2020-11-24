@@ -265,7 +265,7 @@
         "description": "Der returneres en liste over alle businesseventSubscription, der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "responses": {
           "200": {
-            "description": "Denne service returnere den oprettede subscription ved oprettelse",
+            "description": "Denne service returnere en liste af subscriptions",
             "content": {
               "application/json": {
                 "schema": {
@@ -568,7 +568,7 @@
         "description": "Der returneres en liste over alle dataeventSubscription der eksistere under den bruger som laver kaldet",
         "responses": {
           "200": {
-            "description": "Denne service returnere den oprettede subscription ved oprettelse",
+            "description": "Denne service returnere en liste af subscriptions",
             "content": {
               "application/json": {
                 "schema": {
@@ -743,7 +743,7 @@
         }
       },
       "get": {
-        "summary": "Hen en subscription",
+        "summary": "Hent en subscription",
         "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
         "parameters": [
         ],
@@ -795,10 +795,6 @@
       "get": {
         "summary": "Hent en liste over alle CPR-lister",
         "description": "Der returneres en liste over alle CPR-lister til brug for subscriptions i datafordeleren.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
-        "parameters": [
-          {
-          }
-        ],
         "responses": {
           "200": {
             "description": "Denne service returnere en liste over alle CPR-lister",
@@ -806,7 +802,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "example": "[{\n  \"listId\": \"list01\",\n  \"listId\": list01\n}]"
+                  "example": "[\n{\n  \"listId\": \"list01\"\n  },\n  {\n  \"listId\": list01\n}\n]"
                 }
               }
             }
@@ -820,7 +816,6 @@
           {
             "name": "cprList",
             "description": "The unique id of the list to get created",
-            "example": "listId1"
           }
         ],
         "responses": {
@@ -833,7 +828,7 @@
                   "properties": {
                     "listId": {
                       "type": "string",
-                      "example": "list01"
+                      "example": "{\n  \"listId\": \"list01\",\n  \"listId\": list01\n}"
                     }
                   }
                 }
@@ -1122,7 +1117,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "example": "[{\n  \"listId\": \"list01\",\n  \"listId\": list01\n}]"
+                  "example": "[\n{\n  \"listId\": \"list01\"\n  },\n  {\n  \"listId\": list01\n}\n]"
                 }
               }
             }
@@ -1146,7 +1141,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "example": "[{\n  \"listId\": \"list01\",\n  \"listId\": list01\n}]"
+                  "example": "{\n  \"listId\": \"list01\",\n  \"listId\": list01\n}"
                 }
               }
             }
