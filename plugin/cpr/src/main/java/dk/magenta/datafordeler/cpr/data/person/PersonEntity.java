@@ -979,9 +979,11 @@ public class PersonEntity extends CprRecordEntity {
                     oldItem.setUndone(true);
                     session.saveOrUpdate(oldItem);
                     if(oldItem.getClosesRecordId()!=null) {
-                        CprBitemporalRecord it = items.stream().filter(item -> oldItem.getClosesRecordId().equals(item.getId())).findFirst().get();
-                        it.setRegistrationTo(null);
-                        session.saveOrUpdate(it);
+                        CprBitemporalRecord it = items.stream().filter(item -> oldItem.getClosesRecordId().equals(item.getId())).findFirst().orElse(null);
+                        if(it!=null) {
+                            it.setRegistrationTo(null);
+                            session.saveOrUpdate(it);
+                        }
                     }
                     return false;
                 }
@@ -1115,7 +1117,9 @@ public class PersonEntity extends CprRecordEntity {
                         !(newItem instanceof ProtectionDataRecord)) {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
-                    newItem.setClosesRecordId(correctedRecord.getId());
+                    if(correctedRecord.getId()!=null) {
+                        newItem.setClosesRecordId(correctedRecord.getId());
+                    }
                 }
 
                 return set.add((E) newItem);
