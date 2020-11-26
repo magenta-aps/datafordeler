@@ -170,6 +170,18 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
         return this;
     }
 
+    public Long getClosesRecordId() {
+        return closesRecordId;
+    }
+
+    public void setClosesRecordId(Long closesRecordId) {
+        this.closesRecordId = closesRecordId;
+    }
+
+    @Transient
+    private long closesRecordId;
+
+
 
 
     public CprBitemporalRecord setBitemporality(OffsetDateTime registrationFrom, OffsetDateTime registrationTo, OffsetDateTime effectFrom, boolean effectFromUncertain, OffsetDateTime effectTo, boolean effectToUncertain) {

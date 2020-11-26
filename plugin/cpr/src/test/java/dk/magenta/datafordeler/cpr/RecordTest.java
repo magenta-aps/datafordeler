@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -325,8 +326,12 @@ public class RecordTest {
     public void testPersonWithUndoneNewAddress() throws DataFordelerException, IOException {
         Session session = sessionManager.getSessionFactory().openSession();
         ImportMetadata importMetadata = new ImportMetadata();
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
         importMetadata.setSession(session);
-        this.loadPerson("/undoneNewAdress.txt", importMetadata);
+        this.loadPerson("/undoneNewAdress1.txt", importMetadata);
+        this.loadPerson("/undoneNewAdress2.txt", importMetadata);
+        transaction.commit();
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
