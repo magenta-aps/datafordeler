@@ -7,7 +7,6 @@ import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
@@ -34,8 +33,8 @@ public class CompanyRecordQuery extends BaseQuery {
     public static final String ETAGE = AddressRecord.IO_FIELD_FLOOR;
     public static final String DOOR = AddressRecord.IO_FIELD_DOOR;
     public static final String LASTUPDATED = CvrBitemporalRecord.IO_FIELD_LAST_UPDATED;
-    public static final String COMPANYDATAEVENT = PersonDataEventDataRecord.DB_FIELD_FIELD;
-    public static final String COMPANYDATAEVENTTIME = PersonDataEventDataRecord.DB_FIELD_TIMESTAMP;
+    public static final String COMPANYDATAEVENT = CompanyDataEventRecord.DB_FIELD_FIELD;
+    public static final String COMPANYDATAEVENTTIME = CompanyDataEventRecord.DB_FIELD_TIMESTAMP;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CVRNUMMER)
     private List<String> cvrNumre = new ArrayList<>();
