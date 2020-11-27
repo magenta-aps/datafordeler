@@ -161,7 +161,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public static final String DB_FIELD_CLOSES_RECORD = "closesRecord";
     public static final String IO_FIELD_CLOSES_RECORD = "closesRecord";
     @Column(name = DB_FIELD_CLOSES_RECORD)
-    private Long closesRecordId;
+    private Long closesRecordId = null;
 
     /**
      * Set information about the Id of the record that this record closes.
