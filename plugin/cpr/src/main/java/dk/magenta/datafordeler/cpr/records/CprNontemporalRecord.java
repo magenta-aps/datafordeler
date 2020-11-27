@@ -158,6 +158,25 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
         this.undone = undone != null ? undone : false;
     }
 
+    public static final String DB_FIELD_CLOSES_RECORD = "closesRecord";
+    public static final String IO_FIELD_CLOSES_RECORD = "closesRecord";
+    @Column(name = DB_FIELD_CLOSES_RECORD)
+    private Long closesRecordId;
+
+    /**
+     * Set information about the Id of the record that this record closes.
+     * If for instance a person gets a new address then the timeinterval of the former address is closed.
+     * If later the address is revoked, then it is necessary to reopen the record which has been closed
+     * @param closesRecordId
+     */
+    public void setClosesRecordId(Long closesRecordId) {
+        this.closesRecordId = closesRecordId;
+    }
+
+    public Long getClosesRecordId() {
+        return closesRecordId;
+    }
+
 
 
     public static final String DB_FIELD_AUTHORITY = "authority";
