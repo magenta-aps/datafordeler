@@ -174,6 +174,12 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
         return closesRecordId;
     }
 
+    /**
+     * Set information about the Id of the record that this record closes.
+     * If for instance a person gets a new address then the timeinterval of the former address is closed.
+     * If later the address is revoked, then it is necessary to reopen the record which has been closed
+     * @param closesRecordId
+     */
     public void setClosesRecordId(Long closesRecordId) {
         this.closesRecordId = closesRecordId;
     }
