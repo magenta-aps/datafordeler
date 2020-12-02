@@ -4,7 +4,6 @@ import dk.magenta.datafordeler.core.testutil.OrderedRunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.CronExpression;
@@ -50,7 +49,7 @@ public class MonitorTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Test
+    //@Test
     public void testError() {
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> response = this.restTemplate.exchange("/monitor/errors", HttpMethod.GET, httpEntity, String.class);

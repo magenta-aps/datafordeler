@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
-import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @javax.persistence.Entity

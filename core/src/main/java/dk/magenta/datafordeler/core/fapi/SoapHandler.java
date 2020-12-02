@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Deprecated
 public class SoapHandler implements SOAPHandler<SOAPMessageContext> {
 
     @Override

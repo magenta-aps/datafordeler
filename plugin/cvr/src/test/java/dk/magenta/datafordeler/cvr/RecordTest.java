@@ -35,6 +35,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -44,10 +45,13 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class RecordTest {
 
     @Autowired
@@ -914,4 +918,34 @@ public class RecordTest {
 
         }
     }
+
+    @SpyBean
+    private DirectLookup directLookup;
+
+    @Test
+    public void testEnrich() throws IOException, DataFordelerException {
+        loadParticipant("/person.json");
+        ParticipantRecordQuery query = new ParticipantRecordQuery();
+        query.setNavn("Morten*");
+        Session session = sessionManager.getSessionFactory().openSession();
+        List<ParticipantRecord> records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
+        session.close();
+        Assert.assertEquals(1, records.size());
+        ParticipantRecord record = records.get(0);
+        Assert.assertEquals(null, record.getBusinessKey());
+        ParticipantRecord mockParticipant = new ParticipantRecord();
+        mockParticipant.setBusinessKey(1234567890L);
+        doReturn(mockParticipant).when(directLookup).participantLookup(anyString());
+
+        loadParticipant("/person.json");
+        session = sessionManager.getSessionFactory().openSession();
+        records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
+        Assert.assertEquals(1, records.size());
+        record = records.get(0);
+        Assert.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
+        session.close();
+    }
+
+
+
 }

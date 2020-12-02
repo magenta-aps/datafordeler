@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.plugindemo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.PluginManager;
-import dk.magenta.datafordeler.core.database.EntityReference;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.Event;
@@ -11,7 +10,6 @@ import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.PluginSourceData;
 import dk.magenta.datafordeler.core.plugin.*;
 import dk.magenta.datafordeler.core.util.ItemInputStream;
-import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.plugindemo.configuration.DemoConfigurationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,11 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.UUID;
 
 @Component
@@ -139,11 +134,6 @@ public class DemoRegisterManager extends RegisterManager {
         return expandBaseURI(this.getBaseEndpoint(), "/getNewEvents");
     }
 
-    @Override
-    public boolean pullsEventsCommonly() {
-        return false;
-    }
-
     public ItemInputStream<? extends PluginSourceData> pullEvents(ImportMetadata importMetadata) throws DataFordelerException {
         return this.pullEvents(this.getEventInterface(null), null, importMetadata);
     }
@@ -155,34 +145,6 @@ public class DemoRegisterManager extends RegisterManager {
 
     public String getPullCronSchedule() {
         return this.configurationManager.getConfiguration().getPullCronSchedule();
-    }
-
-    /* listChecksums */
-
-    @Override
-    protected Communicator getChecksumFetcher() {
-        return this.commonFetcher;
-    }
-
-    public URI getListChecksumInterface(String schema, OffsetDateTime from) {
-        ListHashMap<String, String> parameters = new ListHashMap<>();
-        if (schema != null) {
-            parameters.add("objectType", schema);
-        }
-        if (from != null) {
-            parameters.add("timestamp", from.format(DateTimeFormatter.ISO_DATE_TIME));
-        }
-        return expandBaseURI(this.getBaseEndpoint(), "/listChecksums", RegisterManager.joinQueryString(parameters), null);
-    }
-
-    @Override
-    protected ItemInputStream<EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        //responseContent = this.printStream(responseContent); // Just for printing, can be omitted
-        HashMap<String, Class<? extends EntityReference>> classMap = new HashMap<>();
-        for (EntityManager entityManager : this.entityManagers) {
-            classMap.put(entityManager.getSchema(), entityManager.getManagedEntityReferenceClass());
-        }
-        return ItemInputStream.parseJsonStream(responseContent, classMap, "items", "type", this.objectMapper);
     }
 
     @Override

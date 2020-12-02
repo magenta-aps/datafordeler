@@ -6,7 +6,6 @@ import dk.magenta.datafordeler.core.exception.ParseException;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprDataRecord;
-import dk.magenta.datafordeler.cpr.records.road.data.CprBitemporalRoadRecord;
 
 import java.util.ArrayList;
 import java.util.HashSet;

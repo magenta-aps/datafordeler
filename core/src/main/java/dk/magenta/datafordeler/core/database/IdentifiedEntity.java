@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.core.database;
 
-import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import org.hibernate.Session;
 

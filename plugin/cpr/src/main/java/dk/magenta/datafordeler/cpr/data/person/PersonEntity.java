@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.util.FixedQueueMap;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
+import dk.magenta.datafordeler.cpr.records.BitemporalSet;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprMonotemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
@@ -31,7 +32,6 @@ import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * An Entity representing a person. Bitemporal data is structured as
@@ -276,6 +276,51 @@ public class PersonEntity extends CprRecordEntity {
     public Set<ChurchVerificationDataRecord> getChurchRelationVerification() {
         return this.churchRelationVerification;
     }
+
+    public static final String DB_FIELD_CHILDREN = "children";
+    public static final String IO_FIELD_CHILDREN = "born";
+    @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @Filters({
+            @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
+            @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),
+            @Filter(name = Bitemporal.FILTER_EFFECTTO_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTTO_AFTER),
+            @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_AFTER),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
+    })
+    @JsonProperty(IO_FIELD_CHILDREN)
+    Set<ChildrenDataRecord> children = new HashSet<>();
+
+    public Set<ChildrenDataRecord> getChildren() {
+        return this.children;
+    }
+
+    public static final String DB_FIELD_CUSTODY = "custody";
+    public static final String IO_FIELD_CUSTODY = "varge";
+    @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @Filters({
+            @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
+            @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),
+            @Filter(name = Bitemporal.FILTER_EFFECTTO_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTTO_AFTER),
+            @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_AFTER),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
+    })
+    @JsonProperty(IO_FIELD_CUSTODY)
+    Set<CustodyDataRecord> custody = new HashSet<>();
+
+    public BitemporalSet<CustodyDataRecord> getCustody() {
+        return new BitemporalSet<>(this.custody);
+    }
+
 
     public static final String DB_FIELD_CITIZENSHIP = "citizenship";
     public static final String IO_FIELD_CITIZENSHIP = "statsborgerskab";
@@ -695,8 +740,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_STATUS)
     Set<PersonStatusDataRecord> status = new HashSet<>();
 
-    public Set<PersonStatusDataRecord> getStatus() {
-        return this.status;
+    public BitemporalSet<PersonStatusDataRecord> getStatus() {
+        return new BitemporalSet<>(this.status);
     }
 
     public static final String DB_FIELD_PROTECTION = "protection";
@@ -792,6 +837,12 @@ public class PersonEntity extends CprRecordEntity {
         }
         if (record instanceof CitizenshipDataRecord) {
             added = addItem(this, this.citizenship, record, session, compareExisting);
+        }
+        if (record instanceof ChildrenDataRecord) {
+            added = addItem(this, this.children, record, session, compareExisting);
+        }
+        if (record instanceof CustodyDataRecord) {
+            added = addItem(this, this.custody, record, session, compareExisting);
         }
         if (record instanceof CitizenshipVerificationDataRecord) {
             added = addItem(this, this.citizenshipVerification, record, session, compareExisting);
@@ -890,10 +941,6 @@ public class PersonEntity extends CprRecordEntity {
                 return set.add((E) newItem);
             }
 
-            if (newItem.line == null || set.stream().anyMatch(item -> StringUtils.equals(newItem.line, item.line))) {
-                //If this specific line with excatcly the same information has allready been read it should be ignored
-                return false;
-            }
 
             E correctedRecord = null;
             E correctingRecord = null;
@@ -965,7 +1012,7 @@ public class PersonEntity extends CprRecordEntity {
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         return set.add((E) newItem);
 
-                    } else if (
+                    } else if ( !oldItem.isUndone() &&
                             Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
                                     (Equality.cprDomainEqualDate(newItem.getRegistrationTo(), oldItem.getRegistrationTo()) || newItem.getRegistrationTo() == null) &&
                                     Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom())
@@ -1056,7 +1103,11 @@ public class PersonEntity extends CprRecordEntity {
                 boolean hasAnyUnclosed = items.stream().anyMatch(item -> item.getRegistrationTo() == null && item.getEffectTo() == null);
 
                 //Does this person allready have a recordtype which is of same type, and which is unclosed, then close the old one
-                if(hasAnyUnclosed && newItem.getRegistrationTo()==null && newItem.getEffectTo()==null) {
+                if(hasAnyUnclosed && newItem.getRegistrationTo()==null && newItem.getEffectTo()==null &&
+                        //Specifically for custodyRecord there can be more than one at the same time
+                        //This might be correct to do for all recordtypes but is has not been tested good yet
+                        !(newItem instanceof CustodyDataRecord) &&
+                        !(newItem instanceof ProtectionDataRecord)) {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                 }
@@ -1078,6 +1129,7 @@ public class PersonEntity extends CprRecordEntity {
         records.addAll(this.birthTime);
         records.addAll(this.churchRelation);
         records.addAll(this.churchRelationVerification);
+        records.addAll(this.children);
         records.addAll(this.citizenship);
         records.addAll(this.citizenshipVerification);
         records.addAll(this.civilstatus);
