@@ -11,9 +11,238 @@
     }
   ],
   "paths": {
-    "/prisme/cpr/addresshistory/<version>": {
+    "/prisme/cpr/addresshistory/1/{cprNummer}": {
       "get": {
         "summary": "Enkeltopslag i CPR - adressehistorik",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik, gemt i datafordeleren og indenfor Danske eller Grønlandske kommuner.",
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string",
+                            "example": 956
+                          },
+                          "vejkode": {
+                            "type": "string",
+                            "example": 187
+                          },
+                          "kommune": {
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
+                          },
+                          "adresse": {
+                            "type": "string",
+                            "example": "Aqqusernga"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string",
+                            "example": "Kangerlussuaq"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string",
+                            "example": "GL"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-02-03"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-03-19"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/sameaddress/1/{cprNummer}": {
+      "get": {
+        "summary": "Fremsøgning af andre persone med bopæl på samme adresse",
+        "description": "Servicen fremsøger alle de presoner som bemor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, døør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er retgistreret som en administrativ adresse laves ingen adressematch.",
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over CPR-numre på personer som denne person deler adresse med.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "municipalitycode": {
+                      "type": "string",
+                      "example": "956"
+                    },
+                    "roadcode": {
+                      "type": "string",
+                      "example": "104"
+                    },
+                    "housenumber": {
+                      "type": "string",
+                      "example": "10"
+                    },
+                    "floor": {
+                      "type": "string",
+                      "example": "1"
+                    },
+                    "door": {
+                      "type": "string",
+                      "example": "100"
+                    },
+                    "buildingNo": {
+                      "type": "string",
+                      "example": "B-1020"
+                    },
+                    "localityCode": {
+                      "type": "string",
+                      "example": "700"
+                    },
+                    "roadName": {
+                      "type": "string",
+                      "example": "MutAqqut"
+                    },
+                    "sameAddressCprs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["12345678","12345679"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cpr/1/{cprNummer}": {
+      "get": {
+        "summary": "WRITE SOMETHING HERE",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string",
+                            "example": 956
+                          },
+                          "vejkode": {
+                            "type": "string",
+                            "example": 187
+                          },
+                          "kommune": {
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
+                          },
+                          "adresse": {
+                            "type": "string",
+                            "example": "Aqqusernga"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string",
+                            "example": "Kangerlussuaq"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string",
+                            "example": "GL"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-02-03"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-03-19"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "WRITE SOMETHING HERE",
         "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
         "parameters": [
           {
@@ -103,19 +332,532 @@
         }
       }
     },
-    "/prisme/cvr/ownerhistory/<version>": {
+    "/prisme/cpr/combined/1/{cprNummer}": {
+      "get": {
+        "summary": "WRITE SOMETHING HERE",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string",
+                            "example": 956
+                          },
+                          "vejkode": {
+                            "type": "string",
+                            "example": 187
+                          },
+                          "kommune": {
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
+                          },
+                          "adresse": {
+                            "type": "string",
+                            "example": "Aqqusernga"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string",
+                            "example": "Kangerlussuaq"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string",
+                            "example": "GL"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-02-03"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-03-19"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "WRITE SOMETHING HERE",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
+        "parameters": [
+          {
+            "name": "cprNummer",
+            "in": "query",
+            "description": "CPR-nummer",
+            "example": "0101011234"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string",
+                            "example": 956
+                          },
+                          "vejkode": {
+                            "type": "string",
+                            "example": 187
+                          },
+                          "kommune": {
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
+                          },
+                          "adresse": {
+                            "type": "string",
+                            "example": "Aqqusernga"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string",
+                            "example": "Kangerlussuaq"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string",
+                            "example": "GL"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-02-03"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-03-19"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/1/{cvrNummer}": {
+      "get": {
+        "summary": "WRITE SOMETHING HERE",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string",
+                            "example": 956
+                          },
+                          "vejkode": {
+                            "type": "string",
+                            "example": 187
+                          },
+                          "kommune": {
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
+                          },
+                          "adresse": {
+                            "type": "string",
+                            "example": "Aqqusernga"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string",
+                            "example": "Kangerlussuaq"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string",
+                            "example": "GL"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-02-03"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-03-19"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "WRITE SOMETHING HERE",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
+        "parameters": [
+          {
+            "name": "cprNummer",
+            "in": "query",
+            "description": "CPR-nummer",
+            "example": "0101011234"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string",
+                            "example": 956
+                          },
+                          "vejkode": {
+                            "type": "string",
+                            "example": 187
+                          },
+                          "kommune": {
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
+                          },
+                          "adresse": {
+                            "type": "string",
+                            "example": "Aqqusernga"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string",
+                            "example": "Kangerlussuaq"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string",
+                            "example": "GL"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-02-03"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-03-19"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/3/{cvrNummer}": {
+      "get": {
+        "summary": "WRITE SOMETHING HERE",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string",
+                            "example": 956
+                          },
+                          "vejkode": {
+                            "type": "string",
+                            "example": 187
+                          },
+                          "kommune": {
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
+                          },
+                          "adresse": {
+                            "type": "string",
+                            "example": "Aqqusernga"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string",
+                            "example": "Kangerlussuaq"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string",
+                            "example": "GL"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-02-03"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-03-19"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "WRITE SOMETHING HERE",
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
+        "parameters": [
+          {
+            "name": "cprNummer",
+            "in": "query",
+            "description": "CPR-nummer",
+            "example": "0101011234"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over denne persons adressehistorik",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "adresses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "myndighedskode": {
+                            "type": "string",
+                            "example": 956
+                          },
+                          "vejkode": {
+                            "type": "string",
+                            "example": 187
+                          },
+                          "kommune": {
+                            "type": "string",
+                            "example": "Qeqqata Kommunia"
+                          },
+                          "adresse": {
+                            "type": "string",
+                            "example": "Aqqusernga"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3900
+                          },
+                          "bynavn": {
+                            "type": "string",
+                            "example": "Kangerlussuaq"
+                          },
+                          "stedkode": {
+                            "type": "integer",
+                            "example": 200
+                          },
+                          "landekode": {
+                            "type": "string",
+                            "example": "GL"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-02-03"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-03-19"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/ownerhistory/1//{cvrNummer}": {
       "get": {
         "summary": "Enkeltopslag i CVR - ejerskabshistorik",
         "description": "Servicen fremsøger en historik over egerskabet af et CVR-nummer<br/><br/>Hvis det forespurgte CVR-nummer findes i datafordeleren, og hvis virksomheden er af en type hvor der er lovgrundlag for at fremsøge informationen, så leveres en liste med et svar. <br/><br/>Der kan leveres information om ejerskab på følgende 3 typer af virksomheder:<br/>Enkeltmandsvirksomheder (virksomhedsformkode = 10)<br/>Interessentskaber (virksomhedsformkode = 30)<br/>Partsrederier (virksomhedsformkode = 50)<br/><br/>Da der tilføjes CPR-information til data som leveres fra ejerskabshistorik, skal brugeren som  kalder denne service være oprettet som en bruger med adgang til både cpr- og cvr- data.<br/>Hvis brugeren ikke har denne adgang svares med http 401.<br/><br/>Hvis der ikke kan findes information om CPR-nummer via liveopslag returneres http 500<br/><br/>Eksempel:<br/>/prisme/cvr/ownerhistory/1/12345678",
-
-        "parameters": [
-          {
-            "name": "cvrNummer",
-            "in": "query",
-            "description": "CVR-nummer",
-            "example": "12345678"
-          }
-        ],
         "responses": {
           "200": {
             "description": "Virksomhedsinformation og en liste over denne virksomheds ejerhistorik",
@@ -206,7 +948,7 @@
         }
       }
     },
-    "/prisme/cvr/companychanges/<version>/lookup": {
+    "/prisme/cvr/companychanges/1/lookup": {
       "get": {
         "summary": "Fremsøgning af virksomheder som er tilføjet eller ændret siden et tidspunkt",
         "description": "Servicen kaldes med et tidsstempel, og en liste af virksomhedsformkoder.<br/>Alle virksomheder i datafordeleren som både er af en af de forespurgte virksomhedsformkoder, og hvor der er sket ændringer siden tidsstemplet leveres i svaret.<br/><br/>Eksempel:<br/>/prisme/cvr/companychanges/1/lookup/?updatedSince=2020-06-29&companyForms=10,30,50",
