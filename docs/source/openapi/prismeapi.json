@@ -11,18 +11,10 @@
     }
   ],
   "paths": {
-    "/prisme/cpr/addresshistory/<version>": {
+    "/prisme/cpr/addresshistory/1/{cprNummer}": {
       "get": {
         "summary": "Enkeltopslag i CPR - adressehistorik",
-        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik og indenfor Danske eller Grønlandske kommuner.",
-        "parameters": [
-          {
-            "name": "cprNummer",
-            "in": "query",
-            "description": "CPR-nummer",
-            "example": "0101011234"
-          }
-        ],
+        "description": "Servicen fremsøger adressehistorikken for en person. Der leveres alle adresser, som ligger i den aktuelle historik, gemt i datafordeleren og indenfor Danske eller Grønlandske kommuner.",
         "responses": {
           "200": {
             "description": "Personinformation og en liste over denne persons adressehistorik",
@@ -53,11 +45,11 @@
                         "type": "object",
                         "properties": {
                           "myndighedskode": {
-                            "type": "string",
+                            "type": "integer",
                             "example": 956
                           },
                           "vejkode": {
-                            "type": "string",
+                            "type": "integer",
                             "example": 187
                           },
                           "kommune": {
@@ -103,19 +95,837 @@
         }
       }
     },
-    "/prisme/cvr/ownerhistory/<version>": {
+    "/prisme/sameaddress/1/{cprNummer}": {
       "get": {
-        "summary": "Enkeltopslag i CVR - ejerskabshistorik",
-        "description": "Servicen fremsøger en historik over egerskabet af et CVR-nummer<br/><br/>Hvis det forespurgte CVR-nummer findes i datafordeleren, og hvis virksomheden er af en type hvor der er lovgrundlag for at fremsøge informationen, så leveres en liste med et svar. <br/><br/>Der kan leveres information om ejerskab på følgende 3 typer af virksomheder:<br/>Enkeltmandsvirksomheder (virksomhedsformkode = 10)<br/>Interessentskaber (virksomhedsformkode = 30)<br/>Partsrederier (virksomhedsformkode = 50)<br/><br/>Da der tilføjes CPR-information til data som leveres fra ejerskabshistorik, skal brugeren som  kalder denne service være oprettet som en bruger med adgang til både cpr- og cvr- data.<br/>Hvis brugeren ikke har denne adgang svares med http 401.<br/><br/>Hvis der ikke kan findes information om CPR-nummer via liveopslag returneres http 500<br/><br/>Eksempel:<br/>/prisme/cvr/ownerhistory/1/12345678",
-
+        "summary": "Fremsøgning af andre persone med bopæl på samme adresse",
+        "description": "Servicen fremsøger alle de presoner som bemor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, døør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er retgistreret som en administrativ adresse laves ingen adressematch.",
+        "responses": {
+          "200": {
+            "description": "Personinformation og en liste over CPR-numre på personer som denne person deler adresse med.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "municipalitycode": {
+                      "type": "string",
+                      "example": "956"
+                    },
+                    "roadcode": {
+                      "type": "string",
+                      "example": "104"
+                    },
+                    "housenumber": {
+                      "type": "string",
+                      "example": "10"
+                    },
+                    "floor": {
+                      "type": "string",
+                      "example": "1"
+                    },
+                    "door": {
+                      "type": "string",
+                      "example": "100"
+                    },
+                    "buildingNo": {
+                      "type": "string",
+                      "example": "B-1020"
+                    },
+                    "localityCode": {
+                      "type": "string",
+                      "example": "700"
+                    },
+                    "roadName": {
+                      "type": "string",
+                      "example": "MutAqqut"
+                    },
+                    "sameAddressCprs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["12345678","12345679"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cpr/1/{cprNummer}": {
+      "get": {
+        "summary": "Find udvalgt personlig information på en person, som fremsøges på baggrund af CPR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke",
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den fremfundne person",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "civilstandsdato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "ægtefælleCprNummer": {
+                      "type": "string",
+                      "example": "1111111113"
+                    },
+                    "statsborgerskab": {
+                      "type": "integer",
+                      "example": 5100
+                    },
+                    "køn": {
+                      "type": "string",
+                      "example": "M"
+                    },
+                    "far": {
+                      "type": "string",
+                      "example": "1111111111"
+                    },
+                    "mor": {
+                      "type": "string",
+                      "example": "1111111112"
+                    },
+                    "statuskode": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "statuskodedato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "tilflytningsdato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "myndighedskode": {
+                      "type": "integer",
+                      "example": 956
+                    },
+                    "vejkode": {
+                      "type": "integer",
+                      "example": 102
+                    },
+                    "kommune": {
+                      "type": "string",
+                      "example": "Kommuneqarfik Sermersooq"
+                    },
+                    "adresse": {
+                      "type": "string",
+                      "example": "Mut Aqqut"
+                    },
+                    "postnummer": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "bynavn": {
+                      "type": "string",
+                      "example": "Nuuk"
+                    },
+                    "stedkode": {
+                      "type": "integer",
+                      "example": 700
+                    },
+                    "landekode": {
+                      "type": "string",
+                      "example": "GL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cpr/1/": {
+      "post": {
+        "summary": "Find udvalgt personlig information på en person, som fremsøges på baggrund af CPR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke.<br/>Svaret returneres som en liste. Hvis en personinformation ikke kan findes, så leveres denne ikke i listen",
+        "parameters": [
+          {
+            "name": "cprNummer",
+            "in": "body",
+            "description": "CPR-numre",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": "[\"1111111111\",\"1111111112\",\"111111113\",\"1111111114\"]"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på de fremfundne personer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cprNummer": {
+                        "type": "string",
+                        "example": "0101011234"
+                      },
+                      "fornavn": {
+                        "type": "string",
+                        "example": "Peter"
+                      },
+                      "efternavn": {
+                        "type": "string",
+                        "example": "Andersen"
+                      },
+                      "civilstand": {
+                        "type": "string",
+                        "example": "U"
+                      },
+                      "civilstandsdato": {
+                        "type": "string",
+                        "example": "2020-10-27"
+                      },
+                      "ægtefælleCprNummer": {
+                        "type": "string",
+                        "example": "1111111113"
+                      },
+                      "statsborgerskab": {
+                        "type": "integer",
+                        "example": 5100
+                      },
+                      "køn": {
+                        "type": "string",
+                        "example": "M"
+                      },
+                      "far": {
+                        "type": "string",
+                        "example": "1111111111"
+                      },
+                      "mor": {
+                        "type": "string",
+                        "example": "1111111112"
+                      },
+                      "statuskode": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "statuskodedato": {
+                        "type": "string",
+                        "example": "2020-10-27"
+                      },
+                      "tilflytningsdato": {
+                        "type": "string",
+                        "example": "2020-10-27"
+                      },
+                      "myndighedskode": {
+                        "type": "integer",
+                        "example": 956
+                      },
+                      "vejkode": {
+                        "type": "integer",
+                        "example": 102
+                      },
+                      "kommune": {
+                        "type": "string",
+                        "example": "Kommuneqarfik Sermersooq"
+                      },
+                      "adresse": {
+                        "type": "string",
+                        "example": "Mut Aqqut"
+                      },
+                      "postnummer": {
+                        "type": "integer",
+                        "example": 3900
+                      },
+                      "bynavn": {
+                        "type": "string",
+                        "example": "Nuuk"
+                      },
+                      "stedkode": {
+                        "type": "integer",
+                        "example": 700
+                      },
+                      "landekode": {
+                        "type": "string",
+                        "example": "GL"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cpr/combined/1/{cprNummer}": {
+      "get": {
+        "summary": "Find udvalgt personlig information på en person, som fremsøges på baggrund af CPR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke",
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den fremfundne person",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "civilstandsdato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "ægtefælleCprNummer": {
+                      "type": "string",
+                      "example": "1111111113"
+                    },
+                    "statsborgerskab": {
+                      "type": "integer",
+                      "example": 5100
+                    },
+                    "køn": {
+                      "type": "string",
+                      "example": "M"
+                    },
+                    "far": {
+                      "type": "string",
+                      "example": "1111111111"
+                    },
+                    "mor": {
+                      "type": "string",
+                      "example": "1111111112"
+                    },
+                    "statuskode": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "statuskodedato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "tilflytningsdato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "myndighedskode": {
+                      "type": "integer",
+                      "example": 956
+                    },
+                    "vejkode": {
+                      "type": "integer",
+                      "example": 102
+                    },
+                    "kommune": {
+                      "type": "string",
+                      "example": "Kommuneqarfik Sermersooq"
+                    },
+                    "adresse": {
+                      "type": "string",
+                      "example": "Mut Aqqut"
+                    },
+                    "postnummer": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "bynavn": {
+                      "type": "string",
+                      "example": "Nuuk"
+                    },
+                    "stedkode": {
+                      "type": "integer",
+                      "example": 700
+                    },
+                    "landekode": {
+                      "type": "string",
+                      "example": "GL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cpr/combined/1/": {
+      "post": {
+        "summary": "Find udvalgt personlig information på en person, som fremsøges på baggrund af CPR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke.<br/>Svaret returneres som en liste. Hvis en personinformation ikke kan findes, så leveres denne ikke i listen",
+        "parameters": [
+          {
+            "name": "cprNummer",
+            "in": "body",
+            "description": "CPR-numre",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": "[\"1111111111\",\"1111111112\",\"111111113\",\"1111111114\"]"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på de fremfundne personer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cvrNummer": {
+                        "type": "string",
+                        "example": "12345678"
+                      },
+                      "navn": {
+                        "type": "string",
+                        "example": "Anders And"
+                      },
+                      "forretningsområde": {
+                        "type": "string",
+                        "example": "Handel"
+                      },
+                      "statuskode": {
+                        "type": "string",
+                        "example": "Aktiv"
+                      },
+                      "statuskodedato": {
+                        "type": "string",
+                        "example": "2020-10-27"
+                      },
+                      "myndighedskode": {
+                        "type": "integer",
+                        "example": 956
+                      },
+                      "kommune": {
+                        "type": "string",
+                        "example": "Sermersooq"
+                      },
+                      "adresse": {
+                        "type": "string",
+                        "example": "Mut Aqqut 1"
+                      },
+                      "postboks": {
+                        "type": "string",
+                        "example": "postbox"
+                      },
+                      "postnummer": {
+                        "type": "integer",
+                        "example": 3900
+                      },
+                      "bynavn": {
+                        "type": "string",
+                        "example": "Nuuk"
+                      },
+                      "landekode": {
+                        "type": "string",
+                        "example": "GL"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "anders@and.gl"
+                      },
+                      "telefon": {
+                        "type": "string",
+                        "example": "123456"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/1/{cvrNummer}": {
+      "get": {
+        "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens postaddresse. Hvis denne ikke er angivet i CVR-registeret, så anvendes virksomhedens beliggenhedsadresse.Hvis et felt ikke har nogen værdi, så udelades det",
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den fremfundne virksomhed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cvrNummer": {
+                      "type": "string",
+                      "example": "12345678"
+                    },
+                    "navn": {
+                      "type": "string",
+                      "example": "Anders And"
+                    },
+                    "forretningsområde": {
+                      "type": "string",
+                      "example": "Handel"
+                    },
+                    "statuskode": {
+                      "type": "string",
+                      "example": "Aktiv"
+                    },
+                    "statuskodedato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "myndighedskode": {
+                      "type": "integer",
+                      "example": 956
+                    },
+                    "kommune": {
+                      "type": "string",
+                      "example": "Sermersooq"
+                    },
+                    "adresse": {
+                      "type": "string",
+                      "example": "Mut Aqqut 1"
+                    },
+                    "postboks": {
+                      "type": "string",
+                      "example": "postbox"
+                    },
+                    "postnummer": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "bynavn": {
+                      "type": "string",
+                      "example": "Nuuk"
+                    },
+                    "landekode": {
+                      "type": "string",
+                      "example": "GL"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "anders@and.gl"
+                    },
+                    "telefon": {
+                      "type": "string",
+                      "example": "123456"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/1/": {
+      "post": {
+        "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens postaddresse. Hvis denne ikke er angivet i CVR-registeret, så anvendes virksomhedens beliggenhedsadresse.Hvis et felt ikke har nogen værdi, så udelades det.<br/>Svaret returneres som en liste. Hvis en virksomheds-formation ikke kan findes, så leveres denne ikke i listen",
         "parameters": [
           {
             "name": "cvrNummer",
-            "in": "query",
-            "description": "CVR-nummer",
-            "example": "12345678"
+            "in": "body",
+            "description": "CVR-numre",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": "[\"11111111\",\"11111112\",\"1111113\",\"11111114\"]"
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på de fremfundne personer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cvrNummer": {
+                        "type": "string",
+                        "example": "12345678"
+                      },
+                      "navn": {
+                        "type": "string",
+                        "example": "Anders And"
+                      },
+                      "forretningsområde": {
+                        "type": "string",
+                        "example": "Handel"
+                      },
+                      "statuskode": {
+                        "type": "string",
+                        "example": "Aktiv"
+                      },
+                      "statuskodedato": {
+                        "type": "string",
+                        "example": "2020-10-27"
+                      },
+                      "myndighedskode": {
+                        "type": "integer",
+                        "example": 956
+                      },
+                      "kommune": {
+                        "type": "string",
+                        "example": "Sermersooq"
+                      },
+                      "adresse": {
+                        "type": "string",
+                        "example": "Mut Aqqut 1"
+                      },
+                      "postboks": {
+                        "type": "string",
+                        "example": "postbox"
+                      },
+                      "postnummer": {
+                        "type": "integer",
+                        "example": 3900
+                      },
+                      "bynavn": {
+                        "type": "string",
+                        "example": "Nuuk"
+                      },
+                      "landekode": {
+                        "type": "string",
+                        "example": "GL"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "anders@and.gl"
+                      },
+                      "telefon": {
+                        "type": "string",
+                        "example": "123456"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/3/{cvrNummer}": {
+      "get": {
+        "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens postaddresse. Hvis denne ikke er angivet i CVR-registeret, så anvendes virksomhedens beliggenhedsadresse.Hvis et felt ikke har nogen værdi, så udelades det",
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den fremfundne virksomhed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cvrNummer": {
+                      "type": "string",
+                      "example": "12345678"
+                    },
+                    "navn": {
+                      "type": "string",
+                      "example": "Anders And"
+                    },
+                    "forretningsområde": {
+                      "type": "string",
+                      "example": "Handel"
+                    },
+                    "statuskode": {
+                      "type": "string",
+                      "example": "Aktiv"
+                    },
+                    "statuskodedato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "myndighedskode": {
+                      "type": "integer",
+                      "example": 956
+                    },
+                    "kommune": {
+                      "type": "string",
+                      "example": "Sermersooq"
+                    },
+                    "adresse": {
+                      "type": "string",
+                      "example": "Mut Aqqut 1"
+                    },
+                    "postboks": {
+                      "type": "string",
+                      "example": "postbox"
+                    },
+                    "postnummer": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "bynavn": {
+                      "type": "string",
+                      "example": "Nuuk"
+                    },
+                    "landekode": {
+                      "type": "string",
+                      "example": "GL"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "anders@and.gl"
+                    },
+                    "telefon": {
+                      "type": "string",
+                      "example": "123456"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/3/": {
+      "post": {
+        "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens postaddresse. Hvis denne ikke er angivet i CVR-registeret, så anvendes virksomhedens beliggenhedsadresse.Hvis et felt ikke har nogen værdi, så udelades det.<br/>Svaret returneres som en liste. Hvis en virksomheds-formation ikke kan findes, så leveres denne ikke i listen",
+        "parameters": [
+          {
+            "name": "cvrNummer",
+            "in": "body",
+            "description": "CVR-numre",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": "[\"11111111\",\"11111112\",\"1111113\",\"11111114\"]"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på de fremfundne personer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cvrNummer": {
+                        "type": "string",
+                        "example": "12345678"
+                      },
+                      "navn": {
+                        "type": "string",
+                        "example": "Anders And"
+                      },
+                      "forretningsområde": {
+                        "type": "string",
+                        "example": "Handel"
+                      },
+                      "statuskode": {
+                        "type": "string",
+                        "example": "Aktiv"
+                      },
+                      "statuskodedato": {
+                        "type": "string",
+                        "example": "2020-10-27"
+                      },
+                      "myndighedskode": {
+                        "type": "integer",
+                        "example": 956
+                      },
+                      "kommune": {
+                        "type": "string",
+                        "example": "Sermersooq"
+                      },
+                      "adresse": {
+                        "type": "string",
+                        "example": "Mut Aqqut 1"
+                      },
+                      "postboks": {
+                        "type": "string",
+                        "example": "postbox"
+                      },
+                      "postnummer": {
+                        "type": "integer",
+                        "example": 3900
+                      },
+                      "bynavn": {
+                        "type": "string",
+                        "example": "Nuuk"
+                      },
+                      "landekode": {
+                        "type": "string",
+                        "example": "GL"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "anders@and.gl"
+                      },
+                      "telefon": {
+                        "type": "string",
+                        "example": "123456"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cvr/ownerhistory/1//{cvrNummer}": {
+      "get": {
+        "summary": "Enkeltopslag i CVR - ejerskabshistorik",
+        "description": "Servicen fremsøger en historik over egerskabet af et CVR-nummer<br/><br/>Hvis det forespurgte CVR-nummer findes i datafordeleren, og hvis virksomheden er af en type hvor der er lovgrundlag for at fremsøge informationen, så leveres en liste med et svar. <br/><br/>Der kan leveres information om ejerskab på følgende 3 typer af virksomheder:<br/>Enkeltmandsvirksomheder (virksomhedsformkode = 10)<br/>Interessentskaber (virksomhedsformkode = 30)<br/>Partsrederier (virksomhedsformkode = 50)<br/><br/>Da der tilføjes CPR-information til data som leveres fra ejerskabshistorik, skal brugeren som  kalder denne service være oprettet som en bruger med adgang til både cpr- og cvr- data.<br/>Hvis brugeren ikke har denne adgang svares med http 401.<br/><br/>Hvis der ikke kan findes information om CPR-nummer via liveopslag returneres http 500<br/><br/>Eksempel:<br/>/prisme/cvr/ownerhistory/1/12345678",
         "responses": {
           "200": {
             "description": "Virksomhedsinformation og en liste over denne virksomheds ejerhistorik",
@@ -206,7 +1016,7 @@
         }
       }
     },
-    "/prisme/cvr/companychanges/<version>/lookup": {
+    "/prisme/cvr/companychanges/1/lookup": {
       "get": {
         "summary": "Fremsøgning af virksomheder som er tilføjet eller ændret siden et tidspunkt",
         "description": "Servicen kaldes med et tidsstempel, og en liste af virksomhedsformkoder.<br/>Alle virksomheder i datafordeleren som både er af en af de forespurgte virksomhedsformkoder, og hvor der er sket ændringer siden tidsstemplet leveres i svaret.<br/><br/>Eksempel:<br/>/prisme/cvr/companychanges/1/lookup/?updatedSince=2020-06-29&companyForms=10,30,50",
