@@ -159,16 +159,6 @@ public class CivilStatusDataService extends PersonStatisticsService {
         OffsetDateTime searchTime = filter.registrationAfter;
         OffsetDateTime mariageEffectTime = null;
 
-        String birthAuthorityId;
-        String birthAuthorityText;
-        String birthAuthorityCode;
-
-        //Just get the first registration
-        BirthPlaceDataRecord birthPlaceDataRecord = person.getBirthPlace().iterator().next();
-        birthAuthorityId = Integer.toString(birthPlaceDataRecord.getAuthority());
-        birthAuthorityText = birthPlaceDataRecord.getBirthPlaceName();
-        birthAuthorityCode = Integer.toString(birthPlaceDataRecord.getBirthPlaceCode());
-
         Set<CivilStatusDataRecord> civilStatusCollection = null;
         if (filter.getCivilStatus() != null || searchTime != null) {
             civilStatusCollection = person.getCivilstatus().stream().filter(r -> (filter.getCivilStatus()== null || filter.getCivilStatus().equals(r.getCivilStatus())) &&
@@ -219,6 +209,16 @@ public class CivilStatusDataService extends PersonStatisticsService {
             if (mariageEffectTime != null && Objects.equals(mariageEffectTime, civilStatusDataRecord.getEffectTo())) {
                 continue;
             }
+
+            String birthAuthorityId;
+            String birthAuthorityText;
+            String birthAuthorityCode;
+
+            //Just get the first registration
+            BirthPlaceDataRecord birthPlaceDataRecord = findNewestUnclosedWithSpecifiedEffect(person.getBirthPlace(), mariageEffectTime);
+            birthAuthorityId = Integer.toString(birthPlaceDataRecord.getAuthority());
+            birthAuthorityText = birthPlaceDataRecord.getBirthPlaceName();
+            birthAuthorityCode = Integer.toString(birthPlaceDataRecord.getBirthPlaceCode());
 
             OffsetDateTime regFrom = civilStatusDataRecord.getRegistrationFrom();
             CprBitemporalRecord c = civilStatusDataRecord.getCorrectionof();
