@@ -145,10 +145,10 @@ public class CvrOwnerHistoryTest extends TestBase {
 
         JSONAssert.assertEquals("{\"cvrNummer\":\"88888885\",\"virksomhedsformkode\":\"30\"," +
                         "\"shortDescription\":\"I/S\",\"longDescription\":\"Interessentskab\",\"pnrs\":[{\"pnr\":" +
-                        "\"1111111111\",\"enhedDetaljer\":{\"enhedsNummer\":4000000000,\"gyldigFra\":\"2013-09-01\"," +
+                        "\"1111111111\",\"enhedDetaljer\":{\"enhedsNummer\":4000000000,\"gyldigFra\":\"2015-07-24\"," +
                         "\"gyldigTil\":null}},{\"pnr\":\"1111111112\",\"enhedDetaljer\":{\"enhedsNummer\":4000000001," +
-                        "\"gyldigFra\":\"2013-09-01\",\"gyldigTil\":null}},{\"pnr\":\"1111111113\",\"enhedDetaljer\":{" +
-                        "\"enhedsNummer\":4000000002,\"gyldigFra\":\"2013-09-01\",\"gyldigTil\":null}}],\"cvrs\":[{" +
+                        "\"gyldigFra\":\"2015-07-24\",\"gyldigTil\":2018-09-01}},{\"pnr\":\"1111111113\",\"enhedDetaljer\":{" +
+                        "\"enhedsNummer\":4000000002,\"gyldigFra\":\"2018-09-01\",\"gyldigTil\":null}}],\"cvrs\":[{" +
                         "\"cvr\":73585511,\"enhedDetaljer\":{\"enhedsNummer\":4000395354,\"gyldigFra\":\"2015-03-01\"," +
                         "\"gyldigTil\":null}}]}",
                 response.getBody().trim(), JSONCompareMode.LENIENT
@@ -227,7 +227,7 @@ public class CvrOwnerHistoryTest extends TestBase {
         InputStream testData = CvrCombinedTest.class.getResourceAsStream("/company_interessentskab.json");
         Session session = sessionManager.getSessionFactory().openSession();
         try {
-            dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager companyEntityManager = (dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager) cvrPlugin.getRegisterManager().getEntityManager(CompanyRecord.schema);
+            CompanyEntityManager companyEntityManager = (CompanyEntityManager) cvrPlugin.getRegisterManager().getEntityManager(CompanyRecord.schema);
             JsonNode root = objectMapper.readTree(testData);
             testData.close();
             JsonNode itemList = root.get("hits").get("hits");

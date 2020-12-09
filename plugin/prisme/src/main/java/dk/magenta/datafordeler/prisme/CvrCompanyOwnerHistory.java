@@ -158,17 +158,21 @@ public class CvrCompanyOwnerHistory {
                             Iterator<OrganizationRecord> orgRecordList = participant.getOrganizations().iterator();
                             while (orgRecordList.hasNext()) {
                                 OrganizationRecord orgRecord = orgRecordList.next();
-                                Iterator<AttributeRecord> attributeList = orgRecord.getAttributes().iterator();
-                                while (attributeList.hasNext()) {
-                                    AttributeRecord attribute = attributeList.next();
+                                Iterator<OrganizationMemberdataRecord> memberdataIterator = orgRecord.getMemberData().iterator();
+                                while (memberdataIterator.hasNext()) {
+                                    OrganizationMemberdataRecord memberdata = memberdataIterator.next();
 
-                                    Iterator<AttributeValueRecord> attributeValueList = attribute.getValues().iterator();
-                                    while (attributeValueList.hasNext()) {
-                                        AttributeValueRecord attValue = attributeValueList.next();
-                                        from = Optional.ofNullable(attValue.getValidFrom()).map(o -> o.toString()).orElse(null);
-                                        to = Optional.ofNullable(attValue.getValidTo()).map(o -> o.toString()).orElse(null);
-                                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
-                                        personalOwnerList.add(ownerItem);
+                                    Iterator<AttributeRecord> attributeList = memberdata.getAttributes().iterator();
+                                    while (attributeList.hasNext()) {
+                                        AttributeRecord attribute = attributeList.next();
+                                        Iterator<AttributeValueRecord> attributeValueList = attribute.getValues().iterator();
+                                        while (attributeValueList.hasNext()) {
+                                            AttributeValueRecord attValue = attributeValueList.next();
+                                            from = Optional.ofNullable(attValue.getValidFrom()).map(o -> o.toString()).orElse(null);
+                                            to = Optional.ofNullable(attValue.getValidTo()).map(o -> o.toString()).orElse(null);
+                                            CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, null, String.format("%010d", deltagerPnr), from, to);
+                                            personalOwnerList.add(ownerItem);
+                                        }
                                     }
                                 }
                             }
