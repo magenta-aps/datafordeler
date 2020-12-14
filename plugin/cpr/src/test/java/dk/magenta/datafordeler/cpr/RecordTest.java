@@ -340,7 +340,7 @@ public class RecordTest {
             PersonEntity personEntity = entities.get(0);
 
             Assert.assertTrue("Validate that the address is still correct after undoing a new adress ",
-                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null && add.getDoor().equals("115")));
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
 
         } finally {
             session.close();

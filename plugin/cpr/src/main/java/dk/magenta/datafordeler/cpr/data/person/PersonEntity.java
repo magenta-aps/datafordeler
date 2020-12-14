@@ -955,7 +955,7 @@ public class PersonEntity extends CprRecordEntity {
                 * It is not a replacement, but a correction. We keep both the corrected and corrector records, with a link between them,
                 * and set registrationTo on the corrected record
                 * */
-                if (oldItem.isHistoric() && newItem.isCorrection() && newItem.hasData()) {
+                if (newItem.isCorrection() && newItem.hasData()) {
                     // Annkor: K
                     if (
                             Objects.equals(newItem.getOrigin(), oldItem.getOrigin()) &&
@@ -974,7 +974,7 @@ public class PersonEntity extends CprRecordEntity {
                 /*
                  * Item marking that a previous record should be undone by setting a flag on it, enabling lookups to ignore it
                  * */
-                else if (oldItem.isHistoric() && newItem.isUndo() && Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom()) && newItem.equalData(oldItem) && oldItem.getReplacedby() == null) {
+                else if (newItem.isUndo() && Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom()) && newItem.equalData(oldItem) && oldItem.getReplacedby() == null) {
                     // Annkor: A
                     oldItem.setUndone(true);
                     session.saveOrUpdate(oldItem);
