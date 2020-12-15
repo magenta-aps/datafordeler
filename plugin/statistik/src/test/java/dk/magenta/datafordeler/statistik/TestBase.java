@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.statistik;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -15,6 +16,11 @@ import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.junit.Assert;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -102,5 +108,28 @@ public abstract class TestBase {
                 PersonEntity.class,
         });
         QueryManager.clearCaches();
+    }
+
+    /**
+     * Compare two different JSON-arrays where the value of one field is ignored
+     * This functionality can be used for validation of reports where the timezone during passing of input results in different dayswhen decoding a timestamp
+     * @param expected
+     * @param actual
+     * @param ignoreValue
+     * @throws JSONException
+     * @throws JsonProcessingException
+     */
+    public void compareJSONARRAYWithIgnoredValues(String expected, String actual, String ignoreValue) throws JSONException, JsonProcessingException {
+        JSONArray expectedJsonArray = new JSONArray(expected);
+        JSONArray actualJsonArray = new JSONArray(actual);
+        Assert.assertEquals(expectedJsonArray.length(), actualJsonArray.length());
+        for(int index=0; index<expectedJsonArray.length();index++) {
+            expectedJsonArray.getJSONObject(index).put(ignoreValue, "*");
+            actualJsonArray.getJSONObject(index).put(ignoreValue, "*");
+        }
+        JSONAssert.assertEquals(
+                expectedJsonArray,
+                actualJsonArray, JSONCompareMode.LENIENT);
+
     }
 }

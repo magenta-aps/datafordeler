@@ -117,10 +117,9 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"09-08-2019\";;\"03-09-2019\";\"0101011234\";\"1111111114\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
                 "\"G\";\"15-03-2018\";;\"15-03-2018\";\"0101011235\";\"1111111111\";\"340\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"";
 
-        JSONAssert.assertEquals(
+        compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), JSONCompareMode.LENIENT
-        );
+                testUtil.csvToJsonString(response.getBody().trim()), "CivDto");
 
         response = restTemplate.exchange("/statistik/civilstate_data/?registrationAfter=2019-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(200, response.getStatusCodeValue());
@@ -129,10 +128,9 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"09-08-2019\";;\"09-08-2019\";\"0101011234\";\"1111111112\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
                 "\"G\";\"09-08-2019\";;\"03-09-2019\";\"0101011234\";\"1111111114\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"";
 
-        JSONAssert.assertEquals(
+        compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), JSONCompareMode.LENIENT
-        );
+                testUtil.csvToJsonString(response.getBody().trim()), "CivDto");
 
         response = restTemplate.exchange("/statistik/civilstate_data/?registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(200, response.getStatusCodeValue());
@@ -144,10 +142,9 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"15-03-2018\";;\"15-03-2018\";\"0101011235\";\"1111111111\";\"340\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"\n" +
                 "\"F\";\"16-12-2018\";;\"16-12-2018\";\"0101011235\";\"1111111111\";\"1350\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"";
 
-        JSONAssert.assertEquals(
+        compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), JSONCompareMode.LENIENT
-        );
+                testUtil.csvToJsonString(response.getBody().trim()), "CivDto");
     }
 
 
@@ -168,10 +165,9 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"09-08-2019\";;\"09-08-2019\";\"0101011234\";\"1111111112\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
                 "\"G\";\"09-08-2019\";;\"03-09-2019\";\"0101011234\";\"1111111114\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"";
 
-        JSONAssert.assertEquals(
+        compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), JSONCompareMode.LENIENT
-        );
+                testUtil.csvToJsonString(response.getBody().trim()), "CivDto");
     }
 
     @Test
