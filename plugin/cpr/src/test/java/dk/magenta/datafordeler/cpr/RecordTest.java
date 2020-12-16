@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -315,6 +316,31 @@ public class RecordTest {
             PersonEntity personEntity = entities.get(0);
             Assert.assertTrue("Validate that when setting a name and undoing that name, it must be possible to set that same name again ",
                     personEntity.getName().stream().anyMatch(name -> !name.isUndone()));
+
+        } finally {
+            session.close();
+        }
+    }
+
+    @Test
+    public void testPersonWithUndoneNewAddress() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        importMetadata.setSession(session);
+        this.loadPerson("/undoneNewAdress1.txt", importMetadata);
+        this.loadPerson("/undoneNewAdress2.txt", importMetadata);
+        transaction.commit();
+        try {
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("0101011234");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+
+            Assert.assertTrue("Validate that the address is still correct after undoing a new adress ",
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
 
         } finally {
             session.close();
