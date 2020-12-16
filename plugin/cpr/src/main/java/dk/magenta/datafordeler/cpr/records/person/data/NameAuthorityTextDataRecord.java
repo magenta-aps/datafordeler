@@ -34,6 +34,10 @@ public class NameAuthorityTextDataRecord extends AuthorityTextDataRecord<NameAut
         super(text, correctionMarking);
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Override
     public boolean updateBitemporalityByCloning() {
         return true;

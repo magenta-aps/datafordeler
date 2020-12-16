@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -119,8 +120,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_ADDRESS_CONAME)
     Set<AddressConameDataRecord> coname = new HashSet<>();
 
-    public Set<AddressConameDataRecord> getConame() {
-        return this.coname;
+    public BitemporalSet<AddressConameDataRecord> getConame() {
+        return new BitemporalSet<>(this.coname);
     }
 
     public static final String DB_FIELD_ADDRESS = "address";
@@ -141,8 +142,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_ADDRESS)
     Set<AddressDataRecord> address = new HashSet<>();
 
-    public Set<AddressDataRecord> getAddress() {
-        return this.address;
+    public BitemporalSet<AddressDataRecord> getAddress() {
+        return new BitemporalSet<>(this.address);
     }
 
     public static final String DB_FIELD_ADDRESS_NAME = "addressName";
@@ -163,8 +164,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_ADDRESS_NAME)
     Set<AddressNameDataRecord> addressName = new HashSet<>();
 
-    public Set<AddressNameDataRecord> getAddressName() {
-        return this.addressName;
+    public BitemporalSet<AddressNameDataRecord> getAddressName() {
+        return new BitemporalSet<>(this.addressName);
     }
 
     public static final String DB_FIELD_BIRTHPLACE = "birthPlace";
@@ -185,8 +186,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_BIRTHPLACE)
     Set<BirthPlaceDataRecord> birthPlace = new HashSet<>();
 
-    public Set<BirthPlaceDataRecord> getBirthPlace() {
-        return this.birthPlace;
+    public BitemporalSet<BirthPlaceDataRecord> getBirthPlace() {
+        return new BitemporalSet<>(this.birthPlace);
     }
 
     public static final String DB_FIELD_BIRTHPLACE_VERIFICATION = "birthPlaceVerification";
@@ -207,8 +208,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_BIRTHPLACE_VERIFICATION)
     Set<BirthPlaceVerificationDataRecord> birthPlaceVerification = new HashSet<>();
 
-    public Set<BirthPlaceVerificationDataRecord> getBirthPlaceVerification() {
-        return this.birthPlaceVerification;
+    public BitemporalSet<BirthPlaceVerificationDataRecord> getBirthPlaceVerification() {
+        return new BitemporalSet<>(this.birthPlaceVerification);
     }
 
     public static final String DB_FIELD_BIRTHTIME = "birthTime";
@@ -229,8 +230,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_BIRTHTIME)
     Set<BirthTimeDataRecord> birthTime = new HashSet<>();
 
-    public Set<BirthTimeDataRecord> getBirthTime() {
-        return this.birthTime;
+    public BitemporalSet<BirthTimeDataRecord> getBirthTime() {
+        return new BitemporalSet<>(this.birthTime);
     }
 
     public static final String DB_FIELD_CHURCH = "churchRelation";
@@ -251,8 +252,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CHURCH)
     Set<ChurchDataRecord> churchRelation = new HashSet<>();
 
-    public Set<ChurchDataRecord> getChurchRelation() {
-        return this.churchRelation;
+    public BitemporalSet<ChurchDataRecord> getChurchRelation() {
+        return new BitemporalSet<>(this.churchRelation);
     }
 
     public static final String DB_FIELD_CHURCH_VERIFICATION = "churchRelationVerification";
@@ -273,8 +274,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CHURCH_VERIFICATION)
     Set<ChurchVerificationDataRecord> churchRelationVerification = new HashSet<>();
 
-    public Set<ChurchVerificationDataRecord> getChurchRelationVerification() {
-        return this.churchRelationVerification;
+    public BitemporalSet<ChurchVerificationDataRecord> getChurchRelationVerification() {
+        return new BitemporalSet<>(this.churchRelationVerification);
     }
 
     public static final String DB_FIELD_CHILDREN = "children";
@@ -295,8 +296,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CHILDREN)
     Set<ChildrenDataRecord> children = new HashSet<>();
 
-    public Set<ChildrenDataRecord> getChildren() {
-        return this.children;
+    public BitemporalSet<ChildrenDataRecord> getChildren() {
+        return new BitemporalSet<>(this.children);
     }
 
     public static final String DB_FIELD_CUSTODY = "custody";
@@ -340,8 +341,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CITIZENSHIP)
     Set<CitizenshipDataRecord> citizenship = new HashSet<>();
 
-    public Set<CitizenshipDataRecord> getCitizenship() {
-        return this.citizenship;
+    public BitemporalSet<CitizenshipDataRecord> getCitizenship() {
+        return new BitemporalSet<>(this.citizenship);
     }
 
     public static final String DB_FIELD_CITIZENSHIP_VERIFICATION = "citizenshipVerification";
@@ -362,8 +363,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CITIZENSHIP_VERIFICATION)
     Set<CitizenshipVerificationDataRecord> citizenshipVerification = new HashSet<>();
 
-    public Set<CitizenshipVerificationDataRecord> getCitizenshipVerification() {
-        return this.citizenshipVerification;
+    public BitemporalSet<CitizenshipVerificationDataRecord> getCitizenshipVerification() {
+        return new BitemporalSet<>(this.citizenshipVerification);
     }
 
     public static final String DB_FIELD_CIVILSTATUS = "civilstatus";
@@ -384,8 +385,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CIVILSTATUS)
     Set<CivilStatusDataRecord> civilstatus = new HashSet<>();
 
-    public Set<CivilStatusDataRecord> getCivilstatus() {
-        return this.civilstatus;
+    public BitemporalSet<CivilStatusDataRecord> getCivilstatus() {
+        return new BitemporalSet<>(this.civilstatus);
     }
 
     public static final String DB_FIELD_CIVILSTATUS_AUTHORITYTEXT = "civilstatusAuthorityText";
@@ -406,8 +407,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CIVILSTATUS_AUTHORITYTEXT)
     Set<CivilStatusAuthorityTextDataRecord> civilstatusAuthorityText = new HashSet<>();
 
-    public Set<CivilStatusAuthorityTextDataRecord> getCivilstatusAuthorityText() {
-        return this.civilstatusAuthorityText;
+    public BitemporalSet<CivilStatusAuthorityTextDataRecord> getCivilstatusAuthorityText() {
+        return new BitemporalSet<>(this.civilstatusAuthorityText);
     }
 
     public static final String DB_FIELD_CIVILSTATUS_VERIFICATION = "civilstatusVerification";
@@ -428,8 +429,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CIVILSTATUS_VERIFICATION)
     Set<CivilStatusVerificationDataRecord> civilstatusVerification = new HashSet<>();
 
-    public Set<CivilStatusVerificationDataRecord> getCivilstatusVerification() {
-        return this.civilstatusVerification;
+    public BitemporalSet<CivilStatusVerificationDataRecord> getCivilstatusVerification() {
+        return new BitemporalSet<>(this.civilstatusVerification);
     }
 
     public static final String DB_FIELD_FOREIGN_ADDRESS = "foreignAddress";
@@ -450,8 +451,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_FOREIGN_ADDRESS)
     Set<ForeignAddressDataRecord> foreignAddress = new HashSet<>();
 
-    public Set<ForeignAddressDataRecord> getForeignAddress() {
-        return this.foreignAddress;
+    public BitemporalSet<ForeignAddressDataRecord> getForeignAddress() {
+        return new BitemporalSet<>(this.foreignAddress);
     }
 
     public static final String DB_FIELD_FOREIGN_ADDRESS_EMIGRATION = "emigration";
@@ -472,8 +473,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_FOREIGN_ADDRESS_EMIGRATION)
     Set<ForeignAddressEmigrationDataRecord> emigration = new HashSet<>();
 
-    public Set<ForeignAddressEmigrationDataRecord> getEmigration() {
-        return this.emigration;
+    public BitemporalSet<ForeignAddressEmigrationDataRecord> getEmigration() {
+        return new BitemporalSet<>(this.emigration);
     }
 
     public static final String DB_FIELD_MOVE_MUNICIPALITY = "municipalityMove";
@@ -494,8 +495,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_MOVE_MUNICIPALITY)
     Set<MoveMunicipalityDataRecord> municipalityMove = new HashSet<>();
 
-    public Set<MoveMunicipalityDataRecord> getMunicipalityMove() {
-        return this.municipalityMove;
+    public BitemporalSet<MoveMunicipalityDataRecord> getMunicipalityMove() {
+        return new BitemporalSet<>(this.municipalityMove);
     }
 
     public static final String DB_FIELD_NAME = "name";
@@ -516,8 +517,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_NAME)
     Set<NameDataRecord> name = new HashSet<>();
 
-    public Set<NameDataRecord> getName() {
-        return this.name;
+    public BitemporalSet<NameDataRecord> getName() {
+        return new BitemporalSet<>(this.name);
     }
 
     public static final String DB_FIELD_NAME_AUTHORITY_TEXT = "nameAuthorityText";
@@ -538,8 +539,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_NAME_AUTHORITY_TEXT)
     Set<NameAuthorityTextDataRecord> nameAuthorityText = new HashSet<>();
 
-    public Set<NameAuthorityTextDataRecord> getNameAuthorityText() {
-        return this.nameAuthorityText;
+    public BitemporalSet<NameAuthorityTextDataRecord> getNameAuthorityText() {
+        return new BitemporalSet<>(this.nameAuthorityText);
     }
 
     public static final String DB_FIELD_NAME_VERIFICATION = "nameVerification";
@@ -560,8 +561,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_NAME_VERIFICATION)
     Set<NameVerificationDataRecord> nameVerification = new HashSet<>();
 
-    public Set<NameVerificationDataRecord> getNameVerification() {
-        return this.nameVerification;
+    public BitemporalSet<NameVerificationDataRecord> getNameVerification() {
+        return new BitemporalSet<>(this.nameVerification);
     }
 
     public static final String DB_FIELD_MOTHER = "mother";
@@ -583,8 +584,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_MOTHER)
     Set<ParentDataRecord> mother = new HashSet<>();
 
-    public Set<ParentDataRecord> getMother() {
-        return this.mother;
+    public BitemporalSet<ParentDataRecord> getMother() {
+        return new BitemporalSet<>(this.mother);
     }
 
     public static final String DB_FIELD_MOTHER_VERIFICATION = "motherVerification";
@@ -606,8 +607,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_MOTHER_VERIFICATION)
     Set<ParentVerificationDataRecord> motherVerification = new HashSet<>();
 
-    public Set<ParentVerificationDataRecord> getMotherVerification() {
-        return this.motherVerification;
+    public BitemporalSet<ParentVerificationDataRecord> getMotherVerification() {
+        return new BitemporalSet<>(this.motherVerification);
     }
 
     public static final String DB_FIELD_FATHER = "father";
@@ -629,8 +630,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_FATHER)
     Set<ParentDataRecord> father = new HashSet<>();
 
-    public Set<ParentDataRecord> getFather() {
-        return this.father;
+    public BitemporalSet<ParentDataRecord> getFather() {
+        return new BitemporalSet<>(this.father);
     }
 
     public static final String DB_FIELD_FATHER_VERIFICATION = "fatherVerification";
@@ -652,8 +653,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_FATHER_VERIFICATION)
     Set<ParentVerificationDataRecord> fatherVerification = new HashSet<>();
 
-    public Set<ParentVerificationDataRecord> getFatherVerification() {
-        return this.fatherVerification;
+    public BitemporalSet<ParentVerificationDataRecord> getFatherVerification() {
+        return new BitemporalSet<>(this.fatherVerification);
     }
 
     public static final String DB_FIELD_CORE = "person";
@@ -674,8 +675,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_CORE)
     Set<PersonCoreDataRecord> core = new HashSet<>();
 
-    public Set<PersonCoreDataRecord> getCore() {
-        return this.core;
+    public BitemporalSet<PersonCoreDataRecord> getCore() {
+        return new BitemporalSet<>(this.core);
     }
 
     public static final String DB_FIELD_PNR = "personNumber";
@@ -696,8 +697,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_PNR)
     Set<PersonNumberDataRecord> personNumber = new HashSet<>();
 
-    public Set<PersonNumberDataRecord> getPersonNumber() {
-        return this.personNumber;
+    public BitemporalSet<PersonNumberDataRecord> getPersonNumber() {
+        return new BitemporalSet<>(this.personNumber);
     }
 
     public static final String DB_FIELD_POSITION = "position";
@@ -718,8 +719,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_POSITION)
     Set<PersonPositionDataRecord> position = new HashSet<>();
 
-    public Set<PersonPositionDataRecord> getPosition() {
-        return this.position;
+    public BitemporalSet<PersonPositionDataRecord> getPosition() {
+        return new BitemporalSet<>(this.position);
     }
 
     public static final String DB_FIELD_STATUS = "status";
@@ -762,8 +763,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_PROTECTION)
     Set<ProtectionDataRecord> protection = new HashSet<>();
 
-    public Set<ProtectionDataRecord> getProtection() {
-        return this.protection;
+    public BitemporalSet<ProtectionDataRecord> getProtection() {
+        return new BitemporalSet<>(this.protection);
     }
 
 
@@ -785,8 +786,8 @@ public class PersonEntity extends CprRecordEntity {
     @JsonProperty(IO_FIELD_GUARDIAN)
     Set<GuardianDataRecord> guardian = new HashSet<>();
 
-    public Set<GuardianDataRecord> getGuardian() {
-        return this.guardian;
+    public BitemporalSet<GuardianDataRecord> getGuardian() {
+        return new BitemporalSet<>(this.guardian);
     }
 
     public static final String DB_FIELD_EVENT = "event";
@@ -803,6 +804,33 @@ public class PersonEntity extends CprRecordEntity {
         this.event.add(record);
         record.setEntity(this);
     }
+
+    public static final String DB_FIELD_DATAEVENT = "dataevent";
+    public static final String IO_FIELD_DATAEVENT = "dataevent";
+    @OneToMany(mappedBy = PersonDataEventDataRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @JsonProperty(IO_FIELD_DATAEVENT)
+    Set<PersonDataEventDataRecord> dataevent = new HashSet<>();
+
+    public Set<PersonDataEventDataRecord> getDataEvent() {
+        return this.dataevent;
+    }
+
+    /**
+     *
+     * @param fieldName
+     * @return
+     */
+    public PersonDataEventDataRecord getDataEvent(String fieldName) {
+        return this.dataevent.stream().filter(event -> event.getField().equals(fieldName)).max(Comparator.comparingLong(s -> s.getTimestamp().toEpochSecond())).orElse(null);
+
+    }
+
+    public void addDataEvent(PersonDataEventDataRecord record) {
+        this.dataevent.add(record);
+        record.setEntity(this);
+    }
+
+
 
 
     public void addBitemporalRecord(CprBitemporalPersonRecord record, Session session) {
@@ -1006,9 +1034,8 @@ public class PersonEntity extends CprRecordEntity {
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         newItem.setSameAs(oldItem);
                         session.saveOrUpdate(oldItem);
-                        return set.add((E) newItem);
-
-
+                        boolean success = set.add((E) newItem);
+                        return success;
                     } else if (
                                 newItem.getBitemporality().equals(oldItem.getBitemporality()) &&
                                                 (newItem instanceof AddressDataRecord) &&
@@ -1017,7 +1044,8 @@ public class PersonEntity extends CprRecordEntity {
                         // Special case for addresses: Municipality codes may have changed without us getting a change record (AnnKor: Æ)
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
-                        return set.add((E) newItem);
+                        boolean success = set.add((E) newItem);
+                        return success;
 
                     } else if ( !oldItem.isUndone() &&
                             Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
@@ -1065,6 +1093,7 @@ public class PersonEntity extends CprRecordEntity {
                     clone.setEntity(newestOlderItem.getEntity());
                     newestOlderItem.setReplacedby(clone);
                     set.add(clone);
+                    entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), newestOlderItem.getId(), "newestOlderItem_replaced"));
                 }
                 if (oldestNewerItem != null) {
                     if (newItem.getRegistrationTo() == null) {
@@ -1075,6 +1104,7 @@ public class PersonEntity extends CprRecordEntity {
                         clone.setEntity(oldestNewerItem.getEntity());
                         newItem.setReplacedby(clone);
                         set.add(clone);
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), clone.getId(), "oldestNewerItem_replaced"));
                     }
                 }
             }
@@ -1114,15 +1144,23 @@ public class PersonEntity extends CprRecordEntity {
                         //Specifically for custodyRecord there can be more than one at the same time
                         //This might be correct to do for all recordtypes but is has not been tested good yet
                         !(newItem instanceof CustodyDataRecord) &&
-                        !(newItem instanceof ProtectionDataRecord)) {
+                        !(newItem instanceof ProtectionDataRecord) &&
+                        !(newItem instanceof ChildrenDataRecord)) {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                     if(correctedRecord.getId()!=null) {
                         newItem.setClosesRecordId(correctedRecord.getId());
                     }
+                    boolean success = set.add((E) newItem);
+                    if(newItem.getRegistrationFrom()!=null && correctedRecord.getId()!=null) {
+                        entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), "sametype_closed"));
+                    }
+                    return success;
+                } else {
+                    return set.add((E) newItem);
                 }
 
-                return set.add((E) newItem);
+
             }
         }
         return false;

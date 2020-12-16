@@ -26,6 +26,10 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
 
     public static final String DB_FIELD_COMPANY_RELATION = "companyParticipantRelationRecord";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @ManyToOne(targetEntity = CompanyParticipantRelationRecord.class, fetch = FetchType.LAZY)
     @JoinColumn(name = DB_FIELD_COMPANY_RELATION + DatabaseEntry.REF)
     @JsonIgnore

@@ -30,6 +30,10 @@ public class CompanyLinkRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_CVRNUMBER = "cvrNumber";
     public static final String IO_FIELD_CVRNUMBER = "cvrNummer";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_CVRNUMBER)
     @JsonProperty(value = IO_FIELD_CVRNUMBER)
     private int cvrNumber;

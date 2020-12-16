@@ -36,6 +36,10 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
         this.deletionDate = deletionDate;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     /*
     0001 = Navne- og adressebeskyttelse
     0002 = Lokalvejviserbeskyttelse

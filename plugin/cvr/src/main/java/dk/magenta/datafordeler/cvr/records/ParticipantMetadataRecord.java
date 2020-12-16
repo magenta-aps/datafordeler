@@ -27,6 +27,10 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_NEWEST_LOCATION = "newestLocation";
     public static final String IO_FIELD_NEWEST_LOCATION = "nyesteBeliggenhedsadresse";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @OneToMany(targetEntity = AddressRecord.class, mappedBy = AddressRecord.DB_FIELD_PARTICIPANT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),

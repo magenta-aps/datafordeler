@@ -45,6 +45,10 @@ public class PersonCoreDataRecord extends CprBitemporalPersonRecord<PersonCoreDa
         this.setGender(gender);
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_GENDER = "gender";
     public static final String IO_FIELD_GENDER = "køn";
     @Column(name = DB_FIELD_GENDER)

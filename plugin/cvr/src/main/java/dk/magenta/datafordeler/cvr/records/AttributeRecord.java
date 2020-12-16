@@ -35,6 +35,10 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     public static final String DB_FIELD_SEQUENCENUMBER = "sequenceNumber";
     public static final String IO_FIELD_SEQUENCENUMBER = "sekvensnr";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_SEQUENCENUMBER)
     @JsonProperty(value = IO_FIELD_SEQUENCENUMBER)
     private int sequenceNumber;

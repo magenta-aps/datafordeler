@@ -34,6 +34,10 @@ public class CitizenshipDataRecord extends CprBitemporalPersonRecord<Citizenship
         this.countryCode = countryCode;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_COUNTRY_CODE = "countryCode";
     public static final String IO_FIELD_COUNTRY_CODE = "landekode";
     @Column(name = DB_FIELD_COUNTRY_CODE)

@@ -36,6 +36,10 @@ public class PersonPositionDataRecord extends CprBitemporalPersonRecord<PersonPo
         this.position = position;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_POSITION = "position";
     public static final String IO_FIELD_POSITION = "stilling";
     @Column(name = DB_FIELD_POSITION)

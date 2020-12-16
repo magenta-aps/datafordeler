@@ -47,6 +47,10 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
         this.emigrationCountryCode = emigrationCountryCode;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_IN_COUNTRY_CODE = "immigrationCountryCode";
     public static final String IO_FIELD_IN_COUNTRY_CODE = "indrejseLandekode";
     @Column(name = DB_FIELD_IN_COUNTRY_CODE)

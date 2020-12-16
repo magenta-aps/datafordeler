@@ -42,6 +42,10 @@ public class BirthPlaceVerificationDataRecord extends VerificationDataRecord<Bir
         super(verified);
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Override
     public BirthPlaceVerificationDataRecord clone() {
         BirthPlaceVerificationDataRecord clone = new BirthPlaceVerificationDataRecord();

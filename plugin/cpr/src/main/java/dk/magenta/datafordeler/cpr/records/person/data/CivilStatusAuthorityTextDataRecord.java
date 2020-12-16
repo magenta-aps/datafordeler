@@ -34,7 +34,9 @@ public class CivilStatusAuthorityTextDataRecord extends AuthorityTextDataRecord<
         super(text, correctionMarking);
     }
 
-
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
     @Override
     public CivilStatusAuthorityTextDataRecord clone() {

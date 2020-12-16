@@ -30,6 +30,10 @@ public class AddressConameDataRecord extends CprBitemporalPersonRecord<AddressCo
     public AddressConameDataRecord() {
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public AddressConameDataRecord(String coname) {
         this.coname = coname;
     }

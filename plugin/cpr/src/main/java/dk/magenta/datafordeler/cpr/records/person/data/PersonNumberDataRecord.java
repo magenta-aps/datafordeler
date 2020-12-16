@@ -36,6 +36,10 @@ public class PersonNumberDataRecord extends CprBitemporalPersonRecord<PersonNumb
         this.cprNumber = cprNumber;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_CPR_NUMBER = "cprNumber";
     public static final String IO_FIELD_CPR_NUMBER = "cprNummer";
     @Column(name = DB_FIELD_CPR_NUMBER, length = 10)

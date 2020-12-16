@@ -40,6 +40,10 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
         this.relationPnrStart = relationPnrStart;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
 
     public static final String DB_FIELD_RELATION_TYPE = "relationType";
     public static final String IO_FIELD_RELATION_TYPE = "relationsType";

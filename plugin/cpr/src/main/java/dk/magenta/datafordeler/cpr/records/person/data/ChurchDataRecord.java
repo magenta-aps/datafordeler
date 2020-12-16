@@ -33,6 +33,10 @@ public class ChurchDataRecord extends CprBitemporalPersonRecord<ChurchDataRecord
         this.churchRelation = churchRelation;
     }
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_CHURCH_RELATION = "churchRelation";
     public static final String IO_FIELD_CHURCH_RELATION = "folkekirkeforhold";
     @Column(name = DB_FIELD_CHURCH_RELATION)

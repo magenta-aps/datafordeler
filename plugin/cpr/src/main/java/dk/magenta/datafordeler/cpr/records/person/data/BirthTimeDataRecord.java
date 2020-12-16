@@ -41,7 +41,9 @@ public class BirthTimeDataRecord extends CprBitemporalPersonRecord<BirthTimeData
         this.foedselsraekkefoelge = foedselsraekkefoelge;
     }
 
-
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
     public static final String DB_FIELD_BIRTH_DATETIME = "birthDatetime";
     public static final String IO_FIELD_BIRTH_DATETIME = "fødselsdato";

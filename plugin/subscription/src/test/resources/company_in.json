@@ -1,0 +1,304 @@
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "failed": 0
+  },
+  "hits": {
+    "total": 1,
+    "max_score": 17.219288,
+    "hits": [
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "_doc",
+        "_id": "4001248508",
+        "_score": 17.219288,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 25052943,
+            "regNummer": [],
+            "brancheAnsvarskode": 0,
+            "reklamebeskyttet": true,
+            "navne": [
+              {
+                "navn": "ApS KBIL 17 NR. 1179",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": "2000-02-20"
+                },
+                "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
+              },
+              {
+                "navn": "MAGENTA ApS",
+                "periode": {
+                  "gyldigFra": "2000-02-21",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2000-02-29T11:44:42.000+01:00"
+              }
+            ],
+            "binavne": [],
+            "postadresse": [
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 3996,
+                "kommune": {
+                  "kommuneKode": 957,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                },
+                "husnummerFra": 18,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": "Advokatfirmaet Stakemann",
+                "postboks": null,
+                "vejnavn": "testvejnavn",
+                "bynavn": null,
+                "postnummer": 1306,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": "2000-02-20"
+                },
+                "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+              }
+            ],
+            "beliggenhedsadresse": [
+            ],
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "33369696",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2001-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2001-08-29T19:34:30.000+02:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "info@magenta.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2017-04-10",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-04-10T09:01:06.000+02:00"
+              }
+            ],
+            "hjemmeside": [
+              {
+                "kontaktoplysning": "www.magenta.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2017-04-10",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-04-10T09:01:06.000+02:00"
+              }
+            ],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "1999-11-29T16:33:47.000+01:00"
+              }
+            ],
+            "hovedbranche": [
+            ],
+            "bibranche1": [],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [
+              {
+                "status": "NORMAL",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+              }
+            ],
+            "virksomhedsform": [
+              {
+                "virksomhedsformkode": 80,
+                "kortBeskrivelse": "APS",
+                "langBeskrivelse": "Anpartsselskab",
+                "ansvarligDataleverandoer": "E&S",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
+              }
+            ],
+            "aarsbeskaeftigelse": [
+            ],
+            "kvartalsbeskaeftigelse": [
+            ],
+            "maanedsbeskaeftigelse": [
+            ],
+            "attributter": [
+            ],
+            "penheder": [
+              {
+                "pNummer": 1007256945,
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "1999-11-29T16:33:51.000+01:00"
+              },
+              {
+                "pNummer": 1019601052,
+                "periode": {
+                  "gyldigFra": "2014-08-07",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2014-08-07T09:53:14.000+02:00"
+              }
+            ],
+            "deltagerRelation": [
+            ],
+            "fusioner": [
+            ],
+            "spaltninger": [],
+            "virksomhedMetadata": {
+              "nyesteNavn": {
+                "navn": "MAGENTA ApS",
+                "periode": {
+                  "gyldigFra": "2000-02-21",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2000-02-29T11:44:42.000+01:00"
+              },
+              "nyesteVirksomhedsform": {
+                "virksomhedsformkode": 80,
+                "kortBeskrivelse": "APS",
+                "langBeskrivelse": "Anpartsselskab",
+                "ansvarligDataleverandoer": "E&S",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 5520,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerFra": 43,
+                "adresseId": null,
+                "sidstValideret": "2017-04-10T09:01:55.285+02:00",
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "3",
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Pilestræde",
+                "bynavn": null,
+                "postnummer": 1112,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "2017-04-10",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-04-10T09:01:06.000+02:00"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "620200",
+                "branchetekst": "Konsulentbistand vedrørende informationsteknologi",
+                "periode": {
+                  "gyldigFra": "2014-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-05-22T11:37:32.000+02:00"
+              },
+              "nyesteBibranche1": null,
+              "nyesteBibranche2": null,
+              "nyesteBibranche3": null,
+              "nyesteStatus": null,
+              "nyesteKontaktoplysninger": [
+                "33369696",
+                "info@magenta.dk",
+                "www.magenta.dk"
+              ],
+              "antalPenheder": 2,
+              "nyesteAarsbeskaeftigelse": {
+                "aar": 2014,
+                "antalInklusivEjere": null,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2016-12-15T14:15:55.762+01:00",
+                "intervalKodeAntalInklusivEjere": "ANTAL_10_19",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_10_19"
+              },
+              "nyesteKvartalsbeskaeftigelse": {
+                "aar": 2016,
+                "kvartal": 3,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2017-03-03T16:29:43.402+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_20_49"
+              },
+              "nyesteMaanedsbeskaeftigelse": {
+                "aar": 2016,
+                "maaned": 12,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2017-03-03T16:29:44.934+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_20_49"
+              },
+              "sammensatStatus": "NORMAL",
+              "stiftelsesDato": "1999-11-15",
+              "virkningsDato": "1999-11-15"
+            },
+            "samtId": 57,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4001248508,
+            "enhedstype": "VIRKSOMHED",
+            "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+            "sidstOpdateret": "2017-04-10T09:01:06.000+02:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "PO"
+          }
+        }
+      }
+    ]
+  }
+}
