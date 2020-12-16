@@ -49,6 +49,10 @@ public class ParticipantRecord extends CvrEntityRecord {
 
     public static final String schema = "deltager";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Override
     @JsonIgnore
     protected String getDomain() {

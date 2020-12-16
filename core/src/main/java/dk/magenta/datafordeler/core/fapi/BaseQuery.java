@@ -878,7 +878,7 @@ public abstract class BaseQuery {
     public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List values, Class type, boolean orNull) throws QueryBuildException {
         String member = this.useJoinHandle(handle);
         String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
-        if (member != null && values != null && !values.isEmpty()) {
+        if (member != null && values != null && !values.isEmpty() && values.stream().anyMatch( f -> f!=null)) {
             try {
                 if (orNull) {
                     MultiCondition multiCondition = new MultiCondition(parent, "OR");

@@ -30,6 +30,10 @@ public class CompanyRegNumberRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_REGNUMBER = "regNumber";
     public static final String IO_FIELD_REGNUMBER = "regNummer";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_REGNUMBER)
     @JsonProperty(value = IO_FIELD_REGNUMBER)
     private String regNumber;

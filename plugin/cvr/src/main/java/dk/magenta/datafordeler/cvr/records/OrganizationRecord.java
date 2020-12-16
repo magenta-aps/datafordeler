@@ -25,6 +25,10 @@ public class OrganizationRecord extends CvrRecord {
 
     public static final String DB_FIELD_PARTICIPANT_RELATION = "companyParticipantRelationRecord";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
 
     @ManyToOne(targetEntity = CompanyParticipantRelationRecord.class, fetch = FetchType.LAZY)
     @JoinColumn(name = DB_FIELD_PARTICIPANT_RELATION + DatabaseEntry.REF)

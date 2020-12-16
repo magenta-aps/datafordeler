@@ -42,6 +42,11 @@ pushd %DIR%..\plugin\ger
     call mvnw.cmd -DskipTests clean install
 popd
 
+echo "Build subscription"
+pushd %DIR%..\plugin\subscription
+    call mvnw.cmd -DskipTests clean install
+popd
+
 echo "Build eboks"
 pushd %DIR%..\plugin\eboks
     call mvnw.cmd -DskipTests clean install

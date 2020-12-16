@@ -32,6 +32,10 @@ public class CompanyYearlyNumbersRecord extends CompanyNumbersRecord {
     public static final String DB_FIELD_YEAR = "year";
     public static final String IO_FIELD_YEAR = "aar";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_YEAR)
     @JsonProperty(value = IO_FIELD_YEAR)
     private int year;

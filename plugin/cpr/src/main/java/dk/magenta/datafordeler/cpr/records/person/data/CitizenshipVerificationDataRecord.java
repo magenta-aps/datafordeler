@@ -31,7 +31,9 @@ public class CitizenshipVerificationDataRecord extends VerificationDataRecord<Ci
         super(verified);
     }
 
-
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
     @Override
     public CitizenshipVerificationDataRecord clone() {
