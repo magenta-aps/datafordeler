@@ -171,7 +171,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     }
 
 
-
     public CprBitemporalRecord setBitemporality(OffsetDateTime registrationFrom, OffsetDateTime registrationTo, OffsetDateTime effectFrom, boolean effectFromUncertain, OffsetDateTime effectTo, boolean effectToUncertain) {
         super.setBitemporality(registrationFrom, registrationTo);
         this.effectFrom = effectFrom;
