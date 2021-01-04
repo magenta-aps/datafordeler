@@ -969,10 +969,16 @@ public class PersonEntity extends CprRecordEntity {
                 return set.add((E) newItem);
             }
 
+            if (newItem.line == null || set.stream().anyMatch(item -> StringUtils.equals(newItem.line, item.line))) {
+                //If this specific line with excatcly the same information has allready been read it should be ignored
+                return false;
+            }
 
             E correctedRecord = null;
             E correctingRecord = null;
-            ArrayList<E> items = new ArrayList<>(set);
+            ArrayList<E> allItems = new ArrayList<>(set);
+
+            List<E> items = allItems.stream().filter(f -> f.getFieldName().equals(newItem.getFieldName())).collect(Collectors.toList());
 
             items.sort(Comparator.comparing(CprNontemporalRecord::getCnt));
 
@@ -1015,8 +1021,8 @@ public class PersonEntity extends CprRecordEntity {
                     }
                     return false;
                 }
-                //If we get the same adress again we need to figure out if we already got the information,
-                // or the person is moving to the same adress again
+                //If we get the same record again we need to figure out if we already got the information,
+                // or the person is moving to the same record again
                 else if (newItem.equalData(oldItem)) {
                     /*
                      * Historic item matching prior current item. This means we have the prior item ended, and should set registrationTo
@@ -1029,7 +1035,6 @@ public class PersonEntity extends CprRecordEntity {
                                     !Equality.cprDomainEqualDate(newItem.getEffectFrom(), newItem.getEffectTo())
                                     && oldItem.getReplacedby() == null
                     ) {
-                        //I would expect that this case is wrong, why let a historic overwrite an nonhistoric
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         newItem.setSameAs(oldItem);
