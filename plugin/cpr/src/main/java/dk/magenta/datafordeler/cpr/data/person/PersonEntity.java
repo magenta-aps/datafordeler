@@ -978,7 +978,7 @@ public class PersonEntity extends CprRecordEntity {
             E correctingRecord = null;
             ArrayList<E> allItems = new ArrayList<>(set);
 
-            List<E> items = allItems.stream().filter(f -> f.getFieldName().equals(newItem.getFieldName())).collect(Collectors.toList());
+            List<E> items = allItems.stream().filter(item -> item.getFieldName().equals(newItem.getFieldName())).collect(Collectors.toList());
 
             items.sort(Comparator.comparing(CprNontemporalRecord::getCnt));
 
@@ -1052,15 +1052,14 @@ public class PersonEntity extends CprRecordEntity {
                         boolean success = set.add((E) newItem);
                         return success;
 
-                    } else if ( !oldItem.isUndone() &&
-                            Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
+                    } else if (Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
                                     (Equality.cprDomainEqualDate(newItem.getRegistrationTo(), oldItem.getRegistrationTo()) || newItem.getRegistrationTo() == null) &&
                                     Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom())
                     ) {
                         /*
                          * We see a record that is a near-repeat of a prior record. No need to add it
                          * */
-                        if(newItem.isHistoric()) {
+                        if(isActiveRecord(oldItem)) {
                             return false;
                         }
                     }
@@ -1217,5 +1216,10 @@ public class PersonEntity extends CprRecordEntity {
         ArrayList<BaseQuery> queries = new ArrayList<>();
         queries.addAll(this.address.stream().map(a -> a.getAssoc()).flatMap(x -> x.stream()).collect(Collectors.toList()));
         return queries;
+    }
+
+
+    private static boolean isActiveRecord(CprBitemporalPersonRecord bitemporalRecord) {
+        return bitemporalRecord.getEffectTo()==null && bitemporalRecord.getRegistrationTo()==null && !bitemporalRecord.isUndone();
     }
 }
