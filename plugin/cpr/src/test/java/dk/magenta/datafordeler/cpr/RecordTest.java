@@ -359,7 +359,7 @@ public class RecordTest {
 
 
     @Test
-    public void testPersonGoodTestStuff() throws DataFordelerException, IOException {
+    public void testPersonCorrectHandlingOfClosingRecords() throws DataFordelerException, IOException {
         Session session = sessionManager.getSessionFactory().openSession();
         ImportMetadata importMetadata = new ImportMetadata();
         Transaction transaction = session.beginTransaction();
