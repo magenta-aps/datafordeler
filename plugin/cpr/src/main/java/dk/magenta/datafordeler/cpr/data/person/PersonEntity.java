@@ -1059,7 +1059,7 @@ public class PersonEntity extends CprRecordEntity {
                         /*
                          * We see a record that is a near-repeat of a prior record. No need to add it
                          * */
-                        if(isActiveRecord(oldItem)) {
+                        if(newItem.isHistoric() || isActiveRecord(oldItem)) {
                             return false;
                         }
                     }
