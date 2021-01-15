@@ -20,4 +20,8 @@ public abstract class CprBitemporalPersonRecord<S extends CprBitemporalPersonRec
         return false;
     }
 
+    public boolean isActiveRecord() {
+        return this.getEffectTo()==null && this.getRegistrationTo()==null && !this.isUndone();
+    }
+
 }

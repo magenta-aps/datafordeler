@@ -969,6 +969,10 @@ public class PersonEntity extends CprRecordEntity {
                 return set.add((E) newItem);
             }
 
+            if (newItem.line == null || set.stream().anyMatch(item -> StringUtils.equals(newItem.line, item.line))) {
+                //If this specific line with excatcly the same information has allready been read it should be ignored
+                return false;
+            }
 
             E correctedRecord = null;
             E correctingRecord = null;
@@ -983,8 +987,9 @@ public class PersonEntity extends CprRecordEntity {
                 * It is not a replacement, but a correction. We keep both the corrected and corrector records, with a link between them,
                 * and set registrationTo on the corrected record
                 * */
-                if (newItem.isCorrection() && newItem.hasData()) {
+                if (oldItem.isHistoric() && newItem.isCorrection() && newItem.hasData()) {
                     // Annkor: K
+                    // Acording to responses from CPR-office in denmark corrections can not be made to records that is not historic
                     if (
                             Objects.equals(newItem.getOrigin(), oldItem.getOrigin()) &&
                                     Equality.equal(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
@@ -1002,8 +1007,9 @@ public class PersonEntity extends CprRecordEntity {
                 /*
                  * Item marking that a previous record should be undone by setting a flag on it, enabling lookups to ignore it
                  * */
-                else if (newItem.isUndo() && Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom()) && newItem.equalData(oldItem) && oldItem.getReplacedby() == null) {
+                else if (oldItem.isHistoric() && newItem.isUndo() && Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom()) && newItem.equalData(oldItem) && oldItem.getReplacedby() == null) {
                     // Annkor: A
+                    // Acording to responses from CPR-office in denmark corrections can not be made to records that is not historic
                     oldItem.setUndone(true);
                     session.saveOrUpdate(oldItem);
                     if(oldItem.getClosesRecordId()!=null) {
@@ -1015,8 +1021,8 @@ public class PersonEntity extends CprRecordEntity {
                     }
                     return false;
                 }
-                //If we get the same adress again we need to figure out if we already got the information,
-                // or the person is moving to the same adress again
+                //If we get the same record again we need to figure out if we already got the information,
+                // or the person is moving to the same record again
                 else if (newItem.equalData(oldItem)) {
                     /*
                      * Historic item matching prior current item. This means we have the prior item ended, and should set registrationTo
@@ -1029,7 +1035,8 @@ public class PersonEntity extends CprRecordEntity {
                                     !Equality.cprDomainEqualDate(newItem.getEffectFrom(), newItem.getEffectTo())
                                     && oldItem.getReplacedby() == null
                     ) {
-                        //I would expect that this case is wrong, why let a historic overwrite an nonhistoric
+                        // If we recieve a "historic" record which is equal to a previous "not historic" record,
+                        // then the record is marked as replaced
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         newItem.setSameAs(oldItem);
@@ -1047,15 +1054,18 @@ public class PersonEntity extends CprRecordEntity {
                         boolean success = set.add((E) newItem);
                         return success;
 
-                    } else if ( !oldItem.isUndone() &&
-                            Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
+                    } else if (Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
                                     (Equality.cprDomainEqualDate(newItem.getRegistrationTo(), oldItem.getRegistrationTo()) || newItem.getRegistrationTo() == null) &&
                                     Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom())
                     ) {
                         /*
                          * We see a record that is a near-repeat of a prior record. No need to add it
                          * */
-                        return false;
+                        if(newItem.isHistoric() || oldItem.isActiveRecord()) {
+                            //If the repeated record is historic it should not be added, since this record is allready added.
+                            //If the repeated record is not closed by either undone or closed timestamp, it should not be added.
+                            return false;
+                        }
                     }
                 }
             }
@@ -1125,6 +1135,7 @@ public class PersonEntity extends CprRecordEntity {
                     }
                 }
             }
+
 
 
             if (newItem.isCorrection()) {

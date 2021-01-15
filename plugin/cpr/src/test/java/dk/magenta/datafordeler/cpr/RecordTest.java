@@ -19,6 +19,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.NameRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import org.hamcrest.Matchers;
 import org.hibernate.Criteria;
@@ -357,6 +358,59 @@ public class RecordTest {
     }
 
 
+    @Test
+    public void testPersonCorrectHandlingOfClosingRecords() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        importMetadata.setSession(session);
+        this.loadPerson("/d111111.111111", importMetadata);
+        this.loadPerson("/d111111.111118", importMetadata);
+
+        this.loadPerson("/d111114.111110", importMetadata);
+        this.loadPerson("/d111114.111111", importMetadata);
+        this.loadPerson("/d111114.111112", importMetadata);
+
+        transaction.commit();
+        try {
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("1111111111");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+
+            List<AddressDataRecord> list = personEntity.getAddress().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+
+            for(AddressDataRecord add : list) {
+                System.out.println(add.cnt);
+                System.out.println(add.line);
+            }
+
+            Assert.assertTrue("Validate that the person has an active address ",
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
+
+
+            query.setPersonnummer("1111111113");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+
+            list = personEntity.getAddress().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+
+            for(AddressDataRecord add : list) {
+                System.out.println(add.cnt);
+                System.out.println(add.line);
+            }
+
+            Assert.assertFalse("Validate that the person does not have an active address",
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
+
+        } finally {
+            session.close();
+        }
+    }
+
+
 
     @Test
     public void testPersonAddressSearch() throws DataFordelerException, IOException {
@@ -428,7 +482,6 @@ public class RecordTest {
             PersonEntity personEntity = entities.get(0);
             Assert.assertEquals(1, personEntity.getConame().size());
             Assert.assertEquals(1, personEntity.getAddress().size());
-            Assert.assertEquals(2, personEntity.getAddressName().size());
             Assert.assertEquals(1, personEntity.getBirthPlace().size());
             Assert.assertEquals(0, personEntity.getBirthPlaceVerification().size());
             Assert.assertEquals(1, personEntity.getBirthTime().size());
@@ -440,9 +493,7 @@ public class RecordTest {
             Assert.assertEquals(1, personEntity.getForeignAddress().size());
             Assert.assertEquals(1, personEntity.getEmigration().size());
             Assert.assertEquals(0, personEntity.getMunicipalityMove().size());
-            Assert.assertEquals(4, personEntity.getName().size());
             Assert.assertEquals(3, personEntity.getNameAuthorityText().size());
-            Assert.assertEquals(4, personEntity.getNameVerification().size());
             Assert.assertEquals(1, personEntity.getMother().size());
             Assert.assertEquals(1, personEntity.getMotherVerification().size());
             Assert.assertEquals(1, personEntity.getFather().size());
