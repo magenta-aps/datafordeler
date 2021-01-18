@@ -40,6 +40,7 @@ public class AddressNameDataRecord extends CprBitemporalPersonRecord<AddressName
         this.rapportnavne = rapportnavne;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

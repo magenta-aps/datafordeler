@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.person;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 
@@ -10,6 +11,7 @@ public abstract class CprBitemporalPersonRecord<S extends CprBitemporalPersonRec
 
     public static final String DB_FIELD_ENTITY = CprBitemporalRecord.DB_FIELD_ENTITY;
 
+    @JsonIgnore
     public String getFieldName() {
         return "";
     }

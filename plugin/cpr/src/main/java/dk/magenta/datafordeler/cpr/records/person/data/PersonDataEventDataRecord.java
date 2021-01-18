@@ -36,6 +36,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
         this.text = text;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }
