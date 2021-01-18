@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.records;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
@@ -30,6 +31,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     public static final String DB_FIELD_UNITNUMBER = "unitNumber";
     public static final String IO_FIELD_UNITNUMBER = "enhedsNummer";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

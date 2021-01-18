@@ -34,6 +34,7 @@ public class SecNameRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_NAME = "name";
     public static final String IO_FIELD_NAME = "navn";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

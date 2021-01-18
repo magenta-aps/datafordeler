@@ -46,6 +46,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
 
     public static final String schema = "produktionsenhed";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

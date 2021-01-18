@@ -25,6 +25,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public static final String DB_FIELD_NEWEST_FORM = "newestForm";
     public static final String IO_FIELD_NEWEST_FORM = "nyesteVirksomhedsform";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

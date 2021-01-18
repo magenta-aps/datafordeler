@@ -29,6 +29,7 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
         this.oldItem = oldItem;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

@@ -26,6 +26,7 @@ public class LifecycleRecord extends CvrBitemporalDataRecord {
 
     public static final String TABLE_NAME = "cvr_record_lifecycle";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }
