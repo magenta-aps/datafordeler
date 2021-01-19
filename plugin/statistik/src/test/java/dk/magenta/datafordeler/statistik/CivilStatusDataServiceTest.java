@@ -130,7 +130,9 @@ public class CivilStatusDataServiceTest extends TestBase {
 
         compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), "CivDto");
+                testUtil.csvToJsonString(response.getBody().trim()),
+                "CivDto"
+);
 
         response = restTemplate.exchange("/statistik/civilstate_data/?registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(200, response.getStatusCodeValue());
