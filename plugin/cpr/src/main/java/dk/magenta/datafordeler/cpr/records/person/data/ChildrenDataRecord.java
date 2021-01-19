@@ -35,6 +35,10 @@ public class ChildrenDataRecord extends CprBitemporalPersonRecord<ChildrenDataRe
         this.status = status;
     }
 
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
     public static final String DB_FIELD_CHILD_CPR_NUMBER = "childCprNumber";
     public static final String IO_FIELD_CHILD_CPR_NUMBER = "barnpersonnummer";

@@ -36,6 +36,10 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_PARTICIPANT_RELATION = "relationParticipantRecord";
     public static final String IO_FIELD_PARTICIPANT_RELATION = "deltager";
 
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @OneToOne(targetEntity = RelationParticipantRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonProperty(value = IO_FIELD_PARTICIPANT_RELATION)
     private RelationParticipantRecord relationParticipantRecord;

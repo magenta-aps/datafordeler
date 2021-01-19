@@ -29,23 +29,20 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over PCR-numre som denne person har forældremyndighed over. Udovere CPR-nummeret leveres statuskoden for barnet. Statuskoden benyttes generelt til at indikere en status på personer i CPR-registeret. Dek kan være bopæl i Grønland/Danmark eller at personen er forsvundet eller dødForældremyndigheden beregnes ud fra fremsøgning af en liste over personens børn. Herefter fratrækkes børn som er blevet tildelt en ny forældremyndighed, og der tilføjes børn som denne person har fået tildelt forældremyndigheden over. Børn som er blevet over 18 år fremsøges ikke da forældreemyndigheden dermed er udløbet. Der kan læses om statuskoder på dette link: https://kaqa.gl/Anvendelse/Brugervejledning/Folkeregister/CPR-koder",
+            "description": "Liste over CPR-numre som denne person har forældremyndighed over. Udovere CPR-nummeret leveres statuskoden for barnet. Statuskoden benyttes generelt til at indikere en status på personer i CPR-registeret. Dek kan være bopæl i Grønland/Danmark eller at personen er forsvundet eller dødForældremyndigheden beregnes ud fra fremsøgning af en liste over personens børn. Herefter fratrækkes børn som er blevet tildelt en ny forældremyndighed, og der tilføjes børn som denne person har fået tildelt forældremyndigheden over. Børn som er blevet over 18 år fremsøges ikke da forældreemyndigheden dermed er udløbet. Der kan læses om statuskoder på dette link: https://kaqa.gl/Anvendelse/Brugervejledning/Folkeregister/CPR-koder",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "path": {
+                    "parent": {
                       "type": "string"
                     },
-                    "terms": {
-                      "type": "string"
-                    },
-                    "adresses": {
+                    "children": {
                       "type": "array",
                       "items": {
-                        "type": "string",
-                        "example": ["0101011235", "0101011236", "0101011237"]
+                        "type": "object",
+                        "example": [{"pnr": "01011235", "status": 5},{"pnr": "01011236", "status": 5},{"pnr": "01011237", "status": 5}]
                       }
                     }
                   }

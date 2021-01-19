@@ -142,7 +142,7 @@ function generate_java_api_doc
         '/vagrant/plugin/statistik/src/main/java/dk/magenta/datafordeler/statistik/services' $EMPTY_FOLDER
 
 }
-task "Generating java-api documentation..." generate_java_api_doc
+#task "Generating java-api documentation..." generate_java_api_doc
 
 title "Building reST files from submodules"
 function pull_in_module_docs
@@ -228,7 +228,7 @@ function generate_html_documentation
     do
        subtitle "Generating: $lang"
        mkdir -p $OUTPUT_FOLDER/html/$lang/
-       sphinx-build -D language="$lang" -b html $SPHINX_SOURCE $OUTPUT_FOLDER/html/$lang/
+       #sphinx-build -D language="$lang" -b html $SPHINX_SOURCE $OUTPUT_FOLDER/html/$lang/
     done
 }
 task "Generating html documentation..." generate_html_documentation
@@ -247,13 +247,13 @@ function generate_openapi_documentation
     cp $SPHINX_SOURCE/openapi/prismeapi.html $OUTPUT_FOLDER/html/da/openapi/
     cp $SPHINX_SOURCE/openapi/prismeapi.json $OUTPUT_FOLDER/html/da/openapi/
 
-
-
-
     # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
     cp $SPHINX_SOURCE/openapi/cprapi.html $OUTPUT_FOLDER/html/da/openapi/
     cp $SPHINX_SOURCE/openapi/cprapi.json $OUTPUT_FOLDER/html/da/openapi/
 
+    # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    cp $SPHINX_SOURCE/openapi/subscriptionapi.html $OUTPUT_FOLDER/html/da/openapi/
+    cp $SPHINX_SOURCE/openapi/subscriptionapi.json $OUTPUT_FOLDER/html/da/openapi/
 
     cp -r $SPHINX_SOURCE/openapi/swagger/ $OUTPUT_FOLDER/html/da/openapi/
 }

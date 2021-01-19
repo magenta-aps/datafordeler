@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
+import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
@@ -17,7 +18,13 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
+import dk.magenta.datafordeler.cpr.records.person.NameRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
+import org.hamcrest.Matchers;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +43,8 @@ import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
+
 
 import static org.mockito.Mockito.when;
 
@@ -124,6 +133,8 @@ public class RecordTest {
 
             query.setEfternavn("Testersen");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+
+
 
         } finally {
             session.close();
@@ -321,6 +332,84 @@ public class RecordTest {
         }
     }
 
+    @Test
+    public void testPersonWithUndoneNewAddress() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        importMetadata.setSession(session);
+        this.loadPerson("/undoneNewAdress1.txt", importMetadata);
+        this.loadPerson("/undoneNewAdress2.txt", importMetadata);
+        transaction.commit();
+        try {
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("0101011234");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+
+            Assert.assertTrue("Validate that the address is still correct after undoing a new adress ",
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
+
+        } finally {
+            session.close();
+        }
+    }
+
+
+    @Test
+    public void testPersonCorrectHandlingOfClosingRecords() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+        importMetadata.setSession(session);
+        this.loadPerson("/d111111.111111", importMetadata);
+        this.loadPerson("/d111111.111118", importMetadata);
+
+        this.loadPerson("/d111114.111110", importMetadata);
+        this.loadPerson("/d111114.111111", importMetadata);
+        this.loadPerson("/d111114.111112", importMetadata);
+
+        transaction.commit();
+        try {
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("1111111111");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+
+            List<AddressDataRecord> list = personEntity.getAddress().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+
+            for(AddressDataRecord add : list) {
+                System.out.println(add.cnt);
+                System.out.println(add.line);
+            }
+
+            Assert.assertTrue("Validate that the person has an active address ",
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
+
+
+            query.setPersonnummer("1111111113");
+            entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            personEntity = entities.get(0);
+
+            list = personEntity.getAddress().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+
+            for(AddressDataRecord add : list) {
+                System.out.println(add.cnt);
+                System.out.println(add.line);
+            }
+
+            Assert.assertFalse("Validate that the person does not have an active address",
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
+
+        } finally {
+            session.close();
+        }
+    }
+
 
 
     @Test
@@ -393,7 +482,6 @@ public class RecordTest {
             PersonEntity personEntity = entities.get(0);
             Assert.assertEquals(1, personEntity.getConame().size());
             Assert.assertEquals(1, personEntity.getAddress().size());
-            Assert.assertEquals(2, personEntity.getAddressName().size());
             Assert.assertEquals(1, personEntity.getBirthPlace().size());
             Assert.assertEquals(0, personEntity.getBirthPlaceVerification().size());
             Assert.assertEquals(1, personEntity.getBirthTime().size());
@@ -405,9 +493,7 @@ public class RecordTest {
             Assert.assertEquals(1, personEntity.getForeignAddress().size());
             Assert.assertEquals(1, personEntity.getEmigration().size());
             Assert.assertEquals(0, personEntity.getMunicipalityMove().size());
-            Assert.assertEquals(4, personEntity.getName().size());
             Assert.assertEquals(3, personEntity.getNameAuthorityText().size());
-            Assert.assertEquals(4, personEntity.getNameVerification().size());
             Assert.assertEquals(1, personEntity.getMother().size());
             Assert.assertEquals(1, personEntity.getMotherVerification().size());
             Assert.assertEquals(1, personEntity.getFather().size());
@@ -510,6 +596,141 @@ public class RecordTest {
             Assert.assertEquals("0101900124", personEntity.getMother().iterator().next().getCprNumber());
         } finally {
             session.close();
+        }
+    }
+
+
+
+
+
+    /**
+     * This unittest validates that it is possible to filter out addresschanges that do not happen based on the eventtype A01
+     * @throws DataFordelerException
+     * @throws IOException
+     */
+    @Test
+    public void testPersonLoadAndFindBusinessEvent() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        importMetadata.setSession(session);
+        this.loadPerson("/personsWithEvents.txt", importMetadata);
+        session.close();
+
+        session = sessionManager.getSessionFactory().openSession();
+        PersonRecordQuery query = new PersonRecordQuery();
+        query.setPageSize(100);
+        query.setEvent("A01");
+        query.setEventTimeAfter("2016-10-26T12:00-06:00");
+        query.applyFilters(session);
+        List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        List<String> pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a1Events = Arrays.asList("0101011234", "0101011235", "0101011236", "0101011237", "0101011238"
+                , "0101011239", "0101011240");
+        Collections.sort(a1Events);
+        Collections.sort(pnrList);
+        Assert.assertTrue(a1Events.equals(pnrList));
+
+
+        query = new PersonRecordQuery();
+        query.setEvent("A02");
+        query.setEventTimeAfter("2016-10-26T12:00-06:00");
+        query.applyFilters(session);
+        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a2Events = Arrays.asList("0101011240", "0101011241", "0101011242", "0101011243");
+        Collections.sort(a1Events);
+        Collections.sort(pnrList);
+        Assert.assertThat(pnrList, Matchers.is(a2Events));
+
+        query = new PersonRecordQuery();
+        query.setEvent("A01");
+        query.setEventTimeAfter("2020-09-01T12:00-06:00");
+        query.applyFilters(session);
+        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a1Events1 = Arrays.asList("0101011238", "0101011239");
+        Collections.sort(a1Events1);
+        Collections.sort(pnrList);
+        Assert.assertThat(pnrList, Matchers.is(a1Events1));
+
+        query = new PersonRecordQuery();
+        query.setEvent("A01");
+        query.setEventTimeAfter("2020-09-05T12:00-06:00");
+        query.applyFilters(session);
+        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a1Events2 = Arrays.asList("0101011239");
+        Collections.sort(a1Events2);
+        Collections.sort(pnrList);
+        Assert.assertThat(pnrList, Matchers.is(a1Events2));
+
+        query = new PersonRecordQuery();
+        query.setEvent("A01");
+        query.setEventTimeAfter("2020-09-10T12:00-06:00");
+        query.applyFilters(session);
+        entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        pnrList = entities.stream().map(x -> x.getPersonnummer()).collect(Collectors.toList());
+
+        List<String> a1Events3 = Arrays.asList();
+        Collections.sort(a1Events3);
+        Collections.sort(pnrList);
+        Assert.assertThat(pnrList, Matchers.is(a1Events3));
+    }
+
+    /**
+     * This unittest validates that it is possible to filter out addresschanges that do not happen based on the eventtype A01
+     * @throws DataFordelerException
+     * @throws IOException
+     */
+    @Test
+    public void testPersonLoadAndFindDataEvent() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        importMetadata.setSession(session);
+        this.loadPerson("/personsWithNewAdresses.txt", importMetadata);
+        this.loadPerson("/personsWithNewAdresses2.txt", importMetadata);
+        this.loadPerson("/personsWithNewAdresses3.txt", importMetadata);
+        session.close();
+
+        session = sessionManager.getSessionFactory().openSession();
+        PersonRecordQuery query = new PersonRecordQuery();
+        query.setPersonnummer("0101011234");
+        query.setDataEvent("cpr_person_address_record");
+        query.applyFilters(session);
+        List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+
+        Assert.assertEquals(2, entities.get(0).getDataEvent().size());
+    }
+
+    /**
+     * Confirm that new children does not generate events
+     * @throws Exception
+     */
+    @Test
+    public void testPersonWithChildrenAndConfirmNoChildrenEvents() throws Exception {
+        //This test will start failing in year 2030 when the children in this test is no longer children
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+        }
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("0101011234");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(1, entities.size());
+            Assert.assertEquals(4, entities.get(0).getChildren().size());
+            Assert.assertEquals(0, entities.get(0).getDataEvent().size());
         }
     }
 

@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -31,6 +32,11 @@ public class ChurchDataRecord extends CprBitemporalPersonRecord<ChurchDataRecord
 
     public ChurchDataRecord(Character churchRelation) {
         this.churchRelation = churchRelation;
+    }
+
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
     }
 
     public static final String DB_FIELD_CHURCH_RELATION = "churchRelation";

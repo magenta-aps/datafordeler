@@ -35,6 +35,11 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
     public static final String DB_FIELD_NAME = "name";
     public static final String IO_FIELD_NAME = "navn";
 
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_NAME, length = 900)
     @JsonProperty(value = IO_FIELD_NAME)
     private String name;

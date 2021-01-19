@@ -14,8 +14,8 @@ import java.util.Enumeration;
  */
 public class LoggerHelper {
 
-  final Level URLINVOKE = Level.forName("URLINVOKE", 250);
-  final Level URLRESPONSE = Level.forName("URLRESPONSE", 251);
+  final Level URLINVOKE = Level.forName("[URLINVOKE]", 250);
+  final Level URLRESPONSE = Level.forName("[URLRESPONSE]", 251);
 
   private Logger logger;
   private HttpServletRequest request;
