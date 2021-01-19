@@ -41,6 +41,7 @@ public class ContactRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_DATA = "contactInformation";
     public static final String IO_FIELD_DATA = "kontaktoplysning";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

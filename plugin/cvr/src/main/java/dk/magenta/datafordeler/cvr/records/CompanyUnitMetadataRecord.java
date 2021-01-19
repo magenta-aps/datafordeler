@@ -24,6 +24,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     public static final String DB_FIELD_NEWEST_CVR_RELATION = "newestCvrRelation";
     public static final String IO_FIELD_NEWEST_CVR_RELATION = "nyesteCvrNummerRelation";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

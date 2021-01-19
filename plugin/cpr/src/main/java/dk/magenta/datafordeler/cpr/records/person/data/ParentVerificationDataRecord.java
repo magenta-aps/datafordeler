@@ -37,6 +37,7 @@ public class ParentVerificationDataRecord extends VerificationDataRecord<ParentV
         this.isMother = isMother;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

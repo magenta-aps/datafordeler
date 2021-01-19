@@ -26,6 +26,7 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
 
     public static final String DB_FIELD_COMPANY_RELATION = "companyParticipantRelationRecord";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

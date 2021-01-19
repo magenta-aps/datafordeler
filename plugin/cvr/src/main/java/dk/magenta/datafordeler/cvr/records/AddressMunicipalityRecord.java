@@ -29,6 +29,7 @@ public class AddressMunicipalityRecord extends CvrBitemporalRecord {
 
     public static final String IO_FIELD_MUNICIPALITY_CODE = "kommuneKode";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

@@ -173,6 +173,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
         this.closesRecordId = closesRecordId;
     }
 
+    @JsonIgnore
     public Long getClosesRecordId() {
         return closesRecordId;
     }

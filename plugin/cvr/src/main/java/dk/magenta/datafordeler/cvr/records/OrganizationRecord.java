@@ -25,6 +25,7 @@ public class OrganizationRecord extends CvrRecord {
 
     public static final String DB_FIELD_PARTICIPANT_RELATION = "companyParticipantRelationRecord";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }
