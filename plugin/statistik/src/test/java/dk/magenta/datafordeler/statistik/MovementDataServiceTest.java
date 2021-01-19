@@ -155,7 +155,9 @@ public class MovementDataServiceTest extends TestBase {
 
         compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), "FlyDto");
+                testUtil.csvToJsonString(response.getBody().trim()),
+                "FlyDto"
+);
     }
 
     @Test
