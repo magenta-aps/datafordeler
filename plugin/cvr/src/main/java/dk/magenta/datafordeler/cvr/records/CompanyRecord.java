@@ -49,6 +49,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
     public static final String schema = "virksomhed";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

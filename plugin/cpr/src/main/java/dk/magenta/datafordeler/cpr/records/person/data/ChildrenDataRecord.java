@@ -35,6 +35,7 @@ public class ChildrenDataRecord extends CprBitemporalPersonRecord<ChildrenDataRe
         this.status = status;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

@@ -46,6 +46,7 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
         this.spouseNameMarking = spouseNameMarking;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

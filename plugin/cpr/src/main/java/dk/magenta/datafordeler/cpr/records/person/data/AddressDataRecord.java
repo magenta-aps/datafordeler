@@ -53,6 +53,7 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
         this.startAuthority = startAuthority;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

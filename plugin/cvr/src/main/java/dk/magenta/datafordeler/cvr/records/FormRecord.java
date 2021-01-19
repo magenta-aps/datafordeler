@@ -32,6 +32,7 @@ public class FormRecord extends CvrBitemporalDataRecord {
 
     public static final String DB_FIELD_COMPANY_METADATA = "companyMetadataRecord";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

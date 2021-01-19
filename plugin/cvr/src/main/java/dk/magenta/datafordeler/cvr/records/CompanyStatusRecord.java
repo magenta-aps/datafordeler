@@ -30,6 +30,7 @@ public class CompanyStatusRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_STATUS = "status";
     public static final String IO_FIELD_STATUS = "status";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

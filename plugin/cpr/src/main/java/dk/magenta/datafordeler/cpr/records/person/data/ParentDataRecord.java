@@ -44,6 +44,7 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
         this.nameMarking = nameMarking;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

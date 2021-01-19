@@ -41,6 +41,7 @@ public class BirthTimeDataRecord extends CprBitemporalPersonRecord<BirthTimeData
         this.foedselsraekkefoelge = foedselsraekkefoelge;
     }
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }

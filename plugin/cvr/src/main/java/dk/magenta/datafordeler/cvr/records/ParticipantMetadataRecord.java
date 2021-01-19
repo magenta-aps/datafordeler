@@ -27,6 +27,7 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_NEWEST_LOCATION = "newestLocation";
     public static final String IO_FIELD_NEWEST_LOCATION = "nyesteBeliggenhedsadresse";
 
+    @JsonIgnore
     public String getFieldName() {
         return TABLE_NAME;
     }
