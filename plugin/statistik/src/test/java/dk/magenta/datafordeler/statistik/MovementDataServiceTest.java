@@ -122,7 +122,9 @@ public class MovementDataServiceTest extends TestBase {
                 "\"0101011235\";\"2005\";;\"05\";;;\"1111111112\";\"1111111111\";;\"09-05-2019\";\"\";\"11-04-2019\";;\"0956\";\"\";\"0243\";\"\";\"\";\"\";\"1654\";;\"0957\";\"\";\"0102\";\"0002\";\"\";\"\";\"\"";
         compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), "FlyDto");
+                testUtil.csvToJsonString(response.getBody().trim()),
+                "FlyDto"
+);
     }
 
 
@@ -153,7 +155,9 @@ public class MovementDataServiceTest extends TestBase {
 
         compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), "FlyDto");
+                testUtil.csvToJsonString(response.getBody().trim()),
+                "FlyDto"
+);
     }
 
     @Test
@@ -191,7 +195,9 @@ public class MovementDataServiceTest extends TestBase {
 
         compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(contents.trim()), "FlyDto");
+                testUtil.csvToJsonString(contents.trim()),
+                "FlyDto"
+);
     }
 
 }

@@ -129,7 +129,9 @@ public abstract class TestBase {
         }
         JSONAssert.assertEquals(
                 expectedJsonArray,
-                actualJsonArray, JSONCompareMode.LENIENT);
+                actualJsonArray,
+                JSONCompareMode.LENIENT
+);
 
     }
 }
