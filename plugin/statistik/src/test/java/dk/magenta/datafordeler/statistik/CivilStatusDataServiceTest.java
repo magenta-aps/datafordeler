@@ -144,7 +144,9 @@ public class CivilStatusDataServiceTest extends TestBase {
 
         compareJSONARRAYWithIgnoredValues(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), "CivDto");
+                testUtil.csvToJsonString(response.getBody().trim()),
+                "CivDto"
+);
     }
 
 
