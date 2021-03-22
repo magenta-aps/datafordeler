@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 
@@ -77,7 +78,7 @@ public class VoteListDataService extends PersonStatisticsService {
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public void get(HttpServletRequest request, HttpServletResponse response)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, IOException, HttpNotFoundException, MissingParameterException, InvalidCertificateException {
-        super.handleRequest(request, response, ServiceName.STATUS);
+        super.handleRequest(request, response, ServiceName.VOTE);
     }
 
     /**
@@ -96,16 +97,15 @@ public class VoteListDataService extends PersonStatisticsService {
     @RequestMapping(method = RequestMethod.POST, path = "/")
     public void handlePost(HttpServletRequest request, HttpServletResponse response)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, IOException, MissingParameterException, InvalidClientInputException, HttpNotFoundException, InvalidCertificateException {
-        super.handleRequest(request, response, ServiceName.STATUS);
+        super.handleRequest(request, response, ServiceName.VOTE);
     }
 
     @Override
     protected List<String> getColumnNames() {
         return Arrays.asList(new String[]{
-                PNR, BIRTHDAY_YEAR, FIRST_NAME, LAST_NAME, STATUS_CODE,
-                BIRTH_AUTHORITY, BIRTH_AUTHORITY_TEXT, CITIZENSHIP_CODE, MOTHER_PNR, FATHER_PNR, CIVIL_STATUS, SPOUSE_PNR,
+                PNR, FIRST_NAME, LAST_NAME, BIRTHDAY_YEAR, STATUS_CODE, CITIZENSHIP_CODE,
                 MUNICIPALITY_CODE, LOCALITY_NAME, LOCALITY_CODE, LOCALITY_ABBREVIATION, ROAD_CODE, ROAD_NAME, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER,
-                BNR, MOVING_IN_DATE, MOVE_PROD_DATE, POST_CODE, CIVIL_STATUS_DATE, CIVIL_STATUS_PROD_DATE, CHURCH, PROTECTION_TYPE
+                BNR, POST_CODE, PROTECTION_TYPE
         });
     }
 
@@ -155,17 +155,15 @@ public class VoteListDataService extends PersonStatisticsService {
             item.put(LAST_NAME, nameDataRecord.getLastName());
         }
 
-        BirthPlaceDataRecord birthPlaceDataRecord = filter(person.getBirthPlace(), filter);
-        if(birthPlaceDataRecord!=null) {
-            item.put(BIRTH_AUTHORITY, Integer.toString(birthPlaceDataRecord.getAuthority()));
-            item.put(BIRTH_AUTHORITY_CODE_TEXT, birthPlaceDataRecord.getBirthPlaceName());
-            item.put(BIRTH_AUTHORITY_TEXT, birthPlaceDataRecord.getBirthPlaceName());
-        }
-
         BirthTimeDataRecord birthTimeDataRecord = filter(person.getBirthTime(), filter);
         if(birthTimeDataRecord!=null) {
             LocalDateTime birthTime = birthTimeDataRecord.getBirthDatetime();
             if (birthTime != null) {
+                //If a person is less than 18 years at this date, we return without adding the person
+                if(filter.effectAt.minusYears(18).isBefore(birthTime.atOffset(ZoneOffset.UTC)))
+                {
+                    return null;
+                }
                 item.put(BIRTHDAY_YEAR, Integer.toString(birthTime.getYear()));
             }
         }
@@ -180,43 +178,15 @@ public class VoteListDataService extends PersonStatisticsService {
             item.put(CITIZENSHIP_CODE, Integer.toString(citizenshipDataRecord.getCountryCode()));
         }
 
-        ParentDataRecord mparentDataRecord = filter(person.getMother(), filter);
-        if(mparentDataRecord!=null) {
-            item.put(MOTHER_PNR, formatPnr(mparentDataRecord.getCprNumber()));
-        }
-
-        ParentDataRecord fparentDataRecord = filter(person.getFather(), filter);
-        if(fparentDataRecord!=null) {
-            item.put(FATHER_PNR, formatPnr(fparentDataRecord.getCprNumber()));
-        }
-
-        CivilStatusDataRecord civilStatusDataRecord = filter(person.getCivilstatus(), filter);
-        if(civilStatusDataRecord!=null) {
-            item.put(SPOUSE_PNR, formatPnr(civilStatusDataRecord.getSpouseCpr()));
-        }
-
-        ChurchDataRecord churchDataRecord = filter(person.getChurchRelation(), filter);
-        if(churchDataRecord!=null) {
-            item.put(CHURCH, churchDataRecord.getChurchRelation().toString());
-        }
-
         ProtectionDataRecord protectionDataRecord = filter(person.getProtection(), filter);
         if(protectionDataRecord!=null) {
             item.put(PROTECTION_TYPE, Integer.toString(protectionDataRecord.getProtectionType()));
         }
 
-        CivilStatusDataRecord civilStatusDataRecordr = filter(person.getCivilstatus(), filter);
-        if(civilStatusDataRecordr!=null) {
-            item.put(CIVIL_STATUS, civilStatusDataRecordr.getCivilStatus());
-            item.put(CIVIL_STATUS_DATE, formatTime(civilStatusDataRecordr.getEffectFrom()));
-            item.put(CIVIL_STATUS_PROD_DATE, formatTime(civilStatusDataRecordr.getRegistrationFrom()));
-        }
 
         AddressDataRecord addressDataRecord = filter(person.getAddress(), filter);
         if(addressDataRecord!=null) {
             if (addressDataRecord.getMunicipalityCode() < 900) return null;
-            item.put(MOVING_IN_DATE, formatTime(addressDataRecord.getEffectFrom()));
-            item.put(MOVE_PROD_DATE, formatTime(addressDataRecord.getRegistrationFrom()));
 
             item.put(MUNICIPALITY_CODE, formatMunicipalityCode(addressDataRecord.getMunicipalityCode()));
             item.put(ROAD_CODE, formatRoadCode(addressDataRecord.getRoadCode()));
