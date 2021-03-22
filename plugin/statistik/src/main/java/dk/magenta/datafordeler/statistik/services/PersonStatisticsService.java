@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.naturalOrder;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public abstract class PersonStatisticsService extends StatisticsService {
@@ -193,7 +194,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
      */
     public static <R extends CprBitemporalRecord> R findRegistrationAtMatchingChangedtimePre(Collection<R> records, OffsetDateTime changedToOrIsTime) {
         R result = null;
-        List<R> filtered = records.stream().filter(r -> r.getEffectTo()==null && r.getRegistrationTo()!=null && r.getRegistrationTo().equals(changedToOrIsTime)).collect(Collectors.toList());
+        List<R> filtered = records.stream().filter(r -> r.getEffectTo()==null && r.getRegistrationTo()!=null && r.getRegistrationTo().equals(changedToOrIsTime)).collect(toList());
         if(filtered.size()==0) {
             Comparator regTimeComparator = Comparator.comparing(R::getRegistrationFrom);
             result = (R)records.stream().max(regTimeComparator).orElse(null);
@@ -224,6 +225,17 @@ public abstract class PersonStatisticsService extends StatisticsService {
      */
     public static <R extends CprBitemporalRecord> R findNewestUnclosed(Collection<R> records) {
         return (R) records.stream().filter(r -> r.getBitemporality().registrationTo == null).max(bitemporalComparator).orElse(null);
+    }
+
+    /**
+     * Find all records which is unclosed in registrationinterval, and which is not undone
+     * @param records
+     * @param <R>
+     * @return
+     */
+    public static <R extends CprBitemporalRecord> List<R> findAllUnclosedInRegistrationAndNotUndone(Collection<R> records, OffsetDateTime intervalstart, OffsetDateTime intervalend) {
+        List s = records.stream().filter(r -> r.getBitemporality().registrationTo == null && !r.isUndone() && (r.getBitemporality().effectTo == null || intervalstart.isBefore(r.getBitemporality().effectTo) ||  intervalend.isAfter((r.getBitemporality().effectFrom)))).collect(toList());
+        return s;
     }
 
     /**
@@ -268,7 +280,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
 
 
     public static <R extends CprBitemporalRecord> List<R> FilterOnRegistrationFrom(Collection<R> records, OffsetDateTime registrationTimeStart, OffsetDateTime registrationTimeEnd) {
-        List<R> filtered = records.stream().filter(r -> r.getRegistrationFrom()!= null && (registrationTimeStart==null || r.getRegistrationFrom().isAfter(registrationTimeStart)) && (registrationTimeEnd==null || r.getRegistrationFrom().isBefore(registrationTimeEnd))).collect(Collectors.toList());
+        List<R> filtered = records.stream().filter(r -> r.getRegistrationFrom()!= null && (registrationTimeStart==null || r.getRegistrationFrom().isAfter(registrationTimeStart)) && (registrationTimeEnd==null || r.getRegistrationFrom().isBefore(registrationTimeEnd))).collect(toList());
         return filtered;
     }
 }

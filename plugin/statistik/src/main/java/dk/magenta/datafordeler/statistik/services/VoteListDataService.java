@@ -30,6 +30,22 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 
+/**
+
+Alle statuskoder før denne dato skal være 5 eller 7
+public static final String BEFORE_DATE_PARAMETER = "beforeDate";
+
+Alle statuskoder efter denne dato skal være 5 eller 7
+public static final String AFTER_DATE_PARAMETER = "afterDate";
+
+ //datoen hvor man skal være 18 år
+ public static final String EFFECT_DATE_PARAMETER = "effectDate";
+
+ RegistrationAt
+ Der skal kigges på information registreringsinterval der opfylder dette
+
+ */
+
 
 @RestController
 @RequestMapping("/statistik/vote_list_data")
@@ -105,7 +121,7 @@ public class VoteListDataService extends PersonStatisticsService {
         return Arrays.asList(new String[]{
                 PNR, FIRST_NAME, LAST_NAME, BIRTHDAY_YEAR, STATUS_CODE, CITIZENSHIP_CODE,
                 MUNICIPALITY_CODE, LOCALITY_NAME, LOCALITY_CODE, LOCALITY_ABBREVIATION, ROAD_CODE, ROAD_NAME, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER,
-                BNR, POST_CODE, PROTECTION_TYPE
+                BNR, POST_CODE, POST_DISTRICT, PROTECTION_TYPE
         });
     }
 
@@ -164,13 +180,23 @@ public class VoteListDataService extends PersonStatisticsService {
                 {
                     return null;
                 }
-                item.put(BIRTHDAY_YEAR, Integer.toString(birthTime.getYear()));
+                item.put(BIRTHDAY_YEAR, formatTime(birthTimeDataRecord.getBirthDatetime().toLocalDate()));
+            }  else {
+                item.put(BIRTHDAY_YEAR, "UNDEFINED");
             }
         }
 
-        PersonStatusDataRecord statusDataRecord = filter(person.getStatus(), filter);
-        if(statusDataRecord!=null) {
-            item.put(STATUS_CODE, formatStatusCode(statusDataRecord.getStatus()));
+        List<PersonStatusDataRecord> statusDataRecords = findAllUnclosedInRegistrationAndNotUndone(person.getStatus(), filter.after, filter.before);
+        if(statusDataRecords!=null) {
+            System.out.println(statusDataRecords.size());
+            String statusString = " ";
+            for(PersonStatusDataRecord status : statusDataRecords) {
+                statusString += status.getStatus();
+            }
+
+            item.put(STATUS_CODE, statusString);
+        } else {
+            item.put(STATUS_CODE, "UNDEFINED");
         }
 
         CitizenshipDataRecord citizenshipDataRecord = filter(person.getCitizenship(), filter);
@@ -206,6 +232,7 @@ public class VoteListDataService extends PersonStatisticsService {
                 item.put(LOCALITY_CODE, lookup.getLocalityCode());
                 item.put(LOCALITY_ABBREVIATION, lookup.getLocalityAbbrev());
                 item.put(POST_CODE, Integer.toString(lookup.getPostalCode()));
+                item.put(POST_DISTRICT, lookup.getPostalDistrict());
                 item.put(ROAD_NAME, lookup.getRoadName());
             }
         }
