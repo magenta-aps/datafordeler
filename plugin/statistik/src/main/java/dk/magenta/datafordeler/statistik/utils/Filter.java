@@ -30,6 +30,10 @@ public class Filter {
 
     public OffsetDateTime registrationAt;
 
+    public OffsetDateTime filterTime1;
+
+    public OffsetDateTime filterTime2;
+
     public LocalDate originAfter;
 
     public LocalDate originBefore;
@@ -51,6 +55,8 @@ public class Filter {
         this.after = Query.parseDateTime(request.getParameter(StatisticsService.AFTER_DATE_PARAMETER));
         this.originAfter = parseLocaldate(request.getParameter(StatisticsService.ORIGIN_AFTER));
         this.originBefore = parseLocaldate(request.getParameter(StatisticsService.ORIGIN_BEFORE));
+        this.filterTime1 = Query.parseDateTime(request.getParameter("filterTime1"));
+        this.filterTime2 = Query.parseDateTime(request.getParameter("filterTime2"));
         this.timeintervallimit =timeintervallimit;
         String[] pnr = request.getParameterValues("pnr");
         if (pnr != null && pnr.length > 0) {

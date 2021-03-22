@@ -77,7 +77,7 @@ public class VoteListDataServiceTest extends TestBase {
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
 
-        response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-07-01&registrationAt=2018-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+        response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-07-01&filterTime1=2000-08-01&filterTime2=2020-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(200, response.getStatusCodeValue());
         Assert.assertNotNull("Response contains a body", response);
 
@@ -88,7 +88,7 @@ public class VoteListDataServiceTest extends TestBase {
     public void testFileOutput() throws IOException {
         voteListDataService.setWriteToLocalFile(true);
 
-        ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-05-01&registrationAt=2018-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+        ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-05-01&filterTime1=2000-08-01&filterTime2=2020-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(403, response.getStatusCodeValue());
 
         testUserDetails = new TestUserDetails();
@@ -96,7 +96,7 @@ public class VoteListDataServiceTest extends TestBase {
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
 
-        response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-07-01&registrationAt=2018-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+        response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-07-01&filterTime1=2000-08-01&filterTime2=2020-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
 
         Assert.assertEquals(200, response.getStatusCodeValue());
 

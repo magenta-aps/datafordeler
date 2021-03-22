@@ -186,7 +186,7 @@ public class VoteListDataService extends PersonStatisticsService {
             }
         }
 
-        List<PersonStatusDataRecord> statusDataRecords = findAllUnclosedInRegistrationAndNotUndone(person.getStatus(), filter.after, filter.before);
+        List<PersonStatusDataRecord> statusDataRecords = findAllUnclosedInRegistrationAndNotUndone(person.getStatus(), filter.filterTime1, filter.filterTime2);
         if(statusDataRecords!=null) {
             System.out.println(statusDataRecords.size());
             String statusString = " ";
