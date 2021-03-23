@@ -102,7 +102,7 @@ public class GeoLookupService extends CprLookupService {
                 geoLookupDTO.setPostalDistrict(entity.getName().iterator().next().getName());
             } else {
                 //Fallback to supplying with danish postalcodes
-                CprLookupDTO cprDto = super.doLookup(municipalityCode, roadCode);
+                CprLookupDTO cprDto = super.doLookup(municipalityCode, roadCode, "");
                 geoLookupDTO.setPostalCode(cprDto.getPostalCode());
                 geoLookupDTO.setPostalDistrict(cprDto.getPostalDistrict());
             }
