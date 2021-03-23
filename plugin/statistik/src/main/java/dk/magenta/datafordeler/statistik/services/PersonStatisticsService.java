@@ -16,6 +16,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonStatusDataRecord;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportSyncHandler;
@@ -233,9 +234,10 @@ public abstract class PersonStatisticsService extends StatisticsService {
      * @param <R>
      * @return
      */
-    public static <R extends CprBitemporalRecord> List<R> findAllUnclosedInRegistrationAndNotUndone(Collection<R> records, OffsetDateTime intervalstart, OffsetDateTime intervalend) {
-        List s = records.stream().filter(r -> r.getBitemporality().registrationTo == null && !r.isUndone() && (r.getBitemporality().effectTo == null || intervalstart.isBefore(r.getBitemporality().effectTo) ||  intervalend.isAfter((r.getBitemporality().effectFrom)))).collect(toList());
-        return s;
+    public static <R extends CprBitemporalRecord> List<R> findAllUnclosedInRegistrationAndNotUndone(Collection<R> records, OffsetDateTime intervalstart) {
+        List<R> recordList = records.stream().filter(r -> r.getBitemporality().registrationTo == null && !r.isUndone() &&
+                (r.getBitemporality().effectTo == null || r.getBitemporality().effectTo.isAfter(intervalstart))).collect(toList());
+        return recordList;
     }
 
     /**

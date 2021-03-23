@@ -54,7 +54,7 @@ public class VoteListDataServiceTest extends TestBase {
     @Before
     public void initialize() throws Exception {
         testsUtils.setPath();
-        testsUtils.loadPersonData("statusperson.txt");
+        testsUtils.loadPersonData("voter.txt");
         this.loadAllGeoAdress(sessionManager);
         voteListDataService.setUseTimeintervallimit(false);
     }
@@ -65,30 +65,12 @@ public class VoteListDataServiceTest extends TestBase {
         testsUtils.deleteAll();
     }
 
-    @Test
-    public void testStatusDataService() throws JsonProcessingException {
-        voteListDataService.setWriteToLocalFile(false);
-
-        ResponseEntity<String> response;// = restTemplate.exchange("/statistik/status_data/?effectDate=2018-04-16", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        //Assert.assertEquals(403, response.getStatusCodeValue());
-
-        testUserDetails = new TestUserDetails();
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
-
-        response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-07-01&filterTime1=2000-08-01&filterTime2=2020-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
-        Assert.assertNotNull("Response contains a body", response);
-
-
-    }
 
     @Test
     public void testFileOutput() throws IOException {
         voteListDataService.setWriteToLocalFile(true);
 
-        ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-05-01&filterTime1=2000-08-01&filterTime2=2020-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+        ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2031-03-20&&registrationAt=2031-03-20&filterTime1=2030-11-01&filterTime2=2031-03-20", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(403, response.getStatusCodeValue());
 
         testUserDetails = new TestUserDetails();
@@ -96,7 +78,7 @@ public class VoteListDataServiceTest extends TestBase {
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
 
-        response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2018-07-01&filterTime1=2000-08-01&filterTime2=2020-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+        response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2031-03-20&&registrationAt=2031-03-20&filterTime1=2030-11-01&filterTime2=2031-03-20", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
 
         Assert.assertEquals(200, response.getStatusCodeValue());
 
@@ -108,6 +90,7 @@ public class VoteListDataServiceTest extends TestBase {
                 fileInputStream,"UTF-8"
         );
         fileInputStream.close();
+
 
 
     }

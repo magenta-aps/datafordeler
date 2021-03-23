@@ -121,7 +121,7 @@ public class VoteListDataService extends PersonStatisticsService {
         return Arrays.asList(new String[]{
                 PNR, FIRST_NAME, LAST_NAME, "FoedDato", STATUS_CODE, CITIZENSHIP_CODE,
                 MUNICIPALITY_CODE, LOCALITY_NAME, LOCALITY_CODE, LOCALITY_ABBREVIATION, ROAD_CODE, ROAD_NAME, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER,
-                BNR, POST_CODE, POST_DISTRICT
+                BNR, POST_CODE, POST_DISTRICT, "GUARDIAN"
         });
     }
 
@@ -186,7 +186,7 @@ public class VoteListDataService extends PersonStatisticsService {
             }
         }
 
-        List<PersonStatusDataRecord> statusDataRecords = findAllUnclosedInRegistrationAndNotUndone(person.getStatus(), filter.filterTime1, filter.filterTime2);
+        List<PersonStatusDataRecord> statusDataRecords = findAllUnclosedInRegistrationAndNotUndone(person.getStatus(), filter.filterTime1);
         if(statusDataRecords!=null) {
             System.out.println(statusDataRecords.size());
             String statusString = " ";
@@ -233,6 +233,11 @@ public class VoteListDataService extends PersonStatisticsService {
                 item.put(POST_DISTRICT, lookup.getPostalDistrict());
                 item.put(ROAD_NAME, lookup.getRoadName());
             }
+        }
+
+        GuardianDataRecord guardianDataRecord = filter(person.getGuardian(), filter);
+        if(guardianDataRecord!=null) {
+            item.put("GUARDIAN", guardianDataRecord.getRelationPnr());
         }
 
 
