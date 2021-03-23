@@ -119,9 +119,9 @@ public class VoteListDataService extends PersonStatisticsService {
     @Override
     protected List<String> getColumnNames() {
         return Arrays.asList(new String[]{
-                PNR, FIRST_NAME, LAST_NAME, BIRTHDAY_YEAR, STATUS_CODE, CITIZENSHIP_CODE,
+                PNR, FIRST_NAME, LAST_NAME, "FoedDato", STATUS_CODE, CITIZENSHIP_CODE,
                 MUNICIPALITY_CODE, LOCALITY_NAME, LOCALITY_CODE, LOCALITY_ABBREVIATION, ROAD_CODE, ROAD_NAME, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER,
-                BNR, POST_CODE, POST_DISTRICT, PROTECTION_TYPE
+                BNR, POST_CODE, POST_DISTRICT
         });
     }
 
@@ -180,9 +180,9 @@ public class VoteListDataService extends PersonStatisticsService {
                 {
                     return null;
                 }
-                item.put(BIRTHDAY_YEAR, formatTime(birthTimeDataRecord.getBirthDatetime().toLocalDate()));
+                item.put("FoedDato", formatTime(birthTimeDataRecord.getBirthDatetime().toLocalDate()));
             }  else {
-                item.put(BIRTHDAY_YEAR, "UNDEFINED");
+                item.put("FoedDato", "UNDEFINED");
             }
         }
 
@@ -191,9 +191,10 @@ public class VoteListDataService extends PersonStatisticsService {
             System.out.println(statusDataRecords.size());
             String statusString = " ";
             for(PersonStatusDataRecord status : statusDataRecords) {
-                statusString += status.getStatus();
+                if(status.getStatus()!=5 && status.getStatus()!=7) {
+                    return null;
+                }
             }
-
             item.put(STATUS_CODE, statusString);
         } else {
             item.put(STATUS_CODE, "UNDEFINED");
@@ -204,15 +205,13 @@ public class VoteListDataService extends PersonStatisticsService {
             item.put(CITIZENSHIP_CODE, Integer.toString(citizenshipDataRecord.getCountryCode()));
         }
 
-        ProtectionDataRecord protectionDataRecord = filter(person.getProtection(), filter);
-        if(protectionDataRecord!=null) {
-            item.put(PROTECTION_TYPE, Integer.toString(protectionDataRecord.getProtectionType()));
-        }
-
-
         AddressDataRecord addressDataRecord = filter(person.getAddress(), filter);
         if(addressDataRecord!=null) {
-            if (addressDataRecord.getMunicipalityCode() < 900) return null;
+            if (addressDataRecord.getMunicipalityCode() < 900) {
+                return null;
+            } else if(filter.munipialicityFilter != null && addressDataRecord.getMunicipalityCode() != filter.munipialicityFilter) {
+                return null;
+            }
 
             item.put(MUNICIPALITY_CODE, formatMunicipalityCode(addressDataRecord.getMunicipalityCode()));
             item.put(ROAD_CODE, formatRoadCode(addressDataRecord.getRoadCode()));

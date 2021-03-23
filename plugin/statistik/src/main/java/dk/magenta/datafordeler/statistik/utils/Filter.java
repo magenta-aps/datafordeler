@@ -10,10 +10,7 @@ import dk.magenta.datafordeler.statistik.services.StatisticsService;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Filter {
@@ -33,6 +30,8 @@ public class Filter {
     public OffsetDateTime filterTime1;
 
     public OffsetDateTime filterTime2;
+
+    public Integer munipialicityFilter;
 
     public LocalDate originAfter;
 
@@ -57,6 +56,11 @@ public class Filter {
         this.originBefore = parseLocaldate(request.getParameter(StatisticsService.ORIGIN_BEFORE));
         this.filterTime1 = Query.parseDateTime(request.getParameter("filterTime1"));
         this.filterTime2 = Query.parseDateTime(request.getParameter("filterTime2"));
+        this.munipialicityFilter = null;
+        String munipialicityString = request.getParameter("munipialicityFilter");
+        if(munipialicityString != null) {
+            munipialicityFilter = Integer.parseInt(request.getParameter("munipialicityFilter"));
+        }
         this.timeintervallimit =timeintervallimit;
         String[] pnr = request.getParameterValues("pnr");
         if (pnr != null && pnr.length > 0) {
