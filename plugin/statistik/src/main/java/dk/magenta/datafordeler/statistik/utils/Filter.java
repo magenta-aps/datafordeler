@@ -29,9 +29,7 @@ public class Filter {
 
     public OffsetDateTime filterTime1;
 
-    public OffsetDateTime filterTime2;
-
-    public Integer munipialicityFilter;
+    public Integer municipalityFilter;
 
     public LocalDate originAfter;
 
@@ -55,10 +53,10 @@ public class Filter {
         this.originAfter = parseLocaldate(request.getParameter(StatisticsService.ORIGIN_AFTER));
         this.originBefore = parseLocaldate(request.getParameter(StatisticsService.ORIGIN_BEFORE));
         this.filterTime1 = Query.parseDateTime(request.getParameter("filterTime1"));
-        this.munipialicityFilter = null;
-        String munipialicityString = request.getParameter("munipialicityFilter");
+        this.municipalityFilter = null;
+        String munipialicityString = request.getParameter("municipalityFilter");
         if(munipialicityString != null) {
-            munipialicityFilter = Integer.parseInt(request.getParameter("munipialicityFilter"));
+            municipalityFilter = Integer.parseInt(request.getParameter("municipalityFilter"));
         }
         this.timeintervallimit =timeintervallimit;
         String[] pnr = request.getParameterValues("pnr");

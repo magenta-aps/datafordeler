@@ -158,7 +158,7 @@ public class VoteListDataServiceTest extends TestBase {
         testsUtils.applyAccess(testUserDetails);
 
 
-        ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2029-11-13&&registrationAt=2031-03-20&filterTime1=2030-11-01&munipialicityFilter=956", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+        ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2029-11-13&&registrationAt=2031-03-20&filterTime1=2030-11-01&municipalityFilter=956", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(200, response.getStatusCodeValue());
         String[] statusFiles = new File(StatisticsService.PATH_FILE).list((dir, name) -> name.startsWith(StatisticsService.ServiceName.VOTE.getIdentifier()));
         Assert.assertEquals(1, statusFiles.length);
@@ -181,7 +181,7 @@ public class VoteListDataServiceTest extends TestBase {
         testsUtils.applyAccess(testUserDetails);
 
 
-        ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2029-11-13&&registrationAt=2031-03-20&filterTime1=2030-11-01&munipialicityFilter=957", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+        ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2029-11-13&&registrationAt=2031-03-20&filterTime1=2030-11-01&municipalityFilter=957", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(200, response.getStatusCodeValue());
         String[] statusFiles = new File(StatisticsService.PATH_FILE).list((dir, name) -> name.startsWith(StatisticsService.ServiceName.VOTE.getIdentifier()));
         Assert.assertEquals(1, statusFiles.length);

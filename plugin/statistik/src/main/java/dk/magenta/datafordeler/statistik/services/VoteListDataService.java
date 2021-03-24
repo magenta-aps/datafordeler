@@ -42,7 +42,7 @@ import java.util.*;
 
  For landstingsvalget skal der derudover frasorteres alle personer, som ikke har haft bopæl i grønland i et halvt år dette angives ved at sætte filterTime1 til T minus et halvt år
 
- For kommunalvalget sættes filterTime1 til samme dato som effectDate og registrationAt, derudover sættes municipalityFilter til kommunekoden
+ For kommunalvalget sættes filterTime1 til samme dato som effectDate og registrationAt, derudover sættes municipalityFilterFilter til kommunekoden
 
  Om en person har været bosiddende i grønland siden filterTime1 identificeret ved at iterere over alle statuskoder på personen, som har været delvist gældende siden filterTime1.
  Hvis nogen af disse statuskoder har anden værdi end 5 eller 7, så frasorteres denne person fra listen
@@ -217,7 +217,7 @@ public class VoteListDataService extends PersonStatisticsService {
         if(addressDataRecord!=null) {
             if (addressDataRecord.getMunicipalityCode() < 900) {
                 return null;
-            } else if(filter.munipialicityFilter != null && addressDataRecord.getMunicipalityCode() != filter.munipialicityFilter) {
+            } else if(filter.municipalityFilter != null && addressDataRecord.getMunicipalityCode() != filter.municipalityFilter) {
                 return null;
             }
 
