@@ -86,7 +86,7 @@ public class GeoLookupService extends CprLookupService {
                     geoLookupDTO.setPostalDistrict(hardcodedAdress.getCityname());
                 }
             }
-
+// Find postalcode for road. This is only available through access addresses on the road. In theory there could be several postal codes for one road
             AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
             accessAddressQuery.setMunicipalityCode(municipalityCode);
 
