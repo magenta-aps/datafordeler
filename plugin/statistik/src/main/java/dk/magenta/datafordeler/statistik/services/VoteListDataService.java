@@ -31,18 +31,27 @@ import java.time.ZoneOffset;
 import java.util.*;
 
 /**
+ Denne service benyttes til at konstruere valglister til grønlandske valg.
+ Valglisterne konstrueres når denne service kaldes, og resultatet gemmes lokalt på serverens disk.
 
-Alle statuskoder før denne dato skal være 5 eller 7
-public static final String BEFORE_DATE_PARAMETER = "beforeDate";
+ Der findes 2 forskellige typer af valg, der er landstingsvalg og kommunalvalg, og der skal konstrueres en valgliste til hver af disse for sig
 
-Alle statuskoder efter denne dato skal være 5 eller 7
-public static final String AFTER_DATE_PARAMETER = "afterDate";
+ Begge lister skal levere alle CPR-numre i den grønlandske datafordeler, men med frasortering af personer, som beskrevet nedenfor:
 
- //datoen hvor man skal være 18 år
- public static final String EFFECT_DATE_PARAMETER = "effectDate";
+ For begge typer af lister, skal der frasorteres alle personer, som ikke er fyldt 18 år på tidspunktet angivet med parametrene effectDate og registrationAt
 
- RegistrationAt
- Der skal kigges på information registreringsinterval der opfylder dette
+ For landstingsvalget skal der derudover frasorteres alle personer, som ikke har haft bopæl i grønland i et halvt år dette angives ved at sætte filterTime1 til T minus et halvt år
+
+ For kummunalvalget sættes filterTime1 til samme dato som effectDate og registrationAt, derudover sættes munipialicityFilter til kommunekoden
+
+ Om en person har været bosiddende i grønland siden filterTime1 identificeret ved at iterere over alle statuskoder på personen, som har været delvist gældende siden filterTime1.
+ Hvis nogen af disse statuskoder har anden værdi end 5 eller 7, så frasorteres denne person fra listen
+
+
+ Området som personer bor i er vigtig ved brugen af denne liste, da det identificere hvor disse personer skal stemme.
+ Der er en del fejl i GAR, som benyttes til at finde personers fysiske adresse på baggrund af personernes data i cpr-registeret.
+ Der laves derfor kun match i GAR på baggrund af kommunekode og vejkode, da dette øger sandsynligheden for at finde et match.
+ Hvis der ikke findes et match på postnummer, og postdistrikt, så findes dette via cpr-registerets danske adresseregister.
 
  */
 

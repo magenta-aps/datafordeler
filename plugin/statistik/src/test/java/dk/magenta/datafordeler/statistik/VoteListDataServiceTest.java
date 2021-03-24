@@ -25,6 +25,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+
+/**
+ * Denne test laver tests på nedenstående 4 personer, som indlæses fra voter.txt i forbindelse med afvikling af unittests:
+ * 0011111111110 - Er født 2011-11-11 og har aktiv bopæl i grønland
+ * 0011211111111 - Er født 2011-11-12 og har aktiv bopæl i grønland
+ * 0011311111111 - Er født 2011-11-13 og har aktiv bopæl i grønland
+ * 0011311111112 - Er født 2011-11-13 og har aktiv bopæl i danmark
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
