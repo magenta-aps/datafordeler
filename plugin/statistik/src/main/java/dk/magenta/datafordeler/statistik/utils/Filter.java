@@ -55,7 +55,6 @@ public class Filter {
         this.originAfter = parseLocaldate(request.getParameter(StatisticsService.ORIGIN_AFTER));
         this.originBefore = parseLocaldate(request.getParameter(StatisticsService.ORIGIN_BEFORE));
         this.filterTime1 = Query.parseDateTime(request.getParameter("filterTime1"));
-        this.filterTime2 = Query.parseDateTime(request.getParameter("filterTime2"));
         this.munipialicityFilter = null;
         String munipialicityString = request.getParameter("munipialicityFilter");
         if(munipialicityString != null) {
