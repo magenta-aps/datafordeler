@@ -42,7 +42,7 @@ public class GeoLookupService extends CprLookupService {
         return this.doLookup(municipalityCode, roadCode, houseNumber, null);
     }
 
-    public GeoLookupDTO doLookupBestEffoert(int municipalityCode, int roadCode) {
+    public GeoLookupDTO doLookupBestEffort(int municipalityCode, int roadCode) {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
