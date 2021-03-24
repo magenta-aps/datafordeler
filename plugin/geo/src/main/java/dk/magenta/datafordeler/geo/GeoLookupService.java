@@ -72,7 +72,7 @@ public class GeoLookupService extends CprLookupService {
             if (roadEntities != null && roadEntities.size() > 0) {
                 GeoRoadEntity roadEntity = roadEntities.stream().min(Comparator.comparing(GeoRoadEntity::getId)).get();
                 //There can be more than one roadEntities, we just take the first one.
-                //This is becrause ane road can be split into many roadentities by sideroads.
+                //This is because a road can be split into many roadentities by sideroads.
                 //If all sideeroads does not have the same name, it is an error at the delivered data.
                 geoLookupDTO.setRoadName(roadEntity.getName().iterator().next().getName());
                 geoLookupDTO.setLocalityCode(roadEntity.getLocality().iterator().next().getCode());
