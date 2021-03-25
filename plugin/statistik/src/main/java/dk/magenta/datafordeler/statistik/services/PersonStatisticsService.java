@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.BitemporalSet;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
@@ -229,13 +230,14 @@ public abstract class PersonStatisticsService extends StatisticsService {
     }
 
     /**
-     * Find all records which is unclosed in registrationinterval, and which is not undone
+     * Find all records which is unclosed in registrationinterval, and which is not undone.
+     * Beside of that it has to be either unclosed in the registration interval, or a part of it has to be active at the time defined by intervalstart
      * @param records
      * @param <R>
      * @return
      */
-    public static <R extends CprBitemporalRecord> List<R> findAllUnclosedInRegistrationAndNotUndone(Collection<R> records, OffsetDateTime intervalstart) {
-        List<R> recordList = records.stream().filter(r -> r.getBitemporality().registrationTo == null && !r.isUndone() &&
+    public static <R extends CprBitemporalRecord> List<R> findAllUnclosedInRegistrationAndNotUndone(BitemporalSet<R> records, OffsetDateTime intervalstart) {
+        List<R> recordList = records.current().stream().filter(r -> r.getBitemporality().registrationTo == null && !r.isUndone() &&
                 (r.getBitemporality().effectTo == null || r.getBitemporality().effectTo.isAfter(intervalstart))).collect(toList());
         return recordList;
     }

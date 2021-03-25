@@ -46,12 +46,10 @@ public class GeoLookupService extends CprLookupService {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
-            String municipalityEntity = null;
-            if (municipalityCacheGR.containsKey(municipalityCode)) {
-                municipalityEntity = municipalityCacheGR.get(municipalityCode);
-            } else {
+            String municipalityEntity = municipalityCacheGR.get(municipalityCode);
+            if (municipalityEntity == null) {
                 MunicipalityQuery query = new MunicipalityQuery();
-                query.addKommunekodeRestriction(Integer.toString(municipalityCode));
+                query.addCode(Integer.toString(municipalityCode));
                 setQueryNow(query);
                 List<GeoMunicipalityEntity> municipalities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
                 for (GeoMunicipalityEntity municipality : municipalities) {
@@ -73,7 +71,7 @@ public class GeoLookupService extends CprLookupService {
                 GeoRoadEntity roadEntity = roadEntities.stream().min(Comparator.comparing(GeoRoadEntity::getId)).get();
                 //There can be more than one roadEntities, we just take the first one.
                 //This is because a road can be split into many roadentities by sideroads.
-                //If all sideeroads does not have the same name, it is an error at the delivered data.
+                //If all sideroads do not have the same name, it is an error in the delivered data.
                 geoLookupDTO.setRoadName(roadEntity.getName().iterator().next().getName());
                 geoLookupDTO.setLocalityCode(roadEntity.getLocality().iterator().next().getCode());
             } else {
@@ -114,8 +112,8 @@ public class GeoLookupService extends CprLookupService {
                 setQueryNow(localityQuery);
                 List<GeoLocalityEntity> localities = QueryManager.getAllEntities(session, localityQuery, GeoLocalityEntity.class);
                 if (localities != null && localities.size() > 0) {
-                    geoLookupDTO.setLocalityName(localities.get(0).getName().iterator().next().getName());
-                    geoLookupDTO.setLocalityAbbrev(localities.get(0).getAbbreviation().iterator().next().getName());
+                    geoLookupDTO.setLocalityName(localities.get(0).getName().current().getName());
+                    geoLookupDTO.setLocalityAbbrev(localities.get(0).getAbbreviation().current().getName());
                 }
             }
             return geoLookupDTO;
@@ -129,12 +127,10 @@ public class GeoLookupService extends CprLookupService {
             try(Session session = sessionManager.getSessionFactory().openSession()) {
 
                 GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
-                String municipalityEntity = null;
-                if (municipalityCacheGR.containsKey(municipalityCode)) {
-                    municipalityEntity = municipalityCacheGR.get(municipalityCode);
-                } else {
+                String municipalityEntity = municipalityCacheGR.get(municipalityCode);
+                if (municipalityEntity == null) {
                     MunicipalityQuery query = new MunicipalityQuery();
-                    query.addKommunekodeRestriction(Integer.toString(municipalityCode));
+                    query.addCode(Integer.toString(municipalityCode));
                     setQueryNow(query);
                     List<GeoMunicipalityEntity> municipalities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
                     for (GeoMunicipalityEntity municipality : municipalities) {
