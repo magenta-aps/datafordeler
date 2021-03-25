@@ -237,7 +237,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
      * @return
      */
     public static <R extends CprBitemporalRecord> List<R> findAllUnclosedInRegistrationAndNotUndone(BitemporalSet<R> records, OffsetDateTime intervalstart) {
-        List<R> recordList = records.current().stream().filter(r -> r.getBitemporality().registrationTo == null && !r.isUndone() &&
+        List<R> recordList = records.stream().filter(r -> r.getBitemporality().registrationTo == null && !r.isUndone() &&
                 (r.getBitemporality().effectTo == null || r.getBitemporality().effectTo.isAfter(intervalstart))).collect(toList());
         return recordList;
     }
