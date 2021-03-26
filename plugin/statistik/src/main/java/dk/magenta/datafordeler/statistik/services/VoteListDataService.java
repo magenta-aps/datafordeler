@@ -194,6 +194,27 @@ public class VoteListDataService extends PersonStatisticsService {
                 item.put("FoedDato", "UNDEFINED");
             }
         }
+        if(filter.filterTime1 != null) {
+            //If this is not null, we need to validate back in time
+            List<PersonStatusDataRecord> statusDataRecords = findAllUnclosedInRegistrationAndNotUndone(person.getStatus(), filter.filterTime1);
+            if (statusDataRecords != null) {
+                for (PersonStatusDataRecord status : statusDataRecords) {
+                    //Status 5 and 7 indicates that the person has an active address in greenland
+                    if (status.getStatus() != 5 && status.getStatus() != 7) {
+                        return null;
+                    }
+                }
+            }
+
+            List<AddressDataRecord> addressDataRecords = findAllUnclosedInRegistrationAndNotUndone(person.getAddress(), filter.filterTime1);
+            if (addressDataRecords != null) {
+                for (AddressDataRecord addressDataRecord : addressDataRecords) {
+                    if (addressDataRecord.getMunicipalityCode() < 900) {
+                        return null;
+                    }
+                }
+            }
+        }
 
         PersonStatusDataRecord statusDataRecord = filter(person.getStatus(), filter);
         if(statusDataRecord!=null) {
@@ -203,7 +224,6 @@ public class VoteListDataService extends PersonStatisticsService {
             } else {
                 item.put(STATUS_CODE, ""+statusDataRecord.getStatus());
             }
-
         } else {
             item.put(STATUS_CODE, "UNDEFINED");
         }
@@ -211,16 +231,6 @@ public class VoteListDataService extends PersonStatisticsService {
         CitizenshipDataRecord citizenshipDataRecord = filter(person.getCitizenship(), filter);
         if(citizenshipDataRecord!=null) {
             item.put(CITIZENSHIP_CODE, Integer.toString(citizenshipDataRecord.getCountryCode()));
-        }
-        List<AddressDataRecord> addressDataRecords = findAllUnclosedInRegistrationAndNotUndone(person.getAddress(), filter.filterTime1);
-        if(addressDataRecords!=null) {
-            for(AddressDataRecord addressDataRecord : addressDataRecords) {
-                if (addressDataRecord.getMunicipalityCode() < 900) {
-                    return null;
-                } else if (filter.municipalityFilter != null && addressDataRecord.getMunicipalityCode() != filter.municipalityFilter) {
-                    return null;
-                }
-            }
         }
 
         AddressDataRecord addressDataRecord = filter(person.getAddress(), filter);
