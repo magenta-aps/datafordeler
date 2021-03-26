@@ -45,13 +45,44 @@ import java.util.*;
  For kommunalvalget sættes filterTime1 til samme dato som effectDate og registrationAt, derudover sættes municipalityFilter til kommunekoden
 
  Om en person har været bosiddende i grønland siden filterTime1 identificeret ved at iterere over alle statuskoder på personen, som har været delvist gældende siden filterTime1.
- Hvis nogen af disse statuskoder har anden værdi end 5 eller 7, så frasorteres denne person fra listen
+ Hvis nogen af disse statuskoder har anden værdi end 5 eller 7, så frasorteres denne person fra listen, derudover filtreres også på kommunekode < 900
 
 
  Området som personer bor i er vigtig ved brugen af denne liste, da det identificere hvor disse personer skal stemme.
  Der er en del fejl i GAR, som benyttes til at finde personers fysiske adresse på baggrund af personernes data i cpr-registeret.
  Der laves derfor kun match i GAR på baggrund af kommunekode og vejkode, da dette øger sandsynligheden for at finde et match.
  Hvis der ikke findes et match på postnummer, og postdistrikt, så findes dette via cpr-registerets danske adresseregister.
+
+
+ Ved valget i Grønland 2021 laves 2 lister, en over landstingsval, og en over kommunalvalg i sermersooq
+ For landstingsvalget benyttes følgende url i datafordeleren, il at lave listen:
+ statistik/vote_list_data/?effectDate=2021-03-29&registrationAt=2021-03-29&filterTime1=2020-10-06
+
+
+ Og til kommunalvalget benyttes følgende url i datafordeleren
+ statistik/vote_list_data/?effectDate=2021-03-29&registrationAt=2021-03-29&filterTime1=2021-03-29&munipialicityFilter=956
+
+ Alle personerne i listerne har stemmeret til valget ud fra de kriterier jeg har fået oplyst
+
+ Listerne indeholder følgende kolonner:
+ Pnr - CPR-nummeret på personen
+ Fornavn - Fammensat fornavn og mellemnavn
+ Efternavn -
+ FoedData - Datoen hvor personen er født
+ StatKod - Koden på personens statsborgerskab
+ LokNavn - Novnet på den lokalitet personen bor i følge folkeregidter og fremsøgning på baggrund af vejkode og kommunekode
+ LokKode - Lokalitetskoden på den lokalitet personen bor i følge folkeregidter og fremsøgning på baggrund af vejkode og kommunekode
+ LokKortNavn - Det korte navn på den lokalitet personen bor i følge folkeregidter og fremsøgning på baggrund af vejkode og kommunekode
+ VejNavn - Navnet på den vej personen bor i følge folkeregidter og fremsøgning på baggrund af vejkode og kommunekode
+ HusNr -
+ Etage -
+ SideDoer -
+ Bnr -
+ Postnr - Postnummer fundet på baggrund af vejkode og kommunekode, der laves fallback til det danske register hvis informationen ikke kan findes i GAR
+ Postdistrikt - Postdistrikt fundet på baggrund af vejkode og kommunekode, der laves fallback til det danske register hvis informationen ikke kan findes i GAR
+ GUARDIAN - Der angives CPR-nummeret i fald der findes en værge for personen
+
+
 
  */
 
