@@ -109,8 +109,12 @@ public class CprRecordCombinedPersonLookupService {
             }
 
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            if (personEntities.isEmpty() &&  "true".equals(allowDirect)) {
-                PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
+            if (personEntities.isEmpty()) {
+                PersonEntity personEntity = null;
+                if("true".equals(allowDirect)) {
+                    personEntity = cprDirectLookup.getPerson(cprNummer);
+                }
+
                 if(personEntity==null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
