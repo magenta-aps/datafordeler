@@ -113,6 +113,7 @@ public class CprRecordCombinedPersonLookupService {
                 PersonEntity personEntity = null;
                 if("true".equals(allowDirect)) {
                     personEntity = cprDirectLookup.getPerson(cprNummer);
+                    entityManager.createSubscription(Collections.singleton(cprNummer));
                 }
 
                 if(personEntity==null) {
@@ -214,11 +215,12 @@ public class CprRecordCombinedPersonLookupService {
                 HashSet<String> found = new HashSet<>();
                 if (!cprNumbers.isEmpty() && !hasAreaRestrictions(user) && "true".equals(allowDirect)) {
                     List<String> remaining = new ArrayList<>(cprNumbers);
-                    remaining.stream().map(pnr -> {
+                    remaining.stream().map(cprNummer -> {
                         try {
-                            PersonEntity personEntity = cprDirectLookup.getPerson(pnr);
+                            PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
+                            entityManager.createSubscription(Collections.singleton(cprNummer));
                             if (personEntity != null) {
-                                found.add(pnr);
+                                found.add(cprNummer);
                                 return personEntity;
                             }
                         } catch (DataStreamException e) {
