@@ -1,19 +1,13 @@
 package dk.magenta.datafordeler.prisme;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
-import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
-import dk.magenta.datafordeler.cpr.data.person.PersonSubscriptionAssignmentStatus;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -33,7 +27,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.StringJoiner;
 import static org.mockito.Mockito.when;
 
@@ -116,8 +109,7 @@ public class CprLookupTest extends TestBase {
     }
 
     @Test
-    public void testSinglePersonLookup() throws IOException {
-
+    public void testSinglePersonDBLookup() throws IOException {
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
@@ -129,7 +121,6 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
@@ -139,7 +130,6 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("0101001234", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
@@ -149,22 +139,15 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
 
 
-    private void applyAccess(TestUserDetails testUserDetails) {
-        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
-    }
 
-    @SpyBean
-    private CprDirectLookup cprDirectLookup;
 
     @Test
-    public void testAllowDirectLookup() throws Exception {
-
+    public void testSinglePersonAllowDirectLookup() throws Exception {
         String cpr = "1111111188";
         String data = "038406fJrr7CCxWUDI0178001590000000000000003840120190808000000000011111111188          01000000000000 M1961-07-07 1961-07-07*           Socialrådg.                       002111111118809560254018 01  mf                                      198010102000 196107071034 0000000000000000                                                                                                                                                                                                   0031111111188Mortensen,Jens                                                                                        Boulevarden 101,1 mf                                                6800Varde               05735731101 01  mf    Boulevarden         0081111111188Jens                                                                                        Mortensen                                196107072000 Mortensen,Jens                    00911111111885150                    01011111111885100199103201299*0111111111188F1961-07-07*0121111111188F0706611234                                              198010012000             014111111118813018140770141111111188131281123401511111111881961-07-07*0912414434                                              1961-07-07*0909414385                                              01711111111882019-04-10*          0002                    Terd                              2019-04-10grd                                                                                                                                                                       999999999999900000012";
         Mockito.doReturn(data).when(cprDirectLookup).lookup(ArgumentMatchers.eq(cpr));
@@ -180,7 +163,6 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
@@ -190,7 +172,6 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("0101001234", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
@@ -200,14 +181,12 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("1111111188", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
     }
 
     @Test
-    public void testForceDirectLookup() throws Exception {
-
+    public void testSinglePersonForceDirectLookup() throws Exception {
         String cpr = "1111111188";
         String data = "038406fJrr7CCxWUDI0178001590000000000000003840120190808000000000011111111188          01000000000000 M1961-07-07 1961-07-07*           Socialrådg.                       002111111118809560254018 01  mf                                      198010102000 196107071034 0000000000000000                                                                                                                                                                                                   0031111111188Mortensen,Jens                                                                                        Boulevarden 101,1 mf                                                6800Varde               05735731101 01  mf    Boulevarden         0081111111188Jens                                                                                        Mortensen                                196107072000 Mortensen,Jens                    00911111111885150                    01011111111885100199103201299*0111111111188F1961-07-07*0121111111188F0706611234                                              198010012000             014111111118813018140770141111111188131281123401511111111881961-07-07*0912414434                                              1961-07-07*0909414385                                              01711111111882019-04-10*          0002                    Terd                              2019-04-10grd                                                                                                                                                                       999999999999900000012";
         Mockito.doReturn(data).when(cprDirectLookup).lookup(ArgumentMatchers.eq(cpr));
@@ -223,7 +202,6 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
@@ -232,7 +210,6 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
@@ -241,9 +218,89 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("1111111188", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
     }
 
+
+    @Test
+    public void testListPersonDBLookup() throws IOException {
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/combinedPersonLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(7, objectMapper.readTree(response.getBody()).size());
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000001"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000002"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000003"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000004"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000005"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000006"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000007"));
+        Assert.assertNull(objectMapper.readTree(response.getBody()).get("1000000007"));
+        Assert.assertNull(objectMapper.readTree(response.getBody()).get("1111111188"));
+    }
+
+    @Test
+    public void testListPersonAllowDirectLookup() throws Exception {
+        String cpr = "1111111188";
+        String data = "038406fJrr7CCxWUDI0178001590000000000000003840120190808000000000011111111188          01000000000000 M1961-07-07 1961-07-07*           Socialrådg.                       002111111118809560254018 01  mf                                      198010102000 196107071034 0000000000000000                                                                                                                                                                                                   0031111111188Mortensen,Jens                                                                                        Boulevarden 101,1 mf                                                6800Varde               05735731101 01  mf    Boulevarden         0081111111188Jens                                                                                        Mortensen                                196107072000 Mortensen,Jens                    00911111111885150                    01011111111885100199103201299*0111111111188F1961-07-07*0121111111188F0706611234                                              198010012000             014111111118813018140770141111111188131281123401511111111881961-07-07*0912414434                                              1961-07-07*0909414385                                              01711111111882019-04-10*          0002                    Terd                              2019-04-10grd                                                                                                                                                                       999999999999900000012";
+        Mockito.doReturn(data).when(cprDirectLookup).lookup(ArgumentMatchers.eq(cpr));
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/combinedPersonLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188&allowDirect=true",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(8, objectMapper.readTree(response.getBody()).size());
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000001"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000002"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000003"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000004"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000005"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000006"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000007"));
+        Assert.assertNull(objectMapper.readTree(response.getBody()).get("1000000007"));
+        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("1111111188"));
+    }
+
+    @Test
+    public void testListPersonForceDirectLookup() throws Exception {
+        String cpr = "1111111188";
+        String data = "038406fJrr7CCxWUDI0178001590000000000000003840120190808000000000011111111188          01000000000000 M1961-07-07 1961-07-07*           Socialrådg.                       002111111118809560254018 01  mf                                      198010102000 196107071034 0000000000000000                                                                                                                                                                                                   0031111111188Mortensen,Jens                                                                                        Boulevarden 101,1 mf                                                6800Varde               05735731101 01  mf    Boulevarden         0081111111188Jens                                                                                        Mortensen                                196107072000 Mortensen,Jens                    00911111111885150                    01011111111885100199103201299*0111111111188F1961-07-07*0121111111188F0706611234                                              198010012000             014111111118813018140770141111111188131281123401511111111881961-07-07*0912414434                                              1961-07-07*0909414385                                              01711111111882019-04-10*          0002                    Terd                              2019-04-10grd                                                                                                                                                                       999999999999900000012";
+        Mockito.doReturn(data).when(cprDirectLookup).lookup(ArgumentMatchers.eq(cpr));
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/combinedPersonLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188&forceDirect=true",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    private void applyAccess(TestUserDetails testUserDetails) {
+        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
+    }
+
+    @SpyBean
+    private CprDirectLookup cprDirectLookup;
 }

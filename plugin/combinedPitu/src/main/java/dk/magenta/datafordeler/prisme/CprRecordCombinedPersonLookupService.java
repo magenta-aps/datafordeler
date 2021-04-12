@@ -137,7 +137,7 @@ public class CprRecordCombinedPersonLookupService {
         List<String> cprs = requestParams.get("cpr");
         String forceDirect = requestParams.getFirst("forceDirect");
         if ("true".equals(forceDirect)) {
-            throw new QueryBuildException("Forcing direct is not allowed");
+            throw new AccessDeniedException("Forcing direct is not allowed");
         }
         String allowDirect = requestParams.getFirst("allowDirect");
 
@@ -158,7 +158,7 @@ public class CprRecordCombinedPersonLookupService {
         }
 
         personQuery.setPersonnumre(cprNumbers);
-        if ("true".equals(forceDirect)) {
+        if (cprs.size() > 100) {
             throw new QueryBuildException("Maximum 100 numbers is allowed");
         }
 
@@ -212,7 +212,7 @@ public class CprRecordCombinedPersonLookupService {
                 personEntities.forEach(entityWriter);
 
                 HashSet<String> found = new HashSet<>();
-                if (!cprNumbers.isEmpty() && !hasAreaRestrictions(user) && "true".equals(forceDirect)) {
+                if (!cprNumbers.isEmpty() && !hasAreaRestrictions(user) && "true".equals(allowDirect)) {
                     List<String> remaining = new ArrayList<>(cprNumbers);
                     remaining.stream().map(pnr -> {
                         try {
