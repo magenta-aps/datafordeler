@@ -109,6 +109,31 @@ public class CprLookupTest extends TestBase {
     }
 
     @Test
+    public void testNoAccessLookup() throws IOException {
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/combinedPersonLookup/1/cpr/0000000007",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals(null, objectMapper.readTree(response.getBody()).get("cprNummer"));
+
+        response = restTemplate.exchange(
+                "/combinedPersonLookup/1/cpr/?cpr=0000000007",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+    }
+
+    @Test
     public void testSinglePersonDBLookup() throws IOException {
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());

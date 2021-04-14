@@ -138,6 +138,7 @@ public class CprRecordCombinedPersonLookupService {
 
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.urlInvokePersistablelogs("CprRecordCombinedPersonLookupService");
+        this.checkAndLogAccess(loggerHelper);
 
         PersonRecordQuery personQuery = new PersonRecordQuery();
 
@@ -163,7 +164,7 @@ public class CprRecordCombinedPersonLookupService {
 
             try (Session session = sessionManager.getSessionFactory().openSession()) {
 
-                this.checkAndLogAccess(loggerHelper);
+
                 GeoLookupService lookupService = new GeoLookupService(sessionManager);
                 personOutputWrapper.setLookupService(lookupService);
 
@@ -223,8 +224,6 @@ public class CprRecordCombinedPersonLookupService {
 
                 entityManager.createSubscription(found);
 
-            } catch (AccessDeniedException e) {
-                log.warn("AccessDeniedException");
             } catch (InvalidClientInputException e) {
                 log.warn("InvalidClientInputException");
             }
