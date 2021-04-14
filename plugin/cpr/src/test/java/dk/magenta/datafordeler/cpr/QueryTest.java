@@ -293,10 +293,6 @@ public class QueryTest {
         searchParameters.replace("fmt", "dataonly");
 
         response = restSearch(searchParameters, "person");
-
-        System.out.println(response);
-
-
         Assert.assertEquals(200, response.getStatusCode().value());
         jsonBody = objectMapper.readTree(response.getBody());
         results = jsonBody.get("results");
