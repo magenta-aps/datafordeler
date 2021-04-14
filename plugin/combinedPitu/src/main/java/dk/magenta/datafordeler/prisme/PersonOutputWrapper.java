@@ -188,7 +188,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         AddressConameDataRecord personAddressConameData = this.getLatest(input.getConame());
         if (personAddressConameData != null && !personAddressConameData.getConame().isEmpty()) {
             String coname = personAddressConameData.getConame();
-            if (coname != null) {
+            if (coname != null && !coname.isEmpty()) {
                 coname = coname.toLowerCase();
                 Matcher m = postboxExtract.matcher(coname);
                 if (m.find()) {
@@ -215,18 +215,6 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         }
         return null;
     }
-
-    private OffsetDateTime getLastEffectTime(Collection<? extends Effect> effects) {
-        OffsetDateTime latest = OffsetDateTime.MIN;
-        for (Effect effect : effects) {
-            OffsetDateTime start = effect.getEffectFrom();
-            if (start != null && start.isAfter(latest)) {
-                latest = start;
-            }
-        }
-        return latest;
-    }
-
 
     public static String getAddressFormatted(String roadName, String houseNumberFrom, String houseNumberTo, String letterFrom, String letterTo, String floor, String door, String bNumber) {
         StringBuilder out = new StringBuilder();

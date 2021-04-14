@@ -43,10 +43,10 @@ import java.util.stream.Stream;
 public class CprRecordCombinedPersonLookupService {
 
     @Autowired
-    SessionManager sessionManager;
+    private SessionManager sessionManager;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Autowired
     private DafoUserManager dafoUserManager;
@@ -95,10 +95,8 @@ public class CprRecordCombinedPersonLookupService {
             personQuery.setPersonnummer(cprNummer);
 
             OffsetDateTime now = OffsetDateTime.now();
-            personQuery.setRegistrationFromBefore(now);
-            personQuery.setRegistrationToAfter(now);
-            personQuery.setEffectFromBefore(now);
-            personQuery.setEffectToAfter(now);
+            personQuery.setRegistrationAt(now);
+            personQuery.setEffectAt(now);
 
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
@@ -109,21 +107,19 @@ public class CprRecordCombinedPersonLookupService {
             }
 
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            if (personEntities.isEmpty()) {
-                PersonEntity personEntity = null;
-                if("true".equals(allowDirect)) {
-                    personEntity = cprDirectLookup.getPerson(cprNummer);
-                    entityManager.createSubscription(Collections.singleton(cprNummer));
-                }
-
-                if(personEntity==null) {
-                    throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
-                }
-                entityManager.createSubscription(Collections.singleton(cprNummer));
-                Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
-                return obj.toString();
+            PersonEntity personEntity = null;
+            if (!personEntities.isEmpty()) {
+                personEntity = personEntities.get(0);
             }
-            PersonEntity personEntity = personEntities.get(0);//There is always one here
+            if (personEntity == null && "true".equals(allowDirect)) {
+                personEntity = cprDirectLookup.getPerson(cprNummer);
+                entityManager.createSubscription(Collections.singleton(cprNummer));
+            }
+
+            if(personEntity==null) {
+                throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
+            }
+
             Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
             return obj.toString();
         } catch(DataStreamException e) {
@@ -136,10 +132,6 @@ public class CprRecordCombinedPersonLookupService {
     public StreamingResponseBody findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidDataInputException, QueryBuildException {
 
         List<String> cprs = requestParams.get("cpr");
-        String forceDirect = requestParams.getFirst("forceDirect");
-        if ("true".equals(forceDirect)) {
-            throw new AccessDeniedException("Forcing direct is not allowed");
-        }
         String allowDirect = requestParams.getFirst("allowDirect");
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -164,16 +156,12 @@ public class CprRecordCombinedPersonLookupService {
         }
 
         OffsetDateTime now = OffsetDateTime.now();
-        personQuery.setRegistrationFromBefore(now);
-        personQuery.setRegistrationToAfter(now);
-        personQuery.setEffectFromBefore(now);
-        personQuery.setEffectToAfter(now);
-
+        personQuery.setRegistrationAt(now);
+        personQuery.setEffectAt(now);
 
         return outputStream -> {
 
-            try (Session session = sessionManager.getSessionFactory().openSession();
-                 Session entitySession = sessionManager.getSessionFactory().openSession()) {
+            try (Session session = sessionManager.getSessionFactory().openSession()) {
 
                 this.checkAndLogAccess(loggerHelper);
                 GeoLookupService lookupService = new GeoLookupService(sessionManager);
@@ -182,7 +170,7 @@ public class CprRecordCombinedPersonLookupService {
                 personQuery.applyFilters(session);
                 this.applyAreaRestrictionsToQuery(personQuery, user);
 
-                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(entitySession, personQuery, PersonEntity.class);
+                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
 
                 final FinalWrapper<Boolean> first = new FinalWrapper<>(true);
                 Consumer<PersonEntity> entityWriter = personEntity -> {
@@ -205,7 +193,7 @@ public class CprRecordCombinedPersonLookupService {
                         } catch (IOException e) {
                             log.error("IOException", e.getStackTrace());
                         }
-                        entitySession.evict(personEntity);
+                        session.evict(personEntity);
                     }
                 };
 
@@ -262,7 +250,7 @@ public class CprRecordCombinedPersonLookupService {
         AreaRestrictionType municipalityType = areaRestrictionDefinition.getAreaRestrictionTypeByName(CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER);
         for (AreaRestriction restriction : restrictions) {
             if (restriction.getType() == municipalityType) {
-                query.addKommunekode(restriction.getValue());
+                query.addKommunekodeRestriction(restriction.getValue());
             }
         }
     }
