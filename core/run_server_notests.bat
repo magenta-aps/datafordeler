@@ -57,6 +57,11 @@ pushd %DIR%..\plugin\prisme
     call mvnw.cmd -DskipTests clean install
 popd
 
+echo "Build combinedPitu"
+pushd %DIR%..\plugin\combinedPitu
+    call mvnw.cmd -DskipTests clean install
+popd
+
 echo "Build statistik"
 pushd %DIR%..\plugin\statistik
     call mvnw.cmd -DskipTests clean install
