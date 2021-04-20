@@ -115,7 +115,7 @@ public class CprLookupTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/0000000007",
+                "/combined/personLookup/1/cpr/0000000007",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -124,7 +124,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(null, objectMapper.readTree(response.getBody()).get("cprNummer"));
 
         response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/?cpr=0000000007",
+                "/combined/personLookup/1/cpr/?cpr=0000000007",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -141,7 +141,7 @@ public class CprLookupTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/0000000007",
+                "/combined/personLookup/1/cpr/0000000007",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -150,7 +150,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/0101001234",
+                "/combined/personLookup/1/cpr/0101001234",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -159,7 +159,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals("0101001234", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/1111111188",
+                "/combined/personLookup/1/cpr/1111111188",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -183,7 +183,7 @@ public class CprLookupTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/0000000007?allowDirect=true",
+                "/combined/personLookup/1/cpr/0000000007?allowDirect=true",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -192,7 +192,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/0101001234?allowDirect=true",
+                "/combined/personLookup/1/cpr/0101001234?allowDirect=true",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -201,7 +201,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals("0101001234", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/1111111188?allowDirect=true",
+                "/combined/personLookup/1/cpr/1111111188?allowDirect=true",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -222,7 +222,7 @@ public class CprLookupTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/0000000007?forceDirect=true",
+                "/combined/personLookup/1/cpr/0000000007?forceDirect=true",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -230,7 +230,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/0101001234?forceDirect=true",
+                "/combined/personLookup/1/cpr/0101001234?forceDirect=true",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -238,7 +238,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/1111111188?forceDirect=true",
+                "/combined/personLookup/1/cpr/1111111188?forceDirect=true",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -256,7 +256,7 @@ public class CprLookupTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188",
+                "/combined/personLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -285,7 +285,7 @@ public class CprLookupTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combinedPersonLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188&allowDirect=true",
+                "/combined/personLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188&allowDirect=true",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/combinedPersonLookup/1")
+@RequestMapping("/combined/personLookup/1")
 public class CprRecordCombinedPersonLookupService {
 
     @Autowired
