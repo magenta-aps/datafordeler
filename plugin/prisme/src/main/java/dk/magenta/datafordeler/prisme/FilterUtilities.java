@@ -6,8 +6,10 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 
 import static java.util.Comparator.naturalOrder;
 
@@ -17,6 +19,9 @@ public class FilterUtilities {
             .thenComparing(CprNontemporalRecord::getOriginDate, Comparator.nullsLast(naturalOrder()))
             .thenComparing(CprNontemporalRecord::getDafoUpdated)
             .thenComparing(DatabaseEntry::getId);
+
+    private static Comparator effectStartComparator = Comparator.comparing(FilterUtilities::getBitemporality, BitemporalityComparator.EFFECT_FROM)
+            .thenComparing(CprNontemporalRecord::getId);
 
 
     /**
@@ -29,6 +34,13 @@ public class FilterUtilities {
     public static <R extends CprBitemporalRecord> R findNewestUnclosed(Collection<R> records) {
         return (R) records.stream().filter(r -> r.getBitemporality().registrationTo == null &&
                  r.getBitemporality().effectTo == null).max(bitemporalComparator).orElse(null);
+    }
+
+
+    public static <R extends CprBitemporalRecord> List<R> sortRecordsOnEffect(Collection<R> records) {
+        ArrayList<R> recordList = new ArrayList<>(records);
+        recordList.sort(bitemporalComparator);
+        return recordList;
     }
 
 
