@@ -92,8 +92,6 @@ public class CprResidentService {
 
                 PersonEntity personEntity = personEntities.get(0);
                 List<PersonStatusDataRecord> statusList = FilterUtilities.sortRecordsOnEffect(personEntity.getStatus());
-                OffsetDateTime timestamp = null;
-                boolean residentInGL = false;
                 ResidentItem residentInfo = new ResidentItem(cprNummer, false, null);
                 for(PersonStatusDataRecord status : statusList) {
 
@@ -101,10 +99,12 @@ public class CprResidentService {
                         residentInfo.setTimestamp(status.getEffectFrom().toLocalDate());
                         residentInfo.setResidentInGL(true);
                     } else {
-                        break;
+                        //If a status for the person is found where the person is not living in greenland return the last values of the person living in greenland
+                        loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
+                        return residentInfo;
                     }
                 }
-
+                residentInfo.setTimestamp(FilterUtilities.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime().toLocalDate());
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
                 return residentInfo;
             }
