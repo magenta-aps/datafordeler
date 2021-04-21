@@ -62,9 +62,6 @@ public class CprResidentService {
 
     private Logger log = LogManager.getLogger(CprResidentService.class.getCanonicalName());
 
-    @Autowired
-    private PersonAdressHistoryOutputWrapperPrisme personOutputWrapper;
-
     @PostConstruct
     public void init() {
     }
