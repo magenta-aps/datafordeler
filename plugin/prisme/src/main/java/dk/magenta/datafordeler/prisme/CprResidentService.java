@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class CprResidentService {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
+    public ResidentItem getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
             throws AccessDeniedException, InvalidTokenException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -89,26 +90,23 @@ public class CprResidentService {
 
             if (!personEntities.isEmpty()) {
 
-
-
-
                 PersonEntity personEntity = personEntities.get(0);
-
-                List<PersonStatusDataRecord> statusList = FilterUtilities.sortRecordsOnEffect(personEntity.getStatus().current());
-
+                List<PersonStatusDataRecord> statusList = FilterUtilities.sortRecordsOnEffect(personEntity.getStatus());
+                OffsetDateTime timestamp = null;
+                boolean residentInGL = false;
+                ResidentItem residentInfo = new ResidentItem(cprNummer, false, null);
                 for(PersonStatusDataRecord status : statusList) {
 
-                    System.out.println(status.getStatus());
-
-
-
+                    if(status.getStatus()==5 || status.getStatus()==7) {
+                        residentInfo.setTimestamp(status.getEffectFrom().toLocalDate());
+                        residentInfo.setResidentInGL(true);
+                    } else {
+                        break;
+                    }
                 }
 
-
-
-
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
-                return objectMapper.writeValueAsString(personOutputWrapper.wrapRecordResult(personEntity, personQuery));
+                return residentInfo;
             }
             loggerHelper.urlResponsePersistablelogs(HttpStatus.NOT_FOUND.value(), "residentinformation done");
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");

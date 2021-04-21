@@ -36,10 +36,15 @@ public class FilterUtilities {
                  r.getBitemporality().effectTo == null).max(bitemporalComparator).orElse(null);
     }
 
-
+    /**
+     * Get a sorted list of the items with the items sorted by effectFrom, and the newest item first
+     * @param records
+     * @param <R>
+     * @return
+     */
     public static <R extends CprBitemporalRecord> List<R> sortRecordsOnEffect(Collection<R> records) {
         ArrayList<R> recordList = new ArrayList<>(records);
-        recordList.sort(bitemporalComparator);
+        recordList.sort(bitemporalComparator.reversed());
         return recordList;
     }
 
