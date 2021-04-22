@@ -69,7 +69,7 @@ public class CprCohabitationService {
     public void init() {
     }
 
-    @GetMapping("/cpr")
+    @GetMapping("/search")
     public StreamingResponseBody findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException {
 
         List<String> cprs = requestParams.get("cpr");
@@ -106,8 +106,8 @@ public class CprCohabitationService {
                 personQuery.applyFilters(session);
                 this.applyAreaRestrictionsToQuery(personQuery, user);
 
-                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
-                AddressDataRecord firstAddress = FilterUtilities.findNewestUnclosed(personEntities.findFirst().get().getAddress());
+                List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
+                AddressDataRecord firstAddress = FilterUtilities.findNewestUnclosed(personEntities.get(0).getAddress());
 
                 int munipialicity =  firstAddress.getMunicipalityCode();
                 int road =  firstAddress.getRoadCode();
@@ -116,7 +116,7 @@ public class CprCohabitationService {
                 String floor =  firstAddress.getFloor();
                 String bnr =  firstAddress.getBuildingNumber();
 
-                List<PersonEntity> matchingEntities = personEntities.filter(item ->
+                List<PersonEntity> matchingEntities = personEntities.stream().filter(item ->
                                 FilterUtilities.findNewestUnclosed(item.getAddress().current()).getMunicipalityCode()==munipialicity &&
                                 FilterUtilities.findNewestUnclosed(item.getAddress().current()).getRoadCode()==road &&
                                 FilterUtilities.findNewestUnclosed(item.getAddress().current()).getHouseNumber()==houseNumber &&
