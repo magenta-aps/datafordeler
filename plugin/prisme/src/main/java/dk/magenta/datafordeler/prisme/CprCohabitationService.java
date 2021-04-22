@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.apache.logging.log4j.LogManager;
@@ -121,10 +122,25 @@ public class CprCohabitationService {
             ).collect(Collectors.toList());
 
             int counter = 1;
+            OffsetDateTime lastPersonOnThisAddress = null;
             for(PersonEntity personEntity : matchingEntities) {
                 obj.put("cpr"+counter, personEntity.getPersonnummer());
+                counter++;
+
+                PersonEventDataRecord eventListMove = (PersonEventDataRecord)personEntity.getEvent().stream().filter(event -> "A01".equals(event.getEventId()) ||
+                        "A05".equals(event.getEventId())).max(FilterUtilities.monoIdComparator).orElse(null);
+
+                if(eventListMove==null) {
+                    //lastPersonOnThisAddress = personEntity.getBirthTime().current().get(0).getBirthDatetime();
+                } else if(lastPersonOnThisAddress==null || eventListMove.getTimestamp().isAfter(lastPersonOnThisAddress)) {
+                    lastPersonOnThisAddress = eventListMove.getTimestamp();
+                }
             }
-            obj.put("Cohabitation", personEntities.size()==matchingEntities.size() && !lookup.isAdministrativ());
+            boolean allPersonsHasSameAddress = personEntities.size()==matchingEntities.size() && !lookup.isAdministrativ();
+            obj.put("Cohabitation", allPersonsHasSameAddress);
+            if(lastPersonOnThisAddress!=null) {
+                obj.put("ResidentDate", allPersonsHasSameAddress ? lastPersonOnThisAddress.toLocalDate().toString() : null);
+            }
         }
         return obj;
     }

@@ -2,6 +2,8 @@ package dk.magenta.datafordeler.prisme;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.util.BitemporalityComparator;
+import dk.magenta.datafordeler.core.util.Monotemporality;
+import dk.magenta.datafordeler.core.util.MonotemporalityComparator;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
@@ -20,9 +22,8 @@ public class FilterUtilities {
             .thenComparing(CprNontemporalRecord::getDafoUpdated)
             .thenComparing(DatabaseEntry::getId);
 
-    private static Comparator effectStartComparator = Comparator.comparing(FilterUtilities::getBitemporality, BitemporalityComparator.EFFECT_FROM)
+    protected static Comparator monoIdComparator = Comparator.comparing(FilterUtilities::getMonotemporality, MonotemporalityComparator.REGISTRATION_FROM)
             .thenComparing(CprNontemporalRecord::getId);
-
 
     /**
      * Find the newest unclosed record from the list of records
@@ -52,5 +53,9 @@ public class FilterUtilities {
 
     public static CprBitemporality getBitemporality(CprBitemporalRecord record) {
         return record.getBitemporality();
+    }
+
+    public static Monotemporality getMonotemporality(CprBitemporalRecord record) {
+        return record.getMonotemporality();
     }
 }
