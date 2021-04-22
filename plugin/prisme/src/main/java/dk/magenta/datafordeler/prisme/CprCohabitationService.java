@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.prisme;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
@@ -11,7 +11,6 @@ import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.core.util.FinalWrapper;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -19,27 +18,19 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonStatusDataRecord;
+import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Get the history of cohabitation
@@ -70,7 +61,7 @@ public class CprCohabitationService {
     }
 
     @GetMapping("/search")
-    public StreamingResponseBody findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException {
+    public ObjectNode findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException {
 
         List<String> cprs = requestParams.get("cpr");
         String allowDirect = requestParams.getFirst("allowDirect");
@@ -101,39 +92,41 @@ public class CprCohabitationService {
         personQuery.setRegistrationAt(now);
         personQuery.setEffectAt(now);
 
-            try (Session session = sessionManager.getSessionFactory().openSession()) {
+        ObjectNode obj = objectMapper.createObjectNode();
 
-                personQuery.applyFilters(session);
-                this.applyAreaRestrictionsToQuery(personQuery, user);
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
-                List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-                AddressDataRecord firstAddress = FilterUtilities.findNewestUnclosed(personEntities.get(0).getAddress());
+            personQuery.applyFilters(session);
+            this.applyAreaRestrictionsToQuery(personQuery, user);
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
-                int munipialicity =  firstAddress.getMunicipalityCode();
-                int road =  firstAddress.getRoadCode();
-                String houseNumber =  firstAddress.getHouseNumber();
-                String door =  firstAddress.getDoor();
-                String floor =  firstAddress.getFloor();
-                String bnr =  firstAddress.getBuildingNumber();
+            List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
+            AddressDataRecord firstAddress = FilterUtilities.findNewestUnclosed(personEntities.get(0).getAddress());
 
-                List<PersonEntity> matchingEntities = personEntities.stream().filter(item ->
-                                FilterUtilities.findNewestUnclosed(item.getAddress().current()).getMunicipalityCode()==munipialicity &&
-                                FilterUtilities.findNewestUnclosed(item.getAddress().current()).getRoadCode()==road &&
-                                FilterUtilities.findNewestUnclosed(item.getAddress().current()).getHouseNumber()==houseNumber &&
-                                FilterUtilities.findNewestUnclosed(item.getAddress().current()).getDoor()==door &&
-                                FilterUtilities.findNewestUnclosed(item.getAddress().current()).getFloor()==floor &&
-                                FilterUtilities.findNewestUnclosed(item.getAddress().current()).getBuildingNumber()==bnr
-                        ).collect(Collectors.toList());
+            int municipalityCode =  firstAddress.getMunicipalityCode();
+            int roadCode =  firstAddress.getRoadCode();
+            GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode);
+            String houseNumber =  firstAddress.getHouseNumber();
+            String door =  firstAddress.getDoor();
+            String floor =  firstAddress.getFloor();
+            String bnr =  firstAddress.getBuildingNumber();
 
-                System.out.println(matchingEntities);
+            List<PersonEntity> matchingEntities = personEntities.stream().filter(item ->
+                    FilterUtilities.findNewestUnclosed(item.getAddress().current()).getMunicipalityCode()==municipalityCode &&
+                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getRoadCode()==roadCode &&
+                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getHouseNumber().equals(houseNumber) &&
+                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getDoor().equals(door) &&
+                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getFloor().equals(floor) &&
+                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getBuildingNumber().equals(bnr)
+            ).collect(Collectors.toList());
 
-
-
-
+            int counter = 1;
+            for(PersonEntity personEntity : matchingEntities) {
+                obj.put("cpr"+counter, personEntity.getPersonnummer());
             }
-
-            return null;
-
+            obj.put("Cohabitation", personEntities.size()==matchingEntities.size() && !lookup.isAdministrativ());
+        }
+        return obj;
     }
 
 
