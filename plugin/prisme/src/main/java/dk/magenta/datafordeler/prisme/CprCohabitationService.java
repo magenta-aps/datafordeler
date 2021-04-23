@@ -18,7 +18,6 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +28,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -122,25 +122,21 @@ public class CprCohabitationService {
             ).collect(Collectors.toList());
 
             int counter = 1;
-            OffsetDateTime lastPersonOnThisAddress = null;
+            LocalDate personBirthDate = null;
+            OffsetDateTime lastMovingTimestamp = null;
+
             for(PersonEntity personEntity : matchingEntities) {
                 obj.put("cpr"+counter, personEntity.getPersonnummer());
                 counter++;
+                personBirthDate = personEntity.getBirthTime().current().get(0).getBirthDatetime().toLocalDate();
 
-                PersonEventDataRecord eventListMove = (PersonEventDataRecord)personEntity.getEvent().stream().filter(event -> "A01".equals(event.getEventId()) ||
-                        "A05".equals(event.getEventId())).max(FilterUtilities.monoIdComparator).orElse(null);
+                lastMovingTimestamp = personEntity.getEvent().stream().filter(event -> "A01".equals(event.getEventId()) ||
+                        "A05".equals(event.getEventId())).map(u -> u.getTimestamp()).max(OffsetDateTime::compareTo).orElse(null);
 
-                if(eventListMove==null) {
-                    //lastPersonOnThisAddress = personEntity.getBirthTime().current().get(0).getBirthDatetime();
-                } else if(lastPersonOnThisAddress==null || eventListMove.getTimestamp().isAfter(lastPersonOnThisAddress)) {
-                    lastPersonOnThisAddress = eventListMove.getTimestamp();
-                }
             }
             boolean allPersonsHasSameAddress = personEntities.size()==matchingEntities.size() && !lookup.isAdministrativ();
             obj.put("Cohabitation", allPersonsHasSameAddress);
-            if(lastPersonOnThisAddress!=null) {
-                obj.put("ResidentDate", allPersonsHasSameAddress ? lastPersonOnThisAddress.toLocalDate().toString() : null);
-            }
+            obj.put("ResidentDate", allPersonsHasSameAddress ? Optional.ofNullable(lastMovingTimestamp).map(OffsetDateTime::toLocalDate).map(LocalDate::toString).orElse(personBirthDate.toString()) : null);
         }
         return obj;
     }
