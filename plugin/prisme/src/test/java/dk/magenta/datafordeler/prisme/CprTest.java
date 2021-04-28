@@ -338,6 +338,28 @@ public class CprTest extends TestBase {
 
 
     @Test
+    public void testMaintainChildrenPrisme() throws Exception {
+        //TODO: THIS TEST IS NOT SUFFICIENT ON LONGER TERM
+        loadPerson("/person.txt");
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/birthDate/1/search/?dataEventTime.GTE=" + "20100101",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+
+
+    @Test
     public void test4PersonBulkPrisme() throws Exception {
 
         OffsetDateTime start = OffsetDateTime.now();
