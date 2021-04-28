@@ -27,6 +27,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 import static org.mockito.Mockito.when;
 
@@ -167,7 +170,24 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    @Test
+    public void testPersonInterval() throws IOException {
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        //"municipalitycode"
+        //"localitycode"
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/combined/cpr/birthIntervalDate/1/search/?birth.GTE=20000101&birth.GTE=20210101",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(response.getBody());
 
+    }
 
 
 
