@@ -1,0 +1,361 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Datafordeler",
+    "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere, sekundært Selvstyrets og Digitaliseringsstyrelsens medarbejdere med relation til brug af data fra datafordeleren. For at få adgang til datafordelerens services skal brugeren indhente en adgangsgivende token fra datafordeleren. Det gøres ved f.eks. med cURL hvor <brugernavn> og <kodeord> udfyldes med de brugeroplysninger, som man tidligere har fået udleveret: curl -u <brugernavn>:<kodeord> -X GET https://sts.test.data.gl/get_token_passive Som respons får man en adgangsgivende token, som man skal sende med i headeren for ens forespørgsler til datafordelerens prismeservices.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://dafo.data.gl"
+    }
+  ],
+  "paths": {
+    "/combined/personLookup/1/{cprNummer}": {
+      "get": {
+        "summary": "Enkeltopslag i CPR pu en person, på baggrund af dennes CPR-nummer",
+        "description": "Servicen fremsøger personoplysninger på personer der indlæses i den Grønlandske datafordeler via natlige opdateringer. <br/>Hvis den forespurgte person ikke kan findes i informationer der er cashet fra det danske CPR-register, så forsøges det at lave et live-opslag i det danske adresseregister. <br/>Personinformationerne beriges med adresseinformationer fra det Grønlandske adresseregister GAR.<br/><br/>PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-PERSONLOOKUP/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/cpr/",
+        "parameters": [
+          {
+            "name": "allowDirect",
+            "in": "url",
+            "description": "Tillad at servicen laver opslag direkte i det Danske CPR-register i tilfælde af at CPR-numrene ikke findes i den Grønlandske datafordeler",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false"
+            }
+          },
+          {
+            "name": "forceDirect",
+            "in": "url",
+            "description": "Lav altid fremsøgningen direkte i det Danske CPR-register uden at validere om informationen allerede er hentet",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den fremfundne person",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "fornavn": {
+                      "type": "string",
+                      "example": "Peter"
+                    },
+                    "efternavn": {
+                      "type": "string",
+                      "example": "Andersen"
+                    },
+                    "civilstand": {
+                      "type": "string",
+                      "example": "U"
+                    },
+                    "civilstandsdato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "ægtefælleCprNummer": {
+                      "type": "string",
+                      "example": "1111111113"
+                    },
+                    "statsborgerskab": {
+                      "type": "integer",
+                      "example": 5100
+                    },
+                    "køn": {
+                      "type": "string",
+                      "example": "M"
+                    },
+                    "far": {
+                      "type": "string",
+                      "example": "1111111111"
+                    },
+                    "mor": {
+                      "type": "string",
+                      "example": "1111111112"
+                    },
+                    "statuskode": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "statuskodedato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "tilflytningsdato": {
+                      "type": "string",
+                      "example": "2020-10-27"
+                    },
+                    "myndighedskode": {
+                      "type": "integer",
+                      "example": 956
+                    },
+                    "vejkode": {
+                      "type": "integer",
+                      "example": 102
+                    },
+                    "kommune": {
+                      "type": "string",
+                      "example": "Kommuneqarfik Sermersooq"
+                    },
+                    "adresse": {
+                      "type": "string",
+                      "example": "Mut Aqqut"
+                    },
+                    "postnummer": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "bynavn": {
+                      "type": "string",
+                      "example": "Nuuk"
+                    },
+                    "stedkode": {
+                      "type": "integer",
+                      "example": 700
+                    },
+                    "landekode": {
+                      "type": "string",
+                      "example": "GL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/combined/personLookup/1/": {
+      "get": {
+        "summary": "Bulkopslag i CPR pu en person, på baggrund af dennes CPR-nummer",
+        "description": "Servicen fremsøger personoplysninger på en personer der indlæses i den Grønlandske datafordeler via natlige opdateringer. \nHvis den forespurgte person ikke kan findes i informationer der er cashet fra det danske CPR-register, så forsøges det at lave et live-opslag i det danske adresseregister. \nPersoninformationerne beriges med adresseinformationer fra det Grønlandske adresseregister GAR.<br/><br/>PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-PERSONLOOKUP/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/cpr/",
+        "parameters": [
+          {
+            "name": "cpr",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "\"1111111111\",\"1111111112\",\"111111113\",\"1111111114\""
+            }
+          },
+          {
+            "name": "allowDirect",
+            "in": "url",
+            "description": "Tillad at servicen laver opslag direkte i det Danske CPR-register i tilfælde af at CPR-numrene ikke findes i den Grønlandske datafordeler",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på de fremfundne personer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "0101011234": {
+                      "type": "object",
+                      "properties": {
+                        "cprNummer": {
+                          "type": "string",
+                          "example": "0101011234"
+                        },
+                        "fornavn": {
+                          "type": "string",
+                          "example": "Peter"
+                        },
+                        "efternavn": {
+                          "type": "string",
+                          "example": "Andersen"
+                        },
+                        "civilstand": {
+                          "type": "string",
+                          "example": "U"
+                        },
+                        "civilstandsdato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "ægtefælleCprNummer": {
+                          "type": "string",
+                          "example": "1111111113"
+                        },
+                        "statsborgerskab": {
+                          "type": "integer",
+                          "example": 5100
+                        },
+                        "køn": {
+                          "type": "string",
+                          "example": "M"
+                        },
+                        "far": {
+                          "type": "string",
+                          "example": "1111111111"
+                        },
+                        "mor": {
+                          "type": "string",
+                          "example": "1111111112"
+                        },
+                        "statuskode": {
+                          "type": "integer",
+                          "example": 5
+                        },
+                        "statuskodedato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "tilflytningsdato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "myndighedskode": {
+                          "type": "integer",
+                          "example": 956
+                        },
+                        "vejkode": {
+                          "type": "integer",
+                          "example": 102
+                        },
+                        "kommune": {
+                          "type": "string",
+                          "example": "Kommuneqarfik Sermersooq"
+                        },
+                        "adresse": {
+                          "type": "string",
+                          "example": "Mut Aqqut"
+                        },
+                        "postnummer": {
+                          "type": "integer",
+                          "example": 3900
+                        },
+                        "bynavn": {
+                          "type": "string",
+                          "example": "Nuuk"
+                        },
+                        "stedkode": {
+                          "type": "integer",
+                          "example": 700
+                        },
+                        "landekode": {
+                          "type": "string",
+                          "example": "GL"
+                        }
+                      }
+                    },
+                    "1111111113": {
+                      "type": "object",
+                      "properties": {
+                        "cprNummer": {
+                          "type": "string",
+                          "example": "1111111113"
+                        },
+                        "fornavn": {
+                          "type": "string",
+                          "example": "Peter"
+                        },
+                        "efternavn": {
+                          "type": "string",
+                          "example": "Andersen"
+                        },
+                        "civilstand": {
+                          "type": "string",
+                          "example": "U"
+                        },
+                        "civilstandsdato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "ægtefælleCprNummer": {
+                          "type": "string",
+                          "example": "0101011234"
+                        },
+                        "statsborgerskab": {
+                          "type": "integer",
+                          "example": 5100
+                        },
+                        "køn": {
+                          "type": "string",
+                          "example": "M"
+                        },
+                        "far": {
+                          "type": "string",
+                          "example": "1111111111"
+                        },
+                        "mor": {
+                          "type": "string",
+                          "example": "1111111112"
+                        },
+                        "statuskode": {
+                          "type": "integer",
+                          "example": 5
+                        },
+                        "statuskodedato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "tilflytningsdato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "myndighedskode": {
+                          "type": "integer",
+                          "example": 956
+                        },
+                        "vejkode": {
+                          "type": "integer",
+                          "example": 102
+                        },
+                        "kommune": {
+                          "type": "string",
+                          "example": "Kommuneqarfik Sermersooq"
+                        },
+                        "adresse": {
+                          "type": "string",
+                          "example": "Mut Aqqut"
+                        },
+                        "postnummer": {
+                          "type": "integer",
+                          "example": 3900
+                        },
+                        "bynavn": {
+                          "type": "string",
+                          "example": "Nuuk"
+                        },
+                        "stedkode": {
+                          "type": "integer",
+                          "example": 700
+                        },
+                        "landekode": {
+                          "type": "string",
+                          "example": "GL"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
