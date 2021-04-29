@@ -20,9 +20,25 @@ import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
+import dk.magenta.datafordeler.geo.data.accessaddress.*;
+import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
+import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
+import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
+import dk.magenta.datafordeler.geo.data.municipality.MunicipalityNameRecord;
+import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
+import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
+import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
+import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressDoorRecord;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
@@ -74,24 +90,8 @@ public class CprBirthIntervalDateService {
         String birthBefore = requestParams.getFirst("birth.LTE");
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
-        List<String>  municipalitycodes = Optional.ofNullable(requestParams.get("municipalitycode")).orElse(new ArrayList<>());
-        List<String>  localitycodes = Optional.ofNullable(requestParams.get("localitycode")).orElse(new ArrayList<>());
-
-        List<String> municipalitycodeNumbers = new ArrayList<String>();
-        for (String municipalitycode : municipalitycodes) {
-            List<String> municipalitycodeList = Arrays.asList(municipalitycode.split(","));
-            for (String municipality : municipalitycodeList) {
-                municipalitycodeNumbers.add(municipality);
-            }
-        }
-
-        List<String> localitycodeNumbers = new ArrayList<String>();
-        for (String localitycode : localitycodes) {
-            List<String> localitycodeList = Arrays.asList(localitycode.split(","));
-            for (String municipality : localitycodeList) {
-                localitycodeNumbers.add(municipality);
-            }
-        }
+        String  municipalitycode = requestParams.getFirst("municipalitycode");
+        String  localitycode = requestParams.getFirst("localitycode");
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
@@ -101,40 +101,54 @@ public class CprBirthIntervalDateService {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        PersonRecordQuery personQuery = new PersonRecordQuery();
-        if(pageSize != null) {
-            personQuery.setPageSize(pageSize);
-        }
-        if(page != null) {
-            personQuery.setPage(page);
-        }
-
-        personQuery.setRegistrationAt(now);
-        personQuery.setEffectAt(now);
-        personQuery.setKommunekoder(municipalitycodeNumbers);
-        if(birthAfter!=null) {
-            personQuery.setBirthTimeAfter(dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthAfter).toLocalDateTime());
-        }
-        if(birthBefore!=null) {
-            personQuery.setBirthTimeBefore(dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime());
-        }
-
         try (Session session = sessionManager.getSessionFactory().openSession()) {
+            String hql = "SELECT personEntity.personnummer, accessAddressLocalityRecord.code, birthDataRecord.birthDatetime " +
+                    "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity, "+PersonEntity.class.getCanonicalName()+" personEntity "+
+                    "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
+                    "JOIN "+ AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
+                    "JOIN "+ AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord."+AddressDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
+                        " AND addressDataRecord."+AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE+"=accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+
+                        " AND addressDataRecord."+AddressDataRecord.DB_FIELD_ROAD_CODE+"=accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+" "+
+                    "JOIN "+ BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord ON birthDataRecord."+BirthTimeDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
+                    "";
+
+            String condition = " WHERE ";
+            if(localitycode!=null && municipalitycode!=null) {
+                condition += String.format("accessAddressLocalityRecord.code = '%s' AND addressDataRecord.municipalityCode = '%s'", localitycode, municipalitycode);
+            } else if(localitycode!=null) {
+                condition += String.format("accessAddressLocalityRecord.code = '%s'", localitycode);
+            } else if(municipalitycode!=null) {
+                condition += String.format("addressDataRecord.municipalityCode = '%s'", municipalitycode);
+            }
+
+            hql += condition;
+
+            Query query = session.createQuery(hql);
+
+            if(pageSize != null) {
+                query.setMaxResults(Integer.valueOf(pageSize));
+            } else {
+                query.setMaxResults(10);
+            }
+            if(page != null) {
+                int pageIndex = (Integer.valueOf(page)-1)*query.getMaxResults();
+                query.setFirstResult(pageIndex);
+            } else {
+                query.setFirstResult(0);
+            }
+
+            List<Object[]> resultList = query.getResultList();
+
             Envelope envelope = new Envelope();
             envelope.setRequestTimestamp(user.getCreationTime());
             envelope.setUsername(user.toString());
 
-            personQuery.applyFilters(session);
-            this.applyAreaRestrictionsToQuery(personQuery, user);
-
-            List<String> personEntities =QueryManager.getAllEntities(session, personQuery, PersonEntity.class).stream().map(item -> item.getPersonnummer()).collect(Collectors.toList());;
-
-            envelope.setPageSize(personQuery.getPageSize());
-            envelope.setPage(personQuery.getPage());
+            envelope.setPageSize(query.getMaxResults());
+            envelope.setPage(query.getFirstResult()+1);
             envelope.setPath(request.getServletPath());
             envelope.setResponseTimestamp(OffsetDateTime.now());
 
-            envelope.setResults(personEntities);
+            envelope.setResults(resultList);
             setHeaders(response);
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprBirthIntervalDateService done");
             return envelope;
