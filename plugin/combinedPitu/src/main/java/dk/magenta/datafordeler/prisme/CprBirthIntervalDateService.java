@@ -1,15 +1,14 @@
 package dk.magenta.datafordeler.prisme;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
-import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
-import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -23,18 +22,6 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.geo.data.accessaddress.*;
-import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
-import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
-import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
-import dk.magenta.datafordeler.geo.data.municipality.MunicipalityNameRecord;
-import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
-import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
-import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
-import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
-import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressDoorRecord;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -84,10 +71,20 @@ public class CprBirthIntervalDateService {
     }
 
     @GetMapping("/search")
-    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException {
+    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException{
 
         String birthAfter = requestParams.getFirst("birth.GTE");
+        LocalDateTime birthAfterTS=null;
+        if(birthAfter!=null) {
+            birthAfterTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthAfter).toLocalDateTime();
+        }
+
         String birthBefore = requestParams.getFirst("birth.LTE");
+        LocalDateTime birthBeforeTS=null;
+        if(birthBefore!=null) {
+            birthBeforeTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime();
+        }
+
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
         String  municipalitycode = requestParams.getFirst("municipalitycode");
@@ -102,17 +99,17 @@ public class CprBirthIntervalDateService {
         OffsetDateTime now = OffsetDateTime.now();
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            String hql = "SELECT personEntity.personnummer, accessAddressLocalityRecord.code, birthDataRecord.birthDatetime " +
-                    "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity, "+PersonEntity.class.getCanonicalName()+" personEntity "+
+            String hql = "SELECT personEntity.personnummer , accessAddressLocalityRecord.code , birthDataRecord.birthDatetime " +
+                    "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
                     "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
                     "JOIN "+ AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
-                    "JOIN "+ AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord."+AddressDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
-                        " AND addressDataRecord."+AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE+"=accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+
+                    "JOIN "+ AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord."+AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE+"=accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+
                         " AND addressDataRecord."+AddressDataRecord.DB_FIELD_ROAD_CODE+"=accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+" "+
+                    "JOIN "+ PersonEntity.class.getCanonicalName() + " personEntity ON addressDataRecord."+AddressDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
                     "JOIN "+ BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord ON birthDataRecord."+BirthTimeDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
                     "";
 
-            String condition = " WHERE ";
+            String condition = " WHERE birthDataRecord.birthDatetime <= :btb AND birthDataRecord.birthDatetime >= :bta AND ";
             if(localitycode!=null && municipalitycode!=null) {
                 condition += String.format("accessAddressLocalityRecord.code = '%s' AND addressDataRecord.municipalityCode = '%s'", localitycode, municipalitycode);
             } else if(localitycode!=null) {
@@ -124,6 +121,8 @@ public class CprBirthIntervalDateService {
             hql += condition;
 
             Query query = session.createQuery(hql);
+            query.setParameter("btb", birthBeforeTS);
+            query.setParameter("bta", birthAfterTS);
 
             if(pageSize != null) {
                 query.setMaxResults(Integer.valueOf(pageSize));
@@ -139,6 +138,8 @@ public class CprBirthIntervalDateService {
 
             List<Object[]> resultList = query.getResultList();
 
+            List<PersonLocationObject> personLocationObjectList = resultList.stream().map(ob -> new PersonLocationObject(ob[0].toString(), ob[1].toString(), ob[2].toString())).collect(Collectors.toList());
+
             Envelope envelope = new Envelope();
             envelope.setRequestTimestamp(user.getCreationTime());
             envelope.setUsername(user.toString());
@@ -148,7 +149,7 @@ public class CprBirthIntervalDateService {
             envelope.setPath(request.getServletPath());
             envelope.setResponseTimestamp(OffsetDateTime.now());
 
-            envelope.setResults(resultList);
+            envelope.setResults(personLocationObjectList);
             setHeaders(response);
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprBirthIntervalDateService done");
             return envelope;
