@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/combined/cpr/birthIntervalDate/1")
 public class CprBirthIntervalDateService {
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-DD");
 
     @Autowired
     SessionManager sessionManager;
@@ -138,7 +141,7 @@ public class CprBirthIntervalDateService {
 
             List<Object[]> resultList = query.getResultList();
 
-            List<PersonLocationObject> personLocationObjectList = resultList.stream().map(ob -> new PersonLocationObject(ob[0].toString(), ob[1].toString(), ob[2].toString())).collect(Collectors.toList());
+            List<PersonLocationObject> personLocationObjectList = resultList.stream().map(ob -> new PersonLocationObject(ob[0].toString(), ob[1].toString(), ((LocalDateTime)ob[2]).format(formatter))).collect(Collectors.toList());
 
             Envelope envelope = new Envelope();
             envelope.setRequestTimestamp(user.getCreationTime());
