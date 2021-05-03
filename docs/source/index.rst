@@ -13,7 +13,7 @@ Velkommen til den offentlige dokumentation for Grønlands Datafordeler.
 
 Datafordeleren giver myndigheder, virksomheder og borgere nem og sikker adgang til data om borgere, virksomheder, kommuner, byer, bygder, vejnavne og adresser.
 
-Datafordeleren er en del af `Grunddata-programmet <http://digitalimik.gl/da/Losninger-og-infrastruktur/Grunddata-ny/Projekter>`_ hos Grønlands Digitaliseringsstyrelse. Den udvikles og drives af `Magenta <http://www.magenta.dk>`_ og `Nukik.it <http://www.nukik.it>`_ på vegne af `Grønlands Digitaliseringsstyrelse. <http://digitalimik.gl/>`_
+Datafordeleren er en del af `Grunddata-programmet <https://digitalimik.gl/emner/digitale_loesninger/grunddata/projekter>`_ hos Grønlands Digitaliseringsstyrelse. Den udvikles og drives af `Magenta <http://www.magenta.dk>`_ og `Nukik.it <http://www.nukik.it>`_ på vegne af `Grønlands Digitaliseringsstyrelse. <http://digitalimik.gl/>`_
 
 Koden er open source og kan findes på `Github. <https://github.com/magenta-aps/datafordeler/>`_
 
