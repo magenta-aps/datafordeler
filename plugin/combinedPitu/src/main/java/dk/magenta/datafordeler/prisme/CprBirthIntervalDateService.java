@@ -71,13 +71,13 @@ public class CprBirthIntervalDateService {
     @GetMapping("/search")
     public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException{
 
-        String birthAfter = requestParams.getFirst("birth.GTE");
+        String birthAfter = requestParams.getFirst("birthAfter");
         LocalDateTime birthAfterTS=null;
         if(birthAfter!=null) {
             birthAfterTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthAfter).toLocalDateTime();
         }
 
-        String birthBefore = requestParams.getFirst("birth.LTE");
+        String birthBefore = requestParams.getFirst("birthBefore");
         LocalDateTime birthBeforeTS=null;
         if(birthBefore!=null) {
             birthBeforeTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime();
@@ -109,7 +109,7 @@ public class CprBirthIntervalDateService {
                     "";
 
             String condition = " WHERE addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO +" IS null " +
-                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO +" IS null AND "+
+                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO +" IS null "+
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE +" = 0 AND "+
             " birthDataRecord.birthDatetime <= :btb AND birthDataRecord.birthDatetime >= :bta AND ";
             if(localitycode!=null && municipalitycode!=null) {

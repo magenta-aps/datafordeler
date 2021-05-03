@@ -179,7 +179,7 @@ public class CprLookupTest extends TestBase {
         //"municipalitycode"
         //"localitycode"
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combined/cpr/birthIntervalDate/1/search/?birth.GTE=1990-01-01&birth.LTE=2021-01-01&localitycode=0600",
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2021-01-01&localitycode=0600",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
