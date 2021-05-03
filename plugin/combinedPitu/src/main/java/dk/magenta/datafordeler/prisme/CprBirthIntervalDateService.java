@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.prisme;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
@@ -50,7 +52,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/combined/cpr/birthIntervalDate/1")
 public class CprBirthIntervalDateService {
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-DD");
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Autowired
     SessionManager sessionManager;
@@ -102,14 +104,15 @@ public class CprBirthIntervalDateService {
         OffsetDateTime now = OffsetDateTime.now();
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            String hql = "SELECT personEntity.personnummer , accessAddressLocalityRecord.code , birthDataRecord.birthDatetime " +
-                    "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
-                    "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
-                    "JOIN "+ AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
-                    "JOIN "+ AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord."+AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE+"=accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+
-                        " AND addressDataRecord."+AddressDataRecord.DB_FIELD_ROAD_CODE+"=accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+" "+
-                    "JOIN "+ PersonEntity.class.getCanonicalName() + " personEntity ON addressDataRecord."+AddressDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
+            String hql = "SELECT DISTINCT personEntity.personnummer, accessAddressLocalityRecord.code, birthDataRecord.birthDatetime  " +
+                    "FROM "+ PersonEntity.class.getCanonicalName() + " personEntity "+
                     "JOIN "+ BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord ON birthDataRecord."+BirthTimeDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
+                    "JOIN "+ AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord."+AddressDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
+
+                    "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+"=addressDataRecord."+AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE+
+                        " AND accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+"=addressDataRecord."+AddressDataRecord.DB_FIELD_ROAD_CODE+" "+
+                    "JOIN "+ AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
+                    "JOIN "+ AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
                     "";
 
             String condition = " WHERE birthDataRecord.birthDatetime <= :btb AND birthDataRecord.birthDatetime >= :bta AND ";
