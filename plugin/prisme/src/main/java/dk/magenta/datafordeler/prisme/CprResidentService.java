@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.prisme;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -68,7 +66,7 @@ public class CprResidentService {
 
     @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResidentItem getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
-            throws AccessDeniedException, InvalidTokenException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
+            throws AccessDeniedException, InvalidTokenException, HttpNotFoundException, InvalidCertificateException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);

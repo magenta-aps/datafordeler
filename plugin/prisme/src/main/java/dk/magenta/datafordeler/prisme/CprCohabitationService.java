@@ -65,7 +65,6 @@ public class CprCohabitationService {
     public ObjectNode findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException {
 
         List<String> cprs = requestParams.get("cpr");
-        String allowDirect = requestParams.getFirst("allowDirect");
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 

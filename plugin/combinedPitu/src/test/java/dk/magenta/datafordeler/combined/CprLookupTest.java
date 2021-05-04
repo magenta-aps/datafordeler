@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.prisme;
+package dk.magenta.datafordeler.combined;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
@@ -27,9 +27,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.StringJoiner;
 import static org.mockito.Mockito.when;
 

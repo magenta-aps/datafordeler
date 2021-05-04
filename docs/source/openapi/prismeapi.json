@@ -194,6 +194,18 @@
       "get": {
         "summary": "Fremsøgning af hvor længe de fremsøgte personer har haft samme adresse. <br/>Hvis en af personerne er født med bopæl på adressen, opfattes fødselsdatoen som indflytningsdato.\n",
         "description": "Servicen fremsøger alle de presoner som bebor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, dør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er retgistreret som en administrativ adresse laves ingen adressematch.",
+        "parameters": [
+          {
+            "name": "cpr",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1111111111,1111111112"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Personinformation med information om hvorvidt de fremsøgte personer har samme adresse, og i givet fald hvor længe de har haft samme adresse.",
@@ -230,6 +242,48 @@
       "get": {
         "summary": "Fremsøgning af personer som er under 18 år. Der gives mulighed for at filterer på personer hvor der er sket ændringer i personens grunddata siden et specifikt tidspunkt",
         "description": "Servicen fremsøger alle de presoner som er under 18 år, og hvortil der er registreret ændringer i personens grunddata siden et tidspunkt defineret ved et leveret tidsstempel",
+        "parameters": [
+          {
+            "name": "dataEventTime.GTE",
+            "in": "url",
+            "description": "Filtrer persone fra responset, som ikke har ændringer i personens grunddata siden denne dato",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2020-12-24"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "name": "page",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "municipalitycode",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 956
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Liste over personer som på baggrund af filtering på de leverede parametre finder alle de CPR-numre i datafordeleren, som på tidspunktet for kaldet er under 18 år gamle.",

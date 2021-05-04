@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.prisme;
+package dk.magenta.datafordeler.combined;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
