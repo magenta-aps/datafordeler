@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * Get the history of cohabitation
  */
 @RestController
-@RequestMapping("/prisme/cpr/birthDate/1")
+@RequestMapping("/prisme/cpr/under18Years/1")
 public class CprBirthDateService {
 
     @Autowired

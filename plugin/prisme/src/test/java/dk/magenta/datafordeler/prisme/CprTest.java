@@ -349,7 +349,7 @@ public class CprTest extends TestBase {
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
         ResponseEntity<String> response = restTemplate.exchange(
-                "/prisme/cpr/birthDate/1/search/?dataEventTime.GTE=" + "20100101",
+                "/prisme/cpr/under18Years/1/search/?dataEventTime.GTE=" + "20100101",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

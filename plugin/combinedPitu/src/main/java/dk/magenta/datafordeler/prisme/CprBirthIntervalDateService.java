@@ -57,9 +57,6 @@ public class CprBirthIntervalDateService {
     private DafoUserManager dafoUserManager;
 
     @Autowired
-    private CprPlugin cprPlugin;
-
-    @Autowired
     protected MonitorService monitorService;
 
     private Logger log = LogManager.getLogger(CprBirthIntervalDateService.class.getCanonicalName());
@@ -93,8 +90,6 @@ public class CprBirthIntervalDateService {
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.urlInvokePersistablelogs("CprBirthIntervalDateService");
         this.checkAndLogAccess(loggerHelper);
-
-        OffsetDateTime now = OffsetDateTime.now();
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             String hql = "SELECT DISTINCT personEntity.personnummer, accessAddressLocalityRecord.code, birthDataRecord.birthDatetime  " +

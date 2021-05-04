@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 public class ResidentItem {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String pnr;
+    private String cprNummer;
 
 
     private boolean residentInGL;
@@ -22,18 +22,18 @@ public class ResidentItem {
     public ResidentItem() {
     }
 
-    public ResidentItem(String pnr, boolean residentInGL, LocalDate timestamp) {
-        this.pnr = pnr;
+    public ResidentItem(String cprNummer, boolean residentInGL, LocalDate timestamp) {
+        this.cprNummer = cprNummer;
         this.residentInGL = residentInGL;
         this.timestamp = timestamp;
     }
 
-    public String getPnr() {
-        return pnr;
+    public String getCprNummer() {
+        return cprNummer;
     }
 
-    public void setPnr(String pnr) {
-        this.pnr = pnr;
+    public void setCprNummer(String cprNummer) {
+        this.cprNummer = cprNummer;
     }
 
     public void setResidentInGL(boolean residentInGL) {
