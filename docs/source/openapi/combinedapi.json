@@ -140,7 +140,7 @@
     "/combined/personLookup/1/": {
       "get": {
         "summary": "Bulkopslag i CPR pu en person, på baggrund af dennes CPR-nummer",
-        "description": "Servicen fremsøger personoplysninger på en personer der indlæses i den Grønlandske datafordeler via natlige opdateringer. \nHvis den forespurgte person ikke kan findes i informationer der er cashet fra det danske CPR-register, så forsøges det at lave et live-opslag i det danske adresseregister. \nPersoninformationerne beriges med adresseinformationer fra det Grønlandske adresseregister GAR.<br/><br/>PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-PERSONLOOKUP/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/cpr/",
+        "description": "Servicen fremsøger personoplysninger på en personer der indlæses i den Grønlandske datafordeler via natlige opdateringer. <br/>Hvis den forespurgte person ikke kan findes i informationer der er cashet fra det danske CPR-register, så forsøges det at lave et live-opslag i det danske adresseregister. \nPersoninformationerne beriges med adresseinformationer fra det Grønlandske adresseregister GAR.<br/><br/>PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-PERSONLOOKUP/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/cpr/",
         "parameters": [
           {
             "name": "cpr",
@@ -359,14 +359,14 @@
     },
     "/combined/cpr/birthIntervalDate/1/search": {
       "get": {
-        "summary": "Find udvalgt personlig information på en person, som fremsøges på baggrund af CPR-nummer",
-        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes i Prisme.<br/>Hvis en parameter har værdien null, så leveres denne ikke",
+        "summary": "Find Personer med fødselsdato indenfor specificeret datointerval",
+        "description": "Servicen leverer en liste over personer med fødselsdato inden for et givent datointerval. <br/>Der er mulighed for at filtrere i svaret på baggrund af personerne nuværende adresseinformation, enten personens bopælskommune eller personens adresses tilhørende lokalitetskode.<br/><br/>PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-BIRTHINTERVALLOOKUP/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/search/",
         "parameters": [
           {
             "name": "birthAfter",
             "in": "url",
             "description": "Find persones, som er født efter denne dato",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string",
               "example": "2020-12-24"
@@ -376,7 +376,7 @@
             "name": "birthBefore",
             "in": "url",
             "description": "Find persones, som er født før denne dato",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string",
               "example": "2020-12-31"

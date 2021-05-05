@@ -160,7 +160,7 @@
     },
     "/prisme/cpr/residentinformation/1/{cprNummer}": {
       "get": {
-        "summary": "Bla.",
+        "summary": "Fremsøgning af bopælsinformation på en person",
         "description": "Servicen fremsøger information om den givne person her popæl i Grønland, og i givet fald hvornå denne person er flyttet til landet.<br/>Hvis personen aldrig har haft bopæl uden for Grønland leveres datoen for hvornår personen er født.<br/>Hvis personen ikke har aktuel bopæl i Grønland så leveres et null som dato",
         "responses": {
           "200": {
@@ -192,7 +192,7 @@
     },
     "/prisme/cpr/cohabitationinformation/1/search": {
       "get": {
-        "summary": "Fremsøgning af hvor længe de fremsøgte personer har haft samme adresse. <br/>Hvis en af personerne er født med bopæl på adressen, opfattes fødselsdatoen som indflytningsdato.\n",
+        "summary": "Fremsøgning af hvor længe de fremsøgte personer har haft samme adresse.",
         "description": "Servicen fremsøger alle de presoner som bebor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, dør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er retgistreret som en administrativ adresse laves ingen adressematch.",
         "parameters": [
           {
@@ -240,14 +240,13 @@
     },
     "/prisme/cpr/under18Years/1/search": {
       "get": {
-        "summary": "Fremsøgning af personer som er under 18 år. Der gives mulighed for at filterer på personer hvor der er sket ændringer i personens grunddata siden et specifikt tidspunkt",
+        "summary": "Fremsøgning af personer som er under 18 år",
         "description": "Servicen fremsøger alle de presoner som er under 18 år, og hvortil der er registreret ændringer i personens grunddata siden et tidspunkt defineret ved et leveret tidsstempel",
         "parameters": [
           {
             "name": "dataEventTime.GTE",
             "in": "url",
             "description": "Filtrer persone fra responset, som ikke har ændringer i personens grunddata siden denne dato",
-            "required": true,
             "schema": {
               "type": "string",
               "example": "2020-12-24"
@@ -257,7 +256,6 @@
             "name": "pageSize",
             "in": "url",
             "description": "Liste af CPR-numre",
-            "required": true,
             "schema": {
               "type": "integer",
               "example": 10
@@ -267,7 +265,6 @@
             "name": "page",
             "in": "url",
             "description": "Liste af CPR-numre",
-            "required": true,
             "schema": {
               "type": "integer",
               "example": 1
@@ -277,7 +274,6 @@
             "name": "municipalitycode",
             "in": "url",
             "description": "Liste af CPR-numre",
-            "required": true,
             "schema": {
               "type": "integer",
               "example": 956

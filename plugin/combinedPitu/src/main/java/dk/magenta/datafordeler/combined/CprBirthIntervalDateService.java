@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
+import dk.magenta.datafordeler.core.exception.MissingParameterException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -65,19 +66,19 @@ public class CprBirthIntervalDateService {
     }
 
     @GetMapping("/search")
-    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException{
+    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, MissingParameterException, InvalidTokenException, InvalidCertificateException{
 
         String birthAfter = requestParams.getFirst("birthAfter");
-        LocalDateTime birthAfterTS=null;
-        if(birthAfter!=null) {
-            birthAfterTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthAfter).toLocalDateTime();
+        if(birthAfter==null) {
+            throw new MissingParameterException("birthAfter");
         }
+        LocalDateTime birthAfterTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthAfter).toLocalDateTime();
 
         String birthBefore = requestParams.getFirst("birthBefore");
-        LocalDateTime birthBeforeTS=null;
-        if(birthBefore!=null) {
-            birthBeforeTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime();
+        if(birthBefore==null) {
+            throw new MissingParameterException("birthBefore");
         }
+        LocalDateTime birthBeforeTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime();
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
@@ -105,13 +106,13 @@ public class CprBirthIntervalDateService {
             String condition = " WHERE addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO +" IS null " +
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO +" IS null "+
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE +" = 0 AND "+
-            " birthDataRecord.birthDatetime <= :btb AND birthDataRecord.birthDatetime >= :bta AND ";
+            " birthDataRecord.birthDatetime <= :btb AND birthDataRecord.birthDatetime >= :bta ";
             if(localitycode!=null && municipalitycode!=null) {
-                condition += String.format("accessAddressLocalityRecord.code = '%s' AND addressDataRecord.municipalityCode = '%s'", localitycode, municipalitycode);
+                condition += String.format("AND accessAddressLocalityRecord.code = '%s' AND addressDataRecord.municipalityCode = '%s'", localitycode, municipalitycode);
             } else if(localitycode!=null) {
-                condition += String.format("accessAddressLocalityRecord.code = '%s'", localitycode);
+                condition += String.format("AND accessAddressLocalityRecord.code = '%s'", localitycode);
             } else if(municipalitycode!=null) {
-                condition += String.format("addressDataRecord.municipalityCode = '%s'", municipalitycode);
+                condition += String.format("AND addressDataRecord.municipalityCode = '%s'", municipalitycode);
             }
 
             hql += condition;
