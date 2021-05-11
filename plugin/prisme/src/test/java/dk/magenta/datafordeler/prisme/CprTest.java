@@ -242,8 +242,6 @@ public class CprTest extends TestBase {
         Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
         JsonNode responseContent = objectMapper.readTree(response.getBody());
         Assert.assertFalse(responseContent.get("adminadresse").asBoolean());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
         Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"far\":\"0101641234\""));
         Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"mor\":\"2903641234\""));
