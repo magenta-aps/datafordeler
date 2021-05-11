@@ -240,12 +240,41 @@ public class CprTest extends TestBase {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+        JsonNode responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertFalse(responseContent.get("adminadresse").asBoolean());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
         Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"far\":\"0101641234\""));
         Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"mor\":\"2903641234\""));
 
     }
 
+    @Test
+    public void testAdminAddPersonPrisme() throws Exception {
+        loadPerson("/personAdminAdd.txt");
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        testUserDetails.giveAccess(
+                cprPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
+                        CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER
+                ).getRestriction(
+                        CprAreaRestrictionDefinition.RESTRICTION_KOMMUNE_SERMERSOOQ
+                )
+        );
+        this.applyAccess(testUserDetails);
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/1/" + "0101005551",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        JsonNode responseContent = objectMapper.readTree(response.getBody());
+        Assert.assertTrue(responseContent.get("adminadresse").asBoolean());
+    }
 
     /**
      * Test the service cpr/2
