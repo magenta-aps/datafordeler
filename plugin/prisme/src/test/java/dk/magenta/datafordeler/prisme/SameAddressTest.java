@@ -3,8 +3,6 @@ package dk.magenta.datafordeler.prisme;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.Entity;
-import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
@@ -14,7 +12,6 @@ import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.geo.GeoPlugin;
 import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -38,7 +35,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
-import java.util.List;
 import java.util.StringJoiner;
 
 import static org.mockito.Mockito.when;
@@ -68,12 +64,6 @@ public class SameAddressTest extends TestBase {
 
     @Autowired
     private CprPlugin cprPlugin;
-
-    @Autowired
-    private CprService cprService;
-
-    @Autowired
-    private PersonOutputWrapperPrisme personOutputWrapper;
 
     HashSet<Entity> createdEntities = new HashSet<>();
 
@@ -133,6 +123,10 @@ public class SameAddressTest extends TestBase {
         session.close();
     }
 
+    /**
+     * Validate that the sameadress service finds the cpr-number of all persons that does have an address which is the same as the cpr-number that is used when calling the service
+     * @throws Exception
+     */
     @Test
     public void test3PersonPrisme() throws Exception {
         loadPerson();
@@ -212,7 +206,56 @@ public class SameAddressTest extends TestBase {
         }
     }
 
+    /**
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testCohabitantPersonPrisme() throws Exception {
+        loadPerson();
 
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,0101001236",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,0101001235",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001235\",\"Cohabitation\":false,\"ResidentDate\":null}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,0101001236",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001236\",\"Cohabitation\":true,\"ResidentDate\":\"2000-01-01\"}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,0101001235,0101001236",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001235\",\"cpr3\":\"0101001236\",\"Cohabitation\":false,\"ResidentDate\":null}", response.getBody(), false);
+    }
 
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);

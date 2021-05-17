@@ -345,28 +345,6 @@ public class CprTest extends TestBase {
     }
 
     @Test
-    public void testCohabitantPersonPrisme() throws Exception {
-        //TODO: THIS TEST IS NOT SUFFICIENT ON LONGER TERM
-        loadPerson("/person.txt");
-
-        TestUserDetails testUserDetails = new TestUserDetails();
-
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        this.applyAccess(testUserDetails);
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,1111111111",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(response.getBody());
-    }
-
-
-    @Test
     public void testMaintainChildrenPrisme() throws Exception {
         //TODO: THIS TEST IS NOT SUFFICIENT ON LONGER TERM
         loadPerson("/person.txt");
