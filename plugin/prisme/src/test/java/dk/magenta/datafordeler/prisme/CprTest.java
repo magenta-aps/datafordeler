@@ -20,7 +20,6 @@ import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscriptionAssignmentStatus;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.geo.GeoLookupService;
-import dk.magenta.datafordeler.geo.GeoPlugin;
 
 import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
@@ -30,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -293,26 +293,55 @@ public class CprTest extends TestBase {
 
     }
 
-
+    /**
+     * Validate that it is possible to find if a person is currently citizen in greenland, and if yes how long the person has been living here
+     * @throws Exception
+     */
     @Test
     public void testResidentPersonPrisme() throws Exception {
-        //TODO: THIS TEST IS NOT SUFFICIENT ON LONGER TERM
-        loadPerson("/person.txt");
+        loadPerson("/persons_with_history.txt");
 
         TestUserDetails testUserDetails = new TestUserDetails();
-
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/residentinformation/1/" + "1111111110",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/prisme/cpr/residentinformation/1/" + "0101001234",
+        response = restTemplate.exchange(
+                "/prisme/cpr/residentinformation/1/" + "1111111110",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"cprNummer\":\"1111111110\",\"residentInGL\":true,\"timestamp\":\"2020-07-20\"}", response.getBody(), false);
+
         System.out.println(response.getBody());
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/residentinformation/1/" + "1211111111",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"cprNummer\":\"1211111111\",\"residentInGL\":false,\"timestamp\":null}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/residentinformation/1/" + "1311111111",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"cprNummer\":\"1311111111\",\"residentInGL\":true,\"timestamp\":\"2011-11-13\"}", response.getBody(), false);
     }
 
     @Test
