@@ -68,7 +68,7 @@ public class CprBirthDateService {
     }
 
     @GetMapping("/search")
-    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException {
+    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String updatedSince = requestParams.getFirst("dataEventTime.GTE");
         String pageSize = requestParams.getFirst("pageSize");
@@ -105,7 +105,6 @@ public class CprBirthDateService {
         }
 
         personQuery.setRegistrationAt(now);
-        personQuery.setPage(page);
         personQuery.setEffectAt(now);
         personQuery.setBirthTimeAfter(LocalDateTime.now().minusYears(18));
         personQuery.setKommunekoder(municipalitycodeNumbers);
@@ -115,12 +114,9 @@ public class CprBirthDateService {
             Envelope envelope = new Envelope();
             envelope.setRequestTimestamp(user.getCreationTime());
             envelope.setUsername(user.toString());
-
-            personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
 
             List<String> personEntities =QueryManager.getAllEntities(session, personQuery, PersonEntity.class).stream().map(item -> item.getPersonnummer()).collect(Collectors.toList());;
-
 
             envelope.setPageSize(personQuery.getPageSize());
             envelope.setPage(personQuery.getPage());

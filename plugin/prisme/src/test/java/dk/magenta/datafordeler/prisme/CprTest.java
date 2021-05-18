@@ -14,10 +14,7 @@ import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
-import dk.magenta.datafordeler.cpr.data.person.PersonSubscriptionAssignmentStatus;
+import dk.magenta.datafordeler.cpr.data.person.*;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 
@@ -43,6 +40,7 @@ import javax.persistence.FlushModeType;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -126,6 +124,37 @@ public class CprTest extends TestBase {
             personEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
+        transaction.commit();
+        session.close();
+    }
+
+    /**
+     * Load a person with a specified age
+     * @param age
+     * @throws Exception
+     */
+    public void loadSpecificAgePersons(int age) throws Exception {
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+
+        String testData = InputStreamReader.readInputStream(CprTest.class.getResourceAsStream("/person.txt"));
+        String[] lines = testData.split("\n");
+
+        StringJoiner sb = new StringJoiner("\n");
+        String yearsOld = String.format("%04d", OffsetDateTime.now().minusYears(age).getYear());
+        for (int j = 0; j < lines.length; j++) {
+            String line = lines[j];
+            if(line.startsWith("0010101001234")) {
+                line = line.substring(0, 67) + yearsOld + line.substring(71);
+            }
+            sb.add(line);
+        }
+        ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+        personEntityManager.parseData(bais, importMetadata);
+        bais.close();
         transaction.commit();
         session.close();
     }
@@ -346,22 +375,62 @@ public class CprTest extends TestBase {
 
     @Test
     public void testMaintainChildrenPrisme() throws Exception {
-        //TODO: THIS TEST IS NOT SUFFICIENT ON LONGER TERM
-        loadPerson("/person.txt");
-
         TestUserDetails testUserDetails = new TestUserDetails();
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&dataEventTime.GTE=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/prisme/cpr/under18Years/1/search/?dataEventTime.GTE=" + "20100101",
+
+        this.loadSpecificAgePersons(16);
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&dataEventTime.GTE=" + "2010-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
+
+        this.cleanup();
+        this.loadSpecificAgePersons(19);
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&dataEventTime.GTE=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
+
+        this.cleanup();
+        this.loadSpecificAgePersons(16);
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&dataEventTime.GTE=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=957&dataEventTime.GTE=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
     }
 
 
