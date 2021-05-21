@@ -82,8 +82,8 @@ public class CprBirthIntervalDateService {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
-        String  municipalitycode = requestParams.getFirst("municipalitycode");
-        String  localitycode = requestParams.getFirst("localitycode");
+        String  municipalitycode = requestParams.getFirst("kommune_kode");
+        String  localityCode = requestParams.getFirst("lokalitet_kode");
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
@@ -107,10 +107,10 @@ public class CprBirthIntervalDateService {
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO +" IS null "+
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE +" = 0 AND "+
             " birthDataRecord.birthDatetime <= :btb AND birthDataRecord.birthDatetime >= :bta ";
-            if(localitycode!=null && municipalitycode!=null) {
-                condition += String.format("AND accessAddressLocalityRecord.code = '%s' AND addressDataRecord.municipalityCode = '%s'", localitycode, municipalitycode);
-            } else if(localitycode!=null) {
-                condition += String.format("AND accessAddressLocalityRecord.code = '%s'", localitycode);
+            if(localityCode!=null && municipalitycode!=null) {
+                condition += String.format("AND accessAddressLocalityRecord.code = '%s' AND addressDataRecord.municipalityCode = '%s'", localityCode, municipalitycode);
+            } else if(localityCode!=null) {
+                condition += String.format("AND accessAddressLocalityRecord.code = '%s'", localityCode);
             } else if(municipalitycode!=null) {
                 condition += String.format("AND addressDataRecord.municipalityCode = '%s'", municipalitycode);
             }

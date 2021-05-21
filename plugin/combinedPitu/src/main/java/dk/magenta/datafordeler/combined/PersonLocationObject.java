@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.combined;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PersonLocationObject {
 
@@ -8,14 +9,14 @@ public class PersonLocationObject {
     private String pnr = "";
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String locationCode = "";
+    private String localityCode = "";
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String birthTime = "";
 
-    public PersonLocationObject(String pnr, String locationCode, String birthTime) {
+    public PersonLocationObject(String pnr, String localityCode, String birthTime) {
         this.pnr = pnr;
-        this.locationCode = locationCode;
+        this.localityCode = localityCode;
         this.birthTime = birthTime;
     }
 
@@ -27,12 +28,13 @@ public class PersonLocationObject {
         this.pnr = pnr;
     }
 
-    public String getLocationCode() {
-        return locationCode;
+    @JsonProperty(value = "lokalitet_kode")
+    public String getLocalityCode() {
+        return localityCode;
     }
 
-    public void setLocationCode(String locationCode) {
-        this.locationCode = locationCode;
+    public void setLocalityCode(String locationCode) {
+        this.localityCode = localityCode;
     }
 
     public String getBirthTime() {

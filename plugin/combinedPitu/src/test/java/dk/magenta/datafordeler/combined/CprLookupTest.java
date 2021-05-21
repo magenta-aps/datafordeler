@@ -176,7 +176,7 @@ public class CprLookupTest extends TestBase {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&localitycode=0601&pageSize=1000",
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&lokalitet_kode=0601&pageSize=1000",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -190,7 +190,7 @@ public class CprLookupTest extends TestBase {
         //"municipalitycode"
         //"localitycode"
         response = restTemplate.exchange(
-                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&localitycode=0601&pageSize=1000",
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&lokalitet_kode=0601&pageSize=1000",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -202,7 +202,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&localitycode=0600&pageSize=1000",
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&lokalitet_kode=0600&pageSize=1000",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -214,7 +214,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&municipalitycode=957&pageSize=1000",
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&kommune_kode=957&pageSize=1000",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -226,7 +226,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&municipalitycode=956&pageSize=1000",
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&kommune_kode=956&pageSize=1000",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -238,7 +238,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=2010-01-01&birthBefore=2012-01-01&municipalitycode=956&pageSize=1000",
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=2010-01-01&birthBefore=2012-01-01&kommune_kode=956&pageSize=1000",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -250,7 +250,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=2012-01-01&birthBefore=2014-01-01&municipalitycode=956&pageSize=1000",
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=2012-01-01&birthBefore=2014-01-01&kommune_kode=956&pageSize=1000",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
