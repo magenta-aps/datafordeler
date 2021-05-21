@@ -3,10 +3,7 @@ package dk.magenta.datafordeler.combined;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.AccessDeniedException;
-import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
-import dk.magenta.datafordeler.core.exception.InvalidTokenException;
-import dk.magenta.datafordeler.core.exception.MissingParameterException;
+import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -66,7 +63,7 @@ public class CprBirthIntervalDateService {
     }
 
     @GetMapping("/search")
-    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, MissingParameterException, InvalidTokenException, InvalidCertificateException{
+    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, MissingParameterException, InvalidTokenException, InvalidCertificateException, InvalidParameterException{
 
         String birthAfter = requestParams.getFirst("birthAfter");
         if(birthAfter==null) {
@@ -81,6 +78,13 @@ public class CprBirthIntervalDateService {
         LocalDateTime birthBeforeTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime();
 
         String pageSize = requestParams.getFirst("pageSize");
+        int pageSizeInt = 10;
+        if(pageSize != null) {
+            pageSizeInt = Integer.valueOf(pageSize);
+            if(pageSizeInt>1000) {
+                throw new InvalidParameterException("pageSize");
+            }
+        }
         String page = requestParams.getFirst("page");
         String  municipalitycode = requestParams.getFirst("kommune_kode");
         String  localityCode = requestParams.getFirst("lokalitet_kode");
@@ -121,11 +125,7 @@ public class CprBirthIntervalDateService {
             query.setParameter("btb", birthBeforeTS);
             query.setParameter("bta", birthAfterTS);
 
-            if(pageSize != null) {
-                query.setMaxResults(Integer.valueOf(pageSize));
-            } else {
-                query.setMaxResults(10);
-            }
+            query.setMaxResults(pageSizeInt);
             if(page != null) {
                 int pageIndex = (Integer.valueOf(page)-1)*query.getMaxResults();
                 query.setFirstResult(pageIndex);

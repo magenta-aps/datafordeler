@@ -6,10 +6,7 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.AccessDeniedException;
-import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
-import dk.magenta.datafordeler.core.exception.InvalidTokenException;
-import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -68,7 +65,7 @@ public class CprBirthDateService {
     }
 
     @GetMapping("/search")
-    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidParameterException {
 
         String updatedSince = requestParams.getFirst("dataEventTime.GTE");
         String pageSize = requestParams.getFirst("pageSize");
@@ -98,7 +95,14 @@ public class CprBirthDateService {
 
         PersonRecordQuery personQuery = new PersonRecordQuery();
         if(pageSize != null) {
-            personQuery.setPageSize(pageSize);
+            int pageSizeInt = 10;
+            if(pageSize != null) {
+                pageSizeInt = Integer.valueOf(pageSize);
+                if(pageSizeInt>1000) {
+                    throw new InvalidParameterException("pageSize");
+                }
+                personQuery.setPageSize(pageSizeInt);
+            }
         }
         if(page != null) {
             personQuery.setPage(page);
