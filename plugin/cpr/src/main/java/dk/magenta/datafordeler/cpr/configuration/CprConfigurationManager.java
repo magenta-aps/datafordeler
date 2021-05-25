@@ -35,6 +35,13 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
     public void init() {
         // Very important to call init() on ConfigurationManager, or the config will not be loaded
         super.init();
+        /*try {
+            this.setDirectPassword("newpassword");
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
     }
 
     @Override

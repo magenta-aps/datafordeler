@@ -77,8 +77,6 @@ public class CprRecordCombinedService {
 
     @PostConstruct
     public void init() {
-        this.monitorService.addAccessCheckPoint("/prisme/cpr/combined/1/1234");
-        this.monitorService.addAccessCheckPoint("POST", "/prisme/cpr/combined/1/", "{}");
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
