@@ -244,7 +244,7 @@
         "description": "Servicen fremsøger alle de presoner som er under 18 år, og hvortil der er registreret ændringer i personens grunddata siden et tidspunkt defineret ved et leveret tidsstempel",
         "parameters": [
           {
-            "name": "dataEventTime.GTE",
+            "name": "updatedSince",
             "in": "url",
             "description": "Filtrer persone fra responset, som ikke har ændringer i personens grunddata siden denne dato",
             "schema": {

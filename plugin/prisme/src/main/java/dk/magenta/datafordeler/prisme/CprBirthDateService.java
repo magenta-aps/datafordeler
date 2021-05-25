@@ -67,7 +67,7 @@ public class CprBirthDateService {
     @GetMapping("/search")
     public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidParameterException {
 
-        String updatedSince = requestParams.getFirst("dataEventTime.GTE");
+        String updatedSince = requestParams.getFirst("updatedSince");
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
         List<String>  municipalitycodes = Optional.ofNullable(requestParams.get("municipalitycode")).orElse(new ArrayList<>());
@@ -88,21 +88,14 @@ public class CprBirthDateService {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        OffsetDateTime offsetTimestampLTE=null;
+        OffsetDateTime offsetTimestampGTE=null;
         if(updatedSince!=null) {
-            offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(updatedSince);
+            offsetTimestampGTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(updatedSince);
         }
 
         PersonRecordQuery personQuery = new PersonRecordQuery();
         if(pageSize != null) {
-            int pageSizeInt = 10;
-            if(pageSize != null) {
-                pageSizeInt = Integer.valueOf(pageSize);
-                if(pageSizeInt>1000) {
-                    throw new InvalidParameterException("pageSize");
-                }
-                personQuery.setPageSize(pageSizeInt);
-            }
+            personQuery.setPageSize(pageSize);
         }
         if(page != null) {
             personQuery.setPage(page);
@@ -112,7 +105,7 @@ public class CprBirthDateService {
         personQuery.setEffectAt(now);
         personQuery.setBirthTimeAfter(LocalDateTime.now().minusYears(18));
         personQuery.setKommunekoder(municipalitycodeNumbers);
-        personQuery.setDataEventTimeAfter(offsetTimestampLTE);
+        personQuery.setRecordAfter(offsetTimestampGTE);
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Envelope envelope = new Envelope();

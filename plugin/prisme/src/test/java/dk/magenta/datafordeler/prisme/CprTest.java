@@ -380,7 +380,7 @@ public class CprTest extends TestBase {
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&dataEventTime.GTE=" + "2010-01-01",
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&updatedSince=" + "2010-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -392,7 +392,7 @@ public class CprTest extends TestBase {
 
         this.loadSpecificAgePersons(16);
         response = restTemplate.exchange(
-                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&dataEventTime.GTE=" + "2010-01-01",
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&updatedSince=" + "2010-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -400,10 +400,19 @@ public class CprTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
 
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&updatedSince=" + "2030-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
+
         this.cleanup();
         this.loadSpecificAgePersons(19);
         response = restTemplate.exchange(
-                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&dataEventTime.GTE=" + "2010-01-01",
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&updatedSince=" + "2010-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -414,7 +423,7 @@ public class CprTest extends TestBase {
         this.cleanup();
         this.loadSpecificAgePersons(16);
         response = restTemplate.exchange(
-                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&dataEventTime.GTE=" + "2010-01-01",
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&updatedSince=" + "2010-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -424,7 +433,7 @@ public class CprTest extends TestBase {
         Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
 
         response = restTemplate.exchange(
-                "/prisme/cpr/under18Years/1/search/?municipalitycode=957&dataEventTime.GTE=" + "2010-01-01",
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=957&updatedSince=" + "2010-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
