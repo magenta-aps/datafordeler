@@ -95,6 +95,14 @@ public class CprBirthDateService {
 
         PersonRecordQuery personQuery = new PersonRecordQuery();
         if(pageSize != null) {
+            int pageSizeInt = 10;
+            if(pageSize != null) {
+                pageSizeInt = Integer.valueOf(pageSize);
+                if(pageSizeInt>1000) {
+                    throw new InvalidParameterException("pageSize");
+                }
+                personQuery.setPageSize(pageSizeInt);
+            }
             personQuery.setPageSize(pageSize);
         }
         if(page != null) {
