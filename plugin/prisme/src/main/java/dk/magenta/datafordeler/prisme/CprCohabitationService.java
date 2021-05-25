@@ -62,7 +62,7 @@ public class CprCohabitationService {
     }
 
     @GetMapping("/search")
-    public ObjectNode findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException {
+    public ObjectNode findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException, HttpNotFoundException {
 
         List<String> cprs = requestParams.get("cpr");
 
@@ -101,6 +101,10 @@ public class CprCohabitationService {
             GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
+            if(personEntities.size() != cprNumbers.size()) {
+                throw new HttpNotFoundException(cprs.toString());
+            }
+
             AddressDataRecord firstAddress = FilterUtilities.findNewestUnclosed(personEntities.get(0).getAddress());
 
             int municipalityCode =  firstAddress.getMunicipalityCode();
@@ -132,7 +136,7 @@ public class CprCohabitationService {
                     lastMovingTimestamp = personMovingTimestamp;
                 }
             }
-            boolean allPersonsHasSameAddress = personEntities.size()==matchingEntities.size() && !lookup.isAdministrativ();
+            boolean allPersonsHasSameAddress = matchingEntities.size()==cprNumbers.size() && !lookup.isAdministrativ();
             obj.put("Cohabitation", allPersonsHasSameAddress);
             obj.put("ResidentDate", allPersonsHasSameAddress ? Optional.ofNullable(lastMovingTimestamp).map(OffsetDateTime::toLocalDate).map(LocalDate::toString).orElse(personBirthDate.toString()) : null);
             for(String cpr : cprNumbers) {
