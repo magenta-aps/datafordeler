@@ -287,93 +287,184 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "cprNummer": {
-                        "type": "string",
-                        "example": "0101011234"
-                      },
-                      "fornavn": {
-                        "type": "string",
-                        "example": "Peter"
-                      },
-                      "efternavn": {
-                        "type": "string",
-                        "example": "Andersen"
-                      },
-                      "civilstand": {
-                        "type": "string",
-                        "example": "U"
-                      },
-                      "civilstandsdato": {
-                        "type": "string",
-                        "example": "2020-10-27"
-                      },
-                      "ægtefælleCprNummer": {
-                        "type": "string",
-                        "example": "1111111113"
-                      },
-                      "statsborgerskab": {
-                        "type": "integer",
-                        "example": 5100
-                      },
-                      "køn": {
-                        "type": "string",
-                        "example": "M"
-                      },
-                      "far": {
-                        "type": "string",
-                        "example": "1111111111"
-                      },
-                      "mor": {
-                        "type": "string",
-                        "example": "1111111112"
-                      },
-                      "statuskode": {
-                        "type": "integer",
-                        "example": 5
-                      },
-                      "statuskodedato": {
-                        "type": "string",
-                        "example": "2020-10-27"
-                      },
-                      "tilflytningsdato": {
-                        "type": "string",
-                        "example": "2020-10-27"
-                      },
-                      "myndighedskode": {
-                        "type": "integer",
-                        "example": 956
-                      },
-                      "vejkode": {
-                        "type": "integer",
-                        "example": 102
-                      },
-                      "kommune": {
-                        "type": "string",
-                        "example": "Kommuneqarfik Sermersooq"
-                      },
-                      "adresse": {
-                        "type": "string",
-                        "example": "Mut Aqqut"
-                      },
-                      "postnummer": {
-                        "type": "integer",
-                        "example": 3900
-                      },
-                      "bynavn": {
-                        "type": "string",
-                        "example": "Nuuk"
-                      },
-                      "stedkode": {
-                        "type": "integer",
-                        "example": 700
-                      },
-                      "landekode": {
-                        "type": "string",
-                        "example": "GL"
+                  "type": "object",
+                  "properties": {
+                    "0101011234": {
+                      "type": "object",
+                      "properties": {
+                        "cprNummer": {
+                          "type": "string",
+                          "example": "0101011234"
+                        },
+                        "fornavn": {
+                          "type": "string",
+                          "example": "Peter"
+                        },
+                        "efternavn": {
+                          "type": "string",
+                          "example": "Andersen"
+                        },
+                        "civilstand": {
+                          "type": "string",
+                          "example": "U"
+                        },
+                        "civilstandsdato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "ægtefælleCprNummer": {
+                          "type": "string",
+                          "example": "1111111113"
+                        },
+                        "statsborgerskab": {
+                          "type": "integer",
+                          "example": 5100
+                        },
+                        "køn": {
+                          "type": "string",
+                          "example": "M"
+                        },
+                        "far": {
+                          "type": "string",
+                          "example": "1111111111"
+                        },
+                        "mor": {
+                          "type": "string",
+                          "example": "1111111112"
+                        },
+                        "statuskode": {
+                          "type": "integer",
+                          "example": 5
+                        },
+                        "statuskodedato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "tilflytningsdato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "myndighedskode": {
+                          "type": "integer",
+                          "example": 956
+                        },
+                        "vejkode": {
+                          "type": "integer",
+                          "example": 102
+                        },
+                        "kommune": {
+                          "type": "string",
+                          "example": "Kommuneqarfik Sermersooq"
+                        },
+                        "adresse": {
+                          "type": "string",
+                          "example": "Mut Aqqut"
+                        },
+                        "postnummer": {
+                          "type": "integer",
+                          "example": 3900
+                        },
+                        "bynavn": {
+                          "type": "string",
+                          "example": "Nuuk"
+                        },
+                        "stedkode": {
+                          "type": "integer",
+                          "example": 700
+                        },
+                        "landekode": {
+                          "type": "string",
+                          "example": "GL"
+                        }
+                      }
+                    },
+                    "1111111113": {
+                      "type": "object",
+                      "properties": {
+                        "cprNummer": {
+                          "type": "string",
+                          "example": "1111111113"
+                        },
+                        "fornavn": {
+                          "type": "string",
+                          "example": "Peter"
+                        },
+                        "efternavn": {
+                          "type": "string",
+                          "example": "Andersen"
+                        },
+                        "civilstand": {
+                          "type": "string",
+                          "example": "U"
+                        },
+                        "civilstandsdato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "ægtefælleCprNummer": {
+                          "type": "string",
+                          "example": "0101011234"
+                        },
+                        "statsborgerskab": {
+                          "type": "integer",
+                          "example": 5100
+                        },
+                        "køn": {
+                          "type": "string",
+                          "example": "M"
+                        },
+                        "far": {
+                          "type": "string",
+                          "example": "1111111111"
+                        },
+                        "mor": {
+                          "type": "string",
+                          "example": "1111111112"
+                        },
+                        "statuskode": {
+                          "type": "integer",
+                          "example": 5
+                        },
+                        "statuskodedato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "tilflytningsdato": {
+                          "type": "string",
+                          "example": "2020-10-27"
+                        },
+                        "myndighedskode": {
+                          "type": "integer",
+                          "example": 956
+                        },
+                        "vejkode": {
+                          "type": "integer",
+                          "example": 102
+                        },
+                        "kommune": {
+                          "type": "string",
+                          "example": "Kommuneqarfik Sermersooq"
+                        },
+                        "adresse": {
+                          "type": "string",
+                          "example": "Mut Aqqut"
+                        },
+                        "postnummer": {
+                          "type": "integer",
+                          "example": 3900
+                        },
+                        "bynavn": {
+                          "type": "string",
+                          "example": "Nuuk"
+                        },
+                        "stedkode": {
+                          "type": "integer",
+                          "example": 700
+                        },
+                        "landekode": {
+                          "type": "string",
+                          "example": "GL"
+                        }
                       }
                     }
                   }

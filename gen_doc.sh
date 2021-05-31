@@ -239,21 +239,25 @@ function generate_openapi_documentation
 {
     echo "generate_openapi_documentation"
     mkdir -p $OUTPUT_FOLDER/html/da/openapi
-    # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    # This will overwrite the sphinx-generated placeholder file that is referenced by the TOC
     cp $SPHINX_SOURCE/openapi/openapi.html $OUTPUT_FOLDER/html/da/openapi/
     cp $SPHINX_SOURCE/openapi/openapi.json $OUTPUT_FOLDER/html/da/openapi/
 
-    # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    # This will overwrite the sphinx-generated placeholder file that is referenced by the TOC
     cp $SPHINX_SOURCE/openapi/prismeapi.html $OUTPUT_FOLDER/html/da/openapi/
     cp $SPHINX_SOURCE/openapi/prismeapi.json $OUTPUT_FOLDER/html/da/openapi/
 
-    # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    # This will overwrite the sphinx-generated placeholder file that is referenced by the TOC
     cp $SPHINX_SOURCE/openapi/cprapi.html $OUTPUT_FOLDER/html/da/openapi/
     cp $SPHINX_SOURCE/openapi/cprapi.json $OUTPUT_FOLDER/html/da/openapi/
 
-    # THis will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    # This will overwrite the sphinx-generated placeholder file that is referenced by the TOC
     cp $SPHINX_SOURCE/openapi/subscriptionapi.html $OUTPUT_FOLDER/html/da/openapi/
     cp $SPHINX_SOURCE/openapi/subscriptionapi.json $OUTPUT_FOLDER/html/da/openapi/
+
+    # This will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    cp $SPHINX_SOURCE/openapi/combinedapi.html $OUTPUT_FOLDER/html/da/openapi/
+    cp $SPHINX_SOURCE/openapi/combinedapi.json $OUTPUT_FOLDER/html/da/openapi/
 
     cp -r $SPHINX_SOURCE/openapi/swagger/ $OUTPUT_FOLDER/html/da/openapi/
 }
