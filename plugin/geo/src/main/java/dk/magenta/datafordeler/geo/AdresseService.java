@@ -593,10 +593,11 @@ public class AdresseService {
                     if (floorValue != null && !floorValue.isEmpty()) {
                         addressNode.put(OUTPUT_FLOOR, floorValue);
                     }
-                    if (doorValue != null && !doorValue.isEmpty()) {
+                    /*if (doorValue != null && !doorValue.isEmpty()) {//Julia and Thor want us to stop using door now, and use enhedsnummer instead
                         addressNode.put(OUTPUT_DOOR, door.getDoor());
-                    }
+                    }*/
                     if (unitNumberValue != null && !unitNumberValue.isEmpty()) {
+                        addressNode.put(OUTPUT_DOOR, unitNumberValue);//Julia and Thor want us to stop using door now, and use enhedsnummer instead
                         addressNode.put(OUTPUT_UNITNUMBER, unitNumberValue);
                     }
 
@@ -609,12 +610,12 @@ public class AdresseService {
                     }
 
                     addressNode.put(OUTPUT_BNUMBER, stripBnr(bnr, true));
-                    if (doorValue == null || doorValue.isEmpty()) {
+                    /*if (doorValue == null || doorValue.isEmpty()) {//Julia and Thor want us to stop using door now
                         String bnrDoor = bnrExtraLetter(bnr);
                         if (bnrDoor != null) {
                             addressNode.put(OUTPUT_DOOR, bnrDoor);
                         }
-                    }
+                    }*/
 
 
                     UnitAddressUsageRecord usage = current(unitAddressEntity.getUsage());
@@ -772,16 +773,17 @@ public class AdresseService {
                             addressNode.put(OUTPUT_FLOOR, floorValue);
                         }
                     }
-                    UnitAddressDoorRecord door = current(unitAddress.getDoor());
+                    /*UnitAddressDoorRecord door = current(unitAddress.getDoor());//Julia and Thor want us to stop using door now, and use enhedsnummer instead
                     if (door != null) {
                         doorValue = door.getDoor();
                         if (doorValue != null && !doorValue.isEmpty()) {
                             addressNode.put(OUTPUT_DOOR, doorValue);
                         }
-                    }
+                    }*/
                     UnitAddressNumberRecord unitNumber = current(unitAddress.getNumber());
                     if (unitNumber != null) {
                         addressNode.put(OUTPUT_UNITNUMBER, unitNumber.getNumber());
+                        addressNode.put(OUTPUT_DOOR, unitNumber.getNumber());//Julia and Thor want us to stop using door now, and use enhedsnummer instead
                     }
                     UnitAddressUsageRecord usage = current(unitAddress.getUsage());
                     if (usage != null) {
