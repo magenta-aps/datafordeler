@@ -249,7 +249,7 @@ public class GenericUnitAddressService {
                 output.setSource(accessAddressEntity.getSource().stream().findFirst().orElse(null).getSource());
                 output.setStatus(accessAddressEntity.getStatus().stream().findFirst().orElse(null).getStatus());
                 //output.mabeysomething(accessAddressEntity.getBuilding().stream().findFirst().orElse(null).);
-                output.setDoer(unitAddressEntity.getDoor().stream().findFirst().orElse(null).getDoor());
+                output.setEnhed(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
                 output.setEtage(unitAddressEntity.getFloor().stream().findFirst().orElse(null).getFloor());
                 //output.mabeysomething(unitAddressEntity.getUsage().stream().findFirst().orElse(null).getUsage());
                 output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
