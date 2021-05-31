@@ -166,7 +166,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
                     root.put("vejkode", roadCode);
 
                     GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
-
+                    root.put("adminadresse", lookup.isAdministrativ());
                     root.put("kommune", lookup.getMunicipalityName());
 
                     String buildingNumber = lookup.getbNumber();
