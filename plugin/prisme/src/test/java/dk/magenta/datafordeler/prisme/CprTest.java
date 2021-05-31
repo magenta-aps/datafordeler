@@ -401,6 +401,14 @@ public class CprTest extends TestBase {
         Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
 
         response = restTemplate.exchange(
+                "/prisme/cpr/under18Years/1/search/?municipalitycode=956&pageSize=10000&updatedSince=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        response = restTemplate.exchange(
                 "/prisme/cpr/under18Years/1/search/?municipalitycode=956&updatedSince=" + "2030-01-01",
                 HttpMethod.GET,
                 httpEntity,
