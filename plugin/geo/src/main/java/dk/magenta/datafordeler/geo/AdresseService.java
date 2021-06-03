@@ -775,7 +775,8 @@ public class AdresseService {
                             addressNode.put(OUTPUT_FLOOR, floorValue);
                         }
                     }
-                    /*UnitAddressDoorRecord door = current(unitAddress.getDoor());//Julia and Thor want us to stop using door now, and use enhedsnummer instead
+                    /* Julia and Thor want us to stop using door now, and use enhedsnummer instead. See #43824
+                    UnitAddressDoorRecord door = current(unitAddress.getDoor());
                     if (door != null) {
                         doorValue = door.getDoor();
                         if (doorValue != null && !doorValue.isEmpty()) {
