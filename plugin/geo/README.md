@@ -90,7 +90,7 @@ Der er også en service for opslag på en specifik adresse på baggrund af denne
 /geo/adresse/adresseoplysninger?adresse=uuid
 
 
-Sammenfattede kompenceringer:
+Sammenfattede kompenseringer:
 B-numre i responses til digital flytning angives altid uden "B-" og eventuelt bogstav i slutningen.
 
 Dvs. at "B-" fjernes inden b-nummeret leveres
