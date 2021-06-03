@@ -91,7 +91,7 @@ Der er også en service for opslag på en specifik adresse på baggrund af denne
 
 
 Sammenfattede kompenceringer:
-B-numre i responses til digital flytning angives altid uden "B-" og eventuellt borstav i slutningen.
+B-numre i responses til digital flytning angives altid uden "B-" og eventuelt bogstav i slutningen.
 
 Dvs. at "B-" fjernes inden b-nummeret leveres
 
