@@ -74,7 +74,7 @@ Hvis der er flere bygningsnumre med samme husnummer frasorteres de i responset
 Ved fremsøgning på "husnr" fjernes foranstillede nuller og der laves fremsøgning både med og uden disse nuller.
 Dermed kan adresser findes uanset om der er foranstillede nuller
 
-Ved fremsøgning på b_nummer appendes "B-" foran "b_nummer" (B-numre er altid angivet med B- i GAR)
+Ved fremsøgning på b_nummer tilføjes "B-" foran "b_nummer" (B-numre er altid angivet med B- i GAR)
 Der appendes A,B,C,D,E,F efter bygningsnummeret (Og søges på alle kombinationer) (Dermed fremfindes også bygninger som hedder B-304A)
 
 Ved output af "b_nummer" fjernes "B-"
