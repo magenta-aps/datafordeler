@@ -18,7 +18,7 @@ Hermed en beskrivelse:
 
 Digital flytning kan kalde denne service for at finde lokaliteter i en kommune:
 https://dafo.data.gl/geo/adresse/lokalitet/?kommune=###
-Her leveres en liste af lokaliteter i den givne kommune, dette er lavet uden kompenceringer for problematiske data i GAR.
+Her leveres en liste af lokaliteter i den givne kommune, dette er lavet uden kompenseringer for problematiske data i GAR.
 Der leveres en liste over lokaliteter og UUID'er på disse
 
 
