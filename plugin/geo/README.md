@@ -13,7 +13,7 @@ This register is used for generating readable Danish adresses in datafordeleren.
 
 I dette plugin udstilles services for brug af digital flytning
 
-Hermed en beskrivelse:
+Beskrivelse:
 
 
 Digital flytning kan kalde denne service for at finde lokaliteter i en kommune:
