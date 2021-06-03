@@ -593,7 +593,8 @@ public class AdresseService {
                     if (floorValue != null && !floorValue.isEmpty()) {
                         addressNode.put(OUTPUT_FLOOR, floorValue);
                     }
-                    /*if (doorValue != null && !doorValue.isEmpty()) {//Julia and Thor want us to stop using door now, and use enhedsnummer instead
+                    /* Julia and Thor want us to stop using door now, and use enhedsnummer instead. See #43824
+                    if (doorValue != null && !doorValue.isEmpty()) {
                         addressNode.put(OUTPUT_DOOR, door.getDoor());
                     }*/
                     if (unitNumberValue != null && !unitNumberValue.isEmpty()) {
