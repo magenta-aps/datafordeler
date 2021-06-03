@@ -610,7 +610,8 @@ public class AdresseService {
                     }
 
                     addressNode.put(OUTPUT_BNUMBER, stripBnr(bnr, true));
-                    /*if (doorValue == null || doorValue.isEmpty()) {//Julia and Thor want us to stop using door now
+                    /* Julia and Thor want us to stop using door now
+                    if (doorValue == null || doorValue.isEmpty()) {
                         String bnrDoor = bnrExtraLetter(bnr);
                         if (bnrDoor != null) {
                             addressNode.put(OUTPUT_DOOR, bnrDoor);
