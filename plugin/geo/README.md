@@ -114,6 +114,10 @@ Hermed en beskrivelse af hvilke data vi henter fra GAR, denne information kan be
 #### Atributter som gemmes for alle objekter
 OBJECTID, GlobalID, sumiffiikId, creator, CreationDate, Editor, EditDate
 
+Herudover gemmes attributter specifikt for de enkelte objekter.
+
+Der indlæses også GIS-koordinater, men dem bruger vi ikke til noget
+
 
 ### Kommuner
 https://nogd01.knno.local/server/rest/services/OperationalLayers/Grunddata/FeatureServer/4/query?where=EditDate>'%{editDate}'&outFields=*&returnGeometry=true&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson
