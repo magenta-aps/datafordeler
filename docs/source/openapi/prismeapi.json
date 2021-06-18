@@ -174,11 +174,11 @@
                       "type": "string",
                       "example": "0101011234"
                     },
-                    "residentInGL": {
+                    "borIGL": {
                       "type": "boolean",
                       "example": true
                     },
-                    "timestamp": {
+                    "dato": {
                       "type": "string",
                       "example": "2020-07-20"
                     }

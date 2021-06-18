@@ -91,15 +91,15 @@ public class CprResidentService {
                 for(PersonStatusDataRecord status : statusList) {
 
                     if(status.getStatus()==5 || status.getStatus()==7) {
-                        residentInfo.setTimestamp(status.getEffectFrom().toLocalDate());
-                        residentInfo.setResidentInGL(true);
+                        residentInfo.setDato(status.getEffectFrom().toLocalDate());
+                        residentInfo.setBoriIGL(true);
                     } else {
                         //If a status for the person is found where the person is not living in greenland return the last values of the person living in greenland
                         loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
                         return residentInfo;
                     }
                 }
-                residentInfo.setTimestamp(FilterUtilities.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime().toLocalDate());
+                residentInfo.setDato(FilterUtilities.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime().toLocalDate());
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
                 return residentInfo;
             }

@@ -15,17 +15,17 @@ public class ResidentItem {
     private String cprNummer;
 
 
-    private boolean residentInGL;
+    private boolean borIGL;
 
-    private LocalDate timestamp;
+    private LocalDate dato;
 
     public ResidentItem() {
     }
 
-    public ResidentItem(String cprNummer, boolean residentInGL, LocalDate timestamp) {
+    public ResidentItem(String cprNummer, boolean borIGL, LocalDate dato) {
         this.cprNummer = cprNummer;
-        this.residentInGL = residentInGL;
-        this.timestamp = timestamp;
+        this.borIGL = borIGL;
+        this.dato = dato;
     }
 
     public String getCprNummer() {
@@ -36,20 +36,20 @@ public class ResidentItem {
         this.cprNummer = cprNummer;
     }
 
-    public void setResidentInGL(boolean residentInGL) {
-        this.residentInGL = residentInGL;
+    public void setBoriIGL(boolean borIGL) {
+        this.borIGL = borIGL;
     }
 
-    public boolean getResidentInGL() {
-        return residentInGL;
+    public boolean getBoriIGL() {
+        return borIGL;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
-        this.timestamp = timestamp;
+    public void setDato(LocalDate dato) {
+        this.dato = dato;
     }
 
-    public LocalDate getTimestamp() {
-        return timestamp;
+    public LocalDate getDato() {
+        return dato;
     }
 
 }
