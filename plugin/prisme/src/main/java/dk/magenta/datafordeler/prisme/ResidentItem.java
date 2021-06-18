@@ -36,11 +36,11 @@ public class ResidentItem {
         this.cprNummer = cprNummer;
     }
 
-    public void setBoriIGL(boolean borIGL) {
+    public void setBorIGL(boolean borIGL) {
         this.borIGL = borIGL;
     }
 
-    public boolean getBoriIGL() {
+    public boolean getBorIGL() {
         return borIGL;
     }
 

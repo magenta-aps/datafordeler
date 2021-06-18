@@ -92,7 +92,7 @@ public class CprResidentService {
 
                     if(status.getStatus()==5 || status.getStatus()==7) {
                         residentInfo.setDato(status.getEffectFrom().toLocalDate());
-                        residentInfo.setBoriIGL(true);
+                        residentInfo.setBorIGL(true);
                     } else {
                         //If a status for the person is found where the person is not living in greenland return the last values of the person living in greenland
                         loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
