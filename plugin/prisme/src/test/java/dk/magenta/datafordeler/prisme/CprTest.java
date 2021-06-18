@@ -144,11 +144,11 @@ public class CprTest extends TestBase {
         String[] lines = testData.split("\n");
 
         StringJoiner sb = new StringJoiner("\n");
-        String yearsOld = String.format("%04d", OffsetDateTime.now().minusYears(age).getYear());
+        String birthYear = String.format("%04d", OffsetDateTime.now().minusYears(age).getYear());
         for (int j = 0; j < lines.length; j++) {
             String line = lines[j];
             if(line.startsWith("0010101001234")) {
-                line = line.substring(0, 67) + yearsOld + line.substring(71);
+                line = line.substring(0, 67) + birthYear + line.substring(71);
             }
             sb.add(line);
         }
@@ -352,7 +352,6 @@ public class CprTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"cprNummer\":\"1111111110\",\"residentInGL\":true,\"timestamp\":\"2020-07-20\"}", response.getBody(), false);
 
-        System.out.println(response.getBody());
 
         response = restTemplate.exchange(
                 "/prisme/cpr/residentinformation/1/" + "1211111111",

@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * Get the history of cohabitation
  */
 @RestController
-@RequestMapping("/prisme/cpr/under18Years/1")
+@RequestMapping("/prisme/cpr/under18years/1")
 public class CprBirthDateService {
 
     @Autowired
@@ -96,12 +96,9 @@ public class CprBirthDateService {
         PersonRecordQuery personQuery = new PersonRecordQuery();
         if(pageSize != null) {
             int pageSizeInt = 10;
-            if(pageSize != null) {
-                pageSizeInt = Integer.valueOf(pageSize);
-                if(pageSizeInt>1000) {
-                    throw new InvalidParameterException("pageSize");
-                }
-                personQuery.setPageSize(pageSizeInt);
+            pageSizeInt = Integer.valueOf(pageSize);
+            if(pageSizeInt>1000) {
+                throw new InvalidParameterException("pageSize");
             }
             personQuery.setPageSize(pageSize);
         }
@@ -159,7 +156,7 @@ public class CprBirthDateService {
         AreaRestrictionType municipalityType = areaRestrictionDefinition.getAreaRestrictionTypeByName(CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER);
         for (AreaRestriction restriction : restrictions) {
             if (restriction.getType() == municipalityType) {
-                query.addKommunekode(restriction.getValue());
+                query.addKommunekodeRestriction(restriction.getValue());
             }
         }
     }

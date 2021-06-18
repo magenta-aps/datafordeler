@@ -86,8 +86,8 @@ public class CprBirthIntervalDateService {
             }
         }
         String page = requestParams.getFirst("page");
-        String  municipalitycode = requestParams.getFirst("kommune_kode");
-        String  localityCode = requestParams.getFirst("lokalitet_kode");
+        String municipalitycode = requestParams.getFirst("kommune_kode");
+        String localityCode = requestParams.getFirst("lokalitet_kode");
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 

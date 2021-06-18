@@ -98,7 +98,7 @@
     "/prisme/sameaddress/1/{cprNummer}": {
       "get": {
         "summary": "Fremsøgning af andre personer med bopæl på samme adresse",
-        "description": "Servicen fremsøger alle de presoner som bebor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, dør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er retgistreret som en administrativ adresse laves ingen adressematch.",
+        "description": "Servicen fremsøger alle de personer som bebor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, dør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er registreret som en administrativ adresse laves ingen adressematch.",
         "responses": {
           "200": {
             "description": "Personinformation og en liste over CPR-numre på personer som denne person deler adresse med.",
@@ -161,10 +161,10 @@
     "/prisme/cpr/residentinformation/1/{cprNummer}": {
       "get": {
         "summary": "Fremsøgning af bopælsinformation på en person",
-        "description": "Servicen fremsøger information om den givne person her popæl i Grønland, og i givet fald hvornå denne person er flyttet til landet.<br/>Hvis personen aldrig har haft bopæl uden for Grønland leveres datoen for hvornår personen er født.<br/>Hvis personen ikke har aktuel bopæl i Grønland så leveres et null som dato",
+        "description": "Servicen fremsøger information om den givne person har bopæl i Grønland, og i givet fald hvornår denne person er flyttet til landet.<br/>Hvis personen aldrig har haft bopæl uden for Grønland leveres datoen for hvornår personen er født.<br/>Hvis personen ikke har aktuel bopæl i Grønland, leveres null som dato",
         "responses": {
           "200": {
-            "description": "Personinformation med information om personen har bopæl i Grønland. <br/Hvis personen er født i Grønland, og har haft uafbrudt bopæl i Grønland siden fødslen så returneres datoen for personens fødsel.",
+            "description": "Personinformation med information om personen har bopæl i Grønland. <br/>Hvis personen er født i Grønland, og har haft uafbrudt bopæl i Grønland siden fødslen, så returneres datoen for personens fødsel.",
             "content": {
               "application/json": {
                 "schema": {
@@ -193,7 +193,7 @@
     "/prisme/cpr/cohabitationinformation/1/search": {
       "get": {
         "summary": "Fremsøgning af hvor længe de fremsøgte personer har haft samme adresse.",
-        "description": "Servicen fremsøger alle de presoner som bebor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, dør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er retgistreret som en administrativ adresse laves ingen adressematch.",
+        "description": "Servicen fremsøger alle de personer som bebor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, dør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode der er registreret som en administrativ adresse laves ingen adressematch.",
         "parameters": [
           {
             "name": "cpr",
@@ -246,7 +246,7 @@
           {
             "name": "updatedSince",
             "in": "url",
-            "description": "Filtrer persone fra responset, som ikke har ændringer i personens grunddata siden denne dato",
+            "description": "Filtrer personer fra responset, som ikke har ændringer i personens grunddata siden denne dato",
             "schema": {
               "type": "string",
               "example": "2020-12-24"

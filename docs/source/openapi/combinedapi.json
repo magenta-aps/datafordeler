@@ -360,12 +360,12 @@
     "/combined/cpr/birthIntervalDate/1/search": {
       "get": {
         "summary": "Find Personer med fødselsdato indenfor specificeret datointerval",
-        "description": "Servicen leverer en liste over personer med fødselsdato inden for et givent datointerval. <br/>Der er mulighed for at filtrere i svaret på baggrund af personerne nuværende adresseinformation, enten personens bopælskommune eller personens adresses tilhørende lokalitetskode.<br/><br/>PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-BIRTHINTERVALLOOKUP/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/search/",
+        "description": "Servicen leverer en liste over personer med fødselsdato inden for et givet datointerval. <br/>Der er mulighed for at filtrere i svaret på baggrund af personernes nuværende adresseinformation, enten personens bopælskommune eller personens adresses tilhørende lokalitetskode.<br/><br/>PITU:<br/>Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-BIRTHINTERVALLOOKUP/1<br />Sti under /restapi/: /search/<br/>Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/search/",
         "parameters": [
           {
             "name": "birthAfter",
             "in": "url",
-            "description": "Find persones, som er født efter denne dato",
+            "description": "Find personer, som er født efter denne dato",
             "required": true,
             "schema": {
               "type": "string",
@@ -384,7 +384,7 @@
           },
           {
             "name": "pageSize",
-            "description": "PageSize definere hvor lang listen af matchene resultater må være",
+            "description": "Definerer hvor mange resultater der vises pr. side.",
             "required": false,
             "schema": {
               "type": "integer",
@@ -393,7 +393,7 @@
           },
           {
             "name": "page",
-            "description": "Page definere hvilen side der fremsøges i tilfælde af, at der er mere end et element i listen",
+            "description": "Definer hvilken resultatside der fremsøges",
             "required": false,
             "schema": {
               "type": "integer",
@@ -403,7 +403,7 @@
           {
             "name": "kommune_kode",
             "in": "url",
-            "description": "Filtrer i resultater bå bagrund af personernes nuværende nuværende bopælskommune",
+            "description": "Filtrer i resultater på baggrund af personernes nuværende bopælskommune",
             "required": false,
             "schema": {
               "type": "integer",
@@ -413,7 +413,7 @@
           {
             "name": "lokalitet_kode",
             "in": "url",
-            "description": "Filtrer i resultater bå bagrund af personernes nuværende nuværende lokmalitet for bopælen",
+            "description": "Filtrer i resultater på baggrund af personernes nuværende lokalitet for bopælen",
             "required": false,
             "schema": {
               "type": "string",

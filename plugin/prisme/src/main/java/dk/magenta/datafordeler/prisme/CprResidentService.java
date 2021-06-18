@@ -125,7 +125,7 @@ public class CprResidentService {
         AreaRestrictionType municipalityType = areaRestrictionDefinition.getAreaRestrictionTypeByName(CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER);
         for (AreaRestriction restriction : restrictions) {
             if (restriction.getType() == municipalityType) {
-                query.addKommunekode(restriction.getValue());
+                query.addKommunekodeRestriction(restriction.getValue());
             }
         }
     }
