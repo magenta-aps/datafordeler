@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,7 +64,7 @@ public class CprBirthIntervalDateService {
     }
 
     @GetMapping("/search")
-    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, MissingParameterException, InvalidTokenException, InvalidCertificateException, InvalidParameterException{
+    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, MissingParameterException, InvalidTokenException, InvalidCertificateException, InvalidParameterException {
 
         String birthAfter = requestParams.getFirst("birthAfter");
         if(birthAfter==null) {
@@ -112,11 +113,11 @@ public class CprBirthIntervalDateService {
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE +" = 0 AND "+
             " birthDataRecord.birthDatetime <= :btb AND birthDataRecord.birthDatetime >= :bta ";
             if(localityCode!=null && municipalitycode!=null) {
-                condition += String.format("AND accessAddressLocalityRecord.code = '%s' AND addressDataRecord.municipalityCode = '%s'", localityCode, municipalitycode);
+                condition += "AND accessAddressLocalityRecord.code = :locality AND addressDataRecord.municipalityCode = :municipality";
             } else if(localityCode!=null) {
-                condition += String.format("AND accessAddressLocalityRecord.code = '%s'", localityCode);
+                condition += "AND accessAddressLocalityRecord.code = :locality";
             } else if(municipalitycode!=null) {
-                condition += String.format("AND addressDataRecord.municipalityCode = '%s'", municipalitycode);
+                condition += "AND addressDataRecord.municipalityCode = :municipality";
             }
 
             hql += condition;
@@ -124,6 +125,12 @@ public class CprBirthIntervalDateService {
             Query query = session.createQuery(hql);
             query.setParameter("btb", birthBeforeTS);
             query.setParameter("bta", birthAfterTS);
+            if(localityCode!=null) {
+                query.setParameter("locality", localityCode);
+            }
+            if(municipalitycode!=null) {
+                query.setParameter("municipality", Integer.parseInt(municipalitycode));
+            }
 
             query.setMaxResults(pageSizeInt);
             if(page != null) {
@@ -150,6 +157,8 @@ public class CprBirthIntervalDateService {
             setHeaders(response);
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprBirthIntervalDateService done");
             return envelope;
+        } catch(NumberFormatException | DateTimeParseException e) {
+            throw new InvalidParameterException("Invalid parameters");
         }
 
     }
