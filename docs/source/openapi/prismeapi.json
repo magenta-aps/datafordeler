@@ -238,7 +238,7 @@
         }
       }
     },
-    "/prisme/cpr/under18Years/1/search": {
+    "/prisme/cpr/under18years/1/search": {
       "get": {
         "summary": "Fremsøgning af personer som er under 18 år",
         "description": "Servicen fremsøger alle de presoner som er under 18 år, og hvortil der er registreret ændringer i personens grunddata siden et tidspunkt defineret ved et leveret tidsstempel",
