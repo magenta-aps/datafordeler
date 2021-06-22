@@ -40,6 +40,11 @@ public class AddressNameDataRecord extends CprBitemporalPersonRecord<AddressName
         this.rapportnavne = rapportnavne;
     }
 
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     public static final String DB_FIELD_ADDRESS_NAME = "addressName";
     public static final String IO_FIELD_ADDRESS_NAME = "adressenavn";
     @Column(name = DB_FIELD_ADDRESS_NAME)

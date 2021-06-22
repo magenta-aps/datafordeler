@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.records;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
@@ -32,6 +33,11 @@ public class CompanyMonthlyNumbersRecord extends CompanyNumbersRecord {
 
     public static final String DB_FIELD_YEAR = "year";
     public static final String IO_FIELD_YEAR = "aar";
+
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
     @Column(name = DB_FIELD_YEAR)
     @JsonProperty(value = IO_FIELD_YEAR)

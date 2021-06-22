@@ -28,6 +28,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
     }
 
     public PersonEventDataRecord(OffsetDateTime timestamp, String eventId, String derived) {
+        this.setDafoUpdated(OffsetDateTime.now());
         this.timestamp = timestamp;
         this.eventId = eventId;
         this.derived = derived;
@@ -71,6 +72,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
 
 
     public static final String DB_FIELD_EVENT = "eventId";
+    public static final String IO_FIELD_EVENT = "eventId";
     @Column(name = DB_FIELD_EVENT)
     @JsonIgnore
     @XmlTransient

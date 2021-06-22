@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -28,6 +29,11 @@ public class AddressConameDataRecord extends CprBitemporalPersonRecord<AddressCo
     public static final String TABLE_NAME = "cpr_person_address_coname_record";
 
     public AddressConameDataRecord() {
+    }
+
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
     }
 
     public AddressConameDataRecord(String coname) {

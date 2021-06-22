@@ -23,6 +23,11 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     public static final String DB_FIELD_UNITNUMBER = "unitNumber";
     public static final String IO_FIELD_UNITNUMBER = "enhedsNummer";
 
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_UNITNUMBER)
     @JsonProperty(value = IO_FIELD_UNITNUMBER)
     private long unitNumber;

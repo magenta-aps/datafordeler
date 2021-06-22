@@ -113,6 +113,17 @@ test-prisme:
       junit:
         - /app/plugin/prisme/target/surefire-reports/TEST-*.xml
 
+test-subscription:
+  <<: *test-default
+  before_script:
+    - cd /app/plugin/subscription
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /app/plugin/subscription/target/surefire-reports/TEST-*.xml
+
 test-statistik:
   <<: *test-default
   before_script:

@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -32,6 +33,11 @@ public class CitizenshipDataRecord extends CprBitemporalPersonRecord<Citizenship
 
     public CitizenshipDataRecord(int countryCode) {
         this.countryCode = countryCode;
+    }
+
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
     }
 
     public static final String DB_FIELD_COUNTRY_CODE = "countryCode";

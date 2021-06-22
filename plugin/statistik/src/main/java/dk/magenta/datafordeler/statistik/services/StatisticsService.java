@@ -216,6 +216,7 @@ public abstract class StatisticsService {
         CIVILSTATUS("civilstate_data"),
         MOVEMENT("movement_data"),
         STATUS("status_data"),
+        VOTE("vote_list_data"),
         ADDRESS("address_data"),
         ROAD("road_data"),
         LOCALITY("locality_data"),

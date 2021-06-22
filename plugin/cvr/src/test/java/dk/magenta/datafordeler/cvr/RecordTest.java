@@ -235,8 +235,7 @@ public class RecordTest {
     public void testUpdateCompany() throws IOException, DataFordelerException {
         loadCompany("/company_in.json");
         loadCompany("/company_in2.json");
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setCvrNumre("25052943");
             List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
@@ -246,7 +245,7 @@ public class RecordTest {
 
             Assert.assertEquals(3, companyRecord.getNames().size());
             Assert.assertEquals(1, companyRecord.getSecondaryNames().size());
-            Assert.assertEquals(1, companyRecord.getPostalAddress().size());
+            Assert.assertEquals(2, companyRecord.getPostalAddress().size());
             Assert.assertEquals(5, companyRecord.getLocationAddress().size());
             Assert.assertEquals(2, companyRecord.getPhoneNumber().size());
             Assert.assertEquals(0, companyRecord.getFaxNumber().size());
@@ -265,11 +264,23 @@ public class RecordTest {
             Assert.assertEquals(12, companyRecord.getParticipants().size());
             Assert.assertEquals(1, companyRecord.getFusions().size());
 
+            Set<CompanyDataEventRecord> listOfdataevents = companyRecord.getDataevent();
+
+            long adressEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).count();
+            Assert.assertEquals(6, adressEvents);
+
+            CompanyDataEventRecord record = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).findFirst().get();
+            System.out.println(record.getOldItem());
+
+
+
+
+            long nameEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_company_status")).count();
+            Assert.assertEquals(1, nameEvents);
+
             Assert.assertEquals(2, companyRecord.getFusions().iterator().next().getName().size());
             Assert.assertEquals(1, companyRecord.getFusions().iterator().next().getIncoming().size());
             Assert.assertEquals(2, companyRecord.getFusions().iterator().next().getIncoming().iterator().next().getValues().size());
-
-
 
             Assert.assertEquals(1, companyRecord.getSplits().size());
             Assert.assertEquals(2, companyRecord.getMetadata().getNewestName().size());
@@ -326,9 +337,24 @@ public class RecordTest {
             }
             Assert.assertTrue(foundParticipantData);
 
-        } finally {
-            session.close();
         }
+
+        loadCompany("/company_in3.json");
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            CompanyRecordQuery query = new CompanyRecordQuery();
+            query.setCvrNumre("25052943");
+            List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
+            CompanyRecord companyRecord = records.get(0);
+
+            Set<CompanyDataEventRecord> listOfdataevents = companyRecord.getDataevent();
+
+            long adressEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).count();
+            Assert.assertEquals(7, adressEvents);
+
+        }
+
+
     }
 
     @Test

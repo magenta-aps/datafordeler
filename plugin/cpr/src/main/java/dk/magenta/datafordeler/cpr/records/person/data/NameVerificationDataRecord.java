@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -37,6 +38,11 @@ public class NameVerificationDataRecord extends VerificationDataRecord<NameVerif
     public NameVerificationDataRecord(boolean verified, String correctionMarking) {
         super(verified);
         this.correctionMarking = correctionMarking;
+    }
+
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
     }
 
     public static final String DB_FIELD_CORRECTION_MARKING = "correctionMarking";
