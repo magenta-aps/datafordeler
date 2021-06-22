@@ -375,7 +375,7 @@
           {
             "name": "birthBefore",
             "in": "url",
-            "description": "Find persones, som er født før denne dato",
+            "description": "Find personer, som er født før denne dato",
             "required": true,
             "schema": {
               "type": "string",
