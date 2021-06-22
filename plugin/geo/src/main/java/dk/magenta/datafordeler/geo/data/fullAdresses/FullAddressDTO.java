@@ -18,6 +18,7 @@ public class FullAddressDTO {
     private Number source;
     private String etage;
     private String doer;
+    private String enhed;
     private String nummer;
     private Number vej_kode;
     private String vej_navn;
@@ -135,6 +136,14 @@ public class FullAddressDTO {
 
     public void setDoer(String doer) {
         this.doer = doer;
+    }
+
+    public String getEnhed() {
+        return enhed;
+    }
+
+    public void setEnhed(String enhed) {
+        this.enhed = enhed;
     }
 
     public String getNummer() {

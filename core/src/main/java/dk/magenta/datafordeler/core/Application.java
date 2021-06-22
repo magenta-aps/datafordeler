@@ -59,6 +59,7 @@ public class Application {
             File encryptionFile = new File(args[1]);
             byte[] lastBytes = Files.readAllBytes(new File(args[2]).toPath());
             String pass = Encryption.decrypt(encryptionFile, lastBytes);
+            System.out.println(pass);
             return;
         }
 
