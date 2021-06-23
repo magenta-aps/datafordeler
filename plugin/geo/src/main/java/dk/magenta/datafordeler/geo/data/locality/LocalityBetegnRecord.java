@@ -45,7 +45,7 @@ public class LocalityBetegnRecord extends GeoMonotemporalRecord<GeoLocalityEntit
         return this.betegn;
     }
 
-    public void setType(Integer type) {
+    public void setType(Integer betegn) {
         this.betegn = betegn;
     }
 

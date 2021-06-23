@@ -246,6 +246,12 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
         if (record instanceof LocalityTypeRecord) {
             added = addItem(this.type, record);
         }
+        if (record instanceof LocalityStatusRecord) {
+            added = addItem(this.status, record);
+        }
+        if (record instanceof LocalityBetegnRecord) {
+            added = addItem(this.betegnelse, record);
+        }
         if (record instanceof LocalityMunicipalityRecord) {
             added = addItem(this.municipality, record);
         }

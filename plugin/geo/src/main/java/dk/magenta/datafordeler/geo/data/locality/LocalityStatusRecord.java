@@ -45,7 +45,7 @@ public class LocalityStatusRecord extends GeoMonotemporalRecord<GeoLocalityEntit
         return this.status;
     }
 
-    public void setType(Integer type) {
+    public void setType(Integer status) {
         this.status = status;
     }
 
