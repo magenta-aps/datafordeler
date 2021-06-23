@@ -129,6 +129,41 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
+    public static final String DB_FIELD_STATUS = "status";
+    public static final String IO_FIELD_STATUS = "status";
+    @OneToMany(mappedBy = LocalityStatusRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @Filters({
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_AFTER),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
+    })
+    @JsonProperty(DB_FIELD_STATUS)
+    private Set<LocalityStatusRecord> status = new HashSet<>();
+
+    public MonotemporalSet<LocalityStatusRecord> getStatus() {
+        return new MonotemporalSet<>(this.status);
+    }
+
+
+
+    public static final String DB_FIELD_BETEGN = "betegnelse";
+    public static final String IO_FIELD_BETEGN = "betegnelse";
+    @OneToMany(mappedBy = LocalityBetegnRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @Filters({
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_AFTER),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
+    })
+    @JsonProperty(DB_FIELD_BETEGN)
+    private Set<LocalityBetegnRecord> betegnelse = new HashSet<>();
+
+    public MonotemporalSet<LocalityBetegnRecord> getBetegnelse() {
+        return new MonotemporalSet<>(this.betegnelse);
+    }
+
+
 
     public static final String DB_FIELD_MUNICIPALITY = "municipality";
     public static final String IO_FIELD_MUNICIPALITY = "kommunekode";
