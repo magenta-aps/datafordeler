@@ -41,11 +41,11 @@ public class LocalityStatusRecord extends GeoMonotemporalRecord<GeoLocalityEntit
     @JsonProperty(IO_FIELD_TYPE)
     private Integer status;
 
-    public Integer getType() {
+    public Integer getStatus() {
         return this.status;
     }
 
-    public void setType(Integer status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

@@ -41,11 +41,11 @@ public class LocalityBetegnRecord extends GeoMonotemporalRecord<GeoLocalityEntit
     @JsonProperty(IO_FIELD_TYPE)
     private Integer betegn;
 
-    public Integer getType() {
+    public Integer getBetegn() {
         return this.betegn;
     }
 
-    public void setType(Integer betegn) {
+    public void setBetegn(Integer betegn) {
         this.betegn = betegn;
     }
 
