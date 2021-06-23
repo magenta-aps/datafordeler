@@ -138,7 +138,7 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
-    @JsonProperty(DB_FIELD_STATUS)
+    @JsonProperty(IO_FIELD_STATUS)
     private Set<LocalityStatusRecord> status = new HashSet<>();
 
     public MonotemporalSet<LocalityStatusRecord> getStatus() {
@@ -156,7 +156,7 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
-    @JsonProperty(DB_FIELD_BETEGN)
+    @JsonProperty(IO_FIELD_BETEGN)
     private Set<LocalityBetegnRecord> betegnelse = new HashSet<>();
 
     public MonotemporalSet<LocalityBetegnRecord> getBetegnelse() {
