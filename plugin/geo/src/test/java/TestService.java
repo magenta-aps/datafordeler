@@ -90,7 +90,7 @@ public class TestService extends GeoTest {
         Assert.assertEquals(200, response.getStatusCode().value());
         ArrayNode addresses = (ArrayNode) objectMapper.readTree(response.getBody());
         System.out.println(addresses);
-        Assert.assertEquals(2, addresses.size());
+        Assert.assertEquals(1, addresses.size());
         ObjectNode address = (ObjectNode) addresses.get(0);
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(address));
         Assert.assertEquals("18", address.get("husnummer").asText());
@@ -102,7 +102,7 @@ public class TestService extends GeoTest {
         response = this.lookup("/geo/adresse/adresse?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2&husnummer=18");
         Assert.assertEquals(200, response.getStatusCode().value());
         addresses = (ArrayNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals(2, addresses.size());
+        Assert.assertEquals(1, addresses.size());
         address = (ObjectNode) addresses.get(0);
         Assert.assertEquals("18", address.get("husnummer").asText());
         Assert.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
@@ -113,7 +113,6 @@ public class TestService extends GeoTest {
     }
 
     @Test
-    @Ignore // TODO something is wrong with filter order
     public void testUnitAddressDetails() throws IOException {
         ResponseEntity<String> response = this.lookup("/geo/adresse/adresseoplysninger?adresse=1b3ac64b-c28d-40b2-a106-16cee7c188b8");
         Assert.assertEquals(200, response.getStatusCode().value());
@@ -121,7 +120,6 @@ public class TestService extends GeoTest {
         Assert.assertEquals("1b3ac64b-c28d-40b2-a106-16cee7c188b8", address.get("uuid").asText());
         Assert.assertEquals("18", address.get("husnummer").asText());
         Assert.assertEquals("kld", address.get("etage").asText());
-        Assert.assertEquals("2", address.get("doer").asText());
         Assert.assertEquals("3197", address.get("b_nummer").asText());
         Assert.assertEquals("e1274f15-9e2b-4b6e-8b7d-c8078df65aa2", address.get("vej_uuid").asText());
         Assert.assertEquals(254, address.get("vejkode").intValue());

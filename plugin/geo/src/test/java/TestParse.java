@@ -96,7 +96,6 @@ public class TestParse extends GeoTest {
             Assert.assertEquals("0600", entity.getCode());
             Assert.assertTrue(OffsetDateTime.parse("2018-08-09T12:00:04Z").isEqual(entity.getCreationDate()));
             Assert.assertEquals("GREENADMIN", entity.getCreator());
-            Assert.assertEquals("4F46D110-E6AD-46D1-B403-B12063152564", entity.getSumiffiikId());
             Assert.assertEquals(1, entity.getName().size());
             Assert.assertEquals("Nuuk", entity.getName().iterator().next().getName());
             Assert.assertTrue(OffsetDateTime.parse("2018-08-09T13:11:42Z").isEqual(entity.getName().iterator().next().getRegistrationFrom()));
@@ -240,8 +239,6 @@ public class TestParse extends GeoTest {
             Assert.assertEquals(Integer.valueOf(1), entity.getUsage().iterator().next().getUsage());
             Assert.assertEquals(1, entity.getFloor().size());
             Assert.assertEquals("kld", entity.getFloor().iterator().next().getFloor());
-            Assert.assertEquals(1, entity.getDoor().size());
-            Assert.assertEquals("2", entity.getDoor().iterator().next().getDoor());
             Assert.assertEquals(1, entity.getNumber().size());
             Assert.assertEquals("5678", entity.getNumber().iterator().next().getNumber());
             Assert.assertEquals(1, entity.getSource().size());
