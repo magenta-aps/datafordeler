@@ -49,6 +49,7 @@
         "LokalitetSumiffik": "4F46D110-E6AD-46D1-B403-B12063152564",
         "Lokalitetsnavn_forkortelse": "NUK",
         "Location_type": 1,
+        "Status": 1,
         "GlobalID": "{F0966470-F09F-474D-A820-E8A46ED6FCC7}",
         "SHAPE.STArea()": 0.016245486728621472,
         "SHAPE.STLength()": 0.54156983908556178

@@ -111,7 +111,6 @@
         "Enhedsanvendelse": 1,
         "Etage": "kld",
         "Objektstatus": 2,
-        "Dor_lejlighedsnummer": "2",
         "EnhedsadresseSumiffik": "{EE4805F1-96AB-45A7-B045-ED4D3C28364C}",
         "GlobalID": "{1B3AC64B-C28D-40B2-A106-16CEE7C188B8}"
       }
@@ -129,7 +128,6 @@
         "Enhedsanvendelse": 1,
         "Etage": "kld",
         "Objektstatus": 2,
-        "Dor_lejlighedsnummer": "1",
         "EnhedsadresseSumiffik": "{EE4805F1-96AB-45A7-B045-ED4D3C28364D}",
         "GlobalID": "{1B3AC64B-C28D-40B2-A106-16CEE7C188B9}"
       }
