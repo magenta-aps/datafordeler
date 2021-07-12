@@ -1,6 +1,8 @@
-package dk.magenta.datafordeler.prisme;
+package dk.magenta.datafordeler.combined;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
@@ -28,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.StringJoiner;
+
 import static org.mockito.Mockito.when;
 
 
@@ -167,7 +170,97 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    @Test
+    public void testPersonInterval() throws Exception {
+        this.loadPerson("/different_persons.txt");
 
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&lokalitet_kode=0601&pageSize=1000",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        //"municipalitycode"
+        //"localitycode"
+        response = restTemplate.exchange(
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&lokalitet_kode=0601&pageSize=1000",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        JsonNode jsonNode = objectMapper.readTree(response.getBody());
+        ArrayNode resultList = (ArrayNode)jsonNode.get("results");
+        Assert.assertEquals(3, resultList.size());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&lokalitet_kode=0600&pageSize=1000",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        jsonNode = objectMapper.readTree(response.getBody());
+        resultList = (ArrayNode)jsonNode.get("results");
+        Assert.assertEquals(51, resultList.size());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&kommune_kode=957&pageSize=1000",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        jsonNode = objectMapper.readTree(response.getBody());
+        resultList = (ArrayNode)jsonNode.get("results");
+        Assert.assertEquals(0, resultList.size());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&kommune_kode=956&pageSize=1000",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        jsonNode = objectMapper.readTree(response.getBody());
+        resultList = (ArrayNode)jsonNode.get("results");
+        Assert.assertEquals(54, resultList.size());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=2010-01-01&birthBefore=2012-01-01&kommune_kode=956&pageSize=1000",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        jsonNode = objectMapper.readTree(response.getBody());
+        resultList = (ArrayNode)jsonNode.get("results");
+        Assert.assertEquals(3, resultList.size());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/combined/cpr/birthIntervalDate/1/search/?birthAfter=2012-01-01&birthBefore=2014-01-01&kommune_kode=956&pageSize=1000",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        jsonNode = objectMapper.readTree(response.getBody());
+        resultList = (ArrayNode)jsonNode.get("results");
+        Assert.assertEquals(0, resultList.size());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
 
 
 

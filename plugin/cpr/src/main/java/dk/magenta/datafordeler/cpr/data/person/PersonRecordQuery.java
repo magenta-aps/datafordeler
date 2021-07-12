@@ -7,8 +7,7 @@ import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
-import org.hibernate.query.Query;
-
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -32,6 +31,7 @@ public class PersonRecordQuery extends BaseQuery {
     public static final String PERSONEVENTTIME = PersonEventDataRecord.DB_FIELD_TIMESTAMP;
     public static final String PERSONDATAEVENT = PersonDataEventDataRecord.DB_FIELD_FIELD;
     public static final String PERSONDATAEVENTTIME = PersonDataEventDataRecord.DB_FIELD_TIMESTAMP;
+    public static final String PERSONBIRTHDATE = BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
     private List<String> personnumre = new ArrayList<>();
@@ -203,6 +203,22 @@ public class PersonRecordQuery extends BaseQuery {
             this.doors.addAll(doors);
             this.updatedParameters();
         }
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONBIRTHDATE)
+    private LocalDateTime birthTimeAfter;
+
+    public void setBirthTimeAfter(LocalDateTime birthTimeAfter) {
+        this.birthTimeAfter = birthTimeAfter;
+        this.updatedParameters();
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONBIRTHDATE)
+    private LocalDateTime birthTimeBefore;
+
+    public void setBirthTimeBefore(LocalDateTime birthTimeBefore) {
+        this.birthTimeBefore = birthTimeBefore;
+        this.updatedParameters();
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CUSTODYPNR)
@@ -449,6 +465,8 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("door", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR);
         joinHandles.put("housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("bnr", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER);
+        joinHandles.put("birthtime.GTE", PersonEntity.DB_FIELD_BIRTHTIME + LookupDefinition.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
+        joinHandles.put("birthtime.LTE", PersonEntity.DB_FIELD_BIRTHTIME + LookupDefinition.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
 
         joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + LookupDefinition.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
@@ -465,10 +483,6 @@ public class PersonRecordQuery extends BaseQuery {
         return joinHandles;
     }
 
-
-    private List<String> birth_gt;
-    private List<String> birth_lt;
-
     protected void setupConditions() throws QueryBuildException {
         this.addCondition("pnr", this.personnumre);
         this.addCondition("firstname", this.fornavn);
@@ -481,6 +495,9 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("bnr", this.buildingNos);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
         this.addCondition("custodyPnr", this.custodyPnr);
+        this.addCondition("birthtime.GTE", Condition.Operator.GTE, this.birthTimeAfter, LocalDateTime.class, true);
+        this.addCondition("birthtime.LTE", Condition.Operator.LTE, this.birthTimeBefore, LocalDateTime.class, true);
+
         this.addCondition("personevent", this.personevents);
         this.addCondition("personeventTime.GTE", Condition.Operator.GTE, this.personeventTimeAfter, OffsetDateTime.class, true);
         this.addCondition("personeventTime.LTE", Condition.Operator.GTE, this.personeventTimeBefore, OffsetDateTime.class, true);
@@ -492,7 +509,11 @@ public class PersonRecordQuery extends BaseQuery {
 
     @Override
     protected boolean isEmpty() {
-        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() && this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() && this.personevents.isEmpty() && this.personeventTimeAfter == null && this.persondataevents.isEmpty() && this.personeventTimeAfter == null;
+        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() &&
+                this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() &&
+                this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() &&
+                this.personevents.isEmpty() && this.personeventTimeAfter == null && this.persondataevents.isEmpty() &&
+                this.personeventTimeAfter == null && this.birthTimeAfter == null && this.birthTimeBefore == null;
     }
 
 }

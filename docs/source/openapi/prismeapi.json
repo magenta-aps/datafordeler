@@ -97,8 +97,8 @@
     },
     "/prisme/sameaddress/1/{cprNummer}": {
       "get": {
-        "summary": "Fremsøgning af andre persone med bopæl på samme adresse",
-        "description": "Servicen fremsøger alle de presoner som bemor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, døør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er retgistreret som en administrativ adresse laves ingen adressematch.",
+        "summary": "Fremsøgning af andre personer med bopæl på samme adresse",
+        "description": "Servicen fremsøger alle de personer som bebor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, dør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode som er registreret som en administrativ adresse laves ingen adressematch.",
         "responses": {
           "200": {
             "description": "Personinformation og en liste over CPR-numre på personer som denne person deler adresse med.",
@@ -149,6 +149,172 @@
                         "type": "string"
                       },
                       "example": ["12345678","12345679"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cpr/residentinformation/1/{cprNummer}": {
+      "get": {
+        "summary": "Fremsøgning af bopælsinformation på en person",
+        "description": "Servicen fremsøger information om den givne person har bopæl i Grønland, og i givet fald hvornår denne person er flyttet til landet.<br/>Hvis personen aldrig har haft bopæl uden for Grønland leveres datoen for hvornår personen er født.<br/>Hvis personen ikke har aktuel bopæl i Grønland, leveres null som dato",
+        "responses": {
+          "200": {
+            "description": "Personinformation med information om personen har bopæl i Grønland. <br/>Hvis personen er født i Grønland, og har haft uafbrudt bopæl i Grønland siden fødslen, så returneres datoen for personens fødsel.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cprNummer": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "borIGL": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "dato": {
+                      "type": "string",
+                      "example": "2020-07-20"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cpr/cohabitationinformation/1/search": {
+      "get": {
+        "summary": "Fremsøgning af hvor længe de fremsøgte personer har haft samme adresse.",
+        "description": "Servicen fremsøger alle de personer som bebor den samme adresse.<br/>Om personer har samme adresse defineres ud fra følgende parametre: Kommunekode, vejkode, husnummer, dør, etage, bygningsnummer<br/>Hvis en person bebor en vejkode+kommunekode der er registreret som en administrativ adresse laves ingen adressematch.",
+        "parameters": [
+          {
+            "name": "cpr",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1111111111,1111111112"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Personinformation med information om hvorvidt de fremsøgte personer har samme adresse, og i givet fald hvor længe de har haft samme adresse.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cpr1": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "cpr2": {
+                      "type": "string",
+                      "example": "0101011234"
+                    },
+                    "Cohabitation": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "ResidentDate": {
+                      "type": "string",
+                      "example": "2020-07-20"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/prisme/cpr/under18years/1/search": {
+      "get": {
+        "summary": "Fremsøgning af personer som er under 18 år",
+        "description": "Servicen fremsøger alle de presoner som er under 18 år, og hvortil der er registreret ændringer i personens grunddata siden et tidspunkt defineret ved et leveret tidsstempel",
+        "parameters": [
+          {
+            "name": "updatedSince",
+            "in": "url",
+            "description": "Filtrer personer fra responset, som ikke har ændringer i personens grunddata siden denne dato",
+            "schema": {
+              "type": "string",
+              "example": "2020-12-24"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "name": "page",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "municipalitycode",
+            "in": "url",
+            "description": "Liste af CPR-numre",
+            "schema": {
+              "type": "integer",
+              "example": 956
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over personer som på baggrund af filtering på de leverede parametre finder alle de CPR-numre i datafordeleren, som på tidspunktet for kaldet er under 18 år gamle.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string"
+                    },
+                    "responseTimestamp": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "number"
+                    },
+                    "pageSize": {
+                      "type": "number"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["1111111111","1111111112","1111111113","1111111114"]
                     }
                   }
                 }
