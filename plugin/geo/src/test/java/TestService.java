@@ -121,7 +121,6 @@ public class TestService extends GeoTest {
         Assert.assertEquals("18", address.get("husnummer").asText());
         Assert.assertEquals("kld", address.get("etage").asText());
         Assert.assertEquals("3197", address.get("b_nummer").asText());
-        Assert.assertEquals("e1274f15-9e2b-4b6e-8b7d-c8078df65aa2", address.get("vej_uuid").asText());
         Assert.assertEquals(254, address.get("vejkode").intValue());
         Assert.assertEquals("Qarsaalik", address.get("vejnavn").asText());
         Assert.assertEquals("f0966470-f09f-474d-a820-e8a46ed6fcc7", address.get("lokalitet").asText());

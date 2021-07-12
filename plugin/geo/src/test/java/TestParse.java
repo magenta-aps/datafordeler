@@ -103,7 +103,6 @@ public class TestParse extends GeoTest {
             Assert.assertEquals("NUK", entity.getAbbreviation().iterator().next().getName());
             Assert.assertTrue(OffsetDateTime.parse("2018-08-09T13:11:42Z").isEqual(entity.getName().iterator().next().getRegistrationFrom()));
             Assert.assertEquals(1, entity.getName().size());
-            Assert.assertEquals(Integer.valueOf(1), entity.getType().iterator().next().getType());
             Assert.assertTrue(OffsetDateTime.parse("2018-08-09T13:11:42Z").isEqual(entity.getName().iterator().next().getRegistrationFrom()));
             Assert.assertEquals(1, entity.getShape().size());
             Assert.assertEquals(1, entity.getMunicipality().size());
