@@ -60,7 +60,7 @@ public class TestService extends GeoTest {
         ResponseEntity<String> response = this.lookup("/geo/adresse/vej?lokalitet=f0966470-f09f-474d-a820-e8a46ed6fcc7");
         Assert.assertEquals(200, response.getStatusCode().value());
         ArrayNode roads = (ArrayNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals(2, roads.size());
+        Assert.assertEquals(1, roads.size());
         ObjectNode road = (ObjectNode) roads.get(0);
         Assert.assertEquals(254, road.get("vejkode").intValue());
         Assert.assertEquals("Qarsaalik", road.get("navn").asText());
