@@ -132,13 +132,21 @@ public class AdresseService {
     }
 
     public String getLocalities(String municipality) {
-        LocalityQuery query = new LocalityQuery();
-        setQueryNow(query);
-        setQueryNoLimit(query);
-        query.setMunicipality(municipality);
         Session session = sessionManager.getSessionFactory().openSession();
         try {
-            List<GeoLocalityEntity> localities = QueryManager.getAllEntities(session, query, GeoLocalityEntity.class);
+
+            org.hibernate.query.Query databaseQuery = session.createQuery(
+                    "SELECT locality FROM " + GeoLocalityEntity.class.getCanonicalName() + " locality " +
+                            "JOIN " + LocalityAbbreviationRecord.class.getCanonicalName() + " locality_abbreviation ON locality_abbreviation.entity = locality.id " +
+                            "JOIN " + LocalityTypeRecord.class.getCanonicalName() + " locality_type ON locality_type.entity = locality.id " +
+                            "JOIN " + LocalityNameRecord.class.getCanonicalName() + " locality_name ON locality_name.entity = locality.id " +
+                            "JOIN " + LocalityStatusRecord.class.getCanonicalName() + " locality_status ON locality_status.entity = locality.id " +
+                            "JOIN " + LocalityMunicipalityRecord.class.getCanonicalName() + " locality_municipality ON locality_municipality.entity = locality.id " +
+                            "WHERE locality_status.status = 1 AND locality_municipality.code = :municipality_code");
+
+            databaseQuery.setParameter("municipality_code", Integer.parseInt(municipality));
+
+            List<GeoLocalityEntity>  localities = databaseQuery.getResultList();
             ArrayNode results = objectMapper.createArrayNode();
             for (GeoLocalityEntity locality : localities) {
                 ObjectNode localityNode = objectMapper.createObjectNode();
@@ -159,6 +167,9 @@ public class AdresseService {
                 results.add(localityNode);
             }
             return results.toString();
+        } catch(Exception e) {
+            log.warn("Failed fetching localities for Daedleus");
+            return null;
         } finally {
             session.close();
         }
