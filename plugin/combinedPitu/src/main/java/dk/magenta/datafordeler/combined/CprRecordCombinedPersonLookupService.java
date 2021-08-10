@@ -102,7 +102,7 @@ public class CprRecordCombinedPersonLookupService {
             this.applyAreaRestrictionsToQuery(personQuery, user);
             if ("true".equals(forceDirect)) {
                 PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
-                Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
+                Object obj = personOutputWrapper.wrapRecordResult(personEntity);
                 return obj.toString();
             }
 
@@ -120,7 +120,7 @@ public class CprRecordCombinedPersonLookupService {
                 throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
 
-            Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
+            Object obj = personOutputWrapper.wrapRecordResult(personEntity);
             return obj.toString();
         } catch(DataStreamException e) {
             log.error(e);
@@ -188,7 +188,7 @@ public class CprRecordCombinedPersonLookupService {
                             outputStream.write(("\"" + personEntity.getPersonnummer() + "\":").getBytes());
                             outputStream.write(
                                     objectMapper.writeValueAsString(
-                                            personOutputWrapper.wrapRecordResult(personEntity, personQuery)
+                                            personOutputWrapper.wrapRecordResult(personEntity)
                                     ).getBytes(StandardCharsets.UTF_8)
                             );
                         } catch (IOException e) {

@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -340,6 +342,37 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals("1111111188", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
     }
 
+    @Test
+    public void testFamilyRelation() throws Exception {
+        this.loadPerson("/familyTestData.txt");
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        this.applyAccess(testUserDetails);
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/combined/familyRelation/1/cpr/0101001234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertTrue(response.getBody().contains("error"));
+
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/combined/familyRelation/1/cpr/0101001234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101001234\",\"fornavn\":\"Tester Testmember\"," +
+                "\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956," +
+                "\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\"," +
+                "\"postnummer\":0,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"}},\"far\":{},\"mor\":{}," +
+                "\"soeskende\":[{\"cprNummer\":\"0000000040\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"}]}", response.getBody(), JSONCompareMode.LENIENT);
+    }
 
     @Test
     public void testListPersonDBLookup() throws IOException {
