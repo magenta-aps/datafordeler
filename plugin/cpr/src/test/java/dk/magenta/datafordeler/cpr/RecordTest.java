@@ -40,6 +40,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -135,6 +137,49 @@ public class RecordTest {
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
 
+
+        } finally {
+            session.close();
+        }
+    }
+
+    @Test
+    public void testExperimentPerson() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        ImportMetadata importMetadata = new ImportMetadata();
+        importMetadata.setSession(session);
+        this.loadPerson("/persondata.txt", importMetadata);
+        try {
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            OffsetDateTime time = OffsetDateTime.now();
+            query.setRegistrationAt(time);
+            query.setEffectAt(time);
+            query.applyFilters(session);
+
+            query.setBirthTimeBefore(LocalDateTime.now());
+            List<PersonEntity> personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(1, personList.size());
+
+            query.setBirthTimeBefore(null);
+            personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(1, personList.size());
+
+            query.setBirthTimeBefore(LocalDateTime.of(1999, Month.JULY, 29, 19, 30, 40));
+            personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(0, personList.size());
+
+            query.setBirthTimeBefore(LocalDateTime.of(2001, Month.JULY, 29, 19, 30, 40));
+            personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(1, personList.size());
+
+            query.setBirthTimeAfter(LocalDateTime.now());
+            personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(0, personList.size());
+
+            query.setBirthTimeAfter(null);
+            personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(1, personList.size());
 
         } finally {
             session.close();

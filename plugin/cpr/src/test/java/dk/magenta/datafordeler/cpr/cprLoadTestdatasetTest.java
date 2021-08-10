@@ -113,7 +113,7 @@ public class cprLoadTestdatasetTest {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(42, persons.size());
+            Assert.assertEquals(44, persons.size());
 
             for(PersonEntity person : persons) {
                 System.out.print(person.getPersonnummer());
@@ -161,7 +161,7 @@ public class cprLoadTestdatasetTest {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(42, persons.size());
+            Assert.assertEquals(44, persons.size());
 
             query = new PersonRecordQuery();
             query.setPersonnummer("1111111111");
