@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
-import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
@@ -21,10 +20,12 @@ import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.NameRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import org.hamcrest.Matchers;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -291,6 +292,51 @@ public class RecordTest {
             Assert.assertTrue(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
         }
     }
+
+
+
+    @Test
+    public void testFindSiblings() throws Exception {
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPerson("/personsWithEvents.txt", importMetadata);
+
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.setPersonnummer("0101011234");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            PersonEntity personEntity = entities.get(0);
+
+            String fatherPnr = personEntity.getFather().current().get(0).getCprNumber();
+            String motherPnr = personEntity.getMother().current().get(0).getCprNumber();
+
+            String hql = "SELECT personEntity " +
+                    "FROM "+ PersonEntity.class.getCanonicalName()+" personEntity "+
+                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " mother ON mother."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+PersonEntity.DB_FIELD_IDENTIFICATION+" "+
+                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " father ON father."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+PersonEntity.DB_FIELD_IDENTIFICATION+" "+
+                    " WHERE mother."+ParentDataRecord.DB_FIELD_CPR_NUMBER+"="+motherPnr+
+                    " AND father."+ParentDataRecord.DB_FIELD_CPR_NUMBER+"="+fatherPnr;
+
+
+
+            Query query2 = session.createQuery(hql);
+
+            List<PersonEntity> resultList = query2.getResultList();
+
+            System.out.println(resultList);
+
+            for(PersonEntity p : resultList) {
+                System.out.println(p.getPersonnummer());
+            }
+
+
+
+
+        }
+
+    }
+
 
 
 
