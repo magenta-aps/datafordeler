@@ -48,15 +48,6 @@ public abstract class GerQuery<E extends GerEntity> extends BaseQuery {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition(this);
-        if (this.recordAfter != null) {
-            lookupDefinition.put(DataItem.DB_FIELD_LAST_UPDATED, this.recordAfter, OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
-        }
-        return lookupDefinition;
-    }
-
-    @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         this.setGerNr(parameters.getFirst(GERNR));
     }

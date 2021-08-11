@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.database;
 
 import java.util.*;
 
+@Deprecated
 public class FieldDefinition {
 
     public String path;

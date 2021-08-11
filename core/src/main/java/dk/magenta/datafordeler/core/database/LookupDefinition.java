@@ -53,6 +53,7 @@ import java.util.StringJoiner;
  * See also the various uses in QueryManager, which perform database lookups based on LookupDefinitions from
  * Query and DataItem objects
  */
+@Deprecated
 public class LookupDefinition extends BaseLookupDefinition {
 
     protected Class<? extends DataItem> dataClass;

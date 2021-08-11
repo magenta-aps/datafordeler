@@ -81,21 +81,6 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(ResponsibleEntity.DB_FIELD_NAME, this.name, String.class);
-        }
-        if (!this.getGerNr().isEmpty()) {
-            lookupDefinition.put(ResponsibleEntity.DB_FIELD_GERNR, this.getGerNr(), Integer.class);
-        }
-        if (this.cvrGuid != null && !this.cvrGuid.isEmpty()) {
-            lookupDefinition.put(ResponsibleEntity.DB_FIELD_CVR_PARTICIPANT_GUID, this.cvrGuid, UUID.class);
-        }
-        return lookupDefinition;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return super.isEmpty () && this.name.isEmpty() && this.cvrGuid.isEmpty();
     }

@@ -47,6 +47,7 @@ public abstract class Query<E extends Entity> extends BaseQuery {
      */
     public abstract Class<? extends DataItem> getDataClass();
 
+    @Deprecated
     public LookupDefinition getLookupDefinition() {
         LookupDefinition lookupDefinition = new LookupDefinition(this, this.getDataClass());
         if (this.recordAfter != null) {

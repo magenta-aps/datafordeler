@@ -931,9 +931,6 @@ public abstract class BaseQuery {
         this.finalizeConditions();
         StringJoiner s = new StringJoiner(" \n");
 
-//        s.add("SELECT DISTINCT " + this.getEntityIdentifier());
-//        s.add("FROM " + this.getEntityClassname() + " " + this.getEntityIdentifier());
-
         s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
         s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
 

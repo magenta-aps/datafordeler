@@ -50,25 +50,6 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
         return map;
     }
 
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition(this);
-        if (this.recordAfter != null) {
-            lookupDefinition.put(DataItem.DB_FIELD_LAST_UPDATED, this.recordAfter, OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
-        }
-        if (!this.getGerNr().isEmpty()) {
-            lookupDefinition.put(
-                    BaseLookupDefinition.entityref + BaseLookupDefinition.separator + CompanyEntity.DB_FIELD_GERNR,
-                    this.getGerNr(),
-                    Integer.class
-            );
-        }
-
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(CompanyEntity.DB_FIELD_NAME, this.name, String.class);
-        }
-        return lookupDefinition;
-    }
 
     @Override
     protected boolean isEmpty() {
