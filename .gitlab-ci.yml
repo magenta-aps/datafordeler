@@ -124,10 +124,10 @@ test-subscription:
       junit:
         - /app/plugin/subscription/target/surefire-reports/TEST-*.xml
 
-test-pituCombined:
+test-combinedPitu:
   <<: *test-default
   before_script:
-    - cd /app/plugin/pituCombined
+    - cd /app/plugin/combinedPitu
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
