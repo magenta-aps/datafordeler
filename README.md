@@ -70,7 +70,7 @@ Data in gladdreg is not maintained any more, but it will not be removed yet eith
 This project exposes data from gladdreg, it is not used by any customers, and is considered deprecated.
 
 ### statistik:
-This project exposes data from cpr and geo, it is used for stating batch-jobs for generation of statistical information, and lists of accurences of events on persons.
+This project exposes data from cpr and geo, it is used for stating batch-jobs for generation of statistical information, and lists of occurrences of events on persons.
 A more detailed description can be found in plugins/statistik/README.md
 
 # Compiling/building/testing:
@@ -100,8 +100,8 @@ Installing maven can be done by following the information on the page in the fol
 https://maven.apache.org/install.html
 
 ## Building and testing the application
-For the building and testing of the full application, all plugins needs to be compiled int a *.jar file.
-Some plugins is dependant of other plugins, it is necessary to compile the different plugins in a specifik sequence to get the application running on the development machine.
+For the building and testing of the full application, all plugins needs to be compiled into a *.jar file.
+Some plugins are dependent on other plugins; it is necessary to compile the different plugins in a specific sequence to get the application running on the development machine.
 
 ### Maven
 Building and testing the application can be done through maven.
@@ -118,18 +118,18 @@ For small changes to the project it is sufficient.
 9. Go to datafordeler/plugin/combinedPitu and run "mvn -DskipTests clean install"
 10. Go to datafordeler/plugin/statistik and run "mvn -DskipTests clean install"
 
-After that go to the specifik plugin where a codechange is needed and run:
+After that go to the specific plugin where a code change is needed and run:
 "mvn test"
 In order of validating that the code-change is correct, and that it did not break any existing tests
 
 ### IntelliJ
-If major changes is supposed to be done the developer need a developmenttool like IntelliJ
+If major changes are supposed to be done, the developer need a development tool like IntelliJ
 Each plugin needs to be opened seperately. 
-If for instance the developer needs to make changes to core start IntelliJ, click File-open, and select to open datafordeler/core
+If for instance the developer needs to make changes to core, start IntelliJ, click File-open, and select to open datafordeler/core
 IntelliJ identifies the maven file itself pom.xml, and loads the project and dependencies.
 Find the maven-view.
 compile to compile the plugin, test to test the project.
-Some mudules depends on ather modules, in order to get started install all plugins by clicking install on each plugin.
+Some modules depend on other modules, in order to get started install all plugins by clicking install on each plugin.
 The sequence of installing the plugins is:
 
 1. datafordeler/core
@@ -145,7 +145,7 @@ The sequence of installing the plugins is:
 
 ### Docker
 If a developer wants to build the project in docker, it is possible to run:
-"docker-compose build" and "docker-compos up -d" it is not recommended to work with the project in that way though.
+"docker-compose build" and "docker-compose up -d". It is not recommended to work with the project in that way though.
 
 ## Building the online API-documentation
 The online API-documentation is done inside vagrant. To build the online documentation we use the vagrant image from "gronlandsprojekter"
@@ -184,7 +184,7 @@ The different testfiles is created for different types of persons, which match t
 
 ## Installation of application on Windows server
 
-When deplying Datafordeler on the test- and production- servers, we run the file run_server_notests.bat. This file compiles and builds the full project.
+When deploying Datafordeler on the test- and production- servers, we run the file run_server_notests.bat. This file compiles and builds the full project.
 After running the *.bat file the project, including all plugins is compiles, and stored in the file-system, and the server is started.
 The *.bat file is created for the deployment om production-servers, but is can be used during development on windows machines as well.
 
