@@ -148,13 +148,11 @@ public class cprLoadTestdatasetTest {
                 }
                 System.out.println("---------------------------------------------");
             }
-        }
 
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            PersonRecordQuery query = new PersonRecordQuery();
+            query = new PersonRecordQuery();
             query.applyFilters(session);
             query.setPageSize(100);
-            List<PersonEntity> persons = QueryManager.getAllEntities(session, PersonEntity.class);
+            persons = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(44, persons.size());
 
             query = new PersonRecordQuery();
