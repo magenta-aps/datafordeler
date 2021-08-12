@@ -371,7 +371,7 @@ public class CprLookupTest extends TestBase {
                 "\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956," +
                 "\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\"," +
                 "\"postnummer\":0,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"}},\"far\":{},\"mor\":{}," +
-                "\"soeskende\":[{\"cprNummer\":\"0000000040\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"}]}", response.getBody(), JSONCompareMode.LENIENT);
+                "\"soeskende\":[{\"cprNummer\":\"0101001234\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0101001236\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"}]}", response.getBody(), JSONCompareMode.LENIENT);
     }
 
     @Test

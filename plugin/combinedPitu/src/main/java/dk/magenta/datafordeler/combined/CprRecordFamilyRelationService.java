@@ -109,8 +109,8 @@ public class CprRecordFamilyRelationService {
 
             String hql = "SELECT personEntity " +
                     "FROM "+ PersonEntity.class.getCanonicalName()+" personEntity "+
-                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " mother ON mother."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+PersonEntity.DB_FIELD_IDENTIFICATION+" "+
-                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " father ON father."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+PersonEntity.DB_FIELD_IDENTIFICATION+" "+
+                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " mother ON mother."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
+                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " father ON father."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
                     " WHERE mother."+ParentDataRecord.DB_FIELD_CPR_NUMBER+"=:motherPnr"+
                     " AND father."+ParentDataRecord.DB_FIELD_CPR_NUMBER+"=:fatherPnr";
 
