@@ -148,11 +148,19 @@ public class cprLoadTestdatasetTest {
                 }
                 System.out.println("---------------------------------------------");
             }
+        }
+    }
 
-            query = new PersonRecordQuery();
+
+
+    @Test
+    public void test_B_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
+
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            PersonRecordQuery query = new PersonRecordQuery();
             query.applyFilters(session);
             query.setPageSize(100);
-            persons = QueryManager.getAllEntities(session, PersonEntity.class);
+            List<PersonEntity> persons = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(44, persons.size());
 
             query = new PersonRecordQuery();

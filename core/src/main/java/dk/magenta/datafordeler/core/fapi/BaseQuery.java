@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 /**
  * Query object specifying a search, with basic filter parameters
  * Subclasses should specify further searchable parameters, annotated with @QueryField.
+ * SOAP clients should pass a serialized instance of a Query class to the SOAP interface
  */
 public abstract class BaseQuery {
 

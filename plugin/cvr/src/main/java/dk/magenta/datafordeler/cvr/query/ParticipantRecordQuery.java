@@ -227,6 +227,40 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.setKommuneKode(parameters.getI(KOMMUNEKODE));
     }
 
+    @Deprecated
+    @Override
+    public BaseLookupDefinition getLookupDefinition() {
+        BaseLookupDefinition lookupDefinition = new CvrRecordLookupDefinition(this);
+
+        if (this.getEnhedsNummer() != null && !this.getEnhedsNummer().isEmpty()) {
+            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + ParticipantRecord.DB_FIELD_UNIT_NUMBER, this.getEnhedsNummer(), Long.class);
+        }
+
+        if (this.getNavn() != null && !this.getNavn().isEmpty()) {
+            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + ParticipantRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME, this.getNavn(), String.class);
+        }
+
+        if (this.getKommuneKode() != null && !this.getKommuneKode().isEmpty()) {
+            StringJoiner sj = new StringJoiner(LookupDefinition.separator);
+            sj.add(LookupDefinition.entityref);
+            sj.add(ParticipantRecord.DB_FIELD_LOCATION_ADDRESS);
+            sj.add(AddressRecord.DB_FIELD_MUNICIPALITY);
+            sj.add(AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY);
+            sj.add(Municipality.DB_FIELD_CODE);
+            lookupDefinition.put(sj.toString(), this.getKommuneKode(), Integer.class);
+        }
+        if (this.getKommunekodeRestriction() != null && !this.getKommunekodeRestriction().isEmpty()) {
+            StringJoiner sj = new StringJoiner(LookupDefinition.separator);
+            sj.add(LookupDefinition.entityref);
+            sj.add(ParticipantRecord.DB_FIELD_LOCATION_ADDRESS);
+            sj.add(AddressRecord.DB_FIELD_MUNICIPALITY);
+            sj.add(AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY);
+            sj.add(Municipality.DB_FIELD_CODE);
+            lookupDefinition.put(sj.toString(), this.getKommunekodeRestriction(), Integer.class);
+        }
+        return lookupDefinition;
+    }
+
     @Override
     protected boolean isEmpty() {
         return this.enhedsNummer.isEmpty() && this.navn.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty();

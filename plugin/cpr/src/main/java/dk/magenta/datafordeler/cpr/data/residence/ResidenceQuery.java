@@ -153,6 +153,31 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
         return ResidenceBaseData.class;
     }
 
+
+    @Override
+    public LookupDefinition getLookupDefinition() {
+        LookupDefinition lookupDefinition = super.getLookupDefinition();
+        if (!this.kommunekoder.isEmpty()) {
+            lookupDefinition.put(ResidenceBaseData.DB_FIELD_MUNICIPALITY_CODE, this.kommunekoder, Integer.class);
+        }
+        if (this.vejkode != null) {
+            lookupDefinition.put(ResidenceBaseData.DB_FIELD_ROAD_CODE, this.vejkode, Integer.class);
+        }
+        if (this.husnummer != null) {
+            lookupDefinition.put(ResidenceBaseData.DB_FIELD_HOUSENUMBER, this.husnummer, String.class);
+        }
+        if (this.etage != null) {
+            lookupDefinition.put(ResidenceBaseData.DB_FIELD_FLOOR, this.etage, String.class);
+        }
+        if (this.sideDoer != null) {
+            lookupDefinition.put(ResidenceBaseData.DB_FIELD_DOOR, this.sideDoer, String.class);
+        }
+        if (!this.getKommunekodeRestriction().isEmpty()) {
+            lookupDefinition.put(ResidenceBaseData.DB_FIELD_MUNICIPALITY_CODE, this.getKommunekodeRestriction(), Integer.class);
+        }
+        return lookupDefinition;
+    }
+
     @Override
     protected boolean isEmpty() {
         return this.kommunekoder.isEmpty() && this.vejkode.isEmpty() && this.husnummer.isEmpty() && this.etage.isEmpty() && this.sideDoer.isEmpty();
