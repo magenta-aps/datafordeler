@@ -42,7 +42,7 @@ import java.util.List;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class cprLoadTestdatasetTest {
 
 
@@ -74,6 +74,13 @@ public class cprLoadTestdatasetTest {
         ImportInputStream inputstream2 = new ImportInputStream(labeledInputStream2);
         personEntityManager.parseData(inputstream2, importMetadata);
         testData2.close();
+    }
+
+
+    @After
+    public void clean() {
+        Session session = sessionManager.getSessionFactory().openSession();
+        session.close();
     }
 
     /**
@@ -141,22 +148,6 @@ public class cprLoadTestdatasetTest {
                 }
                 System.out.println("---------------------------------------------");
             }
-        }
-    }
-
-
-
-    @Test
-    public void test_B_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
-            ImportMetadata importMetadata = new ImportMetadata();
-            importMetadata.setTransactionInProgress(true);
-            importMetadata.setSession(session);
-            this.loadPersonWithOrigin(importMetadata);
-            tx.commit();
-            session.close();
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
