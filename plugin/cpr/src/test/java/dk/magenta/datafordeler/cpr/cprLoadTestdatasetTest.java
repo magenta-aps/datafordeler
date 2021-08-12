@@ -76,13 +76,6 @@ public class cprLoadTestdatasetTest {
         testData2.close();
     }
 
-
-    @After
-    public void clean() {
-        Session session = sessionManager.getSessionFactory().openSession();
-        session.close();
-    }
-
     /**
      * This test is parly used for the generation of information about persons in testdata
      * @throws DataFordelerException
