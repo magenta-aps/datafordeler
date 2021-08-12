@@ -156,6 +156,16 @@ public class cprLoadTestdatasetTest {
     @Test
     public void test_B_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setTransactionInProgress(true);
+            importMetadata.setSession(session);
+            this.loadPersonWithOrigin(importMetadata);
+            tx.commit();
+            session.close();
+        }
+
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
             query.applyFilters(session);
