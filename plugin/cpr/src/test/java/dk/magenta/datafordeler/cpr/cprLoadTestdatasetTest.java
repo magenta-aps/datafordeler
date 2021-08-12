@@ -151,9 +151,7 @@ public class cprLoadTestdatasetTest {
         }
     }
 
-
-
-    @Test
+    // This is disabled since it is jus for wrinting testdata to console
     public void test_B_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -176,7 +174,7 @@ public class cprLoadTestdatasetTest {
     }
 
 
-    @Test
+    // This is disabled since it is jus for wrinting testdata to console
     public void test_C_ClearingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
         personEntityManager.cleanDemoData();
     }
