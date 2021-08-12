@@ -15,6 +15,7 @@ import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.apache.logging.log4j.LogManager;
@@ -97,6 +98,14 @@ public class CprRecordFamilyRelationService {
             PersonEntity father = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
             personQuery.setPersonnummer(motherPnr);
             PersonEntity mother = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
+
+            Boolean motherhasCustody = true;
+            Boolean fatherhasCustody = true;
+            List<CustodyDataRecord> currentCustodyList = personEntity.getCustody().current();
+            if(currentCustodyList.size() != 0) {
+                motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3 && r.getRelationPnr().equals(cprNummer));
+                fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4 && r.getRelationPnr().equals(cprNummer));
+            }
 
             String hql = "SELECT personEntity " +
                     "FROM "+ PersonEntity.class.getCanonicalName()+" personEntity "+
