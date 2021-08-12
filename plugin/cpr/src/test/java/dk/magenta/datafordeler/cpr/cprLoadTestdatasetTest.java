@@ -76,13 +76,6 @@ public class cprLoadTestdatasetTest {
         testData2.close();
     }
 
-
-    @After
-    public void clean() {
-        Session session = sessionManager.getSessionFactory().openSession();
-        session.close();
-    }
-
     /**
      * This test is parly used for the generation of information about persons in testdata
      * @throws DataFordelerException
@@ -99,17 +92,12 @@ public class cprLoadTestdatasetTest {
             importMetadata.setSession(session);
             this.loadPersonWithOrigin(importMetadata);
             tx.commit();
-            session.close();
-        }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
             query.setEffectToAfter(OffsetDateTime.now());
             query.setEffectFromBefore(OffsetDateTime.now());
             query.setRegistrationToAfter(OffsetDateTime.now());
             query.setRegistrationFromBefore(OffsetDateTime.now());
-            /*query.addKommunekode(956);
-            query.addKommunekode(960);*/
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
