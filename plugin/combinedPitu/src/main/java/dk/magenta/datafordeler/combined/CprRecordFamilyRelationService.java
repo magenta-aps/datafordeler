@@ -91,13 +91,22 @@ public class CprRecordFamilyRelationService {
                 throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
 
-            String fatherPnr = personEntity.getFather().current().get(0).getCprNumber();
-            String motherPnr = personEntity.getMother().current().get(0).getCprNumber();
-
-            personQuery.setPersonnummer(fatherPnr);
-            PersonEntity father = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
-            personQuery.setPersonnummer(motherPnr);
-            PersonEntity mother = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
+            ParentDataRecord fatherRec = personEntity.getFather().current().stream().findFirst().orElse(null);
+            String fatherPnr = null;
+            PersonEntity fatherEntity = null;
+            if(fatherRec!=null) {
+                fatherPnr = fatherRec.getCprNumber();
+                personQuery.setPersonnummer(fatherPnr);
+                fatherEntity = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
+            }
+            ParentDataRecord motherRec = personEntity.getMother().current().stream().findFirst().orElse(null);
+            String motherPnr = null;
+            PersonEntity motherEntity = null;
+            if(motherRec!=null) {
+                motherPnr = motherRec.getCprNumber();
+                personQuery.setPersonnummer(motherPnr);
+                motherEntity = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
+            }
 
             Boolean motherhasCustody = true;
             Boolean fatherhasCustody = true;
@@ -118,7 +127,7 @@ public class CprRecordFamilyRelationService {
             siblingQuery.setParameter("motherPnr", motherPnr);
             siblingQuery.setParameter("fatherPnr", fatherPnr);
             List<PersonEntity> siblingList = siblingQuery.getResultList();
-            Object obj = personOutputWrapper.wrapRecordResultFilteredInfo(personEntity, father, mother, siblingList);
+            Object obj = personOutputWrapper.wrapRecordResultFilteredInfo(personEntity, fatherEntity, fatherhasCustody, motherEntity, motherhasCustody, siblingList);
             return obj.toString();
         } catch(Exception e) {
             e.printStackTrace();

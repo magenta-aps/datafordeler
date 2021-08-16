@@ -203,11 +203,11 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         return root.getNode();
     }
 
-    public Object wrapRecordResultFilteredInfo(PersonEntity person, PersonEntity father, PersonEntity mother, List<PersonEntity> siblingList) {
+    public Object wrapRecordResultFilteredInfo(PersonEntity person, PersonEntity father, Boolean fatherHasAuthority, PersonEntity mother, Boolean motherHasAuthority, List<PersonEntity> siblingList) {
         NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
-        root.putPOJO("person", wrapRecordResultFilteredInfo(person));
-        root.putPOJO("far", wrapRecordResultFilteredInfo(father));
-        root.putPOJO("mor", wrapRecordResultFilteredInfo(mother));
+        root.putPOJO("person", wrapRecordResultFilteredInfo(person, null));
+        root.putPOJO("far", wrapRecordResultFilteredInfo(father, fatherHasAuthority));
+        root.putPOJO("mor", wrapRecordResultFilteredInfo(mother, motherHasAuthority));
 
 
         ArrayNode node = objectMapper.createArrayNode();
@@ -236,7 +236,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         return root.getNode();
     }
 
-    public Object wrapRecordResultFilteredInfo(PersonEntity input) {
+    public Object wrapRecordResultFilteredInfo(PersonEntity input, Boolean hasAuthority) {
         // Root
         NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
         if(input==null) {
@@ -334,6 +334,9 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
             }
         }
         root.putPOJO("adresse", addressNode);
+        if(hasAuthority!=null) {
+            root.putPOJO("myndighedshaver", hasAuthority);
+        }
 
         return root.getNode();
     }

@@ -349,6 +349,7 @@ public class CprLookupTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         this.applyAccess(testUserDetails);
+        //Call the service for family relations, but before gaining access to cpr-register
         ResponseEntity<String> response = restTemplate.exchange(
                 "/combined/familyRelation/1/cpr/0101001234",
                 HttpMethod.GET,
@@ -360,6 +361,7 @@ public class CprLookupTest extends TestBase {
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
+        //Find familyrelation of "0101001234", this person has a very large amount of siblings
         response = restTemplate.exchange(
                 "/combined/familyRelation/1/cpr/0101001234",
                 HttpMethod.GET,
@@ -371,7 +373,38 @@ public class CprLookupTest extends TestBase {
                 "\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956," +
                 "\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\"," +
                 "\"postnummer\":0,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"}},\"far\":{},\"mor\":{}," +
-                "\"soeskende\":[{\"cprNummer\":\"0101001234\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0101001236\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"}]}", response.getBody(), JSONCompareMode.LENIENT);
+                "\"soeskende\":[{\"cprNummer\":\"0101001234\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000000\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000001\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000002\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000003\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000004\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000005\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000006\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000007\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000008\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000009\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000010\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000011\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000012\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000013\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000014\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000015\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000016\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000017\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000018\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000019\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000020\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000021\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000022\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000023\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000024\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000025\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000026\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000027\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000028\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000029\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000030\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000031\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000032\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000033\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000034\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000035\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000036\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000037\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000038\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000039\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000040\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000041\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000042\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000043\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000044\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000045\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000046\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000047\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000048\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"},{\"cprNummer\":\"0000000049\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"}]}", response.getBody(), JSONCompareMode.LENIENT);
+
+        //Find familyrelation of "0101001235", this person has a mother which is a biological mother, and the person has no father
+        response = restTemplate.exchange(
+                "/combined/familyRelation/1/cpr/0101001235",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101001235\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956,\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\",\"postnummer\":0,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"}},\"far\":{},\"mor\":{\"cprNummer\":\"0101001234\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956,\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\",\"postnummer\":0,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"},\"myndighedshaver\":true},\"soeskende\":[{\"cprNummer\":\"0101001235\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"}]}", response.getBody(), JSONCompareMode.LENIENT);
+
+        //Find familyrelation of "0312600013", this person has a strange formatted fathers cpr (0000000000)
+        response = restTemplate.exchange(
+                "/combined/familyRelation/1/cpr/0312600013",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0312600013\",\"adresse\":{\"tilflytningsdato\":\"2016-10-15\"," +
+                "\"myndighedskode\":541,\"vejkode\":5411,\"kommune\":null,\"postnummer\":0,\"bynavn\":null,\"stedkode\":0,\"landekode\":\"DK\"}},\"far\":{},\"mor\":{},\"soeskende\":[]}", response.getBody(), JSONCompareMode.LENIENT);
+
+        //Find familyrelation of "0101141234", this person has a father which does not have custody, and a mother which does not exist in the dataset
+        response = restTemplate.exchange(
+                "/combined/familyRelation/1/cpr/0101141234",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101141234\",\"adresse\":{}},\"far\":{\"cprNummer\":\"0101011235\",\"adresse\":{},\"myndighedshaver\":false},\"mor\":{},\"soeskende\":[{\"cprNummer\":\"0101011234\"},{\"cprNummer\":\"0101011235\"},{\"cprNummer\":\"0101981234\"},{\"cprNummer\":\"0101121234\"},{\"cprNummer\":\"0101141234\"},{\"cprNummer\":\"0101161234\"},{\"cprNummer\":\"0101991234\"},{\"cprNummer\":\"0101131234\"}]}", response.getBody(), JSONCompareMode.LENIENT);
     }
 
     @Test
