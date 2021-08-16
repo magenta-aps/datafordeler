@@ -89,7 +89,7 @@ public class cprLoadTestdatasetTest {
      * @throws IOException
      * @throws URISyntaxException
      */
-    @Test
+    // This is disabled since it is jus for wrinting testdata to console
     public void test_A_LoadingOfDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
