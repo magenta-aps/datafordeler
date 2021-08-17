@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
@@ -29,9 +30,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
 
+/**
+ * Lookup the family-relation of a person.
+ * The service finds the parents of a person, and information about if the parents has custody over the children.
+ * The service also deliveres a list of siblings of the requested person
+ */
 @RestController
 @RequestMapping("/combined/familyRelation/1")
 public class CprRecordFamilyRelationService {
@@ -111,7 +118,10 @@ public class CprRecordFamilyRelationService {
             Boolean motherhasCustody = true;
             Boolean fatherhasCustody = true;
             List<CustodyDataRecord> currentCustodyList = personEntity.getCustody().current();
-            if(currentCustodyList.size() != 0) {
+            if (LocalDateTime.now().minusYears(18).isAfter(PersonCustodyRelationsManager.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime())) {
+                motherhasCustody = false;
+                fatherhasCustody = false;
+            } else if(currentCustodyList.size() != 0) {
                 motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3);
                 fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4);
             }
@@ -130,7 +140,6 @@ public class CprRecordFamilyRelationService {
             Object obj = personOutputWrapper.wrapRecordResultFilteredInfo(personEntity, fatherEntity, fatherhasCustody, motherEntity, motherhasCustody, siblingList);
             return obj.toString();
         } catch(Exception e) {
-            e.printStackTrace();
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
         }
     }
