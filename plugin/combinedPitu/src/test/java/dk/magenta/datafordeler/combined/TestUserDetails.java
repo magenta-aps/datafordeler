@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.prisme;
+package dk.magenta.datafordeler.combined;
 
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.role.SystemRole;
