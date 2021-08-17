@@ -404,7 +404,7 @@ public class CprLookupTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101141234\",\"adresse\":{}},\"far\":{\"cprNummer\":\"0101011235\",\"adresse\":{},\"myndighedshaver\":false},\"mor\":{},\"soeskende\":[{\"cprNummer\":\"0101011234\"},{\"cprNummer\":\"0101011235\"},{\"cprNummer\":\"0101981234\"},{\"cprNummer\":\"0101121234\"},{\"cprNummer\":\"0101141234\"},{\"cprNummer\":\"0101161234\"},{\"cprNummer\":\"0101991234\"},{\"cprNummer\":\"0101131234\"}]}", response.getBody(), JSONCompareMode.LENIENT);
+        JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101141234\",\"adresse\":{}},\"far\":{\"cprNummer\":\"0101011235\",\"adresse\":{},\"myndighedshaver\":true},\"mor\":{},\"soeskende\":[{\"cprNummer\":\"0101011234\"},{\"cprNummer\":\"0101011235\"},{\"cprNummer\":\"0101981234\"},{\"cprNummer\":\"0101121234\"},{\"cprNummer\":\"0101141234\"},{\"cprNummer\":\"0101161234\"},{\"cprNummer\":\"0101991234\"},{\"cprNummer\":\"0101131234\"}]}", response.getBody(), JSONCompareMode.LENIENT);
     }
 
     @Test

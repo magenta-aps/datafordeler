@@ -112,8 +112,8 @@ public class CprRecordFamilyRelationService {
             Boolean fatherhasCustody = true;
             List<CustodyDataRecord> currentCustodyList = personEntity.getCustody().current();
             if(currentCustodyList.size() != 0) {
-                motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3 && r.getRelationPnr().equals(cprNummer));
-                fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4 && r.getRelationPnr().equals(cprNummer));
+                motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3);
+                fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4);
             }
 
             String hql = "SELECT personEntity " +
