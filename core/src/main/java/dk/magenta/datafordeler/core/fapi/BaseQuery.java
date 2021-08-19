@@ -1,9 +1,6 @@
 package dk.magenta.datafordeler.core.fapi;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.Bitemporal;
-import dk.magenta.datafordeler.core.database.Monotemporal;
-import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import org.apache.logging.log4j.LogManager;
@@ -835,6 +832,7 @@ public abstract class BaseQuery {
     private Map<String, String> allJoinHandles() {
         HashMap<String, String> map = new HashMap<>(this.joinHandles());
         map.put("dafoUpdated", Nontemporal.DB_FIELD_UPDATED);
+        map.put("uuid", Entity.DB_FIELD_IDENTIFICATION + BaseQuery.separator + Identification.DB_FIELD_UUID);
         return map;
     }
 
