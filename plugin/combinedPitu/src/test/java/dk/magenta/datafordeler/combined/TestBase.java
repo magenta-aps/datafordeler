@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.prisme;
+package dk.magenta.datafordeler.combined;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
