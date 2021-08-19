@@ -16,7 +16,7 @@ On Windows (inside `git-on-windows`), the clone command may have to become:
 
      ssh-agent bash -c 'ssh-add; git clone git@git.magenta.dk:gronlandsprojekter/datafordeler.git'
 
-# seperate projects:
+# separate projects:
 The project consists of different projects which should be developed separately, and which generates its own *.jar file.
 Some projects is dependant of the *.jar files in other projects.
 
@@ -77,7 +77,7 @@ A more detailed description can be found in plugins/statistik/README.md
 
 ## Tools to use during development
 
-Datafordeler is developed for Java11, in order to start developing first install Java (OpenJDK 11.#.#) and maven (3.6.# or higher)
+Datafordeler is developed for Java11. In order to start developing, first install Java (OpenJDK 11.#.#) and maven (3.6.# or higher)
 The easiest way to develop for the project is by using IntelliJ or eclipse, but it can be done with any text-editor.
 The best way of developing for the project is by using Linux, the way to work with the project is mainly described with the expectation that the developer uses Linux.
 
@@ -87,20 +87,20 @@ The best way of developing for the project is by using Linux, the way to work wi
 Installing openJDK can be done by following the information on the page in the following url.
 https://openjdk.java.net/install/
 
-If there is installed more than one version of Java, the default version to be used during build, can be changed with the following command.
+If there is installed more than one version of Java, the default version to be used during build can be changed with the following command.
 
 update-alternatives --config java
 
 ##### IntelliJ
-Installing openJDK can be done by following the information on the page in the following url.
+Installing openJDK can be done by following the information on the page in the following url:
 https://www.jetbrains.com/help/idea/installation-guide.html#standalone
 
 ##### Maven
-Installing maven can be done by following the information on the page in the following url
+Installing maven can be done by following the information on the page in the following url:
 https://maven.apache.org/install.html
 
 ## Building and testing the application
-For the building and testing of the full application, all plugins needs to be compiled into a *.jar file.
+For building and testing the full application, all plugins need to be compiled into a *.jar file.
 Some plugins are dependent on other plugins; it is necessary to compile the different plugins in a specific sequence to get the application running on the development machine.
 
 ### Maven
