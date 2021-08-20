@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.statistik.queries;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
-import dk.magenta.datafordeler.core.fapi.Condition;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.SingleCondition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.person.data.CivilStatusDataRecord;

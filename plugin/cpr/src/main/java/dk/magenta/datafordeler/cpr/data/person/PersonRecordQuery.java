@@ -467,7 +467,7 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("birthtime.GTE", PersonEntity.DB_FIELD_BIRTHTIME + BaseQuery.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
         joinHandles.put("birthtime.LTE", PersonEntity.DB_FIELD_BIRTHTIME + BaseQuery.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
 
-        joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
+        joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + BaseQuery.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
         joinHandles.put("personevent", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_EVENT);
         joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);

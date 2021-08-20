@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
 import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
 import java.time.OffsetDateTime;
