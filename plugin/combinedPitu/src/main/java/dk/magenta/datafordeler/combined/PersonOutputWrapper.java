@@ -205,9 +205,9 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
 
     public Object wrapRecordResultFilteredInfo(PersonEntity person, PersonEntity father, Boolean fatherHasAuthority, PersonEntity mother, Boolean motherHasAuthority, List<PersonEntity> siblingList) {
         NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
-        root.putPOJO("person", wrapRecordResultFilteredInfo(person, null));
-        root.putPOJO("far", wrapRecordResultFilteredInfo(father, fatherHasAuthority));
-        root.putPOJO("mor", wrapRecordResultFilteredInfo(mother, motherHasAuthority));
+        root.putPOJO("person", this.wrapRecordResultFilteredInfo(person, null));
+        root.putPOJO("far", this.wrapRecordResultFilteredInfo(father, fatherHasAuthority));
+        root.putPOJO("mor", this.wrapRecordResultFilteredInfo(mother, motherHasAuthority));
 
 
         ArrayNode node = objectMapper.createArrayNode();
