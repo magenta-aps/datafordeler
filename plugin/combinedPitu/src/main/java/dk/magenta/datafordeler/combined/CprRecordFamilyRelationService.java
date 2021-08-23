@@ -92,9 +92,7 @@ public class CprRecordFamilyRelationService {
             PersonEntity personEntity = null;
             if (!personEntities.isEmpty()) {
                 personEntity = personEntities.get(0);
-            }
-
-            if(personEntity==null) {
+            } else {
                 throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
 
