@@ -237,7 +237,6 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
     }
 
     public Object wrapRecordResultFilteredInfo(PersonEntity input, Boolean hasAuthority) {
-        // Root
         NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
         if(input==null) {
             return root.getNode();
