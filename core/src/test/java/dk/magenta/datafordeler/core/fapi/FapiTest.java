@@ -117,26 +117,6 @@ public class FapiTest {
         Assert.assertEquals(400, resp.getStatusCode().value());
     }
 
-    @Test
-    @Order(order = 4)
-    public void soapFailOnInvalidUUIDTest() throws IOException, SOAPException {
-        this.setupSoap();
-        String service = "http://v1.helloworld.fapi.plugindemo.datafordeler.magenta.dk/";
-        soapEnvelope.addNamespaceDeclaration("v1", service);
-        SOAPBody soapBody = soapEnvelope.getBody();
-        QName bodyName = new QName(service, "get", "v1");
-        SOAPBodyElement bodyElement = soapBody.addBodyElement(bodyName);
-        QName n = new QName(service, "id");
-        bodyElement.addChildElement(n).addTextNode("invalid-uuid");
-        soapMessage.saveChanges();
-
-        URI soapEndpoint = this.restTemplate.getRestTemplate().getUriTemplateHandler().expand("/demo/postnummer/1/soap");
-        try {
-            SOAPMessage soapResponseMessage = soapConnection.call(soapMessage, soapEndpoint);
-            Assert.fail("Must throw SOAPException on invalid request");
-        } catch (SOAPException e) {
-        }
-    }
 
 
     @Test
@@ -380,47 +360,6 @@ public class FapiTest {
             this.removeTestObject(uuid);
         }
     }
-
-    @Test
-    @Order(order = 9)
-    public void soapLookupXMLByParametersTest() throws IOException, SOAPException, DataFordelerException {
-        this.setupSoap();
-        UUID uuid = this.addTestObject();
-        try {
-            String service = "http://v1.helloworld.fapi.plugindemo.datafordeler.magenta.dk/";
-            soapEnvelope.addNamespaceDeclaration("v1", service);
-            SOAPBody soapBody = soapEnvelope.getBody();
-            QName bodyName = new QName(service, "search", "v1");
-            SOAPBodyElement bodyElement = soapBody.addBodyElement(bodyName);
-
-            SOAPElement queryElement = bodyElement.addChildElement(new QName("query"));
-
-            QName n = new QName("postnr");
-            queryElement.addChildElement(n).addTextNode("8000");
-            soapMessage.saveChanges();
-
-            URL soapEndpoint = this.restTemplate.getRestTemplate().getUriTemplateHandler().expand("/demo/postnummer/1/soap").toURL();
-            SOAPMessage soapResponseMessage = soapConnection.call(soapMessage, soapEndpoint);
-            Assert.assertNotNull(soapResponseMessage);
-
-            System.out.println("SOAP response:");
-            soapResponseMessage.writeTo(System.out);
-            System.out.println("");
-
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            SOAPBody responseBody = soapResponseMessage.getSOAPBody();
-            System.out.println("responseBody: " + responseBody);
-        /*try {
-            Assert.assertEquals(uuid.toString(), xpath.compile("//return/UUID").evaluate(responseBody, XPathConstants.STRING));
-            Assert.assertEquals("fapitest", xpath.compile("//return/domain").evaluate(responseBody, XPathConstants.STRING));
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
-        }*/
-        } finally {
-            this.removeTestObject(uuid);
-        }
-    }
-
 
     @Test
     @Order(order = 10)

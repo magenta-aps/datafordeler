@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.magenta.datafordeler</groupId>
     <artifactId>datafordeler-core</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
     <name>datafordeler-core</name>
     <description>Core module for Magenta&#39;s Greenlandic System</description>
