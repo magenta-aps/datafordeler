@@ -66,4 +66,24 @@ public abstract class Equality {
         return diff < 48;
     }
 
+    /**
+     * Add feature for comparing of timestamps recieved from CPR (We do not trust the precission very much)
+     * This method returns true if B is more than 48 hours after A
+     * @param a
+     * @param b
+     * @return
+     */
+    public static boolean cprDomainBafterA(OffsetDateTime a, OffsetDateTime b) {
+        if (a == null && b == null) {
+            return false;
+        } else if (a == null) {
+            return false;
+        } else if (b == null) {
+            return true;
+        } else {
+            long diff = Duration.between(a, b).toHours();
+            System.out.println("DIFF "+diff);
+            return diff > 48;
+        }
+    }
 }
