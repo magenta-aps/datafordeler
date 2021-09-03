@@ -600,8 +600,6 @@ public abstract class BaseQuery {
         this.updatedParameters();
     }
 
-    private int dataParamCount = 0;
-
     protected abstract boolean isEmpty();
 
     public abstract void setFromParameters(ParameterMap parameterMap) throws InvalidClientInputException;
@@ -965,7 +963,7 @@ public abstract class BaseQuery {
                     );
                 }
 
-                this.addCondition("uuid", this.uuid);
+                this.addCondition("uuid", this.uuid, UUID.class);
             } catch (QueryBuildException e) {
                 log.error(e);
             }
