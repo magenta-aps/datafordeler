@@ -126,7 +126,7 @@ public class CprService {
 
     @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getBulk(HttpServletRequest request)
-            throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, IOException, HttpNotFoundException, InvalidCertificateException {
+            throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, QueryBuildException, IOException, HttpNotFoundException, InvalidCertificateException {
         JsonNode requestBody;
         try {
             requestBody = objectMapper.readTree(request.getInputStream());

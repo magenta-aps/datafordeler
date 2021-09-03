@@ -144,10 +144,6 @@ public class CprRecordService {
 
         final List<String> cprNumbers = (requestObject.has(PARAM_CPR_NUMBER)) ? this.getCprNumber(requestObject.get(PARAM_CPR_NUMBER)) : null;
 
-        if(cprNumbers.size()>100) {
-            throw new QueryBuildException("Maximum 100 numbers is allowed");
-        }
-
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info(
