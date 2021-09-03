@@ -163,13 +163,13 @@ public class CprRecordService {
 
         personQuery.setRecordAfter(updatedSince);
 
-        if (cprNumbers != null) {
-            for (String cprNumber : cprNumbers) {
-                personQuery.addPersonnummer(cprNumber);
-            }
-        }
-        if (personQuery.getPersonnumre().isEmpty()) {
+        if (cprNumbers == null || cprNumbers.isEmpty()) {
             throw new InvalidClientInputException("Please specify at least one CPR number");
+        } else if(cprNumbers.size()>100) {
+            throw new QueryBuildException("Maximum 100 numbers is allowed");
+        }
+        for (String cprNumber : cprNumbers) {
+            personQuery.addPersonnummer(cprNumber);
         }
 
         OffsetDateTime now = OffsetDateTime.now();

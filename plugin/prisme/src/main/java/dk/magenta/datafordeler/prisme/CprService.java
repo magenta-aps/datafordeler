@@ -158,6 +158,12 @@ public class CprService {
 
         personQuery.setRecordAfter(updatedSince);
 
+        if (cprNumbers == null || cprNumbers.isEmpty()) {
+            throw new InvalidClientInputException("Please specify at least one CPR number");
+        } else if(cprNumbers.size()>100) {
+            throw new QueryBuildException("Maximum 100 numbers is allowed");
+        }
+
         if (cprNumbers != null) {
             for (String cprNumber : cprNumbers) {
                 personQuery.addPersonnummer(cprNumber);
