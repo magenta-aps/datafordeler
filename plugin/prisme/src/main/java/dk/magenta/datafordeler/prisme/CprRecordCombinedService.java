@@ -183,10 +183,6 @@ public class CprRecordCombinedService {
 
         final HashSet<String> cprNumbers = (requestObject.has(PARAM_CPR_NUMBER)) ? new HashSet<>(this.getCprNumber(requestObject.get(PARAM_CPR_NUMBER))) : null;
 
-        if(cprNumbers.size()>100) {
-            throw new QueryBuildException("Maximum 100 numbers is allowed");
-        }
-
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info(
@@ -203,6 +199,8 @@ public class CprRecordCombinedService {
 
         if (cprNumbers == null || cprNumbers.isEmpty()) {
             throw new InvalidClientInputException("Please specify at least one CPR number");
+        } else if(cprNumbers.size()>100) {
+            throw new QueryBuildException("Maximum 100 numbers is allowed");
         }
         for (String cprNumber : cprNumbers) {
             personQuery.addPersonnummer(cprNumber);
