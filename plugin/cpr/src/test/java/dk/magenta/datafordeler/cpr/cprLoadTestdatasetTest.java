@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -67,6 +68,12 @@ public class cprLoadTestdatasetTest {
         ImportInputStream inputstream = new ImportInputStream(labeledInputStream);
         personEntityManager.parseData(inputstream, importMetadata);
         testData1.close();
+
+        InputStream testData2 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST2");
+        LabeledSequenceInputStream labeledInputStream2 = new LabeledSequenceInputStream("GLBASETEST2", new ByteArrayInputStream("GLBASETEST2".getBytes()), "GLBASETEST2", testData2);
+        ImportInputStream inputstream2 = new ImportInputStream(labeledInputStream2);
+        personEntityManager.parseData(inputstream2, importMetadata);
+        testData2.close();
     }
 
 
@@ -82,13 +89,16 @@ public class cprLoadTestdatasetTest {
      * @throws IOException
      * @throws URISyntaxException
      */
-    @Test
+    // This is disabled since it is just for writing testdata to console
     public void test_A_LoadingOfDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
             ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setTransactionInProgress(true);
             importMetadata.setSession(session);
             this.loadPersonWithOrigin(importMetadata);
+            tx.commit();
             session.close();
         }
 
@@ -103,7 +113,7 @@ public class cprLoadTestdatasetTest {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(39, persons.size());
+            Assert.assertEquals(44, persons.size());
 
             for(PersonEntity person : persons) {
                 System.out.print(person.getPersonnummer());
@@ -125,6 +135,7 @@ public class cprLoadTestdatasetTest {
                     System.out.print(" "+add.getAddressLine3());
                     System.out.println(" "+ add.getAddressLine5());
                 }
+                System.out.println(person.getPersonnummer());
                 Assert.assertEquals(1, person.getCivilstatus().size());//ALWAYS 1
                 if(person.getCivilstatus().size()>0) {
                     CivilStatusDataRecord civil = person.getCivilstatus().iterator().next();
@@ -142,29 +153,40 @@ public class cprLoadTestdatasetTest {
 
 
 
-    @Test
+    // This is disabled since it is just for writing testdata to console
     public void test_B_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setEffectToAfter(OffsetDateTime.now());
-            query.setEffectFromBefore(OffsetDateTime.now());
-            query.setRegistrationToAfter(OffsetDateTime.now());
-            query.setRegistrationFromBefore(OffsetDateTime.now());
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(39, persons.size());
+            Assert.assertEquals(44, persons.size());
+
+            query = new PersonRecordQuery();
+            query.setPersonnummer("1111111111");
+            query.addPersonnummer("1111111112");
+            query.addPersonnummer("1111111113");
+            persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(3, persons.size());
+            Assert.assertEquals(2, persons.get(0).getAddress().size());
+            Assert.assertEquals(2, persons.get(1).getAddress().size());
+            Assert.assertEquals(2, persons.get(2).getAddress().size());
         }
     }
 
 
-    @Test
+    // This is disabled since it is just for writing testdata to console
     public void test_C_ClearingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
         personEntityManager.cleanDemoData();
     }
 
-
+    /**
+     * Confirm that all the loaded persons is cleared again
+     * @throws DataFordelerException
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     @Test
     public void test_D_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 

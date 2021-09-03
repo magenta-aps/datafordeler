@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.fapi;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 
@@ -54,6 +55,15 @@ public class Envelope {
 
     public void setResponseTimestamp(OffsetDateTime responseTimestamp) {
         this.responseTimestamp = responseTimestamp;
+    }
+
+    @JsonProperty
+    @XmlElement
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private OffsetDateTime newestResultTimestamp;
+
+    public void setNewestResultTimestamp(OffsetDateTime newestResultTimestamp) {
+        this.newestResultTimestamp = newestResultTimestamp;
     }
 
     @JsonProperty

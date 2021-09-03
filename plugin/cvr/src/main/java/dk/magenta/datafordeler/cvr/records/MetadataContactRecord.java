@@ -21,6 +21,11 @@ public class MetadataContactRecord extends CvrNontemporalRecord {
 
     public static final String DB_FIELD_DATA = "data";
 
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @Column(name = DB_FIELD_DATA)
     private String data;
 

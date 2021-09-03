@@ -1,0 +1,65 @@
+[
+  {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "id": 1,
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -55.596765011999935,
+            72.88345767900006
+          ]
+        },
+        "properties": {
+          "OBJECTID": 1,
+          "BNummer": "B-807",
+          "Creator": "IRKS",
+          "CreationDate": 1535035685000,
+          "Editor": "COREDATA",
+          "EditDate": 1537427527000,
+          "ObjektStatus": 2,
+          "HusNummer": "807",
+          "KommuneKode": 956,
+          "LokalitetsKode": "0600",
+          "Postnummer": 3962,
+          "Vejkode": "0254",
+          "DataKilde": 1,
+          "AdgangsadresseSumiffik": "{19E9F00E-E5BE-4A34-A7EA-8693795A8814}",
+          "bygning_id": "{41947F6E-7404-4A95-9A83-18F70B6CAE77}",
+          "GlobalID": "{CC6C206C-C9CD-4829-B206-F647DC1E7260}"
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 2,
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -55.597416510999949,
+            72.884334970000054
+          ]
+        },
+        "properties": {
+          "OBJECTID": 2,
+          "BNummer": "B-837",
+          "Creator": "IRKS",
+          "CreationDate": 1535035685000,
+          "Editor": "COREDATA",
+          "EditDate": 1537427527000,
+          "ObjektStatus": 2,
+          "HusNummer": "837",
+          "KommuneKode": 956,
+          "LokalitetsKode": "0601",
+          "Postnummer": 3962,
+          "Vejkode": "0255",
+          "DataKilde": 1,
+          "AdgangsadresseSumiffik": "{BF077DEB-8D0B-4AC3-88FD-7DA0C1072293}",
+          "bygning_id": "{9F28EF65-4C02-4200-BD36-9BC48134128E}",
+          "GlobalID": "{4F35FE9B-2E01-4CE8-9F23-27A436E64DCA}"
+        }
+      }
+    ]
+  }
+]

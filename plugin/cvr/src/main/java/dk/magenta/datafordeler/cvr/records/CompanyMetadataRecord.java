@@ -25,6 +25,11 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public static final String DB_FIELD_NEWEST_FORM = "newestForm";
     public static final String IO_FIELD_NEWEST_FORM = "nyesteVirksomhedsform";
 
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
+
     @OneToMany(mappedBy = FormRecord.DB_FIELD_COMPANY_METADATA, targetEntity = FormRecord.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),

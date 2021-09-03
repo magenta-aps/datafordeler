@@ -14,13 +14,9 @@ import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
-import dk.magenta.datafordeler.cpr.data.person.PersonSubscriptionAssignmentStatus;
+import dk.magenta.datafordeler.cpr.data.person.*;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.geo.GeoLookupService;
-import dk.magenta.datafordeler.geo.GeoPlugin;
 
 import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
@@ -30,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -43,6 +40,7 @@ import javax.persistence.FlushModeType;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -126,6 +124,37 @@ public class CprTest extends TestBase {
             personEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
+        transaction.commit();
+        session.close();
+    }
+
+    /**
+     * Load a person with a specified age
+     * @param age
+     * @throws Exception
+     */
+    public void loadSpecificAgePersons(int age) throws Exception {
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+
+        String testData = InputStreamReader.readInputStream(CprTest.class.getResourceAsStream("/person.txt"));
+        String[] lines = testData.split("\n");
+
+        StringJoiner sb = new StringJoiner("\n");
+        String birthYear = String.format("%04d", OffsetDateTime.now().minusYears(age).getYear());
+        for (int j = 0; j < lines.length; j++) {
+            String line = lines[j];
+            if(line.startsWith("0010101001234")) {
+                line = line.substring(0, 67) + birthYear + line.substring(71);
+            }
+            sb.add(line);
+        }
+        ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+        personEntityManager.parseData(bais, importMetadata);
+        bais.close();
         transaction.commit();
         session.close();
     }
@@ -240,12 +269,39 @@ public class CprTest extends TestBase {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+        JsonNode responseContent = objectMapper.readTree(response.getBody());
+        //Assert.assertFalse(responseContent.get("adminadresse").asBoolean());
 
         Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"far\":\"0101641234\""));
         Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"mor\":\"2903641234\""));
 
     }
 
+    @Test
+    public void testAdminAddPersonPrisme() throws Exception {
+        loadPerson("/personAdminAdd.txt");
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        testUserDetails.giveAccess(
+                cprPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
+                        CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER
+                ).getRestriction(
+                        CprAreaRestrictionDefinition.RESTRICTION_KOMMUNE_SERMERSOOQ
+                )
+        );
+        this.applyAccess(testUserDetails);
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/1/" + "0101005551",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        JsonNode responseContent = objectMapper.readTree(response.getBody());
+        //Assert.assertTrue(responseContent.get("adminadresse").asBoolean());
+    }
 
     /**
      * Test the service cpr/2
@@ -292,6 +348,135 @@ public class CprTest extends TestBase {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
     }
+
+    /**
+     * Validate that it is possible to find if a person is currently citizen in greenland, and if yes how long the person has been living here
+     * @throws Exception
+     */
+    @Test
+    public void testResidentPersonPrisme() throws Exception {
+        loadPerson("/persons_with_history.txt");
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/residentinformation/1/" + "1111111110",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/prisme/cpr/residentinformation/1/" + "1111111110",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        JSONAssert.assertEquals("{\"cprNummer\":\"1111111110\",\"borIGL\":true,\"dato\":\"2020-07-20\"}", response.getBody(), false);
+
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/residentinformation/1/" + "1211111111",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"cprNummer\":\"1211111111\",\"borIGL\":false,\"dato\":null}", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/residentinformation/1/" + "1311111111",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"cprNummer\":\"1311111111\",\"borIGL\":true,\"dato\":\"2011-11-13\"}", response.getBody(), false);
+    }
+
+    @Test
+    public void testMaintainChildrenPrisme() throws Exception {
+        TestUserDetails testUserDetails = new TestUserDetails();
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/under18years/1/search/?municipalitycode=956&updatedSince=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        this.loadSpecificAgePersons(16);
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18years/1/search/?municipalitycode=956&updatedSince=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18years/1/search/?municipalitycode=956&pageSize=10000&updatedSince=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18years/1/search/?municipalitycode=956&updatedSince=" + "2030-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
+
+        this.cleanup();
+        this.loadSpecificAgePersons(19);
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18years/1/search/?municipalitycode=956&updatedSince=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
+
+        this.cleanup();
+        this.loadSpecificAgePersons(16);
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18years/1/search/?municipalitycode=956&updatedSince=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
+
+        response = restTemplate.exchange(
+                "/prisme/cpr/under18years/1/search/?municipalitycode=957&updatedSince=" + "2010-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
+    }
+
 
 
     @Test

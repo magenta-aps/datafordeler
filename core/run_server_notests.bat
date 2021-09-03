@@ -42,6 +42,11 @@ pushd %DIR%..\plugin\ger
     call mvnw.cmd -DskipTests clean install
 popd
 
+echo "Build subscription"
+pushd %DIR%..\plugin\subscription
+    call mvnw.cmd -DskipTests clean install
+popd
+
 echo "Build eboks"
 pushd %DIR%..\plugin\eboks
     call mvnw.cmd -DskipTests clean install
@@ -49,6 +54,11 @@ popd
 
 echo "Build prisme"
 pushd %DIR%..\plugin\prisme
+    call mvnw.cmd -DskipTests clean install
+popd
+
+echo "Build combinedPitu"
+pushd %DIR%..\plugin\combinedPitu
     call mvnw.cmd -DskipTests clean install
 popd
 

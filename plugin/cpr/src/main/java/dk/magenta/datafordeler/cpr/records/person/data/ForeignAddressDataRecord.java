@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -41,6 +42,11 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
         this.addressLine3 = addressLine3;
         this.addressLine4 = addressLine4;
         this.addressLine5 = addressLine5;
+    }
+
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
     }
 
     public static final String DB_FIELD_ADDRESS_LINE1 = "addressLine1";

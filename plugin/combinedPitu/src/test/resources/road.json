@@ -1,0 +1,57 @@
+[
+  {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "id": 3694,
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+          ]
+        },
+        "properties": {
+          "OBJECTID": 3694,
+          "Vejnavn": "Mut aqqut",
+          "Vejkode": "0254",
+          "Creator": "COREDATA",
+          "CreationDate": 1538477325000,
+          "Editor": "COREDATA",
+          "EditDate": 1539672913000,
+          "Kommunekode": 956,
+          "Lokalitetskode": "600",
+          "Vejadresseringsnavn": "Mut aqqut",
+          "VejmidteSumiffik": "{76C386F8-C312-4361-937E-57D5597D1004}",
+          "GlobalID": "{F61CA581-7BC9-4216-B716-21AA7BFC440B}",
+          "Vejkategori": "Lokalvej",
+          "Info": null
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 3695,
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+          ]
+        },
+        "properties": {
+          "OBJECTID": 3695,
+          "Vejnavn": "Mut aqq",
+          "Vejkode": "0255",
+          "Creator": "COREDATA",
+          "CreationDate": 1538477325000,
+          "Editor": "COREDATA",
+          "EditDate": 1539672913000,
+          "Kommunekode": 956,
+          "Lokalitetskode": "601",
+          "Vejadresseringsnavn": "Mut aqq",
+          "VejmidteSumiffik": "{68AC4BFD-68B3-4F5C-8DC4-3EB73F27E7E6}",
+          "GlobalID": "{C1253376-43A0-4767-96F4-D2AACE6C93A9}",
+          "Vejkategori": "Lokalvej",
+          "Info": null
+        }
+      }
+    ]
+  }
+]

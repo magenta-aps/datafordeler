@@ -36,6 +36,10 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     @JsonIgnore
     protected abstract String getDomain();
 
+    public String getFieldName() {
+        return "";
+    }
+
     public abstract Map<String, Object> getIdentifyingFilter();
 
     public abstract UUID generateUUID();

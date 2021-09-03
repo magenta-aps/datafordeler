@@ -1,20 +1,15 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.CustodyDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonStatusDataRecord;
-
+import dk.magenta.datafordeler.cpr.records.person.data.*;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -32,6 +27,11 @@ public class PersonRecordQuery extends BaseQuery {
     public static final String HOUSENO = AddressDataRecord.IO_FIELD_HOUSENUMBER;
     public static final String BUILDINGNO = AddressDataRecord.IO_FIELD_BUILDING_NUMBER;
     public static final String CUSTODYPNR = CustodyDataRecord.IO_FIELD_RELATION_PNR;
+    public static final String PERSONEVENT = PersonEventDataRecord.IO_FIELD_EVENT;
+    public static final String PERSONEVENTTIME = PersonEventDataRecord.DB_FIELD_TIMESTAMP;
+    public static final String PERSONDATAEVENT = PersonDataEventDataRecord.DB_FIELD_FIELD;
+    public static final String PERSONDATAEVENTTIME = PersonDataEventDataRecord.DB_FIELD_TIMESTAMP;
+    public static final String PERSONBIRTHDATE = BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
     private List<String> personnumre = new ArrayList<>();
@@ -205,6 +205,22 @@ public class PersonRecordQuery extends BaseQuery {
         }
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONBIRTHDATE)
+    private LocalDateTime birthTimeAfter;
+
+    public void setBirthTimeAfter(LocalDateTime birthTimeAfter) {
+        this.birthTimeAfter = birthTimeAfter;
+        this.updatedParameters();
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONBIRTHDATE)
+    private LocalDateTime birthTimeBefore;
+
+    public void setBirthTimeBefore(LocalDateTime birthTimeBefore) {
+        this.birthTimeBefore = birthTimeBefore;
+        this.updatedParameters();
+    }
+
     @QueryField(type = QueryField.FieldType.STRING, queryName = CUSTODYPNR)
     private List<String> custodyPnr = new ArrayList<>();
 
@@ -303,6 +319,97 @@ public class PersonRecordQuery extends BaseQuery {
         }
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONEVENT)
+    private List<String> personevents = new ArrayList<>();
+
+    public Collection<String> getEvents() {
+        return this.personevents;
+    }
+
+    public void addEvent(String personevent) {
+        this.personevents.add(personevent);
+        if (personevent != null) {
+            this.updatedParameters();
+        }
+    }
+
+    public void setEvent(String personevent) {
+        this.clearEvents();
+        this.addEvent(personevent);
+    }
+
+    public void clearEvents() {
+        this.personevents.clear();
+        this.updatedParameters();
+    }
+
+    public void setEvents(Collection<String> personevent) {
+        this.clearEvents();
+        if (personevent != null) {
+            this.personevents.addAll(personevent);
+            this.updatedParameters();
+        }
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONEVENTTIME)
+    private OffsetDateTime personeventTimeAfter;
+
+    public void setEventTimeAfter(String personeventTimeAfter) {
+        this.personeventTimeAfter = OffsetDateTime.parse(personeventTimeAfter, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONEVENTTIME)
+    private OffsetDateTime personeventTimeBefore;
+
+    public void setEventTimeBefore(String personeventTimeBefore) {
+        this.personeventTimeAfter = OffsetDateTime.parse(personeventTimeBefore, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENT)
+    private List<String> persondataevents = new ArrayList<>();
+
+    public Collection<String> getDataEvents() {
+        return this.persondataevents;
+    }
+
+    public void addDataEvent(String persondataevent) {
+        this.persondataevents.add(persondataevent);
+        if (persondataevent != null) {
+            this.updatedParameters();
+        }
+    }
+
+    public void setDataEvent(String personevent) {
+        this.clearDataEvents();
+        this.addDataEvent(personevent);
+    }
+
+    public void clearDataEvents() {
+        this.persondataevents.clear();
+        this.updatedParameters();
+    }
+
+    public void setDataEvents(Collection<String> personevent) {
+        this.clearEvents();
+        if (personevent != null) {
+            this.persondataevents.addAll(personevent);
+            this.updatedParameters();
+        }
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENTTIME)
+    private OffsetDateTime persondataeventTimeAfter;
+
+    public void setDataEventTimeAfter(OffsetDateTime personeventTimeAfter) {
+        this.persondataeventTimeAfter = personeventTimeAfter;
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENTTIME)
+    private OffsetDateTime persondataeventTimeBefore;
+
+    public void setDataEventTimeBefore(OffsetDateTime personeventTimeBefore) {
+        this.persondataeventTimeBefore = personeventTimeBefore;
+    }
 
     @Override
     public Map<String, Object> getSearchParameters() {
@@ -316,6 +423,8 @@ public class PersonRecordQuery extends BaseQuery {
         map.put(FLOOR, this.floors);
         map.put(HOUSENO, this.houseNos);
         map.put(BUILDINGNO, this.buildingNos);
+        map.put(PERSONEVENT, this.personevents);
+        map.put(PERSONDATAEVENT, this.persondataevents);
         return map;
     }
 
@@ -330,6 +439,8 @@ public class PersonRecordQuery extends BaseQuery {
         this.setFloors(parameters.get(FLOOR));
         this.setHouseNos(parameters.get(HOUSENO));
         this.setBuildingNos(parameters.get(BUILDINGNO));
+        this.setEvents(parameters.get(PERSONEVENT));
+        this.setDataEvents(parameters.get(PERSONDATAEVENT));
     }
 
     @Override
@@ -354,19 +465,23 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("door", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR);
         joinHandles.put("housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("bnr", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER);
+        joinHandles.put("birthtime.GTE", PersonEntity.DB_FIELD_BIRTHTIME + LookupDefinition.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
+        joinHandles.put("birthtime.LTE", PersonEntity.DB_FIELD_BIRTHTIME + LookupDefinition.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
 
         joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + LookupDefinition.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
+        joinHandles.put("personevent", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_EVENT);
+        joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("personeventTime.LTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("persondataevent", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_FIELD);
+        joinHandles.put("persondataeventTime.GTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("persondataeventTime.LTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override
     protected Map<String, String> joinHandles() {
         return joinHandles;
     }
-
-
-    private List<String> birth_gt;
-    private List<String> birth_lt;
 
     protected void setupConditions() throws QueryBuildException {
         this.addCondition("pnr", this.personnumre);
@@ -380,69 +495,25 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("bnr", this.buildingNos);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
         this.addCondition("custodyPnr", this.custodyPnr);
+        this.addCondition("birthtime.GTE", Condition.Operator.GTE, this.birthTimeAfter, LocalDateTime.class, true);
+        this.addCondition("birthtime.LTE", Condition.Operator.LTE, this.birthTimeBefore, LocalDateTime.class, true);
+
+        this.addCondition("personevent", this.personevents);
+        this.addCondition("personeventTime.GTE", Condition.Operator.GTE, this.personeventTimeAfter, OffsetDateTime.class, true);
+        this.addCondition("personeventTime.LTE", Condition.Operator.GTE, this.personeventTimeBefore, OffsetDateTime.class, true);
+        this.addCondition("persondataevent", this.persondataevents);
+        this.addCondition("persondataeventTime.GTE", Condition.Operator.GTE, this.persondataeventTimeAfter, OffsetDateTime.class, true);
+        this.addCondition("persondataeventTime.LTE", Condition.Operator.LTE, this.persondataeventTimeBefore, OffsetDateTime.class, true);
     }
 
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition(this);
-        
-        if (!this.getPersonnumre().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_CPR_NUMBER, this.getPersonnumre(), String.class);
-        }
-
-        if (this.getFornavn() != null) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_NAME + LookupDefinition.separator + NameDataRecord.DB_FIELD_FIRST_NAMES, this.getFornavn(), String.class);
-        }
-        if (this.getEfternavn() != null) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_NAME + LookupDefinition.separator + NameDataRecord.DB_FIELD_LAST_NAME, this.getEfternavn(), String.class);
-        }
-
-        String addressPath = LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_ADDRESS;
-        boolean joinedAddress = false;
-        
-        if (!this.getKommunekoder().isEmpty()) {
-            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE, this.getKommunekoder(), Integer.class);
-            joinedAddress = true;
-        }
-        if (!this.getKommunekodeRestriction().isEmpty()) {
-            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE, this.getKommunekodeRestriction(), Integer.class);
-            joinedAddress = true;
-        }
-
-        if (!this.getVejkoder().isEmpty()) {
-            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_ROAD_CODE, this.getVejkoder(), Integer.class);
-            joinedAddress = true;
-        }
-
-        if (!this.getDoors().isEmpty()) {
-            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR, this.getDoors(), String.class);
-            joinedAddress = true;
-        }
-        if (!this.getFloors().isEmpty()) {
-            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_FLOOR, this.getFloors(), String.class);
-            joinedAddress = true;
-        }
-        if (!this.getHouseNos().isEmpty()) {
-            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER, this.getHouseNos(), String.class);
-            joinedAddress = true;
-        }
-        if (!this.getBuildingNos().isEmpty()) {
-            lookupDefinition.put(addressPath + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER, this.getBuildingNos(), String.class);
-            joinedAddress = true;
-        }
-
-        if (this.getRecordAfter() != null) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + PersonEntity.DB_FIELD_DAFO_UPDATED, this.getRecordAfter(), OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
-        }
-
-
-        return lookupDefinition;
-    }
 
     @Override
     protected boolean isEmpty() {
-        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() && this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty();
+        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() &&
+                this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() &&
+                this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() &&
+                this.personevents.isEmpty() && this.personeventTimeAfter == null && this.persondataevents.isEmpty() &&
+                this.personeventTimeAfter == null && this.birthTimeAfter == null && this.birthTimeBefore == null;
     }
 
 }

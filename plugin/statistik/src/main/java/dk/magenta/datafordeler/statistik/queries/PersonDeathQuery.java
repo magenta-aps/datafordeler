@@ -25,6 +25,7 @@ public class PersonDeathQuery extends PersonStatisticsQuery {
     private static HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
+        joinHandles.put("status", PersonEntity.DB_FIELD_STATUS + LookupDefinition.separator + PersonStatusDataRecord.DB_FIELD_STATUS);
         joinHandles.putAll(getBitemporalHandles("status", PersonEntity.DB_FIELD_STATUS));
     }
 

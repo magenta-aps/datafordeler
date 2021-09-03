@@ -1,0 +1,35 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 4,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+          ]
+        ]
+      },
+      "properties" : {
+        "OBJECTID" : 4,
+        "Kommunenavn" : "Kommuneqarfik Sermersooq",
+        "Creator" : "GREENADMIN",
+        "CreationDate" : 1531998665000,
+        "Editor" : "GREENADMIN",
+        "EditDate" : 1533645230000,
+        "Kommunekode" : 956,
+        "groupid" : "23a2a20416bb427fab4849384ee677ff",
+        "GlobalID" : "{33960E68-2F0A-4CB0-BB3D-02D9F0B21304}",
+        "SHAPE.STArea()" : 126.82365162024757,
+        "SHAPE.STLength()" : 75.065562459106559
+      }
+    }
+  ]
+}

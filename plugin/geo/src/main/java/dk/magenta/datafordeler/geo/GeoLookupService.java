@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.geo;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.cpr.CprLookupDTO;
 import dk.magenta.datafordeler.cpr.CprLookupService;
 import dk.magenta.datafordeler.geo.data.GeoHardcode;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
@@ -41,6 +42,84 @@ public class GeoLookupService extends CprLookupService {
         return this.doLookup(municipalityCode, roadCode, houseNumber, null);
     }
 
+    public GeoLookupDTO doLookupBestEffort(int municipalityCode, int roadCode) {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
+            String municipalityEntity = municipalityCacheGR.get(municipalityCode);
+            if (municipalityEntity == null) {
+                MunicipalityQuery query = new MunicipalityQuery();
+                query.addCode(Integer.toString(municipalityCode));
+                setQueryNow(query);
+                List<GeoMunicipalityEntity> municipalities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
+                for (GeoMunicipalityEntity municipality : municipalities) {
+                    municipalityCacheGR.put(municipality.getCode(), municipality.getName().current().getName());
+                }
+                municipalityEntity = municipalityCacheGR.get(municipalityCode);
+            }
+            if (municipalityEntity != null) {
+                geoLookupDTO.setMunicipalityName(municipalityEntity);
+            }
+
+            RoadQuery roadQuery = new RoadQuery();
+            roadQuery.setMunicipalityCode(municipalityCode);
+            roadQuery.setCode(Integer.toString(roadCode));
+            setQueryNow(roadQuery);
+            List<GeoRoadEntity> roadEntities = QueryManager.getAllEntities(session, roadQuery, GeoRoadEntity.class);
+
+            if (roadEntities != null && roadEntities.size() > 0) {
+                GeoRoadEntity roadEntity = roadEntities.stream().min(Comparator.comparing(GeoRoadEntity::getId)).get();
+                //There can be more than one roadEntities, we just take the first one.
+                //This is because a road can be split into many roadentities by sideroads.
+                //If all sideroads do not have the same name, it is an error in the delivered data.
+                geoLookupDTO.setRoadName(roadEntity.getName().iterator().next().getName());
+                geoLookupDTO.setLocalityCode(roadEntity.getLocality().iterator().next().getCode());
+            } else {
+                GeoHardcode.HardcodedAdressStructure hardcodedAdress = GeoHardcode.getHardcodedRoadname(municipalityCode, roadCode);
+                if (hardcodedAdress != null) {
+                    geoLookupDTO.setAdministrativ(true);
+                    geoLookupDTO.setRoadName(hardcodedAdress.getVejnavn());
+                    geoLookupDTO.setPostalCode(hardcodedAdress.getPostcode());
+                    geoLookupDTO.setLocalityCode(hardcodedAdress.getLocationcode());
+                    geoLookupDTO.setPostalDistrict(hardcodedAdress.getCityname());
+                }
+            }
+// Find postalcode for road. This is only available through access addresses on the road. In theory there could be several postal codes for one road
+            AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
+            accessAddressQuery.setMunicipalityCode(municipalityCode);
+
+            accessAddressQuery.setRoadCode(roadCode);
+            setQueryNow(accessAddressQuery);
+            List<AccessAddressEntity> accessAddress = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
+
+            if (accessAddress != null && accessAddress.size() > 0) {
+                //There can be more than one access-address, we just take the first one.
+                //There can be more than one accessaddress on a road, but they have the same postalcode and postaldistrict
+                geoLookupDTO.setPostalCode(accessAddress.get(0).getPostcode().iterator().next().getPostcode());
+                PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(geoLookupDTO.getPostalCode()), PostcodeEntity.class);
+                geoLookupDTO.setPostalDistrict(entity.getName().iterator().next().getName());
+            } else {
+                //Fallback to supplying with danish postalcodes
+                CprLookupDTO cprDto = super.doLookup(municipalityCode, roadCode, "");
+                geoLookupDTO.setPostalCode(cprDto.getPostalCode());
+                geoLookupDTO.setPostalDistrict(cprDto.getPostalDistrict());
+            }
+
+            LocalityQuery localityQuery = new LocalityQuery();
+            if (geoLookupDTO.getLocalityCode() != null) {
+                localityQuery.setCode(geoLookupDTO.getLocalityCode());
+                localityQuery.setMunicipality(Integer.toString(municipalityCode));
+                setQueryNow(localityQuery);
+                List<GeoLocalityEntity> localities = QueryManager.getAllEntities(session, localityQuery, GeoLocalityEntity.class);
+                if (localities != null && localities.size() > 0) {
+                    geoLookupDTO.setLocalityName(localities.get(0).getName().current().getName());
+                    geoLookupDTO.setLocalityAbbrev(localities.get(0).getAbbreviation().current().getName());
+                }
+            }
+            return geoLookupDTO;
+        }
+    }
+
     public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber) {
         if (municipalityCode < 950) {
             return new GeoLookupDTO(super.doLookup(municipalityCode, roadCode, houseNumber));
@@ -48,12 +127,10 @@ public class GeoLookupService extends CprLookupService {
             try(Session session = sessionManager.getSessionFactory().openSession()) {
 
                 GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
-                String municipalityEntity = null;
-                if (municipalityCacheGR.containsKey(municipalityCode)) {
-                    municipalityEntity = municipalityCacheGR.get(municipalityCode);
-                } else {
+                String municipalityEntity = municipalityCacheGR.get(municipalityCode);
+                if (municipalityEntity == null) {
                     MunicipalityQuery query = new MunicipalityQuery();
-                    query.addKommunekodeRestriction(Integer.toString(municipalityCode));
+                    query.addCode(Integer.toString(municipalityCode));
                     setQueryNow(query);
                     List<GeoMunicipalityEntity> municipalities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
                     for (GeoMunicipalityEntity municipality : municipalities) {

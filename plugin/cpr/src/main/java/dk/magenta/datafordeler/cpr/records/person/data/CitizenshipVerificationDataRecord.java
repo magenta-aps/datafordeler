@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.person.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
@@ -31,7 +32,10 @@ public class CitizenshipVerificationDataRecord extends VerificationDataRecord<Ci
         super(verified);
     }
 
-
+    @JsonIgnore
+    public String getFieldName() {
+        return TABLE_NAME;
+    }
 
     @Override
     public CitizenshipVerificationDataRecord clone() {

@@ -1,0 +1,124 @@
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "failed": 0
+  },
+  "hits": {
+    "total": 1,
+    "max_score": 17.219288,
+    "hits": [
+      {
+        "_index": "test",
+        "_type": "_doc",
+        "_id": "4001248508",
+        "_score": 17.219288,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 25052943,
+            "regNummer": [],
+            "brancheAnsvarskode": 0,
+            "reklamebeskyttet": true,
+            "navne": [
+
+            ],
+            "binavne": [
+            ],
+            "postadresse": [
+              {
+                "landekode": "GL",
+                "fritekst": null,
+                "vejkode": 445,
+                "kommune": {
+                  "kommuneKode": 956,
+                  "kommuneNavn": "Sermersooq",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "2005-10-15T00:00:00.000+02:00"
+                },
+                "husnummerFra": 18,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": "Advokatfirmaet Stakemann",
+                "postboks": null,
+                "vejnavn": "Kronprinsessegade",
+                "bynavn": null,
+                "postnummer": 3900,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": "2000-02-20"
+                },
+                "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+              }
+            ],
+            "beliggenhedsadresse": [
+
+            ],
+            "telefonNummer": [
+
+            ],
+            "telefaxNummer": [],
+            "elektroniskPost": [
+
+            ],
+            "hjemmeside": [
+
+            ],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+
+            ],
+            "hovedbranche": [
+
+            ],
+            "bibranche1": [
+
+            ],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [
+
+            ],
+            "virksomhedsform": [
+
+            ],
+            "aarsbeskaeftigelse": [
+
+            ],
+            "kvartalsbeskaeftigelse": [
+
+            ],
+            "attributter": [
+
+            ],
+            "penheder": [
+
+            ],
+            "deltagerRelation": [
+            ],
+            "fusioner": [
+
+            ],
+            "spaltninger": [
+
+            ],
+            "virksomhedMetadata": {
+
+            }
+          }
+        }
+      }
+    ]
+  }
+}
