@@ -128,7 +128,7 @@ public class CprRecordService {
 
     @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getBulk(HttpServletRequest request)
-            throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, IOException, HttpNotFoundException, InvalidCertificateException {
+            throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, QueryBuildException, IOException, HttpNotFoundException, InvalidCertificateException {
         JsonNode requestBody;
         try {
             requestBody = objectMapper.readTree(request.getInputStream());
@@ -143,7 +143,6 @@ public class CprRecordService {
         final OffsetDateTime updatedSince = requestObject.has(PARAM_UPDATED_SINCE) ? Query.parseDateTime(requestObject.get(PARAM_UPDATED_SINCE).asText(), false) : null;
 
         final List<String> cprNumbers = (requestObject.has(PARAM_CPR_NUMBER)) ? this.getCprNumber(requestObject.get(PARAM_CPR_NUMBER)) : null;
-
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -160,13 +159,13 @@ public class CprRecordService {
 
         personQuery.setRecordAfter(updatedSince);
 
-        if (cprNumbers != null) {
-            for (String cprNumber : cprNumbers) {
-                personQuery.addPersonnummer(cprNumber);
-            }
-        }
-        if (personQuery.getPersonnumre().isEmpty()) {
+        if (cprNumbers == null || cprNumbers.isEmpty()) {
             throw new InvalidClientInputException("Please specify at least one CPR number");
+        } else if(cprNumbers.size()>100) {
+            throw new QueryBuildException("Maximum 100 numbers is allowed");
+        }
+        for (String cprNumber : cprNumbers) {
+            personQuery.addPersonnummer(cprNumber);
         }
 
         OffsetDateTime now = OffsetDateTime.now();
