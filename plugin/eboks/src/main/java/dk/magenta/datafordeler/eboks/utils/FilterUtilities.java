@@ -47,6 +47,18 @@ public class FilterUtilities {
                 r.getBitemporality().effectTo == null).max(bitemporalCvrComparator).orElse(null);
     }
 
+    /**
+     * Find the newest record from the list of records
+     * Records with a missing OriginDate is also removed since they are considered invalid
+     *
+     * @param records
+     * @param <R>
+     * @return
+     */
+    public static <R extends CvrBitemporalRecord> R findNewestCvr(Collection<R> records) {
+        return (R) records.stream().filter(r -> r.getBitemporality().registrationTo == null).max(bitemporalCvrComparator).orElse(null);
+    }
+
 
     public static CprBitemporality getCprBitemporality(CprBitemporalRecord record) {
         return record.getBitemporality();
