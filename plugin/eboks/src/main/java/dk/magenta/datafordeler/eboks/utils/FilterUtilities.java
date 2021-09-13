@@ -56,7 +56,7 @@ public class FilterUtilities {
      * @return
      */
     public static <R extends CvrBitemporalRecord> R findNewestCvr(Collection<R> records) {
-        return (R) records.stream().filter(r -> r.getBitemporality().registrationTo == null).max(bitemporalCvrComparator).orElse(null);
+        return (R) records.stream().max(bitemporalCvrComparator).orElse(null);
     }
 
 

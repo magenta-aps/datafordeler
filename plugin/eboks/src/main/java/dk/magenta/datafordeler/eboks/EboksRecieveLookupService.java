@@ -129,10 +129,10 @@ public class EboksRecieveLookupService {
 
                     AddressRecord adress = FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress());
                     if(adress==null) {
-                        adress = FilterUtilities.findNewestUnclosedCvr(k.getPostalAddress());
+                        adress = FilterUtilities.findNewestCvr(k.getPostalAddress().currentRegistration());
                     }
 
-                    String status = Optional.ofNullable(k.getMetadata().getCompanyStatusRecord(k).getStatus()).orElse(null);
+                    String status = k.getMetadata().getCompanyStatusRecord(k).getStatus();
                     if(!"NORMAL".equals(status)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailStrate.CEASED));
                     } else if (adress.getMunicipality().getMunicipalityCode() < 950) {
@@ -145,7 +145,7 @@ public class EboksRecieveLookupService {
             }
             //Find the company as a ger company, if CVR-company does not exist
             if (cvrs != null &&!cvrs.isEmpty()) {
-                Collection<CompanyEntity> companyEntities = gerCompanyLookup(session, cvrs);
+                Collection<CompanyEntity> companyEntities = this.gerCompanyLookup(session, cvrs);
                 if (!companyEntities.isEmpty()) {
                     companyEntities.forEach((k) -> {
                         String gerNo = Integer.toString(k.getGerNr());
