@@ -285,7 +285,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     //----------------------------------------------------
 
     public static final String DB_FIELD_DOOR = "door";
-    public static final String IO_FIELD_DOOR = "sidedør";
+    public static final String IO_FIELD_DOOR = "sidedoer";
 
     @JsonProperty(value = IO_FIELD_DOOR)
     @XmlElement(name = IO_FIELD_DOOR)
@@ -300,6 +300,9 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         this.door = door;
     }
 
+    //----------------------------------------------------
+    //Old attribute to support backward compability
+    public static final String IO_FIELD_DOOR_OLD = "sidedør";
     //----------------------------------------------------
 
     public static final String DB_FIELD_MUNICIPALITY = "municipality";
