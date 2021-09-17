@@ -3,8 +3,8 @@
 ###############
 FROM maven:3-jdk-11 as builder
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
-COPY pom.xml /code/pom.xml
 
+COPY pom.xml /code/pom.xml
 COPY core/pom.xml /code/core/pom.xml
 
 COPY plugin/adresseservice/pom.xml /code/plugin/adresseservice/pom.xml
@@ -20,7 +20,7 @@ COPY plugin/statistik/pom.xml   /code/plugin/statistik/pom.xml
 COPY plugin/subscription/pom.xml   /code/plugin/subscription/pom.xml
 
 WORKDIR /code/
-#RUN mvn $MAVEN_CLI_OPTS de.qaware.maven:go-offline-maven-plugin:resolve-dependencies
+
 COPY core/src /code/core/src
 COPY plugin/combinedPitu/src/main /code/plugin/combinedPitu/src/main
 COPY plugin/cpr/src/main /code/plugin/cpr/src/main
@@ -43,49 +43,6 @@ COPY docker/hibernate.xml /configs/hibernate.xml
 COPY docker/dev-settings.properties /dist/core/application.properties
 
 WORKDIR /dist/core
-#CMD ["tail", "-f", "/dev/null"]
 CMD ["java", "-jar", "datafordeler-core-exec.jar"]
 
-#FROM maven:3-jdk-11
-#run mkdir /app
-#COPY core /app/core
-#COPY ci /app/ci
-#WORKDIR /app/core
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-#COPY plugin /app/plugin
-#ADD ci/build_plugins.sh /app/plugin/build_plugins.sh
-#WORKDIR /app/plugin
-#RUN chmod +x /app/plugin/build_plugins.sh
-#RUN /app/plugin/build_plugins.sh
-
-#WORKDIR /app/plugin/cpr
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-
-#WORKDIR /app/plugin/geo
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-
-#WORKDIR /app/plugin/cvr
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-
-#WORKDIR /app/plugin/ger
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-
-#WORKDIR /app/plugin/eboks
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-
-#WORKDIR /app/plugin/prisme
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-
-#WORKDIR /app/plugin/subscription
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-
-#WORKDIR /app/plugin/combinedPitu
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-
-#TODO WE NEED TO FIX TESTS OF STATISTICS
-#WORKDIR /app/plugin/statistik
-#RUN mvn --batch-mode -T 2C package install -DskipTests
-#ENTRYPOINT [""]
-#CMD [""]
-#java -jar datafordeler-core-exec.jar --spring.config.location="classpath:/application.properties,file:%DIR%local_settings.properties"
 #https://git.magenta.dk/osflow/osflow/-/blob/develop/backend/docker/Dockerfile
