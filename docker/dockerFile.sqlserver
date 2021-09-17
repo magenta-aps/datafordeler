@@ -1,0 +1,7 @@
+FROM mcr.microsoft.com/mssql/server:2017-latest
+COPY docker/sql_entrypoint.sh /app/sql_entrypoint.sh
+COPY docker/createdbs.sql /app/createdbs.sql
+COPY docker/create_db.sh /app/create_db.sh
+WORKDIR /app
+ENTRYPOINT ["/app/sql_entrypoint.sh"]
+CMD ["/opt/mssql/bin/sqlservr"]
