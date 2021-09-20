@@ -39,10 +39,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -120,13 +117,35 @@ public class EboksRecieveLookupService {
                 });
             }
 
-
             ArrayNode cvrList = objectMapper.createArrayNode();
 
-
-            //First find out if the company exists as a ger company
             if (cvrs != null &&!cvrs.isEmpty()) {
-                Collection<CompanyEntity> companyEntities = gerCompanyLookup(session, cvrs);
+                CompanyRecordQuery query = new CompanyRecordQuery();
+                query.setCvrNumre(cvrs);
+                Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
+
+                companyEntities.forEach((k) -> {
+                    String cvrNumber = Integer.toString(k.getCvrNumber());
+
+                    AddressRecord adress = FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress());
+                    if(adress==null) {
+                        adress = FilterUtilities.findNewestCvr(k.getPostalAddress().currentRegistration());
+                    }
+
+                    String status = k.getMetadata().getCompanyStatusRecord(k).getStatus();
+                    if(!"NORMAL".equals(status)) {
+                        failedCvrs.add(new FailResult(cvrNumber, FailStrate.CEASED));
+                    } else if (adress.getMunicipality().getMunicipalityCode() < 950) {
+                        failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));
+                    } else {
+                        cvrList.add(cvrNumber);
+                    }
+                    cvrs.remove(cvrNumber);
+                });
+            }
+            //Find the company as a ger company, if CVR-company does not exist
+            if (cvrs != null &&!cvrs.isEmpty()) {
+                Collection<CompanyEntity> companyEntities = this.gerCompanyLookup(session, cvrs);
                 if (!companyEntities.isEmpty()) {
                     companyEntities.forEach((k) -> {
                         String gerNo = Integer.toString(k.getGerNr());
@@ -139,28 +158,6 @@ public class EboksRecieveLookupService {
                     });
                 }
             }
-
-            if (!cvrs.isEmpty()) {
-                CompanyRecordQuery query = new CompanyRecordQuery();
-                query.setCvrNumre(cvrs);
-                Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
-
-                companyEntities.forEach((k) -> {
-                    String cvrNumber = Integer.toString(k.getCvrNumber());
-
-                    AddressRecord adress = FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress());
-                    if(adress==null) {
-                        adress = FilterUtilities.findNewestUnclosedCvr(k.getPostalAddress());
-                    }
-                    if (adress.getMunicipality().getMunicipalityCode() >= 950) {
-                        cvrList.add(cvrNumber);
-                    } else {
-                        failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));
-                    }
-                    cvrs.remove(cvrNumber);
-                });
-            }
-
 
             ObjectNode returnValue = objectMapper.createObjectNode();
             ObjectNode validValues = objectMapper.createObjectNode();
@@ -240,7 +237,7 @@ public class EboksRecieveLookupService {
      */
     public enum FailStrate {
 
-        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead"), MINOR("Minor");
+        UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead"), MINOR("Minor"), CEASED("Ceased");
         private String readableFailString;
 
         FailStrate(String readableFailString) {

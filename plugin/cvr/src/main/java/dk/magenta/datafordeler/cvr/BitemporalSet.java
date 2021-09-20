@@ -26,6 +26,14 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
         return this.stream().filter(r -> r.getRegistrationTo() == null).filter(r -> r.getEffectTo() == null).collect(Collectors.toList());
     }
 
+    /**
+     * Get the records that is current on registartiontime
+     * @return
+     */
+    public List<R> currentRegistration() {
+        return this.stream().filter(r -> r.getRegistrationTo() == null).collect(Collectors.toList());
+    }
+
     public List<R> registeredAt(OffsetDateTime dateTime) {
         return this.stream().filter(
                 r -> (r.getRegistrationFrom() == null || r.getRegistrationFrom().isBefore(dateTime) || r.getRegistrationFrom().isEqual(dateTime))
