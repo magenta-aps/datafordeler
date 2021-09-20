@@ -358,9 +358,9 @@ public class CvrRecordService {
                 }
                 if (addressRecord.getFloor() != null) {
                     addressFormatted.append(", " + addressRecord.getFloor() + ".");
-                    if (addressRecord.getDoor() != null) {
-                        addressFormatted.append(" " + addressRecord.getDoor());
-                    }
+                }
+                if (addressRecord.getDoor() != null) {
+                    addressFormatted.append(" " + addressRecord.getDoor());
                 }
             }
 

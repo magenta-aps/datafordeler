@@ -106,6 +106,7 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
         adresseNode.put(AddressRecord.IO_FIELD_HOUSE_FROM, record.getHouseNumberFrom());
         adresseNode.put(AddressRecord.IO_FIELD_FLOOR, record.getFloor());
         adresseNode.put(AddressRecord.IO_FIELD_DOOR, record.getDoor());
+        adresseNode.put(AddressRecord.IO_FIELD_DOOR_OLD, record.getDoor());
         adresseNode.put(AddressRecord.IO_FIELD_POSTDISTRICT, record.getPostdistrikt());
         adresseNode.put(AddressRecord.IO_FIELD_ROADNAME, record.getRoadName());
         adresseNode.put(AddressRecord.IO_FIELD_HOUSE_TO, record.getHouseNumberTo());
