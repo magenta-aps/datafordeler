@@ -27,12 +27,11 @@ build-image:
 
 .test-default: &test-default
   stage: test
+  image: maven:3-jdk-11
   variables:
     GIT_STRATEGY: none
   needs:
     - build-image
-  image:
-    name: ${IMAGE_DEV}
   tags:
     - docker
 
