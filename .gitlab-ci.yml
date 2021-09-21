@@ -30,6 +30,7 @@ build-image:
   image: maven:3-jdk-11
   variables:
     GIT_STRATEGY: none
+    JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
     MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
   needs:
     - build-image
