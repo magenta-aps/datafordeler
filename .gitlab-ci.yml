@@ -38,7 +38,7 @@ build-image:
 test-core:
   <<: *test-default
   script:
-    - mvn --batch-mode -T 2C test
+    - mvn --batch-mode -T 2C verify
   artifacts:
     reports:
       junit:
