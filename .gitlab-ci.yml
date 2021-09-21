@@ -30,6 +30,7 @@ build-image:
   image: maven:3-jdk-11
   variables:
     GIT_STRATEGY: none
+    MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
   needs:
     - build-image
   tags:
@@ -43,76 +44,3 @@ test-core:
     reports:
       junit:
         - /app/core/target/surefire-reports/TEST-*.xml
-
-test-cpr:
-  <<: *test-default
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/cpr/target/surefire-reports/TEST-*.xml
-
-test-geo:
-  <<: *test-default
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/geo/target/surefire-reports/TEST-*.xml
-
-test-cvr:
-  <<: *test-default
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/cvr/target/surefire-reports/TEST-*.xml
-
-test-ger:
-  <<: *test-default
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/ger/target/surefire-reports/TEST-*.xml
-
-test-eboks:
-  <<: *test-default
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/eboks/target/surefire-reports/TEST-*.xml
-
-test-prisme:
-  <<: *test-default
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/prisme/target/surefire-reports/TEST-*.xml
-
-test-subscription:
-  <<: *test-default
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/subscription/target/surefire-reports/TEST-*.xml
-
-test-statistik:
-  <<: *test-default
-  script:
-    # Some day we need to solve that the tests only passes at this timezone
-    - mvn --batch-mode -T 2C test -Duser.timezone=Europe/Copenhagen
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/statistik/target/surefire-reports/TEST-*.xml
