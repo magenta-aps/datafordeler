@@ -25,23 +25,24 @@ build-image:
       --destination=${IMAGE_DEV}
       --cache=true
 
-.test-default: &test-default
+test-core:
   stage: test
+  needs:
+    - build-image
   image: maven:3-jdk-11
   variables:
     GIT_STRATEGY: none
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
     MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
-  needs:
-    - build-image
   tags:
     - docker
-
-test-core:
-  <<: *test-default
   script:
     - mvn --batch-mode -T 2C verify
   artifacts:
     reports:
       junit:
         - /app/core/target/surefire-reports/TEST-*.xml
+  cache:
+    key: "maven-test-cache"
+    paths:
+      - .m2/repository
