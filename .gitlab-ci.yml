@@ -21,7 +21,7 @@ build-image:
     - cat /kaniko/.docker/config.json
     - /kaniko/executor
       --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/ci/dockerFile
+      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile
       --destination=${IMAGE_DEV}
       --cache=true
 
@@ -135,6 +135,3 @@ test-statistik:
     reports:
       junit:
         - /app/plugin/statistik/target/surefire-reports/TEST-*.xml
-
-
-
