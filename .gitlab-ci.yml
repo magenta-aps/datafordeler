@@ -34,7 +34,7 @@ test:
   tags:
     - docker
   script:
-    - mvn --batch-mode -T 2C verify -Dsurefire.useFile=false
+    - mvn -q --batch-mode -T 2C verify -Dsurefire.skipAfterFailureCount=1
   cache:
     key: "maven-test-cache"
     paths:
