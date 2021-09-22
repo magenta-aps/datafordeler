@@ -42,8 +42,6 @@ build-mssql-image:
   services:
     - name: ${IMAGE_SQL}
       alias: datafordeler-db
-  before_script:
-    - mvn --batch-mode -T 2C install
   cache:
     key: "maven-test-cache"
     paths:
@@ -52,8 +50,9 @@ build-mssql-image:
 
 test-core:
   <<: *test-default
-  script:
+  before_script:
     - cd core
+  script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
@@ -62,8 +61,9 @@ test-core:
 
 test-cpr:
   <<: *test-default
-  script:
+  before_script:
     - cd plugin/cpr
+  script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
