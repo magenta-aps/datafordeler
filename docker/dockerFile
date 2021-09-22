@@ -22,23 +22,22 @@ COPY plugin/subscription/pom.xml   /code/plugin/subscription/pom.xml
 WORKDIR /code/
 
 COPY core/src /code/core/src
-COPY plugin/combinedPitu/src/main /code/plugin/combinedPitu/src/main
-COPY plugin/cpr/src/main /code/plugin/cpr/src/main
-COPY plugin/cvr/src/main /code/plugin/cvr/src/main
-COPY plugin/eboks/src/main /code/plugin/eboks/src/main
-COPY plugin/geo/src/main /code/plugin/geo/src/main
-COPY plugin/ger/src/main /code/plugin/ger/src/main
-
-COPY plugin/prisme/src/main /code/plugin/prisme/src/main
-COPY plugin/statistik/src/main /code/plugin/statistik/src/main
-COPY plugin/subscription/src/main /code/plugin/subscription/src/main
+COPY plugin/combinedPitu/src /code/plugin/combinedPitu/src
+COPY plugin/cpr/src /code/plugin/cpr/src
+COPY plugin/cvr/src /code/plugin/cvr/src
+COPY plugin/eboks/src /code/plugin/eboks/src
+COPY plugin/geo/src /code/plugin/geo/src
+COPY plugin/ger/src /code/plugin/ger/src
+COPY plugin/prisme/src /code/plugin/prisme/src
+COPY plugin/statistik/src /code/plugin/statistik/src
+COPY plugin/subscription/src /code/plugin/subscription/src
 
 RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
 
 RUN mkdir -p /dist/core && mkdir -p /dist/plugin/jar \
 &&  mv /code/core/target/*.jar /dist/core/ \
 && mv /code/plugin/jar/*.jar /dist/plugin/jar/
-
+RUN ls -al /dist/plugin/
 COPY docker/hibernate.xml /configs/hibernate.xml
 COPY docker/dev-settings.properties /dist/core/application.properties
 
