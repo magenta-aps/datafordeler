@@ -25,7 +25,7 @@ build-mssql-image:
       --destination=${IMAGE_SQL}
       --cache=true
 
-test-default: &test-default
+.test-default: &test-default
   stage: test
   needs:
     - build-mssql-image
@@ -56,3 +56,8 @@ test-core:
   <<: *test-default
   before_script:
     - cd core
+
+test-cpr:
+  <<: *test-default
+  before_script:
+    - plugin/cpr
