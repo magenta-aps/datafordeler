@@ -31,13 +31,12 @@ test:
     - build-image
   image: maven:3-jdk-11
   variables:
-    GIT_STRATEGY: none
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
     MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
   tags:
     - docker
   script:
-    - mvn --batch-mode -T 2C verify
+    - mvn --batch-mode -T 2C test
   cache:
     key: "maven-test-cache"
     paths:
