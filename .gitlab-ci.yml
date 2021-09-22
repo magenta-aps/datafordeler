@@ -33,7 +33,6 @@ build-mssql-image:
   image: maven:3-jdk-11
   variables:
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
-    MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
     #M$ sql variables
     ACCEPT_EULA: "Y"
     SA_PASSWORD: "testTEST1"
@@ -42,10 +41,6 @@ build-mssql-image:
   services:
     - name: ${IMAGE_SQL}
       alias: datafordeler-db
-  cache:
-    key: "maven-test-cache"
-    paths:
-      - .m2/repository
 
 
 test-core:
