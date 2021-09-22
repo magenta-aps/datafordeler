@@ -1,5 +1,3 @@
-image: maven:3-jdk-11
-
 stages:
   - build
   - test
@@ -36,7 +34,7 @@ test:
   tags:
     - docker
   script:
-    - mvn --batch-mode -T 2C test
+    - mvn --batch-mode -T 2C verify
   cache:
     key: "maven-test-cache"
     paths:
