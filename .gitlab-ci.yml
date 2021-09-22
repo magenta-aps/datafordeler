@@ -57,10 +57,9 @@ test-core:
 test-cpr:
   <<: *test-default
   before_script:
-    - mvn --batch-mode -T 2C install
     - cd plugin/cpr
   script:
-    - mvn --batch-mode -T 2C test
+    - mvn --batch-mode -T 2C test -am
   artifacts:
     reports:
       junit:
