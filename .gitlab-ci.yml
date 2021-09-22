@@ -60,4 +60,4 @@ test-core:
 test-cpr:
   <<: *test-default
   before_script:
-    - plugin/cpr
+    - cd plugin/cpr
