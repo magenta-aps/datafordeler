@@ -68,6 +68,17 @@ test-core:
       junit:
         - /code/core/target/surefire-reports/*.xml
 
+test-pitu:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/combinedPitu
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/cpr/target/surefire-reports/TEST-*
+
 test-cpr:
   <<: *test-default
   before_script:
@@ -89,3 +100,69 @@ test-cvr:
     reports:
       junit:
         - /code/plugin/cvr/target/surefire-reports/*.xml
+
+test-eboks:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/eboks
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/eboks/target/surefire-reports/*.xml
+
+test-geo:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/geo
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/geo/target/surefire-reports/*.xml
+
+test-ger:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/ger
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/ger/target/surefire-reports/*.xml
+
+test-prisme:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/prisme
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/prisme/target/surefire-reports/*.xml
+
+test-statistik:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/statistik
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/statistik/target/surefire-reports/*.xml
+
+test-subscription:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/subscription
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/subscription/target/surefire-reports/*.xml
