@@ -20,11 +20,11 @@
         <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
         <Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
         <Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
-        <Logger name="org.hibernate.stat" level="debug" />
+        <Logger name="org.hibernate.stat" level="eror" />
         <logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
         <logger name="org.hibernate.event.internal.DefaultDeleteEventListener" level="error"/>
         <logger name="org.opensaml" level="warn"/>
-        <Root level="info">
+        <Root level="error">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>

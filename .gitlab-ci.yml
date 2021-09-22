@@ -30,7 +30,7 @@ test:
   image: maven:3-jdk-11
   variables:
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
-    MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
+    MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
   tags:
     - docker
   script:
