@@ -1,42 +1,13 @@
-###############
-# Build Stage #
-###############
 FROM maven:3-jdk-11
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
-
 COPY pom.xml /code/pom.xml
-COPY core/pom.xml /code/core/pom.xml
-
-COPY plugin/adresseservice/pom.xml /code/plugin/adresseservice/pom.xml
-COPY plugin/combinedPitu/pom.xml   /code/plugin/combinedPitu/pom.xml
-COPY plugin/cpr/pom.xml   /code/plugin/cpr/pom.xml
-COPY plugin/cvr/pom.xml   /code/plugin/cvr/pom.xml
-COPY plugin/eboks/pom.xml   /code/plugin/eboks/pom.xml
-COPY plugin/geo/pom.xml   /code/plugin/geo/pom.xml
-COPY plugin/ger/pom.xml   /code/plugin/ger/pom.xml
-
-COPY plugin/prisme/pom.xml   /code/plugin/prisme/pom.xml
-COPY plugin/statistik/pom.xml   /code/plugin/statistik/pom.xml
-COPY plugin/subscription/pom.xml   /code/plugin/subscription/pom.xml
-
+COPY core /code/core
+COPY plugin /code/plugin
 WORKDIR /code/
-
-COPY core/src /code/core/src
-COPY plugin/combinedPitu/src /code/plugin/combinedPitu/src
-COPY plugin/cpr /code/plugin/cpr
-COPY plugin/cvr/src /code/plugin/cvr/src
-COPY plugin/eboks/src /code/plugin/eboks/src
-COPY plugin/geo/src /code/plugin/geo/src
-COPY plugin/ger/src /code/plugin/ger/src
-COPY plugin/prisme/src /code/plugin/prisme/src
-COPY plugin/statistik/src /code/plugin/statistik/src
-COPY plugin/subscription/src /code/plugin/subscription/src
-
 RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
-
 RUN mkdir -p /dist/core && mkdir -p /dist/plugin/jar \
-&&  mv /code/core/target/*.jar /dist/core/ \
-&& mv /code/plugin/jar/*.jar /dist/plugin/jar/
+    &&  mv /code/core/target/*.jar /dist/core/ \
+    && mv /code/plugin/jar/*.jar /dist/plugin/jar/
 COPY docker/hibernate.xml /configs/hibernate.xml
 COPY docker/dev-settings.properties /dist/core/application.properties
 
