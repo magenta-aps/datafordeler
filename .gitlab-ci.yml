@@ -34,8 +34,12 @@ test:
   tags:
     - docker
   script:
-    - mvn -q --batch-mode -T 2C verify -Dsurefire.skipAfterFailureCount=1
+    - mvn --batch-mode -T 2C verify
   cache:
     key: "maven-test-cache"
     paths:
       - .m2/repository
+  artifacts:
+    reports:
+      junit:
+        - core/target/surefire-reports/*.xml
