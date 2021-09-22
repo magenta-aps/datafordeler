@@ -23,7 +23,7 @@ WORKDIR /code/
 
 COPY core/src /code/core/src
 COPY plugin/combinedPitu/src /code/plugin/combinedPitu/src
-COPY plugin/cpr/src /code/plugin/cpr/src
+COPY plugin/cpr /code/plugin/cpr
 COPY plugin/cvr/src /code/plugin/cvr/src
 COPY plugin/eboks/src /code/plugin/eboks/src
 COPY plugin/geo/src /code/plugin/geo/src
