@@ -19,6 +19,7 @@
         </File>
     </Appenders>
     <Loggers>
+        <Logger name="org.hibernate.stat" level="error" />
         <Logger name="dk.magenta.datafordeler" level="info"/>
         <Logger name="dk.magenta.datafordeler" level="urlinvoke"/>
         <Logger name="dk.magenta.datafordeler" level="urlresponse"/>
