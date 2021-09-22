@@ -98,8 +98,7 @@ test-cvr:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
-      junit:
-        - /code/plugin/cvr/target/surefire-reports/*.xml
+      junit: target/surefire-reports/*.xml
 
 test-eboks:
   <<: *test-default
