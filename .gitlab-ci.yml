@@ -65,3 +65,7 @@ test-cpr:
   script:
     - cd plugin/cpr
     - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - plugin/cpr/target/surefire-reports/*.xml
