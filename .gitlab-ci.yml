@@ -3,6 +3,7 @@ stages:
   - test
 
 variables:
+  IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
   IMAGE_SQL: ${CI_REGISTRY_IMAGE}:sql
 
 .build-default: &build-default
@@ -25,11 +26,24 @@ build-mssql-image:
       --destination=${IMAGE_SQL}
       --cache=true
 
+build-image:
+  <<: *build-default
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context=${CI_PROJECT_DIR}
+      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile
+      --destination=${IMAGE_DEV}
+      --cache=true
+
+
+
 .test-default: &test-default
   stage: test
   needs:
     - build-mssql-image
-  image: maven:3-jdk-11
+  image: ${IMAGE_DEV}
   variables:
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
     MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
