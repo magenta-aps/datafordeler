@@ -35,6 +35,8 @@ test:
     - docker
   script:
     - mvn --batch-mode -T 2C verify
+  after_script:
+    - ls -al core/target/surefire-reports
   cache:
     key: "maven-test-cache"
     paths:
