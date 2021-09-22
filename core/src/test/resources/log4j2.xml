@@ -19,13 +19,18 @@
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="org.hibernate.stat" level="error" />
-        <Logger name="dk.magenta.datafordeler" level="info"/>
-        <Logger name="dk.magenta.datafordeler" level="urlinvoke"/>
-        <Logger name="dk.magenta.datafordeler" level="urlresponse"/>
-        <Logger name="dk.magenta.datafordeler" level="error">
+        <Logger name="org.hibernate" level="error" />
+        <logger name="org.opensaml" level="warn"/>
+        <Logger name="dk.magenta.datafordeler" level="info">
             <AppenderRef ref="MonitorFile" />
         </Logger>
+        <Logger name="dk.magenta.datafordeler" level="urlinvoke">
+            <AppenderRef ref="MonitorFile" />
+        </Logger>
+        <Logger name="dk.magenta.datafordeler" level="urlresponse">
+            <AppenderRef ref="MonitorFile" />
+        </Logger>
+        <Logger name="dk.magenta.datafordeler" level="error"/>
         <Root level="error">
             <AppenderRef ref="Console"/>
         </Root>
