@@ -164,5 +164,4 @@ test-subscription:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
-      junit:
-        - /code/plugin/subscription/target/surefire-reports/*.xml
+      junit: /code/plugin/subscription/target/surefire-reports/*.xml
