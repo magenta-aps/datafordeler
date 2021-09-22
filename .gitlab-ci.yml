@@ -26,6 +26,18 @@ build-mssql-image:
       --destination=${IMAGE_SQL}
       --cache=true
 
+build-image:
+  <<: *build-default
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context=${CI_PROJECT_DIR}
+      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile
+      --destination=${IMAGE_DEV}
+      --cache=true
+
+
 .test-default: &test-default
   stage: test
   needs:
@@ -46,7 +58,7 @@ build-mssql-image:
 test-core:
   <<: *test-default
   before_script:
-    - cd core
+    - cd /code/core
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
@@ -57,7 +69,7 @@ test-core:
 test-cpr:
   <<: *test-default
   before_script:
-    - cd plugin/cpr
+    - cd /code/plugin/cpr
   script:
     - mvn --batch-mode -T 2C test -am
   artifacts:

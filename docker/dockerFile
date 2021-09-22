@@ -1,7 +1,7 @@
 ###############
 # Build Stage #
 ###############
-FROM maven:3-jdk-11 as builder
+FROM maven:3-jdk-11
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
 
 COPY pom.xml /code/pom.xml
@@ -33,11 +33,12 @@ COPY plugin/prisme/src/main /code/plugin/prisme/src/main
 COPY plugin/statistik/src/main /code/plugin/statistik/src/main
 COPY plugin/subscription/src/main /code/plugin/subscription/src/main
 
-RUN mvn $MAVEN_CLI_OPTS package -DskipTests
-FROM openjdk:11 as dist
+RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
 
-COPY --from=builder /code/core/target/*.jar /dist/core/
-COPY --from=builder /code/plugin/jar/*.jar /dist/plugin/jar/
+RUN mkdir -p /dist/core && mkdir -p /dist/plugin/jar \
+&&  mv /code/core/target/*.jar /dist/core/ \
+&& mv /code/plugin/jar/*.jar /dist/plugin/jar/
+
 COPY docker/hibernate.xml /configs/hibernate.xml
 COPY docker/dev-settings.properties /dist/core/application.properties
 
