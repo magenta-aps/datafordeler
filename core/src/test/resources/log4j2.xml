@@ -25,7 +25,7 @@
         <Logger name="dk.magenta.datafordeler" level="error">
             <AppenderRef ref="MonitorFile" />
         </Logger>
-        <Root level="info">
+        <Root level="warn">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
