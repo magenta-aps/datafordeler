@@ -3,8 +3,6 @@ stages:
   - test
 
 variables:
-  IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
-  IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
   IMAGE_SQL: ${CI_REGISTRY_IMAGE}:sql
 
 .build-default: &build-default
@@ -27,28 +25,10 @@ build-mssql-image:
       --destination=${IMAGE_SQL}
       --cache=true
 
-build-image:
-  stage: build
-  tags:
-    - docker
-  image:
-    # We use the `:debug` image as it contains `sh` needed by gitlab-ci.
-    name: gcr.io/kaniko-project/executor:debug-v0.16.0
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - cat /kaniko/.docker/config.json
-    - /kaniko/executor
-      --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile
-      --destination=${IMAGE_DEV}
-      --cache=true
-
-test:
+test-default: &test-default
   stage: test
   needs:
     - build-mssql-image
-    - build-image
   image: maven:3-jdk-11
   variables:
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
@@ -61,9 +41,8 @@ test:
   services:
     - name: ${IMAGE_SQL}
       alias: datafordeler-db
-
   script:
-    - mvn --batch-mode -T 2C verify
+    - mvn --batch-mode -T 2C test
   cache:
     key: "maven-test-cache"
     paths:
@@ -72,3 +51,8 @@ test:
     reports:
       junit:
         - core/target/surefire-reports/*.xml
+
+test-core:
+  <<: *test-default
+  before_script:
+    - cd core
