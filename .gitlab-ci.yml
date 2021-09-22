@@ -26,24 +26,11 @@ build-mssql-image:
       --destination=${IMAGE_SQL}
       --cache=true
 
-build-image:
-  <<: *build-default
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - cat /kaniko/.docker/config.json
-    - /kaniko/executor
-      --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile
-      --destination=${IMAGE_DEV}
-      --cache=true
-
-
-
 .test-default: &test-default
   stage: test
   needs:
     - build-mssql-image
-  image: ${IMAGE_DEV}
+  image: maven:3-jdk-11
   variables:
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
     MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
@@ -55,23 +42,26 @@ build-image:
   services:
     - name: ${IMAGE_SQL}
       alias: datafordeler-db
-  script:
-    - mvn --batch-mode -T 2C test
+  before_script:
+    - mvn --batch-mode -T 2C install
   cache:
     key: "maven-test-cache"
     paths:
       - .m2/repository
+
+
+test-core:
+  <<: *test-default
+  script:
+    - cd core
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
         - core/target/surefire-reports/*.xml
 
-test-core:
-  <<: *test-default
-  before_script:
-    - cd core
-
 test-cpr:
   <<: *test-default
-  before_script:
+  script:
     - cd plugin/cpr
+    - mvn --batch-mode -T 2C test
