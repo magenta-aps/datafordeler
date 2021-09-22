@@ -34,9 +34,7 @@ test:
   tags:
     - docker
   script:
-    - mvn --batch-mode -T 2C verify
-  after_script:
-    - ls -al core/target/surefire-reports
+    - mvn --batch-mode -T 2C verify -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
   cache:
     key: "maven-test-cache"
     paths:
