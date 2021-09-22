@@ -33,7 +33,7 @@ COPY plugin/prisme/src/main /code/plugin/prisme/src/main
 COPY plugin/statistik/src/main /code/plugin/statistik/src/main
 COPY plugin/subscription/src/main /code/plugin/subscription/src/main
 
-RUN mvn $MAVEN_CLI_OPTS package -DskipTests
+RUN mvn $MAVEN_CLI_OPTS install -DskipTests
 RUN ls -al /code/plugin/jar/*.jar
 FROM openjdk:11 as dist
 
