@@ -25,7 +25,7 @@ build-image:
       --destination=${IMAGE_DEV}
       --cache=true
 
-test-core:
+test:
   stage: test
   needs:
     - build-image
@@ -36,10 +36,8 @@ test-core:
     MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
   tags:
     - docker
-  before_script:
-    - cd /code
   script:
-    - mvn --batch-mode -T 2C test
+    - mvn --batch-mode -T 2C verify
   cache:
     key: "maven-test-cache"
     paths:
