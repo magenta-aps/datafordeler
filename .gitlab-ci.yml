@@ -30,11 +30,11 @@ test:
   image: maven:3-jdk-11
   variables:
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
-    MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository"
+    MAVEN_OPTS: "-Dmaven.repo.local=/builds/gronlandsprojekter/datafordeler/.m2/repository -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
   tags:
     - docker
   script:
-    - mvn --batch-mode -T 2C verify -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN
+    - mvn --batch-mode -T 2C verify
   cache:
     key: "maven-test-cache"
     paths:
