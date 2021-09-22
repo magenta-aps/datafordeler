@@ -25,7 +25,6 @@
         <Logger name="dk.magenta.datafordeler" level="error">
             <AppenderRef ref="MonitorFile" />
         </Logger>
-        <Logger name="org.hibernate.SQL" level="error"/>
         <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>
