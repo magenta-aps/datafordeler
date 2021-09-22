@@ -77,7 +77,7 @@ test-cpr:
   artifacts:
     reports:
       junit:
-        - /code/plugin/cpr/target/surefire-reports/*.xml
+        - /code/plugin/cpr/target/surefire-reports/TEST-*
 
 test-cvr:
   <<: *test-default

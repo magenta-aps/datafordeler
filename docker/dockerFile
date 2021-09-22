@@ -37,7 +37,6 @@ RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
 RUN mkdir -p /dist/core && mkdir -p /dist/plugin/jar \
 &&  mv /code/core/target/*.jar /dist/core/ \
 && mv /code/plugin/jar/*.jar /dist/plugin/jar/
-RUN ls -al /dist/plugin/
 COPY docker/hibernate.xml /configs/hibernate.xml
 COPY docker/dev-settings.properties /dist/core/application.properties
 
