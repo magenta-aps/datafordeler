@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1066,6 +1065,14 @@ public class PersonEntity extends CprRecordEntity {
                             //If the repeated record is not closed by either undone or closed timestamp, it should not be added.
                             return false;
                         }
+                    } else if (!newItem.isHistoric() && oldItem.isHistoric() &&
+                            oldItem.getRegistrationTo()==null &&
+                            oldItem.getEffectTo() != null &&
+                            !oldItem.isUndone() &&
+                            Equality.cprDomainBafterA(newItem.getEffectFrom(), oldItem.getEffectTo())) {
+                        // If we strike a historic record, which is unclosed, and has a effectTo ending after a new active record of same type, it needs to be closed
+                        oldItem.setRegistrationTo(newItem.getRegistrationFrom());
+                        session.saveOrUpdate(oldItem);
                     }
                 }
             }
