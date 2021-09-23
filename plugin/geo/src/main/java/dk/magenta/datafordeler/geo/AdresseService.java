@@ -160,9 +160,6 @@ public class AdresseService {
                 results.add(localityNode);
             }
             return results.toString();
-        } catch(Exception e) {
-            log.warn("Failed fetching localities for Daedleus");
-            return null;
         } finally {
             session.close();
         }
