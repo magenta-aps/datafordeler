@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.road;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
