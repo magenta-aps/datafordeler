@@ -82,7 +82,6 @@ public abstract class Equality {
             return true;
         } else {
             long diff = Duration.between(a, b).toHours();
-            System.out.println("DIFF "+diff);
             return diff > 48;
         }
     }
