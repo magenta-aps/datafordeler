@@ -378,7 +378,7 @@ public class PullTest {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(43, personEntities.size());//Validate that 40 persons is now initiated
+            Assert.assertEquals(52, personEntities.size());//Validate that 52 persons is now initiated
         }
 
         //Clean the testdata
