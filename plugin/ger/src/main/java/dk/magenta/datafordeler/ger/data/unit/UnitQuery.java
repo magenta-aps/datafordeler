@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.ger.data.unit;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -74,21 +73,6 @@ public class UnitQuery extends GerQuery<UnitEntity> {
         HashMap<String, Object> map = new HashMap<>(super.getSearchParameters());
         map.put(NAME, this.name);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(UnitEntity.DB_FIELD_NAME , this.name, String.class);
-        }
-        if (this.deid != null && !this.deid.isEmpty()) {
-            lookupDefinition.put(UnitEntity.DB_FIELD_DEID, this.deid, UUID.class);
-        }
-        if (!this.getGerNr().isEmpty()) {
-            lookupDefinition.put(UnitEntity.DB_FIELD_GERNR, this.getGerNr(), Integer.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

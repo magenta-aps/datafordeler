@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.locality;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
@@ -91,21 +90,6 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         map.put(NAME, this.name);
         map.put(MUNICIPALITY, this.municipality);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.code != null && !this.code.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_CODE, this.code, String.class);
-        }
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_NAME, this.name, String.class);
-        }
-        if (this.municipality != null && !this.municipality.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + LocalityMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

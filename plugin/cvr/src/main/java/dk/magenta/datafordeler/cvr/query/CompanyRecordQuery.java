@@ -3,8 +3,6 @@ package dk.magenta.datafordeler.cvr.query;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
 import dk.magenta.datafordeler.cvr.DirectLookup;
@@ -606,69 +604,6 @@ public class CompanyRecordQuery extends BaseQuery {
         this.setLastUpdated(parameters.getFirst(LASTUPDATED));
     }
 
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        CvrRecordLookupDefinition lookupDefinition = new CvrRecordLookupDefinition(this);
-
-        if (this.getCvrNumre() != null && !this.getCvrNumre().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyRecord.DB_FIELD_CVR_NUMBER, this.getCvrNumre(), Integer.class);
-        }
-        if (this.getVirksomhedsform() != null && !this.getVirksomhedsform().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyRecord.DB_FIELD_FORM + LookupDefinition.separator + FormRecord.DB_FIELD_FORM + LookupDefinition.separator + CompanyForm.DB_FIELD_CODE, this.getVirksomhedsform(), String.class);
-        }
-        if (this.getReklamebeskyttelse() != null) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyRecord.DB_FIELD_ADVERTPROTECTION, this.getReklamebeskyttelse(), Boolean.class);
-        }
-        if (this.getVirksomhedsnavn() != null && !this.getVirksomhedsnavn().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME, this.getVirksomhedsnavn(), String.class);
-        }
-        if (this.getTelefonnummer() != null && !this.getTelefonnummer().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyRecord.DB_FIELD_PHONE + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA, this.getTelefonnummer(), String.class);
-        }
-        if (this.getTelefaxnummer() != null && !this.getTelefaxnummer().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyRecord.DB_FIELD_FAX + LookupDefinition.separator +ContactRecord.DB_FIELD_DATA, this.getTelefaxnummer(), String.class);
-        }
-        if (this.getEmailadresse() != null && !this.getEmailadresse().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyRecord.DB_FIELD_EMAIL + LookupDefinition.separator + ContactRecord.DB_FIELD_DATA, this.getEmailadresse(), String.class);
-        }
-
-        String addressMunicipalityPath =
-                LookupDefinition.entityref + LookupDefinition.separator +
-                CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator +
-                AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator +
-                AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY;
-        boolean joinedAddress = false;
-
-        if (this.getKommuneKode() != null && !this.getKommuneKode().isEmpty()) {
-            lookupDefinition.put(addressMunicipalityPath + LookupDefinition.separator + Municipality.DB_FIELD_CODE, this.getKommuneKode(), Integer.class);
-            joinedAddress = true;
-        }
-        if (this.getKommunekodeRestriction() != null && !this.getKommunekodeRestriction().isEmpty()) {
-            lookupDefinition.put(addressMunicipalityPath + LookupDefinition.separator + Municipality.DB_FIELD_CODE, this.getKommunekodeRestriction(), Integer.class);
-            joinedAddress = true;
-        }
-
-
-        if (this.getVejKode() != null && !this.getVejKode().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator +
-                    CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE, this.getVejKode(), Integer.class);
-            joinedAddress = true;
-        }
-        if (this.getEtage() != null && !this.getEtage().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator +
-                    CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_FLOOR, this.getEtage(), String.class);
-            joinedAddress = true;
-        }
-        if (this.getDoor() != null && !this.getDoor().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator +
-                    CompanyRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_FLOOR, this.getDoor(), String.class);
-            joinedAddress = true;
-        }
-
-        return lookupDefinition;
-    }
-
     @Override
     protected boolean isEmpty() {
         return this.cvrNumre.isEmpty() && this.virksomhedsform.isEmpty() && this.reklamebeskyttelse == null && this.virksomhedsnavn.isEmpty() &&
@@ -710,8 +645,8 @@ public class CompanyRecordQuery extends BaseQuery {
         joinHandles.put("participantUnitNumber", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
         joinHandles.put("participantOrganizationType", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_ORGANIZATIONS + BaseQuery.separator + OrganizationRecord.DB_FIELD_MAIN_TYPE);
         joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
-        joinHandles.put("companyrecordeventTime.GTE", CompanyRecord.DB_FIELD_DATAEVENT + LookupDefinition.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
-        joinHandles.put("companyrecordeventTime.LTE", CompanyRecord.DB_FIELD_DATAEVENT + LookupDefinition.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("companyrecordeventTime.GTE", CompanyRecord.DB_FIELD_DATAEVENT + BaseQuery.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("companyrecordeventTime.LTE", CompanyRecord.DB_FIELD_DATAEVENT + BaseQuery.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override

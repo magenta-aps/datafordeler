@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.plugindemo.fapi;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -48,18 +47,6 @@ public class DemoRecordQuery extends BaseQuery {
         map.put("postnr", this.postnr);
         map.put("bynavn", this.bynavn);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition();
-        if (this.postnr != null) {
-            lookupDefinition.put(BaseLookupDefinition.entityref + BaseLookupDefinition.separator + "postnr", this.postnr, Integer.class);
-        }
-        if (this.bynavn != null) {
-            lookupDefinition.put(DemoEntityRecord.DB_FIELD_NAME + BaseLookupDefinition.separator + DemoDataRecord.DB_FIELD_NAME, this.bynavn, String.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

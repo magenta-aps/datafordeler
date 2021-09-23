@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
@@ -41,30 +40,6 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
         HashMap<String, Object> map = new HashMap<>();
         map.put(SUMIFFIIK, this.sumiffiik);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition(this);
-        if (this.recordAfter != null) {
-            lookupDefinition.put(DataItem.DB_FIELD_LAST_UPDATED, this.recordAfter, OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
-        }
-        if (this.uuid != null && !this.uuid.isEmpty()) {
-            lookupDefinition.put(
-                    BaseLookupDefinition.entityref + BaseLookupDefinition.separator + GeoEntity.DB_FIELD_IDENTIFICATION + BaseLookupDefinition.separator + Identification.DB_FIELD_UUID,
-                    this.uuid,
-                    UUID.class,
-                    BaseLookupDefinition.Operator.EQ
-            );
-        }
-        if (this.sumiffiik != null) {
-            lookupDefinition.put(
-                    BaseLookupDefinition.entityref + BaseLookupDefinition.separator + SumiffiikEntity.DB_FIELD_SUMIFFIIK_ID,
-                    this.sumiffiik,
-                    String.class
-            );
-        }
-        return lookupDefinition;
     }
 
     @Override

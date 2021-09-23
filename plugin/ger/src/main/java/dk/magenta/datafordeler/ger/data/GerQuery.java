@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.ger.data;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
@@ -45,15 +44,6 @@ public abstract class GerQuery<E extends GerEntity> extends BaseQuery {
         HashMap<String, Object> map = new HashMap<>();
         map.put(GERNR, this.gerNr);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition(this);
-        if (this.recordAfter != null) {
-            lookupDefinition.put(DataItem.DB_FIELD_LAST_UPDATED, this.recordAfter, OffsetDateTime.class, BaseLookupDefinition.Operator.GT);
-        }
-        return lookupDefinition;
     }
 
     @Override
