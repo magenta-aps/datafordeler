@@ -98,7 +98,6 @@ public class TestService extends GeoTest {
         Assert.assertEquals("3197", address.get("b_nummer").asText());
         Assert.assertEquals("kld", address.get("etage").asText());
         Assert.assertEquals(1, address.get("anvendelse").intValue());
-        Assert.assertEquals("1b3ac64b-c28d-40b2-a106-16cee7c188b9", address.get("uuid").asText());
         response = this.lookup("/geo/adresse/adresse?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2&husnummer=18");
         Assert.assertEquals(200, response.getStatusCode().value());
         addresses = (ArrayNode) objectMapper.readTree(response.getBody());
@@ -109,7 +108,6 @@ public class TestService extends GeoTest {
         Assert.assertEquals("3197", address.get("b_nummer").asText());
         Assert.assertEquals("kld", address.get("etage").asText());
         Assert.assertEquals(1, address.get("anvendelse").intValue());
-        Assert.assertEquals("1b3ac64b-c28d-40b2-a106-16cee7c188b9", address.get("uuid").asText());
     }
 
     @Test

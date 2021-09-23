@@ -138,6 +138,7 @@ public class AdresseService {
             LocalityQuery localityQuery = new LocalityQuery();
             localityQuery.setMunicipality(municipality);
             localityQuery.setStatus(1);
+            localityQuery.setPageSize(500);
 
             List<GeoLocalityEntity> localities = QueryManager.getAllEntities(session, localityQuery, GeoLocalityEntity.class);
             ArrayNode results = objectMapper.createArrayNode();
