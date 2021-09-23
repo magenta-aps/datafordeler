@@ -2,12 +2,16 @@ package dk.magenta.datafordeler.prisme;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.util.BitemporalityComparator;
+import dk.magenta.datafordeler.core.util.Monotemporality;
+import dk.magenta.datafordeler.core.util.MonotemporalityComparator;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 
 import static java.util.Comparator.naturalOrder;
 
@@ -18,6 +22,8 @@ public class FilterUtilities {
             .thenComparing(CprNontemporalRecord::getDafoUpdated)
             .thenComparing(DatabaseEntry::getId);
 
+    protected static Comparator monoIdComparator = Comparator.comparing(FilterUtilities::getMonotemporality, MonotemporalityComparator.REGISTRATION_FROM)
+            .thenComparing(CprNontemporalRecord::getId);
 
     /**
      * Find the newest unclosed record from the list of records
@@ -31,9 +37,25 @@ public class FilterUtilities {
                  r.getBitemporality().effectTo == null).max(bitemporalComparator).orElse(null);
     }
 
+    /**
+     * Get a sorted list of the items with the items sorted by effectFrom, and the newest item first
+     * @param records
+     * @param <R>
+     * @return
+     */
+    public static <R extends CprBitemporalRecord> List<R> sortRecordsOnEffect(Collection<R> records) {
+        ArrayList<R> recordList = new ArrayList<>(records);
+        recordList.sort(bitemporalComparator.reversed());
+        return recordList;
+    }
+
 
 
     public static CprBitemporality getBitemporality(CprBitemporalRecord record) {
         return record.getBitemporality();
+    }
+
+    public static Monotemporality getMonotemporality(CprBitemporalRecord record) {
+        return record.getMonotemporality();
     }
 }

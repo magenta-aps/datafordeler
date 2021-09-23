@@ -148,7 +148,7 @@ public class CvrCompanyOwnerHistory {
                             ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
                             participantRecordQuery.setEnhedsNummer(participantNumber.toString());
                             List<ParticipantRecord> participantList = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-                            if(participantList.size()>0) {
+                            if(participantList.size()>0 && participantList.get(0)!= null && participantList.get(0).getBusinessKey()!=null) {
                                 deltagerPnr = participantList.get(0).getBusinessKey();
                             } else {
                                 deltagerPnr = directLookup.participantLookup(participantNumber.toString()).getBusinessKey();

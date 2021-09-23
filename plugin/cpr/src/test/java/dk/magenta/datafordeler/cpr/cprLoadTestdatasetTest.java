@@ -89,7 +89,7 @@ public class cprLoadTestdatasetTest {
      * @throws IOException
      * @throws URISyntaxException
      */
-    @Test
+    // This is disabled since it is just for writing testdata to console
     public void test_A_LoadingOfDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
@@ -113,7 +113,7 @@ public class cprLoadTestdatasetTest {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(42, persons.size());
+            Assert.assertEquals(44, persons.size());
 
             for(PersonEntity person : persons) {
                 System.out.print(person.getPersonnummer());
@@ -153,7 +153,7 @@ public class cprLoadTestdatasetTest {
 
 
 
-    @Test
+    // This is disabled since it is just for writing testdata to console
     public void test_B_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -161,7 +161,7 @@ public class cprLoadTestdatasetTest {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(42, persons.size());
+            Assert.assertEquals(44, persons.size());
 
             query = new PersonRecordQuery();
             query.setPersonnummer("1111111111");
@@ -176,7 +176,7 @@ public class cprLoadTestdatasetTest {
     }
 
 
-    @Test
+    // This is disabled since it is just for writing testdata to console
     public void test_C_ClearingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
         personEntityManager.cleanDemoData();
     }
