@@ -74,9 +74,7 @@ public abstract class Equality {
      * @return
      */
     public static boolean cprDomainBafterA(OffsetDateTime a, OffsetDateTime b) {
-        if (a == null && b == null) {
-            return false;
-        } else if (a == null) {
+        if (a == null) {
             return false;
         } else if (b == null) {
             return true;
