@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
-import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
@@ -18,11 +17,8 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
-import dk.magenta.datafordeler.cpr.records.person.NameRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import org.hamcrest.Matchers;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -94,6 +90,34 @@ public class RecordTest {
         personEntityManager.parseData(testData, importMetadata);
         testData.close();
     }
+
+    /**
+     * This test reconstructs a situation where a person gets a new address and a new historic address.
+     * After that the person gets the same old address again.
+     * This test tests that when a new active address is assigned, it closes old historic address
+     * @throws DataFordelerException
+     * @throws IOException
+     */
+    @Test
+    public void testPersonWithReverts() throws DataFordelerException, IOException {
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            this.loadPerson("/personwithReverts.txt", importMetadata);
+            PersonRecordQuery query = new PersonRecordQuery();
+            OffsetDateTime time = OffsetDateTime.now();
+            query.setRegistrationToAfter(time);
+            query.setEffectAt(time.withYear(2018));
+            query.setPersonnummer("0211081111");
+
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            Assert.assertEquals(1, entities.size());
+            PersonEntity personEntity = entities.get(0);
+            List<AddressDataRecord> addressList = personEntity.getAddress().stream().filter(e -> !e.isUndone()).collect(Collectors.toList());
+            Assert.assertEquals(1, addressList.size());
+        }
+    }
+
 
     @Test
     public void testPerson() throws DataFordelerException, IOException {
