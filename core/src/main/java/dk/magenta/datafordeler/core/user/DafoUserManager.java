@@ -92,7 +92,7 @@ public class DafoUserManager {
 
     public DafoUserDetails getUserFromRequest(HttpServletRequest request, boolean samlOnly)
             throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
-        if(!userdatabaseEnabled) {
+        /*if(!userdatabaseEnabled) {
 
             //VALIDATE SEQURITY
             return new DafoUserDetails(null) {
@@ -141,7 +141,7 @@ public class DafoUserManager {
                     return Collections.EMPTY_LIST;
                 }
             };
-        } else if (request instanceof MockInternalServletRequest) {
+        } else */if (request instanceof MockInternalServletRequest) {
             return ((MockInternalServletRequest) request).getUserDetails();
         }
         if (!this.getIpWhitelist().contains(request.getRemoteAddr())) {
