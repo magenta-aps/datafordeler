@@ -17,6 +17,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * Manages DAFO users that are created from incoming SAML tokens.
  * This default implementation is not database backed and will not look up additional details
@@ -33,6 +36,9 @@ public class DafoUserManager {
 
     @Value("${pitu.sdn.whitelist:}")
     private String[] pituSDNWhitelistCsep;
+
+    @Value("${dafo.userdatabase.enabled:false}")
+    private boolean userdatabaseEnabled;
 
     private HashSet<String> pituSDNWhitelist = new HashSet<>();
 
@@ -86,7 +92,56 @@ public class DafoUserManager {
 
     public DafoUserDetails getUserFromRequest(HttpServletRequest request, boolean samlOnly)
             throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
-        if (request instanceof MockInternalServletRequest) {
+        if(!userdatabaseEnabled) {
+
+            //VALIDATE SEQURITY
+            return new DafoUserDetails(null) {
+                @Override
+                public String getNameQualifier() {
+                    return "INTERNAL";
+                }
+
+                @Override
+                public String getIdentity() {
+                    return "sender";
+                }
+
+                @Override
+                public String getOnBehalfOf() {
+                    return null;
+                }
+
+                @Override
+                public boolean hasSystemRole(String role) {
+                    return true;
+                }
+
+                @Override
+                public boolean isAnonymous() {
+                    return false;
+                }
+
+                @Override
+                public boolean hasUserProfile(String userProfileName) {
+                    return true;
+                }
+
+                @Override
+                public Collection<String> getUserProfiles() {
+                    return Collections.EMPTY_LIST;
+                }
+
+                @Override
+                public Collection<String> getSystemRoles() {
+                    return Collections.EMPTY_LIST;
+                }
+
+                @Override
+                public Collection<UserProfile> getUserProfilesForRole(String role) {
+                    return Collections.EMPTY_LIST;
+                }
+            };
+        } else if (request instanceof MockInternalServletRequest) {
             return ((MockInternalServletRequest) request).getUserDetails();
         }
         if (!this.getIpWhitelist().contains(request.getRemoteAddr())) {
