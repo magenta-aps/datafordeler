@@ -3,7 +3,7 @@
 <hibernate-configuration>
   <session-factory>
 
-    <property name="hibernate.connection.url">jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordele</property>
+    <property name="hibernate.connection.url">jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler</property>
     <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
     <property name="hibernate.connection.username">sa</property>
     <property name="hibernate.connection.password">testTEST1</property>
