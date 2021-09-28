@@ -1,6 +1,6 @@
 version: '3.5'
 services:
-  datafordeler-gl:
+  datafordeler:
     build:
       context: .
       dockerfile: docker/dockerFile
@@ -8,6 +8,17 @@ services:
       - datafordeler-db
     ports:
       - 8080:80
+
+  test:
+    build:
+      context: .
+      dockerfile: docker/dockerFile
+    depends_on:
+      - datafordeler-db
+    ports:
+      - 8080:80
+    command: bash -c "cd /code && mvn --batch-mode -T 2C test"
+    #use docker-compose test to execute tests
 
   datafordeler-db:
     build:
