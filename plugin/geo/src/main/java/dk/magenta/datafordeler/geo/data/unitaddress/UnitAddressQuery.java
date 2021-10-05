@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.unitaddress;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
@@ -198,24 +197,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         //map.put(ROAD, this.road);
         map.put(HOUSE_NUMBER, this.houseNumber);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        /*if (this.bnr != null && !this.bnr.isEmpty()) {
-            lookupDefinition.put(UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + AccessAddressEntity.DB_FIELD_BNR, this.bnr, String.class);
-        }*/
-        /*if (this.houseNumber != null && !this.houseNumber.isEmpty()) {
-            lookupDefinition.put(UnitAddressEntity.DB_ + BaseLookupDefinition.separator + AccessAddressHouseNumberRecord.DB_FIELD_NAME, this.houseNumber, String.class);
-        }*/
-        /*if (this.road != null && !this.road.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_CODE, this.road, Integer.class);
-        }
-        if (this.municipality != null && !this.municipality.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + AccessAddressMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
-        }*/
-        return lookupDefinition;
     }
 
     @Override

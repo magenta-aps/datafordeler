@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.core.fapi;
 import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.database.Identification;
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -46,16 +45,5 @@ public abstract class Query<E extends Entity> extends BaseQuery {
      * @return
      */
     public abstract Class<? extends DataItem> getDataClass();
-
-    public LookupDefinition getLookupDefinition() {
-        LookupDefinition lookupDefinition = new LookupDefinition(this, this.getDataClass());
-        if (this.recordAfter != null) {
-            lookupDefinition.put(DataItem.DB_FIELD_LAST_UPDATED, this.recordAfter, OffsetDateTime.class, LookupDefinition.Operator.GT);
-        }
-        if (this.uuid != null && !this.uuid.isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + Entity.DB_FIELD_IDENTIFICATION + LookupDefinition.separator + Identification.DB_FIELD_UUID, this.uuid, UUID.class, LookupDefinition.Operator.EQ);
-        }
-        return lookupDefinition;
-    }
 
 }

@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.ger.data.responsible;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -78,21 +77,6 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
         map.put(NAME, this.name);
         map.put(CVR_GUID, this.cvrGuid);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(ResponsibleEntity.DB_FIELD_NAME, this.name, String.class);
-        }
-        if (!this.getGerNr().isEmpty()) {
-            lookupDefinition.put(ResponsibleEntity.DB_FIELD_GERNR, this.getGerNr(), Integer.class);
-        }
-        if (this.cvrGuid != null && !this.cvrGuid.isEmpty()) {
-            lookupDefinition.put(ResponsibleEntity.DB_FIELD_CVR_PARTICIPANT_GUID, this.cvrGuid, UUID.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

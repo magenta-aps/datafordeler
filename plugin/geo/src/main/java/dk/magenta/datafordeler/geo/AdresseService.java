@@ -132,13 +132,15 @@ public class AdresseService {
     }
 
     public String getLocalities(String municipality) {
-        LocalityQuery query = new LocalityQuery();
-        setQueryNow(query);
-        setQueryNoLimit(query);
-        query.setMunicipality(municipality);
         Session session = sessionManager.getSessionFactory().openSession();
         try {
-            List<GeoLocalityEntity> localities = QueryManager.getAllEntities(session, query, GeoLocalityEntity.class);
+
+            LocalityQuery localityQuery = new LocalityQuery();
+            localityQuery.setMunicipality(municipality);
+            localityQuery.setStatus(1);
+            localityQuery.setPageSize(500);
+
+            List<GeoLocalityEntity> localities = QueryManager.getAllEntities(session, localityQuery, GeoLocalityEntity.class);
             ArrayNode results = objectMapper.createArrayNode();
             for (GeoLocalityEntity locality : localities) {
                 ObjectNode localityNode = objectMapper.createObjectNode();

@@ -28,16 +28,17 @@ public class LocalityRawData extends SumiffiikRawData {
         @JsonProperty("Kommunekode")
         public Integer municipality;
 
-        @JsonProperty("LokalitetSumiffik")
-        public void setSumiffiikId(String sumiffiikId) {
-            this.sumiffiikId = sumiffiikId;
-        }
-
-        @JsonProperty("Lokalitetvejkode")
+        @JsonProperty("Lokalitetsvejkode")
         public Integer localityRoadcode;
+
+        @JsonProperty("Status")
+        public Integer status;
 
         @JsonProperty("Location_type")
         public Integer type;
+
+        @JsonProperty("Lokalitetsbetegnelse")
+        public Integer betegnelse;
     }
 
     @JsonProperty
@@ -62,6 +63,14 @@ public class LocalityRawData extends SumiffiikRawData {
 
         records.add(
                 new LocalityTypeRecord(this.properties.type)
+        );
+
+        records.add(
+                new LocalityStatusRecord(this.properties.status)
+        );
+
+        records.add(
+                new LocalityBetegnRecord(this.properties.betegnelse)
         );
 
         records.add(

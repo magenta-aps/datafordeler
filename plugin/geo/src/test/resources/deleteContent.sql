@@ -24,6 +24,8 @@ DELETE [Datafordeler_Test].[dbo].[geo_locality_name]
 DELETE [Datafordeler_Test].[dbo].[geo_locality_roadcode]
 DELETE [Datafordeler_Test].[dbo].[geo_locality_shape]
 DELETE [Datafordeler_Test].[dbo].[geo_locality_type]
+DELETE [Datafordeler_Test].[dbo].[geo_locality_betegn]
+DELETE [Datafordeler_Test].[dbo].[geo_locality_status]
 DELETE [Datafordeler_Test].[dbo].[geo_locality]
 
 DELETE [Datafordeler_Test].[dbo].[geo_municipality_name]

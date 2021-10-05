@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
@@ -457,25 +456,25 @@ public class PersonRecordQuery extends BaseQuery {
 
     static {
         joinHandles.put("pnr", PersonEntity.DB_FIELD_CPR_NUMBER);
-        joinHandles.put("firstname", PersonEntity.DB_FIELD_NAME + LookupDefinition.separator + NameDataRecord.DB_FIELD_FIRST_NAMES);
-        joinHandles.put("lastname", PersonEntity.DB_FIELD_NAME + LookupDefinition.separator + NameDataRecord.DB_FIELD_LAST_NAME);
-        joinHandles.put("municipalitycode", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE);
-        joinHandles.put("roadcode", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_ROAD_CODE);
-        joinHandles.put("floor", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_FLOOR);
-        joinHandles.put("door", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_DOOR);
-        joinHandles.put("housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
-        joinHandles.put("bnr", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER);
-        joinHandles.put("birthtime.GTE", PersonEntity.DB_FIELD_BIRTHTIME + LookupDefinition.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
-        joinHandles.put("birthtime.LTE", PersonEntity.DB_FIELD_BIRTHTIME + LookupDefinition.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
+        joinHandles.put("firstname", PersonEntity.DB_FIELD_NAME + BaseQuery.separator + NameDataRecord.DB_FIELD_FIRST_NAMES);
+        joinHandles.put("lastname", PersonEntity.DB_FIELD_NAME + BaseQuery.separator + NameDataRecord.DB_FIELD_LAST_NAME);
+        joinHandles.put("municipalitycode", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE);
+        joinHandles.put("roadcode", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_ROAD_CODE);
+        joinHandles.put("floor", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_FLOOR);
+        joinHandles.put("door", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_DOOR);
+        joinHandles.put("housenumber", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
+        joinHandles.put("bnr", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER);
+        joinHandles.put("birthtime.GTE", PersonEntity.DB_FIELD_BIRTHTIME + BaseQuery.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
+        joinHandles.put("birthtime.LTE", PersonEntity.DB_FIELD_BIRTHTIME + BaseQuery.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
 
-        joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + LookupDefinition.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
-        joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + LookupDefinition.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
-        joinHandles.put("personevent", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_EVENT);
-        joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
-        joinHandles.put("personeventTime.LTE", PersonEntity.DB_FIELD_EVENT + LookupDefinition.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
-        joinHandles.put("persondataevent", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_FIELD);
-        joinHandles.put("persondataeventTime.GTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
-        joinHandles.put("persondataeventTime.LTE", PersonEntity.DB_FIELD_DATAEVENT + LookupDefinition.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
+        joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + BaseQuery.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
+        joinHandles.put("personevent", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_EVENT);
+        joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("personeventTime.LTE", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("persondataevent", PersonEntity.DB_FIELD_DATAEVENT + BaseQuery.separator + PersonDataEventDataRecord.DB_FIELD_FIELD);
+        joinHandles.put("persondataeventTime.GTE", PersonEntity.DB_FIELD_DATAEVENT + BaseQuery.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("persondataeventTime.LTE", PersonEntity.DB_FIELD_DATAEVENT + BaseQuery.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override

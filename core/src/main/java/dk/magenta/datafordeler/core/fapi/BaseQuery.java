@@ -1,9 +1,6 @@
 package dk.magenta.datafordeler.core.fapi;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.Bitemporal;
-import dk.magenta.datafordeler.core.database.Monotemporal;
-import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +18,6 @@ import java.util.stream.Collectors;
 /**
  * Query object specifying a search, with basic filter parameters
  * Subclasses should specify further searchable parameters, annotated with @QueryField.
- * SOAP clients should pass a serialized instance of a Query class to the SOAP interface
  */
 public abstract class BaseQuery {
 
@@ -561,15 +557,6 @@ public abstract class BaseQuery {
 
     public abstract Map<String, Object> getSearchParameters();
 
-    /**
-     * Obtain a LookupDefinition object that describes the query in that form.
-     * This means a definition where keys are set to the full lookup path for
-     * the attribute in question, and values are set from the query.
-     * @return
-     */
-    @Deprecated
-    public BaseLookupDefinition getLookupDefinition() {return null;}
-
     public OutputWrapper.Mode getMode() {
         return this.mode;
     }
@@ -612,8 +599,6 @@ public abstract class BaseQuery {
         }
         this.updatedParameters();
     }
-
-    private int dataParamCount = 0;
 
     protected abstract boolean isEmpty();
 
@@ -835,6 +820,7 @@ public abstract class BaseQuery {
     private Map<String, String> allJoinHandles() {
         HashMap<String, String> map = new HashMap<>(this.joinHandles());
         map.put("dafoUpdated", Nontemporal.DB_FIELD_UPDATED);
+        map.put("uuid", Entity.DB_FIELD_IDENTIFICATION + BaseQuery.separator + Identification.DB_FIELD_UUID);
         return map;
     }
 
@@ -877,8 +863,8 @@ public abstract class BaseQuery {
 
     public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List values, Class type, boolean orNull) throws QueryBuildException {
         String member = this.useJoinHandle(handle);
-        String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
         if (member != null && values != null && !values.isEmpty() && values.stream().anyMatch( f -> f!=null)) {
+            String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
             try {
                 if (orNull) {
                     MultiCondition multiCondition = new MultiCondition(parent, "OR");
@@ -931,9 +917,6 @@ public abstract class BaseQuery {
         this.finalizeConditions();
         StringJoiner s = new StringJoiner(" \n");
 
-//        s.add("SELECT DISTINCT " + this.getEntityIdentifier());
-//        s.add("FROM " + this.getEntityClassname() + " " + this.getEntityIdentifier());
-
         s.add("SELECT DISTINCT " + this.getEntityIdentifiers().stream().collect(Collectors.joining(", ")));
         s.add("FROM " + this.getEntityClassnameStrings().stream().collect(Collectors.joining(", ")));
 
@@ -971,8 +954,16 @@ public abstract class BaseQuery {
                 }
 
                 if (this.recordAfter != null) {
-                    this.addCondition("dafoUpdated", Condition.Operator.GT, Collections.singletonList(this.recordAfter.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)), OffsetDateTime.class, false);
+                    this.addCondition(
+                            "dafoUpdated",
+                            Condition.Operator.GT,
+                            Collections.singletonList(this.recordAfter.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)),
+                            OffsetDateTime.class,
+                            false
+                    );
                 }
+
+                this.addCondition("uuid", this.uuid, UUID.class);
             } catch (QueryBuildException e) {
                 log.error(e);
             }
