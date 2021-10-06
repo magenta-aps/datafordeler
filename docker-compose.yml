@@ -8,6 +8,8 @@ services:
       - datafordeler-db
     ports:
       - 8081:80
+      - 5005:5005
+    command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar datafordeler-core-exec.jar
 
   test:
     build:
