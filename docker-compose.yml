@@ -8,21 +8,20 @@ services:
       - datafordeler-db
     volumes:
       - ./docker/dev-env/application:/app/dev-env/local
+      - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
+      - ./plugin/cpr/src/test/resources/GLBASETEST2.json:/app/dev-env/local/cpr/download/d170609.l534901
+      - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
+      - ./plugin/geo/src/test/resources/municipality.json:/app/dev-env/local/geo/municipality.json
+      - ./plugin/geo/src/test/resources/locality.json:/app/dev-env/local/geo/locality.json
+      - ./plugin/geo/src/test/resources/post.json:/app/dev-env/local/geo/post.json
+      - ./plugin/geo/src/test/resources/road.json:/app/dev-env/local/geo/road.json
+      - ./plugin/geo/src/test/resources/access.json:/app/dev-env/local/geo/access.json
+      - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
+      - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
     ports:
       - 8081:80
       - 5005:5005
     command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar datafordeler-core-exec.jar
-
-  test:
-    build:
-      context: .
-      dockerfile: docker/dockerFile
-    depends_on:
-      - datafordeler-db
-    ports:
-      - 8082:80
-    command: bash -c "cd /code && mvn --batch-mode -T 2C test"
-    #use docker-compose test to execute tests
 
   datafordeler-db:
     build:
