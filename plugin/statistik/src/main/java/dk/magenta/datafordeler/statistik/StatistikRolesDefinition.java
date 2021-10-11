@@ -7,13 +7,16 @@ import dk.magenta.datafordeler.core.role.ReadServiceRole;
 import dk.magenta.datafordeler.core.role.SystemRole;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class StatistikRolesDefinition extends RolesDefinition {
 
     public static ExecuteCommandRole EXECUTE_STATISTIK_ROLE = new ExecuteCommandRole(
             "statistik",
-            null,
+            new HashMap<String, Object>() {{
+                put("plugin", "statistik");
+            }},
             new ExecuteCommandRoleVersion(
                     1.0f,
                     "Role that gives access to generating statistics"

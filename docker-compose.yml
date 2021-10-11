@@ -6,6 +6,8 @@ services:
       dockerfile: docker/dockerFile
     depends_on:
       - datafordeler-db
+    volumes:
+      - ./docker/dev-env/application:/app/dev-env/local
     ports:
       - 8081:80
       - 5005:5005
@@ -29,6 +31,10 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=testTEST1
+    volumes:
+      - ./docker/dev-env/local:/app/dev-env/local
+      - ./docker/dev-env/db/initiate-db.sql:/app/initiate-db.sql
+      - ./docker/manual_initiate.sh:/app/manual_initiate.sh
 
 volumes:
   datafordeler-gl:
