@@ -9,7 +9,7 @@ services:
     volumes:
       - ./docker/dev-env/application:/app/dev-env/local
       - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
-      - ./plugin/cpr/src/test/resources/GLBASETEST2.json:/app/dev-env/local/cpr/download/d170609.l534901
+      - ./plugin/cpr/src/test/resources/GLBASETEST2:/app/dev-env/local/cpr/download/d170610.l534901
       - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
       - ./plugin/geo/src/test/resources/municipality.json:/app/dev-env/local/geo/municipality.json
       - ./plugin/geo/src/test/resources/locality.json:/app/dev-env/local/geo/locality.json
@@ -34,6 +34,18 @@ services:
       - ./docker/dev-env/local:/app/dev-env/local
       - ./docker/dev-env/db/initiate-db.sql:/app/initiate-db.sql
       - ./docker/manual_initiate.sh:/app/manual_initiate.sh
+
+  test:
+    build:
+      context: .
+      dockerfile: docker/dockerFile
+    depends_on:
+      - datafordeler-db
+    ports:
+      - 8082:80
+    command: bash -c "cd /code && mvn --batch-mode -T 2C test"
+    #use docker-compose test to execute tests
+
 
 volumes:
   datafordeler-gl:

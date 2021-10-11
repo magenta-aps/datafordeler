@@ -9,3 +9,8 @@ accessAddressRegisterType = 1, accessAddressRegisterURL = 'file:///app/dev-env/l
 unitAddressRegisterType = 1, unitAddressRegisterURL = 'file:///app/dev-env/local/geo/unit.json',
 buildingRegisterType = 1, buildingRegisterURL = 'file:///app/dev-env/local/geo/building.json'
 GO
+
+INSERT INTO Datafordeler.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cpr"}', 'pull', 'dev-env', 0)
+INSERT INTO Datafordeler.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cvr"}', 'pull', 'dev-env', 0)
+INSERT INTO Datafordeler.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "geo"}', 'pull', 'dev-env', 0)
+GO
