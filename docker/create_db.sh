@@ -7,8 +7,9 @@ do
     if [ $? -eq 0 ]
     then
         echo "setup.sql completed"
-        sleep 100
-        echo "setup.sql WAITED"
+        #Just a simple wait 10 seconds before initiating the database with basic values
+        sleep 50
+        echo "initiate DB"
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P testTEST1 -d master -i initiate-db.sql
         break
     else
