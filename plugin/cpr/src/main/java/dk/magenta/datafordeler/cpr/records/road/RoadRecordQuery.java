@@ -1,7 +1,5 @@
 package dk.magenta.datafordeler.cpr.records.road;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -152,7 +150,7 @@ public class RoadRecordQuery extends BaseQuery {
     static {
         joinHandles.put("municipalitycode", RoadEntity.DB_FIELD_MUNIPALITY_CODE);
         joinHandles.put("roadcode", RoadEntity.DB_FIELD_ROAD_CODE);
-        joinHandles.put("name", RoadEntity.DB_FIELD_NAME_CODE + LookupDefinition.separator + RoadNameBitemporalRecord.DB_FIELD_ROADNAME);
+        joinHandles.put("name", RoadEntity.DB_FIELD_NAME_CODE + BaseQuery.separator + RoadNameBitemporalRecord.DB_FIELD_ROADNAME);
     }
 
     @Override
@@ -166,22 +164,6 @@ public class RoadRecordQuery extends BaseQuery {
         this.addCondition("roadcode", this.vejkoder, Integer.class);
         this.addCondition("name", this.vejnavne);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
-    }
-
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new BaseLookupDefinition();
-        if (!this.getVejkoder().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + RoadEntity.DB_FIELD_ROAD_CODE, this.getVejkoder(), Integer.class);
-        }
-        if (!this.getVejnavne().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + RoadEntity.DB_FIELD_NAME_CODE + LookupDefinition.separator + RoadNameBitemporalRecord.DB_FIELD_ROADNAME, this.getVejnavne(), String.class);
-        }
-        if (!this.getKommunekoder().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + RoadEntity.DB_FIELD_MUNIPALITY_CODE, this.getKommunekoder(), Integer.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.postcode;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
@@ -72,18 +71,6 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
         map.put(CODE, this.code);
         map.put(NAME, this.name);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.code != null && !this.code.isEmpty()) {
-            lookupDefinition.put(PostcodeEntity.DB_FIELD_CODE, this.code, Integer.class);
-        }
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(PostcodeEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + PostcodeNameRecord.DB_FIELD_NAME, this.name, String.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

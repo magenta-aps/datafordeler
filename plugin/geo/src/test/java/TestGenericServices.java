@@ -82,7 +82,6 @@ public class TestGenericServices extends GeoTest {
 
         ObjectNode locality1 = (ObjectNode) responseContent.get("results").get(0);
         Assert.assertEquals("f0966470-f09f-474d-a820-e8a46ed6fcc7", locality1.get("uuid").textValue());
-        Assert.assertEquals("4F46D110-E6AD-46D1-B403-B12063152564", locality1.get("sumiffiik").textValue());
         Assert.assertEquals("0600", locality1.get("lokalitetskode").textValue());
         Assert.assertNull(locality1.get("registreringFra"));
 
@@ -316,6 +315,7 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assert.assertEquals(2, responseContent.get("results").size());
 
+        /* The attribute doer has been removed from GAR
         response = this.lookup("/geo/fullAddress/1/rest/search?doer=1");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
@@ -329,7 +329,7 @@ public class TestGenericServices extends GeoTest {
         response = this.lookup("/geo/fullAddress/1/rest/search?doer=3");
         Assert.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
-        Assert.assertEquals(0, responseContent.get("results").size());
+        Assert.assertEquals(0, responseContent.get("results").size());*/
 
         response = this.lookup("/geo/fullAddress/1/rest/search?etage=kld");
         Assert.assertEquals(200, response.getStatusCode().value());
@@ -371,9 +371,9 @@ public class TestGenericServices extends GeoTest {
         for (JsonNode j : responseContent.get("results")) {
             ObjectNode o = (ObjectNode) j;
             if (o.get("uuid").textValue().equals("1b3ac64b-c28d-40b2-a106-16cee7c188b8")) {
-                Assert.assertEquals("2", o.get("dør").get(0).asText());
+                Assert.assertEquals("5678", o.get("nummer").get(0).asText());
             } else if (o.get("uuid").textValue().equals("1b3ac64b-c28d-40b2-a106-16cee7c188b9")) {
-                Assert.assertEquals("1", o.get("dør").get(0).asText());
+                Assert.assertEquals("5678", o.get("nummer").get(0).asText());
             } else {
                 Assert.fail();
             }

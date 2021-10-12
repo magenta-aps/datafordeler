@@ -1,8 +1,7 @@
 package dk.magenta.datafordeler.statistik.queries;
 
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
-import dk.magenta.datafordeler.core.fapi.Condition;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.SingleCondition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.person.data.CivilStatusDataRecord;
@@ -30,7 +29,7 @@ public class PersonCivilStatusQuery extends PersonStatisticsQuery {
     private static HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
-        joinHandles.put("civilstatus", PersonEntity.DB_FIELD_CIVILSTATUS + LookupDefinition.separator + CivilStatusDataRecord.DB_FIELD_CIVIL_STATUS);
+        joinHandles.put("civilstatus", PersonEntity.DB_FIELD_CIVILSTATUS + BaseQuery.separator + CivilStatusDataRecord.DB_FIELD_CIVIL_STATUS);
         joinHandles.putAll(getBitemporalHandles("civilstatus", PersonEntity.DB_FIELD_CIVILSTATUS));
     }
 

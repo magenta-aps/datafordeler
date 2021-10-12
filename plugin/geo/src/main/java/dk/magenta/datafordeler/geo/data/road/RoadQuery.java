@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.road;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
@@ -172,48 +171,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     }
 
     @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-
-        if (this.code != null && !this.code.isEmpty()) {
-            lookupDefinition.put(GeoRoadEntity.DB_FIELD_CODE, this.code, Integer.class);
-        }
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(
-                    GeoRoadEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + RoadNameRecord.DB_FIELD_NAME,
-                    this.name,
-                    String.class
-            );
-        }
-        if (this.addressingName != null && !this.addressingName.isEmpty()) {
-            lookupDefinition.put(
-                    GeoRoadEntity.DB_FIELD_NAME + BaseLookupDefinition.separator + RoadNameRecord.DB_FIELD_ADDRESSING_NAME,
-                    this.addressingName,
-                    String.class
-            );
-        }
-        if (this.locality != null && !this.locality.isEmpty()) {
-            lookupDefinition.put(
-                    GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_CODE,
-                    this.locality,
-                    String.class
-            );
-        }
-        if (this.localityUUID != null && !this.localityUUID.isEmpty()) {
-            lookupDefinition.put(
-                    GeoRoadEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + RoadLocalityRecord.DB_FIELD_REFERENCE + BaseLookupDefinition.separator + Identification.DB_FIELD_UUID,
-                    this.localityUUID,
-                    UUID.class
-            );
-        }
-
-        if (this.municipalityCode != null && !this.municipalityCode.isEmpty()) {
-            lookupDefinition.put(GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + RoadMunicipalityRecord.DB_FIELD_CODE, this.municipalityCode, Integer.class);
-        }
-        return lookupDefinition;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return super.isEmpty() && this.municipalityCode.isEmpty() && this.code.isEmpty() && this.name.isEmpty() && this.addressingName.isEmpty() && this.locality.isEmpty() && this.localityUUID.isEmpty();
     }
@@ -256,10 +213,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         joinHandles.put("localitycode", GeoRoadEntity.DB_FIELD_LOCALITY + BaseQuery.separator + RoadLocalityRecord.DB_FIELD_CODE);
         joinHandles.put("localityuuid", GeoRoadEntity.DB_FIELD_LOCALITY + BaseQuery.separator + RoadLocalityRecord.DB_FIELD_REFERENCE + BaseQuery.separator + Identification.DB_FIELD_UUID);
         joinHandles.put("municipalitycode", GeoRoadEntity.DB_FIELD_MUNICIPALITY + BaseQuery.separator + RoadMunicipalityRecord.DB_FIELD_CODE);
-
-
-        //RoadNameRecord.class, namealias, member
-        //        GeoRoadEntity.class namealias.entity
     }
 
     @Override

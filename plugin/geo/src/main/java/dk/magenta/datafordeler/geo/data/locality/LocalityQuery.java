@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.locality;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
@@ -22,6 +21,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     public static final String CODE = GeoLocalityEntity.IO_FIELD_CODE;
     public static final String NAME = GeoLocalityEntity.IO_FIELD_NAME;
     public static final String MUNICIPALITY = GeoLocalityEntity.IO_FIELD_MUNICIPALITY;
+    public static final String STATUS = GeoLocalityEntity.IO_FIELD_STATUS;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CODE)
     private List<String> code = new ArrayList<>();
@@ -29,8 +29,11 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAME)
     private List<String> name = new ArrayList<>();
 
-    @QueryField(type = QueryField.FieldType.STRING, queryName = CODE)
+    @QueryField(type = QueryField.FieldType.STRING, queryName = MUNICIPALITY)
     private List<String> municipality = new ArrayList<>();
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = STATUS)
+    private List<String> status = new ArrayList<>();
 
     public List<String> getCode() {
         return code;
@@ -83,6 +86,26 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         }
     }
 
+    public List<String> getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status.clear();
+        this.updatedParameters();
+        this.addStatus(status);
+    }
+    public void setStatus(int status) {
+        this.setStatus(Integer.toString(status));
+    }
+
+    public void addStatus(String status) {
+        if (status != null) {
+            this.status.add(status);
+            this.updatedParameters();
+        }
+    }
+
 
     @Override
     public Map<String, Object> getSearchParameters() {
@@ -91,21 +114,6 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         map.put(NAME, this.name);
         map.put(MUNICIPALITY, this.municipality);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.code != null && !this.code.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_CODE, this.code, String.class);
-        }
-        if (this.name != null && !this.name.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_NAME, this.name, String.class);
-        }
-        if (this.municipality != null && !this.municipality.isEmpty()) {
-            lookupDefinition.put(GeoLocalityEntity.DB_FIELD_MUNICIPALITY + BaseLookupDefinition.separator + LocalityMunicipalityRecord.DB_FIELD_CODE, this.municipality, Integer.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

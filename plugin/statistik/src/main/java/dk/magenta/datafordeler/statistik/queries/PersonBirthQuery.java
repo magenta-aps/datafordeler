@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.statistik.queries;
 
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
@@ -25,7 +25,7 @@ public class PersonBirthQuery extends PersonStatisticsQuery {
     private static HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
-        joinHandles.put("birth", PersonEntity.DB_FIELD_BIRTHTIME + LookupDefinition.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
+        joinHandles.put("birth", PersonEntity.DB_FIELD_BIRTHTIME + BaseQuery.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
         joinHandles.putAll(getBitemporalHandles("birth", PersonEntity.DB_FIELD_BIRTHTIME));
     }
 
