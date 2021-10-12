@@ -54,7 +54,6 @@ public abstract class GeoTest {
     protected void loadAll() throws IOException {
         this.load(localityEntityManager, "/locality.json");
         this.load(roadEntityManager, "/road.json");//We have failures is data from GAR, If there is more than one roadentity, we use the new one find finding a roadname
-        this.load(roadEntityManager,"/roadAddedItem.json");
         this.load(unitAddressEntityManager, "/unit.json");
         this.load(municipalityEntityManager, "/municipality.json");
         this.load(postcodeEntityManager, "/post.json");

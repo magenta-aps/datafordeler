@@ -27,6 +27,7 @@ public class UnitAddressRawData extends SumiffiikRawData {
         @JsonProperty("Etage")
         public String floor;
 
+        //This attribute is becomming deprecated
         @JsonProperty("Dor_lejlighedsnummer")
         public String door;
 

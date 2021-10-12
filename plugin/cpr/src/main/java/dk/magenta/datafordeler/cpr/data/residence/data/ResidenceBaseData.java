@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.cpr.data.residence.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DataItem;
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprData;
 import dk.magenta.datafordeler.cpr.data.residence.ResidenceEffect;
@@ -153,20 +152,6 @@ public class ResidenceBaseData extends CprData<ResidenceEffect, ResidenceBaseDat
         map.put(IO_FIELD_DOOR, this.door);
         map.put(IO_FIELD_LOCALITY, this.locality);
         return map;
-    }
-
-    public LookupDefinition getLookupDefinition() {
-        LookupDefinition lookupDefinition = new LookupDefinition(ResidenceBaseData.class);
-        lookupDefinition.setMatchNulls(true);
-
-        lookupDefinition.put(DB_FIELD_MUNICIPALITY_CODE, this.municipalityCode);
-        lookupDefinition.put(DB_FIELD_ROAD_CODE, this.roadCode);
-        lookupDefinition.put(DB_FIELD_LOCALITY, this.locality);
-        lookupDefinition.put(DB_FIELD_HOUSENUMBER, this.houseNumber);
-        lookupDefinition.put(DB_FIELD_FLOOR, this.floor);
-        lookupDefinition.put(DB_FIELD_DOOR, this.door);
-
-        return lookupDefinition;
     }
 
     @Override

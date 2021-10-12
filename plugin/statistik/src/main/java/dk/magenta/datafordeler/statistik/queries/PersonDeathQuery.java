@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.statistik.queries;
 
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.SingleCondition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
@@ -25,6 +25,7 @@ public class PersonDeathQuery extends PersonStatisticsQuery {
     private static HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
+        joinHandles.put("status", PersonEntity.DB_FIELD_STATUS + BaseQuery.separator + PersonStatusDataRecord.DB_FIELD_STATUS);
         joinHandles.putAll(getBitemporalHandles("status", PersonEntity.DB_FIELD_STATUS));
     }
 

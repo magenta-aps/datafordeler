@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.building;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -71,18 +70,6 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
         map.put(ANR, this.anr);
         map.put(BNR, this.bnr);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.anr != null && !this.anr.isEmpty()) {
-            lookupDefinition.put(BuildingEntity.DB_FIELD_ANR, this.anr, String.class);
-        }
-        if (this.bnr != null && !this.bnr.isEmpty()) {
-            lookupDefinition.put(BuildingEntity.DB_FIELD_BNR, this.bnr, String.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

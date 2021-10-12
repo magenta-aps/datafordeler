@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.statistik.queries;
 
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.MultiCondition;
 import dk.magenta.datafordeler.core.fapi.Query;
@@ -176,11 +176,11 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
 
     protected static HashMap<String, String> getBitemporalHandles(String handle, String path) {
         HashMap<String, String> joinHandles = new HashMap<>();
-        joinHandles.put(handle + "RegistrationFrom", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM);
-        joinHandles.put(handle + "RegistrationTo", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO);
-        joinHandles.put(handle + "EffectFrom", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_EFFECT_FROM);
-        joinHandles.put(handle + "EffectTo", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_EFFECT_TO);
-        joinHandles.put(handle + "Origin", path + LookupDefinition.separator + CprBitemporalRecord.DB_FIELD_ORIGIN_DATE);
+        joinHandles.put(handle + "RegistrationFrom", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM);
+        joinHandles.put(handle + "RegistrationTo", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO);
+        joinHandles.put(handle + "EffectFrom", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_EFFECT_FROM);
+        joinHandles.put(handle + "EffectTo", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_EFFECT_TO);
+        joinHandles.put(handle + "Origin", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_ORIGIN_DATE);
         return joinHandles;
     }
 
