@@ -38,7 +38,8 @@ public class DafoUserManager {
     private String[] pituSDNWhitelistCsep;
 
     @Value("${dafo.userdatabase.sequritydisable:false}")
-    private boolean sequrityDisabled;
+    @Value("${dafo.userdatabase.securitydisabled:false}")
+    private boolean securityDisabled;
 
     private HashSet<String> pituSDNWhitelist = new HashSet<>();
 
@@ -92,9 +93,9 @@ public class DafoUserManager {
 
     public DafoUserDetails getUserFromRequest(HttpServletRequest request, boolean samlOnly)
             throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
-        if(sequrityDisabled) {
+        if(securityDisabled) {
 
-            //VALIDATE SEQURITY
+            //VALIDATE SECURITY
             return new DafoUserDetails(null) {
                 @Override
                 public String getNameQualifier() {
