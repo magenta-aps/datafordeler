@@ -8,7 +8,7 @@ do
     then
         echo "setup.sql completed"
         #Just a simple wait 10 seconds before initiating the database with basic values
-        sleep 50
+        sleep 20
         echo "initiate DB"
         /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P testTEST1 -d master -i initiate-db.sql
         break

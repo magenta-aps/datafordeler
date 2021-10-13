@@ -37,7 +37,6 @@ public class DafoUserManager {
     @Value("${pitu.sdn.whitelist:}")
     private String[] pituSDNWhitelistCsep;
 
-    @Value("${dafo.userdatabase.sequritydisable:false}")
     @Value("${dafo.userdatabase.securitydisabled:false}")
     private boolean securityDisabled;
 
