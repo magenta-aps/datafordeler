@@ -36,6 +36,8 @@ services:
       - ./docker/manual_initiate.sh:/app/manual_initiate.sh
 
   test:
+    profiles:
+      - donotstart
     build:
       context: .
       dockerfile: docker/dockerFile
