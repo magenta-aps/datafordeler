@@ -19,7 +19,6 @@ import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import dk.magenta.datafordeler.geo.data.locality.*;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.road.*;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressDoorRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressUsageRecord;
@@ -82,7 +81,6 @@ public class AdresseService {
     public static final String OUTPUT_BCALLNAME = "b_kaldenavn";
     public static final String OUTPUT_HOUSENUMBER = "husnummer";
     public static final String OUTPUT_FLOOR = "etage";
-    public static final String OUTPUT_DOOR = "doer";
     public static final String OUTPUT_UNITNUMBER = "enhedsnummer";
     public static final String OUTPUT_USAGE = "anvendelse";
 
@@ -577,17 +575,13 @@ public class AdresseService {
                 if (floor != null) {
                     floorValue = floor.getFloor();
                 }
-                UnitAddressDoorRecord door = current(unitAddressEntity.getDoor());
-                if (door != null) {
-                    doorValue = door.getDoor();
-                }
                 UnitAddressNumberRecord unitNumber = current(unitAddressEntity.getNumber());
                 if (unitNumber != null) {
                     unitNumberValue = unitNumber.getNumber();
                 }
                 String bnr = accessAddressEntity.getBnr();
 
-                String key = bnr + "|" + floorValue + "|" + doorValue + "|" + unitNumberValue;
+                String key = bnr + "|" + floorValue + "|" + unitNumberValue;
 
                 if (!existing.contains(key)) {
                     existing.add(key);
@@ -595,12 +589,7 @@ public class AdresseService {
                     if (floorValue != null && !floorValue.isEmpty()) {
                         addressNode.put(OUTPUT_FLOOR, floorValue);
                     }
-                    /* Julia and Thor want us to stop using door now, and use enhedsnummer instead. See #43824
-                    if (doorValue != null && !doorValue.isEmpty()) {
-                        addressNode.put(OUTPUT_DOOR, door.getDoor());
-                    }*/
                     if (unitNumberValue != null && !unitNumberValue.isEmpty()) {
-                        addressNode.put(OUTPUT_DOOR, unitNumberValue);//Julia and Thor want us to stop using door now, and use enhedsnummer instead
                         addressNode.put(OUTPUT_UNITNUMBER, unitNumberValue);
                     }
 
@@ -613,14 +602,6 @@ public class AdresseService {
                     }
 
                     addressNode.put(OUTPUT_BNUMBER, stripBnr(bnr, true));
-                    /* Julia and Thor want us to stop using door now
-                    if (doorValue == null || doorValue.isEmpty()) {
-                        String bnrDoor = bnrExtraLetter(bnr);
-                        if (bnrDoor != null) {
-                            addressNode.put(OUTPUT_DOOR, bnrDoor);
-                        }
-                    }*/
-
 
                     UnitAddressUsageRecord usage = current(unitAddressEntity.getUsage());
                     if (usage != null) {
@@ -650,13 +631,6 @@ public class AdresseService {
                                         Comparator.<ObjectNode, String>comparing(
                                                 jsonNode -> jsonNode.get(OUTPUT_FLOOR) != null ? jsonNode.get(OUTPUT_FLOOR).textValue() : null,
                                                 Comparator.nullsFirst(fuzzyNumberComparator)
-                                        )
-                                ).thenComparing(
-                                        Comparator.nullsFirst(
-                                                Comparator.<ObjectNode, String>comparing(
-                                                        jsonNode -> jsonNode.get(OUTPUT_DOOR) != null ? jsonNode.get(OUTPUT_DOOR).textValue() : null,
-                                                        Comparator.nullsFirst(fuzzyNumberComparator)
-                                                )
                                         )
                                 )
                         );
@@ -759,7 +733,6 @@ public class AdresseService {
                     addressNode.put(OUTPUT_UUID, unitAddress.getUUID().toString());
                     addressNode.set(OUTPUT_HOUSENUMBER, null);
                     addressNode.set(OUTPUT_FLOOR, null);
-                    addressNode.set(OUTPUT_DOOR, null);
                     addressNode.set(OUTPUT_UNITNUMBER, null);
                     addressNode.set(OUTPUT_BNUMBER, null);
                     addressNode.set(OUTPUT_ROADUUID, null);
@@ -777,18 +750,10 @@ public class AdresseService {
                             addressNode.put(OUTPUT_FLOOR, floorValue);
                         }
                     }
-                    /* Julia and Thor want us to stop using door now, and use enhedsnummer instead. See #43824
-                    UnitAddressDoorRecord door = current(unitAddress.getDoor());
-                    if (door != null) {
-                        doorValue = door.getDoor();
-                        if (doorValue != null && !doorValue.isEmpty()) {
-                            addressNode.put(OUTPUT_DOOR, doorValue);
-                        }
-                    }*/
+
                     UnitAddressNumberRecord unitNumber = current(unitAddress.getNumber());
                     if (unitNumber != null) {
                         addressNode.put(OUTPUT_UNITNUMBER, unitNumber.getNumber());
-                        addressNode.put(OUTPUT_DOOR, unitNumber.getNumber());//Julia and Thor want us to stop using door now, and use enhedsnummer instead
                     }
                     UnitAddressUsageRecord usage = current(unitAddress.getUsage());
                     if (usage != null) {
@@ -803,12 +768,6 @@ public class AdresseService {
 
                         String bnr = accessAddress.getBnr();
                         addressNode.put(OUTPUT_BNUMBER, stripBnr(bnr, true));
-                        if (doorValue == null || doorValue.isEmpty()) {
-                            String bnrDoor = bnrExtraLetter(bnr);
-                            if (bnrDoor != null) {
-                                addressNode.put(OUTPUT_DOOR, bnrDoor);
-                            }
-                        }
 
                         AccessAddressBlockNameRecord blockName = current(accessAddress.getBlockName());
                         if (blockName != null) {
