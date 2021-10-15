@@ -6,14 +6,14 @@ do
     /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P testTEST1 -d master -i createdbs.sql
     if [ $? -eq 0 ]
     then
-        echo "setup.sql completed"
-        #Just a simple wait 20 seconds before initiating the database with basic values
-        sleep 20
-        echo "initiate DB"
-        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P testTEST1 -d master -i initiate-db.sql
+        echo "createdbs.sql completed"
         break
     else
         echo "not ready yet..."
         sleep 1
     fi
 done
+
+sleep 20
+#Just a simple wait 20 seconds before initiating the database with basic values
+/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P testTEST1 -d master -i initiate-db.sql
