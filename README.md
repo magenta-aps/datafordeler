@@ -145,7 +145,12 @@ The sequence of installing the plugins is:
 
 ### Docker
 If a developer wants to build the project in docker, it is possible to run:
-"docker-compose build" and "docker-compose up -d". It is not recommended to work with the project in that way though.
+- docker-compose down -v : to clean the image
+- docker-compose build : to build the image
+- docker-compose up datafordeler : to startup the image with a dataset for testing basic functionality
+- docker-compose up test : to startup the tests in the image against a MSSql database
+
+The properties-file used when starting the image disables the uservalidation
 
 ## Building the online API-documentation
 The online API-documentation is done inside vagrant. To build the online documentation we use the vagrant image from "gronlandsprojekter"
