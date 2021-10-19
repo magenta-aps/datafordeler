@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+<session-factory>
+<property name="connection.url">jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler</property>
+<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+<property name="connection.username">sa</property>
+<property name="connection.password">testTEST1</property>
+<property name="hibernate.show_sql">false</property>
+<property name="hibernate.hbm2ddl.auto">update</property>
+<property name="hibernate.default_schema">dbo</property>
+<!--<property name="hibernate.dialect">org.hibernate.dialect.SQLServer2012Dialect</property>-->
+<property name="hibernate.dialect">org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect</property>
+<property name="hibernate.jdbc.batch_size">30</property>
+
+
+<property name="hibernate.c3p0.min_size">5</property>
+<property name="hibernate.c3p0.max_size">200</property>
+<property name="hibernate.c3p0.timeout">5000</property>
+<property name="hibernate.c3p0.max_statements">50</property>
+<property name="hibernate.c3p0.idle_test_period">3000</property>
+</session-factory>
+</hibernate-configuration>

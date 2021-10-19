@@ -191,7 +191,7 @@ public class CprRecordCombinedPersonLookupService {
                             outputStream.write(("\"" + personEntity.getPersonnummer() + "\":").getBytes());
                             outputStream.write(
                                     objectMapper.writeValueAsString(
-                                            personOutputWrapper.wrapRecordResult(personEntity, null)
+                                            personOutputWrapper.wrapRecordResult(personEntity, personQuery)
                                     ).getBytes(StandardCharsets.UTF_8)
                             );
                         } catch (IOException e) {
