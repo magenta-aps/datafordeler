@@ -68,17 +68,6 @@ test-core:
       junit:
         - /code/core/target/surefire-reports/*.xml
 
-test-pitu:
-  <<: *test-default
-  before_script:
-    - cd /code/plugin/combinedPitu
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /code/plugin/cpr/target/surefire-reports/TEST-*
-
 test-cpr:
   <<: *test-default
   before_script:
@@ -147,13 +136,13 @@ test-prisme:
 test-combinedPitu:
   <<: *test-default
   before_script:
-    - cd /app/plugin/combinedPitu
+    - cd /code/plugin/combinedPitu
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
-        - /app/plugin/pituCombined/target/surefire-reports/TEST-*.xml
+        - /code/plugin/pituCombined/target/surefire-reports/TEST-*.xml
 
 test-statistik:
   <<: *test-default
