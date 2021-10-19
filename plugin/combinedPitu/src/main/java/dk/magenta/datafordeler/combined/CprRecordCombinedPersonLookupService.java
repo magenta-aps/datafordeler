@@ -105,7 +105,7 @@ public class CprRecordCombinedPersonLookupService {
                 if(personEntity==null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
-                Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
+                Object obj = personOutputWrapper.wrapRecordResult(personEntity, null);
                 return obj.toString();
             }
 
@@ -123,7 +123,7 @@ public class CprRecordCombinedPersonLookupService {
                 throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
 
-            Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
+            Object obj = personOutputWrapper.wrapRecordResult(personEntity, null);
             return obj.toString();
         } catch(DataStreamException e) {
             log.error(e);
