@@ -82,6 +82,25 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
+
+    public static final String DB_FIELD_DOOR = "door";
+    public static final String IO_FIELD_DOOR = "sidedør";
+    @OneToMany(mappedBy = UnitAddressDoorRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @Filters({
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_AFTER),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = Nontemporal.FILTERLOGIC_LASTUPDATED_BEFORE)
+    })
+    @JsonProperty(IO_FIELD_DOOR)
+    private Set<UnitAddressDoorRecord> door = new HashSet<>();
+
+    public MonotemporalSet<UnitAddressDoorRecord> getDoor() {
+        return new MonotemporalSet(this.door);
+    }
+
+
+
     public static final String DB_FIELD_NUMBER = "number";
     public static final String IO_FIELD_NUMBER = "nummer";
     @OneToMany(mappedBy = UnitAddressNumberRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -165,6 +184,9 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
         if (record instanceof UnitAddressFloorRecord) {
             added = addItem(this.floor, record);
         }
+        if (record instanceof UnitAddressDoorRecord) {
+            added = addItem(this.door, record);
+        }
         if (record instanceof UnitAddressNumberRecord) {
             added = addItem(this.number, record);
         }
@@ -192,6 +214,7 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     @JsonIgnore
     public Set<Set<? extends GeoMonotemporalRecord>> getAllRecords() {
         HashSet<Set<? extends GeoMonotemporalRecord>> records = new HashSet<>();
+        records.add(this.door);
         records.add(this.floor);
         records.add(this.number);
         records.add(this.usage);
