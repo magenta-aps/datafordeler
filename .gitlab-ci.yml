@@ -1,140 +1,166 @@
-image: maven:3-jdk-11
-
 stages:
   - build
   - test
 
 variables:
-  IMAGE_SHA: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
   IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
+  IMAGE_SQL: ${CI_REGISTRY_IMAGE}:sql
 
-build-image:
+.build-default: &build-default
   stage: build
   tags:
     - docker
   image:
     # We use the `:debug` image as it contains `sh` needed by gitlab-ci.
     name: gcr.io/kaniko-project/executor:debug-v0.16.0
-    entrypoint: [""]
+    entrypoint: [ "" ]
+
+build-mssql-image:
+  <<: *build-default
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - cat /kaniko/.docker/config.json
     - /kaniko/executor
       --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/ci/dockerFile
+      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile.sqlserver
+      --destination=${IMAGE_SQL}
+      --cache=true
+
+build-image:
+  <<: *build-default
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context=${CI_PROJECT_DIR}
+      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile
       --destination=${IMAGE_DEV}
       --cache=true
 
+
 .test-default: &test-default
   stage: test
+  needs:
+    - build-mssql-image
+    - build-image
+  image: ${IMAGE_DEV}
   variables:
     GIT_STRATEGY: none
-  needs:
-    - build-image
-  image:
-    name: ${IMAGE_DEV}
+    JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
+    #M$ sql variables
+    ACCEPT_EULA: "Y"
+    SA_PASSWORD: "testTEST1"
   tags:
     - docker
+  services:
+    - name: ${IMAGE_SQL}
+      alias: datafordeler-db
+
 
 test-core:
   <<: *test-default
   before_script:
-    - cd /app/core
+    - cd /code/core
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
-        - /app/core/target/surefire-reports/TEST-*.xml
+        - /code/core/target/surefire-reports/*.xml
 
 test-cpr:
   <<: *test-default
   before_script:
-    - cd /app/plugin/cpr
+    - cd /code/plugin/cpr
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
-        - /app/plugin/cpr/target/surefire-reports/TEST-*.xml
-
-test-geo:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/geo
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/geo/target/surefire-reports/TEST-*.xml
+        - /code/plugin/cpr/target/surefire-reports/TEST-*
 
 test-cvr:
   <<: *test-default
   before_script:
-    - cd /app/plugin/cvr
+    - cd /code/plugin/cvr
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
-      junit:
-        - /app/plugin/cvr/target/surefire-reports/TEST-*.xml
-
-test-ger:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/ger
-  script:
-    - mvn --batch-mode -T 2C test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/ger/target/surefire-reports/TEST-*.xml
+      junit: target/surefire-reports/*.xml
 
 test-eboks:
   <<: *test-default
   before_script:
-    - cd /app/plugin/eboks
+    - cd /code/plugin/eboks
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
-        - /app/plugin/eboks/target/surefire-reports/TEST-*.xml
+        - /code/plugin/eboks/target/surefire-reports/*.xml
+
+test-geo:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/geo
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/geo/target/surefire-reports/*.xml
+
+test-ger:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/ger
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/ger/target/surefire-reports/*.xml
 
 test-prisme:
   <<: *test-default
   before_script:
-    - cd /app/plugin/prisme
+    - cd /code/plugin/prisme
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
-        - /app/plugin/prisme/target/surefire-reports/TEST-*.xml
+        - /code/plugin/prisme/target/surefire-reports/*.xml
 
-test-subscription:
+test-combinedPitu:
   <<: *test-default
   before_script:
-    - cd /app/plugin/subscription
+    - cd /code/plugin/combinedPitu
   script:
     - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
-        - /app/plugin/subscription/target/surefire-reports/TEST-*.xml
+        - /code/plugin/pituCombined/target/surefire-reports/TEST-*.xml
 
 test-statistik:
   <<: *test-default
   before_script:
-    - cd /app/plugin/statistik
+    - cd /code/plugin/statistik
   script:
-    # Some day we need to solve that the tests only passes at this timezone
-    - mvn --batch-mode -T 2C test -Duser.timezone=Europe/Copenhagen
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
-        - /app/plugin/statistik/target/surefire-reports/TEST-*.xml
+        - /code/plugin/statistik/target/surefire-reports/*.xml
 
-
-
+test-subscription:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/subscription
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit: /code/plugin/subscription/target/surefire-reports/*.xml

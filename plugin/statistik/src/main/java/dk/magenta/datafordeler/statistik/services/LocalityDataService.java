@@ -115,7 +115,6 @@ public class LocalityDataService extends StatisticsService {
 
             List<Map<String, String>> concatenation = new ArrayList<>();
             List<GeoLocalityEntity> localityEntities = QueryManager.getAllEntities(primarySession, GeoLocalityEntity.class);
-            HashMap<String, Map<String, String>> cache = new HashMap<>();
             for (GeoLocalityEntity localityEntity : localityEntities) {
 
                 //The testdataset indicates that we can expect to find one of each record
@@ -123,13 +122,14 @@ public class LocalityDataService extends StatisticsService {
                 String KomKortNavn = municipalityIdToMapName(KomKod);
                 String KomNavn = municipalityIdToName(KomKod);
 
-                String localityCode = localityEntity.getMunicipality().size()>0 ? localityEntity.getMunicipality().iterator().next().getEntity().getCode() : "";
-                String LokKortNavn = localityEntity.getAbbreviation().size()>0 ? localityEntity.getAbbreviation().iterator().next().getName() : "";
-                String localityName = localityEntity.getName().size()>0 ? localityEntity.getName().iterator().next().getName() : "";
-                Integer LokTypeKod = localityEntity.getType().size()>0 ? localityEntity.getType().iterator().next().getType() : 0;
-                String LokTypeNavn = typeCodeToName(LokTypeKod);
-                String LokStatusKod = typeCodeToStatusCode(LokTypeKod);
-                String LokStatusNavn = typeCodeToStatusName(LokTypeKod);
+                String localityCode = Optional.ofNullable(localityEntity.getMunicipality().iterator().next().getEntity().getCode()).orElse("");
+                String LokKortNavn = Optional.ofNullable(localityEntity.getAbbreviation().iterator().next().getName()).orElse("");
+                String localityName = Optional.ofNullable(localityEntity.getName().iterator().next().getName()).orElse("");
+
+                Integer LokBetegn = Optional.ofNullable(localityEntity.getBetegnelse().iterator().next().getBetegn()).orElse(0);
+                Integer LokStatus = Optional.ofNullable(localityEntity.getStatus().iterator().next().getStatus()).orElse(0);
+                String LokTypeNavn = typeCodeToName(LokBetegn);
+                String LokStatusNavn = typeCodeToStatusName(LokStatus);
 
                 HashMap<String, String> csvRow = new HashMap<>();
                 csvRow.put(MUNICIPALITY_CODE, Integer.toString(KomKod));
@@ -138,9 +138,8 @@ public class LocalityDataService extends StatisticsService {
                 csvRow.put(LOCALITY_CODE, localityCode);
                 csvRow.put(LOCALITY_ABBREVIATION, LokKortNavn);
                 csvRow.put(LOCALITY_NAME, localityName);
-                csvRow.put(LOC_TYPE_CODE, LokTypeKod+"");
+                csvRow.put(LOC_TYPE_CODE, LokBetegn+"");
                 csvRow.put(LOC_TYPE_NAME, LokTypeNavn);
-                csvRow.put(LOC_STATUS_CODE, LokStatusKod);
                 csvRow.put(LOC_STATUS_NAME, LokStatusNavn);
                 concatenation.add(csvRow);
             }
@@ -200,34 +199,23 @@ public class LocalityDataService extends StatisticsService {
     }
 
 
-    private static String typeCodeToName(Integer typeCode) {
-        switch(typeCode) {
+    private static String typeCodeToName(Integer lokalitetBetegn) {
+
+        switch(lokalitetBetegn) {
+            case 0:
+                return "Ukendt";
             case 1:
-                return "By";
+                return "Hovedstad";
             case 2:
-                return "Nedlagt by";
+                return "Hovedbosted";
             case 3:
-                return "Bygd";
+                return "Større bosted";
             case 4:
-                return "Nedlagt bygd";
+                return "Bosted";
             case 5:
-                return "Fåreholdersted";
+                return "Mindre bosted";
             case 6:
-                return "Nedlagt fåreholdersted";
-            case 7:
-                return "Minestation";
-            case 8:
-                return "Nedlagt minestation";
-            case 9:
-                return "Station";
-            case 10:
-                return "Nedlagt station";
-            case 11:
-                return "Lufthavn";
-            case 12:
-                return "Nedlagt lufthavn";
-            case 13:
-                return "Byudvikling";
+                return "Mindste bosted";
             default:
                 return "Ukendt";
         }
@@ -268,34 +256,12 @@ public class LocalityDataService extends StatisticsService {
 
     private static String typeCodeToStatusName(Integer typeCode) {
         switch(typeCode) {
+            case 0:
+                return "Inaktiv";
             case 1:
                 return "Aktiv";
-            case 2:
-                return "Nedlagt";
-            case 3:
-                return "Aktiv";
-            case 4:
-                return "Nedlagt";
-            case 5:
-                return "Aktiv";
-            case 6:
-                return "Nedlagt";
-            case 7:
-                return "Aktiv";
-            case 8:
-                return "Nedlagt";
-            case 9:
-                return "Aktiv";
-            case 10:
-                return "Nedlagt";
-            case 11:
-                return "Aktiv";
-            case 12:
-                return "Nedlagt";
-            case 13:
-                return "Aktiv";
             default:
-                return "Nedlagt";
+                return "Undefined";
         }
     }
 

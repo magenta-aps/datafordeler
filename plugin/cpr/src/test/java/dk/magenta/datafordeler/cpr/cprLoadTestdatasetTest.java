@@ -113,23 +113,23 @@ public class cprLoadTestdatasetTest {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(44, persons.size());
+            Assert.assertEquals(51, persons.size());
 
             for(PersonEntity person : persons) {
                 System.out.print(person.getPersonnummer());
                 if(person.getName().size()>0) {
-                    NameDataRecord name = person.getName().iterator().next();
+                    NameDataRecord name = person.getName().current().iterator().next();
                     System.out.println(" - "+name.getFirstNames()+" "+name.getMiddleName()+" "+name.getLastName());
                 }
                 if(person.getAddress().size()>0) {
-                    AddressDataRecord add = person.getAddress().iterator().next();
+                    AddressDataRecord add = person.getAddress().current().iterator().next();
                     System.out.print("Kommunekode: "+add.getMunicipalityCode());
                     System.out.print(" Vejkode: "+add.getRoadCode());
                     System.out.println(" Husnummer: "+add.getHouseNumber());
 
                 }
                 if(person.getForeignAddress().size()>0) {
-                    ForeignAddressDataRecord add = person.getForeignAddress().iterator().next();
+                    ForeignAddressDataRecord add = person.getForeignAddress().current().iterator().next();
                     System.out.print("Udenlandskadresse: "+add.getAddressLine1());
                     System.out.print(" "+add.getAddressLine2());
                     System.out.print(" "+add.getAddressLine3());
@@ -138,9 +138,18 @@ public class cprLoadTestdatasetTest {
                 System.out.println(person.getPersonnummer());
                 Assert.assertEquals(1, person.getCivilstatus().size());//ALWAYS 1
                 if(person.getCivilstatus().size()>0) {
-                    CivilStatusDataRecord civil = person.getCivilstatus().iterator().next();
+                    CivilStatusDataRecord civil = person.getCivilstatus().current().iterator().next();
                     System.out.println("Civilstand: "+civil.getCivilStatus());
                 }
+                if(person.getMother().size()>0) {
+                    ParentDataRecord parent = person.getMother().current().iterator().next();
+                    System.out.println("Mor: "+parent.getCprNumber());
+                }
+                if(person.getFather().size()>0) {
+                    ParentDataRecord parent = person.getFather().current().iterator().next();
+                    System.out.println("Far: "+parent.getCprNumber());
+                }
+
                 Assert.assertEquals(1, person.getBirthTime().size());
                 if(person.getBirthTime().size()>0) {//ALWAYS 1
                     BirthTimeDataRecord birth = person.getBirthTime().iterator().next();
@@ -161,7 +170,7 @@ public class cprLoadTestdatasetTest {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(44, persons.size());
+            Assert.assertEquals(51, persons.size());
 
             query = new PersonRecordQuery();
             query.setPersonnummer("1111111111");

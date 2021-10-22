@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.geo.data.accessaddress;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
@@ -229,30 +228,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         map.put(ROAD_UUID, this.roadUUID);
         map.put(MUNICIPALITY, this.municipalityCode);
         return map;
-    }
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = super.getLookupDefinition();
-        if (this.bnr != null && !this.bnr.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_BNR, this.bnr, String.class);
-        }
-        if (this.houseNumber != null && !this.houseNumber.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseLookupDefinition.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER, this.houseNumber, String.class);
-        }
-        if (this.roadCode != null && !this.roadCode.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE, this.roadCode, Integer.class);
-        }
-        if (this.roadUUID != null && !this.roadUUID.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE + BaseLookupDefinition.separator + Identification.DB_FIELD_UUID, this.roadUUID, UUID.class);
-        }
-        if (this.localityUUID != null && !this.localityUUID.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_LOCALITY + BaseLookupDefinition.separator + AccessAddressLocalityRecord.DB_FIELD_REFERENCE + BaseLookupDefinition.separator + Identification.DB_FIELD_UUID, this.localityUUID, UUID.class);
-        }
-        if (this.municipalityCode != null && !this.municipalityCode.isEmpty()) {
-            lookupDefinition.put(AccessAddressEntity.DB_FIELD_ROAD + BaseLookupDefinition.separator + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE, this.municipalityCode, Integer.class);
-        }
-        return lookupDefinition;
     }
 
     @Override

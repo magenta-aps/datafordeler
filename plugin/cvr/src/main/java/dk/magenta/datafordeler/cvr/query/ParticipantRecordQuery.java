@@ -1,7 +1,5 @@
 package dk.magenta.datafordeler.cvr.query;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -227,40 +225,6 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.setKommuneKode(parameters.getI(KOMMUNEKODE));
     }
 
-    @Deprecated
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new CvrRecordLookupDefinition(this);
-
-        if (this.getEnhedsNummer() != null && !this.getEnhedsNummer().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + ParticipantRecord.DB_FIELD_UNIT_NUMBER, this.getEnhedsNummer(), Long.class);
-        }
-
-        if (this.getNavn() != null && !this.getNavn().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + ParticipantRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME, this.getNavn(), String.class);
-        }
-
-        if (this.getKommuneKode() != null && !this.getKommuneKode().isEmpty()) {
-            StringJoiner sj = new StringJoiner(LookupDefinition.separator);
-            sj.add(LookupDefinition.entityref);
-            sj.add(ParticipantRecord.DB_FIELD_LOCATION_ADDRESS);
-            sj.add(AddressRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(Municipality.DB_FIELD_CODE);
-            lookupDefinition.put(sj.toString(), this.getKommuneKode(), Integer.class);
-        }
-        if (this.getKommunekodeRestriction() != null && !this.getKommunekodeRestriction().isEmpty()) {
-            StringJoiner sj = new StringJoiner(LookupDefinition.separator);
-            sj.add(LookupDefinition.entityref);
-            sj.add(ParticipantRecord.DB_FIELD_LOCATION_ADDRESS);
-            sj.add(AddressRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(Municipality.DB_FIELD_CODE);
-            lookupDefinition.put(sj.toString(), this.getKommunekodeRestriction(), Integer.class);
-        }
-        return lookupDefinition;
-    }
-
     @Override
     protected boolean isEmpty() {
         return this.enhedsNummer.isEmpty() && this.navn.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty();
@@ -286,9 +250,9 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     static {
         joinHandles.put("unit", ParticipantRecord.DB_FIELD_UNIT_NUMBER);
-        joinHandles.put("name", ParticipantRecord.DB_FIELD_NAMES + LookupDefinition.separator + SecNameRecord.DB_FIELD_NAME);
-        joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
-        joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
+        joinHandles.put("name", ParticipantRecord.DB_FIELD_NAMES + BaseQuery.separator + SecNameRecord.DB_FIELD_NAME);
+        joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
+        joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
         joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
     }
 

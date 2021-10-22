@@ -1,7 +1,5 @@
 package dk.magenta.datafordeler.cvr.query;
 
-import dk.magenta.datafordeler.core.database.BaseLookupDefinition;
-import dk.magenta.datafordeler.core.database.LookupDefinition;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -230,41 +228,6 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         this.setVejkode(parameters.getI(VEJKODE));
     }
 
-
-    @Override
-    public BaseLookupDefinition getLookupDefinition() {
-        BaseLookupDefinition lookupDefinition = new CvrRecordLookupDefinition(this);
-
-        if (this.getPNummer() != null && !this.getPNummer().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyUnitRecord.DB_FIELD_P_NUMBER, this.getPNummer(), Integer.class);
-        }
-        if (this.getAssociatedCompanyCvrNummer() != null && !this.getAssociatedCompanyCvrNummer().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyUnitRecord.DB_FIELD_COMPANY_LINK + LookupDefinition.separator + CompanyLinkRecord.DB_FIELD_CVRNUMBER, this.getAssociatedCompanyCvrNummer(), Integer.class);
-        }
-        if (this.getPrimaryIndustry() != null && !this.getPrimaryIndustry().isEmpty()) {
-            lookupDefinition.put(LookupDefinition.entityref + LookupDefinition.separator + CompanyUnitRecord.DB_FIELD_PRIMARY_INDUSTRY + LookupDefinition.separator + CompanyIndustryRecord.DB_FIELD_CODE, this.getPrimaryIndustry(), String.class);
-        }
-        if (this.getKommuneKode() != null && !this.getKommuneKode().isEmpty()) {
-            StringJoiner sj = new StringJoiner(LookupDefinition.separator);
-            sj.add(LookupDefinition.entityref);
-            sj.add(CompanyUnitRecord.DB_FIELD_LOCATION_ADDRESS);
-            sj.add(AddressRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(Municipality.DB_FIELD_CODE);
-            lookupDefinition.put(sj.toString(), this.getKommuneKode(), Integer.class);
-        }
-        if (this.getKommunekodeRestriction() != null && !this.getKommunekodeRestriction().isEmpty()) {
-            StringJoiner sj = new StringJoiner(LookupDefinition.separator);
-            sj.add(LookupDefinition.entityref);
-            sj.add(CompanyUnitRecord.DB_FIELD_LOCATION_ADDRESS);
-            sj.add(AddressRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY);
-            sj.add(Municipality.DB_FIELD_CODE);
-            lookupDefinition.put(sj.toString(), this.getKommunekodeRestriction(), Integer.class);
-        }
-        return lookupDefinition;
-    }
-
     @Override
     protected boolean isEmpty() {
         return this.pNummer.isEmpty() && this.associatedCompanyCvrNumber.isEmpty() && this.primaryIndustry.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty();
@@ -289,10 +252,10 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     static {
         joinHandles.put("pnr", CompanyUnitRecord.DB_FIELD_P_NUMBER);
-        joinHandles.put("cvr", CompanyUnitRecord.DB_FIELD_COMPANY_LINK + LookupDefinition.separator + CompanyLinkRecord.DB_FIELD_CVRNUMBER);
-        joinHandles.put("primaryindustrycode", CompanyUnitRecord.DB_FIELD_PRIMARY_INDUSTRY + LookupDefinition.separator + CompanyIndustryRecord.DB_FIELD_CODE);
-        joinHandles.put("municipalitycode", CompanyUnitRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + LookupDefinition.separator + Municipality.DB_FIELD_CODE);
-        joinHandles.put("roadcode", CompanyUnitRecord.DB_FIELD_LOCATION_ADDRESS + LookupDefinition.separator + AddressRecord.DB_FIELD_ROADCODE);
+        joinHandles.put("cvr", CompanyUnitRecord.DB_FIELD_COMPANY_LINK + BaseQuery.separator + CompanyLinkRecord.DB_FIELD_CVRNUMBER);
+        joinHandles.put("primaryindustrycode", CompanyUnitRecord.DB_FIELD_PRIMARY_INDUSTRY + BaseQuery.separator + CompanyIndustryRecord.DB_FIELD_CODE);
+        joinHandles.put("municipalitycode", CompanyUnitRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
+        joinHandles.put("roadcode", CompanyUnitRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
     }
 
     @Override
