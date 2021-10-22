@@ -133,7 +133,7 @@ public class EboksRecieveLookupService {
                     }
 
                     String status = k.getMetadata().getCompanyStatusRecord(k).getStatus();
-                    if(!"NORMAL".equals(status)) {
+                    if(!"NORMAL".equals(status) && !"Aktiv".equals(status) && !"Fremtid".equals(status)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailStrate.CEASED));
                     } else if (adress.getMunicipality().getMunicipalityCode() < 950) {
                         failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));
