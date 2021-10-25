@@ -1,6 +1,8 @@
 package dk.magenta.datafordeler.combined;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
@@ -198,6 +200,143 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                 }
             }
         }
+        return root.getNode();
+    }
+
+    public Object wrapRecordResultFilteredInfo(PersonEntity person, PersonEntity father, Boolean fatherHasAuthority, PersonEntity mother, Boolean motherHasAuthority, List<PersonEntity> siblingList) {
+        NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
+        root.putPOJO("person", this.wrapRecordResultFilteredInfo(person, null));
+        root.putPOJO("far", this.wrapRecordResultFilteredInfo(father, fatherHasAuthority));
+        root.putPOJO("mor", this.wrapRecordResultFilteredInfo(mother, motherHasAuthority));
+
+
+        ArrayNode node = objectMapper.createArrayNode();
+        for(PersonEntity sibling : siblingList) {
+            ObjectNode siblingObject = objectMapper.createObjectNode();
+            siblingObject.put("cprNummer", sibling.getPersonnummer());
+            NameDataRecord nameData = this.getLatest(sibling.getName());
+            if (nameData != null) {
+                StringJoiner nameJoiner = new StringJoiner(" ");
+                if (!nameData.getFirstNames().isEmpty()) {
+                    nameJoiner.add(nameData.getFirstNames());
+                }
+                if (!nameData.getMiddleName().isEmpty()) {
+                    nameJoiner.add(nameData.getMiddleName());
+                }
+                if (nameJoiner.length() > 0) {
+                    siblingObject.put("fornavn", nameJoiner.toString());
+                }
+                if (nameData.getLastName() != null && !nameData.getLastName().isEmpty()) {
+                    siblingObject.put("efternavn", nameData.getLastName());
+                }
+            }
+            node.add(siblingObject);
+        }
+        root.putArray("soeskende", node);
+        return root.getNode();
+    }
+
+    public Object wrapRecordResultFilteredInfo(PersonEntity input, Boolean hasAuthority) {
+        NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
+        if(input==null) {
+            return root.getNode();
+        }
+        root.put("cprNummer", input.getPersonnummer());
+
+        NameDataRecord nameData = this.getLatest(input.getName());
+        if (nameData != null) {
+            StringJoiner nameJoiner = new StringJoiner(" ");
+            if (!nameData.getFirstNames().isEmpty()) {
+                nameJoiner.add(nameData.getFirstNames());
+            }
+            if (!nameData.getMiddleName().isEmpty()) {
+                nameJoiner.add(nameData.getMiddleName());
+            }
+            if (nameJoiner.length() > 0) {
+                root.put("fornavn", nameJoiner.toString());
+            }
+            if (nameData.getLastName() != null && !nameData.getLastName().isEmpty()) {
+                root.put("efternavn", nameData.getLastName());
+            }
+        }
+
+        ForeignAddressDataRecord personForeignAddressData = this.getLatest(input.getForeignAddress());
+        AddressDataRecord personAddressData = this.getLatest(input.getAddress());
+
+        ObjectNode addressNode = objectMapper.createObjectNode();
+
+        if (personForeignAddressData != null && (personAddressData == null || personForeignAddressData.getEffectFrom().isAfter(personAddressData.getEffectFrom()))) {
+            String address = personForeignAddressData.join("\n");
+            addressNode.put("udlandsadresse", address);
+            ForeignAddressEmigrationDataRecord personEmigrationData = this.getLatest(input.getEmigration());
+            if (personEmigrationData != null) {
+                addressNode.put("landekode", countryCodeMap.get(personEmigrationData.getEmigrationCountryCode()));
+                addressNode.put("udrejsedato", formatDate(personEmigrationData.getEffectFrom()));
+            }
+        } else {
+            if (personAddressData != null) {
+                addressNode.put("tilflytningsdato", formatDate(personAddressData.getEffectFrom()));
+                int municipalityCode = personAddressData.getMunicipalityCode();
+                addressNode.put("myndighedskode", municipalityCode);
+                int roadCode = personAddressData.getRoadCode();
+                String houseNumber = personAddressData.getHouseNumber();
+                String personBuildingNumber = personAddressData.getBuildingNumber();
+                if (roadCode > 0) {
+                    addressNode.put("vejkode", roadCode);
+
+                    GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+
+                    addressNode.put("kommune", lookup.getMunicipalityName());
+
+                    String buildingNumber = lookup.getbNumber();
+                    String roadName = lookup.getRoadName();
+
+                    if (roadName != null) {
+                        addressNode.put("adresse", this.getAddressFormatted(
+                                roadName,
+                                personAddressData.getHouseNumber(),
+                                null,
+                                null, null,
+                                personAddressData.getFloor(),
+                                personAddressData.getDoor(),
+                                buildingNumber
+                        ));
+                    } else if (buildingNumber != null && !buildingNumber.isEmpty()) {
+                        addressNode.put("adresse", buildingNumber);
+                    }
+
+                    addressNode.put("postnummer", lookup.getPostalCode());
+                    addressNode.put("bynavn", lookup.getPostalDistrict());
+                    addressNode.put("stedkode", lookup.getLocalityCodeNumber());
+                }
+
+                if (municipalityCode > 0 && municipalityCode < 900) {
+                    addressNode.put("landekode", "DK");
+                } else if (municipalityCode > 900) {
+                    addressNode.put("landekode", "GL");
+                }
+            }
+        }
+
+        AddressConameDataRecord personAddressConameData = this.getLatest(input.getConame());
+        if (personAddressConameData != null && !personAddressConameData.getConame().isEmpty()) {
+            String coname = personAddressConameData.getConame();
+            if (coname != null && !coname.isEmpty()) {
+                coname = coname.toLowerCase();
+                Matcher m = postboxExtract.matcher(coname);
+                if (m.find()) {
+                    try {
+                        int postbox = Integer.parseInt(m.group(1), 10);
+                        addressNode.put("postboks", postbox);
+                    } catch (NumberFormatException e) {}
+                }
+            }
+        }
+        root.putPOJO("adresse", addressNode);
+        if(hasAuthority!=null) {
+            root.putPOJO("myndighedshaver", hasAuthority);
+        }
+
         return root.getNode();
     }
 
