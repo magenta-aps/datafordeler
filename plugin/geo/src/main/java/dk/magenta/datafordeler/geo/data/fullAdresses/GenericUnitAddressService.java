@@ -79,7 +79,6 @@ public class GenericUnitAddressService {
     static {
         parameterMappings.put("bnr", ParameterType.bnr);
         parameterMappings.put("husNummer", ParameterType.husNummer);
-        parameterMappings.put("doer", ParameterType.doer);
         parameterMappings.put("etage", ParameterType.etage);
         parameterMappings.put("bloknavn", ParameterType.bloknavn);
         parameterMappings.put("kommune_kode", ParameterType.kommune_kode);
