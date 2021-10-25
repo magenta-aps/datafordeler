@@ -47,7 +47,6 @@ public class GenericUnitAddressService {
     public enum ParameterType {
         bnr("accessAddressEntity.bnr", false),
         husNummer("accessAddressNumberRecord.number", false),
-        doer("unitAddressDoor.door", false),
         etage("unitAddressFloor.floor", false),
         bloknavn("accessAddressBlockNameRecord.name", false),
         kommune_kode("geoMunipialicityEntity.code", true),

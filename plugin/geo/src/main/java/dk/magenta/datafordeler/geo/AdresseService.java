@@ -564,7 +564,6 @@ public class AdresseService {
                 ObjectNode addressNode = objectMapper.createObjectNode();
                 String houseNumberValue = null;
                 String floorValue = null;
-                String doorValue = null;
                 String unitNumberValue = null;
 
                 AccessAddressHouseNumberRecord houseNumberRecord = current(accessAddressEntity.getHouseNumber());
