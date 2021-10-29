@@ -18,6 +18,9 @@
         <jackson.version>2.12.4</jackson.version>
         <spring.version>5.2.16.RELEASE</spring.version>
         <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
+
+        <hibernate.version>5.5.2.Final</hibernate.version>
+        <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
