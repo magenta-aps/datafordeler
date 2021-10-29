@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.magenta.datafordeler</groupId>
     <artifactId>datafordeler</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <name>datafordeler</name>
     <description></description>
     <packaging>pom</packaging>
