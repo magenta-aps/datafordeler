@@ -18,7 +18,7 @@
         <jackson.version>2.12.4</jackson.version>
         <spring.version>5.2.16.RELEASE</spring.version>
         <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
-        <spring.boot.starter.version>3.4.4</spring.boot.starter.version>
+        <cxf.spring.boot.starter.version>3.3.2</cxf.spring.boot.starter.version>
 
         <commons.io.version>2.11.0</commons.io.version>
 

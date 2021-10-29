@@ -46,7 +46,7 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-            <version>${spring.boot.starter.version}</version>
+            <version>${cxf.spring.boot.starter.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>ch.qos.logback</groupId>
