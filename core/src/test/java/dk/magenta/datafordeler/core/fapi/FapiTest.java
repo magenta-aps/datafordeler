@@ -35,7 +35,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.w3c.dom.Document;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.*;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -80,13 +79,6 @@ public class FapiTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private SOAPConnectionFactory soapConnectionFactory;
-    private SOAPConnection soapConnection;
-    private MessageFactory messageFactory;
-    private SOAPMessage soapMessage;
-    private SOAPPart soapPart;
-    private SOAPEnvelope soapEnvelope;
-
     private static String veryEarly = "1800-01-01T00:00:00Z";
     private static String veryLate = "2200-12-31T23:59:59Z";
 
@@ -98,14 +90,6 @@ public class FapiTest {
         String testSchema = DemoEntityRecord.schema;
         Plugin foundPlugin = this.pluginManager.getPluginForSchema(testSchema);
         Assert.assertEquals(DemoPlugin.class, foundPlugin.getClass());
-    }
-
-    @Test
-    @Order(order = 2)
-    public void soapExistsTest() throws IOException {
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        ResponseEntity<String> resp = this.restTemplate.exchange("/demo/postnummer/1/soap?wsdl", HttpMethod.GET, httpEntity, String.class);
-        Assert.assertEquals(200, resp.getStatusCode().value());
     }
 
     @Test
@@ -135,83 +119,6 @@ public class FapiTest {
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = this.restTemplate.exchange("/demo/postnummer/1/rest/search?postnr=8000&registrationFromBefore=2000-02-31", HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(400, resp.getStatusCode().value());
-    }
-
-
-    // Disabled for now, as we might not need SOAP: @Test
-    @Order(order = 7)
-    public void soapLookupXMLByUUIDTest() throws IOException, SOAPException, DataFordelerException {
-        this.setupSoap();
-        UUID uuid = this.addTestObject();
-        try {
-            String service = "http://v1.helloworld.fapi.plugindemo.datafordeler.magenta.dk/";
-            soapEnvelope.addNamespaceDeclaration("v1", service);
-            SOAPBody soapBody = soapEnvelope.getBody();
-            QName bodyName = new QName(service, "get", "v1");
-            SOAPBodyElement bodyElement = soapBody.addBodyElement(bodyName);
-            QName n = new QName("id");
-            bodyElement.addChildElement(n).addTextNode(uuid.toString());
-            soapMessage.saveChanges();
-
-            URL soapEndpoint = this.restTemplate.getRestTemplate().getUriTemplateHandler().expand("/demo/postnummer/1/soap").toURL();
-            SOAPMessage soapResponseMessage = soapConnection.call(soapMessage, soapEndpoint);
-            Assert.assertNotNull(soapResponseMessage);
-
-            System.out.println("soapResponseMessage (" + soapResponseMessage.getClass().getCanonicalName() + "):");
-            Document document = soapResponseMessage.getSOAPBody().extractContentAsDocument();
-            System.out.println(document.getChildNodes().item(0));
-
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            SOAPBody responseBody = soapResponseMessage.getSOAPBody();
-            System.out.println("responseBody: " + responseBody);
-
-            try {
-                Assert.assertEquals(uuid.toString(), xpath.compile("//return/UUID").evaluate(document, XPathConstants.STRING));
-                Assert.assertEquals("fapitest", xpath.compile("//return/domain").evaluate(document, XPathConstants.STRING));
-
-                this.testSoapResponse(document, "postnr", "8000", "2017-02-21T16:02:50+01:00", "2017-05-01T16:06:22+02:00", "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");
-                this.testSoapResponse(document, "bynavn", "Århus C", "2017-02-21T16:02:50+01:00", "2017-05-01T16:06:22+02:00", "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");
-
-                this.testSoapResponse(document, "postnr", "8000", "2017-02-21T16:02:50+01:00", "2017-05-01T16:06:22+02:00", "2018-01-01T00:00:00+01:00", null);
-                this.testSoapResponse(document, "bynavn", "AArhus C", "2017-02-21T16:02:50+01:00", "2017-05-01T16:06:22+02:00", "2018-01-01T00:00:00+01:00", null);
-
-                this.testSoapResponse(document, "postnr", "8000", "2017-05-01T16:06:22+02:00", null, "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");
-                this.testSoapResponse(document, "bynavn", "Århus C", "2017-05-01T16:06:22+02:00", null, "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");
-
-                this.testSoapResponse(document, "postnr", "8000", "2017-05-01T16:06:22+02:00", null, "2018-01-01T00:00:00+01:00", null);
-                this.testSoapResponse(document, "bynavn", "Aarhus C", "2017-05-01T16:06:22+02:00", null, "2018-01-01T00:00:00+01:00", null);
-
-            } catch (XPathExpressionException e) {
-                e.printStackTrace();
-            }
-        } finally {
-            this.removeTestObject(uuid);
-        }
-    }
-
-    private void testSoapResponse(Object responseBody, String key, String expected, String registrationFrom, String registrationTo, String effectFrom, String effectTo) throws XPathExpressionException {
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        StringBuilder sb = new StringBuilder();
-        sb.append("//return/registration");
-        if (registrationFrom != null) {
-            sb.append("/registrationFromBefore[contains(text(), \"" + registrationFrom + "\") or contains(text(), \"" + toUTC(registrationFrom) + "\")]/..");
-        }
-        if (registrationTo != null) {
-            sb.append("/registrationToBefore[contains(text(), \"" + registrationTo + "\") or contains(text(), \"" + toUTC(registrationTo) + "\")]/..");
-        }
-        sb.append("/effect");
-        if (effectFrom != null) {
-            sb.append("/effectFrom[contains(text(),\"" + effectFrom + "\") or contains(text(), \"" + toUTC(effectFrom) + "\")]/..");
-        }
-        if (effectTo != null) {
-            sb.append("/effectTo[contains(text(),\"" + effectTo + "\") or contains(text(), \"" + toUTC(effectTo) + "\")]/..");
-        }
-        sb.append("/data/entry/key[contains(text(),\"" + key + "\")]/../value");
-        Assert.assertEquals(expected, xpath.compile(sb.toString()).evaluate(responseBody, XPathConstants.STRING));
-    }
-
-    private String toUTC(String time) {
-        return OffsetDateTime.parse(time).atZoneSameInstant(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
     @Test
@@ -701,26 +608,6 @@ public class FapiTest {
         return resp;
     }
 
-    private void setupSoap() {
-        try {
-            //object initialization
-            soapConnectionFactory = SOAPConnectionFactory.newInstance();
-            soapConnection = soapConnectionFactory.createConnection();
-
-            messageFactory = MessageFactory.newInstance();
-            soapMessage = messageFactory.createMessage();
-
-            soapPart = soapMessage.getSOAPPart();
-            soapEnvelope = soapPart.getEnvelope();
-
-        } catch (UnsupportedOperationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SOAPException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
     private UUID addTestObject() throws DataFordelerException {
         UUID uuid = UUID.randomUUID();
