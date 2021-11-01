@@ -314,10 +314,11 @@
         </dependency>
 
         <!-- SQL server connection -->
+        <!-- TODO - find better version -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>9.4.0.jre11</version>
+            <version>7.2.2.jre11</version>
         </dependency>
 
         <dependency>

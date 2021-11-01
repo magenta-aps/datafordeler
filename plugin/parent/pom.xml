@@ -17,11 +17,9 @@
         <junit.version>4.13</junit.version>
         <jackson.version>2.12.4</jackson.version>
         <spring.version>5.2.16.RELEASE</spring.version>
-        <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
+        <spring.boot.version>2.1.15.RELEASE</spring.boot.version><!-- TODO - find better version -->
         <cxf.spring.boot.starter.version>3.4.4</cxf.spring.boot.starter.version>
-
         <commons.io.version>2.11.0</commons.io.version>
-
         <hibernate.version>5.5.2.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <maven.compiler.source>11</maven.compiler.source>
