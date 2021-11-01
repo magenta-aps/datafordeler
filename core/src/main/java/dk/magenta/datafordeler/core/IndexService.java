@@ -30,8 +30,8 @@ public class IndexService {
     @Autowired
     private PluginManager pluginManager;
 
-    @Autowired
-    private SoapServiceConfiguration soapServiceConfiguration;
+
+
 
     // No need to recreate the response every time we are asked, since it's the same for every call on a given server execution
     private String preparedJsonResponse;
@@ -62,10 +62,9 @@ public class IndexService {
                     }
                 }
 
-                for (JaxWsServerFactoryBean soapServiceBean : soapServiceConfiguration.getServerBeans()) {
-                    FapiBaseService soapService = (FapiBaseService) soapServiceBean.getServiceBean();
-                    serviceMap.put(soapServiceBean.getAddress(), new ImmutablePair<>(soapService, true));
-                }
+
+
+
 
                 ObjectMapper objectMapper = new ObjectMapper();
                 ObjectNode root = objectMapper.createObjectNode();
