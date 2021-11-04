@@ -378,6 +378,9 @@ public class CprTest extends TestBase {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
+        System.out.println("---------------------------------------");
+        System.out.println(response.getBody());
+
         JSONAssert.assertEquals("{\"cprNummer\":\"1111111110\",\"borIGL\":true,\"dato\":\"2020-10-28\"}", response.getBody(), false);
 
 
@@ -388,6 +391,10 @@ public class CprTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        System.out.println("---------------------------------------");
+        System.out.println(response.getBody());
+
         JSONAssert.assertEquals("{\"cprNummer\":\"1211111111\",\"borIGL\":true,\"dato\":2020-07-17}", response.getBody(), false);
 
         response = restTemplate.exchange(
@@ -397,6 +404,10 @@ public class CprTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        System.out.println("---------------------------------------");
+        System.out.println(response.getBody());
+
         JSONAssert.assertEquals("{\"cprNummer\":\"1311111111\",\"borIGL\":true,\"dato\":\"2011-11-13\"}", response.getBody(), false);
     }
 
