@@ -19,6 +19,7 @@ import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonStatusDataRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -86,12 +87,20 @@ public class CprResidentService {
             if (!personEntities.isEmpty()) {
 
                 PersonEntity personEntity = personEntities.get(0);
-                List<PersonStatusDataRecord> statusList = FilterUtilities.sortRecordsOnEffect(personEntity.getStatus());
+                List<AddressDataRecord> addList = FilterUtilities.sortRecordsOnEffect(personEntity.getAddress());
                 ResidentItem residentInfo = new ResidentItem(cprNummer, false, null);
-                for(PersonStatusDataRecord status : statusList) {
 
-                    if(status.getStatus()==5 || status.getStatus()==7) {
-                        residentInfo.setDato(status.getEffectFrom().toLocalDate());
+                if(!addList.stream().anyMatch(add -> add.getMunicipalityCode()<900)) {
+                    residentInfo.setDato(FilterUtilities.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime().toLocalDate());
+                    residentInfo.setBorIGL(true);
+                    return residentInfo;
+                }
+
+                //Iterate backward through status of the person
+                for(AddressDataRecord add : addList) {
+
+                    if(add.getMunicipalityCode()>900) {
+                        residentInfo.setDato(add.getEffectFrom().toLocalDate());
                         residentInfo.setBorIGL(true);
                     } else {
                         //If a status for the person is found where the person is not living in greenland return the last values of the person living in greenland
