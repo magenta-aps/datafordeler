@@ -132,7 +132,10 @@ public class CprCohabitationService {
                 personBirthDate = personEntity.getBirthTime().current().get(0).getBirthDatetime().toLocalDate();
                 OffsetDateTime personMovingTimestamp = personEntity.getEvent().stream().filter(event -> "A01".equals(event.getEventId()) ||
                         "A05".equals(event.getEventId())).map(u -> u.getTimestamp()).max(OffsetDateTime::compareTo).orElse(null);
-                if(lastMovingTimestamp==null || lastMovingTimestamp.isBefore(personMovingTimestamp)) {
+                if(personMovingTimestamp==null) {
+                    personMovingTimestamp = personEntity.getAddress().getFirstCurrent().getEffectFrom();
+                }
+                if(personMovingTimestamp!=null && (lastMovingTimestamp==null || lastMovingTimestamp.isBefore(personMovingTimestamp))) {
                     lastMovingTimestamp = personMovingTimestamp;
                 }
             }
