@@ -377,8 +377,7 @@ public class CprTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        JSONAssert.assertEquals("{\"cprNummer\":\"1111111110\",\"borIGL\":true,\"dato\":\"2020-07-20\"}", response.getBody(), false);
+        JSONAssert.assertEquals("{\"cprNummer\":\"1111111110\",\"borIGL\":true,\"dato\":\"2020-10-28\"}", response.getBody(), false);
 
 
         response = restTemplate.exchange(
@@ -388,7 +387,7 @@ public class CprTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"cprNummer\":\"1211111111\",\"borIGL\":false,\"dato\":null}", response.getBody(), false);
+        JSONAssert.assertEquals("{\"cprNummer\":\"1211111111\",\"borIGL\":true,\"dato\":2020-07-17}", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/prisme/cpr/residentinformation/1/" + "1311111111",
