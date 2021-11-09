@@ -132,11 +132,11 @@ public class CprCohabitationService {
                 personBirthDate = personEntity.getBirthTime().current().get(0).getBirthDatetime().toLocalDate();
                 OffsetDateTime personMovingTimestamp = personEntity.getEvent().stream().filter(event -> "A01".equals(event.getEventId()) ||
                         "A05".equals(event.getEventId())).map(u -> u.getTimestamp()).max(OffsetDateTime::compareTo).orElse(null);
-                //If the is no timestamp of actual movings, use the last timestamp og a new adress
+                //If there is no timestamp of actual movings, use the last timestamp of a new address
                 if(personMovingTimestamp==null) {
                     personMovingTimestamp = personEntity.getAddress().getFirstCurrent().getEffectFrom();
                 }
-                //Store the newest timestamp in orde to find the last moving
+                //Store the newest timestamp in order to find the last moving
                 if(personMovingTimestamp!=null && (lastMovingTimestamp==null || lastMovingTimestamp.isBefore(personMovingTimestamp))) {
                     lastMovingTimestamp = personMovingTimestamp;
                 }
