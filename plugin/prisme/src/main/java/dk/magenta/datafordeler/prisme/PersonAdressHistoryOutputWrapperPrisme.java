@@ -104,10 +104,6 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
                         } else if(adressRecord.getEffectTo() == null) {
                             progress.set(adressSequenceProgress.LASTFOUND);
                         }
-                    } else {
-                        //If this flag i s raised is means that the person has an unusual adresssequense, not necessarily wrong.
-                        log.error("ADRESSES IS NOT SEQUENTIAL: " + input.getPersonnummer());
-                        log.info(adressRecord.getEffectFrom());
                     }
                     if(adressRecord.getEffectTo() != null) {
                         org.set(adressRecord.getEffectTo());
