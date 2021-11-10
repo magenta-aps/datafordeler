@@ -245,7 +245,7 @@ public class SameAddressTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001236\",\"Cohabitation\":true,\"ResidentDate\":\"2000-01-01\"}", response.getBody(), false);
+        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001236\",\"Cohabitation\":true,\"ResidentDate\":\"2016-08-31\"}", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,1212121212",

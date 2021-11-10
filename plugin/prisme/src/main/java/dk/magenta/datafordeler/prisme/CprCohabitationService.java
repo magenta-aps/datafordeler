@@ -125,20 +125,23 @@ public class CprCohabitationService {
             ).collect(Collectors.toList());
 
             int counter = 1;
-            LocalDate personBirthDate = null;
             OffsetDateTime lastMovingTimestamp = null;
 
             for(PersonEntity personEntity : matchingEntities) {
-                personBirthDate = personEntity.getBirthTime().current().get(0).getBirthDatetime().toLocalDate();
                 OffsetDateTime personMovingTimestamp = personEntity.getEvent().stream().filter(event -> "A01".equals(event.getEventId()) ||
                         "A05".equals(event.getEventId())).map(u -> u.getTimestamp()).max(OffsetDateTime::compareTo).orElse(null);
-                if(lastMovingTimestamp==null || lastMovingTimestamp.isBefore(personMovingTimestamp)) {
+                //If there is no timestamp of actual movings, use the last timestamp of a new address
+                if(personMovingTimestamp==null) {
+                    personMovingTimestamp = personEntity.getAddress().getFirstCurrent().getEffectFrom();
+                }
+                //Store the newest timestamp in order to find the last moving
+                if(personMovingTimestamp!=null && (lastMovingTimestamp==null || lastMovingTimestamp.isBefore(personMovingTimestamp))) {
                     lastMovingTimestamp = personMovingTimestamp;
                 }
             }
             boolean allPersonsHasSameAddress = matchingEntities.size()==cprNumbers.size() && !lookup.isAdministrativ();
             obj.put("Cohabitation", allPersonsHasSameAddress);
-            obj.put("ResidentDate", allPersonsHasSameAddress ? Optional.ofNullable(lastMovingTimestamp).map(OffsetDateTime::toLocalDate).map(LocalDate::toString).orElse(personBirthDate.toString()) : null);
+            obj.put("ResidentDate", allPersonsHasSameAddress ? Optional.ofNullable(lastMovingTimestamp).map(OffsetDateTime::toLocalDate).map(LocalDate::toString).get() : null);
             for(String cpr : cprNumbers) {
                 obj.put("cpr"+counter, cpr);
                 counter++;
