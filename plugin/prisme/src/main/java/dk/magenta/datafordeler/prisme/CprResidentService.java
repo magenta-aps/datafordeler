@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -93,12 +94,14 @@ public class CprResidentService {
                 PersonEntity personEntity = personEntities.get(0);
                 List<AddressDataRecord> addList = FilterUtilities.sortRecordsOnEffect(personEntity.getAddress());
                 ResidentItem residentInfo = new ResidentItem(cprNummer, false, null);
+                OffsetDateTime lastEffectFrom = null;
 
                 //Iterate backward through munipialicity of the person, stor when the first danish address is found
                 for(AddressDataRecord add : addList) {
 
                     // Munipialicitycode=900 to support adresses from before the merging of munipialitytynumbers
-                    if(add.getMunicipalityCode()>900) {
+                    if(add.getMunicipalityCode()>900 && (lastEffectFrom == null || Equality.cprDomainEqualDate(lastEffectFrom, add.getEffectTo()))) {
+                        lastEffectFrom = add.getEffectFrom();
                         residentInfo.setDato(add.getEffectFrom().toLocalDate());
                         residentInfo.setBorIGL(true);
                     } else {
