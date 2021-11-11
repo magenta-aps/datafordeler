@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -80,6 +81,9 @@ public class CprResidentService {
         try(final Session session = sessionManager.getSessionFactory().openSession();) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setPersonnummer(cprNummer);
+            OffsetDateTime now = OffsetDateTime.now();
+            personQuery.setRegistrationFromBefore(now);
+            personQuery.setRegistrationToAfter(now);
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
@@ -90,15 +94,10 @@ public class CprResidentService {
                 List<AddressDataRecord> addList = FilterUtilities.sortRecordsOnEffect(personEntity.getAddress());
                 ResidentItem residentInfo = new ResidentItem(cprNummer, false, null);
 
-                if(!addList.stream().anyMatch(add -> add.getMunicipalityCode()<900)) {
-                    residentInfo.setDato(FilterUtilities.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime().toLocalDate());
-                    residentInfo.setBorIGL(true);
-                    return residentInfo;
-                }
-
-                //Iterate backward through status of the person
+                //Iterate backward through munipialicity of the person, stor when the first danish address is found
                 for(AddressDataRecord add : addList) {
 
+                    // Munipialicitycode=900 to support adresses from before the merging of munipialitytynumbers
                     if(add.getMunicipalityCode()>900) {
                         residentInfo.setDato(add.getEffectFrom().toLocalDate());
                         residentInfo.setBorIGL(true);
@@ -108,7 +107,6 @@ public class CprResidentService {
                         return residentInfo;
                     }
                 }
-                residentInfo.setDato(FilterUtilities.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime().toLocalDate());
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
                 return residentInfo;
             }
