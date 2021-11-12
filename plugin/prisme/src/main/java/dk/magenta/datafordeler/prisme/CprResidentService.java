@@ -105,7 +105,7 @@ public class CprResidentService {
                         return residentInfo;
                     }
 
-                    // Munipialicitycode=900 to support adresses from before the merging of munipialitytynumbers
+                    // Municipalitycode=900 to support adresses from before the merging of municipalitynumbers
                     if(add.getMunicipalityCode()>900 && (lastEffectFrom == null || Equality.cprDomainEqualDate(lastEffectFrom, add.getEffectTo()))) {
                         lastEffectFrom = add.getEffectFrom();
                         residentInfo.setDato(add.getEffectFrom().toLocalDate());
