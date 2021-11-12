@@ -96,7 +96,7 @@ public class CprResidentService {
                 ResidentItem residentInfo = new ResidentItem(cprNummer, false, null);
                 OffsetDateTime lastEffectFrom = null;
 
-                //Iterate backward through munipialicity of the person, stor when the first danish address is found
+                //Iterate backward through municipality of the person, store when the first danish address is found
                 for(AddressDataRecord add : addList) {
 
                     // If newest adressrecord is not active, this citizen lives outside DK and GL, return false
