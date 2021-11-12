@@ -99,6 +99,12 @@ public class CprResidentService {
                 //Iterate backward through munipialicity of the person, stor when the first danish address is found
                 for(AddressDataRecord add : addList) {
 
+                    // If newest adressrecord is not active, this citizen lives outside DK and GL, return false
+                    if(lastEffectFrom == null && add.getEffectTo()!=null) {
+                        loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
+                        return residentInfo;
+                    }
+
                     // Munipialicitycode=900 to support adresses from before the merging of munipialitytynumbers
                     if(add.getMunicipalityCode()>900 && (lastEffectFrom == null || Equality.cprDomainEqualDate(lastEffectFrom, add.getEffectTo()))) {
                         lastEffectFrom = add.getEffectFrom();
