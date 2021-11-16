@@ -84,15 +84,12 @@ public class CprCohabitationService {
         }
 
         personQuery.setPersonnumre(cprNumbers);
-        if (cprs.size() > 100) {
-            throw new QueryBuildException("Maximum 100 numbers is allowed");
+        if (cprs.size() > 2) {
+            throw new QueryBuildException("Maximum 2 numbers is allowed");
         }
 
         OffsetDateTime now = OffsetDateTime.now();
         personQuery.setRegistrationAt(now);
-        personQuery.setEffectAt(now);
-
-        ObjectNode obj = objectMapper.createObjectNode();
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
@@ -101,55 +98,66 @@ public class CprCohabitationService {
             GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            if(personEntities.size() != cprNumbers.size()) {
+            if (personEntities.size() != cprNumbers.size()) {
                 throw new HttpNotFoundException(cprs.toString());
             }
 
-            AddressDataRecord firstAddress = FilterUtilities.findNewestUnclosed(personEntities.get(0).getAddress());
+            List<AddressDataRecord> firstAddList = FilterUtilities.sortRecordsOnEffect(personEntities.get(0).getAddress()
+                    .stream().filter( adress -> !adress.isUndone()).collect(Collectors.toList()));
+            List<AddressDataRecord> secondAddList = FilterUtilities.sortRecordsOnEffect(personEntities.get(1).getAddress()
+                    .stream().filter( adress -> !adress.isUndone()).collect(Collectors.toList()));
 
-            int municipalityCode =  firstAddress.getMunicipalityCode();
-            int roadCode =  firstAddress.getRoadCode();
-            GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode);
-            String houseNumber =  firstAddress.getHouseNumber();
-            String door =  firstAddress.getDoor();
-            String floor =  firstAddress.getFloor();
-            String bnr =  firstAddress.getBuildingNumber();
-
-            List<PersonEntity> matchingEntities = personEntities.stream().filter(item ->
-                    FilterUtilities.findNewestUnclosed(item.getAddress().current()).getMunicipalityCode()==municipalityCode &&
-                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getRoadCode()==roadCode &&
-                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getHouseNumber().equals(houseNumber) &&
-                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getDoor().equals(door) &&
-                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getFloor().equals(floor) &&
-                            FilterUtilities.findNewestUnclosed(item.getAddress().current()).getBuildingNumber().equals(bnr)
-            ).collect(Collectors.toList());
-
-            int counter = 1;
-            OffsetDateTime lastMovingTimestamp = null;
-
-            for(PersonEntity personEntity : matchingEntities) {
-                OffsetDateTime personMovingTimestamp = personEntity.getEvent().stream().filter(event -> "A01".equals(event.getEventId()) ||
-                        "A05".equals(event.getEventId())).map(u -> u.getTimestamp()).max(OffsetDateTime::compareTo).orElse(null);
-                //If there is no timestamp of actual movings, use the last timestamp of a new address
-                if(personMovingTimestamp==null) {
-                    personMovingTimestamp = personEntity.getAddress().getFirstCurrent().getEffectFrom();
-                }
-                //Store the newest timestamp in order to find the last moving
-                if(personMovingTimestamp!=null && (lastMovingTimestamp==null || lastMovingTimestamp.isBefore(personMovingTimestamp))) {
-                    lastMovingTimestamp = personMovingTimestamp;
-                }
+            if (!this.compareAdresses(firstAddList.get(0), secondAddList.get(0))) {
+                System.out.println("NOTEQUAL");
+                return constructResponse(cprNumbers, false, null);
             }
-            boolean allPersonsHasSameAddress = matchingEntities.size()==cprNumbers.size() && !lookup.isAdministrativ();
-            obj.put("Cohabitation", allPersonsHasSameAddress);
-            obj.put("ResidentDate", allPersonsHasSameAddress ? Optional.ofNullable(lastMovingTimestamp).map(OffsetDateTime::toLocalDate).map(LocalDate::toString).get() : null);
-            for(String cpr : cprNumbers) {
-                obj.put("cpr"+counter, cpr);
-                counter++;
+
+            System.out.println("SAME");
+
+            OffsetDateTime theFirstMatchingOne = findFirstCommonAdress(firstAddList, secondAddList);
+
+            return constructResponse(cprNumbers, true, Optional.ofNullable(theFirstMatchingOne).map(OffsetDateTime::toLocalDate).map(LocalDate::toString).get());
+
+        }
+    }
+
+    private ObjectNode constructResponse(List<String> cprNumbers, boolean cohabitation, String residentDate) {
+        ObjectNode obj = objectMapper.createObjectNode();
+
+        obj.put("Cohabitation", cohabitation);
+        obj.put("ResidentDate", residentDate);
+        int counter = 1;
+        for(String cpr : cprNumbers) {
+            obj.put("cpr" + counter, cpr);
+            counter++;
+        }
+        return obj;
+    }
+
+    private OffsetDateTime findFirstCommonAdress(List<AddressDataRecord> adressList1, List<AddressDataRecord> adressList2) {
+
+        OffsetDateTime commonAdressTime = null;
+        for (int i = 0; i < Math.min(adressList1.size(), adressList2.size()); i++) {
+            AddressDataRecord adress1 = adressList1.get(i);
+            AddressDataRecord adress2 = adressList2.get(i);
+            if (this.compareAdresses(adress1, adress2) &&
+                    adress1.getEffectFrom().equals(adress2.getEffectFrom())) {
+                commonAdressTime = adress1.getEffectFrom();
+            } else {
+                return commonAdressTime;
             }
         }
+        return commonAdressTime;
+    }
 
 
-        return obj;
+    private boolean compareAdresses(AddressDataRecord adress1, AddressDataRecord adress2) {
+        return adress1.getMunicipalityCode()==adress2.getMunicipalityCode() &&
+                adress1.getRoadCode()==adress2.getRoadCode() &&
+                adress1.getHouseNumber().equals(adress2.getHouseNumber()) &&
+                adress1.getDoor().equals(adress2.getDoor()) &&
+                adress1.getFloor().equals(adress2.getFloor()) &&
+                adress1.getBuildingNumber().equals(adress2.getBuildingNumber());
     }
 
 
