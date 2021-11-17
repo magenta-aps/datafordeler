@@ -1,0 +1,145 @@
+package dk.magenta.datafordeler.eboks;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.database.Entity;
+import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.InputStreamReader;
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+
+import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
+import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.StringJoiner;
+
+import static org.mockito.Mockito.when;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = Application.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class EskatLookupTest {
+
+    @Autowired
+    TestRestTemplate restTemplate;
+    HashSet<Entity> createdEntities = new HashSet<>();
+    @Autowired
+    private SessionManager sessionManager;
+    @Autowired
+    private CompanyEntityManager companyEntityManager;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @SpyBean
+    private DafoUserManager dafoUserManager;
+
+
+    private void loadCompany() throws IOException, DataFordelerException {
+        InputStream testData = EskatLookupTest.class.getResourceAsStream("/company_in.json");
+        JsonNode root = objectMapper.readTree(testData);
+        testData.close();
+        JsonNode itemList = root.get("hits").get("hits");
+        Assert.assertTrue(itemList.isArray());
+        ImportMetadata importMetadata = new ImportMetadata();
+        for (JsonNode item : itemList) {
+            String source = objectMapper.writeValueAsString(item.get("_source").get("Vrvirksomhed"));
+            ByteArrayInputStream bais = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
+            companyEntityManager.parseData(bais, importMetadata);
+            bais.close();
+        }
+    }
+
+    public void loadManyCompanies(int count) throws Exception {
+        this.loadManyCompanies(count, 0);
+    }
+
+    public void loadManyCompanies(int count, int start) throws Exception {
+        ImportMetadata importMetadata = new ImportMetadata();
+        String testData = InputStreamReader.readInputStream(EskatLookupTest.class.getResourceAsStream("/company_in.json"));
+        for (int i = start; i < count + start; i++) {
+            String altered = testData.replaceAll("25052943", "1" + String.format("%07d", i)).replaceAll("\n", "");
+            ByteArrayInputStream bais = new ByteArrayInputStream(altered.getBytes(StandardCharsets.UTF_8));
+            companyEntityManager.parseData(bais, importMetadata);
+            bais.close();
+        }
+    }
+
+
+    @Test
+    public void testCallForEmptyList() throws Exception {
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        ArrayList cprList = new ArrayList();
+        ArrayList cvrList = new ArrayList();
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        String cprs = String.join(",", cprList);
+        String cvrs = String.join(",", cvrList);
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eskat/companystatus/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                HttpMethod.GET,
+                httpEntity,
+                String.class, cprs, cvrs
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals("{\"valid\":{}", response.getBody(), false);
+    }
+
+
+    private void applyAccess(TestUserDetails testUserDetails) {
+        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
+    }
+
+    private void cleanup() {
+        Session session = sessionManager.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            for (Entity entity : createdEntities) {
+                try {
+                    session.delete(entity);
+                } catch (Exception e) {
+                }
+            }
+            createdEntities.clear();
+        } finally {
+            try {
+                transaction.commit();
+            } catch (Exception e) {
+            } finally {
+                session.close();
+            }
+        }
+    }
+
+}
