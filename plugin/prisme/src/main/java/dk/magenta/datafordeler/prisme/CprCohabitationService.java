@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import dk.magenta.datafordeler.core.util.Equality;
 
 /**
  * Get the history of cohabitation
@@ -95,7 +96,6 @@ public class CprCohabitationService {
 
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
-            GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             if (personEntities.size() != cprNumbers.size()) {
@@ -108,11 +108,8 @@ public class CprCohabitationService {
                     .stream().filter( adress -> !adress.isUndone()).collect(Collectors.toList()));
 
             if (!this.compareAdresses(firstAddList.get(0), secondAddList.get(0))) {
-                System.out.println("NOTEQUAL");
                 return constructResponse(cprNumbers, false, null);
             }
-
-            System.out.println("SAME");
 
             OffsetDateTime theFirstMatchingOne = findFirstCommonAdress(firstAddList, secondAddList);
 
@@ -141,7 +138,7 @@ public class CprCohabitationService {
             AddressDataRecord adress1 = adressList1.get(i);
             AddressDataRecord adress2 = adressList2.get(i);
             if (this.compareAdresses(adress1, adress2) &&
-                    adress1.getEffectFrom().equals(adress2.getEffectFrom())) {
+                    Equality.cprDomainEqualDate(adress1.getEffectFrom(), adress2.getEffectFrom())) {
                 commonAdressTime = adress1.getEffectFrom();
             } else {
                 return commonAdressTime;
