@@ -32,9 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.StringJoiner;
 
 import static org.mockito.Mockito.when;
 
@@ -71,49 +69,28 @@ public class EskatLookupTest {
         }
     }
 
-    public void loadManyCompanies(int count) throws Exception {
-        this.loadManyCompanies(count, 0);
-    }
-
-    public void loadManyCompanies(int count, int start) throws Exception {
-        ImportMetadata importMetadata = new ImportMetadata();
-        String testData = InputStreamReader.readInputStream(EskatLookupTest.class.getResourceAsStream("/company_in.json"));
-        for (int i = start; i < count + start; i++) {
-            String altered = testData.replaceAll("25052943", "1" + String.format("%07d", i)).replaceAll("\n", "");
-            ByteArrayInputStream bais = new ByteArrayInputStream(altered.getBytes(StandardCharsets.UTF_8));
-            companyEntityManager.parseData(bais, importMetadata);
-            bais.close();
-        }
-    }
-
 
     @Test
     public void testCallForEmptyList() throws Exception {
-
+        this.loadCompany();
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
         HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
 
-        ArrayList cprList = new ArrayList();
-        ArrayList cvrList = new ArrayList();
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
 
-        String cprs = String.join(",", cprList);
-        String cvrs = String.join(",", cvrList);
-
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/eskat/companystatus/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
+                "/eskat/companystatus/lookup",
                 HttpMethod.GET,
                 httpEntity,
-                String.class, cprs, cvrs
+                String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals(null, response.getBody(), false);
+        JSONAssert.assertEquals("[\"Aktiv: NORMAL\"]", response.getBody(), false);
     }
 
 
@@ -141,5 +118,4 @@ public class EskatLookupTest {
             }
         }
     }
-
 }
