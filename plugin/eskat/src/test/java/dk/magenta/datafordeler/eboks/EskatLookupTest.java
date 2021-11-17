@@ -113,7 +113,7 @@ public class EskatLookupTest {
                 String.class, cprs, cvrs
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"valid\":{}", response.getBody(), false);
+        JSONAssert.assertEquals(null, response.getBody(), false);
     }
 
 
