@@ -137,9 +137,18 @@ public class CprCohabitationService {
         for (int i = 0; i < Math.min(adressList1.size(), adressList2.size()); i++) {
             AddressDataRecord adress1 = adressList1.get(i);
             AddressDataRecord adress2 = adressList2.get(i);
-            if (this.compareAdresses(adress1, adress2) &&
-                    Equality.cprDomainEqualDate(adress1.getEffectFrom(), adress2.getEffectFrom())) {
-                commonAdressTime = adress1.getEffectFrom();
+            if (this.compareAdresses(adress1, adress2)) {
+                if(Equality.cprDomainEqualDate(adress1.getEffectFrom(), adress2.getEffectFrom())) {
+                    // Save the timestamp an iterate to find out if there is earlier common adresses
+                    commonAdressTime = adress1.getEffectFrom();
+                } else {
+                    // find the time when the last of the two persons moved in
+                    if(adress1.getEffectFrom().isBefore(adress2.getEffectFrom())) {
+                        return adress2.getEffectFrom();
+                    } else {
+                        return adress1.getEffectFrom();
+                    }
+                }
             } else {
                 return commonAdressTime;
             }
