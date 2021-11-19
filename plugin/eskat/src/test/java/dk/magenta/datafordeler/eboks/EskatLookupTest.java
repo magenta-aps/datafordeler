@@ -9,8 +9,6 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.core.util.InputStreamReader;
-import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
@@ -92,6 +90,40 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[\"Aktiv: NORMAL\"]", response.getBody(), false);
     }
+
+    @Test
+    public void testCallForCompanyLookup() throws Exception {
+        this.loadCompany();
+        TestUserDetails testUserDetails = new TestUserDetails();
+
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?cvrnummer=25052943",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(response.getBody());
+
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?navne=MAGENTA*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(response.getBody());
+
+    }
+
 
 
     private void applyAccess(TestUserDetails testUserDetails) {
