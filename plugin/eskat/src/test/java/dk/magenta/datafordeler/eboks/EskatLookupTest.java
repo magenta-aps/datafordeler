@@ -69,7 +69,7 @@ public class EskatLookupTest {
 
 
     @Test
-    public void testCallForEmptyList() throws Exception {
+    public void testCallForStatusList() throws Exception {
         this.loadCompany();
         TestUserDetails testUserDetails = new TestUserDetails();
 
@@ -124,7 +124,38 @@ public class EskatLookupTest {
 
     }
 
+    @Test
+    public void testCallForCompanyDetailLookup() throws Exception {
+        this.loadCompany();
+        TestUserDetails testUserDetails = new TestUserDetails();
 
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eskat/companydetail/1/rest/search/?cvrnummer=25052943",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(response.getBody());
+
+        response = restTemplate.exchange(
+                "/eskat/companydetail/1/rest/search/?navne=MAGENTA*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(response.getBody());
+
+    }
 
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
