@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import org.hibernate.Session;
@@ -156,6 +157,29 @@ public class EskatLookupTest {
         System.out.println(response.getBody());
 
     }
+
+    @Test
+    public void testCompanyParticipantLookup() throws Exception {
+        this.loadCompany();
+        TestUserDetails testUserDetails = new TestUserDetails();
+
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/1111111111",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+    }
+
+
+
 
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
