@@ -107,7 +107,9 @@ public class CprCohabitationService {
             List<AddressDataRecord> secondAddList = FilterUtilities.sortRecordsOnEffect(personEntities.get(1).getAddress()
                     .stream().filter( adress -> !adress.isUndone()).collect(Collectors.toList()));
 
-            if (!this.compareAdresses(firstAddList.get(0), secondAddList.get(0))) {
+            if (!this.compareAdresses(firstAddList.get(0), secondAddList.get(0)) ||
+                    firstAddList.get(0).getEffectTo()!=null ||
+                    secondAddList.get(0).getEffectTo()!=null) {
                 return constructResponse(cprNumbers, false, null);
             }
 
@@ -160,10 +162,10 @@ public class CprCohabitationService {
     private boolean compareAdresses(AddressDataRecord adress1, AddressDataRecord adress2) {
         return adress1.getMunicipalityCode()==adress2.getMunicipalityCode() &&
                 adress1.getRoadCode()==adress2.getRoadCode() &&
-                adress1.getHouseNumber().equals(adress2.getHouseNumber()) &&
-                adress1.getDoor().equals(adress2.getDoor()) &&
-                adress1.getFloor().equals(adress2.getFloor()) &&
-                adress1.getBuildingNumber().equals(adress2.getBuildingNumber());
+                Objects.equals(adress1.getHouseNumber(), adress2.getHouseNumber()) &&
+                Objects.equals(adress1.getDoor(), adress2.getDoor()) &&
+                Objects.equals(adress1.getFloor(), adress2.getFloor()) &&
+                Objects.equals(adress1.getBuildingNumber(), adress2.getBuildingNumber());
     }
 
 
