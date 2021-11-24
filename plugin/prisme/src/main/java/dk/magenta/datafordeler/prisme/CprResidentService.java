@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -80,6 +82,9 @@ public class CprResidentService {
         try(final Session session = sessionManager.getSessionFactory().openSession();) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setPersonnummer(cprNummer);
+            OffsetDateTime now = OffsetDateTime.now();
+            personQuery.setRegistrationFromBefore(now);
+            personQuery.setRegistrationToAfter(now);
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
@@ -89,17 +94,20 @@ public class CprResidentService {
                 PersonEntity personEntity = personEntities.get(0);
                 List<AddressDataRecord> addList = FilterUtilities.sortRecordsOnEffect(personEntity.getAddress());
                 ResidentItem residentInfo = new ResidentItem(cprNummer, false, null);
+                OffsetDateTime lastEffectFrom = null;
 
-                if(!addList.stream().anyMatch(add -> add.getMunicipalityCode()<900)) {
-                    residentInfo.setDato(FilterUtilities.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime().toLocalDate());
-                    residentInfo.setBorIGL(true);
-                    return residentInfo;
-                }
-
-                //Iterate backward through status of the person
+                //Iterate backward through municipality of the person, store when the first danish address is found
                 for(AddressDataRecord add : addList) {
 
-                    if(add.getMunicipalityCode()>900) {
+                    // If newest adressrecord is not active, this citizen lives outside DK and GL, return false
+                    if(lastEffectFrom == null && add.getEffectTo()!=null) {
+                        loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
+                        return residentInfo;
+                    }
+
+                    // Municipalitycode=900 to support adresses from before the merging of municipalitynumbers
+                    if(add.getMunicipalityCode()>900 && (lastEffectFrom == null || Equality.cprDomainEqualDate(lastEffectFrom, add.getEffectTo()))) {
+                        lastEffectFrom = add.getEffectFrom();
                         residentInfo.setDato(add.getEffectFrom().toLocalDate());
                         residentInfo.setBorIGL(true);
                     } else {
@@ -108,7 +116,6 @@ public class CprResidentService {
                         return residentInfo;
                     }
                 }
-                residentInfo.setDato(FilterUtilities.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime().toLocalDate());
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
                 return residentInfo;
             }
