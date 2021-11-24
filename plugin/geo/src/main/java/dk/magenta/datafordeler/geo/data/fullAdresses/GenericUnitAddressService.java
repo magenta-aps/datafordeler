@@ -18,7 +18,6 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressDoorRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +47,6 @@ public class GenericUnitAddressService {
     public enum ParameterType {
         bnr("accessAddressEntity.bnr", false),
         husNummer("accessAddressNumberRecord.number", false),
-        doer("unitAddressDoor.door", false),
         etage("unitAddressFloor.floor", false),
         bloknavn("accessAddressBlockNameRecord.name", false),
         kommune_kode("geoMunipialicityEntity.code", true),
@@ -81,7 +79,6 @@ public class GenericUnitAddressService {
     static {
         parameterMappings.put("bnr", ParameterType.bnr);
         parameterMappings.put("husNummer", ParameterType.husNummer);
-        parameterMappings.put("doer", ParameterType.doer);
         parameterMappings.put("etage", ParameterType.etage);
         parameterMappings.put("bloknavn", ParameterType.bloknavn);
         parameterMappings.put("kommune_kode", ParameterType.kommune_kode);
@@ -130,7 +127,6 @@ public class GenericUnitAddressService {
             String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity, geoMunipialicityEntity.name AS munipialicityName " +
                     "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
                     "JOIN "+ UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity."+UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS+"=accessAddressEntity."+AccessAddressEntity.DB_FIELD_IDENTIFICATION+" "+
-                    "JOIN "+ UnitAddressDoorRecord.class.getCanonicalName() + " unitAddressDoor ON unitAddressDoor."+UnitAddressDoorRecord.DB_FIELD_ENTITY+"=unitAddressEntity."+"id"+" "+
                     "JOIN "+ UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor."+UnitAddressFloorRecord.DB_FIELD_ENTITY+"=unitAddressEntity."+"id"+" "+
 
                     "JOIN "+ AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord."+AccessAddressHouseNumberRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+

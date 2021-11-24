@@ -22,19 +22,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     @QueryField(type = QueryField.FieldType.STRING, queryName = BNR)
     private List<String> bnr = new ArrayList<>();
 
-/*
-    public static final String ROAD = AccessAddressEntity.IO_FIELD_ROAD;
-
-    @QueryField(type = QueryField.FieldType.INT, queryName = ROAD)
-    private List<String> road = new ArrayList<>();
-
-
-    public static final String MUNICIPALITY = AccessAddressEntity.IO_FIELD_MUNICIPALITY;
-
-    @QueryField(type = QueryField.FieldType.INT, queryName = MUNICIPALITY)
-    private List<String> municipality = new ArrayList<>();
-*/
-
 
     public static final String HOUSE_NUMBER = AccessAddressEntity.IO_FIELD_HOUSE_NUMBER;
 
@@ -69,53 +56,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
             this.updatedParameters();
         }
     }
-/*
-
-
-
-    public List<String> getRoad() {
-        return road;
-    }
-
-    public void setRoad(String road) {
-        this.road.clear();
-        this.addRoad(road);
-    }
-
-    public void setRoad(int road) {
-        this.setRoad(Integer.toString(road));
-    }
-
-    public void addRoad(String road) {
-        if (road != null) {
-            this.road.add(road);
-            this.increaseDataParamCount();
-        }
-    }
-
-
-
-    public List<String> getMunicipality() {
-        return municipality;
-    }
-
-    public void setMunicipality(String municipality) {
-        this.municipality.clear();
-        this.addMunicipality(municipality);
-    }
-
-    public void setMunicipality(int municipality) {
-        this.setMunicipality(Integer.toString(municipality));
-    }
-
-    public void addMunicipality(String municipality) {
-        if (municipality != null) {
-            this.municipality.add(municipality);
-            this.increaseDataParamCount();
-        }
-    }
-*/
-
 
 
     public List<String> getHouseNumber() {
@@ -161,35 +101,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         }
     }
 
-
-
-    public static final String DOOR = UnitAddressEntity.IO_FIELD_DOOR;
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = DOOR)
-    private List<String> door = new ArrayList<>();
-
-
-    public List<String> getDoor() {
-        return door;
-    }
-
-    public void setDoor(String door) {
-        this.door.clear();
-        this.updatedParameters();
-        this.addDoor(door);
-    }
-
-    public void addDoor(String door) {
-        if (door != null) {
-            this.door.add(door);
-            this.updatedParameters();
-        }
-    }
-
-
-
-
-
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>(super.getSearchParameters());
@@ -201,14 +112,13 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     @Override
     protected boolean isEmpty() {
-        return this.floor.isEmpty() && this.door.isEmpty() && this.bnr.isEmpty();
+        return this.floor.isEmpty() && this.bnr.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
         this.setBnr(parameters.getI(BNR));
-        //this.setRoad(parameters.getFirst(ROAD));
     }
 
     @Override
@@ -225,7 +135,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     static {
         joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseQuery.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);
-        joinHandles.put("door", UnitAddressEntity.DB_FIELD_DOOR + BaseQuery.separator + UnitAddressDoorRecord.DB_FIELD_DOOR);
         joinHandles.put("accessaddress_id", UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS);
     }
 
@@ -241,7 +150,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     protected void setupConditions() throws QueryBuildException {
         super.setupConditions();
         this.addCondition("floor", this.floor);
-        this.addCondition("door", this.door);
     }
 
     public AccessAddressQuery addRelatedAccessAddressQuery() {
