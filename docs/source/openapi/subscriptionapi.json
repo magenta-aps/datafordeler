@@ -179,9 +179,6 @@
             "description": "kodeId benyttes som sammenligning for at identificere om ændringer i datafordeleren matcher den oprettede subscription \n\nKodeId består af 3 dele for businessevents:\n\npart 1: Definere hvilket domæne der observeres på cpr/cvr\n\nPart 2: Definere om der observeres på hændelser af typen businessevent eller dataevent\n\nPart 3: Definere i denne situation hvilket businessevent der observeres på. Businessevents er defineret på dette link: https://doc.test.data.gl/handelseskoder.pdf",
             "href": "/handelseskoder.pdf",
             "examples": {
-              "Hvad som helst": {
-                "value": "cpr.businessevent.anything"
-              },
               "Flytning": {
                 "value": "cpr.businessevent.A01"
               },
@@ -311,9 +308,6 @@
             "description": "kodeId benyttes som sammenligning for at identificere om ændringer i datafordeleren matcher den oprettede subscription \n\nKodeId består af 3 dele for businessevents:\n\npart 1: Definere hvilket domæne der observeres på cpr/cvr\n\nPart 2: Definere om der observeres på hændelser af typen businessevent eller dataevent\n\nPart 3: Definere i denne situation hvilket businessevent der observeres på. Businessevents er defineret på dette link: https://doc.test.data.gl/handelseskoder.pdf",
             "href": "/handelseskoder.pdf",
             "examples": {
-              "Hvad som helst": {
-                "value": "cpr.businessevent.anything"
-              },
               "Flytning": {
                 "value": "cpr.businessevent.A01"
               },
