@@ -8,7 +8,7 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
-import dk.magenta.datafordeler.eskat.output.KimikRecordOutputWrapper;
+import dk.magenta.datafordeler.eskat.output.EskatRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.hibernate.Session;
@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 public class CompanyRecordTestingService extends CompanyRecordService {
 
     @Autowired
-    private KimikRecordOutputWrapper companyRecordOutputWrapper;
+    private EskatRecordOutputWrapper companyRecordOutputWrapper;
 
 
     public CompanyRecordTestingService() {

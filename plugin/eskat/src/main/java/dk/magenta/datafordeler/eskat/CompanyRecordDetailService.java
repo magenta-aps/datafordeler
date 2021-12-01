@@ -1,18 +1,13 @@
 package dk.magenta.datafordeler.eskat;
 
-import dk.magenta.datafordeler.core.exception.AccessDeniedException;
-import dk.magenta.datafordeler.core.exception.AccessRequiredException;
-import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
+import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
-import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
-import dk.magenta.datafordeler.cvr.output.CompanyRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
-import dk.magenta.datafordeler.eskat.output.KimikRecordDetailOutputWrapper;
-import dk.magenta.datafordeler.eskat.output.KimikRecordOutputWrapper;
+import dk.magenta.datafordeler.eskat.output.EskatRecordDetailOutputWrapper;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +28,7 @@ import java.util.stream.Stream;
 public class CompanyRecordDetailService extends CompanyRecordService {
 
     @Autowired
-    private KimikRecordDetailOutputWrapper companyRecordOutputWrapper;
+    private EskatRecordDetailOutputWrapper companyRecordOutputWrapper;
 
 
     public CompanyRecordDetailService() {

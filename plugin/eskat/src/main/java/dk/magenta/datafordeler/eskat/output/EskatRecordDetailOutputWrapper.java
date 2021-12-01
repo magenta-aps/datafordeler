@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 
 @Component
-public class KimikRecordDetailOutputWrapper extends CompanyRecordOutputWrapper {
+public class EskatRecordDetailOutputWrapper extends CompanyRecordOutputWrapper {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -58,7 +58,27 @@ public class KimikRecordDetailOutputWrapper extends CompanyRecordOutputWrapper {
         container.addNontemporal("branchetekst", record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryText()).orElse(""));
         container.addNontemporal("branchekode", record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(""));
 
+        /*List<String>  productionUnits = record.getProductionUnits().current().stream().map(f -> Integer.toString(f.getpNumber()));
 
+
+        CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
+        companyUnitRecordQuery.setPNummer(productionUnits);
+        Session session = this.getSessionManager().getSessionFactory().openSession();
+
+        protected Stream<E> searchByQueryAsStream(Q query, Session session) {
+            return QueryManager.getAllEntitiesAsStream(
+                    session, query,
+                    this.getEntityClass()
+            );
+
+
+
+            for(CompanyUnitLinkRecord productionUnit: productionUnits) {
+                CompanyUnitRecordQuery
+
+                System.out.println(productionUnit.getpNumber());
+
+            }*/
 
 
     }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class KimikRecordOutputWrapper extends CompanyRecordOutputWrapper {
+public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
 
     @Autowired
     private ObjectMapper objectMapper;
