@@ -1,11 +1,19 @@
 package dk.magenta.datafordeler.eskat.output;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.output.CompanyRecordOutputWrapper;
+import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitLinkRecord;
+import dk.magenta.datafordeler.cvr.records.SecNameRecord;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 
 @Component
@@ -25,22 +33,32 @@ public class KimikRecordDetailOutputWrapper extends CompanyRecordOutputWrapper {
 
         container.addNontemporal(CompanyRecord.IO_FIELD_CVR_NUMBER, record.getCvrNumber());
         container.addNontemporal("navn", record.getNames().current().iterator().next().getName());
+        container.addNontemporal("sekundartnavn", record.getSecondaryNames().current().stream().findFirst().map(f -> f.getName()).orElse(""));
+        container.addNontemporal("status", record.getStatus().current().stream().findFirst().map(f -> f.getStatusText()).orElse(""));
 
-        AddressRecord adress = record.getLocationAddress().current().iterator().next();
+        AddressRecord adress = record.getLocationAddress().current().stream().findFirst().get();
         container.addNontemporal("co", adress.getCoName());
         container.addNontemporal("postno", adress.getPostnummer());
         container.addNontemporal("adresstext", adress.getAddressText());
         container.addNontemporal("postbox", adress.getPostBox());
         container.addNontemporal("postdistrict", adress.getPostdistrikt());
         container.addNontemporal("munipialicitycode", adress.getMunicipality().getMunicipalityCode());
+        container.addNontemporal("by", adress.getCityName());
+
+
+
         container.addNontemporal("phone", record.getPhoneNumber().iterator().next().getContactInformation());
+        container.addNontemporal("email", record.getEmailAddress().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
+        container.addNontemporal("fax", record.getFaxNumber().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
+        container.addNontemporal("startdato", record.getMetadata().getValidFrom());
+        container.addNontemporal("slutdato", record.getMetadata().getValidTo());
+        String driftsform = record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getCompanyFormCode()).orElse("");
+        driftsform += "/"+record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getLongDescription()).orElse("");
+        container.addNontemporal("driftsform", driftsform);
+        container.addNontemporal("branchetekst", record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryText()).orElse(""));
+        container.addNontemporal("branchekode", record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(""));
 
-        container.addNontemporal("founding", record.getMetadata().getFoundingDate());
-        container.addNontemporal("companyform", record.getMetadata().getNewestForm().iterator().next().getCompanyFormCode()+"/"+
-                record.getMetadata().getNewestForm().iterator().next().getLongDescription());
 
-        container.addNontemporal("industryCode", record.getMetadata().getLatestNewestPrimaryIndustry().getIndustryCode());
-        container.addNontemporal("industryText", record.getMetadata().getLatestNewestPrimaryIndustry().getIndustryText());
 
 
     }
