@@ -66,56 +66,6 @@ public class ParseTest {
         schemaMap.put("deltager", ParticipantRecord.schema);
     }
 
-    @Test
-    public void testParseCompanyFile() throws DataFordelerException, IOException {
-        ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        try {
-            importMetadata.setSession(session);
-            InputStream input = ParseTest.class.getResourceAsStream("/company_in.json");
-            JsonNode root = objectMapper.readTree(input);
-            JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
-            for (JsonNode item : itemList) {
-                String type = item.get("_type").asText();
-                CompanyEntityManager entityManager = (CompanyEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
-                entityManager.parseData(item.get("_source").get("Vrvirksomhed"), importMetadata, session);
-            }
-        } finally {
-            transaction.rollback();
-            session.close();
-            QueryManager.clearCaches();
-        }
-    }
-
-    @Test
-    public void testParseCompanyDemoFile() throws DataFordelerException, URISyntaxException {
-        ImportMetadata importMetadata = new ImportMetadata();
-
-        URL testData = ParseTest.class.getResource("/GLBASETEST.json");
-        String testDataPath = testData.toURI().toString();
-        registerManager.setCvrDemoFile(testDataPath);
-
-        entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
-        InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
-        entityManager.parseData(stream, importMetadata);
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-
-            CompanyRecordQuery query = new CompanyRecordQuery();
-            OffsetDateTime time = OffsetDateTime.now();
-            query.setRegistrationFromBefore(time);
-            query.setRegistrationToAfter(time);
-            query.setEffectToAfter(time);
-            query.setEffectFromBefore(time);
-            query.applyFilters(session);
-
-            List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-
-            Assert.assertEquals(4, companyList.size());
-        }
-    }
 
 
     @Test
