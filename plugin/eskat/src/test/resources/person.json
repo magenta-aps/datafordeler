@@ -20,7 +20,7 @@
             "forretningsnoegle": "1234567890",
             "navne": [
               {
-                "navn": "Morten Kjærsgaard",
+                "navn": "TESTNAVN",
                 "periode": {
                   "gyldigFra": null,
                   "gyldigTil": null
@@ -182,7 +182,7 @@
                   "regNummer": [],
                   "navne": [
                     {
-                      "navn": "MORTEN KJÆRSGAARD",
+                      "navn": "TESTNAVN",
                       "periode": {
                         "gyldigFra": "1998-07-20",
                         "gyldigTil": "2008-12-31"
@@ -763,7 +763,7 @@
                   "regNummer": [],
                   "navne": [
                     {
-                      "navn": "MORTEN KJÆRSGAARD HOLDING ApS",
+                      "navn": "HOLDINGSELSKAB",
                       "periode": {
                         "gyldigFra": "2009-02-20",
                         "gyldigTil": null
@@ -942,7 +942,7 @@
                             "vaerditype": "string",
                             "vaerdier": [
                               {
-                                "vaerdi": "Morten Kjærsgaard\n\nÅrhusgade 82, 3 tv,\n2100 København Ø",
+                                "vaerdi": "STIFTER",
                                 "periode": {
                                   "gyldigFra": "2009-02-20",
                                   "gyldigTil": null

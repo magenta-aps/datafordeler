@@ -248,11 +248,22 @@ public class EskatLookupTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1234567890",
+                "/eskat/companyParticipantConnection/?cpr=1234567890",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("1234567890", response.getBody());
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?navn=TESTNAVN",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("1234567890", response.getBody());
 
         System.out.println(response.getBody());
 

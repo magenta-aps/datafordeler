@@ -26,6 +26,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.criteria.CriteriaQuery;
@@ -51,10 +52,15 @@ public class CompanyParticipantService {
 
 
     @RequestMapping(
-            path = {"/{cpr}"},
+            //path = {"/{cpr}"},
             produces = {"application/json"}
     )
-    public List<ParticipantRecord> getRest(@PathVariable("cpr") String cpr, HttpServletRequest request) throws DataFordelerException {
+
+
+    //public List<String> getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
+
+    public String getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
+                          @RequestParam(value = "navn",required=false, defaultValue = "") String navn, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
@@ -63,7 +69,12 @@ public class CompanyParticipantService {
         OffsetDateTime now = OffsetDateTime.now();
 
         ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-        participantRecordQuery.setBusinessKey(cpr);
+        if(!"".equals(cpr)) {
+            participantRecordQuery.setBusinessKey(cpr);
+        }
+        if(!"".equals(navn)) {
+            participantRecordQuery.setNavn(navn);
+        }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
@@ -71,7 +82,14 @@ public class CompanyParticipantService {
 
 
             List<ParticipantRecord> participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-            return null;
+            //participantlist.g
+
+
+
+
+
+
+            return participantlist.get(0).getBusinessKey()+"";
         } catch (Exception e) {
             throw new DataStreamException(e);
         }
