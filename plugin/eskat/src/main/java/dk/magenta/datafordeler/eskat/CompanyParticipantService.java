@@ -17,14 +17,18 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
+import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -50,44 +54,23 @@ public class CompanyParticipantService {
             path = {"/{cpr}"},
             produces = {"application/json"}
     )
-    public String getRest(@PathVariable("cpr") String cpr, HttpServletRequest request) throws DataFordelerException {
+    public List<ParticipantRecord> getRest(@PathVariable("cpr") String cpr, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
         this.checkAndLogAccess(loggerHelper);
-        Session session = sessionManager.getSessionFactory().openSession();
 
         OffsetDateTime now = OffsetDateTime.now();
-        this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
-        this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_AFTER, Bitemporal.FILTERPARAM_EFFECTTO_AFTER, now);
-
-        CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-        companyRecordQuery.setVirksomhedsform(10);
-        companyRecordQuery.setOrganizationType("FULDT_ANSVARLIG_DELTAGERE");
 
         ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
         participantRecordQuery.setBusinessKey(cpr);
 
-        companyRecordQuery.addRelated(participantRecordQuery, Collections.singletonMap("participantUnitNumber", "unit"));
-
-        companyRecordQuery.setRegistrationAt(now);
-        companyRecordQuery.setEffectAt(now);
-        companyRecordQuery.applyFilters(session);
-
-        ArrayNode arrayNode = objectMapper.createArrayNode();
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
+            this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_AFTER, Bitemporal.FILTERPARAM_EFFECTTO_AFTER, now);
 
 
-
-
-        /*QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class)
-                .forEach(companyRecord -> arrayNode.add(companyRecord.getCvrNumber()));*/
-
-        try {
-
-
-            List l = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
-
-            //return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayNode);
+            List<ParticipantRecord> participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
             return null;
         } catch (Exception e) {
             throw new DataStreamException(e);

@@ -5,14 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.Entity;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cvr.CollectiveCvrLookup;
+import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
+import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
+import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -31,7 +39,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 
@@ -52,6 +60,17 @@ public class EskatLookupTest {
     @SpyBean
     private DafoUserManager dafoUserManager;
 
+    @Autowired
+    private CvrPlugin plugin;
+
+
+    private static HashMap<String, String> schemaMap = new HashMap<>();
+    static {
+        schemaMap.put("_doc", CompanyRecord.schema);
+        schemaMap.put("produktionsenhed", CompanyUnitRecord.schema);
+        schemaMap.put("deltager", ParticipantRecord.schema);
+    }
+
 
     private void loadCompany() throws IOException, DataFordelerException {
         InputStream testData = EskatLookupTest.class.getResourceAsStream("/company_in.json");
@@ -66,6 +85,63 @@ public class EskatLookupTest {
             companyEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
+    }
+
+
+    private HashMap<Long, JsonNode> loadParticipant(String resource) throws IOException, DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        InputStream input = ParseTest.class.getResourceAsStream(resource);
+        if (input == null) {
+            throw new MissingResourceException("Missing resource \""+resource+"\"", resource, "key");
+        }
+        boolean linedFile = false;
+        HashMap<Long, JsonNode> persons = new HashMap<>();
+        try {
+            importMetadata.setSession(session);
+
+            if (linedFile) {
+                int lineNumber = 0;
+                Scanner lineScanner = new Scanner(input, "UTF-8").useDelimiter("\n");
+                while (lineScanner.hasNext()) {
+                    String data = lineScanner.next();
+
+                    JsonNode root = objectMapper.readTree(data);
+                    JsonNode itemList = root.get("hits").get("hits");
+                    Assert.assertTrue(itemList.isArray());
+                    for (JsonNode item : itemList) {
+                        String type = item.get("_type").asText();
+                        ParticipantEntityManager entityManager = (ParticipantEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                        JsonNode participantInputNode = item.get("_source").get("Vrdeltagerperson");
+                        entityManager.parseData(participantInputNode, importMetadata, session);
+                        persons.put(participantInputNode.get("enhedsNummer").asLong(), participantInputNode);
+                    }
+                    lineNumber++;
+                    System.out.println("loaded line " + lineNumber);
+                    if (lineNumber >= 10) {
+                        break;
+                    }
+                }
+            } else {
+                JsonNode root = objectMapper.readTree(input);
+                JsonNode itemList = root.get("hits").get("hits");
+                Assert.assertTrue(itemList.isArray());
+                for (JsonNode item : itemList) {
+                    String type = item.get("_type").asText();
+                    ParticipantEntityManager entityManager = (ParticipantEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                    JsonNode unitInputNode = item.get("_source").get("Vrdeltagerperson");
+                    entityManager.parseData(unitInputNode, importMetadata, session);
+                    persons.put(unitInputNode.get("enhedsNummer").asLong(), unitInputNode);
+                }
+            }
+            transaction.commit();
+        } finally {
+            session.close();
+            QueryManager.clearCaches();
+            input.close();
+        }
+        return persons;
     }
 
 
@@ -161,6 +237,7 @@ public class EskatLookupTest {
     @Test
     public void testCompanyParticipantLookup() throws Exception {
         this.loadCompany();
+        loadParticipant("/person.json");
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
@@ -171,11 +248,16 @@ public class EskatLookupTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1111111111",
+                "/eskat/companyParticipantConnection/1234567890",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
+
+        System.out.println(response.getBody());
+
+
+
     }
 
 
