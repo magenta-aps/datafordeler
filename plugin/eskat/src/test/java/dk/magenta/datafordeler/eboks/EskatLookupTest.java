@@ -265,11 +265,50 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("1234567890", response.getBody());
 
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?enhedsNummer=4000004988",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("1234567890", response.getBody());
+
+
+
+
         System.out.println(response.getBody());
 
 
 
     }
+
+/*    @Test
+    public void testCompanyParticipant2Lookup() throws Exception {
+        this.loadCompany();
+        loadParticipant("/person.json");
+        TestUserDetails testUserDetails = new TestUserDetails();
+
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/eskat/eskatparticipant/1/rest/?businessKey=1234567890",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        System.out.println(response.getBody());
+
+
+
+    }*/
+
 
 
 

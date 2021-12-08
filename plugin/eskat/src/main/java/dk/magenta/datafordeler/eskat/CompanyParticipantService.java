@@ -60,7 +60,8 @@ public class CompanyParticipantService {
     //public List<String> getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
 
     public String getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
-                          @RequestParam(value = "navn",required=false, defaultValue = "") String navn, HttpServletRequest request) throws DataFordelerException {
+                          @RequestParam(value = "navn",required=false, defaultValue = "") String navn,
+                          @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
@@ -75,6 +76,11 @@ public class CompanyParticipantService {
         if(!"".equals(navn)) {
             participantRecordQuery.setNavn(navn);
         }
+        if(!"".equals(enhedsNummer)) {
+            participantRecordQuery.setEnhedsNummer(enhedsNummer);
+        }
+
+
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);

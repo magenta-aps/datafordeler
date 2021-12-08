@@ -151,7 +151,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     public ServiceDescriptor getServiceDescriptor(String servletPath, boolean isSoap) {
         if (isSoap) {
-            return new SoapServiceDescriptor(this.getPlugin(), this.getServiceName(), servletPath, this.getEmptyQuery().getClass());
+            return null;
         } else {
             return new RestServiceDescriptor(this.getPlugin(), this.getServiceName(), servletPath, this.getEmptyQuery().getClass());
         }
@@ -283,65 +283,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
         }
     }
 
-    /**
-     * Handle a lookup-by-UUID request in SOAP. This method is called by the Servlet
-     * @param id Identifier coming from the client
-     * @param registeringFra Low boundary for registration inclusion
-     * @param registeringTil High boundary for registration inclusion
-     * @return Found Entity, or null if none found.
-     */
-    // TODO: How to use DafoUserDetails with SOAP requests?
-    /*
-    @WebMethod(operationName = "get")
-    public Envelope getSoap(@WebParam(name="id") @XmlElement(required=true) String id,
-                     @WebParam(name="registeringFra") @XmlElement(required = false) String registeringFra,
-                     @WebParam(name="registeringTil") @XmlElement(required = false) String registeringTil)
-            throws DataFordelerException {
-        Session session = this.getSessionManager().getSessionFactory().openSession();
-        Envelope envelope = new Envelope();
-        try {
-            MessageContext messageContext = context.getMessageContext();
-            HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
-            DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
-            loggerHelper.info(
-                    "Incoming SOAP request for " + this.getServiceName() + " with id " + id
-            );
-            this.checkAndLogAccess(loggerHelper);
-            Q query = this.getQuery(registeringFra, registeringTil);
-            query.addUUID(id);
-            envelope.addQueryData(query);
-            envelope.addUserData(user);
-            envelope.addRequestData(request);
-            try {
-                List<E> results = this.searchByQuery(query, session);
-                if (this.getOutputWrapper() != null) {
-                    envelope.setResults(this.getOutputWrapper().wrapResults(results, query, this.getDefaultMode()));
-                } else {
-                    ArrayNode jacksonConverted = objectMapper.valueToTree(results);
-                    ArrayList<Object> wrapper = new ArrayList<>();
-                    for (JsonNode node : jacksonConverted) {
-                        wrapper.add(node);
-                    }
-                    envelope.setResults(wrapper);
-                }
-                envelope.close();
-                loggerHelper.logResult(envelope);
-            } catch (IllegalArgumentException e) {
-                throw new InvalidClientInputException(e.getMessage());
-            }
-        } catch (AccessDeniedException|AccessRequiredException|InvalidClientInputException|InvalidTokenException e) {
-            this.log.warn("Error in SOAP getById (id: "+id+", registeringFra: "+registeringFra+", registeringTil: "+registeringTil+")", e);
-            throw e;
-        } catch (Exception e) {
-            this.log.error("Error in SOAP getById (id: "+id+", registeringFra: "+registeringFra+", registeringTil: "+registeringTil+")", e);
-            throw e;
-        } finally {
-            session.close();
-        }
-        return envelope;
-    }*/
-
 
     /**
      * Parse a registration boundary into a Query object of the correct subclass
@@ -445,49 +386,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
         } finally {
             session.close();
         }
-    }
-
-    /**
-     * Handle a lookup-by-parameters request in SOAP. This method is called by the Servlet
-     * @param query Query object specifying search parameters
-     * @return Found Entities
-     */
-    // TODO: How to use DafoUserDetails with SOAP requests?
-    @WebMethod(operationName = "search")
-    @Deprecated
-    public Envelope searchSoap(@WebParam(name="query") @XmlElement(required = true) Q query) throws DataFordelerException {
-        Session session = this.getSessionManager().getSessionFactory().openSession();
-        Envelope envelope = new Envelope();
-        try {
-            MessageContext messageContext = context.getMessageContext();
-            HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
-            DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
-            loggerHelper.info(
-                    "Incoming SOAP request for " + this.getServiceName() + " with query " + query.toString()
-            );
-            this.checkAndLogAccess(loggerHelper);
-            envelope.addQueryData(query);
-            envelope.addUserData(user);
-            envelope.addRequestData(request);
-            List<ResultSet<E>> results = this.searchByQuery(query, session);
-            if (this.getOutputWrapper() != null) {
-                envelope.setResult(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
-            } else {
-                envelope.setResults(results);
-            }
-            envelope.close();
-            loggerHelper.logResult(envelope, query.toString());
-        } catch (AccessDeniedException|AccessRequiredException|InvalidTokenException e) {
-            this.log.warn("Error in SOAP search", e);
-            throw e;
-        } catch (Exception e) {
-            this.log.error("Error in SOAP search", e);
-            throw e;
-        } finally {
-            session.close();
-        }
-        return envelope;
     }
 
 
