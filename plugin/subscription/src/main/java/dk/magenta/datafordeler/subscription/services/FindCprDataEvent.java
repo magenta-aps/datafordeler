@@ -156,13 +156,11 @@ public class FindCprDataEvent {
 
                     String queryPreviousItem = "SELECT DISTINCT person.personnummer FROM "+ CprList.class.getCanonicalName() + " list "+
 
-                                    " JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) "+
-                                    //" JOIN " + DataEventSubscription.class.getCanonicalName() + " dataevent ON (list.id = dataevent.cprList_id) "+
-                                    " JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) "+
-                                            " "+
-                            "where list.listId="+"'"+listId+"'";
-
-                    System.out.println(queryPreviousItem);
+                            " JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) "+
+                            //" JOIN " + DataEventSubscription.class.getCanonicalName() + " dataeventSubscruption ON (list.id = dataeventSubscruption.cprList_id) "+
+                            " JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) "+
+                            " JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.identification = dataeventDataRecord.id) "+
+                            "where list.listId="+"'"+listId+"' AND "+"dataeventDataRecord.field='"+subscribtionKodeId[2]+"'";
 
                     List<String> oldValues = session.createQuery(queryPreviousItem).getResultList();
                     Envelope envelope = new Envelope();
