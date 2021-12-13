@@ -28,6 +28,7 @@ import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCpr
 import dk.magenta.datafordeler.subscription.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,12 +144,34 @@ public class FindCprDataEvent {
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
 
+                String listId = subscribtion.getCprList().getListId();
+
+
                 PersonRecordQuery query = GeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
                     Collection<SubscribedCprNumber> theList = cprList.getCpr();
                     List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
-                    query.setPersonnumre(pnrFilterList);
+                    System.out.println(pnrFilterList);
+
+                    String queryPreviousItem = "SELECT DISTINCT person.personnummer FROM "+ CprList.class.getCanonicalName() + " list "+
+
+                                    " JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) "+
+                                    //" JOIN " + DataEventSubscription.class.getCanonicalName() + " dataevent ON (list.id = dataevent.cprList_id) "+
+                                    " JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) "+
+                                            " "+
+                            "where list.listId="+"'"+listId+"'";
+
+                    System.out.println(queryPreviousItem);
+
+                    List<String> oldValues = session.createQuery(queryPreviousItem).getResultList();
+                    Envelope envelope = new Envelope();
+
+                    envelope.setResults(oldValues);
+                    envelope.setNewestResultTimestamp(newestEventTimestamp);
+                    loggerHelper.urlInvokePersistablelogs("fetchEvents done");
+                    return ResponseEntity.ok(envelope);
+
                 }
 
                 query.setPageSize(pageSize);
