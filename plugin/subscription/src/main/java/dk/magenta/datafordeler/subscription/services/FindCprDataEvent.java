@@ -155,20 +155,19 @@ public class FindCprDataEvent {
 
                     String queryPreviousItem = "SELECT DISTINCT person FROM "+ CprList.class.getCanonicalName() + " list "+
 
-                            " JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) "+
+                            " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) "+
                             //" JOIN " + DataEventSubscription.class.getCanonicalName() + " dataeventSubscruption ON (list.id = dataeventSubscruption.cprList_id) "+
-                            " JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) "+
-                            " JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.identification = dataeventDataRecord.id) "+
-                            " where list.listId="+"'"+listId+"' AND dataeventDataRecord.timestamp >= : persondataeventTimeGT";
-                            //" AND dataeventDataRecord.timestamp >= : persondataeventTimeLT";
-
-
-                    if(!"anything".equals(subscribtionKodeId[2])) {
-                        queryPreviousItem += " AND "+"dataeventDataRecord.field='"+subscribtionKodeId[2]+"'";
-                    }
+                            " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) "+
+                            " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.identification = dataeventDataRecord.entity) "+
+                            " where (list.listId=:listId OR :listId IS NULL) AND" +
+                            " dataeventDataRecord.timestamp IS NOT NULL AND" +
+                            " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                            " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
                     Query query = session.createQuery(queryPreviousItem);
-                    Stream<PersonEntity>  personStream = query.setParameter("persondataeventTimeGT", offsetTimestampGTE).stream();
+                    Stream<PersonEntity>  personStream = query.setParameter("offsetTimestampGTE", offsetTimestampGTE)
+                            .setParameter("offsetTimestampLTE", offsetTimestampLTE)
+                            .setParameter("listId", listId).stream();
 
 
                     List<String> oldValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
