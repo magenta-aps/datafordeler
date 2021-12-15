@@ -46,6 +46,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Comparator.naturalOrder;
 
@@ -146,23 +147,31 @@ public class FindCprDataEvent {
 
                 String listId = subscribtion.getCprList().getListId();
 
-
-                PersonRecordQuery query = GeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
                 CprList cprList = subscribtion.getCprList();
                 if(cprList!=null) {
                     Collection<SubscribedCprNumber> theList = cprList.getCpr();
                     List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
                     System.out.println(pnrFilterList);
 
-                    String queryPreviousItem = "SELECT DISTINCT person.personnummer FROM "+ CprList.class.getCanonicalName() + " list "+
+                    String queryPreviousItem = "SELECT DISTINCT person FROM "+ CprList.class.getCanonicalName() + " list "+
 
                             " JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) "+
                             //" JOIN " + DataEventSubscription.class.getCanonicalName() + " dataeventSubscruption ON (list.id = dataeventSubscruption.cprList_id) "+
                             " JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) "+
                             " JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.identification = dataeventDataRecord.id) "+
-                            "where list.listId="+"'"+listId+"' AND "+"dataeventDataRecord.field='"+subscribtionKodeId[2]+"'";
+                            " where list.listId="+"'"+listId+"' AND dataeventDataRecord.timestamp >= : persondataeventTimeGT";
+                            //" AND dataeventDataRecord.timestamp >= : persondataeventTimeLT";
 
-                    List<String> oldValues = session.createQuery(queryPreviousItem).getResultList();
+
+                    if(!"anything".equals(subscribtionKodeId[2])) {
+                        queryPreviousItem += " AND "+"dataeventDataRecord.field='"+subscribtionKodeId[2]+"'";
+                    }
+
+                    Query query = session.createQuery(queryPreviousItem);
+                    Stream<PersonEntity>  personStream = query.setParameter("persondataeventTimeGT", offsetTimestampGTE).stream();
+
+
+                    List<String> oldValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
                     Envelope envelope = new Envelope();
 
                     envelope.setResults(oldValues);
@@ -172,7 +181,7 @@ public class FindCprDataEvent {
 
                 }
 
-                query.setPageSize(pageSize);
+/*                query.setPageSize(pageSize);
                 if(query.getPageSize()>1000) {
                     String errorMessage = "No access";
                     ObjectNode obj = this.objectMapper.createObjectNode();
@@ -215,10 +224,10 @@ public class FindCprDataEvent {
                     }
                 } else {
                     otherList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
-                }
+                }*/
                 Envelope envelope = new Envelope();
 
-                envelope.setResults(otherList);
+                envelope.setResults(null);
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
                 loggerHelper.urlInvokePersistablelogs("fetchEvents done");
                 return ResponseEntity.ok(envelope);
