@@ -160,6 +160,7 @@ public class FindCprDataEvent {
                             " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) "+
                             " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.identification = dataeventDataRecord.entity) "+
                             " where (list.listId=:listId OR :listId IS NULL) AND" +
+                            " dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL AND"+
                             " dataeventDataRecord.timestamp IS NOT NULL AND" +
                             " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
                             " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
@@ -167,7 +168,9 @@ public class FindCprDataEvent {
                     Query query = session.createQuery(queryPreviousItem);
                     Stream<PersonEntity>  personStream = query.setParameter("offsetTimestampGTE", offsetTimestampGTE)
                             .setParameter("offsetTimestampLTE", offsetTimestampLTE)
-                            .setParameter("listId", listId).stream();
+                            .setParameter("listId", listId)
+                            .setParameter("fieldEntity", subscribtionKodeId[2])
+                            .stream();
 
 
                     List<String> oldValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
