@@ -135,7 +135,6 @@ public class FindCprDataEvent {
                     offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
                 }
 
-                //TODO: dette skal oprettes med opsplitning i forskellige attributter med betydning
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
                 if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
                     String errorMessage = "No access";
@@ -147,62 +146,63 @@ public class FindCprDataEvent {
 
                 String listId = subscribtion.getCprList().getListId();
 
-                CprList cprList = subscribtion.getCprList();
-                if(cprList!=null) {
-                    Collection<SubscribedCprNumber> theList = cprList.getCpr();
-                    List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
-                    System.out.println(pnrFilterList);
 
-                    String queryPreviousItem = "SELECT DISTINCT person FROM "+ CprList.class.getCanonicalName() + " list "+
+                String queryPreviousItem = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
 
-                            " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) "+
-                            //" JOIN " + DataEventSubscription.class.getCanonicalName() + " dataeventSubscruption ON (list.id = dataeventSubscruption.cprList_id) "+
-                            " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) "+
-                            " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.identification = dataeventDataRecord.entity) "+
-                            " where (list.listId=:listId OR :listId IS NULL) AND" +
-                            " dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL AND"+
-                            " dataeventDataRecord.timestamp IS NOT NULL AND" +
-                            " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                            " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                        " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) " +
+                        //" JOIN " + DataEventSubscription.class.getCanonicalName() + " dataeventSubscruption ON (list.id = dataeventSubscruption.cprList_id) "+
+                        " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
+                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.identification = dataeventDataRecord.entity) " +
+                        " where (list.listId=:listId OR :listId IS NULL) AND" +
+                        " dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL AND" +
+                        " dataeventDataRecord.timestamp IS NOT NULL AND" +
+                        " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                        " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
-                    Query query = session.createQuery(queryPreviousItem);
-                    Stream<PersonEntity>  personStream = query.setParameter("offsetTimestampGTE", offsetTimestampGTE)
-                            .setParameter("offsetTimestampLTE", offsetTimestampLTE)
-                            .setParameter("listId", listId)
-                            .setParameter("fieldEntity", subscribtionKodeId[2])
-                            .stream();
-
-
-                    List<String> oldValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
-                    Envelope envelope = new Envelope();
-
-                    envelope.setResults(oldValues);
-                    envelope.setNewestResultTimestamp(newestEventTimestamp);
-                    loggerHelper.urlInvokePersistablelogs("fetchEvents done");
-                    return ResponseEntity.ok(envelope);
-
+                Query query = session.createQuery(queryPreviousItem);
+                if (pageSize != null) {
+                    query.setMaxResults(Integer.valueOf(pageSize));
+                } else {
+                    query.setMaxResults(10);
                 }
-
-/*                query.setPageSize(pageSize);
-                if(query.getPageSize()>1000) {
+                if (page != null) {
+                    int pageIndex = (Integer.valueOf(page) - 1) * query.getMaxResults();
+                    query.setFirstResult(pageIndex);
+                } else {
+                    query.setFirstResult(0);
+                }
+                if (query.getMaxResults() > 1000) {
                     String errorMessage = "No access";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
                     log.warn(errorMessage);
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
-                query.setPage(page);
-                List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
-                List otherList = new ArrayList<ObjectNode>();
 
-                if(includeMeta) {
-                    for(ResultSet<PersonEntity> entity : entities) {
+                Stream<PersonEntity> personStream = query.setParameter("offsetTimestampGTE", offsetTimestampGTE)
+                        .setParameter("offsetTimestampLTE", offsetTimestampLTE)
+                        .setParameter("listId", listId)
+                        .setParameter("fieldEntity", subscribtionKodeId[2])
+                        .stream();
+
+                Envelope envelope = new Envelope();
+                List<Object> returnValues = null;
+
+                if(!includeMeta) {
+
+                    returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
+                    envelope.setResults(returnValues);
+                } else {
+                    List otherList = new ArrayList<ObjectNode>();
+                    List<PersonEntity> entities = personStream.collect(Collectors.toList());
+
+                    for(PersonEntity entity : entities) {
                         CprBitemporalPersonRecord oldValues = null;
-                        CprBitemporalPersonRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity.getPrimaryEntity());
-                        PersonDataEventDataRecord eventRecord = entity.getPrimaryEntity().getDataEvent(subscribtionKodeId[2]);
+                        CprBitemporalPersonRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity);
+                        PersonDataEventDataRecord eventRecord = entity.getDataEvent(subscribtionKodeId[2]);
                         if(eventRecord != null) {
                             if(eventRecord.getOldItem() != null) {
-                                String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
+                                queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
                                 oldValues = (CprBitemporalPersonRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem().longValue()).getResultList().get(0);
                             }
                         }
@@ -210,26 +210,23 @@ public class FindCprDataEvent {
                         if(subscribtionKodeId.length>=5) {
                             if(subscribtionKodeId[3].equals("before")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], oldValues)) {
-                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             } else if(subscribtionKodeId[3].equals("after")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], newValues)) {
-                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             }
                         } else {
-                            ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                            ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                             otherList.add(node);
                         }
                     }
-                } else {
-                    otherList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
-                }*/
-                Envelope envelope = new Envelope();
+                    envelope.setResults(otherList);
+                }
 
-                envelope.setResults(null);
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
                 loggerHelper.urlInvokePersistablelogs("fetchEvents done");
                 return ResponseEntity.ok(envelope);
