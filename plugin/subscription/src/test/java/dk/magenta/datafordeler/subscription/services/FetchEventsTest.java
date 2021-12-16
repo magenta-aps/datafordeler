@@ -325,15 +325,19 @@ public class FetchEventsTest {
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<String> response = null;
+        ObjectNode responseContent = null;
+        JsonNode results = null;
+
+        response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        JsonNode results = responseContent.get("results");
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
 
         System.out.println(results);
         Assert.assertEquals(6, results.size());
@@ -477,6 +481,24 @@ public class FetchEventsTest {
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
+
+
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.addPersonnummer("0101011235");
+            query.addPersonnummer("0101011236");
+            query.addPersonnummer("0101011237");
+            query.addPersonnummer("0101011238");
+            query.addPersonnummer("0101011239");
+            query.addPersonnummer("0101011240");
+            query.addPersonnummer("0101011241");
+            query.addPersonnummer("0101011242");
+            query.addPersonnummer("0101011243");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            System.out.println(entities);
+        }
+
 
         ResponseEntity<String> response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE4&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
