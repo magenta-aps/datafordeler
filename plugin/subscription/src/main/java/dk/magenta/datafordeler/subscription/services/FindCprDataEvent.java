@@ -150,9 +150,8 @@ public class FindCprDataEvent {
                 String queryPreviousItem = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
 
                         " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) " +
-                        //" JOIN " + DataEventSubscription.class.getCanonicalName() + " dataeventSubscruption ON (list.id = dataeventSubscruption.cprList_id) "+
                         " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
-                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.identification = dataeventDataRecord.entity) " +//FEJL HER
+                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.id = dataeventDataRecord.entity) " +//FEJL HER
                         " where (list.listId=:listId OR :listId IS NULL) AND" +
                         " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
                         " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
@@ -183,7 +182,8 @@ public class FindCprDataEvent {
                     fieldType = subscribtionKodeId[2];
                 }
 
-                Stream<PersonEntity> personStream = query.setParameter("offsetTimestampGTE", offsetTimestampGTE)
+                Stream<PersonEntity> personStream = query
+                        .setParameter("offsetTimestampGTE", offsetTimestampGTE)
                         .setParameter("offsetTimestampLTE", offsetTimestampLTE)
                         .setParameter("listId", listId)
                         .setParameter("fieldEntity", fieldType)
