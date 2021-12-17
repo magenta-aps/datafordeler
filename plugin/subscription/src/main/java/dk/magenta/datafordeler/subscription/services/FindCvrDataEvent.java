@@ -118,7 +118,6 @@ public class FindCvrDataEvent {
                     offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
                 }
 
-                //TODO: dette skal oprettes med opsplitning i forskellige attributter med betydning
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
                 if(!"cvr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
                     String errorMessage = "No access";
@@ -130,8 +129,8 @@ public class FindCvrDataEvent {
 
                 String listId = subscribtion.getCvrList().getListId();
 
+                // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT company FROM " + CvrList.class.getCanonicalName() + " list " +
-
                         " INNER JOIN " + SubscribedCvrNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.id) " +
                         " INNER JOIN " + CompanyRecord.class.getCanonicalName() + " company ON (company.cvrNumber = numbers.cvrNumber) " +
                         " INNER JOIN " + CompanyDataEventRecord.class.getCanonicalName() + " dataeventDataRecord ON (company.id = dataeventDataRecord.companyRecord) " +
