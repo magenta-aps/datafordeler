@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.api.client.util.Value;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
@@ -54,6 +55,9 @@ import static java.util.Comparator.naturalOrder;
 @RestController
 @RequestMapping("/subscription/1/findCprDataEvent")
 public class FindCprDataEvent {
+
+    @Value("${dafo.subscription.securitydisabled}")
+    protected boolean securitydisabled = false;
 
     @Autowired
     SessionManager sessionManager;
@@ -116,7 +120,7 @@ public class FindCprDataEvent {
                 return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscribtion = (DataEventSubscription) eventQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+                if(!securitydisabled && !subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     String errorMessage = "No access";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
@@ -147,18 +151,18 @@ public class FindCprDataEvent {
                 String listId = subscribtion.getCprList().getListId();
 
 
-                String queryPreviousItem = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
+                String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
 
                         " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) " +
                         " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
-                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.id = dataeventDataRecord.entity) " +//FEJL HER
+                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.id = dataeventDataRecord.entity) " +
                         " where (list.listId=:listId OR :listId IS NULL) AND" +
                         " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
                         " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
                         " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
                         " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
-                Query query = session.createQuery(queryPreviousItem);
+                Query query = session.createQuery(queryString);
                 if (pageSize != null) {
                     query.setMaxResults(Integer.valueOf(pageSize));
                 } else {
@@ -206,7 +210,7 @@ public class FindCprDataEvent {
                         PersonDataEventDataRecord eventRecord = entity.getDataEvent(subscribtionKodeId[2]);
                         if(eventRecord != null) {
                             if(eventRecord.getOldItem() != null) {
-                                queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
+                                String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
                                 oldValues = (CprBitemporalPersonRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem().longValue()).getResultList().get(0);
                             }
                         }

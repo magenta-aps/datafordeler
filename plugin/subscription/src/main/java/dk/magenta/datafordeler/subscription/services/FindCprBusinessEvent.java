@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.api.client.util.Value;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -14,11 +15,15 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.BusinessEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
+import dk.magenta.datafordeler.subscription.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -32,15 +37,21 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @RestController
 @RequestMapping("/subscription/1/findCprBusinessEvent")
 public class FindCprBusinessEvent {
+
+    @Value("${dafo.subscription.securitydisabled}")
+    protected boolean securitydisabled = false;
 
     @Autowired
     SessionManager sessionManager;
@@ -94,7 +105,7 @@ public class FindCprBusinessEvent {
                 return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscribtion = (BusinessEventSubscription) eventQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+                if(!securitydisabled && !subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     String errorMessage = "No access";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
@@ -104,47 +115,76 @@ public class FindCprBusinessEvent {
                 String hql = "SELECT max(event.timestamp) FROM "+ PersonEventDataRecord.class.getCanonicalName()+" event ";
                 Query timestampQuery = session.createQuery(hql);
                 OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
+                    OffsetDateTime offsetTimestampGTE;
+                    if(timestampGTE==null) {
+                        offsetTimestampGTE = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
+                    } else {
+                        offsetTimestampGTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampGTE);
+                    }
 
-                PersonRecordQuery query = new PersonRecordQuery();
-                CprList cprList = subscribtion.getCprList();
-                if(cprList!=null) {
-                    Collection<SubscribedCprNumber> theList = cprList.getCpr();
-                    List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
-                    query.setPersonnumre(pnrFilterList);
-                }
-                //TODO: dette skal oprettes med opsplitning i forskellige attributter med betydning
-                String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
-                if(!"cpr".equals(subscribtionKodeId[0]) && !"businessevent".equals(subscribtionKodeId[1])) {
-                    String errorMessage = "No access";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                }
+                    OffsetDateTime offsetTimestampLTE=null;
+                    if(timestampLTE!=null) {
+                        offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
+                    }
 
-                query.setEvent(subscribtionKodeId[2]);
-                if(timestampGTE!=null) {
-                    query.setEventTimeAfter(timestampGTE);
-                }
-                if(timestampLTE!=null) {
-                    query.setEventTimeBefore(timestampLTE);
-                }
-                query.setPageSize(pageSize);
-                if(query.getPageSize()>1000) {
-                    String errorMessage = "No access";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                }
-                query.setPage(page);
-                List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
-                Envelope envelope = new Envelope();
-                List<String> pnrList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
-                envelope.setResults(pnrList);
-                envelope.setNewestResultTimestamp(newestEventTimestamp);
-                loggerHelper.urlInvokePersistablelogs("fetchEvents done");
-                return ResponseEntity.ok(envelope);
+                    String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
+                    if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
+                        String errorMessage = "No access";
+                        ObjectNode obj = this.objectMapper.createObjectNode();
+                        obj.put("errorMessage", errorMessage);
+                        log.warn(errorMessage);
+                        return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                    }
+
+                    String listId = subscribtion.getCprList().getListId();
+
+                    String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
+
+                            " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) " +
+                            " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
+                            " INNER JOIN " + PersonEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.id = dataeventDataRecord.entity) " +
+                            " where (list.listId=:listId OR :listId IS NULL) AND" +
+                            " (dataeventDataRecord.eventId=:eventId OR :eventId IS NULL) AND" +
+                            " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
+                            " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                            " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+
+                    Query query = session.createQuery(queryString);
+                    if (pageSize != null) {
+                        query.setMaxResults(Integer.valueOf(pageSize));
+                    } else {
+                        query.setMaxResults(10);
+                    }
+                    if (page != null) {
+                        int pageIndex = (Integer.valueOf(page) - 1) * query.getMaxResults();
+                        query.setFirstResult(pageIndex);
+                    } else {
+                        query.setFirstResult(0);
+                    }
+                    if (query.getMaxResults() > 1000) {
+                        String errorMessage = "No access";
+                        ObjectNode obj = this.objectMapper.createObjectNode();
+                        obj.put("errorMessage", errorMessage);
+                        log.warn(errorMessage);
+                        return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                    }
+
+                    Stream<PersonEntity> personStream = query
+                            .setParameter("offsetTimestampGTE", offsetTimestampGTE)
+                            .setParameter("offsetTimestampLTE", offsetTimestampLTE)
+                            .setParameter("listId", listId)
+                            .setParameter("eventId", subscribtionKodeId[2])
+                            .stream();
+
+                    Envelope envelope = new Envelope();
+                    List<Object> returnValues = null;
+
+                    returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
+                    envelope.setResults(returnValues);
+
+                    envelope.setNewestResultTimestamp(newestEventTimestamp);
+                    loggerHelper.urlInvokePersistablelogs("fetchEvents done");
+                    return ResponseEntity.ok(envelope);
             }
         } catch (AccessRequiredException e) {
             String errorMessage = "No access to this information";
