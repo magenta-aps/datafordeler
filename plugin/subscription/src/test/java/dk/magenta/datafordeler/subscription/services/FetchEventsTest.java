@@ -563,15 +563,19 @@ public class FetchEventsTest {
         testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<String> response;
+        ObjectNode responseContent;
+        JsonNode results;
+
+        response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=1980-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        JsonNode results = responseContent.get("results");
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
         Assert.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
