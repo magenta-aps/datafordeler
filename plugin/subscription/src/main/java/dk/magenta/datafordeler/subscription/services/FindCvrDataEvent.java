@@ -2,9 +2,11 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.api.client.util.Value;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -38,6 +40,9 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/subscription/1/findCvrDataEvent")
 public class FindCvrDataEvent {
+
+    @Value("${dafo.subscription.allowCallingOtherConsumersSubscriptions}")
+    protected boolean allowCallingOtherConsumersSubscriptions = false;
 
     @Autowired
     SessionManager sessionManager;
@@ -99,7 +104,7 @@ public class FindCvrDataEvent {
                 return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscribtion = (DataEventSubscription) eventQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+                if(!allowCallingOtherConsumersSubscriptions && !subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     String errorMessage = "No access";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
@@ -110,12 +115,12 @@ public class FindCvrDataEvent {
                 if(timestampGTE==null) {
                     offsetTimestampGTE = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
                 } else {
-                    offsetTimestampGTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampGTE);
+                    offsetTimestampGTE = BaseQuery.parseDateTime(timestampGTE);
                 }
 
                 OffsetDateTime offsetTimestampLTE=null;
                 if(timestampLTE!=null) {
-                    offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
+                    offsetTimestampLTE = BaseQuery.parseDateTime(timestampLTE);
                 }
 
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
@@ -155,7 +160,7 @@ public class FindCvrDataEvent {
                     query.setFirstResult(0);
                 }
                 if (query.getMaxResults() > 1000) {
-                    String errorMessage = "No access";
+                    String errorMessage = "Pagesize is too large";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
                     log.warn(errorMessage);

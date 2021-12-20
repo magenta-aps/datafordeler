@@ -6,6 +6,7 @@ import com.google.api.client.util.Value;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -41,8 +42,8 @@ import java.util.stream.Stream;
 @RequestMapping("/subscription/1/findCprBusinessEvent")
 public class FindCprBusinessEvent {
 
-    @Value("${dafo.subscription.securitydisabled}")
-    protected boolean securitydisabled = false;
+    @Value("${dafo.subscription.allowCallingOtherConsumersSubscriptions}")
+    protected boolean allowCallingOtherConsumersSubscriptions = false;
 
     @Autowired
     SessionManager sessionManager;
@@ -95,8 +96,8 @@ public class FindCprBusinessEvent {
                 log.warn(errorMessage);
                 return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             } else {
-                BusinessEventSubscription subscribtion = (BusinessEventSubscription) eventQuery.getResultList().get(0);
-                if(!securitydisabled && !subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+                BusinessEventSubscription subscription = (BusinessEventSubscription) eventQuery.getResultList().get(0);
+                if(!allowCallingOtherConsumersSubscriptions && !subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                     String errorMessage = "No access";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
@@ -110,15 +111,15 @@ public class FindCprBusinessEvent {
                 if(timestampGTE==null) {
                     offsetTimestampGTE = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
                 } else {
-                    offsetTimestampGTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampGTE);
+                    offsetTimestampGTE = BaseQuery.parseDateTime(timestampGTE);
                 }
 
                 OffsetDateTime offsetTimestampLTE=null;
                 if(timestampLTE!=null) {
-                    offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
+                    offsetTimestampLTE = BaseQuery.parseDateTime(timestampLTE);
                 }
 
-                String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
+                String[] subscribtionKodeId = subscription.getKodeId().split("[.]");
                 if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
                     String errorMessage = "No access";
                     ObjectNode obj = this.objectMapper.createObjectNode();
@@ -127,7 +128,7 @@ public class FindCprBusinessEvent {
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
 
-                String listId = subscribtion.getCprList().getListId();
+                String listId = subscription.getCprList().getListId();
 
                 // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
@@ -153,7 +154,7 @@ public class FindCprBusinessEvent {
                     query.setFirstResult(0);
                 }
                 if (query.getMaxResults() > 1000) {
-                    String errorMessage = "No access";
+                    String errorMessage = "Pagesize is too large";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
                     log.warn(errorMessage);
@@ -168,9 +169,8 @@ public class FindCprBusinessEvent {
                         .stream();
 
                 Envelope envelope = new Envelope();
-                List<Object> returnValues = null;
 
-                returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
+                List<Object> returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
                 envelope.setResults(returnValues);
 
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
