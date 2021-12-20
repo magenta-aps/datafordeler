@@ -2,7 +2,9 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cvr.records.CvrBitemporalDataRecord;
@@ -43,7 +45,8 @@ public class RecordMetadataWrapper {
     public ObjectNode fillContainer(String pnr, String fieldname, CvrBitemporalDataRecord valueBeforeEvent, CvrBitemporalDataRecord valueAfterEvent)  {
 
         ObjectNode root = this.objectMapper.createObjectNode();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         root.put(PersonEntity.IO_FIELD_CPR_NUMBER, pnr);
 
         JsonNode nodeBeforeDataEvent = null;

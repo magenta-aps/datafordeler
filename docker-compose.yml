@@ -21,7 +21,7 @@ services:
     ports:
       - 8081:80
       - 5005:5005
-    command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar datafordeler-core-exec.jar
+    command: java --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/java.lang.invoke=ALL-UNNAMED -Xms128M -Xmx4096M -Dterminal.jline=false -Dterminal.ansi=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar datafordeler-core-exec.jar
 
   datafordeler-db:
     build:
