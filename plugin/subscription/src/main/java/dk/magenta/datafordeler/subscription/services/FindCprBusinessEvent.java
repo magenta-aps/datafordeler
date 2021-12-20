@@ -90,19 +90,11 @@ public class FindCprBusinessEvent {
             Query eventQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
             eventQuery.setParameter("businessEventId", businessEventId);
             if(eventQuery.getResultList().isEmpty()) {
-                String errorMessage = "Subscription not found";
-                ObjectNode obj = this.objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.warn(errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
+                return this.getErrorMessage("Subscription not found", HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscription = (BusinessEventSubscription) eventQuery.getResultList().get(0);
                 if(!allowCallingOtherConsumersSubscriptions && !subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    String errorMessage = "No access";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                    return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
                 String hql = "SELECT max(event.timestamp) FROM "+ PersonEventDataRecord.class.getCanonicalName()+" event ";
                 Query timestampQuery = session.createQuery(hql);
@@ -121,11 +113,7 @@ public class FindCprBusinessEvent {
 
                 String[] subscribtionKodeId = subscription.getKodeId().split("[.]");
                 if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
-                    String errorMessage = "No access";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                    return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
 
                 String listId = subscription.getCprList().getListId();
@@ -154,11 +142,7 @@ public class FindCprBusinessEvent {
                     query.setFirstResult(0);
                 }
                 if (query.getMaxResults() > 1000) {
-                    String errorMessage = "Pagesize is too large";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                    return this.getErrorMessage("Pagesize is too large", HttpStatus.FORBIDDEN);
                 }
 
                 Stream<PersonEntity> personStream = query
@@ -187,6 +171,14 @@ public class FindCprBusinessEvent {
             log.error("Failed pulling events from subscribtion", e);
         }
         return ResponseEntity.status(500).build();
+    }
+
+    private ResponseEntity getErrorMessage(String message, HttpStatus status) {
+        String errorMessage = message;
+        ObjectNode obj = this.objectMapper.createObjectNode();
+        obj.put("errorMessage", message);
+        log.warn(errorMessage);
+        return new ResponseEntity(obj.toString(), status);
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
