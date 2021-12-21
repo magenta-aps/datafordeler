@@ -271,6 +271,23 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("1234567890", response.getBody());
 
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?cvr=25052943",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("1234567890", response.getBody());
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?companyName=MAGENTA",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("1234567890", response.getBody());
 
 
 
@@ -280,7 +297,7 @@ public class EskatLookupTest {
 
     }
 
-/*    @Test
+    @Test
     public void testCompanyParticipant2Lookup() throws Exception {
         this.loadCompany();
         loadParticipant("/person.json");
@@ -304,7 +321,7 @@ public class EskatLookupTest {
 
 
 
-    }*/
+    }
 
 
 

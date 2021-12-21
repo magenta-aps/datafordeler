@@ -203,6 +203,72 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.updatedParameters();
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
+    private List<String> cvrnumber = new ArrayList<>();
+
+    public List<String> getCvrnumber() {
+        return this.cvrnumber;
+    }
+
+    public void addCvrnumber(String vrnumber) {
+        if (cvrnumber != null) {
+            this.cvrnumber.add(vrnumber);
+            this.updatedParameters();
+        }
+    }
+
+    public void setCvrnumber(String businessKey) {
+        this.clearCvrnumber();
+        this.addCvrnumber(businessKey);
+    }
+
+    public void setCvrnumber(Collection<String> businessKeys) {
+        this.clearCvrnumber();
+        if (cvrnumber != null) {
+            for (String cvrnumber : cvrnumber) {
+                this.addCvrnumber(cvrnumber);
+            }
+        }
+    }
+
+    public void clearCvrnumber() {
+        this.cvrnumber.clear();
+        this.updatedParameters();
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
+    private List<String> companyNames = new ArrayList<>();
+
+    public List<String> getCompanyNames() {
+        return this.companyNames;
+    }
+
+    public void addCompanyNames(String vrnumber) {
+        if (companyNames != null) {
+            this.companyNames.add(vrnumber);
+            this.updatedParameters();
+        }
+    }
+
+    public void setCompanyNames(String businessKey) {
+        this.clearCompanyNames();
+        this.addCompanyNames(businessKey);
+    }
+
+    public void setCompanyNames(Collection<String> businessKeys) {
+        this.clearCompanyNames();
+        if (companyNames != null) {
+            for (String cvrnumber : companyNames) {
+                this.addCompanyNames(cvrnumber);
+            }
+        }
+    }
+
+    public void clearCompanyNames() {
+        this.companyNames.clear();
+        this.updatedParameters();
+    }
+
 
 
     @Override
@@ -253,6 +319,8 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
         joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
         joinHandles.put("CompanyParticipantRelationRecord", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
+        joinHandles.put("cvrNumber", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "cvrNumber");
+        joinHandles.put("companyNames", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "names");
 
         //joinHandles.put("participantUnitNumber", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
     }
@@ -269,5 +337,8 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.addCondition("roadcode", this.vejkode, Integer.class);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
         this.addCondition("businessKey", this.getBusinessKey(), Long.class);
+        this.addCondition("cvrNumber", this.getCvrnumber(), Long.class);
+        this.addCondition("names", this.getCvrnumber(), Long.class);
+        this.addCondition("companyNames", this.getCompanyNames(), String.class);
     }
 }

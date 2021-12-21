@@ -61,7 +61,9 @@ public class CompanyParticipantService {
 
     public String getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
                           @RequestParam(value = "navn",required=false, defaultValue = "") String navn,
-                          @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer, HttpServletRequest request) throws DataFordelerException {
+                          @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer,
+                          @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
+                          @RequestParam(value = "companyName",required=false, defaultValue = "") String companyName, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
@@ -79,8 +81,12 @@ public class CompanyParticipantService {
         if(!"".equals(enhedsNummer)) {
             participantRecordQuery.setEnhedsNummer(enhedsNummer);
         }
-
-
+        /*if(!"".equals(cvr)) {
+            participantRecordQuery.setCvrnumber(cvr);
+        }
+        if(!"".equals(companyName)) {
+            participantRecordQuery.setCompanyNames(companyName);
+        }*/
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
@@ -88,10 +94,6 @@ public class CompanyParticipantService {
 
 
             List<ParticipantRecord> participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-            //participantlist.g
-
-
-
 
 
 
