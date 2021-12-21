@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.eboks;
+package dk.magenta.datafordeler.eskat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
