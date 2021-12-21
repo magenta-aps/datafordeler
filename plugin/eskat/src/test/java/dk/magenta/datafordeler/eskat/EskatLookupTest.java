@@ -24,6 +24,7 @@ import org.hibernate.Transaction;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -251,7 +252,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("1234567890", response.getBody());
+        JSONAssert.assertEquals("[{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"responsibleEnd\":\"null\",\"companyStart\":\"2009-03-03T00:00Z\",\"companyEnd\":\"2009-10-21T00:00Z\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"NORMAL\",\"responsibleStart\":\"null\",\"personName\":\"TESTNAVN\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?navn=TESTNAVN",
@@ -260,7 +261,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("1234567890", response.getBody());
+        JSONAssert.assertEquals("[{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"responsibleEnd\":\"null\",\"companyStart\":\"2009-03-03T00:00Z\",\"companyEnd\":\"2009-10-21T00:00Z\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"NORMAL\",\"responsibleStart\":\"null\",\"personName\":\"TESTNAVN\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?enhedsNummer=4000004988",
@@ -269,7 +270,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("1234567890", response.getBody());
+        JSONAssert.assertEquals("[{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"responsibleEnd\":\"null\",\"companyStart\":\"2009-03-03T00:00Z\",\"companyEnd\":\"2009-10-21T00:00Z\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"NORMAL\",\"responsibleStart\":\"null\",\"personName\":\"TESTNAVN\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?cvr=25052943",
@@ -278,7 +279,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("1234567890", response.getBody());
+        JSONAssert.assertEquals("[{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"responsibleEnd\":\"null\",\"companyStart\":\"2009-03-03T00:00Z\",\"companyEnd\":\"2009-10-21T00:00Z\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"NORMAL\",\"responsibleStart\":\"null\",\"personName\":\"TESTNAVN\"}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?companyName=HOLDINGSELSKAB",
@@ -294,7 +295,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("1234567890", response.getBody());
+        JSONAssert.assertEquals("[{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"responsibleEnd\":\"null\",\"companyStart\":\"2009-03-03T00:00Z\",\"companyEnd\":\"2009-10-21T00:00Z\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"NORMAL\",\"responsibleStart\":\"null\",\"personName\":\"TESTNAVN\"}]", response.getBody(), false );
 
 
 

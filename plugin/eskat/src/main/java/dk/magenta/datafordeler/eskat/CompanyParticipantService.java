@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
@@ -19,6 +20,7 @@ import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
+import dk.magenta.datafordeler.eskat.output.ParticipantObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -33,8 +35,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/eskat/companyParticipantConnection/")
@@ -60,12 +64,16 @@ public class CompanyParticipantService {
 
     //public List<String> getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
 
-    public String getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
-                          @RequestParam(value = "navn",required=false, defaultValue = "") String navn,
-                          @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer,
-                          @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
-                          @RequestParam(value = "companyName",required=false, defaultValue = "") String companyName,
-                          @RequestParam(value = "status",required=false, defaultValue = "") String status, HttpServletRequest request) throws DataFordelerException {
+    public Collection<ParticipantObject> getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
+                                                 @RequestParam(value = "navn",required=false, defaultValue = "") String navn,
+                                                 @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer,
+                                                 @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
+                                                 @RequestParam(value = "companyName",required=false, defaultValue = "") String companyName,
+                                                 @RequestParam(value = "status",required=false, defaultValue = "") String status,
+                                                 @RequestParam(value = "relationstartTimeBefore",required=false, defaultValue = "") String relationstartTimeBefore,
+                                                 @RequestParam(value = "relationstartTimeAfter",required=false, defaultValue = "") String relationstartTimeAfter,
+                                                 @RequestParam(value = "relationendTimeBefore",required=false, defaultValue = "") String relationendTimeBefore,
+                                                 @RequestParam(value = "relationendTimeAfter",required=false, defaultValue = "") String relationendTimeAfter, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
@@ -92,6 +100,18 @@ public class CompanyParticipantService {
         if(!"".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
         }
+        if(!"".equals(relationstartTimeBefore)) {
+            participantRecordQuery.setRelationStartTimeBefore(BaseQuery.parseDateTime(relationstartTimeBefore));
+        }
+        if(!"".equals(relationstartTimeAfter)) {
+            participantRecordQuery.setRelationStartTimeAfter(BaseQuery.parseDateTime(relationstartTimeAfter));
+        }
+        if(!"".equals(relationendTimeBefore)) {
+            participantRecordQuery.setRelationEndTimeBefore(BaseQuery.parseDateTime(relationendTimeBefore));
+        }
+        if(!"".equals(relationendTimeAfter)) {
+            participantRecordQuery.setRelationEndTimeAfter(BaseQuery.parseDateTime(relationendTimeAfter));
+        }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
@@ -99,9 +119,15 @@ public class CompanyParticipantService {
 
             List<ParticipantRecord> participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
 
+            return participantlist.stream().map(f -> new ParticipantObject(f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCvrNumber()+"",
+                    f.getBusinessKey()+"", f.getNames().current().iterator().next().getName(),
+                    f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getNames().iterator().next().getName()+"",
+                    f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getStatus(),
+                    f.getCompanyRelation().current().get(0).getRegistrationFrom()+"",f.getCompanyRelation().current().get(0).getRegistrationTo()+"",
+                    f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getEffectFrom()+"",
+                    f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getEffectTo()+"")).collect(Collectors.toList());
 
 
-            return participantlist.get(0).getBusinessKey()+"";
         } catch (Exception e) {
             throw new DataStreamException(e);
         }
