@@ -269,6 +269,39 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.updatedParameters();
     }
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
+    private List<String> companyStatuses = new ArrayList<>();
+
+    public List<String> getStatuses() {
+        return this.companyStatuses;
+    }
+
+    public void addStatuses(String vrnumber) {
+        if (companyStatuses != null) {
+            this.companyStatuses.add(vrnumber);
+            this.updatedParameters();
+        }
+    }
+
+    public void setStatuses(String businessKey) {
+        this.clearCompanyNames();
+        this.addCompanyNames(businessKey);
+    }
+
+    public void setStatuses(Collection<String> businessKeys) {
+        this.clearCompanyNames();
+        if (companyStatuses != null) {
+            for (String cvrnumber : companyStatuses) {
+                this.addCompanyNames(cvrnumber);
+            }
+        }
+    }
+
+    public void clearStatuses() {
+        this.companyStatuses.clear();
+        this.updatedParameters();
+    }
+
 
 
     @Override
@@ -320,9 +353,8 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
         joinHandles.put("CompanyParticipantRelationRecord", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
         joinHandles.put("cvrNumber", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "cvrNumber");
-        joinHandles.put("companyNames", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "names");
-
-        //joinHandles.put("participantUnitNumber", CompanyRecord.DB_FIELD_PARTICIPANTS + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
+        joinHandles.put("companyNames", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "names" + BaseQuery.separator + "name");
+        joinHandles.put("companyStatus", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "companyStatus" + BaseQuery.separator + "status");
     }
 
     @Override
@@ -340,5 +372,6 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.addCondition("cvrNumber", this.getCvrnumber(), Long.class);
         this.addCondition("names", this.getCvrnumber(), Long.class);
         this.addCondition("companyNames", this.getCompanyNames(), String.class);
+        this.addCondition("companyStatus", this.getStatuses(), String.class);
     }
 }
