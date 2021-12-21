@@ -281,7 +281,14 @@ public class EskatLookupTest {
         Assert.assertEquals("1234567890", response.getBody());
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/?companyName=MAGENTA",
+                "/eskat/companyParticipantConnection/?companyName=HOLDINGSELSKAB",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?status=AKTIV",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

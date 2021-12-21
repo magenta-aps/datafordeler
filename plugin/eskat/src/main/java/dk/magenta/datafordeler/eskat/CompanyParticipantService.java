@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -63,7 +64,8 @@ public class CompanyParticipantService {
                           @RequestParam(value = "navn",required=false, defaultValue = "") String navn,
                           @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer,
                           @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
-                          @RequestParam(value = "companyName",required=false, defaultValue = "") String companyName, HttpServletRequest request) throws DataFordelerException {
+                          @RequestParam(value = "companyName",required=false, defaultValue = "") String companyName,
+                          @RequestParam(value = "status",required=false, defaultValue = "") String status, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
@@ -81,17 +83,19 @@ public class CompanyParticipantService {
         if(!"".equals(enhedsNummer)) {
             participantRecordQuery.setEnhedsNummer(enhedsNummer);
         }
-        /*if(!"".equals(cvr)) {
+        if(!"".equals(cvr)) {
             participantRecordQuery.setCvrnumber(cvr);
         }
         if(!"".equals(companyName)) {
             participantRecordQuery.setCompanyNames(companyName);
-        }*/
+        }
+        if(!"".equals(status)) {
+            participantRecordQuery.setStatuses(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
+        }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
             this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_AFTER, Bitemporal.FILTERPARAM_EFFECTTO_AFTER, now);
-
 
             List<ParticipantRecord> participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
 
