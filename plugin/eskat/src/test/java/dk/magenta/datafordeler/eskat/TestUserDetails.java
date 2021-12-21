@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.eboks;
+package dk.magenta.datafordeler.eskat;
 
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.role.SystemRole;
