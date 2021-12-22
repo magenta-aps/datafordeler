@@ -3,12 +3,14 @@ package dk.magenta.datafordeler.eskat.output;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.cvr.output.CvrRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.output.UnitRecordOutputWrapper;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitMetadataRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.List;
 
 import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
 
@@ -56,61 +58,26 @@ public class PunitRecordOutputWrapper extends UnitRecordOutputWrapper {
     protected void fillContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode mode) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
+
+
         container.addNontemporal(CompanyUnitRecord.IO_FIELD_P_NUMBER, record.getpNumber());
-        container.addNontemporal(CompanyUnitRecord.IO_FIELD_ADVERTPROTECTION, record.getAdvertProtection());
-        container.addNontemporal(CompanyUnitRecord.IO_FIELD_UNITNUMBER, record.getUnitNumber());
-        container.addNontemporal(CompanyUnitRecord.IO_FIELD_UNITTYPE, record.getUnitType());
-        container.addNontemporal(CompanyUnitRecord.IO_FIELD_INDUSTRY_RESPONSIBILITY_CODE, record.getIndustryResponsibilityCode());
-
-        container.addCvrBitemporal("navn", record.getNames(), true);
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_LOCATION_ADDRESS, record.getLocationAddress(), this::createAddressNode);
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_POSTAL_ADDRESS, record.getPostalAddress(), this::createAddressNode);
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_PHONE, record.getPhoneNumber(), true);
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_FAX, record.getFaxNumber(), true);
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_EMAIL, record.getEmailAddress(), true);
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_PRIMARY_INDUSTRY, record.getPrimaryIndustry());
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_SECONDARY_INDUSTRY1, record.getSecondaryIndustry1());
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_SECONDARY_INDUSTRY2, record.getSecondaryIndustry2());
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_SECONDARY_INDUSTRY3, record.getSecondaryIndustry3());
-
-        if (!DATAONLY.equals(mode)) {
-            container.addCvrBitemporal("livscyklusAktiv", record.getLifecycle(), this::createLifecycleNode);
-            container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_YEARLY_NUMBERS, record.getYearlyNumbers());
-            container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_QUARTERLY_NUMBERS, record.getQuarterlyNumbers());
-            container.addAttribute(CompanyUnitRecord.IO_FIELD_ATTRIBUTES, record.getAttributes());
-            container.addNontemporal(CompanyUnitRecord.IO_FIELD_REGISTER_ERROR, record.getRegisterError());
-            container.addNontemporal(CompanyUnitRecord.IO_FIELD_DATA_ACCESS, record.getDataAccess());
-            container.addNontemporal(CompanyUnitRecord.IO_FIELD_LAST_LOADED, record.getLastLoaded());
-            container.addNontemporal(CompanyUnitRecord.IO_FIELD_LAST_UPDATED, record.getLastUpdated());
-            container.addNontemporal(CompanyUnitRecord.IO_FIELD_LOADING_ERROR, record.getLoadingError());
-            container.addNontemporal(CompanyUnitRecord.IO_FIELD_NEAREST_FUTURE_DATE, record.getNearestFutureDate());
-            container.addNontemporal(CompanyUnitRecord.IO_FIELD_ERRORDESCRIPTION, record.getErrorDescription());
-            container.addNontemporal(CompanyUnitRecord.IO_FIELD_EFFECT_AGENT, record.getEffectAgent());
+        List<AddressRecord> addList = record.getLocationAddress().current();
+        if(!addList.isEmpty()) {
+            container.addCvrBitemporal("navn", record.getNames(), true);
+            container.addNontemporal("co", addList.get(0).getCoName());
+            container.addNontemporal("postbox", addList.get(0).getPostBox());
+            container.addNontemporal("postnummer", addList.get(0).getPostnummer());
+            container.addNontemporal("postdistrict", addList.get(0).getPostdistrikt());
+            container.addNontemporal("by", addList.get(0).getCityName());
+            container.addNontemporal("vej", addList.get(0).getRoadName());
+            container.addNontemporal("husnummer", addList.get(0).getHouseNumberFrom());
+            container.addNontemporal("kommunekode", addList.get(0).getMunicipality().getMunicipalityCode());
+            container.addNontemporal("landekode", addList.get(0).getCountryCode());
         }
-        container.addCvrBitemporal(CompanyUnitRecord.IO_FIELD_COMPANY_LINK, record.getCompanyLinkRecords(), null, true, true);
-        container.addNontemporal(CompanyUnitRecord.IO_FIELD_SAMT_ID, record.getSamtId());
-        /*
-        participants
-        */
     }
 
     @Override
     protected void fillMetadataContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode m) {
-        CvrOutputContainer container = (CvrOutputContainer) oContainer;
-
-        CompanyUnitMetadataRecord meta = record.getMetadata();
-        container.addNontemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_CVR_RELATION, meta.getNewestCvrRelation());
-        container.addNontemporal(CompanyUnitMetadataRecord.IO_FIELD_AGGREGATE_STATUS, meta.getAggregateStatus());
-        container.addCvrNontemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_CONTACT_DATA, meta.getMetadataContactRecords(), null, true, true);
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_PRIMARY_INDUSTRY, meta.getNewestPrimaryIndustry());
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_SECONDARY_INDUSTRY1, meta.getNewestSecondaryIndustry1());
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_SECONDARY_INDUSTRY2, meta.getNewestSecondaryIndustry2());
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_SECONDARY_INDUSTRY3, meta.getNewestSecondaryIndustry3());
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_NAME, meta.getNewestName());
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_YEARLY_NUMBERS, Collections.singleton(meta.getNewestYearlyNumbers()));
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_QUARTERLY_NUMBERS, Collections.singleton(meta.getNewestQuarterlyNumbers()));
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_MONTHLY_NUMBERS, Collections.singleton(meta.getNewestMonthlyNumbers()));
-        container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_LOCATION, meta.getNewestLocation(), this::createAddressNode);
     }
 
 }

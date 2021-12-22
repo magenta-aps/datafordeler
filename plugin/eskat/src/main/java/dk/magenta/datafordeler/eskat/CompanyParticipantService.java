@@ -113,7 +113,8 @@ public class CompanyParticipantService {
 
             for(ParticipantRecord participant : participantlist) {
                 List<CompanyParticipantRelationRecord> relations =  participant.getCompanyRelation().current();
-                oList.addAll(ParticipantUnwrapper.CompanyParticipantRelationRecord(relations));
+
+                oList.addAll(ParticipantUnwrapper.CompanyParticipantRelationRecord(relations, participant.getBusinessKey()+"", participant.getNames().current().iterator().next().getName()));
             }
             return oList;
         } catch (Exception e) {

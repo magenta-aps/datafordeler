@@ -14,9 +14,14 @@ public class ParticipantUnwrapper {
 
 
 
-    public static List<ParticipantObject> CompanyParticipantRelationRecord(List<CompanyParticipantRelationRecord> relations) {
+    public static List<ParticipantObject> CompanyParticipantRelationRecord(List<CompanyParticipantRelationRecord> relations, String cpr, String personName) {
 
         ArrayList<ParticipantObject> list = new ArrayList<ParticipantObject>();
+
+
+
+
+
 
         for(CompanyParticipantRelationRecord relation : relations) {
 
@@ -24,7 +29,7 @@ public class ParticipantUnwrapper {
             if(relation.getRelationCompanyRecord().getCompanyStatus().size() > 0) {
 
                 ParticipantObject p = new ParticipantObject(relation.getRelationCompanyRecord().getCvrNumber() + "",
-                        "", "",
+                        cpr, personName,
                         relation.getRelationCompanyRecord().getNames().iterator().next().getName() + "",
                         relation.getRelationCompanyRecord().getCompanyStatus().iterator().next().getStatus(),
                         dateConvert(relation.getRegistrationFrom()), dateConvert(relation.getRegistrationTo()),
