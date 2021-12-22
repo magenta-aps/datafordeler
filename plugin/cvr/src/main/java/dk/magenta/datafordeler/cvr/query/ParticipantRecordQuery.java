@@ -2,11 +2,14 @@ package dk.magenta.datafordeler.cvr.query;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 /**
@@ -303,6 +306,39 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
 
+    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
+    private OffsetDateTime relationstartTimeAfter;
+
+    public void setRelationStartTimeAfter(OffsetDateTime relationstartTimeAfter) {
+        this.relationstartTimeAfter = relationstartTimeAfter;
+        this.updatedParameters();
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
+    private OffsetDateTime relationstartTimeBefore;
+
+    public void setRelationStartTimeBefore(OffsetDateTime relationstartTimeBefore) {
+        this.relationstartTimeBefore = relationstartTimeBefore;
+        this.updatedParameters();
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
+    private OffsetDateTime relationendTimeAfter;
+
+    public void setRelationEndTimeAfter(OffsetDateTime relationendTimeAfter) {
+        this.relationendTimeAfter = relationendTimeAfter;
+        this.updatedParameters();
+    }
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
+    private OffsetDateTime relationendTimeBefore;
+
+    public void setRelationEndTimeBefore(OffsetDateTime relationendTimeBefore) {
+        this.relationendTimeBefore = relationendTimeBefore;
+        this.updatedParameters();
+    }
+
+
 
     @Override
     public Map<String, Object> getSearchParameters() {
@@ -355,6 +391,10 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("cvrNumber", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "cvrNumber");
         joinHandles.put("companyNames", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "names" + BaseQuery.separator + "name");
         joinHandles.put("companyStatus", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "companyStatus" + BaseQuery.separator + "status");
+        joinHandles.put("companyStatusStart.GTE", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "companyStatus" + BaseQuery.separator + "validity" + BaseQuery.separator + "validFrom");
+        joinHandles.put("companyStatusStart.LTE", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "companyStatus" + BaseQuery.separator + "validity" + BaseQuery.separator + "validFrom");
+        joinHandles.put("companyStatusEnd.GTE", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "companyStatus" + BaseQuery.separator + "validity" + BaseQuery.separator + "validTo");
+        joinHandles.put("companyStatusEnd.LTE", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + "companyStatus" + BaseQuery.separator + "validity" + BaseQuery.separator + "validTo");
     }
 
     @Override
@@ -373,5 +413,18 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.addCondition("names", this.getCvrnumber(), Long.class);
         this.addCondition("companyNames", this.getCompanyNames(), String.class);
         this.addCondition("companyStatus", this.getStatuses(), String.class);
+
+        if (this.relationstartTimeAfter != null) {
+            this.addCondition("companyStatusStart.GTE", Condition.Operator.GTE, this.relationstartTimeAfter, LocalDate.class, false);
+        }
+        if (this.relationstartTimeBefore != null) {
+            this.addCondition("companyStatusStart.LTE", Condition.Operator.LTE, this.relationstartTimeBefore, LocalDate.class, false);
+        }
+        if (this.relationendTimeAfter != null) {
+            this.addCondition("companyStatusStart.GTE", Condition.Operator.GTE, this.relationendTimeAfter, LocalDate.class, false);
+        }
+        if (this.relationendTimeBefore != null) {
+            this.addCondition("companyStatusStart.LTE", Condition.Operator.LTE, this.relationendTimeBefore, LocalDate.class, false);
+        }
     }
 }
