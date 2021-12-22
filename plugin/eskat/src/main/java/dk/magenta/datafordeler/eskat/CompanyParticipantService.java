@@ -97,7 +97,7 @@ public class CompanyParticipantService {
         if(!"".equals(companyName)) {
             participantRecordQuery.setCompanyNames(companyName);
         }
-        if(!"".equals(status)) {
+        if("Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
         }
         if(!"".equals(relationstartTimeBefore)) {
