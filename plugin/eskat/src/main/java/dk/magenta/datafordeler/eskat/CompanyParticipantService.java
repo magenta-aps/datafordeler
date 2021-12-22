@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,6 +44,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/eskat/companyParticipantConnection/")
 public class CompanyParticipantService {
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Autowired
     private DafoUserManager dafoUserManager;
@@ -123,9 +126,9 @@ public class CompanyParticipantService {
                     f.getBusinessKey()+"", f.getNames().current().iterator().next().getName(),
                     f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getNames().iterator().next().getName()+"",
                     f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getStatus(),
-                    f.getCompanyRelation().current().get(0).getRegistrationFrom()+"",f.getCompanyRelation().current().get(0).getRegistrationTo()+"",
-                    f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getEffectFrom()+"",
-                    f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getEffectTo()+"")).collect(Collectors.toList());
+                    dateConvert(f.getCompanyRelation().current().get(0).getRegistrationFrom()),dateConvert(f.getCompanyRelation().current().get(0).getRegistrationTo()),
+                    dateConvert(f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getEffectFrom()),
+                    dateConvert(f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getEffectTo()))).collect(Collectors.toList());
 
 
         } catch (Exception e) {
@@ -150,6 +153,14 @@ public class CompanyParticipantService {
                     parameterName,
                     parameterValue
             );
+        }
+    }
+
+    private static String dateConvert(OffsetDateTime datetime) {
+        if(datetime==null) {
+            return null;
+        } else {
+            return datetime.format(formatter);
         }
     }
 }
