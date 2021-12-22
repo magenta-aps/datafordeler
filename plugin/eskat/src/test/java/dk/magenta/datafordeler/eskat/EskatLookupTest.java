@@ -15,6 +15,7 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
+import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
@@ -33,6 +34,10 @@ import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -140,6 +145,29 @@ public class EskatLookupTest {
             input.close();
         }
         return persons;
+    }
+
+    @Test
+    public void loadUnit() throws IOException, DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            importMetadata.setSession(session);
+            InputStream input = ParseTest.class.getResourceAsStream("/unit.json");
+            JsonNode root = objectMapper.readTree(input);
+            JsonNode itemList = root.get("hits").get("hits");
+            Assert.assertTrue(itemList.isArray());
+            for (JsonNode item : itemList) {
+                String type = item.get("_type").asText();
+                CompanyUnitEntityManager entityManager = (CompanyUnitEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                entityManager.parseData(item.get("_source").get("VrproduktionsEnhed"), importMetadata, session);
+            }
+        } finally {
+            transaction.commit();
+            session.close();
+            QueryManager.clearCaches();
+        }
     }
 
 
@@ -305,9 +333,9 @@ public class EskatLookupTest {
     }
 
     @Test
-    public void testCompanyParticipant2Lookup() throws Exception {
-        this.loadCompany();
-        loadParticipant("/person.json");
+    public void testCompanyPunitLookup() throws Exception {
+        this.loadUnit();
+
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
@@ -318,16 +346,13 @@ public class EskatLookupTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/eskat/eskatparticipant/1/rest/?businessKey=1234567890",
+                "/eskat/punit/1/rest/search?pnummer=1020895337",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
 
         System.out.println(response.getBody());
-
-
-
     }
 
 
