@@ -1,8 +1,6 @@
 package dk.magenta.datafordeler.eskat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -15,31 +13,23 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import dk.magenta.datafordeler.eskat.output.ParticipantObject;
+import dk.magenta.datafordeler.eskat.utils.ParticipantUnwrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @RestController
 @RequestMapping("/eskat/companyParticipantConnection/")
@@ -63,9 +53,6 @@ public class CompanyParticipantService {
             //path = {"/{cpr}"},
             produces = {"application/json"}
     )
-
-
-    //public List<String> getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
 
     public Collection<ParticipantObject> getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
                                                  @RequestParam(value = "navn",required=false, defaultValue = "") String navn,
@@ -122,15 +109,13 @@ public class CompanyParticipantService {
 
             List<ParticipantRecord> participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
 
-            return participantlist.stream().map(f -> new ParticipantObject(f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCvrNumber()+"",
-                    f.getBusinessKey()+"", f.getNames().current().iterator().next().getName(),
-                    f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getNames().iterator().next().getName()+"",
-                    f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getStatus(),
-                    dateConvert(f.getCompanyRelation().current().get(0).getRegistrationFrom()),dateConvert(f.getCompanyRelation().current().get(0).getRegistrationTo()),
-                    dateConvert(f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getEffectFrom()),
-                    dateConvert(f.getCompanyRelation().current().get(0).getRelationCompanyRecord().getCompanyStatus().iterator().next().getEffectTo()))).collect(Collectors.toList());
+            List<ParticipantObject> oList = new ArrayList<ParticipantObject>();
 
-
+            for(ParticipantRecord participant : participantlist) {
+                List<CompanyParticipantRelationRecord> relations =  participant.getCompanyRelation().current();
+                oList.addAll(ParticipantUnwrapper.CompanyParticipantRelationRecord(relations));
+            }
+            return oList;
         } catch (Exception e) {
             throw new DataStreamException(e);
         }

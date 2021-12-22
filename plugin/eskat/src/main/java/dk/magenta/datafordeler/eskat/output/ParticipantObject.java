@@ -22,6 +22,7 @@ public class ParticipantObject {
         this.responsibleend = responsibleend;
         this.companystart = companystart;
         this.companyend = companyend;
+
     }
 
     public String getCvr() {
@@ -59,4 +60,10 @@ public class ParticipantObject {
     public String getCompanyEnd() {
         return companyend;
     }
+
+
+
+
+
+
 }
