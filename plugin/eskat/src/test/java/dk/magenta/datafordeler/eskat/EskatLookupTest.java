@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
@@ -42,6 +43,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
@@ -225,6 +227,16 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         System.out.println(response.getBody());
 
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?companyStatus=NORMAL",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(response.getBody());
+
+
     }
 
     @Test
@@ -283,7 +295,7 @@ public class EskatLookupTest {
         //[{"cvr":"25052943","cpr":"1234567890","driftForm":"NORMAL","responsibleEnd":null,"companyStart":"1999-11-15","companyEnd":null,"responsibleStart":null,"personName":"TESTNAVN","companyName":"ApS KBIL 17 NR. 1179"}]
         System.out.println(response.getBody());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"UNDER FRIVILLIG LIKVIDATION\",\"responsibleEnd\":null,\"companyStart\":\"2009-10-22\",\"companyEnd\":\"2010-11-08\",\"responsibleStart\":null}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?navn=TESTNAVN",
@@ -292,7 +304,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"UNDER FRIVILLIG LIKVIDATION\",\"responsibleEnd\":null,\"companyStart\":\"2009-10-22\",\"companyEnd\":\"2010-11-08\",\"responsibleStart\":null}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?enhedsNummer=4000004988",
@@ -301,7 +313,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"UNDER FRIVILLIG LIKVIDATION\",\"responsibleEnd\":null,\"companyStart\":\"2009-10-22\",\"companyEnd\":\"2010-11-08\",\"responsibleStart\":null}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?cvr=25052943",
@@ -310,7 +322,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"UNDER FRIVILLIG LIKVIDATION\",\"responsibleEnd\":null,\"companyStart\":\"2009-10-22\",\"companyEnd\":\"2010-11-08\",\"responsibleStart\":null}]", response.getBody(), false);
+        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?companyName=HOLDINGSELSKAB",
@@ -319,7 +331,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"UNDER FRIVILLIG LIKVIDATION\",\"responsibleEnd\":null,\"companyStart\":\"2009-10-22\",\"companyEnd\":\"2010-11-08\",\"responsibleStart\":null}]", response.getBody(), false );
+        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false );
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?status=AKTIV",
@@ -328,7 +340,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32075541\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"COPENHAGENSOURCE A/S\",\"driftForm\":\"UNDER FRIVILLIG LIKVIDATION\",\"responsibleEnd\":null,\"companyStart\":\"2009-10-22\",\"companyEnd\":\"2010-11-08\",\"responsibleStart\":null}]", response.getBody(), false );
+        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false );
 
     }
 

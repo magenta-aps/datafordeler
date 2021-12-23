@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.eskat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -42,9 +41,6 @@ public class CompanyParticipantService {
 
     @Autowired
     private SessionManager sessionManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private Logger log = LogManager.getLogger(CompanyParticipantService.class.getCanonicalName());
 
@@ -102,6 +98,12 @@ public class CompanyParticipantService {
         if(!"".equals(relationendTimeAfter)) {
             participantRecordQuery.setRelationEndTimeAfter(BaseQuery.parseDateTime(relationendTimeAfter));
         }
+
+        participantRecordQuery.setRegistrationFromBefore(now);
+        participantRecordQuery.setRegistrationToAfter(now);
+        participantRecordQuery.setEffectFromBefore(now);
+        participantRecordQuery.setEffectToAfter(now);
+
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
