@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import dk.magenta.datafordeler.eskat.output.EskatRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.eskat.query.EskatCompanyRecordQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +76,7 @@ public class CompanyRecordTestingService extends CompanyRecordService {
 
     @Override
     protected CompanyRecordQuery getEmptyQuery() {
-        return new CompanyRecordQuery();
+        return new EskatCompanyRecordQuery();
     }
 
     @Override
