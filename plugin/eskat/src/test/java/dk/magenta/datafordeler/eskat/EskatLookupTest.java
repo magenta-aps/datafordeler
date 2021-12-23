@@ -216,16 +216,32 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(response.getBody());
-
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
         response = restTemplate.exchange(
-                "/eskat/company/1/rest/search/?navne=MAGENTA*",
+                "/eskat/company/1/rest/search/?cvrnummer=25052944*",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(response.getBody());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?navne=MAGENT*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?navne=MAGENH*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
                 "/eskat/company/1/rest/search/?companyStatus=NORMAL",
@@ -234,7 +250,16 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(response.getBody());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?companyStatus=UNORMAL",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
 
 
     }
