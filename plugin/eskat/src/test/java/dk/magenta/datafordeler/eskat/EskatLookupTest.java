@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 
@@ -35,15 +34,10 @@ import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.OffsetDateTime;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
@@ -209,7 +203,9 @@ public class EskatLookupTest {
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<String> response;
+
+        response = restTemplate.exchange(
                 "/eskat/company/1/rest/search/?cvrnummer=25052943",
                 HttpMethod.GET,
                 httpEntity,
@@ -253,6 +249,31 @@ public class EskatLookupTest {
         Assert.assertEquals(true, response.getBody().contains("25052943"));
         response = restTemplate.exchange(
                 "/eskat/company/1/rest/search/?companyStatus=UNORMAL",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?companyStatus=NORMAL&companyrecordeventTime.GTE=1999-01-01&companyrecordeventTime.LTE=2000-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?companyStatus=NORMAL&companyrecordeventTime.GTE=2000-01-01&companyrecordeventTime.LTE=2001-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?companyStatus=UNORMAL&companyrecordeventTime.GTE=1999-01-01&companyrecordeventTime.LTE=2000-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

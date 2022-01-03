@@ -1,17 +1,11 @@
 package dk.magenta.datafordeler.eskat.query;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
-import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
-import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
-import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -64,17 +58,17 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = COMPANYDATAEVENTTIME)
-    private OffsetDateTime companyrecordValidityTimeGTE;
+    private LocalDate companyrecordValidityTimeGTE;
 
-    public void setCompanyStatusValidityFromGTE(OffsetDateTime companyrecordValidityTimeGTE) {
+    public void setCompanyStatusValidityFromGTE(LocalDate companyrecordValidityTimeGTE) {
         this.companyrecordValidityTimeGTE = companyrecordValidityTimeGTE;
         this.updatedParameters();
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = COMPANYDATAEVENTTIME)
-    private OffsetDateTime companyrecordValidityTimeLTE;
+    private LocalDate companyrecordValidityTimeLTE;
 
-    public void setCompanyStatusValidityFromLTE(OffsetDateTime companyrecordValidityTimeLTE) {
+    public void setCompanyStatusValidityFromLTE(LocalDate companyrecordValidityTimeLTE) {
         this.companyrecordValidityTimeLTE = companyrecordValidityTimeLTE;
         this.updatedParameters();
     }
@@ -84,6 +78,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     public Map<String, Object> getSearchParameters() {
         Map<String, Object> map = super.getSearchParameters();
         map.put("companyStatus", this.companyStatus);
+        map.put("companyrecordeventTime.GTE", this.companyrecordValidityTimeGTE);
+        map.put("companyrecordeventTime.LTE", this.companyrecordValidityTimeLTE);
         return map;
     }
 
@@ -91,23 +87,14 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
         this.setCompanyStatus(parameters.getI("companyStatus"));
-        this.setDataEventTimeAfter(BaseQuery.parseDateTime(parameters.getFirst("companyrecordeventTime.GTE")));
-        this.setDataEventTimeBefore(BaseQuery.parseDateTime(parameters.getFirst("companyrecordeventTime.LTE")));
+        this.setCompanyStatusValidityFromGTE(parseDate(parameters.getFirst("companyrecordeventTime.GTE")));
+        this.setCompanyStatusValidityFromLTE(parseDate(parameters.getFirst("companyrecordeventTime.LTE")));
     }
 
     @Override
     protected boolean isEmpty() {
         return super.isEmpty() && this.companyStatus.isEmpty() &&
                 this.companyrecordValidityTimeGTE != null && this.companyrecordValidityTimeLTE != null;
-    }
-
-
-    private static HashMap<String, String> joinHandles = new HashMap<>();
-
-    static {
-
-        joinHandles.put("companyrecordeventTime.GTE", CompanyRecord.DB_FIELD_DATAEVENT + BaseQuery.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
-        joinHandles.put("companyrecordeventTime.LTE", CompanyRecord.DB_FIELD_DATAEVENT + BaseQuery.separator + CompanyDataEventRecord.DB_FIELD_TIMESTAMP);
     }
 
     @Override
@@ -126,14 +113,23 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
         super.setupConditions();
 
         this.addCondition("companyStatus", this.companyStatus);
-        this.addCondition("companyStatusValidityFrom", this.companyStatus);
+        //this.addCondition("companyStatusValidityFrom", this.companyStatus);
 
         if (this.companyrecordValidityTimeGTE != null) {
-            this.addCondition("companyStatusValidityFrom.GTE", Condition.Operator.GTE, this.companyrecordValidityTimeGTE, OffsetDateTime.class, false);
+            this.addCondition("companyStatusValidityFrom.GTE", Condition.Operator.GTE, this.companyrecordValidityTimeGTE, LocalDate.class, false);
         }
         if (this.companyrecordValidityTimeLTE != null) {
-            this.addCondition("companyStatusValidityFrom.LTE", Condition.Operator.LTE, this.companyrecordValidityTimeLTE, OffsetDateTime.class, false);
+            this.addCondition("companyStatusValidityFrom.LTE", Condition.Operator.LTE, this.companyrecordValidityTimeLTE, LocalDate.class, false);
         }
+    }
+
+    private static LocalDate parseDate(String date) {
+        if(date!=null) {
+            return LocalDate.parse(date,formatter);
+        } else {
+            return null;
+        }
+
     }
 
 }
