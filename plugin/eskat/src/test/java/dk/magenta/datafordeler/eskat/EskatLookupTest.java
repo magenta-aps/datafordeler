@@ -71,19 +71,36 @@ public class EskatLookupTest {
     }
 
 
-    private void loadCompany() throws IOException, DataFordelerException {
-        InputStream testData = EskatLookupTest.class.getResourceAsStream("/company_in.json");
+    private void loadAllCompany() throws IOException, DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        //Transaction transaction = session.beginTransaction();
+        importMetadata.setSession(session);
+        this.loadCompanyFile("/company_in2.json", importMetadata);
+        this.loadCompanyFile("/company_in.json", importMetadata);
+        this.loadUnit();
+        this.loadParticipant("/person.json");
+        Transaction tx = session.getTransaction();
+        if(tx.isActive()) {
+            tx.commit();
+        }
+    }
+
+    private void loadCompanyFile(String resource, ImportMetadata importMetadata) throws IOException, DataFordelerException {
+        InputStream testData = EskatLookupTest.class.getResourceAsStream(resource);
         JsonNode root = objectMapper.readTree(testData);
         testData.close();
         JsonNode itemList = root.get("hits").get("hits");
         Assert.assertTrue(itemList.isArray());
-        ImportMetadata importMetadata = new ImportMetadata();
+
         for (JsonNode item : itemList) {
             String source = objectMapper.writeValueAsString(item.get("_source").get("Vrvirksomhed"));
             ByteArrayInputStream bais = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
             companyEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
+
+
     }
 
 
@@ -169,7 +186,7 @@ public class EskatLookupTest {
 
     @Test
     public void testCallForStatusList() throws Exception {
-        this.loadCompany();
+        this.loadAllCompany();
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
@@ -187,12 +204,12 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        //JSONAssert.assertEquals("[\"Aktiv: NORMAL\"]", response.getBody(), false);
+        JSONAssert.assertEquals("[\"Ophørt: OPLØST EFTER FRIVILLIG LIKVIDATION\",\"Aktiv: NORMAL\",\"Ophørt: UNDER FRIVILLIG LIKVIDATION\"]", response.getBody(), false);
     }
 
     @Test
     public void testCallForCompanyLookup() throws Exception {
-        this.loadCompany();
+        this.loadAllCompany();
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
@@ -287,7 +304,7 @@ public class EskatLookupTest {
 
     @Test
     public void testCallForCompanyDetailLookup() throws Exception {
-        this.loadCompany();
+        this.loadAllCompany();
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
@@ -320,8 +337,7 @@ public class EskatLookupTest {
 
     @Test
     public void testCompanyParticipantLookup() throws Exception {
-        this.loadCompany();
-        loadParticipant("/person.json");
+        this.loadAllCompany();
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
@@ -392,7 +408,7 @@ public class EskatLookupTest {
 
     @Test
     public void testCompanyPunitLookup() throws Exception {
-        this.loadUnit();
+        this.loadAllCompany();
 
         TestUserDetails testUserDetails = new TestUserDetails();
 
