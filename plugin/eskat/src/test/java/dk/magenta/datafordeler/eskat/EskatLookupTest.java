@@ -184,6 +184,12 @@ public class EskatLookupTest {
     }
 
 
+    /**
+     * Test of feature for "aktuelle virksomhedsstatusser."
+     * This service supports functionality as requested by skattestyrelsen to support functionality in E-skat
+     *
+     * @throws Exception
+     */
     @Test
     public void testCallForStatusList() throws Exception {
         this.loadAllCompany();
@@ -207,18 +213,18 @@ public class EskatLookupTest {
         JSONAssert.assertEquals("[\"Ophørt: OPLØST EFTER FRIVILLIG LIKVIDATION\",\"Aktiv: NORMAL\",\"Ophørt: UNDER FRIVILLIG LIKVIDATION\"]", response.getBody(), false);
     }
 
+    /**
+     * Test of feature for searching for companies based on different attributes.
+     *
+     * @throws Exception
+     */
     @Test
     public void testCallForCompanyLookup() throws Exception {
         this.loadAllCompany();
         TestUserDetails testUserDetails = new TestUserDetails();
-
         ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-
+        HttpEntity<String> httpEntity;
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-
-        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response;
 
@@ -228,8 +234,21 @@ public class EskatLookupTest {
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?cvrnummer=25052943",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("25052943"));
+        Assert.assertEquals(false, response.getBody().contains("25052944"));
         response = restTemplate.exchange(
                 "/eskat/company/1/rest/search/?cvrnummer=25052944*",
                 HttpMethod.GET,
@@ -238,6 +257,7 @@ public class EskatLookupTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("25052943"));
+        Assert.assertEquals(false, response.getBody().contains("25052944"));
 
         response = restTemplate.exchange(
                 "/eskat/company/1/rest/search/?navne=MAGENT*",
@@ -273,8 +293,32 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
+    }
+
+    @Test
+    public void testCallForCompanyTimestampStatusLookup() throws Exception {
+        this.loadAllCompany();
+        TestUserDetails testUserDetails = new TestUserDetails();
+        ObjectNode body = objectMapper.createObjectNode();
+        HttpEntity<String>  httpEntity;
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        ResponseEntity<String> response;
+
         response = restTemplate.exchange(
-                "/eskat/company/1/rest/search/?companyStatus=NORMAL&companyrecordeventTime.GTE=1999-01-01&companyrecordeventTime.LTE=2000-01-01",
+                "/eskat/company/1/rest/search/?cvrnummer=25052943",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?companyStatus=NORMAL&companyStatusValidityFrom.GTE=1999-01-01&companyStatusValidityFrom.LTE=2000-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -282,7 +326,7 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("25052943"));
         response = restTemplate.exchange(
-                "/eskat/company/1/rest/search/?companyStatus=NORMAL&companyrecordeventTime.GTE=2000-01-01&companyrecordeventTime.LTE=2001-01-01",
+                "/eskat/company/1/rest/search/?companyStatus=NORMAL&companyStatusValidityFrom.GTE=2000-01-01&companyStatusValidityFrom.LTE=2001-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -290,7 +334,7 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("25052943"));
         response = restTemplate.exchange(
-                "/eskat/company/1/rest/search/?companyStatus=UNORMAL&companyrecordeventTime.GTE=1999-01-01&companyrecordeventTime.LTE=2000-01-01",
+                "/eskat/company/1/rest/search/?companyStatus=UNORMAL&companyStatusValidityFrom.GTE=1999-01-01&companyStatusValidityFrom.LTE=2000-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -298,8 +342,14 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
-
-
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?companyStatus=UNORMAL&companyStatusValidityFrom.GTE=2000-01-01&companyStatusValidityFrom.LTE=2001-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
     }
 
     @Test
@@ -308,31 +358,42 @@ public class EskatLookupTest {
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        HttpEntity<String>  httpEntity;
+        ResponseEntity<String> response;
 
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+
+        response = restTemplate.exchange(
+                "/eskat/companydetail/1/rest/search/?cvrnummer=25052943",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        response = restTemplate.exchange(
                 "/eskat/companydetail/1/rest/search/?cvrnummer=25052943",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(response.getBody());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+        Assert.assertEquals(false, response.getBody().contains("25052944"));
 
         response = restTemplate.exchange(
-                "/eskat/companydetail/1/rest/search/?navne=MAGENTA*",
+                "/eskat/companydetail/1/rest/search/?cvrnummer=25052944",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(response.getBody());
-
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+        Assert.assertEquals(false, response.getBody().contains("25052944"));
     }
 
     @Test

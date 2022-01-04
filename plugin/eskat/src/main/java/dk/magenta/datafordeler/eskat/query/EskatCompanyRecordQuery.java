@@ -78,8 +78,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     public Map<String, Object> getSearchParameters() {
         Map<String, Object> map = super.getSearchParameters();
         map.put("companyStatus", this.companyStatus);
-        map.put("companyrecordeventTime.GTE", this.companyrecordValidityTimeGTE);
-        map.put("companyrecordeventTime.LTE", this.companyrecordValidityTimeLTE);
+        map.put("companyStatusValidityFrom.GTE", this.companyrecordValidityTimeGTE);
+        map.put("companyStatusValidityFrom.LTE", this.companyrecordValidityTimeLTE);
         return map;
     }
 
@@ -87,8 +87,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
         this.setCompanyStatus(parameters.getI("companyStatus"));
-        this.setCompanyStatusValidityFromGTE(parseDate(parameters.getFirst("companyrecordeventTime.GTE")));
-        this.setCompanyStatusValidityFromLTE(parseDate(parameters.getFirst("companyrecordeventTime.LTE")));
+        this.setCompanyStatusValidityFromGTE(parseDate(parameters.getFirst("companyStatusValidityFrom.GTE")));
+        this.setCompanyStatusValidityFromLTE(parseDate(parameters.getFirst("companyStatusValidityFrom.LTE")));
     }
 
     @Override
