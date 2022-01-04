@@ -364,7 +364,7 @@ public class EskatLookupTest {
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
 
         response = restTemplate.exchange(
-                "/eskat/companydetail/1/rest/search/?cvrnummer=25052943",
+                "/eskat/companydetail/1/rest/25052943",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -376,24 +376,43 @@ public class EskatLookupTest {
         this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange(
-                "/eskat/companydetail/1/rest/search/?cvrnummer=25052943",
+                "/eskat/companydetail/1/rest/25052943",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(true, response.getBody().contains("25052943"));
-        Assert.assertEquals(false, response.getBody().contains("25052944"));
+        JSONAssert.assertEquals("{\n" +
+                "  \"cvrNummer\" : 25052943,\n" +
+                "  \"navne\" : \"MAGENTA\",\n" +
+                "  \"binavne\" : \"\",\n" +
+                "  \"status\" : \"\",\n" +
+                "  \"coName\" : \"c/o Dummy CO\",\n" +
+                "  \"postnummer\" : 1112,\n" +
+                "  \"addressText\" : null,\n" +
+                "  \"postboks\" : \"1234\",\n" +
+                "  \"postdistrikt\" : \"København K\",\n" +
+                "  \"kommuneKode\" : 955,\n" +
+                "  \"bynavn\" : null,\n" +
+                "  \"telefonNummer\" : \"33369696\",\n" +
+                "  \"elektroniskPost\" : \"info@magenta.dk\",\n" +
+                "  \"faxNumber\" : \"\",\n" +
+                "  \"startdato\" : null,\n" +
+                "  \"nyesteVirksomhedsform\" : \"80/Anpartsselskab\",\n" +
+                "  \"branchetekst\" : \"Konsulentbistand vedrørende informationsteknologi\",\n" +
+                "  \"branchekode\" : \"620200\"\n" +
+                "}", response.getBody(), false);
 
         response = restTemplate.exchange(
-                "/eskat/companydetail/1/rest/search/?cvrnummer=25052944",
+                "/eskat/companydetail/1/rest/25052944",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(false, response.getBody().contains("25052943"));
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("25052944"));
+
+        //TODO: WE STILL NEED P-Unit
     }
 
     @Test
@@ -403,21 +422,42 @@ public class EskatLookupTest {
 
         ObjectNode body = objectMapper.createObjectNode();
         HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        ResponseEntity<String> response;
 
-        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        this.applyAccess(testUserDetails);
-
-        ResponseEntity<String> response = restTemplate.exchange(
+        response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?cpr=1234567890",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
 
-        //[{"cvr":"25052943","cpr":"1234567890","driftForm":"NORMAL","responsibleEnd":null,"companyStart":"1999-11-15","companyEnd":null,"responsibleStart":null,"personName":"TESTNAVN","companyName":"ApS KBIL 17 NR. 1179"}]
-        System.out.println(response.getBody());
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?cpr=1234567890",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?cpr=1234567890",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
         JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
@@ -427,7 +467,26 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
         JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?navn=TESTNA*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?navn=TESTNU*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?enhedsNummer=4000004988",
@@ -445,7 +504,26 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
         JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false);
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?cvr=25052*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?cvr=25053*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?companyName=HOLDINGSELSKAB",
@@ -454,7 +532,26 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
         JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false );
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?companyName=*NGSELSKAB",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?companyName=*MGSELSKAB",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/?status=AKTIV",
@@ -463,7 +560,10 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
         JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false );
+
+
 
     }
 

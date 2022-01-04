@@ -1,0 +1,26 @@
+package dk.magenta.datafordeler.eskat.utils;
+
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class DateConverter {
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public static String dateConvert(OffsetDateTime datetime) {
+        if(datetime==null) {
+            return null;
+        } else {
+            return datetime.format(formatter);
+        }
+    }
+
+    public static String dateConvert(LocalDate datetime) {
+        if(datetime==null) {
+            return null;
+        } else {
+            return datetime.format(formatter);
+        }
+    }
+}
