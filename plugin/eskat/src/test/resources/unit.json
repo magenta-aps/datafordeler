@@ -91,7 +91,7 @@
                 "vejnavn": "Martine Christoffersens Vej",
                 "periode": {
                   "gyldigFra": "2015-11-13",
-                  "gyldigTil": "2016-12-31"
+                  "gyldigTil": null
                 },
                 "postnummer": 7000,
                 "bogstavTil": null,
@@ -144,7 +144,7 @@
                 "vejnavn": "Martine Christoffersens Vej",
                 "periode": {
                   "gyldigFra": "2015-11-13",
-                  "gyldigTil": "2016-12-31"
+                  "gyldigTil": null
                 },
                 "postnummer": 7000,
                 "bogstavTil": null,
@@ -182,7 +182,7 @@
                 "navn": "Jointo",
                 "periode": {
                   "gyldigFra": "2015-11-13",
-                  "gyldigTil": "2016-12-31"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
               }
@@ -207,7 +207,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
               }
@@ -217,7 +217,7 @@
                 "cvrNummer": 37952273,
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
               }
@@ -229,7 +229,7 @@
                 "branchetekst": "Detailhandel med andre varer fra stadepladser og markeder",
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
               }
@@ -251,7 +251,7 @@
                 "navn": "retroognyt.dk",
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
               },
@@ -261,7 +261,7 @@
                 "branchetekst": "Detailhandel med andre varer fra stadepladser og markeder",
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
               },
@@ -274,7 +274,7 @@
                 "vejnavn": "Svinget",
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "postnummer": 7100,
                 "bogstavTil": null,
@@ -310,7 +310,7 @@
               {
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
               }
@@ -327,7 +327,7 @@
                 "vejnavn": "Svinget",
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "postnummer": 7100,
                 "bogstavTil": null,
@@ -363,7 +363,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
               }
@@ -375,7 +375,7 @@
                 "navn": "retroognyt.dk",
                 "periode": {
                   "gyldigFra": "2016-08-23",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
               }
@@ -400,7 +400,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2016-02-11",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
               }
@@ -410,7 +410,7 @@
                 "cvrNummer": 37440612,
                 "periode": {
                   "gyldigFra": "2016-02-11",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
               }
@@ -422,7 +422,7 @@
                 "branchetekst": "Taxikørsel",
                 "periode": {
                   "gyldigFra": "2016-02-11",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
               }
@@ -443,7 +443,7 @@
                 "navn": "Hallengreen v/lars hansen",
                 "periode": {
                   "gyldigFra": "2016-02-11",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
               },
@@ -453,7 +453,7 @@
                 "branchetekst": "Taxikørsel",
                 "periode": {
                   "gyldigFra": "2016-02-11",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
               },
@@ -466,7 +466,7 @@
                 "vejnavn": "Brandholms Alle",
                 "periode": {
                   "gyldigFra": "2016-09-27",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "postnummer": 2610,
                 "bogstavTil": null,
@@ -502,7 +502,7 @@
               {
                 "periode": {
                   "gyldigFra": "2016-02-11",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
               }
@@ -519,7 +519,7 @@
                 "vejnavn": "Brandholms Alle",
                 "periode": {
                   "gyldigFra": "2016-02-11",
-                  "gyldigTil": "2016-09-26"
+                  "gyldigTil": null
                 },
                 "postnummer": 2610,
                 "bogstavTil": null,
@@ -552,7 +552,7 @@
                 "vejnavn": "Brandholms Alle",
                 "periode": {
                   "gyldigFra": "2016-09-27",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "postnummer": 2610,
                 "bogstavTil": null,
@@ -590,7 +590,7 @@
                 "navn": "Hallengreen v/lars hansen",
                 "periode": {
                   "gyldigFra": "2016-02-11",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
               }
@@ -615,7 +615,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               }
@@ -625,7 +625,7 @@
                 "cvrNummer": 37940755,
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               }
@@ -637,7 +637,7 @@
                 "branchetekst": "Kommunikationsdesign og grafisk design",
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2016-09-02"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2016-09-27T10:57:33.000+02:00"
               },
@@ -646,7 +646,7 @@
                 "branchetekst": "Konsulentbistand vedrørende informationsteknologi",
                 "periode": {
                   "gyldigFra": "2016-09-03",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               }
@@ -666,7 +666,7 @@
                 "branchetekst": "Kommunikationsdesign og grafisk design",
                 "periode": {
                   "gyldigFra": "2016-09-03",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               },
@@ -676,7 +676,7 @@
                 "navn": "TM.Media Services",
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               },
@@ -686,7 +686,7 @@
                 "branchetekst": "Konsulentbistand vedrørende informationsteknologi",
                 "periode": {
                   "gyldigFra": "2016-09-03",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               },
@@ -699,7 +699,7 @@
                 "vejnavn": "Høstvej",
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "postnummer": 6705,
                 "bogstavTil": null,
@@ -736,7 +736,7 @@
                 "branchetekst": "Detailhandel via Internettet med digitale produkter",
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2016-09-02"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2016-09-27T10:31:07.000+02:00"
               },
@@ -745,7 +745,7 @@
                 "branchetekst": "Kommunikationsdesign og grafisk design",
                 "periode": {
                   "gyldigFra": "2016-09-03",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               }
@@ -754,7 +754,7 @@
               {
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               }
@@ -771,7 +771,7 @@
                 "vejnavn": "Høstvej",
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "postnummer": 6705,
                 "bogstavTil": null,
@@ -807,7 +807,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               }
@@ -819,7 +819,7 @@
                 "navn": "TM.Media Services",
                 "periode": {
                   "gyldigFra": "2016-08-18",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
               }
@@ -844,7 +844,7 @@
                 "cvrNummer": 27475922,
                 "periode": {
                   "gyldigFra": "2003-08-01",
-                  "gyldigTil": "2010-11-03"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
               }
@@ -856,7 +856,7 @@
                 "branchetekst": "Udlejning af erhvervsejendomme",
                 "periode": {
                   "gyldigFra": "2003-08-01",
-                  "gyldigTil": "2007-12-31"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T23:05:42.000+01:00"
               },
@@ -865,7 +865,7 @@
                 "branchetekst": "Udlejning af erhvervsejendomme",
                 "periode": {
                   "gyldigFra": "2008-01-01",
-                  "gyldigTil": "2010-11-03"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
               }
@@ -884,7 +884,7 @@
                 "navn": "Henrik Ørbekker",
                 "periode": {
                   "gyldigFra": "2003-08-01",
-                  "gyldigTil": "2010-11-03"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
               },
@@ -903,7 +903,7 @@
                 "branchetekst": "Udlejning af erhvervsejendomme",
                 "periode": {
                   "gyldigFra": "2008-01-01",
-                  "gyldigTil": "2010-11-03"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
               },
@@ -916,7 +916,7 @@
                 "vejnavn": "Vester Farimagsgade",
                 "periode": {
                   "gyldigFra": "2010-11-03",
-                  "gyldigTil": "2010-11-03"
+                  "gyldigTil": null
                 },
                 "postnummer": 1606,
                 "bogstavTil": null,
@@ -952,7 +952,7 @@
               {
                 "periode": {
                   "gyldigFra": "2003-08-01",
-                  "gyldigTil": "2010-11-03"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
               }
@@ -1062,56 +1062,6 @@
             ],
             "deltagerRelation": [],
             "aarsbeskaeftigelse": [
-              {
-                "aar": 2003,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2005-12-02T16:38:49.000Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
-                "intervalKodeAntalAarsvaerk": "ANTAL_0_0",
-                "intervalKodeAntalAnsatte": "ANTAL_0_0"
-              },
-              {
-                "aar": 2004,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2006-05-18T15:52:22.000Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
-                "intervalKodeAntalAarsvaerk": "ANTAL_0_0",
-                "intervalKodeAntalAnsatte": "ANTAL_0_0"
-              },
-              {
-                "aar": 2006,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2008-10-03T10:54:52.000Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
-                "intervalKodeAntalAarsvaerk": "ANTAL_0_0",
-                "intervalKodeAntalAnsatte": "ANTAL_0_0"
-              },
-              {
-                "aar": 2007,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2009-09-08T10:59:45.000Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
-                "intervalKodeAntalAarsvaerk": "ANTAL_0_0",
-                "intervalKodeAntalAnsatte": "ANTAL_0_0"
-              },
-              {
-                "aar": 2009,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2016-12-15T13:15:45.197Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
-                "intervalKodeAntalAarsvaerk": "ANTAL_0_0",
-                "intervalKodeAntalAnsatte": "ANTAL_0_0"
-              }
             ],
             "virkningsAktoer": "R",
             "kvartalsbeskaeftigelse": [],
@@ -1124,7 +1074,7 @@
                 "navn": "Henrik Ørbekker",
                 "periode": {
                   "gyldigFra": "2003-08-01",
-                  "gyldigTil": "2010-11-03"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
               }
@@ -1149,7 +1099,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
               }
@@ -1159,7 +1109,7 @@
                 "cvrNummer": 37314161,
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
               }
@@ -1171,7 +1121,7 @@
                 "branchetekst": "Andre organisationer og foreninger i.a.n.",
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
               }
@@ -1192,7 +1142,7 @@
                 "navn": "4 Beloved Paws",
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
               },
@@ -1202,7 +1152,7 @@
                 "branchetekst": "Andre organisationer og foreninger i.a.n.",
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
               },
@@ -1215,7 +1165,7 @@
                 "vejnavn": "Skt. Knuds gade",
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "postnummer": 5000,
                 "bogstavTil": null,
@@ -1251,7 +1201,7 @@
               {
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
               }
@@ -1268,7 +1218,7 @@
                 "vejnavn": "Skt. Knuds gade",
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "postnummer": 5000,
                 "bogstavTil": null,
@@ -1306,7 +1256,7 @@
                 "navn": "4 Beloved Paws",
                 "periode": {
                   "gyldigFra": "2015-12-20",
-                  "gyldigTil": "2017-01-29"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
               }
@@ -1331,7 +1281,7 @@
                 "cvrNummer": 38062980,
                 "periode": {
                   "gyldigFra": "2016-09-28",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
               }
@@ -1343,7 +1293,7 @@
                 "branchetekst": "Uoplyst",
                 "periode": {
                   "gyldigFra": "2016-09-28",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
               }
@@ -1362,7 +1312,7 @@
                 "navn": "BE 64 K/S",
                 "periode": {
                   "gyldigFra": "2016-09-28",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
               },
@@ -1372,7 +1322,7 @@
                 "branchetekst": "Uoplyst",
                 "periode": {
                   "gyldigFra": "2016-09-28",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
               },
@@ -1385,7 +1335,7 @@
                 "vejnavn": "Kigkurren",
                 "periode": {
                   "gyldigFra": "2016-09-28",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "postnummer": 2300,
                 "bogstavTil": null,
@@ -1421,7 +1371,7 @@
               {
                 "periode": {
                   "gyldigFra": "2016-09-28",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
               }
@@ -1438,7 +1388,7 @@
                 "vejnavn": "Kigkurren",
                 "periode": {
                   "gyldigFra": "2016-09-28",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "postnummer": 2300,
                 "bogstavTil": null,
@@ -1476,7 +1426,7 @@
                 "navn": "BE 64 K/S",
                 "periode": {
                   "gyldigFra": "2016-09-28",
-                  "gyldigTil": "2017-01-30"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
               }
@@ -1501,7 +1451,7 @@
                 "cvrNummer": 27197531,
                 "periode": {
                   "gyldigFra": "2003-06-13",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2003-06-13T13:59:48.000+02:00"
               }
@@ -1522,7 +1472,7 @@
                 "branchetekst": "Ikke-specialiseret engroshandel med føde-, drikke- og tobaksvarer",
                 "periode": {
                   "gyldigFra": "2008-01-01",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T23:09:38.000+01:00"
               }
@@ -1544,7 +1494,7 @@
                 "navn": "LOTUS IMPORT ApS",
                 "periode": {
                   "gyldigFra": "2003-06-13",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T22:55:56.000+01:00"
               },
@@ -1563,7 +1513,7 @@
                 "branchetekst": "Ikke-specialiseret engroshandel med føde-, drikke- og tobaksvarer",
                 "periode": {
                   "gyldigFra": "2008-01-01",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T23:09:38.000+01:00"
               },
@@ -1576,7 +1526,7 @@
                 "vejnavn": "Frugtmarkedet",
                 "periode": {
                   "gyldigFra": "2007-05-31",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "postnummer": 2500,
                 "bogstavTil": null,
@@ -1612,7 +1562,7 @@
               {
                 "periode": {
                   "gyldigFra": "2003-06-13",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2003-06-13T13:59:48.000+02:00"
               }
@@ -1722,46 +1672,6 @@
             ],
             "deltagerRelation": [],
             "aarsbeskaeftigelse": [
-              {
-                "aar": 2003,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2005-12-02T16:38:43.000Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_0_0",
-                "intervalKodeAntalAarsvaerk": "ANTAL_0_0",
-                "intervalKodeAntalAnsatte": "ANTAL_0_0"
-              },
-              {
-                "aar": 2007,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2009-09-08T11:00:09.000Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_2_4",
-                "intervalKodeAntalAarsvaerk": "ANTAL_1_1",
-                "intervalKodeAntalAnsatte": "ANTAL_2_4"
-              },
-              {
-                "aar": 2008,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2010-09-23T10:52:21.000Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_2_4",
-                "intervalKodeAntalAarsvaerk": "ANTAL_1_1",
-                "intervalKodeAntalAnsatte": "ANTAL_2_4"
-              },
-              {
-                "aar": 2011,
-                "antalInklusivEjere": null,
-                "antalAarsvaerk": null,
-                "antalAnsatte": null,
-                "sidstOpdateret": "2016-12-15T13:15:45.197Z",
-                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
-                "intervalKodeAntalAarsvaerk": "ANTAL_1_1",
-                "intervalKodeAntalAnsatte": "ANTAL_1_1"
-              }
             ],
             "virkningsAktoer": "R",
             "kvartalsbeskaeftigelse": [],
@@ -1772,7 +1682,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2007-05-09",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T23:01:39.000+01:00"
               }
@@ -1783,7 +1693,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2007-05-09",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T23:01:39.000+01:00"
               }
@@ -1794,7 +1704,7 @@
                 "navn": "LOTUS IMPORT ApS",
                 "periode": {
                   "gyldigFra": "2003-06-13",
-                  "gyldigTil": "2013-06-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T22:55:56.000+01:00"
               }
@@ -1819,7 +1729,7 @@
                 "cvrNummer": 25218604,
                 "periode": {
                   "gyldigFra": "2003-01-01",
-                  "gyldigTil": "2015-01-08"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
               }
@@ -1840,7 +1750,7 @@
                 "branchetekst": "Restauranter",
                 "periode": {
                   "gyldigFra": "2008-01-01",
-                  "gyldigTil": "2015-01-08"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
               }
@@ -1859,7 +1769,7 @@
                 "navn": "J.J. MULTISERVICE ApS",
                 "periode": {
                   "gyldigFra": "2006-08-14",
-                  "gyldigTil": "2015-01-08"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
               },
@@ -1869,7 +1779,7 @@
                 "branchetekst": "Restauranter",
                 "periode": {
                   "gyldigFra": "2008-01-01",
-                  "gyldigTil": "2015-01-08"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
               },
@@ -1882,7 +1792,7 @@
                 "vejnavn": "Frugtmarkedet",
                 "periode": {
                   "gyldigFra": "2010-10-08",
-                  "gyldigTil": "2015-01-08"
+                  "gyldigTil": null
                 },
                 "postnummer": 2500,
                 "bogstavTil": null,
@@ -1918,7 +1828,7 @@
               {
                 "periode": {
                   "gyldigFra": "2003-01-01",
-                  "gyldigTil": "2015-01-08"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
               }
@@ -1935,7 +1845,7 @@
                 "vejnavn": "Strandmarksvej",
                 "periode": {
                   "gyldigFra": "2003-01-01",
-                  "gyldigTil": "2003-12-17"
+                  "gyldigTil": null
                 },
                 "postnummer": 2650,
                 "bogstavTil": null,
@@ -2055,7 +1965,7 @@
                 "navn": "J.J. MULTISERVICE ApS",
                 "periode": {
                   "gyldigFra": "2006-08-14",
-                  "gyldigTil": "2015-01-08"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
               }
@@ -2080,7 +1990,7 @@
                 "cvrNummer": 27740960,
                 "periode": {
                   "gyldigFra": "2004-05-14",
-                  "gyldigTil": "2007-09-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2004-05-14T16:17:19.000+02:00"
               }
@@ -2092,7 +2002,7 @@
                 "branchetekst": "Anden engroshandel",
                 "periode": {
                   "gyldigFra": "2004-05-14",
-                  "gyldigTil": "2007-09-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T23:09:38.000+01:00"
               }
@@ -2113,7 +2023,7 @@
                 "navn": "B2B EUROPE ApS",
                 "periode": {
                   "gyldigFra": "2004-05-14",
-                  "gyldigTil": "2007-09-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T22:55:56.000+01:00"
               },
@@ -2132,7 +2042,7 @@
                 "branchetekst": "Anden engroshandel",
                 "periode": {
                   "gyldigFra": "2004-05-14",
-                  "gyldigTil": "2007-09-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T23:09:38.000+01:00"
               },
@@ -2145,7 +2055,7 @@
                 "vejnavn": "Frugtmarkedet",
                 "periode": {
                   "gyldigFra": "2005-07-18",
-                  "gyldigTil": "2007-09-20"
+                  "gyldigTil": null
                 },
                 "postnummer": 2500,
                 "bogstavTil": null,
@@ -2181,7 +2091,7 @@
               {
                 "periode": {
                   "gyldigFra": "2004-05-14",
-                  "gyldigTil": "2007-09-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2004-05-14T16:17:19.000+02:00"
               }
@@ -2278,7 +2188,7 @@
                 "hemmelig": false,
                 "periode": {
                   "gyldigFra": "2005-07-25",
-                  "gyldigTil": "2007-09-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T23:01:39.000+01:00"
               }
@@ -2290,7 +2200,7 @@
                 "navn": "B2B EUROPE ApS",
                 "periode": {
                   "gyldigFra": "2004-05-14",
-                  "gyldigTil": "2007-09-20"
+                  "gyldigTil": null
                 },
                 "sidstOpdateret": "2013-11-22T22:55:56.000+01:00"
               }

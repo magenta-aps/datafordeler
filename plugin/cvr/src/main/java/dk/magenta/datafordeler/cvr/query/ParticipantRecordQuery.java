@@ -213,22 +213,22 @@ public class ParticipantRecordQuery extends BaseQuery {
         return this.cvrnumber;
     }
 
-    public void addCvrnumber(String vrnumber) {
+    public void addCvrnumber(String cvrnumber) {
         if (cvrnumber != null) {
-            this.cvrnumber.add(vrnumber);
+            this.cvrnumber.add(cvrnumber);
             this.updatedParameters();
         }
     }
 
-    public void setCvrnumber(String businessKey) {
+    public void setCvrnumber(String cvrnumber) {
         this.clearCvrnumber();
-        this.addCvrnumber(businessKey);
+        this.addCvrnumber(cvrnumber);
     }
 
-    public void setCvrnumber(Collection<String> businessKeys) {
+    public void setCvrnumber(Collection<String> cvrnumbers) {
         this.clearCvrnumber();
-        if (cvrnumber != null) {
-            for (String cvrnumber : cvrnumber) {
+        if (cvrnumbers != null) {
+            for (String cvrnumber : cvrnumbers) {
                 this.addCvrnumber(cvrnumber);
             }
         }
@@ -246,23 +246,23 @@ public class ParticipantRecordQuery extends BaseQuery {
         return this.companyNames;
     }
 
-    public void addCompanyNames(String vrnumber) {
-        if (companyNames != null) {
-            this.companyNames.add(vrnumber);
+    public void addCompanyNames(String companyName) {
+        if (companyName != null) {
+            this.companyNames.add(companyName);
             this.updatedParameters();
         }
     }
 
-    public void setCompanyNames(String businessKey) {
+    public void setCompanyNames(String companyName) {
         this.clearCompanyNames();
-        this.addCompanyNames(businessKey);
+        this.addCompanyNames(companyName);
     }
 
-    public void setCompanyNames(Collection<String> businessKeys) {
+    public void setCompanyNames(Collection<String> companyNames) {
         this.clearCompanyNames();
         if (companyNames != null) {
-            for (String cvrnumber : companyNames) {
-                this.addCompanyNames(cvrnumber);
+            for (String companyName : companyNames) {
+                this.addCompanyNames(companyName);
             }
         }
     }
@@ -279,23 +279,23 @@ public class ParticipantRecordQuery extends BaseQuery {
         return this.companyStatuses;
     }
 
-    public void addStatuses(String vrnumber) {
+    public void addStatuses(String status) {
         if (companyStatuses != null) {
-            this.companyStatuses.add(vrnumber);
+            this.companyStatuses.add(status);
             this.updatedParameters();
         }
     }
 
-    public void setStatuses(String businessKey) {
-        this.clearCompanyNames();
-        this.addCompanyNames(businessKey);
+    public void setStatuses(String status) {
+        this.clearStatuses();
+        this.addStatuses(status);
     }
 
-    public void setStatuses(Collection<String> businessKeys) {
-        this.clearCompanyNames();
+    public void setStatuses(Collection<String> companyStatuses) {
+        this.clearStatuses();
         if (companyStatuses != null) {
-            for (String cvrnumber : companyStatuses) {
-                this.addCompanyNames(cvrnumber);
+            for (String status : companyStatuses) {
+                this.addStatuses(status);
             }
         }
     }

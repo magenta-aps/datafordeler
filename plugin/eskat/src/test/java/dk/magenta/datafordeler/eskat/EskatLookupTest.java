@@ -554,17 +554,24 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/?status=AKTIV",
+                "/eskat/companyParticipantConnection/?status=Aktiv",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("25052943"));
-        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"BComeSafe ApS\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2015-10-01\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"HOLDINGSELSKAB\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"2009-02-20\",\"companyEnd\":null,\"responsibleStart\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"personName\":\"TESTNAVN\",\"companyName\":\"ApS KBIL 17 NR. 1179\",\"driftForm\":\"NORMAL\",\"responsibleEnd\":null,\"companyStart\":\"1999-11-15\",\"companyEnd\":null,\"responsibleStart\":null}]", response.getBody(), false );
 
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/?status=!Aktiv",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
 
-
+        //TODO: Check listen i bunden
     }
 
     @Test
@@ -575,19 +582,42 @@ public class EskatLookupTest {
 
         ObjectNode body = objectMapper.createObjectNode();
         HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        ResponseEntity<String> response;
 
-        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        this.applyAccess(testUserDetails);
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/eskat/punit/1/rest/search?pnummer=1020895337",
+        response = restTemplate.exchange(
+                "/eskat/punit/1/rest/1020895337",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("1020895337"));
+
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        response = restTemplate.exchange(
+                "/eskat/punit/1/rest/1020895337",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("1020895337"));
 
         System.out.println(response.getBody());
+
+        response = restTemplate.exchange(
+                "/eskat/punit/1/rest/1020895338",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("1020895337"));
+        Assert.assertEquals(false, response.getBody().contains("1020895338"));
+
+
     }
 
 

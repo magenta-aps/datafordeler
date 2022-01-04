@@ -86,6 +86,9 @@ public class CompanyParticipantService {
         if("Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
         }
+        if("!Aktiv".equals(status)) {
+            participantRecordQuery.setStatuses(Arrays.asList("Ikke Aktiv"));
+        }
         if(!"".equals(relationstartTimeBefore)) {
             participantRecordQuery.setRelationStartTimeBefore(BaseQuery.parseDateTime(relationstartTimeBefore));
         }
@@ -141,14 +144,6 @@ public class CompanyParticipantService {
                     parameterName,
                     parameterValue
             );
-        }
-    }
-
-    private static String dateConvert(OffsetDateTime datetime) {
-        if(datetime==null) {
-            return null;
-        } else {
-            return datetime.format(formatter);
         }
     }
 }

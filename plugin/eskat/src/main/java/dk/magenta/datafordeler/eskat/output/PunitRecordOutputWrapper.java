@@ -1,18 +1,12 @@
 package dk.magenta.datafordeler.eskat.output;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.cvr.output.CvrRecordOutputWrapper;
-import dk.magenta.datafordeler.cvr.output.UnitRecordOutputWrapper;
-import dk.magenta.datafordeler.cvr.records.AddressRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyUnitMetadataRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.eskat.utils.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
-
-import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
 
 /**
  * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
@@ -44,40 +38,48 @@ import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
  * }
  */
 @Component
-public class PunitRecordOutputWrapper extends UnitRecordOutputWrapper {
+public class PunitRecordOutputWrapper {
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Override
     public ObjectMapper getObjectMapper() {
         return this.objectMapper;
     }
 
-    @Override
-    protected void fillContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode mode) {
-        CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
+    public ObjectNode fillContainer(CompanyUnitRecord record) {
+        ObjectNode container = getObjectMapper().createObjectNode();
 
-
-        container.addNontemporal(CompanyUnitRecord.IO_FIELD_P_NUMBER, record.getpNumber());
-        List<AddressRecord> addList = record.getLocationAddress().current();
-        if(!addList.isEmpty()) {
-            container.addCvrBitemporal("navn", record.getNames(), true);
-            container.addNontemporal("co", addList.get(0).getCoName());
-            container.addNontemporal("postbox", addList.get(0).getPostBox());
-            container.addNontemporal("postnummer", addList.get(0).getPostnummer());
-            container.addNontemporal("postdistrict", addList.get(0).getPostdistrikt());
-            container.addNontemporal("by", addList.get(0).getCityName());
-            container.addNontemporal("vej", addList.get(0).getRoadName());
-            container.addNontemporal("husnummer", addList.get(0).getHouseNumberFrom());
-            container.addNontemporal("kommunekode", addList.get(0).getMunicipality().getMunicipalityCode());
-            container.addNontemporal("landekode", addList.get(0).getCountryCode());
+        container.put(CompanyUnitRecord.IO_FIELD_P_NUMBER, record.getpNumber());
+        AddressRecord addressList = record.getLocationAddress().current().stream().findFirst().orElse(null);
+        container.put(CompanyUnitRecord.IO_FIELD_NAMES, record.getNames().current().stream().findFirst().get().getName());
+        if(addressList!=null) {
+            container.put(AddressRecord.IO_FIELD_CONAME, addressList.getCoName());
+            container.put(AddressRecord.IO_FIELD_POSTBOX, addressList.getPostBox());
+            container.put(AddressRecord.IO_FIELD_POSTCODE, addressList.getPostnummer());
+            container.put(AddressRecord.IO_FIELD_POSTDISTRICT, addressList.getPostdistrikt());
+            container.put(AddressRecord.IO_FIELD_CITY, addressList.getCityName());
+            container.put(AddressRecord.IO_FIELD_ROADNAME, addressList.getRoadName());
+            container.put(AddressRecord.IO_FIELD_HOUSE_FROM, addressList.getHouseNumberFrom());
+            container.put(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, addressList.getMunicipality().getMunicipalityCode());
+            container.put(AddressRecord.IO_FIELD_COUNTRYCODE, addressList.getCountryCode());
         }
+
+        ContactRecord emailContact = record.getEmailAddress().current().stream().findFirst().orElse(null);
+        container.put(CompanyUnitRecord.IO_FIELD_FAX, emailContact==null ? "":emailContact.getContactInformation());
+
+        ContactRecord faxContact = record.getFaxNumber().current().stream().findFirst().orElse(null);
+        container.put(CompanyUnitRecord.IO_FIELD_EMAIL, faxContact==null ? "":faxContact.getContactInformation());
+
+        container.put("startdato", DateConverter.dateConvert(record.getMetadata().getValidFrom()));
+        container.put("slutdato", DateConverter.dateConvert(record.getMetadata().getValidTo()));
+        container.put(CompanyIndustryRecord.IO_FIELD_TEXT, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryText()).orElse(""));
+        container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(""));
+        container.put(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_CVR_RELATION, record.getMetadata().getNewestCvrRelation());
+
+        return container;
     }
 
-    @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode m) {
-    }
 
 }
