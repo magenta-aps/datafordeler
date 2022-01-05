@@ -17,6 +17,11 @@ if exist "%DIR%local_settings.properties" (
     set RUN_ARGS=%RUN_ARGS% --spring.config.location="classpath:/application.properties,file:%DIR%local_settings.properties"
 )
 
+echo "Build parent"
+pushd %DIR%..\plugin\parent
+   call mvnw.cmd -DskipTests clean install
+popd
+
 echo "Build core"
 pushd %COREDIR%
    call mvnw.cmd -DskipTests clean install
