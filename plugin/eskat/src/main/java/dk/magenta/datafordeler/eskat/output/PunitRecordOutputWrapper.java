@@ -1,11 +1,15 @@
 package dk.magenta.datafordeler.eskat.output;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.eskat.utils.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -78,8 +82,11 @@ public class PunitRecordOutputWrapper {
         container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(""));
         container.put(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_CVR_RELATION, record.getMetadata().getNewestCvrRelation());
 
+        List<Integer> participantList = record.getParticipants().current().stream().map(participant -> participant.getRelationParticipantRecord().getBusinessKey()).collect(Collectors.toList());
+        ArrayNode arrayNode = container.putArray(CompanyUnitRecord.IO_FIELD_PARTICIPANTS);
+        for (Integer item : participantList) {
+            arrayNode.add(item);
+        }
         return container;
     }
-
-
 }

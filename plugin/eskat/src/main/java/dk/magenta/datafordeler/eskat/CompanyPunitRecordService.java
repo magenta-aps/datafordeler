@@ -67,7 +67,6 @@ public class CompanyPunitRecordService {
             Stream<CompanyUnitRecord> companyUnitEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyUnitRecord.class);
             CompanyUnitRecord companyUnitEntity = companyUnitEntities.findFirst().orElse(null);
 
-            //TODO: WE STILL NEED P-Unit
             if(companyUnitEntity==null) {
                 String errorMessage = "Company not found";
                 ObjectNode obj = objectMapper.createObjectNode();
