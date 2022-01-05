@@ -17,6 +17,11 @@ if exist "%DIR%local_settings.properties" (
     set RUN_ARGS=%RUN_ARGS% --spring.config.location="classpath:/application.properties,file:%DIR%local_settings.properties"
 )
 
+echo "Build parent"
+pushd %DIR%..\plugin\parent
+   call mvnw.cmd -DskipTests clean install
+popd
+
 echo "Build core"
 pushd %COREDIR%
    call mvnw.cmd clean install
@@ -32,8 +37,38 @@ pushd %DIR%..\plugin\cvr
     call mvnw.cmd clean install
 popd
 
-echo "Build gladdrreg"
-pushd %DIR%..\plugin\gladdrreg
+echo "Build geo"
+pushd %DIR%..\plugin\geo
+    call mvnw.cmd clean install
+popd
+
+echo "Build ger"
+pushd %DIR%..\plugin\ger
+    call mvnw.cmd clean install
+popd
+
+echo "Build subscription"
+pushd %DIR%..\plugin\subscription
+    call mvnw.cmd clean install
+popd
+
+echo "Build eboks"
+pushd %DIR%..\plugin\eboks
+    call mvnw.cmd clean install
+popd
+
+echo "Build prisme"
+pushd %DIR%..\plugin\prisme
+    call mvnw.cmd clean install
+popd
+
+echo "Build combinedPitu"
+pushd %DIR%..\plugin\combinedPitu
+    call mvnw.cmd clean install
+popd
+
+echo "Build statistik"
+pushd %DIR%..\plugin\statistik
     call mvnw.cmd clean install
 popd
 

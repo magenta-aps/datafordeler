@@ -10,7 +10,9 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
@@ -323,15 +325,19 @@ public class FetchEventsTest {
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<String> response = null;
+        ObjectNode responseContent = null;
+        JsonNode results = null;
+
+        response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        JsonNode results = responseContent.get("results");
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
 
         System.out.println(results);
         Assert.assertEquals(6, results.size());
@@ -399,17 +405,20 @@ public class FetchEventsTest {
         this.applyAccess(testUserDetails);
 
         OffsetDateTime timestamp = OffsetDateTime.now(ZoneOffset.UTC);
+        ResponseEntity<String> response;
+        ObjectNode responseContent;
+        JsonNode results;
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=2020-09-26T12:00-06:00&pageSize=100",
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=1920-09-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        JsonNode results = responseContent.get("results");
-        Assert.assertEquals(16, results.size());
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
+        Assert.assertEquals(9, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&pageSize=100",
@@ -420,7 +429,7 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(16, results.size());
+        Assert.assertEquals(9, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE="+timestamp.toString()+"&pageSize=100",
@@ -445,7 +454,7 @@ public class FetchEventsTest {
         }
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE="+timestamp.toString()+"&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=2020-01-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -453,7 +462,7 @@ public class FetchEventsTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(2, results.size());
+        Assert.assertEquals(4, results.size());
     }
 
 
@@ -472,6 +481,24 @@ public class FetchEventsTest {
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
+
+
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            PersonRecordQuery query = new PersonRecordQuery();
+            query.addPersonnummer("0101011235");
+            query.addPersonnummer("0101011236");
+            query.addPersonnummer("0101011237");
+            query.addPersonnummer("0101011238");
+            query.addPersonnummer("0101011239");
+            query.addPersonnummer("0101011240");
+            query.addPersonnummer("0101011241");
+            query.addPersonnummer("0101011242");
+            query.addPersonnummer("0101011243");
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            System.out.println(entities);
+        }
+
 
         ResponseEntity<String> response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE4&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
@@ -536,15 +563,19 @@ public class FetchEventsTest {
         testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<String> response;
+        ObjectNode responseContent;
+        JsonNode results;
+
+        response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=1980-11-26T12:00-06:00&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
-        JsonNode results = responseContent.get("results");
+        responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        results = responseContent.get("results");
         Assert.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
