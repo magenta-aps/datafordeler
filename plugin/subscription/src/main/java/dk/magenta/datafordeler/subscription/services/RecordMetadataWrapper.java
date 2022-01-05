@@ -46,7 +46,8 @@ public class RecordMetadataWrapper {
     public ObjectNode fillContainer(String cvr, String fieldname, CvrBitemporalDataRecord valueBeforeEvent, CvrBitemporalDataRecord valueAfterEvent)  {
 
         ObjectNode root = this.objectMapper.createObjectNode();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         root.put(CompanyRecord.IO_FIELD_CVR_NUMBER, cvr);
 
         JsonNode nodeBeforeDataEvent = null;
