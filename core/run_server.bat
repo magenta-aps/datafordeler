@@ -1,7 +1,7 @@
 @echo off
 
 set DIR=%~dp0%
-set RUN_ARGS=""
+set RUN_ARGS="-Dlog4j2.formatMsgNoLookups=true"
 set RUN_JAR=%DIR%target\dafo-dataprovider.war
 
 rem Load global settings
