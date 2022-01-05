@@ -2,11 +2,13 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.api.client.util.Value;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -28,6 +30,7 @@ import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCpr
 import dk.magenta.datafordeler.subscription.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Comparator.naturalOrder;
 
@@ -52,6 +56,9 @@ import static java.util.Comparator.naturalOrder;
 @RestController
 @RequestMapping("/subscription/1/findCprDataEvent")
 public class FindCprDataEvent {
+
+    @Value("${dafo.subscription.allowCallingOtherConsumersSubscriptions}")
+    protected boolean allowCallingOtherConsumersSubscriptions = false;
 
     @Autowired
     SessionManager sessionManager;
@@ -107,67 +114,84 @@ public class FindCprDataEvent {
             Query eventQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
             if(eventQuery.getResultList().size()==0) {
-                String errorMessage = "Subscription not found";
-                ObjectNode obj = this.objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.warn(errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
+                return this.getErrorMessage("Subscription not found", HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscribtion = (DataEventSubscription) eventQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    String errorMessage = "No access";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                if(!allowCallingOtherConsumersSubscriptions && !subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+                    return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
                 OffsetDateTime offsetTimestampGTE;
                 if(timestampGTE==null) {
                     offsetTimestampGTE = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
                 } else {
-                    offsetTimestampGTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampGTE);
+                    offsetTimestampGTE = BaseQuery.parseDateTime(timestampGTE);
                 }
 
                 OffsetDateTime offsetTimestampLTE=null;
                 if(timestampLTE!=null) {
-                    offsetTimestampLTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(timestampLTE);
+                    offsetTimestampLTE = BaseQuery.parseDateTime(timestampLTE);
                 }
 
-                //TODO: dette skal oprettes med opsplitning i forskellige attributter med betydning
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
                 if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
-                    String errorMessage = "No access";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                    return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
 
-                PersonRecordQuery query = GeneralQuery.getPersonQuery(subscribtionKodeId[2], offsetTimestampGTE, offsetTimestampLTE);
-                CprList cprList = subscribtion.getCprList();
-                if(cprList!=null) {
-                    Collection<SubscribedCprNumber> theList = cprList.getCpr();
-                    List<String> pnrFilterList = theList.stream().map(x -> x.getCprNumber()).collect(Collectors.toList());
-                    query.setPersonnumre(pnrFilterList);
+                String listId = subscribtion.getCprList().getListId();
+
+                // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
+                String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
+                        " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) " +
+                        " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
+                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.id = dataeventDataRecord.entity) " +
+                        " where (list.listId=:listId OR :listId IS NULL) AND" +
+                        " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
+                        " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
+                        " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                        " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+
+                Query query = session.createQuery(queryString);
+                if (pageSize != null) {
+                    query.setMaxResults(Integer.valueOf(pageSize));
+                } else {
+                    query.setMaxResults(10);
+                }
+                if (page != null) {
+                    int pageIndex = (Integer.valueOf(page) - 1) * query.getMaxResults();
+                    query.setFirstResult(pageIndex);
+                } else {
+                    query.setFirstResult(0);
+                }
+                if (query.getMaxResults() > 1000) {
+                    return this.getErrorMessage("Pagesize is too large", HttpStatus.FORBIDDEN);
+                }
+                String fieldType = null;
+                if(!"anything".equals(subscribtionKodeId[2])) {
+                    fieldType = subscribtionKodeId[2];
                 }
 
-                query.setPageSize(pageSize);
-                if(query.getPageSize()>1000) {
-                    String errorMessage = "No access";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                }
-                query.setPage(page);
-                List<ResultSet<PersonEntity>> entities = QueryManager.getAllEntitySets(session, query, PersonEntity.class);
-                List otherList = new ArrayList<ObjectNode>();
+                Stream<PersonEntity> personStream = query
+                        .setParameter("offsetTimestampGTE", offsetTimestampGTE)
+                        .setParameter("offsetTimestampLTE", offsetTimestampLTE)
+                        .setParameter("listId", listId)
+                        .setParameter("fieldEntity", fieldType)
+                        .stream();
 
-                if(includeMeta) {
-                    for(ResultSet<PersonEntity> entity : entities) {
+                Envelope envelope = new Envelope();
+                List<Object> returnValues = null;
+
+                if(!includeMeta) {
+
+                    returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
+                    envelope.setResults(returnValues);
+                } else {
+                    List otherList = new ArrayList<ObjectNode>();
+                    List<PersonEntity> entities = personStream.collect(Collectors.toList());
+
+                    for(PersonEntity entity : entities) {
                         CprBitemporalPersonRecord oldValues = null;
-                        CprBitemporalPersonRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity.getPrimaryEntity());
-                        PersonDataEventDataRecord eventRecord = entity.getPrimaryEntity().getDataEvent(subscribtionKodeId[2]);
+                        CprBitemporalPersonRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity);
+                        PersonDataEventDataRecord eventRecord = entity.getDataEvent(subscribtionKodeId[2]);
                         if(eventRecord != null) {
                             if(eventRecord.getOldItem() != null) {
                                 String queryPreviousItem = GeneralQuery.getQueryPersonValueObjectFromIdInEvent(subscribtionKodeId[2]);
@@ -178,26 +202,23 @@ public class FindCprDataEvent {
                         if(subscribtionKodeId.length>=5) {
                             if(subscribtionKodeId[3].equals("before")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], oldValues)) {
-                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             } else if(subscribtionKodeId[3].equals("after")) {
                                 if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], newValues)) {
-                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                                    ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             }
                         } else {
-                            ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPrimaryEntity().getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
+                            ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscribtionKodeId[2], oldValues, newValues);
                             otherList.add(node);
                         }
                     }
-                } else {
-                    otherList = entities.stream().map(x -> x.getPrimaryEntity().getPersonnummer()).collect(Collectors.toList());
+                    envelope.setResults(otherList);
                 }
-                Envelope envelope = new Envelope();
 
-                envelope.setResults(otherList);
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
                 loggerHelper.urlInvokePersistablelogs("fetchEvents done");
                 return ResponseEntity.ok(envelope);
@@ -212,6 +233,14 @@ public class FindCprDataEvent {
             log.error("Failed pulling events from subscribtion", e);
         }
         return ResponseEntity.status(500).build();
+    }
+
+    private ResponseEntity getErrorMessage(String message, HttpStatus status) {
+        String errorMessage = message;
+        ObjectNode obj = this.objectMapper.createObjectNode();
+        obj.put("errorMessage", message);
+        log.warn(errorMessage);
+        return new ResponseEntity(obj.toString(), status);
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
