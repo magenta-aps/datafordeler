@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
@@ -57,7 +56,7 @@ public class ListCompanyStatusService {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<String> getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
+    public List<String> getSingle(HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -72,9 +71,9 @@ public class ListCompanyStatusService {
             List<String> statusList = session.createQuery("SELECT DISTINCT status FROM "+CompanyStatusRecord.class.getCanonicalName(), String.class).list();
             convertedStatusList = statusList.stream().map(status -> {
                if(!"NORMAL".equals(status) && !"Aktiv".equals(status) && !"Fremtid".equals(status)) {
-                   return new String("Ophørt: "+status);
+                   return "Ophørt: " + status;
                } else {
-                   return new String("Aktiv: "+status);
+                   return "Aktiv: "+status;
                }
            }).collect(Collectors.toList());
         }
@@ -90,5 +89,4 @@ public class ListCompanyStatusService {
             throw (e);
         }
     }
-
 }

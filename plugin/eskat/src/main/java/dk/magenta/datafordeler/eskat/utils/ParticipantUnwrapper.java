@@ -12,10 +12,13 @@ import java.util.List;
 
 public class ParticipantUnwrapper {
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-
-
+    /**
+     * Convert a list of participants from the database into a list of participants with required attributes
+     * @param relations
+     * @param cpr
+     * @param personName
+     * @return
+     */
     public static List<ParticipantObject> CompanyParticipantRelationRecord(List<CompanyParticipantRelationRecord> relations, String cpr, String personName) {
 
         ArrayList<ParticipantObject> list = new ArrayList<ParticipantObject>();
@@ -25,27 +28,15 @@ public class ParticipantUnwrapper {
 
             if(companyStatus!=null) {
 
-                ParticipantObject p = new ParticipantObject(relation.getRelationCompanyRecord().getCvrNumber() + "",
+                ParticipantObject participantObject = new ParticipantObject(relation.getRelationCompanyRecord().getCvrNumber() + "",
                         cpr, personName,
                         relation.getRelationCompanyRecord().getNames().iterator().next().getName() + "",
                         companyStatus.getStatus(),
-                        dateConvert(relation.getRegistrationFrom()), dateConvert(relation.getRegistrationTo()),
-                        dateConvert(companyStatus.getEffectFrom()),
-                        dateConvert(companyStatus.getEffectTo()));
-
-                list.add(p);
+                        DateConverter.dateConvert(relation.getRegistrationFrom()), DateConverter.dateConvert(relation.getRegistrationTo()),
+                        DateConverter.dateConvert(companyStatus.getEffectFrom()), DateConverter.dateConvert(companyStatus.getEffectTo()));
+                list.add(participantObject);
             }
         }
         return list;
     }
-
-
-    private static String dateConvert(OffsetDateTime datetime) {
-        if(datetime==null) {
-            return null;
-        } else {
-            return datetime.format(formatter);
-        }
-    }
-
 }

@@ -605,8 +605,6 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("1020895337"));
 
-        System.out.println(response.getBody());
-
         response = restTemplate.exchange(
                 "/eskat/punit/1/rest/1020895338",
                 HttpMethod.GET,
@@ -616,8 +614,6 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("1020895337"));
         Assert.assertEquals(false, response.getBody().contains("1020895338"));
-
-
     }
 
 

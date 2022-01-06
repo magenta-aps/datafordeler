@@ -4,17 +4,15 @@ import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.eskat.utils.DateConverter;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
  * Container for a query for Companies, defining fields and database lookup
  */
 public class EskatCompanyRecordQuery extends CompanyRecordQuery {
-
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static final String LASTUPDATED = CvrBitemporalRecord.IO_FIELD_LAST_UPDATED;
     public static final String COMPANYDATAEVENT = CompanyDataEventRecord.DB_FIELD_FIELD;
@@ -87,8 +85,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
         this.setCompanyStatus(parameters.getI("companyStatus"));
-        this.setCompanyStatusValidityFromGTE(parseDate(parameters.getFirst("companyStatusValidityFrom.GTE")));
-        this.setCompanyStatusValidityFromLTE(parseDate(parameters.getFirst("companyStatusValidityFrom.LTE")));
+        this.setCompanyStatusValidityFromGTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidityFrom.GTE")));
+        this.setCompanyStatusValidityFromLTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidityFrom.LTE")));
     }
 
     @Override
@@ -109,12 +107,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     }
 
     protected void setupConditions() throws QueryBuildException {
-
         super.setupConditions();
-
         this.addCondition("companyStatus", this.companyStatus);
-        //this.addCondition("companyStatusValidityFrom", this.companyStatus);
-
         if (this.companyrecordValidityTimeGTE != null) {
             this.addCondition("companyStatusValidityFrom.GTE", Condition.Operator.GTE, this.companyrecordValidityTimeGTE, LocalDate.class, false);
         }
@@ -122,14 +116,4 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
             this.addCondition("companyStatusValidityFrom.LTE", Condition.Operator.LTE, this.companyrecordValidityTimeLTE, LocalDate.class, false);
         }
     }
-
-    private static LocalDate parseDate(String date) {
-        if(date!=null) {
-            return LocalDate.parse(date,formatter);
-        } else {
-            return null;
-        }
-
-    }
-
 }

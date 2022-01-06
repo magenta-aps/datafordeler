@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.eskat.output;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.output.CompanyRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -10,7 +9,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
+/**
+ * A class for formatting a CompanyRecord to JSON, for FAPI output. The data hierarchy
+ * under a Company is sorted into this format:
+ */
 @Component
 public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
 
@@ -39,5 +41,4 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
     protected void fillMetadataContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
 
     }
-
 }

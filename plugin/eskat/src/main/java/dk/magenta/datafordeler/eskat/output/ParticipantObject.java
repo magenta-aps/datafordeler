@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.eskat.output;
 
+
 public class ParticipantObject {
     private String cvr;
     private String cpr;
@@ -60,10 +61,4 @@ public class ParticipantObject {
     public String getCompanyEnd() {
         return companyend;
     }
-
-
-
-
-
-
 }

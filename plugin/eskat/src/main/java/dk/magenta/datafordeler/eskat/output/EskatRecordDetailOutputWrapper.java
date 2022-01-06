@@ -7,6 +7,9 @@ import dk.magenta.datafordeler.eskat.utils.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * A class for formatting a CompanyUnitRecord to JSON
+ */
 @Component
 public class EskatRecordDetailOutputWrapper {
 
@@ -32,8 +35,6 @@ public class EskatRecordDetailOutputWrapper {
         container.put(AddressRecord.IO_FIELD_POSTDISTRICT, adress.getPostdistrikt());
         container.put(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, adress.getMunicipality().getMunicipalityCode());
         container.put(AddressRecord.IO_FIELD_CITY, adress.getCityName());
-
-
 
         container.put(CompanyRecord.IO_FIELD_PHONE, record.getPhoneNumber().iterator().next().getContactInformation());
         container.put(CompanyRecord.IO_FIELD_EMAIL, record.getEmailAddress().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
@@ -69,6 +70,4 @@ public class EskatRecordDetailOutputWrapper {
 
         return container;
     }
-
-
 }

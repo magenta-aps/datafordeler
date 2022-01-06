@@ -29,13 +29,12 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/eskat/company/1/rest")
-public class CompanyRecordTestingService extends CompanyRecordService {
+public class CompanyRecordListService extends CompanyRecordService {
 
     @Autowired
     private EskatRecordOutputWrapper companyRecordOutputWrapper;
 
-
-    public CompanyRecordTestingService() {
+    public CompanyRecordListService() {
         super();
     }
 

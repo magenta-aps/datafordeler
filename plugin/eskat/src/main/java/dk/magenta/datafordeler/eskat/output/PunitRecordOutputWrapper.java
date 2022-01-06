@@ -13,33 +13,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
- * under a Company is sorted into this format:
- * {
- *     "UUID": <company uuid>
- *     "cvrnummer": <company cvr number>
- *     "id": {
- *         "domaene": <company domain>
- *     },
- *     registreringer: [
- *          {
- *              "registreringFra": <registrationFrom>,
- *              "registreringTil": <registrationTo>,
- *              "navn": [
- *              {
- *                  "navn": <companyName1>
- *                  "virkningFra": <effectFrom1>
- *                  "virkningTil": <effectTo1>
- *              },
- *              {
- *                  "navn": <companyName2>
- *                  "virkningFra": <effectFrom2>
- *                  "virkningTil": <effectTo2>
- *              }
- *              ]
- *          }
- *     ]
- * }
+ * A class for formatting a CompanyUnitRecord to JSON
  */
 @Component
 public class PunitRecordOutputWrapper {
@@ -47,13 +21,8 @@ public class PunitRecordOutputWrapper {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public ObjectMapper getObjectMapper() {
-        return this.objectMapper;
-    }
-
-
     public ObjectNode fillContainer(CompanyUnitRecord record) {
-        ObjectNode container = getObjectMapper().createObjectNode();
+        ObjectNode container = objectMapper.createObjectNode();
 
         container.put(CompanyUnitRecord.IO_FIELD_P_NUMBER, record.getpNumber());
         AddressRecord addressList = record.getLocationAddress().current().stream().findFirst().orElse(null);

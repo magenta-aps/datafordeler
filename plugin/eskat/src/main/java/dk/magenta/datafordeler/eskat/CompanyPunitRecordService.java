@@ -52,7 +52,7 @@ public class CompanyPunitRecordService {
 
     @GetMapping("/{pnummer}")
     @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
-    ResponseEntity companyDetail(HttpServletRequest request, @PathVariable String pnummer) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
+    ResponseEntity punitDetail(HttpServletRequest request, @PathVariable String pnummer) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
         LoggerHelper loggerHelper = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
