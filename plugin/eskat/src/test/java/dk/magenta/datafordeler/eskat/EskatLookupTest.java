@@ -389,15 +389,12 @@ public class EskatLookupTest {
                 "  \"status\" : \"\",\n" +
                 "  \"coName\" : \"c/o Dummy CO\",\n" +
                 "  \"postnummer\" : 1112,\n" +
-                "  \"addressText\" : null,\n" +
                 "  \"postboks\" : \"1234\",\n" +
                 "  \"postdistrikt\" : \"København K\",\n" +
                 "  \"kommuneKode\" : 955,\n" +
-                "  \"bynavn\" : null,\n" +
                 "  \"telefonNummer\" : \"33369696\",\n" +
                 "  \"elektroniskPost\" : \"info@magenta.dk\",\n" +
                 "  \"faxNumber\" : \"\",\n" +
-                "  \"startdato\" : null,\n" +
                 "  \"nyesteVirksomhedsform\" : \"80/Anpartsselskab\",\n" +
                 "  \"branchetekst\" : \"Konsulentbistand vedrørende informationsteknologi\",\n" +
                 "  \"branchekode\" : \"620200\"\n" +
@@ -411,8 +408,6 @@ public class EskatLookupTest {
         );
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("25052944"));
-
-        //TODO: WE STILL NEED P-Unit
     }
 
     @Test

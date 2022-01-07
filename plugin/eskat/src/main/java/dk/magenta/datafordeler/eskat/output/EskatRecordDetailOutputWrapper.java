@@ -1,8 +1,6 @@
 package dk.magenta.datafordeler.eskat.output;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.cvr.records.*;
@@ -28,7 +26,7 @@ public class EskatRecordDetailOutputWrapper {
     }
 
     public ObjectNode fillContainer(CompanyRecord record, Stream<CompanyUnitRecord> pUnitEntities) {
-        ObjectNode container = getObjectMapper().createObjectNode();
+        OutputWrapper.NodeWrapper container = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
 
         container.put(CompanyRecord.IO_FIELD_CVR_NUMBER, record.getCvrNumber());
         container.put(CompanyRecord.IO_FIELD_NAMES, record.getNames().current().iterator().next().getName());
@@ -54,12 +52,9 @@ public class EskatRecordDetailOutputWrapper {
         container.put(CompanyIndustryRecord.IO_FIELD_TEXT, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryText()).orElse(""));
         container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(""));
 
-        /*List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(f.getpNumber()+"", f.getNames().current().stream().findFirst().get().getName(), f.getLocationAddress().current().stream().findFirst().get().getCountryCode())).collect(Collectors.toList());
-
+        List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(f.getpNumber()+"", f.getNames().current().stream().findFirst().get().getName(), f.getLocationAddress().current().stream().findFirst().get().getCountryCode())).collect(Collectors.toList());
         ObjectMapper mapper = new ObjectMapper();
-
-        container.putArray(CompanyUnitRecord.IO_FIELD_P_NUMBER, mapper.valueToTree(pUnitList));*/
-
-        return container;
+        container.putArray(CompanyUnitRecord.IO_FIELD_P_NUMBER, mapper.valueToTree(pUnitList));
+        return container.getNode();
     }
 }
