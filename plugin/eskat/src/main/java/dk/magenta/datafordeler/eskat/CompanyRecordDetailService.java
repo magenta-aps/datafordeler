@@ -14,7 +14,9 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.eskat.output.EskatRecordDetailOutputWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -80,7 +84,12 @@ public class CompanyRecordDetailService {
                 return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             }
 
-            ObjectNode objectNode = companyRecordOutputWrapper.fillContainer(companyEntity);
+            List<String> productionUnits = companyEntity.getProductionUnits().current().stream().map(f -> Integer.toString(f.getpNumber())).collect(Collectors.toList());
+            CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
+            companyUnitRecordQuery.setPNummer(productionUnits);
+            Stream<CompanyUnitRecord> pUnitEntities = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);
+
+            ObjectNode objectNode = companyRecordOutputWrapper.fillContainer(companyEntity, pUnitEntities);
             return ResponseEntity.ok(objectNode);
         } catch (AccessDeniedException | InvalidCertificateException | InvalidTokenException e) {
             String errorMessage = "Failed accessing company";

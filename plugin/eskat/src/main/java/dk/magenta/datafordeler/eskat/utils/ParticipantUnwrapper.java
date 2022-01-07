@@ -2,11 +2,8 @@ package dk.magenta.datafordeler.eskat.utils;
 
 import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyStatusRecord;
-import dk.magenta.datafordeler.cvr.records.unversioned.CompanyStatus;
-import dk.magenta.datafordeler.eskat.output.ParticipantObject;
+import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +16,16 @@ public class ParticipantUnwrapper {
      * @param personName
      * @return
      */
-    public static List<ParticipantObject> CompanyParticipantRelationRecord(List<CompanyParticipantRelationRecord> relations, String cpr, String personName) {
+    public static List<ParticipantEntity> CompanyParticipantRelationRecord(List<CompanyParticipantRelationRecord> relations, String cpr, String personName) {
 
-        ArrayList<ParticipantObject> list = new ArrayList<ParticipantObject>();
+        ArrayList<ParticipantEntity> list = new ArrayList<ParticipantEntity>();
 
         for(CompanyParticipantRelationRecord relation : relations) {
             CompanyStatusRecord companyStatus = relation.getRelationCompanyRecord().getCompanyStatus().stream().filter(f -> f.getEffectTo()==null).findFirst().orElse(null);
 
             if(companyStatus!=null) {
 
-                ParticipantObject participantObject = new ParticipantObject(relation.getRelationCompanyRecord().getCvrNumber() + "",
+                ParticipantEntity participantObject = new ParticipantEntity(relation.getRelationCompanyRecord().getCvrNumber() + "",
                         cpr, personName,
                         relation.getRelationCompanyRecord().getNames().iterator().next().getName() + "",
                         companyStatus.getStatus(),

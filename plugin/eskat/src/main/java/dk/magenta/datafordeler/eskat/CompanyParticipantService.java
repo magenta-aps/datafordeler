@@ -15,7 +15,7 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import dk.magenta.datafordeler.eskat.output.ParticipantObject;
+import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
 import dk.magenta.datafordeler.eskat.utils.ParticipantUnwrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,7 +50,7 @@ public class CompanyParticipantService {
             produces = {"application/json"}
     )
 
-    public Collection<ParticipantObject> getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
+    public Collection<ParticipantEntity> getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
                                                  @RequestParam(value = "navn",required=false, defaultValue = "") String navn,
                                                  @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer,
                                                  @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
@@ -114,7 +114,7 @@ public class CompanyParticipantService {
 
             List<ParticipantRecord> participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
 
-            List<ParticipantObject> oList = new ArrayList<ParticipantObject>();
+            List<ParticipantEntity> oList = new ArrayList<ParticipantEntity>();
 
             for(ParticipantRecord participant : participantlist) {
                 List<CompanyParticipantRelationRecord> relations =  participant.getCompanyRelation().current();
