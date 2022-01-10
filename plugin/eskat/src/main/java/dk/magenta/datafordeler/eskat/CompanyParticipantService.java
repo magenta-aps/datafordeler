@@ -31,7 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
-@RequestMapping("/eskat/companyParticipantConnection/")
+@RequestMapping("/eskat/companyParticipantConnection/1/rest")
 public class CompanyParticipantService {
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

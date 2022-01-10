@@ -135,6 +135,282 @@
           }
         }
       }
+    },
+    "/eskat/companydetail/1/rest/{cvr}": {
+      "get": {
+        "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens beliggenhedsadresse. Hvis et felt ikke har nogen værdi, så udelades det",
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den fremfundne virksomhed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cvrNummer": {
+                      "type": "string",
+                      "example": "12345678"
+                    },
+                    "navn": {
+                      "type": "string",
+                      "example": "Anders And"
+                    },
+                    "binavne": {
+                      "type": "string",
+                      "example": "Anders And"
+                    },
+                    "branchetekst": {
+                      "type": "string",
+                      "example": "Handel"
+                    },
+                    "branchekode": {
+                      "type": "string",
+                      "example": "620200"
+                    },
+                    "statuskode": {
+                      "type": "string",
+                      "example": "Aktiv"
+                    },
+                    "kommuneKode": {
+                      "type": "integer",
+                      "example": 956
+                    },
+                    "adresse": {
+                      "type": "string",
+                      "example": "Mut Aqqut 1"
+                    },
+                    "postboks": {
+                      "type": "string",
+                      "example": "postbox"
+                    },
+                    "postnummer": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "postdistrikt": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "bynavn": {
+                      "type": "string",
+                      "example": "Nuuk"
+                    },
+                    "landekode": {
+                      "type": "string",
+                      "example": "GL"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "anders@and.gl"
+                    },
+                    "telefon": {
+                      "type": "string",
+                      "example": "123456"
+                    },
+                    "faxNumber": {
+                      "type": "string",
+                      "example": "123456"
+                    },
+                    "pNummer": {
+                      "type": "string",
+                      "example": ["23456778901","1234567890"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eskat/companyParticipantConnection/1/rest": {
+      "get": {
+        "summary": "Find ansvarlige deltagere i form af ejerskab af virksomheder",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke.",
+        "parameters": [
+          {
+            "name": "cpr",
+            "in": "query",
+            "description": "CVR nummer",
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+          {
+            "name": "navn",
+            "in": "query",
+            "description": "Virksomhedsnavn",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "enhedsNummer",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "cvr",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "companyName",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "relationstartTimeBefore",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "relationstartTimeAfter",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "relationendTimeBefore",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "relationendTimeAfter",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på hhv. virksomhed og person",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cpr": {
+                        "type": "string",
+                        "example": "1234567890"
+                      },
+                      "ansvarlig-gyldigFra": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "personNavn": {
+                        "type": "string",
+                        "example": "Anders And"
+                      },
+                      "firmaNavn": {
+                        "type": "string",
+                        "example": "Vinduespudseren ApS"
+                      },
+                      "firmdriftformaNavn": {
+                        "type": "string",
+                        "example": "Interresentskab"
+                      },
+                      "ansvarlig-gyldigTil": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "virksomhed-gyldigFra": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "virksomhed-gyldigTil": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
+

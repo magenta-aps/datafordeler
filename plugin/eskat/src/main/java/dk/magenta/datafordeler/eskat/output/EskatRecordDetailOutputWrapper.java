@@ -31,7 +31,7 @@ public class EskatRecordDetailOutputWrapper {
         container.put(CompanyRecord.IO_FIELD_CVR_NUMBER, record.getCvrNumber());
         container.put(CompanyRecord.IO_FIELD_NAMES, record.getNames().current().iterator().next().getName());
         container.put(CompanyRecord.IO_FIELD_SECONDARY_NAMES, record.getSecondaryNames().current().stream().findFirst().map(f -> f.getName()).orElse(""));
-        container.put(CompanyRecord.IO_FIELD_STATUS, record.getStatus().current().stream().findFirst().map(f -> f.getStatusText()).orElse(""));
+        container.put(StatusRecord.IO_FIELD_STATUSCODE, record.getStatus().current().stream().findFirst().map(f -> f.getStatusText()).orElse(""));
 
         AddressRecord adress = record.getLocationAddress().current().stream().findFirst().get();
         container.put(AddressRecord.DB_FIELD_CONAME, adress.getCoName());
