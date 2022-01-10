@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.eskat.output;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.cvr.output.CompanyRecordOutputWrapper;
+import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
 import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
         if(addressSet.size()==0) {
             addressSet = record.getPostalAddress().current();
         }
-        container.addNontemporal(CompanyRecord.IO_FIELD_POSTAL_ADDRESS, addressSet.iterator().next().getMunicipality().getMunicipalityCode()+"");
+        container.addNontemporal(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, addressSet.iterator().next().getMunicipality().getMunicipalityCode()+"");
     }
 
     @Override

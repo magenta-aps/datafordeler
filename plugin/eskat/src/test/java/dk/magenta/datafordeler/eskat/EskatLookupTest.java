@@ -204,7 +204,7 @@ public class EskatLookupTest {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/eskat/companystatus/lookup",
+                "/eskat/1/companystatus/list",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

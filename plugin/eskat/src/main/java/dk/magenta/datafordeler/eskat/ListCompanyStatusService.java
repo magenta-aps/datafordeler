@@ -28,10 +28,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Webservice for
+ * Webservice for fetching all statuses of current companies i datafordeler
  */
 @RestController
-@RequestMapping("/eskat/companystatus")
+@RequestMapping("/eskat/1/companystatus")
 public class ListCompanyStatusService {
 
     @Autowired
@@ -51,13 +51,13 @@ public class ListCompanyStatusService {
 
     @PostConstruct
     public void init() {
-        this.monitorService.addAccessCheckPoint("/eskat/companystatus/lookup?cvr=1111");
+        this.monitorService.addAccessCheckPoint("/eskat/1/companystatus");
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<String> getSingle(HttpServletRequest request)
-            throws DataFordelerException, JsonProcessingException {
+            throws DataFordelerException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);

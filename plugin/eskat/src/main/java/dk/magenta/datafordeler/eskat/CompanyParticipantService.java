@@ -46,7 +46,6 @@ public class CompanyParticipantService {
 
 
     @RequestMapping(
-            //path = {"/{cpr}"},
             produces = {"application/json"}
     )
 
