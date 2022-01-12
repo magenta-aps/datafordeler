@@ -28,7 +28,7 @@ public class ParticipantUnwrapper {
                 ParticipantEntity participantObject = new ParticipantEntity(relation.getRelationCompanyRecord().getCvrNumber() + "",
                         cpr, personName,
                         relation.getRelationCompanyRecord().getNames().iterator().next().getName() + "",
-                        companyStatus.getStatus(),
+                        relation.getRelationCompanyRecord().getForm().stream().findFirst().get().getLongDescription(),  companyStatus.getStatus(),
                         DateConverter.dateConvert(relation.getRegistrationFrom()), DateConverter.dateConvert(relation.getRegistrationTo()),
                         DateConverter.dateConvert(companyStatus.getEffectFrom()), DateConverter.dateConvert(companyStatus.getEffectTo()));
                 list.add(participantObject);

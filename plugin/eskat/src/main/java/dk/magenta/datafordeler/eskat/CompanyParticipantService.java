@@ -27,14 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
 @RequestMapping("/eskat/companyParticipantConnection/1/rest")
 public class CompanyParticipantService {
-
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Autowired
     private DafoUserManager dafoUserManager;
@@ -50,10 +47,10 @@ public class CompanyParticipantService {
     )
 
     public Collection<ParticipantEntity> getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
-                                                 @RequestParam(value = "navn",required=false, defaultValue = "") String navn,
+                                                 @RequestParam(value = "personNavn",required=false, defaultValue = "") String navn,
                                                  @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer,
                                                  @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
-                                                 @RequestParam(value = "companyName",required=false, defaultValue = "") String companyName,
+                                                 @RequestParam(value = "firmaNavn",required=false, defaultValue = "") String companyName,
                                                  @RequestParam(value = "status",required=false, defaultValue = "") String status,
                                                  @RequestParam(value = "relationstartTimeBefore",required=false, defaultValue = "") String relationstartTimeBefore,
                                                  @RequestParam(value = "relationstartTimeAfter",required=false, defaultValue = "") String relationstartTimeAfter,

@@ -410,6 +410,104 @@
           }
         }
       }
+    },
+    "/eskat/punit/1/rest/{pNummer}": {
+      "get": {
+        "summary": "Find produktionsenheder",
+        "description": "Servicen giver mulighed for at fremfinde detaljer om en specifik produktionsenhed",
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den givne virksomhed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "pNummer": {
+                        "type": "string",
+                        "example": "1234567890"
+                      },
+                      "navne": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "coName": {
+                        "type": "string",
+                        "example": "Anders And"
+                      },
+                      "postboks": {
+                        "type": "string",
+                        "example": "Vinduespudseren ApS"
+                      },
+                      "postnummer": {
+                        "type": "string",
+                        "example": "Interresentskab"
+                      },
+                      "postdistrikt": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "bynavn": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "vejnavn": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "husnummerFra": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "kommuneKode": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "landekode": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "telefaxNummer": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "elektroniskPost": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "startdato": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "slutdato": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "branchetekst": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "branchekode": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "nyesteCvrNummerRelation": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "deltagerRelation": {
+                        "type": "array"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

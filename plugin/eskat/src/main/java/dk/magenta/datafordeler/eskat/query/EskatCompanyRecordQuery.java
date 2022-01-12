@@ -76,8 +76,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     public Map<String, Object> getSearchParameters() {
         Map<String, Object> map = super.getSearchParameters();
         map.put("companyStatus", this.companyStatus);
-        map.put("companyStatusValidityFrom.GTE", this.companyrecordValidityTimeGTE);
-        map.put("companyStatusValidityFrom.LTE", this.companyrecordValidityTimeLTE);
+        map.put("companyStatusValidity.GTE", this.companyrecordValidityTimeGTE);
+        map.put("companyStatusValidity.LTE", this.companyrecordValidityTimeLTE);
         return map;
     }
 
@@ -85,8 +85,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
         this.setCompanyStatus(parameters.getI("companyStatus"));
-        this.setCompanyStatusValidityFromGTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidityFrom.GTE")));
-        this.setCompanyStatusValidityFromLTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidityFrom.LTE")));
+        this.setCompanyStatusValidityFromGTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidity.GTE")));
+        this.setCompanyStatusValidityFromLTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidity.LTE")));
     }
 
     @Override
@@ -101,8 +101,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
         Map<String, String> joinHandles = super.joinHandles();
 
         joinHandles.put("companyStatus", "companyStatus" + BaseQuery.separator + "status");
-        joinHandles.put("companyStatusValidityFrom.GTE", "companyStatus" + BaseQuery.separator + "validity" + BaseQuery.separator + "validFrom");
-        joinHandles.put("companyStatusValidityFrom.LTE", "companyStatus" + BaseQuery.separator + "validity" + BaseQuery.separator + "validFrom");
+        joinHandles.put("companyStatusValidity.GTE", "companyStatus" + BaseQuery.separator + "validity" + BaseQuery.separator + "validFrom");
+        joinHandles.put("companyStatusValidity.LTE", "companyStatus" + BaseQuery.separator + "validity" + BaseQuery.separator + "validFrom");
         return joinHandles;
     }
 
@@ -110,10 +110,10 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
         super.setupConditions();
         this.addCondition("companyStatus", this.companyStatus);
         if (this.companyrecordValidityTimeGTE != null) {
-            this.addCondition("companyStatusValidityFrom.GTE", Condition.Operator.GTE, this.companyrecordValidityTimeGTE, LocalDate.class, false);
+            this.addCondition("companyStatusValidity.GTE", Condition.Operator.GTE, this.companyrecordValidityTimeGTE, LocalDate.class, false);
         }
         if (this.companyrecordValidityTimeLTE != null) {
-            this.addCondition("companyStatusValidityFrom.LTE", Condition.Operator.LTE, this.companyrecordValidityTimeLTE, LocalDate.class, false);
+            this.addCondition("companyStatusValidity.LTE", Condition.Operator.LTE, this.companyrecordValidityTimeLTE, LocalDate.class, false);
         }
     }
 }
