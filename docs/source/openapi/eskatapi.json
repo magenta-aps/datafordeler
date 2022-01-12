@@ -79,7 +79,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Personinformation og en liste over CPR-numre på personer som denne person deler adresse med.",
+            "description": "Liste over virkcomheder som matche søgekriterierne",
             "content": {
               "application/json": {
                 "schema": {
@@ -176,7 +176,7 @@
                       "type": "integer",
                       "example": 956
                     },
-                    "adresse": {
+                    "adresseFritekst": {
                       "type": "string",
                       "example": "Mut Aqqut 1"
                     },
@@ -232,7 +232,7 @@
           {
             "name": "cpr",
             "in": "query",
-            "description": "CVR nummer",
+            "description": "CPR nummer",
             "examples": {
               "fuld": {
                 "value": "12950160"
@@ -271,13 +271,12 @@
           {
             "name": "cvr",
             "in": "query",
-            "description": "Virksomhedsstatus",
+            "description": "CVR nummer",
             "examples": {
               "fuld": {
-                "value": "Magenta Grønland ApS"
-              },
+                "value": "12345678
               "wildcard": {
-                "value": "Magenta*"
+                "value": "12345*"
               }
             }
           },
@@ -298,66 +297,31 @@
             "name": "status",
             "in": "query",
             "description": "Virksomhedsstatus",
-            "examples": {
-              "fuld": {
-                "value": "Magenta Grønland ApS"
-              },
-              "wildcard": {
-                "value": "Magenta*"
-              }
-            }
+            "example": "Active"
           },
           {
-            "name": "relationstartTimeBefore",
+            "name": "relationstartTime.LTE",
             "in": "query",
-            "description": "Virksomhedsstatus",
-            "examples": {
-              "fuld": {
-                "value": "Magenta Grønland ApS"
-              },
-              "wildcard": {
-                "value": "Magenta*"
-              }
-            }
+            "description": "Relationstarttid interval",
+            "example": "2020-01-01"
           },
           {
-            "name": "relationstartTimeAfter",
+            "name": "relationstartTime.GTE",
             "in": "query",
-            "description": "Virksomhedsstatus",
-            "examples": {
-              "fuld": {
-                "value": "Magenta Grønland ApS"
-              },
-              "wildcard": {
-                "value": "Magenta*"
-              }
-            }
+            "description": "Relationstarttid interval",
+            "example": "2020-01-01"
           },
           {
-            "name": "relationendTimeBefore",
+            "name": "relationendTime.LTE",
             "in": "query",
-            "description": "Virksomhedsstatus",
-            "examples": {
-              "fuld": {
-                "value": "Magenta Grønland ApS"
-              },
-              "wildcard": {
-                "value": "Magenta*"
-              }
-            }
+            "description": "Relationstarttid interval",
+            "example": "2020-01-01"
           },
           {
-            "name": "relationendTimeAfter",
+            "name": "relationendTime.GTE",
             "in": "query",
-            "description": "Virksomhedsstatus",
-            "examples": {
-              "fuld": {
-                "value": "Magenta Grønland ApS"
-              },
-              "wildcard": {
-                "value": "Magenta*"
-              }
-            }
+            "description": "Relationstarttid interval",
+            "example": "2020-01-01"
           }
         ],
         "responses": {
@@ -374,10 +338,6 @@
                         "type": "string",
                         "example": "1234567890"
                       },
-                      "ansvarlig-gyldigFra": {
-                        "type": "string",
-                        "example": "2020-01-01"
-                      },
                       "personNavn": {
                         "type": "string",
                         "example": "Anders And"
@@ -389,6 +349,10 @@
                       "firmdriftformaNavn": {
                         "type": "string",
                         "example": "Interresentskab"
+                      },
+                      "ansvarlig-gyldigFra": {
+                        "type": "string",
+                        "example": "2020-01-01"
                       },
                       "ansvarlig-gyldigTil": {
                         "type": "string",
@@ -431,51 +395,47 @@
                       },
                       "navne": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "Vinduespudseren ApS"
                       },
                       "coName": {
                         "type": "string",
-                        "example": "Anders And"
+                        "example": "co kontorbygningen"
                       },
                       "postboks": {
                         "type": "string",
-                        "example": "Vinduespudseren ApS"
+                        "example": "postboks 17"
                       },
                       "postnummer": {
                         "type": "string",
-                        "example": "Interresentskab"
+                        "example": "3900"
                       },
                       "postdistrikt": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "Nuuk"
                       },
                       "bynavn": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "Nuuk"
                       },
-                      "vejnavn": {
+                      "adresseFritekst": {
                         "type": "string",
-                        "example": "2020-01-01"
-                      },
-                      "husnummerFra": {
-                        "type": "string",
-                        "example": "2020-01-01"
+                        "example": "Mut Aqqur 1"
                       },
                       "kommuneKode": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "956"
                       },
                       "landekode": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "GL"
                       },
                       "telefaxNummer": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "299 456789"
                       },
                       "elektroniskPost": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "test@test.com"
                       },
                       "startdato": {
                         "type": "string",
@@ -487,15 +447,15 @@
                       },
                       "branchetekst": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "Fiskeri"
                       },
                       "branchekode": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "92056"
                       },
                       "nyesteCvrNummerRelation": {
                         "type": "string",
-                        "example": "2020-01-01"
+                        "example": "12345678"
                       },
                       "deltagerRelation": {
                         "type": "array"

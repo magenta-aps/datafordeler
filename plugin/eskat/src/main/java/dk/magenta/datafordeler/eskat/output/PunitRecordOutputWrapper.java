@@ -33,8 +33,7 @@ public class PunitRecordOutputWrapper {
             container.put(AddressRecord.IO_FIELD_POSTCODE, addressList.getPostnummer());
             container.put(AddressRecord.IO_FIELD_POSTDISTRICT, addressList.getPostdistrikt());
             container.put(AddressRecord.IO_FIELD_CITY, addressList.getCityName());
-            container.put(AddressRecord.IO_FIELD_ROADNAME, addressList.getRoadName());
-            container.put(AddressRecord.IO_FIELD_HOUSE_FROM, addressList.getHouseNumberFrom());
+            container.put(AddressRecord.DB_FIELD_TEXT, addressList.getAddressText());
             container.put(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, addressList.getMunicipality().getMunicipalityCode());
             container.put(AddressRecord.IO_FIELD_COUNTRYCODE, addressList.getCountryCode());
         }

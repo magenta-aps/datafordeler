@@ -16,6 +16,7 @@ import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
+import dk.magenta.datafordeler.eskat.utils.DateConverter;
 import dk.magenta.datafordeler.eskat.utils.ParticipantUnwrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,10 +53,10 @@ public class CompanyParticipantService {
                                                  @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
                                                  @RequestParam(value = "firmaNavn",required=false, defaultValue = "") String companyName,
                                                  @RequestParam(value = "status",required=false, defaultValue = "") String status,
-                                                 @RequestParam(value = "relationstartTimeBefore",required=false, defaultValue = "") String relationstartTimeBefore,
-                                                 @RequestParam(value = "relationstartTimeAfter",required=false, defaultValue = "") String relationstartTimeAfter,
-                                                 @RequestParam(value = "relationendTimeBefore",required=false, defaultValue = "") String relationendTimeBefore,
-                                                 @RequestParam(value = "relationendTimeAfter",required=false, defaultValue = "") String relationendTimeAfter, HttpServletRequest request) throws DataFordelerException {
+                                                 @RequestParam(value = "relationstartTime.LTE",required=false, defaultValue = "") String relationstartTimeLTE,
+                                                 @RequestParam(value = "relationstartTime.GTE",required=false, defaultValue = "") String relationstartTimeGTE,
+                                                 @RequestParam(value = "relationendTime.LTE",required=false, defaultValue = "") String relationendTimeLTE,
+                                                 @RequestParam(value = "relationendTime.GTE",required=false, defaultValue = "") String relationendTimeGTE, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
@@ -85,17 +86,17 @@ public class CompanyParticipantService {
         if("!Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("Ikke Aktiv"));
         }
-        if(!"".equals(relationstartTimeBefore)) {
-            participantRecordQuery.setRelationStartTimeBefore(BaseQuery.parseDateTime(relationstartTimeBefore));
+        if(!"".equals(relationstartTimeLTE)) {
+            participantRecordQuery.setRelationStartTimeLTE(DateConverter.parseDate(relationstartTimeLTE));
         }
-        if(!"".equals(relationstartTimeAfter)) {
-            participantRecordQuery.setRelationStartTimeAfter(BaseQuery.parseDateTime(relationstartTimeAfter));
+        if(!"".equals(relationstartTimeGTE)) {
+            participantRecordQuery.setRelationStartTimeGTE(DateConverter.parseDate(relationstartTimeGTE));
         }
-        if(!"".equals(relationendTimeBefore)) {
-            participantRecordQuery.setRelationEndTimeBefore(BaseQuery.parseDateTime(relationendTimeBefore));
+        if(!"".equals(relationendTimeLTE)) {
+            participantRecordQuery.setRelationEndTimeLTE(DateConverter.parseDate(relationendTimeLTE));
         }
-        if(!"".equals(relationendTimeAfter)) {
-            participantRecordQuery.setRelationEndTimeAfter(BaseQuery.parseDateTime(relationendTimeAfter));
+        if(!"".equals(relationendTimeGTE)) {
+            participantRecordQuery.setRelationEndTimeGTE(DateConverter.parseDate(relationendTimeGTE));
         }
 
         participantRecordQuery.setRegistrationFromBefore(now);

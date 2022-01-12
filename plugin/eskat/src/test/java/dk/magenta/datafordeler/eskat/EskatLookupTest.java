@@ -565,6 +565,60 @@ public class EskatLookupTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/1/rest?status=Aktiv&relationstartTime.LTE=1990-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/1/rest?status=Aktiv&relationstartTime.LTE=2000-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/1/rest?status=Aktiv&relationstartTime.GTE=1990-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/1/rest?status=Aktiv&relationstartTime.GTE=2020-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/1/rest?status=Aktiv&relationendTime.LTE=1990-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/1/rest?status=Aktiv&relationendTime.LTE=2020-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
     }
 
     @Test

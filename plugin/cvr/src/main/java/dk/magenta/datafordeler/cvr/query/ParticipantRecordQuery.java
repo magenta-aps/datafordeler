@@ -307,34 +307,34 @@ public class ParticipantRecordQuery extends BaseQuery {
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private OffsetDateTime relationstartTimeAfter;
+    private LocalDate relationstartTimeGTE;
 
-    public void setRelationStartTimeAfter(OffsetDateTime relationstartTimeAfter) {
-        this.relationstartTimeAfter = relationstartTimeAfter;
+    public void setRelationStartTimeGTE(LocalDate relationstartTimeGTE) {
+        this.relationstartTimeGTE = relationstartTimeGTE;
         this.updatedParameters();
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private OffsetDateTime relationstartTimeBefore;
+    private LocalDate relationstartTimeLTE;
 
-    public void setRelationStartTimeBefore(OffsetDateTime relationstartTimeBefore) {
-        this.relationstartTimeBefore = relationstartTimeBefore;
+    public void setRelationStartTimeLTE(LocalDate relationstartTimeLTE) {
+        this.relationstartTimeLTE = relationstartTimeLTE;
         this.updatedParameters();
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private OffsetDateTime relationendTimeAfter;
+    private LocalDate relationendTimeGTE;
 
-    public void setRelationEndTimeAfter(OffsetDateTime relationendTimeAfter) {
-        this.relationendTimeAfter = relationendTimeAfter;
+    public void setRelationEndTimeGTE(LocalDate relationendTimeGTE) {
+        this.relationendTimeGTE = relationendTimeGTE;
         this.updatedParameters();
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private OffsetDateTime relationendTimeBefore;
+    private LocalDate relationendTimeLTE;
 
-    public void setRelationEndTimeBefore(OffsetDateTime relationendTimeBefore) {
-        this.relationendTimeBefore = relationendTimeBefore;
+    public void setRelationEndTimeLTE(LocalDate relationendTimeLTE) {
+        this.relationendTimeLTE = relationendTimeLTE;
         this.updatedParameters();
     }
 
@@ -414,17 +414,17 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.addCondition("companyNames", this.getCompanyNames(), String.class);
         this.addCondition("companyStatus", this.getStatuses(), String.class);
 
-        if (this.relationstartTimeAfter != null) {
-            this.addCondition("companyStatusStart.GTE", Condition.Operator.GTE, this.relationstartTimeAfter, LocalDate.class, false);
+        if (this.relationstartTimeGTE != null) {
+            this.addCondition("companyStatusStart.GTE", Condition.Operator.GTE, this.relationstartTimeGTE, LocalDate.class, false);
         }
-        if (this.relationstartTimeBefore != null) {
-            this.addCondition("companyStatusStart.LTE", Condition.Operator.LTE, this.relationstartTimeBefore, LocalDate.class, false);
+        if (this.relationstartTimeLTE != null) {
+            this.addCondition("companyStatusStart.LTE", Condition.Operator.LTE, this.relationstartTimeLTE, LocalDate.class, false);
         }
-        if (this.relationendTimeAfter != null) {
-            this.addCondition("companyStatusStart.GTE", Condition.Operator.GTE, this.relationendTimeAfter, LocalDate.class, false);
+        if (this.relationendTimeGTE != null) {
+            this.addCondition("companyStatusStart.GTE", Condition.Operator.GTE, this.relationendTimeGTE, LocalDate.class, false);
         }
-        if (this.relationendTimeBefore != null) {
-            this.addCondition("companyStatusStart.LTE", Condition.Operator.LTE, this.relationendTimeBefore, LocalDate.class, false);
+        if (this.relationendTimeLTE != null) {
+            this.addCondition("companyStatusStart.LTE", Condition.Operator.LTE, this.relationendTimeLTE, LocalDate.class, false);
         }
     }
 }
