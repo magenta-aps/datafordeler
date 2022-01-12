@@ -2,9 +2,12 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CvrBitemporalDataRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,11 +43,12 @@ public class RecordMetadataWrapper {
 
 
 
-    public ObjectNode fillContainer(String pnr, String fieldname, CvrBitemporalDataRecord valueBeforeEvent, CvrBitemporalDataRecord valueAfterEvent)  {
+    public ObjectNode fillContainer(String cvr, String fieldname, CvrBitemporalDataRecord valueBeforeEvent, CvrBitemporalDataRecord valueAfterEvent)  {
 
         ObjectNode root = this.objectMapper.createObjectNode();
-        ObjectMapper mapper = new ObjectMapper();
-        root.put(PersonEntity.IO_FIELD_CPR_NUMBER, pnr);
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        root.put(CompanyRecord.IO_FIELD_CVR_NUMBER, cvr);
 
         JsonNode nodeBeforeDataEvent = null;
         JsonNode nodeAfterDataEvent = null;

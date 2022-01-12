@@ -33,8 +33,8 @@ import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
+
+
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -79,8 +79,8 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
 
 
-    @Resource(name="wsContext")
-    WebServiceContext context;
+
+
 
     @Autowired
     protected CsvMapper csvMapper;
@@ -387,6 +387,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             session.close();
         }
     }
+
 
 
     /**

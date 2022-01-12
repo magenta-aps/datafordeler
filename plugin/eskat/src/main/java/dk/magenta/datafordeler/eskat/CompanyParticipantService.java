@@ -16,6 +16,7 @@ import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
+import dk.magenta.datafordeler.eskat.query.EskatParticipantRecordQuery;
 import dk.magenta.datafordeler.eskat.utils.DateConverter;
 import dk.magenta.datafordeler.eskat.utils.ParticipantUnwrapper;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -64,7 +66,7 @@ public class CompanyParticipantService {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
+        EskatParticipantRecordQuery participantRecordQuery = new EskatParticipantRecordQuery();
         if(!"".equals(cpr)) {
             participantRecordQuery.setBusinessKey(cpr);
         }
@@ -86,18 +88,21 @@ public class CompanyParticipantService {
         if("!Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("Ikke Aktiv"));
         }
-        if(!"".equals(relationstartTimeLTE)) {
+
+        LocalDate d = LocalDate.now();
+
+        /*if(!"".equals(relationstartTimeLTE)) {
             participantRecordQuery.setRelationStartTimeLTE(DateConverter.parseDate(relationstartTimeLTE));
         }
         if(!"".equals(relationstartTimeGTE)) {
-            participantRecordQuery.setRelationStartTimeGTE(DateConverter.parseDate(relationstartTimeGTE));
+            participantRecordQuery.setRelationStartTimeGTE(d);
         }
         if(!"".equals(relationendTimeLTE)) {
-            participantRecordQuery.setRelationEndTimeLTE(DateConverter.parseDate(relationendTimeLTE));
+            participantRecordQuery.setRelationEndTimeLTE(d);
         }
         if(!"".equals(relationendTimeGTE)) {
-            participantRecordQuery.setRelationEndTimeGTE(DateConverter.parseDate(relationendTimeGTE));
-        }
+            participantRecordQuery.setRelationEndTimeGTE(d);
+        }*/
 
         participantRecordQuery.setRegistrationFromBefore(now);
         participantRecordQuery.setRegistrationToAfter(now);
