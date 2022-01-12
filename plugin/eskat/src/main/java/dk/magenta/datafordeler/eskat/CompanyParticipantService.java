@@ -91,18 +91,18 @@ public class CompanyParticipantService {
 
         LocalDate d = LocalDate.now();
 
-        /*if(!"".equals(relationstartTimeLTE)) {
+        if(!"".equals(relationstartTimeLTE)) {
             participantRecordQuery.setRelationStartTimeLTE(DateConverter.parseDate(relationstartTimeLTE));
         }
         if(!"".equals(relationstartTimeGTE)) {
-            participantRecordQuery.setRelationStartTimeGTE(d);
+            participantRecordQuery.setRelationStartTimeGTE(DateConverter.parseDate(relationstartTimeGTE));
         }
         if(!"".equals(relationendTimeLTE)) {
-            participantRecordQuery.setRelationEndTimeLTE(d);
+            participantRecordQuery.setRelationEndTimeLTE(DateConverter.parseDate(relationendTimeLTE));
         }
         if(!"".equals(relationendTimeGTE)) {
-            participantRecordQuery.setRelationEndTimeGTE(d);
-        }*/
+            participantRecordQuery.setRelationEndTimeGTE(DateConverter.parseDate(relationendTimeGTE));
+        }
 
         participantRecordQuery.setRegistrationFromBefore(now);
         participantRecordQuery.setRegistrationToAfter(now);
