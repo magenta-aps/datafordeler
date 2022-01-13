@@ -37,10 +37,6 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
             "virkningTil",
     }));
 
-    protected boolean streamMetadata = true;
-
-
-
     @Override
     public Set<String> getRemoveFieldNames(Mode mode) {
         switch(mode) {
@@ -72,8 +68,8 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
         ObjectNode root = super.getNode(record, overlap, mode);
 
         CvrOutputContainer metadataRecordOutput = new CvrOutputContainer();
-        this.fillMetadataContainer(metadataRecordOutput, record, mode);
-        if(streamMetadata) {
+        boolean metadata = this.fillMetadataContainer(metadataRecordOutput, record, mode);
+        if(metadata) {
             ObjectNode metaNode = this.getObjectMapper().createObjectNode();
             root.set("metadata", metaNode);
             metaNode.setAll(metadataRecordOutput.getBase());
@@ -102,7 +98,7 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
         return this.getObjectMapper().createObjectNode();
     }
 
-    protected abstract void fillMetadataContainer(OutputContainer container, E item, Mode m);
+    protected abstract boolean fillMetadataContainer(OutputContainer container, E item, Mode m);
 
     protected JsonNode createAddressNode(AddressRecord record) {
         ObjectNode adresseNode = this.createItemNode(record);

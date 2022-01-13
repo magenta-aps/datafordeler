@@ -35,12 +35,6 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
         return this.objectMapper;
     }
 
-    @PostConstruct
-    public void init() {
-        super.streamMetadata = false;
-    }
-
-
     @Override
     protected void fillContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
@@ -58,8 +52,9 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
         }
     }
 
-    @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
 
+    @Override
+    protected boolean fillMetadataContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
+        return false;
     }
 }
