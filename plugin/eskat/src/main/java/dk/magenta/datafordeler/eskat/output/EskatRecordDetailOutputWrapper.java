@@ -42,7 +42,7 @@ public class EskatRecordDetailOutputWrapper {
         container.put(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, adress.getMunicipality().getMunicipalityCode());
         container.put(AddressRecord.IO_FIELD_CITY, adress.getCityName());
 
-        container.put(CompanyRecord.IO_FIELD_PHONE, record.getPhoneNumber().iterator().next().getContactInformation());
+        container.put(CompanyRecord.IO_FIELD_PHONE, record.getPhoneNumber().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
         container.put(CompanyRecord.IO_FIELD_EMAIL, record.getEmailAddress().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
         container.put(CompanyRecord.DB_FIELD_FAX, record.getFaxNumber().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
         container.put("startdato", DateConverter.dateConvert(record.getMetadata().getValidFrom()));

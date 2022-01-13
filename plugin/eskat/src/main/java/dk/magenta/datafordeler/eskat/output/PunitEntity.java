@@ -13,4 +13,27 @@ public class PunitEntity {
 
     }
 
+    public String getpNummer() {
+        return pNummer;
+    }
+
+    public void setpNummer(String pNummer) {
+        this.pNummer = pNummer;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLand() {
+        return land;
+    }
+
+    public void setLand(String land) {
+        this.land = land;
+    }
 }
