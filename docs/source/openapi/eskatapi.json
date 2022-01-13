@@ -41,6 +41,9 @@
             "name": "cvrnummer",
             "in": "query",
             "description": "CVR nummer",
+            "schema": {
+              "type": "string"
+            },
             "examples": {
               "fuld": {
                 "value": "12950160"
@@ -54,6 +57,9 @@
             "name": "navne",
             "in": "query",
             "description": "Virksomhedsnavn",
+            "schema": {
+              "type": "string"
+            },
             "examples": {
               "fuld": {
                 "value": "Magenta Grønland ApS"
@@ -67,6 +73,9 @@
             "name": "companyStatus",
             "in": "query",
             "description": "Virksomhedsstatus",
+            "schema": {
+              "type": "string"
+            },
             "examples": {
               "fuld": {
                 "value": "Magenta Grønland ApS"
@@ -233,6 +242,9 @@
             "name": "cpr",
             "in": "query",
             "description": "CPR nummer",
+            "schema": {
+              "type": "string"
+            },
             "examples": {
               "fuld": {
                 "value": "12950160"
@@ -246,6 +258,9 @@
             "name": "navn",
             "in": "query",
             "description": "Virksomhedsnavn",
+            "schema": {
+              "type": "string"
+            },
             "examples": {
               "fuld": {
                 "value": "Magenta Grønland ApS"
@@ -259,6 +274,9 @@
             "name": "enhedsNummer",
             "in": "query",
             "description": "Virksomhedsstatus",
+            "schema": {
+              "type": "string"
+            },
             "examples": {
               "fuld": {
                 "value": "Magenta Grønland ApS"
@@ -272,9 +290,13 @@
             "name": "cvr",
             "in": "query",
             "description": "CVR nummer",
+            "schema": {
+              "type": "string"
+            },
             "examples": {
               "fuld": {
-                "value": "12345678
+                "value": "12345678"
+              },
               "wildcard": {
                 "value": "12345*"
               }
@@ -284,6 +306,9 @@
             "name": "companyName",
             "in": "query",
             "description": "Virksomhedsstatus",
+            "schema": {
+              "type": "string"
+            },
             "examples": {
               "fuld": {
                 "value": "Magenta Grønland ApS"
@@ -297,30 +322,45 @@
             "name": "status",
             "in": "query",
             "description": "Virksomhedsstatus",
+            "schema": {
+              "type": "string"
+            },
             "example": "Active"
           },
           {
             "name": "relationstartTime.LTE",
             "in": "query",
             "description": "Relationstarttid interval",
+            "schema": {
+              "type": "string"
+            },
             "example": "2020-01-01"
           },
           {
             "name": "relationstartTime.GTE",
             "in": "query",
             "description": "Relationstarttid interval",
+            "schema": {
+              "type": "string"
+            },
             "example": "2020-01-01"
           },
           {
             "name": "relationendTime.LTE",
             "in": "query",
             "description": "Relationstarttid interval",
+            "schema": {
+              "type": "string"
+            },
             "example": "2020-01-01"
           },
           {
             "name": "relationendTime.GTE",
             "in": "query",
             "description": "Relationstarttid interval",
+            "schema": {
+              "type": "string"
+            },
             "example": "2020-01-01"
           }
         ],
