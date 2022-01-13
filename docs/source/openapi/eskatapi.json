@@ -88,7 +88,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over virkcomheder som matche søgekriterierne",
+            "description": "Liste over virksomheder som matcher søgekriterierne",
             "content": {
               "application/json": {
                 "schema": {
