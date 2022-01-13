@@ -37,7 +37,7 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
             "virkningTil",
     }));
 
-    protected boolean stremMetadata = true;
+    protected boolean streamMetadata = true;
 
 
 
@@ -73,7 +73,7 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
 
         CvrOutputContainer metadataRecordOutput = new CvrOutputContainer();
         this.fillMetadataContainer(metadataRecordOutput, record, mode);
-        if(stremMetadata) {
+        if(streamMetadata) {
             ObjectNode metaNode = this.getObjectMapper().createObjectNode();
             root.set("metadata", metaNode);
             metaNode.setAll(metadataRecordOutput.getBase());
