@@ -6,13 +6,11 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
-import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
@@ -33,7 +31,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 @RestController
-@RequestMapping("/eskat/companyParticipantConnection/1/rest")
+@RequestMapping("/eskat/companyParticipantConnection/1/rest/search")
 public class CompanyParticipantService {
 
     @Autowired
@@ -58,7 +56,10 @@ public class CompanyParticipantService {
                                                  @RequestParam(value = "relationstartTime.LTE",required=false, defaultValue = "") String relationstartTimeLTE,
                                                  @RequestParam(value = "relationstartTime.GTE",required=false, defaultValue = "") String relationstartTimeGTE,
                                                  @RequestParam(value = "relationendTime.LTE",required=false, defaultValue = "") String relationendTimeLTE,
-                                                 @RequestParam(value = "relationendTime.GTE",required=false, defaultValue = "") String relationendTimeGTE, HttpServletRequest request) throws DataFordelerException {
+                                                 @RequestParam(value = "relationendTime.GTE",required=false, defaultValue = "") String relationendTimeGTE,
+                                                 @RequestParam(value = "page",required=false, defaultValue = "1") Integer page,
+                                                 @RequestParam(value = "pageSize",required=false, defaultValue = "10") Integer pageSize,
+                                                 HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
@@ -108,6 +109,8 @@ public class CompanyParticipantService {
         participantRecordQuery.setRegistrationToAfter(now);
         participantRecordQuery.setEffectFromBefore(now);
         participantRecordQuery.setEffectToAfter(now);
+        participantRecordQuery.setPage(page);
+        participantRecordQuery.setPageSize(pageSize);
 
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {

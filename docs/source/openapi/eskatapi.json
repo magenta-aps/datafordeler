@@ -33,7 +33,7 @@
         }
       }
     },
-    "/eskat/company/1/rest/": {
+    "/eskat/company/1/rest/search": {
       "get": {
         "summary": "Fremsøgning af virksomheder i datafordeleren",
         "parameters": [
@@ -233,10 +233,10 @@
         }
       }
     },
-    "/eskat/companyParticipantConnection/1/rest": {
+    "/eskat/companyParticipantConnection/1/rest/search": {
       "get": {
         "summary": "Find ansvarlige deltagere i form af ejerskab af virksomheder",
-        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke.",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden, dvs. at der ikke leveres ejerskab på personer som har solgt virksomheden.<br/>Hvis en parameter har værdien null, så leveres denne ikke.",
         "parameters": [
           {
             "name": "cpr",
@@ -255,18 +255,18 @@
             }
           },
           {
-            "name": "navn",
+            "name": "personNavn",
             "in": "query",
-            "description": "Virksomhedsnavn",
+            "description": "personNavn",
             "schema": {
               "type": "string"
             },
             "examples": {
               "fuld": {
-                "value": "Magenta Grønland ApS"
+                "value": "Anders And"
               },
               "wildcard": {
-                "value": "Magenta*"
+                "value": "Anders*"
               }
             }
           },
@@ -277,14 +277,7 @@
             "schema": {
               "type": "string"
             },
-            "examples": {
-              "fuld": {
-                "value": "Magenta Grønland ApS"
-              },
-              "wildcard": {
-                "value": "Magenta*"
-              }
-            }
+            "example": "400000000"
           },
           {
             "name": "cvr",
@@ -303,9 +296,9 @@
             }
           },
           {
-            "name": "companyName",
+            "name": "firmaNavn",
             "in": "query",
-            "description": "Virksomhedsstatus",
+            "description": "firmaNavn",
             "schema": {
               "type": "string"
             },

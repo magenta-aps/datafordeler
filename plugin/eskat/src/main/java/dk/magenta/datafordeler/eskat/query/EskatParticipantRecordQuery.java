@@ -176,7 +176,6 @@ public class EskatParticipantRecordQuery extends ParticipantRecordQuery {
     protected void setupConditions() throws QueryBuildException {
         super.setupConditions();
         this.addCondition("cvrNumber", this.getCvrnumber(), Long.class);
-        this.addCondition("names", this.getCvrnumber(), Long.class);
         this.addCondition("companyNames", this.getCompanyNames(), String.class);
         this.addCondition("companyStatus", this.getStatuses(), String.class);
 
