@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/eskat/companystatus/lookup": {
+    "/eskat/1/companystatus/list": {
       "get": {
         "summary": "Aktuelle status for virksomheder i datafordeleren",
         "description": "Ved kald til denne service kan hentes alle aktuelle status for virksomheder i datafordeleren. Der appendes en status til den status der er hentet fra det danske CVR-register. For virksomheder med status forskellig fra NORMAL, Aktiv og Fremtid returneres 'Ophørt:  + status' for alle andre status returneres 'Aktiv: +status'",
@@ -459,7 +459,7 @@
                       },
                       "adresseFritekst": {
                         "type": "string",
-                        "example": "Mut Aqqur 1"
+                        "example": "Mut Aqqut 1"
                       },
                       "kommuneKode": {
                         "type": "string",
@@ -498,7 +498,11 @@
                         "example": "12345678"
                       },
                       "deltagerRelation": {
-                        "type": "array"
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": ["1234567890", "2345678901"]
+                        }
                       }
                     }
                   }
