@@ -222,8 +222,12 @@
                       "example": "123456"
                     },
                     "pNummer": {
-                      "type": "string",
-                      "example": ["23456778901","1234567890"]
+                      "type": "object",
+                      "example": [{
+                        "pNummer": "1008052391",
+                        "name": "Afdeling 1",
+                        "land": "GL"
+                      }]
                     }
                   }
                 }
@@ -269,15 +273,6 @@
                 "value": "Anders*"
               }
             }
-          },
-          {
-            "name": "enhedsNummer",
-            "in": "query",
-            "description": "Virksomhedsstatus",
-            "schema": {
-              "type": "string"
-            },
-            "example": "400000000"
           },
           {
             "name": "cvr",
