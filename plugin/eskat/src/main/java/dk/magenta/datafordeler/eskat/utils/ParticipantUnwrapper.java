@@ -32,6 +32,14 @@ public class ParticipantUnwrapper {
                         DateConverter.dateConvert(relation.getRegistrationFrom()), DateConverter.dateConvert(relation.getRegistrationTo()),
                         DateConverter.dateConvert(companyStatus.getEffectFrom()), DateConverter.dateConvert(companyStatus.getEffectTo()));
                 list.add(participantObject);
+            } else {
+                ParticipantEntity participantObject = new ParticipantEntity(relation.getRelationCompanyRecord().getCvrNumber() + "",
+                        cpr, personName,
+                        relation.getRelationCompanyRecord().getNames().iterator().next().getName() + "",
+                        relation.getRelationCompanyRecord().getForm().stream().findFirst().get().getLongDescription(),  "N/A",
+                        DateConverter.dateConvert(relation.getRegistrationFrom()), DateConverter.dateConvert(relation.getRegistrationTo()),
+                        "N/A","N/A");
+                list.add(participantObject);
             }
         }
         return list;

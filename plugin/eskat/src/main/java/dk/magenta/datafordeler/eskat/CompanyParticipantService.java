@@ -11,9 +11,10 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
-import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
+import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
+import dk.magenta.datafordeler.eskat.query.EskatCompanyRecordQuery;
 import dk.magenta.datafordeler.eskat.query.EskatParticipantRecordQuery;
 import dk.magenta.datafordeler.eskat.utils.DateConverter;
 import dk.magenta.datafordeler.eskat.utils.ParticipantUnwrapper;
@@ -21,17 +22,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/eskat/companyParticipantConnection/1/rest/search")
+@RequestMapping("/eskat/companyParticipantConnection/1/rest")
 public class CompanyParticipantService {
 
     @Autowired
@@ -44,12 +45,11 @@ public class CompanyParticipantService {
 
 
     @RequestMapping(
-            produces = {"application/json"}
+            path = "/dummy",
+            produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-
     public Collection<ParticipantEntity> getRest(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
                                                  @RequestParam(value = "personNavn",required=false, defaultValue = "") String navn,
-                                                 @RequestParam(value = "enhedsNummer",required=false, defaultValue = "") String enhedsNummer,
                                                  @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
                                                  @RequestParam(value = "firmaNavn",required=false, defaultValue = "") String companyName,
                                                  @RequestParam(value = "status",required=false, defaultValue = "") String status,
@@ -74,9 +74,6 @@ public class CompanyParticipantService {
         if(!"".equals(navn)) {
             participantRecordQuery.setNavn(navn);
         }
-        if(!"".equals(enhedsNummer)) {
-            participantRecordQuery.setEnhedsNummer(enhedsNummer);
-        }
         if(!"".equals(cvr)) {
             participantRecordQuery.setCvrnumber(cvr);
         }
@@ -89,8 +86,6 @@ public class CompanyParticipantService {
         if("!Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("Ikke Aktiv"));
         }
-
-        LocalDate d = LocalDate.now();
 
         if(!"".equals(relationstartTimeLTE)) {
             participantRecordQuery.setRelationStartTimeLTE(DateConverter.parseDate(relationstartTimeLTE));
@@ -131,6 +126,159 @@ public class CompanyParticipantService {
             throw new DataStreamException(e);
         }
     }
+
+
+    @RequestMapping(
+            path = "/search",
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public Collection<ParticipantEntity> getRestD(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
+                                                 @RequestParam(value = "personNavn",required=false, defaultValue = "") String navn,
+                                                 @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
+                                                 @RequestParam(value = "firmaNavn",required=false, defaultValue = "") String companyName,
+                                                 @RequestParam(value = "status",required=false, defaultValue = "") String status,
+                                                 @RequestParam(value = "relationstartTime.LTE",required=false, defaultValue = "") String relationstartTimeLTE,
+                                                 @RequestParam(value = "relationstartTime.GTE",required=false, defaultValue = "") String relationstartTimeGTE,
+                                                 @RequestParam(value = "relationendTime.LTE",required=false, defaultValue = "") String relationendTimeLTE,
+                                                 @RequestParam(value = "relationendTime.GTE",required=false, defaultValue = "") String relationendTimeGTE,
+                                                 @RequestParam(value = "page",required=false, defaultValue = "1") Integer page,
+                                                 @RequestParam(value = "pageSize",required=false, defaultValue = "10") Integer pageSize,
+                                                 HttpServletRequest request) throws DataFordelerException {
+        DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
+        loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
+        this.checkAndLogAccess(loggerHelper);
+
+        OffsetDateTime now = OffsetDateTime.now();
+
+        EskatParticipantRecordQuery participantRecordQuery = new EskatParticipantRecordQuery();
+        if(!"".equals(cpr)) {
+            participantRecordQuery.setBusinessKey(cpr);
+        }
+        if(!"".equals(navn)) {
+            participantRecordQuery.setNavn(navn);
+        }
+        if(!"".equals(cvr)) {
+            participantRecordQuery.setCvrnumber(cvr);
+        }
+        if(!"".equals(companyName)) {
+            participantRecordQuery.setCompanyNames(companyName);
+        }
+        if("Aktiv".equals(status)) {
+            participantRecordQuery.setStatuses(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
+        }
+        if("!Aktiv".equals(status)) {
+            participantRecordQuery.setStatuses(Arrays.asList("Ikke Aktiv"));
+        }
+
+        if(!"".equals(relationstartTimeLTE)) {
+            participantRecordQuery.setRelationStartTimeLTE(DateConverter.parseDate(relationstartTimeLTE));
+        }
+        if(!"".equals(relationstartTimeGTE)) {
+            participantRecordQuery.setRelationStartTimeGTE(DateConverter.parseDate(relationstartTimeGTE));
+        }
+        if(!"".equals(relationendTimeLTE)) {
+            participantRecordQuery.setRelationEndTimeLTE(DateConverter.parseDate(relationendTimeLTE));
+        }
+        if(!"".equals(relationendTimeGTE)) {
+            participantRecordQuery.setRelationEndTimeGTE(DateConverter.parseDate(relationendTimeGTE));
+        }
+
+        participantRecordQuery.setRegistrationFromBefore(now);
+        participantRecordQuery.setRegistrationToAfter(now);
+        participantRecordQuery.setEffectFromBefore(now);
+        //participantRecordQuery.setEffectToAfter(now);
+        participantRecordQuery.setPage(page);
+        participantRecordQuery.setPageSize(pageSize);
+
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            List<ParticipantRecord> participantlist;
+            CompanyRecord companyEntity = null;
+
+            if(!"".equals(cvr)) {
+
+                participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
+
+                CompanyRecordQuery query = new CompanyRecordQuery();
+                query.setCvrNumre(cvr);
+                Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
+                companyEntity = companyEntities.findFirst().orElse(null);
+
+
+            }
+
+            participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
+
+
+
+
+
+            List<ParticipantEntity> oList = new ArrayList<ParticipantEntity>();
+
+            for(ParticipantRecord participant : participantlist) {
+
+                //System.out.println(participant.getMetadata().);
+                System.out.println("--------------------------------------------------");
+                //System.out.println(participant.getBusinessKey());
+                //System.out.println(participant.getUnitNumber());
+                //System.out.println(participant.getNames().current().iterator().next().getName());
+                CvrRecordPeriod period = participant.getValidity();
+                //System.out.println(period);
+                if(period!=null) {
+                    System.out.println(period.getValidFrom());
+                    System.out.println(period.getValidTo());
+                }
+
+
+                ParticipantEntity participantObject = new ParticipantEntity(null, participant.getBusinessKey()+"",
+                        participant.getNames().current().stream().findFirst().get().getName(), null, null, null, null, null, null, null);
+
+
+
+                if(!"".equals(cpr)) {
+
+                    List<CompanyParticipantRelationRecord> relations = participant.getCompanyRelation().current();
+
+                    for (CompanyParticipantRelationRecord cprs : relations) {
+                        participantObject = new ParticipantEntity(null, participantObject.getCpr(),
+                                participantObject.getPersonName(), null, null, null, null, null, null, null);
+
+                        participantObject.setCvr(cprs.getRelationCompanyRecord().getCvrNumber()+"");
+                        participantObject.setDriftform(cprs.getRelationCompanyRecord().getForm().stream().findFirst().get().getLongDescription());
+                        CompanyStatusRecord statusExtract = cprs.getRelationCompanyRecord().getCompanyStatus().stream().findFirst().orElse(null);
+                        participantObject.setStatus(statusExtract!=null ? statusExtract.getStatus() : "N/A");
+                        participantObject.setCompanyname(cprs.getRelationCompanyRecord().getNames().stream().findFirst().get().getName());
+
+
+                        System.out.println("CVR "+cprs.getRelationCompanyRecord().getCvrNumber());
+
+                        oList.add(participantObject);
+                    }
+                } else if(!"".equals(cvr)) {
+
+                    participantObject.setCvr(cvr);
+                    participantObject.setDriftform(companyEntity.getCompanyForm().current().stream().findFirst().get().getLongDescription()+"");
+                    participantObject.setStatus(companyEntity.getMetadata().getNewestStatus()!=null ? companyEntity.getMetadata().getNewestStatus().getStatusText():  "N/A");
+                    participantObject.setCompanyname(companyEntity.getMetadata().getNewestName().stream().findFirst().get().getName());
+
+
+                }
+                oList.add(participantObject);
+
+            }
+            return oList;
+        } catch (Exception e) {
+            throw new DataStreamException(e);
+        }
+    }
+
+
+
+
+
+
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {

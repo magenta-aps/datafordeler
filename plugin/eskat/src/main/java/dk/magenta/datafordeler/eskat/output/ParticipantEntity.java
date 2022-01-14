@@ -87,4 +87,44 @@ public class ParticipantEntity {
     public String getCompanyEnd() {
         return companyend;
     }
+
+    public void setCvr(String cvr) {
+        this.cvr = cvr;
+    }
+
+    public void setCpr(String cpr) {
+        this.cpr = cpr;
+    }
+
+    public void setCompanyname(String companyname) {
+        this.companyname = companyname;
+    }
+
+    public void setPersonname(String personname) {
+        this.personname = personname;
+    }
+
+    public void setDriftform(String driftform) {
+        this.driftform = driftform;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setResponsiblestart(String responsiblestart) {
+        this.responsiblestart = responsiblestart;
+    }
+
+    public void setResponsibleend(String responsibleend) {
+        this.responsibleend = responsibleend;
+    }
+
+    public void setCompanystart(String companystart) {
+        this.companystart = companystart;
+    }
+
+    public void setCompanyend(String companyend) {
+        this.companyend = companyend;
+    }
 }
