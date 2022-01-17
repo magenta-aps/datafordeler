@@ -133,7 +133,7 @@ public class CompanyParticipantService {
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     public Collection<ParticipantEntity> getRestD(@RequestParam(value = "cpr",required=false, defaultValue = "") String cpr,
-                                                 @RequestParam(value = "personNavn",required=false, defaultValue = "") String navn,
+                                                 @RequestParam(value = "personNavn",required=false, defaultValue = "") String personNavn,
                                                  @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
                                                  @RequestParam(value = "firmaNavn",required=false, defaultValue = "") String companyName,
                                                  @RequestParam(value = "status",required=false, defaultValue = "") String status,
@@ -152,23 +152,28 @@ public class CompanyParticipantService {
         OffsetDateTime now = OffsetDateTime.now();
 
         EskatParticipantRecordQuery participantRecordQuery = new EskatParticipantRecordQuery();
+        EskatCompanyRecordQuery companyRecordQuery = new EskatCompanyRecordQuery();
         if(!"".equals(cpr)) {
             participantRecordQuery.setBusinessKey(cpr);
         }
-        if(!"".equals(navn)) {
-            participantRecordQuery.setNavn(navn);
+        if(!"".equals(personNavn)) {
+            participantRecordQuery.setNavn(personNavn);
         }
         if(!"".equals(cvr)) {
             participantRecordQuery.setCvrnumber(cvr);
+            companyRecordQuery.setCvrNumre(cvr);
         }
         if(!"".equals(companyName)) {
             participantRecordQuery.setCompanyNames(companyName);
+            companyRecordQuery.setVirksomhedsnavn(companyName);
         }
         if("Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
+            companyRecordQuery.setCompanyStatus(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
         }
         if("!Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("Ikke Aktiv"));
+            companyRecordQuery.setCompanyStatus(Arrays.asList("Ikke Aktiv"));
         }
 
         if(!"".equals(relationstartTimeLTE)) {
@@ -187,7 +192,7 @@ public class CompanyParticipantService {
         participantRecordQuery.setRegistrationFromBefore(now);
         participantRecordQuery.setRegistrationToAfter(now);
         participantRecordQuery.setEffectFromBefore(now);
-        //participantRecordQuery.setEffectToAfter(now);
+        participantRecordQuery.setEffectToAfter(now);
         participantRecordQuery.setPage(page);
         participantRecordQuery.setPageSize(pageSize);
 
@@ -199,38 +204,17 @@ public class CompanyParticipantService {
 
             if(!"".equals(cvr)) {
 
-                participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-
-                CompanyRecordQuery query = new CompanyRecordQuery();
-                query.setCvrNumre(cvr);
-                Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
+                companyRecordQuery.setCvrNumre(cvr);
+                Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class);
                 companyEntity = companyEntities.findFirst().orElse(null);
-
-
             }
 
             participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
 
 
-
-
-
             List<ParticipantEntity> oList = new ArrayList<ParticipantEntity>();
 
             for(ParticipantRecord participant : participantlist) {
-
-                //System.out.println(participant.getMetadata().);
-                System.out.println("--------------------------------------------------");
-                //System.out.println(participant.getBusinessKey());
-                //System.out.println(participant.getUnitNumber());
-                //System.out.println(participant.getNames().current().iterator().next().getName());
-                CvrRecordPeriod period = participant.getValidity();
-                //System.out.println(period);
-                if(period!=null) {
-                    System.out.println(period.getValidFrom());
-                    System.out.println(period.getValidTo());
-                }
-
 
                 ParticipantEntity participantObject = new ParticipantEntity(null, participant.getBusinessKey()+"",
                         participant.getNames().current().stream().findFirst().get().getName(), null, null, null, null, null, null, null);
@@ -273,11 +257,6 @@ public class CompanyParticipantService {
             throw new DataStreamException(e);
         }
     }
-
-
-
-
-
 
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
