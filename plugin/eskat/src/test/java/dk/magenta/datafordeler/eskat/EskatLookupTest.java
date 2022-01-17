@@ -453,7 +453,6 @@ public class EskatLookupTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("25052943"));
-        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2015-10-01\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"BComeSafe ApS\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2009-02-20\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"HOLDINGSELSKAB\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"1999-11-15\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"ApS KBIL 17 NR. 1179\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/1/rest/search?personNavn=TESTNAVN",
@@ -463,7 +462,6 @@ public class EskatLookupTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("25052943"));
-        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2015-10-01\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"BComeSafe ApS\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2009-02-20\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"HOLDINGSELSKAB\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"1999-11-15\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"ApS KBIL 17 NR. 1179\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/1/rest/search?personNavn=TESTNA*",
@@ -490,7 +488,6 @@ public class EskatLookupTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2015-10-01\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"BComeSafe ApS\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2009-02-20\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"HOLDINGSELSKAB\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"1999-11-15\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"ApS KBIL 17 NR. 1179\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/1/rest/search?cvr=25052943",
@@ -500,7 +497,6 @@ public class EskatLookupTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("25052943"));
-        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2015-10-01\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"BComeSafe ApS\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2009-02-20\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"HOLDINGSELSKAB\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"1999-11-15\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"ApS KBIL 17 NR. 1179\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null}]", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/eskat/companyParticipantConnection/1/rest/search?cvr=25052*",
@@ -521,17 +517,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?firmaNavn=HOLDINGSELSKAB",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(true, response.getBody().contains("25052943"));
-        JSONAssert.assertEquals("[{\"cvr\":\"37130737\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2015-10-01\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"BComeSafe ApS\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"32067174\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"2009-02-20\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"HOLDINGSELSKAB\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null},{\"cvr\":\"25052943\",\"cpr\":\"1234567890\",\"ansvarlig-gyldigFra\":null,\"virksomhed-gyldigFra\":\"1999-11-15\",\"virksomhed-gyldigTil\":null,\"personNavn\":\"TESTNAVN\",\"firmaNavn\":\"ApS KBIL 17 NR. 1179\",\"status\":\"NORMAL\",\"ansvarlig-gyldigTil\":null}]", response.getBody(), false );
-
-        response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?firmaNavn=*NGSELSKAB",
+                "/eskat/companyParticipantConnection/1/rest/search?firmaNavn=MAGENTA",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -540,7 +526,16 @@ public class EskatLookupTest {
         Assert.assertEquals(true, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?firmaNavn=*MGSELSKAB",
+                "/eskat/companyParticipantConnection/1/rest/search?firmaNavn=*GENTA",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(true, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/companyParticipantConnection/1/rest/search?firmaNavn=*PENTA",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -567,7 +562,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&relationstartTime.LTE=1990-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companystartTime.LTE=1970-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -576,7 +571,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&relationstartTime.LTE=2000-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companystartTime.LTE=2000-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -585,7 +580,7 @@ public class EskatLookupTest {
         Assert.assertEquals(true, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&relationstartTime.GTE=1990-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companystartTime.GTE=1990-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -594,7 +589,7 @@ public class EskatLookupTest {
         Assert.assertEquals(true, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&relationstartTime.GTE=2020-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companystartTime.GTE=2020-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -603,7 +598,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&relationendTime.LTE=1990-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companyendTime.LTE=1990-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -612,7 +607,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&relationendTime.LTE=2020-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companyendTime.LTE=2020-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

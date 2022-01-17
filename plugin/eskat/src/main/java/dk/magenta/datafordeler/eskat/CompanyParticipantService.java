@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
@@ -137,10 +138,10 @@ public class CompanyParticipantService {
                                                  @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
                                                  @RequestParam(value = "firmaNavn",required=false, defaultValue = "") String companyName,
                                                  @RequestParam(value = "status",required=false, defaultValue = "") String status,
-                                                 @RequestParam(value = "relationstartTime.LTE",required=false, defaultValue = "") String relationstartTimeLTE,
-                                                 @RequestParam(value = "relationstartTime.GTE",required=false, defaultValue = "") String relationstartTimeGTE,
-                                                 @RequestParam(value = "relationendTime.LTE",required=false, defaultValue = "") String relationendTimeLTE,
-                                                 @RequestParam(value = "relationendTime.GTE",required=false, defaultValue = "") String relationendTimeGTE,
+                                                 @RequestParam(value = "companystartTime.LTE",required=false, defaultValue = "") String companystartTimeLTE,
+                                                 @RequestParam(value = "companystartTime.GTE",required=false, defaultValue = "") String companystartTimeGTE,
+                                                 @RequestParam(value = "companyendTime.LTE",required=false, defaultValue = "") String companyendTimeLTE,
+                                                 @RequestParam(value = "companyendTime.GTE",required=false, defaultValue = "") String companyendTimeGTE,
                                                  @RequestParam(value = "page",required=false, defaultValue = "1") Integer page,
                                                  @RequestParam(value = "pageSize",required=false, defaultValue = "10") Integer pageSize,
                                                  HttpServletRequest request) throws DataFordelerException {
@@ -160,33 +161,29 @@ public class CompanyParticipantService {
             participantRecordQuery.setNavn(personNavn);
         }
         if(!"".equals(cvr)) {
-            participantRecordQuery.setCvrnumber(cvr);
             companyRecordQuery.setCvrNumre(cvr);
         }
         if(!"".equals(companyName)) {
-            participantRecordQuery.setCompanyNames(companyName);
             companyRecordQuery.setVirksomhedsnavn(companyName);
         }
         if("Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
-            companyRecordQuery.setCompanyStatus(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
         }
         if("!Aktiv".equals(status)) {
             participantRecordQuery.setStatuses(Arrays.asList("Ikke Aktiv"));
-            companyRecordQuery.setCompanyStatus(Arrays.asList("Ikke Aktiv"));
         }
 
-        if(!"".equals(relationstartTimeLTE)) {
-            participantRecordQuery.setRelationStartTimeLTE(DateConverter.parseDate(relationstartTimeLTE));
+        if(!"".equals(companystartTimeLTE)) {
+            participantRecordQuery.setRelationStartTimeLTE(DateConverter.parseDate(companystartTimeLTE));
         }
-        if(!"".equals(relationstartTimeGTE)) {
-            participantRecordQuery.setRelationStartTimeGTE(DateConverter.parseDate(relationstartTimeGTE));
+        if(!"".equals(companystartTimeGTE)) {
+            participantRecordQuery.setRelationStartTimeGTE(DateConverter.parseDate(companystartTimeGTE));
         }
-        if(!"".equals(relationendTimeLTE)) {
-            participantRecordQuery.setRelationEndTimeLTE(DateConverter.parseDate(relationendTimeLTE));
+        if(!"".equals(companyendTimeLTE)) {
+            participantRecordQuery.setRelationEndTimeLTE(DateConverter.parseDate(companyendTimeLTE));
         }
-        if(!"".equals(relationendTimeGTE)) {
-            participantRecordQuery.setRelationEndTimeGTE(DateConverter.parseDate(relationendTimeGTE));
+        if(!"".equals(companyendTimeGTE)) {
+            participantRecordQuery.setRelationEndTimeGTE(DateConverter.parseDate(companyendTimeGTE));
         }
 
         participantRecordQuery.setRegistrationFromBefore(now);
@@ -196,62 +193,54 @@ public class CompanyParticipantService {
         participantRecordQuery.setPage(page);
         participantRecordQuery.setPageSize(pageSize);
 
-
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-
-            List<ParticipantRecord> participantlist;
-            CompanyRecord companyEntity = null;
-
-            if(!"".equals(cvr)) {
-
-                companyRecordQuery.setCvrNumre(cvr);
-                Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class);
-                companyEntity = companyEntities.findFirst().orElse(null);
-            }
-
-            participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-
 
             List<ParticipantEntity> oList = new ArrayList<ParticipantEntity>();
 
-            for(ParticipantRecord participant : participantlist) {
-
-                ParticipantEntity participantObject = new ParticipantEntity(null, participant.getBusinessKey()+"",
-                        participant.getNames().current().stream().findFirst().get().getName(), null, null, null, null, null, null, null);
-
-
-
-                if(!"".equals(cpr)) {
-
-                    List<CompanyParticipantRelationRecord> relations = participant.getCompanyRelation().current();
-
-                    for (CompanyParticipantRelationRecord cprs : relations) {
-                        participantObject = new ParticipantEntity(null, participantObject.getCpr(),
-                                participantObject.getPersonName(), null, null, null, null, null, null, null);
-
-                        participantObject.setCvr(cprs.getRelationCompanyRecord().getCvrNumber()+"");
-                        participantObject.setDriftform(cprs.getRelationCompanyRecord().getForm().stream().findFirst().get().getLongDescription());
-                        CompanyStatusRecord statusExtract = cprs.getRelationCompanyRecord().getCompanyStatus().stream().findFirst().orElse(null);
-                        participantObject.setStatus(statusExtract!=null ? statusExtract.getStatus() : "N/A");
-                        participantObject.setCompanyname(cprs.getRelationCompanyRecord().getNames().stream().findFirst().get().getName());
-
-
-                        System.out.println("CVR "+cprs.getRelationCompanyRecord().getCvrNumber());
-
+            if(companyRecordQuery.isSearchSet()) {
+                List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
+                for(CompanyRecord company : companyEntities) {
+                    List<CompanyParticipantRelationRecord> participants = company.getParticipants().current();
+                    for(CompanyParticipantRelationRecord participant : participants) {
+                        FormRecord form = company.getCompanyForm().current().stream().findFirst().orElse(null);
+                        StatusRecord statusRecord = company.getStatus().current().stream().findFirst().orElse(null);
+                        ParticipantEntity participantObject = new ParticipantEntity(company.getCvrNumberString(),
+                                participant.getRelationParticipantRecord().getBusinessKey()+"",
+                                participant.getRelationParticipantRecord().getNames().stream().findFirst().get().getName(),
+                                company.getNames().current().stream().findFirst().get().getName(),
+                                form!=null?form.getLongDescription() : null,
+                                statusRecord!=null?statusRecord.getStatusText() : null,
+                                DateConverter.dateConvert(participant.getEffectFrom()),
+                                DateConverter.dateConvert(participant.getEffectTo()),
+                                DateConverter.dateConvert(company.getMetadata().getEffectFrom()),
+                                DateConverter.dateConvert(company.getMetadata().getEffectTo()));
                         oList.add(participantObject);
                     }
-                } else if(!"".equals(cvr)) {
-
-                    participantObject.setCvr(cvr);
-                    participantObject.setDriftform(companyEntity.getCompanyForm().current().stream().findFirst().get().getLongDescription()+"");
-                    participantObject.setStatus(companyEntity.getMetadata().getNewestStatus()!=null ? companyEntity.getMetadata().getNewestStatus().getStatusText():  "N/A");
-                    participantObject.setCompanyname(companyEntity.getMetadata().getNewestName().stream().findFirst().get().getName());
-
-
                 }
-                oList.add(participantObject);
 
+            } else if(participantRecordQuery.isSearchSet()) {
+                List<ParticipantRecord> participantlist = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
+                for(ParticipantRecord participant : participantlist) {
+                    List<CompanyParticipantRelationRecord> relations =  participant.getCompanyRelation().current();
+                    for(CompanyParticipantRelationRecord participantRelation : relations) {
+                        RelationCompanyRecord relationCompany = participantRelation.getRelationCompanyRecord();
+
+                        StatusRecord statusRecord = relationCompany.getStatus().stream().findFirst().orElse(null);
+                        ParticipantEntity participantObject = new ParticipantEntity(relationCompany.getCvrNumber()+"",
+                                participant.getBusinessKey()+"",
+                                participant.getNames().current().stream().findFirst().get().getName(),
+                                relationCompany.getNames().stream().findFirst().get().getName(),
+                                relationCompany.getForm().stream().findFirst().get().getLongDescription(),
+                                statusRecord!=null?statusRecord.getStatusText() : null,
+                                DateConverter.dateConvert(participantRelation.getEffectFrom()),
+                                DateConverter.dateConvert(participantRelation.getEffectTo()),
+                                DateConverter.dateConvert(relationCompany.getEffectFrom()),
+                                DateConverter.dateConvert(relationCompany.getEffectTo()));
+                        oList.add(participantObject);
+                    }
+                }
             }
+
             return oList;
         } catch (Exception e) {
             throw new DataStreamException(e);

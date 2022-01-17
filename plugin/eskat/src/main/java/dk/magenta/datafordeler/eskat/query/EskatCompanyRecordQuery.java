@@ -92,7 +92,11 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     @Override
     protected boolean isEmpty() {
         return super.isEmpty() && this.companyStatus.isEmpty() &&
-                this.companyrecordValidityTimeGTE != null && this.companyrecordValidityTimeLTE != null;
+                this.companyrecordValidityTimeGTE == null && this.companyrecordValidityTimeLTE == null;
+    }
+
+    public boolean isSearchSet() {
+        return !this.isEmpty();
     }
 
     @Override

@@ -7,7 +7,7 @@ import dk.magenta.datafordeler.cvr.records.CvrRecordPeriod;
 
 public class ParticipantEntity {
     private String cvr;
-    private String cpr;
+    private String cpr_cvr;
     private String companyname;
     private String personname;
     private String driftform;
@@ -17,10 +17,10 @@ public class ParticipantEntity {
     private String companystart;
     private String companyend;
 
-    public ParticipantEntity(String cvr, String cpr, String personname, String companyname, String driftform, String status,
+    public ParticipantEntity(String cvr, String cpr_cvr, String personname, String companyname, String driftform, String status,
                              String responsiblestart, String responsibleend, String companystart, String companyend) {
         this.cvr = cvr;
-        this.cpr = cpr;
+        this.cpr_cvr = cpr_cvr;
         this.personname = personname;
         this.companyname = companyname;
         this.driftform = driftform;
@@ -39,9 +39,9 @@ public class ParticipantEntity {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("cpr")
-    public String getCpr() {
-        return cpr;
+    @JsonProperty("cpr_cvr")
+    public String getCprCvr() {
+        return cpr_cvr;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -92,8 +92,8 @@ public class ParticipantEntity {
         this.cvr = cvr;
     }
 
-    public void setCpr(String cpr) {
-        this.cpr = cpr;
+    public void setCprCvr(String cpr_cvr) {
+        this.cpr_cvr = cpr_cvr;
     }
 
     public void setCompanyname(String companyname) {

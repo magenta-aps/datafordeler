@@ -156,7 +156,15 @@ public class EskatParticipantRecordQuery extends ParticipantRecordQuery {
         return map;
     }
 
+    @Override
+    protected boolean isEmpty() {
+        return super.isEmpty() && this.cvrnumber.isEmpty() && this.companyNames.isEmpty() && this.companyStatuses.isEmpty() &&
+                this.relationstartTimeLTE == null && this.relationendTimeGTE == null;
+    }
 
+    public boolean isSearchSet() {
+        return !this.isEmpty();
+    }
 
     @Override
     protected Map<String, String> joinHandles() {
