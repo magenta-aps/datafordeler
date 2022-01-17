@@ -240,7 +240,7 @@
     "/eskat/companyParticipantConnection/1/rest/search": {
       "get": {
         "summary": "Find ansvarlige deltagere i form af ejerskab af virksomheder",
-        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden, dvs. at der ikke leveres ejerskab på personer som har solgt virksomheden.<br/>Hvis en parameter har værdien null, så leveres denne ikke.",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden. <br/>Der kan enten fremsøges på CPR-nummer/Navn på personen, og der leveres så alle relationer som tilhører denne person. Alternativt kan der søges på CVR-nummer, selskabsnavn eller aktivitetsstatys for virksomheden, og her kan tilføjes datoattributter for virksomhedens start/stop. <br/>Hvis en parameter har værdien null, så leveres denne ikke.",
         "parameters": [
           {
             "name": "cpr",
@@ -316,27 +316,18 @@
             "example": "Active"
           },
           {
-            "name": "relationstartTime.LTE",
+            "name": "companystartTime.GTE",
             "in": "query",
-            "description": "Relationstarttid interval",
+            "description": "Virksomhedens starttidspunkt skal være efter denne dato",
             "schema": {
               "type": "string"
             },
             "example": "2020-01-01"
           },
           {
-            "name": "relationstartTime.GTE",
+            "name": "companystartTime.LTE",
             "in": "query",
-            "description": "Relationstarttid interval",
-            "schema": {
-              "type": "string"
-            },
-            "example": "2020-01-01"
-          },
-          {
-            "name": "relationendTime.LTE",
-            "in": "query",
-            "description": "Relationstarttid interval",
+            "description": "Virksomhedens starttidspunkt skal være før denne dato",
             "schema": {
               "type": "string"
             },
@@ -345,7 +336,16 @@
           {
             "name": "relationendTime.GTE",
             "in": "query",
-            "description": "Relationstarttid interval",
+            "description": "Virksomhedens ophørstidspunkt skal være efter denne dato",
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-01-01"
+          },
+          {
+            "name": "relationendTime.LTE",
+            "in": "query",
+            "description": "Virksomhedens starttidspunkt skal være før denne dato",
             "schema": {
               "type": "string"
             },
@@ -354,7 +354,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Ved succesfuldt opslag leveres information på hhv. virksomhed og person",
+            "description": "Ved succesfuldt opslag leveres information på ansvarlighedsinformation mellem virksomhed og person",
             "content": {
               "application/json": {
                 "schema": {

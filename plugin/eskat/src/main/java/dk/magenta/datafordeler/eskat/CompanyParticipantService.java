@@ -167,23 +167,25 @@ public class CompanyParticipantService {
             companyRecordQuery.setVirksomhedsnavn(companyName);
         }
         if("Aktiv".equals(status)) {
-            participantRecordQuery.setStatuses(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
+            companyRecordQuery.setCompanyStatus(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
         }
         if("!Aktiv".equals(status)) {
-            participantRecordQuery.setStatuses(Arrays.asList("Ikke Aktiv"));
+            companyRecordQuery.setCompanyStatus(Arrays.asList("Ikke Aktiv", "UNDER REKONSTRUKTION", "OPLØST EFTER KONKURS",
+            "UNDER KONKURS", "TVANGSOPLØST", "UNDER FRIVILLIG LIKVIDATION", "UNDER REASSUMERING", "OPLØST EFTER SPALTNING",
+            "UDEN RETSVIRKNING", "SLETTET", "UNDER TVANGSOPLØSNING", "OPLØST EFTER ERKLÆRING", "OPLØST EFTER FRIVILLIG LIKVIDATION", "OPLØST EFTER FUSION"));
         }
 
         if(!"".equals(companystartTimeLTE)) {
-            participantRecordQuery.setRelationStartTimeLTE(DateConverter.parseDate(companystartTimeLTE));
+            companyRecordQuery.setCompanyStartDateLTE(DateConverter.parseDate(companystartTimeLTE));
         }
         if(!"".equals(companystartTimeGTE)) {
-            participantRecordQuery.setRelationStartTimeGTE(DateConverter.parseDate(companystartTimeGTE));
+            companyRecordQuery.setCompanyStartDateGTE(DateConverter.parseDate(companystartTimeGTE));
         }
         if(!"".equals(companyendTimeLTE)) {
-            participantRecordQuery.setRelationEndTimeLTE(DateConverter.parseDate(companyendTimeLTE));
+            companyRecordQuery.setCompanyEndDateLTE(DateConverter.parseDate(companyendTimeLTE));
         }
         if(!"".equals(companyendTimeGTE)) {
-            participantRecordQuery.setRelationEndTimeGTE(DateConverter.parseDate(companyendTimeGTE));
+            companyRecordQuery.setCompanyEndDateGTE(DateConverter.parseDate(companyendTimeGTE));
         }
 
         participantRecordQuery.setRegistrationFromBefore(now);
@@ -204,6 +206,14 @@ public class CompanyParticipantService {
                     for(CompanyParticipantRelationRecord participant : participants) {
                         FormRecord form = company.getCompanyForm().current().stream().findFirst().orElse(null);
                         StatusRecord statusRecord = company.getStatus().current().stream().findFirst().orElse(null);
+                        LifecycleRecord lifeCycle = company.getLifecycle().current().stream().findFirst().orElse(null);
+                        String companyFrom = null;
+                        String companyTo = null;
+                        if(lifeCycle!=null) {
+                            companyFrom = DateConverter.dateConvert(lifeCycle.getValidFrom());
+                            companyTo = DateConverter.dateConvert(lifeCycle.getValidTo());
+                        }
+
                         ParticipantEntity participantObject = new ParticipantEntity(company.getCvrNumberString(),
                                 participant.getRelationParticipantRecord().getBusinessKey()+"",
                                 participant.getRelationParticipantRecord().getNames().stream().findFirst().get().getName(),
@@ -212,8 +222,7 @@ public class CompanyParticipantService {
                                 statusRecord!=null?statusRecord.getStatusText() : null,
                                 DateConverter.dateConvert(participant.getEffectFrom()),
                                 DateConverter.dateConvert(participant.getEffectTo()),
-                                DateConverter.dateConvert(company.getMetadata().getEffectFrom()),
-                                DateConverter.dateConvert(company.getMetadata().getEffectTo()));
+                                companyFrom, companyTo);
                         oList.add(participantObject);
                     }
                 }
@@ -234,8 +243,8 @@ public class CompanyParticipantService {
                                 statusRecord!=null?statusRecord.getStatusText() : null,
                                 DateConverter.dateConvert(participantRelation.getEffectFrom()),
                                 DateConverter.dateConvert(participantRelation.getEffectTo()),
-                                DateConverter.dateConvert(relationCompany.getEffectFrom()),
-                                DateConverter.dateConvert(relationCompany.getEffectTo()));
+                                DateConverter.dateConvert(relationCompany.getLifecycle().stream().findFirst().get().getValidFrom()),
+                                DateConverter.dateConvert(relationCompany.getLifecycle().stream().findFirst().get().getValidTo()));
                         oList.add(participantObject);
                     }
                 }

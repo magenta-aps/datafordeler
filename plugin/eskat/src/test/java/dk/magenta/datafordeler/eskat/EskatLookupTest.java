@@ -598,22 +598,13 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companyendTime.LTE=1990-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companyendTime.LTE=2022-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(false, response.getBody().contains("25052943"));
-
-        response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companyendTime.LTE=2020-01-01",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(true, response.getBody().contains("25052943"));
     }
 
     @Test
