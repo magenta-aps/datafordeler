@@ -77,11 +77,47 @@
               "type": "string"
             },
             "examples": {
-              "fuld": {
-                "value": "Magenta Grønland ApS"
+              "under rekonstruktion": {
+                "value": "UNDER REKONSTRUKTION"
               },
-              "wildcard": {
-                "value": "Magenta*"
+              "opløst efter konkurs": {
+                "value": "OPLØST EFTER KONKURS"
+              },
+              "Under konkurs": {
+                "value": "UNDER KONKURS"
+              },
+              "Normalt aktiv virksomhed": {
+                "value": "NORMAL"
+              },
+              "Tvangsopløst": {
+                "value": "TVANGSOPLØST"
+              },
+              "Frivillig opøsning": {
+                "value": "UNDER FRIVILLIG LIKVIDATION"
+              },
+              "Under reassumering": {
+                "value": "UNDER REASSUMERING"
+              },
+              "Opløst efter spaltning": {
+                "value": "OPLØST EFTER SPALTNING"
+              },
+              "Uden retsvirkning": {
+                "value": "UDEN RETSVIRKNING"
+              },
+              "Slettet": {
+                "value": "SLETTET"
+              },
+              "Under tvangsopløsning": {
+                "value": "UNDER TVANGSOPLØSNING"
+              },
+              "Opløst efter erklæring": {
+                "value": "OPLØST EFTER ERKLÆRING"
+              },
+              "Frivilligt opløst": {
+                "value": "OPLØST EFTER FRIVILLIG LIKVIDATION"
+              },
+              "Fusioneret": {
+                "value": "OPLØST EFTER FUSION"
               }
             }
           }

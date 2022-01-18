@@ -29,32 +29,39 @@ public class EskatRecordDetailOutputWrapper {
         OutputWrapper.NodeWrapper container = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
 
         container.put(CompanyRecord.IO_FIELD_CVR_NUMBER, record.getCvrNumber());
-        container.put(CompanyRecord.IO_FIELD_NAMES, record.getNames().current().iterator().next().getName());
-        container.put(CompanyRecord.IO_FIELD_SECONDARY_NAMES, record.getSecondaryNames().current().stream().findFirst().map(f -> f.getName()).orElse(""));
-        container.put(StatusRecord.IO_FIELD_STATUSCODE, record.getStatus().current().stream().findFirst().map(f -> f.getStatusText()).orElse(""));
+        container.put(BaseNameRecord.IO_FIELD_NAME, record.getNames().current().stream().findFirst().map(f -> f.getName()).orElse(null));
+        container.put(CompanyRecord.IO_FIELD_SECONDARY_NAMES, record.getSecondaryNames().current().stream().findFirst().map(f -> f.getName()).orElse(null));
+        container.put(StatusRecord.IO_FIELD_STATUSCODE, record.getStatus().current().stream().findFirst().map(f -> f.getStatusText()).orElse(null));
 
-        AddressRecord adress = record.getLocationAddress().current().stream().findFirst().get();
-        container.put(AddressRecord.DB_FIELD_CONAME, adress.getCoName());
-        container.put(AddressRecord.IO_FIELD_POSTCODE, adress.getPostnummer());
-        container.put(AddressRecord.DB_FIELD_TEXT, adress.getAddressText());
-        container.put(AddressRecord.IO_FIELD_POSTBOX, adress.getPostBox());
-        container.put(AddressRecord.IO_FIELD_POSTDISTRICT, adress.getPostdistrikt());
-        container.put(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, adress.getMunicipality().getMunicipalityCode());
-        container.put(AddressRecord.IO_FIELD_CITY, adress.getCityName());
+        AddressRecord adress = record.getLocationAddress().current().stream().findFirst().orElse(null);
+        if(adress!=null) {
+            container.put(AddressRecord.DB_FIELD_CONAME, adress.getCoName());
+            container.put(AddressRecord.IO_FIELD_POSTCODE, adress.getPostnummer());
+            container.put(AddressRecord.DB_FIELD_TEXT, adress.getAddressText());
+            container.put(AddressRecord.IO_FIELD_POSTBOX, adress.getPostBox());
+            container.put(AddressRecord.IO_FIELD_POSTDISTRICT, adress.getPostdistrikt());
+            container.put(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, adress.getMunicipality().getMunicipalityCode());
+            container.put(AddressRecord.IO_FIELD_CITY, adress.getCityName());
+        }
 
-        container.put(CompanyRecord.IO_FIELD_PHONE, record.getPhoneNumber().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
-        container.put(CompanyRecord.IO_FIELD_EMAIL, record.getEmailAddress().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
-        container.put(CompanyRecord.DB_FIELD_FAX, record.getFaxNumber().stream().findFirst().map(f -> f.getContactInformation()).orElse(""));
+        container.put(CompanyRecord.IO_FIELD_PHONE, record.getPhoneNumber().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(null));
+        container.put(CompanyRecord.IO_FIELD_EMAIL, record.getEmailAddress().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(null));
+        container.put(CompanyRecord.DB_FIELD_FAX, record.getFaxNumber().stream().findFirst().map(f -> f.getContactInformation()).orElse(null));
         container.put("startdato", DateConverter.dateConvert(record.getMetadata().getValidFrom()));
-        String driftsform = record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getCompanyFormCode()).orElse("");
-        driftsform += "/"+record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getLongDescription()).orElse("");
+        String driftsform = record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getCompanyFormCode()).orElse(null);
+        driftsform += "/"+record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getLongDescription()).orElse(null);
         container.put(CompanyMetadataRecord.IO_FIELD_NEWEST_FORM, driftsform);
-        container.put(CompanyIndustryRecord.IO_FIELD_TEXT, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryText()).orElse(""));
-        container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(""));
+        container.put(CompanyIndustryRecord.IO_FIELD_TEXT, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryText()).orElse(null));
+        container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(null));
 
-        List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(f.getpNumber()+"", f.getNames().current().stream().findFirst().get().getName(), f.getLocationAddress().current().stream().findFirst().get().getCountryCode())).collect(Collectors.toList());
+        List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(f.getpNumber()+"",
+                f.getNames().current().size()>0?f.getNames().current().stream().findFirst().get().getName():null,
+                f.getLocationAddress().current().size()>0?f.getLocationAddress().current().stream().findFirst().get().getCountryCode():null
+        )).collect(Collectors.toList());
         ObjectMapper mapper = new ObjectMapper();
         container.putArray(CompanyUnitRecord.IO_FIELD_P_NUMBER, mapper.valueToTree(pUnitList));
         return container.getNode();
     }
+
+
 }

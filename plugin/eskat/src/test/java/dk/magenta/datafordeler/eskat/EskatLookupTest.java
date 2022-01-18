@@ -384,9 +384,7 @@ public class EskatLookupTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\n" +
                 "  \"cvrNummer\" : 25052943,\n" +
-                "  \"navne\" : \"MAGENTA\",\n" +
-                "  \"binavne\" : \"\",\n" +
-                "  \"statuskode\" : \"\",\n" +
+                "  \"navn\" : \"MAGENTA\",\n" +
                 "  \"coName\" : \"c/o Dummy CO\",\n" +
                 "  \"postnummer\" : 1112,\n" +
                 "  \"postboks\" : \"1234\",\n" +
@@ -394,7 +392,6 @@ public class EskatLookupTest {
                 "  \"kommuneKode\" : 955,\n" +
                 "  \"telefonNummer\" : \"33369696\",\n" +
                 "  \"elektroniskPost\" : \"info@magenta.dk\",\n" +
-                "  \"faxNumber\" : \"\",\n" +
                 "  \"nyesteVirksomhedsform\" : \"80/Anpartsselskab\",\n" +
                 "  \"branchetekst\" : \"Konsulentbistand vedrørende informationsteknologi\",\n" +
                 "  \"branchekode\" : \"620200\"\n" +

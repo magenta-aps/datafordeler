@@ -215,7 +215,7 @@ public class CompanyParticipantService {
                         }
 
                         ParticipantEntity participantObject = new ParticipantEntity(company.getCvrNumberString(),
-                                participant.getRelationParticipantRecord().getBusinessKey()+"",
+                                participant.getRelationParticipantRecord().getBusinessKey()!=null? Long.toString(participant.getRelationParticipantRecord().getBusinessKey()) : null,
                                 participant.getRelationParticipantRecord().getNames().stream().findFirst().get().getName(),
                                 company.getNames().current().stream().findFirst().get().getName(),
                                 form!=null?form.getLongDescription() : null,
@@ -235,8 +235,9 @@ public class CompanyParticipantService {
                         RelationCompanyRecord relationCompany = participantRelation.getRelationCompanyRecord();
 
                         StatusRecord statusRecord = relationCompany.getStatus().stream().findFirst().orElse(null);
-                        ParticipantEntity participantObject = new ParticipantEntity(relationCompany.getCvrNumber()+"",
-                                participant.getBusinessKey()+"",
+                        ParticipantEntity participantObject = new ParticipantEntity(
+                                Long.toString(relationCompany.getCvrNumber()),
+                                participant.getBusinessKey()!=null? Long.toString(participant.getBusinessKey()) : null,
                                 participant.getNames().current().stream().findFirst().get().getName(),
                                 relationCompany.getNames().stream().findFirst().get().getName(),
                                 relationCompany.getForm().stream().findFirst().get().getLongDescription(),
