@@ -120,6 +120,24 @@
                 "value": "OPLØST EFTER FUSION"
               }
             }
+          },
+          {
+            "name": "companyStatusValidity.GTE",
+            "in": "query",
+            "description": "validFrom is after this time",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyStatusValidity.LTE",
+            "in": "query",
+            "description": "validFrom is before this time",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
           }
         ],
         "responses": {
@@ -276,7 +294,7 @@
     "/eskat/companyParticipantConnection/1/rest/search": {
       "get": {
         "summary": "Find ansvarlige deltagere i form af ejerskab af virksomheder",
-        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden. <br/>Der kan enten fremsøges på CPR-nummer/Navn på personen, og der leveres så alle relationer som tilhører denne person. Alternativt kan der søges på CVR-nummer, selskabsnavn eller aktivitetsstatys for virksomheden, og her kan tilføjes datoattributter for virksomhedens start/stop. <br/>Hvis en parameter har værdien null, så leveres denne ikke.",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden. <br/>Der kan enten fremsøges på CPR-nummer/Navn på personen, og der leveres så alle relationer som tilhører denne person. Alternativt kan der søges på CVR-nummer, selskabsnavn eller aktivitetsstatus for virksomheden, og her kan tilføjes datoattributter for virksomhedens start/stop. <br/>Datoansvarlighedsintervallet leveres som start slut tidspunkterne for den nyeste relation mellem personen og virksomheden<br/>Hvis en parameter har værdien null, så leveres denne ikke.",
         "parameters": [
           {
             "name": "cpr",
@@ -349,7 +367,14 @@
             "schema": {
               "type": "string"
             },
-            "example": "Active"
+            "examples": {
+              "Aktiv": {
+                "value": "Aktiv"
+              },
+              "Inaktiv": {
+                "value": "!Aktiv"
+              }
+            },
           },
           {
             "name": "companystartTime.GTE",
@@ -370,7 +395,7 @@
             "example": "2020-01-01"
           },
           {
-            "name": "relationendTime.GTE",
+            "name": "companyendTime.GTE",
             "in": "query",
             "description": "Virksomhedens ophørstidspunkt skal være efter denne dato",
             "schema": {
@@ -379,9 +404,9 @@
             "example": "2020-01-01"
           },
           {
-            "name": "relationendTime.LTE",
+            "name": "companyendTime.LTE",
             "in": "query",
-            "description": "Virksomhedens starttidspunkt skal være før denne dato",
+            "description": "Virksomhedens ophørstidspunkt skal være før denne dato",
             "schema": {
               "type": "string"
             },

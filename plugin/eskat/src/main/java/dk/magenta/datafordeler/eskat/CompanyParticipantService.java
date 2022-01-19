@@ -10,9 +10,7 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
 import dk.magenta.datafordeler.eskat.query.EskatCompanyRecordQuery;
@@ -27,10 +25,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/eskat/companyParticipantConnection/1/rest")
@@ -214,14 +210,15 @@ public class CompanyParticipantService {
                             companyTo = DateConverter.dateConvert(lifeCycle.getValidTo());
                         }
 
+                        CvrRecordPeriod period = findValidity(participant);
                         ParticipantEntity participantObject = new ParticipantEntity(company.getCvrNumberString(),
-                                participant.getRelationParticipantRecord().getBusinessKey()!=null? Long.toString(participant.getRelationParticipantRecord().getBusinessKey()) : null,
+                                participant.getParticipantRecord()!=null? Long.toString(participant.getRelationParticipantRecord().getBusinessKey()) : null,
                                 participant.getRelationParticipantRecord().getNames().stream().findFirst().get().getName(),
                                 company.getNames().current().stream().findFirst().get().getName(),
                                 form!=null?form.getLongDescription() : null,
                                 statusRecord!=null?statusRecord.getStatusText() : null,
-                                DateConverter.dateConvert(participant.getEffectFrom()),
-                                DateConverter.dateConvert(participant.getEffectTo()),
+                                period!=null?DateConverter.dateConvert(period.getValidFrom()):null,
+                                period!=null?DateConverter.dateConvert(period.getValidTo()):null,
                                 companyFrom, companyTo);
                         oList.add(participantObject);
                     }
@@ -235,6 +232,7 @@ public class CompanyParticipantService {
                         RelationCompanyRecord relationCompany = participantRelation.getRelationCompanyRecord();
 
                         StatusRecord statusRecord = relationCompany.getStatus().stream().findFirst().orElse(null);
+                        CvrRecordPeriod period = findValidity(participantRelation);
                         ParticipantEntity participantObject = new ParticipantEntity(
                                 Long.toString(relationCompany.getCvrNumber()),
                                 participant.getBusinessKey()!=null? Long.toString(participant.getBusinessKey()) : null,
@@ -242,8 +240,8 @@ public class CompanyParticipantService {
                                 relationCompany.getNames().stream().findFirst().get().getName(),
                                 relationCompany.getForm().stream().findFirst().get().getLongDescription(),
                                 statusRecord!=null?statusRecord.getStatusText() : null,
-                                DateConverter.dateConvert(participantRelation.getEffectFrom()),
-                                DateConverter.dateConvert(participantRelation.getEffectTo()),
+                                period!=null?DateConverter.dateConvert(period.getValidFrom()):null,
+                                period!=null?DateConverter.dateConvert(period.getValidTo()):null,
                                 DateConverter.dateConvert(relationCompany.getLifecycle().stream().findFirst().get().getValidFrom()),
                                 DateConverter.dateConvert(relationCompany.getLifecycle().stream().findFirst().get().getValidTo()));
                         oList.add(participantObject);
@@ -255,6 +253,23 @@ public class CompanyParticipantService {
         } catch (Exception e) {
             throw new DataStreamException(e);
         }
+    }
+
+    /**
+     * Find the validity of the current participants relation.
+     * The correct element is found by selecting the last organization, which is the newest one, after that the validity of any value is selected
+     * @param participantRelation
+     * @return
+     */
+    private CvrRecordPeriod findValidity(CompanyParticipantRelationRecord participantRelation) {
+        Set<AttributeRecord> attRecord = participantRelation.getOrganizations().stream().reduce((first, second) -> second).get().getAttributes();
+        if(attRecord!=null&&attRecord.size()>0) {
+            Set<AttributeValueRecord> attributes = attRecord.stream().findFirst().orElse(null).getValues();
+            if(attributes!=null&&attributes.size()>0) {
+                return attributes.stream().findFirst().orElse(null).getValidity();
+            }
+        }
+        return null;
     }
 
 
