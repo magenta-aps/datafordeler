@@ -6,10 +6,8 @@ import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.output.CompanyRecordOutputWrapper;
-import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
-import dk.magenta.datafordeler.cvr.records.AddressRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
-import dk.magenta.datafordeler.cvr.records.SecNameRecord;
+import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.eskat.utils.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,6 +47,17 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
         }
         if(!addressSet.isEmpty()) {
             container.addNontemporal(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, addressSet.stream().findFirst().get().getMunicipality().getMunicipalityCode() + "");
+            container.addNontemporal(AddressRecord.IO_FIELD_POSTCODE, addressSet.stream().findFirst().get().getPostnummer());
+            container.addNontemporal(AddressRecord.IO_FIELD_POSTDISTRICT, addressSet.stream().findFirst().get().getPostdistrikt());
+        }
+        StatusRecord statusRecord = record.getStatus().current().stream().findFirst().orElse(null);
+        if(statusRecord!=null) {
+            container.addNontemporal(StatusRecord.IO_FIELD_STATUSCODE,  record.getStatus().current().stream().findFirst().get().getStatusText());
+        }
+        if(record.getLifecycle().current().size()>0) {
+            LifecycleRecord lifeCycle = record.getLifecycle().current().stream().findFirst().get();
+            container.addNontemporal("startdato", DateConverter.dateConvert(lifeCycle.getValidFrom()));
+            container.addNontemporal("slutdato", DateConverter.dateConvert(lifeCycle.getValidTo()));
         }
     }
 
