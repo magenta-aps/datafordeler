@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.eskat;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.AccessRequiredException;
 import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -86,6 +87,8 @@ public class CompanyRecordListService extends CompanyRecordService {
     @Override
     public List<ResultSet<CompanyRecord>> searchByQuery(CompanyRecordQuery query, Session session) {
         List<ResultSet<CompanyRecord>> allRecords = new ArrayList<>();
+
+        query.setEffectToAfter(BaseQuery.ALWAYSTIMEINTERVAL);
 
         List<ResultSet<CompanyRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {

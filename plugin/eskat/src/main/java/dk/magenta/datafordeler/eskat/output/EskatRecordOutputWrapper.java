@@ -33,29 +33,35 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
         return this.objectMapper;
     }
 
+    /**
+     * We are not using the current functionality here, since we also need to find information about closed companies, we find the last attribute with .reduce((first, second) -> second)
+     * @param oContainer
+     * @param record
+     * @param mode
+     */
     @Override
     protected void fillContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         container.addNontemporal(CompanyRecord.IO_FIELD_CVR_NUMBER, record.getCvrNumber());
-        if(!record.getNames().current().isEmpty()) {
-            container.addNontemporal("navn", record.getNames().current().stream().findFirst().get().getName());
+        if(!record.getNames().isEmpty()) {
+            container.addNontemporal("navn", record.getNames().stream().reduce((first, second) -> second).get().getName());
         }
-        List<AddressRecord> addressSet = record.getLocationAddress().current();
+        BitemporalSet<AddressRecord> addressSet = record.getLocationAddress();
         if(addressSet.size()==0) {
-            addressSet = record.getPostalAddress().current();
+            addressSet = record.getPostalAddress();
         }
         if(!addressSet.isEmpty()) {
-            container.addNontemporal(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, addressSet.stream().findFirst().get().getMunicipality().getMunicipalityCode() + "");
-            container.addNontemporal(AddressRecord.IO_FIELD_POSTCODE, addressSet.stream().findFirst().get().getPostnummer());
-            container.addNontemporal(AddressRecord.IO_FIELD_POSTDISTRICT, addressSet.stream().findFirst().get().getPostdistrikt());
+            container.addNontemporal(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, addressSet.stream().reduce((first, second) -> second).get().getMunicipality().getMunicipalityCode() + "");
+            container.addNontemporal(AddressRecord.IO_FIELD_POSTCODE, addressSet.stream().reduce((first, second) -> second).get().getPostnummer());
+            container.addNontemporal(AddressRecord.IO_FIELD_POSTDISTRICT, addressSet.stream().reduce((first, second) -> second).get().getPostdistrikt());
         }
-        StatusRecord statusRecord = record.getStatus().current().stream().findFirst().orElse(null);
+        StatusRecord statusRecord = record.getStatus().stream().reduce((first, second) -> second).orElse(null);
         if(statusRecord!=null) {
-            container.addNontemporal(StatusRecord.IO_FIELD_STATUSCODE,  record.getStatus().current().stream().findFirst().get().getStatusText());
+            container.addNontemporal(StatusRecord.IO_FIELD_STATUSCODE,  record.getStatus().stream().reduce((first, second) -> second).get().getStatusText());
         }
-        if(record.getLifecycle().current().size()>0) {
-            LifecycleRecord lifeCycle = record.getLifecycle().current().stream().findFirst().get();
+        if(record.getLifecycle().size()>0) {
+            LifecycleRecord lifeCycle = record.getLifecycle().stream().reduce((first, second) -> second).get();
             container.addNontemporal("startdato", DateConverter.dateConvert(lifeCycle.getValidFrom()));
             container.addNontemporal("slutdato", DateConverter.dateConvert(lifeCycle.getValidTo()));
         }
