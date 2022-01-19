@@ -185,7 +185,7 @@
             "example": ""
           },
           {
-            "name": "companyEndDate.GTE",
+            "name": "companyEndDate.LTE",
             "in": "query",
             "description": "Company valid interval",
             "schema": {
