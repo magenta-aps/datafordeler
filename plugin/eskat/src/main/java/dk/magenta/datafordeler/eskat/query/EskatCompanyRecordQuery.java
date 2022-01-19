@@ -122,6 +122,11 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
         this.setCompanyStatus(parameters.getI("companyStatus"));
         this.setCompanyStatusValidityFromGTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidity.GTE")));
         this.setCompanyStatusValidityFromLTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidity.LTE")));
+
+        this.setCompanyStartDateGTE(DateConverter.parseDate(parameters.getFirst("companyStartDate.GTE")));
+        this.setCompanyStartDateLTE(DateConverter.parseDate(parameters.getFirst("companyStartDate.LTE")));
+        this.setCompanyEndDateGTE(DateConverter.parseDate(parameters.getFirst("companyEndDate.GTE")));
+        this.setCompanyEndDateLTE(DateConverter.parseDate(parameters.getFirst("companyEndDate.LTE")));
     }
 
     @Override
