@@ -14,7 +14,7 @@
     "/eskat/1/companystatus/list": {
       "get": {
         "summary": "Aktuelle status for virksomheder i datafordeleren",
-        "description": "Ved kald til denne service kan hentes alle aktuelle status for virksomheder i datafordeleren. Der appendes en status til den status der er hentet fra det danske CVR-register. For virksomheder med status forskellig fra NORMAL, Aktiv og Fremtid returneres 'Ophørt:  + status' for alle andre status returneres 'Aktiv: +status'",
+        "description": "Ved kald til denne service kan hentes alle aktuelle status for virksomheder i datafordeleren. Der appendes en status til den status der er hentet fra det danske CVR-register. For virksomheder med status forskellig fra NORMAL, Aktiv og Fremtid returneres 'Ophørt:  + status' for alle andre status returneres 'Aktiv: +status'. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/companystatus/list",
         "responses": {
           "200": {
             "description": "Aktuelle status for virksomheder i datafordeleren",
@@ -138,6 +138,60 @@
               "type": "string"
             },
             "example": ""
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Search page",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Size of response",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyStartDate.GTE",
+            "in": "query",
+            "description": "Company valid interval",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyStartDate.LTE",
+            "in": "query",
+            "description": "Company valid interval",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyEndDate.GTE",
+            "in": "query",
+            "description": "Company valid interval",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyEndDate.GTE",
+            "in": "query",
+            "description": "Company valid interval",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
           }
         ],
         "responses": {
@@ -187,6 +241,22 @@
                           "kommuneKode": {
                             "type": "string",
                             "example": "956"
+                          },
+                          "postnummer": {
+                            "type": "string",
+                            "example": "3905"
+                          },
+                          "postdistrikt": {
+                            "type": "string",
+                            "example": "Nuuk"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-01-01"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-01-01"
                           }
                         }
                       }
@@ -202,7 +272,7 @@
     "/eskat/companydetail/1/rest/{cvr}": {
       "get": {
         "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer",
-        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens beliggenhedsadresse. Hvis et felt ikke har nogen værdi, så udelades det",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens beliggenhedsadresse. Hvis et felt ikke har nogen værdi, så udelades det. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companydetail/1/rest/{cvr}",
         "responses": {
           "200": {
             "description": "Ved succesfuldt opslag leveres information på den fremfundne virksomhed",
@@ -294,7 +364,7 @@
     "/eskat/companyParticipantConnection/1/rest/search": {
       "get": {
         "summary": "Find ansvarlige deltagere i form af ejerskab af virksomheder",
-        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden. <br/>Der kan enten fremsøges på CPR-nummer/Navn på personen, og der leveres så alle relationer som tilhører denne person. Alternativt kan der søges på CVR-nummer, selskabsnavn eller aktivitetsstatus for virksomheden, og her kan tilføjes datoattributter for virksomhedens start/stop. <br/>Datoansvarlighedsintervallet leveres som start slut tidspunkterne for den nyeste relation mellem personen og virksomheden<br/>Hvis en parameter har værdien null, så leveres denne ikke.",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden. <br/>Der kan enten fremsøges på CPR-nummer/Navn på personen, og der leveres så alle relationer som tilhører denne person. Alternativt kan der søges på CVR-nummer, selskabsnavn eller aktivitetsstatus for virksomheden, og her kan tilføjes datoattributter for virksomhedens start/stop. <br/>Datoansvarlighedsintervallet leveres som start slut tidspunkterne for den nyeste relation mellem personen og virksomheden<br/>Hvis en parameter har værdien null, så leveres denne ikke. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companyParticipantConnection1/rest/search",
         "parameters": [
           {
             "name": "cpr",
@@ -467,7 +537,7 @@
     "/eskat/punit/1/rest/{pNummer}": {
       "get": {
         "summary": "Find produktionsenheder",
-        "description": "Servicen giver mulighed for at fremfinde detaljer om en specifik produktionsenhed",
+        "description": "Servicen giver mulighed for at fremfinde detaljer om en specifik produktionsenhed. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/punit/1/rest{pNummer}",
         "responses": {
           "200": {
             "description": "Ved succesfuldt opslag leveres information på den givne virksomhed",

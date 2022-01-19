@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
+import dk.magenta.datafordeler.core.exception.InvalidParameterException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
@@ -106,6 +107,9 @@ public class CompanyParticipantService {
         participantRecordQuery.setEffectToAfter(now);
         participantRecordQuery.setPage(page);
         participantRecordQuery.setPageSize(pageSize);
+        if(participantRecordQuery.getPageSize()>100) {
+            throw new InvalidParameterException("pageSize");
+        }
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
