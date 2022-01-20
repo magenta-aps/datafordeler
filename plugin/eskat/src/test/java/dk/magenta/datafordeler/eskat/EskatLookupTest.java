@@ -559,7 +559,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv",
+                "/eskat/companyParticipantConnection/1/rest/search?aktivitet=Aktiv",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -568,7 +568,7 @@ public class EskatLookupTest {
         Assert.assertEquals(true, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=!Aktiv",
+                "/eskat/companyParticipantConnection/1/rest/search?aktivitet=!Aktiv",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -577,7 +577,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companystartTime.LTE=1970-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?aktivitet=Aktiv&companystartTime.LTE=1970-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -586,7 +586,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companystartTime.LTE=2000-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?aktivitet=Aktiv&companystartTime.LTE=2000-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -595,7 +595,7 @@ public class EskatLookupTest {
         Assert.assertEquals(true, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companystartTime.GTE=1990-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?aktivitet=Aktiv&companystartTime.GTE=1990-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -604,7 +604,7 @@ public class EskatLookupTest {
         Assert.assertEquals(true, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companystartTime.GTE=2020-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?aktivitet=Aktiv&companystartTime.GTE=2020-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -613,7 +613,7 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
-                "/eskat/companyParticipantConnection/1/rest/search?status=Aktiv&companyendTime.LTE=2022-01-01",
+                "/eskat/companyParticipantConnection/1/rest/search?aktivitet=Aktiv&companyendTime.LTE=2022-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class

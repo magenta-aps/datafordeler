@@ -50,7 +50,7 @@ public class CompanyParticipantService {
                                                  @RequestParam(value = "personNavn",required=false, defaultValue = "") String personNavn,
                                                  @RequestParam(value = "cvr",required=false, defaultValue = "") String cvr,
                                                  @RequestParam(value = "firmaNavn",required=false, defaultValue = "") String companyName,
-                                                 @RequestParam(value = "status",required=false, defaultValue = "") String status,
+                                                 @RequestParam(value = "aktivitet",required=false, defaultValue = "") String aktivitet,
                                                  @RequestParam(value = "companystartTime.LTE",required=false, defaultValue = "") String companystartTimeLTE,
                                                  @RequestParam(value = "companystartTime.GTE",required=false, defaultValue = "") String companystartTimeGTE,
                                                  @RequestParam(value = "companyendTime.LTE",required=false, defaultValue = "") String companyendTimeLTE,
@@ -79,10 +79,10 @@ public class CompanyParticipantService {
         if(!"".equals(companyName)) {
             companyRecordQuery.setVirksomhedsnavn(companyName);
         }
-        if("Aktiv".equals(status)) {
+        if("Aktiv".equals(aktivitet)) {
             companyRecordQuery.setCompanyStatus(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
         }
-        if("!Aktiv".equals(status)) {
+        if("!Aktiv".equals(aktivitet)) {
             companyRecordQuery.setCompanyStatus(Arrays.asList("Ikke Aktiv", "UNDER REKONSTRUKTION", "OPLØST EFTER KONKURS",
             "UNDER KONKURS", "TVANGSOPLØST", "UNDER FRIVILLIG LIKVIDATION", "UNDER REASSUMERING", "OPLØST EFTER SPALTNING",
             "UDEN RETSVIRKNING", "SLETTET", "UNDER TVANGSOPLØSNING", "OPLØST EFTER ERKLÆRING", "OPLØST EFTER FRIVILLIG LIKVIDATION", "OPLØST EFTER FUSION"));
@@ -100,6 +100,12 @@ public class CompanyParticipantService {
         if(!"".equals(companyendTimeGTE)) {
             companyRecordQuery.setCompanyEndDateGTE(DateConverter.parseDate(companyendTimeGTE));
         }
+
+        companyRecordQuery.setRegistrationFromBefore(now);
+        companyRecordQuery.setRegistrationToAfter(now);
+        companyRecordQuery.setEffectFromBefore(now);
+        companyRecordQuery.setPage(page);
+        companyRecordQuery.setPageSize(pageSize);
 
         participantRecordQuery.setRegistrationFromBefore(now);
         participantRecordQuery.setRegistrationToAfter(now);

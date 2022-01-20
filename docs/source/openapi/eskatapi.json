@@ -271,7 +271,7 @@
     },
     "/eskat/companydetail/1/rest/{cvr}": {
       "get": {
-        "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer",
+        "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer. Der fremsøges i virksomheder, som er i drift, og ikke i ophørte virksomheder.",
         "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens beliggenhedsadresse. Hvis et felt ikke har nogen værdi, så udelades det. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companydetail/1/rest/{cvr}",
         "responses": {
           "200": {
@@ -357,6 +357,22 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke kan findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Entity could not be found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -431,9 +447,9 @@
             }
           },
           {
-            "name": "status",
+            "name": "aktivitet",
             "in": "query",
-            "description": "Virksomhedsstatus",
+            "description": "Er virksomheden aktiv",
             "schema": {
               "type": "string"
             },
@@ -444,7 +460,7 @@
               "Inaktiv": {
                 "value": "!Aktiv"
               }
-            },
+            }
           },
           {
             "name": "companystartTime.GTE",
@@ -623,6 +639,22 @@
                           "example": ["1234567890", "2345678901"]
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte enhed ikke kan findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Entity could not be found"
                     }
                   }
                 }
