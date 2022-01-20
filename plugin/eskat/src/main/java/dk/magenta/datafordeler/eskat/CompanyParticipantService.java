@@ -189,9 +189,9 @@ public class CompanyParticipantService {
      */
     private CvrRecordPeriod findValidity(CompanyParticipantRelationRecord participantRelation) {
         Set<AttributeRecord> attRecord = participantRelation.getOrganizations().stream().reduce((first, second) -> second).get().getAttributes();
-        if(attRecord!=null&&attRecord.size()>0) {
+        if(attRecord!=null && !attRecord.isEmpty()) {
             Set<AttributeValueRecord> attributes = attRecord.stream().findFirst().orElse(null).getValues();
-            if(attributes!=null&&attributes.size()>0) {
+            if(attributes!=null && !attributes.isEmpty()) {
                 return attributes.stream().findFirst().orElse(null).getValidity();
             }
         }

@@ -48,11 +48,10 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
             container.addNontemporal("navn", record.getNames().stream().reduce((first, second) -> second).get().getName());
         }
         BitemporalSet<AddressRecord> addressSet = record.getLocationAddress();
-        if(addressSet.size()==0) {
+        if(addressSet.isEmpty()) {
             addressSet = record.getPostalAddress();
-        }
-        if(!addressSet.isEmpty()) {
-            container.addNontemporal(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, addressSet.stream().reduce((first, second) -> second).get().getMunicipality().getMunicipalityCode() + "");
+        } else {
+            container.addNontemporal(AddressMunicipalityRecord.IO_FIELD_MUNICIPALITY_CODE, addressSet.stream().reduce((first, second) -> second).get().getMunicipality().getMunicipalityCode().toString());
             container.addNontemporal(AddressRecord.IO_FIELD_POSTCODE, addressSet.stream().reduce((first, second) -> second).get().getPostnummer());
             container.addNontemporal(AddressRecord.IO_FIELD_POSTDISTRICT, addressSet.stream().reduce((first, second) -> second).get().getPostdistrikt());
         }

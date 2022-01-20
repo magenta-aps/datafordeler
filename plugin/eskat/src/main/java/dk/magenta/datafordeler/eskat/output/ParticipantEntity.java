@@ -29,7 +29,6 @@ public class ParticipantEntity {
         this.responsibleend = responsibleend;
         this.companystart = companystart;
         this.companyend = companyend;
-
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

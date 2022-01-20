@@ -271,6 +271,5 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.addCondition("roadcode", this.vejkode, Integer.class);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
         this.addCondition("businessKey", this.getBusinessKey(), Long.class);
-
     }
 }

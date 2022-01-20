@@ -13,7 +13,6 @@ public class PunitEntity {
         this.pNummer = pNummer;
         this.name = name;
         this.land = land;
-
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
