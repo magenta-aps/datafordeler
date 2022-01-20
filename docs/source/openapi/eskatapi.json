@@ -36,6 +36,7 @@
     "/eskat/company/1/rest/search": {
       "get": {
         "summary": "Fremsøgning af virksomheder i datafordeleren",
+        "description": "Ved kald til denne service kan hentes en liste over virksomheder som matcher fremsøgningskriterierne. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/company/1/rest/search",
         "parameters": [
           {
             "name": "cvrnummer",
@@ -120,24 +121,6 @@
                 "value": "OPLØST EFTER FUSION"
               }
             }
-          },
-          {
-            "name": "companyStatusValidity.GTE",
-            "in": "query",
-            "description": "validFrom is after this time",
-            "schema": {
-              "type": "string"
-            },
-            "example": ""
-          },
-          {
-            "name": "companyStatusValidity.LTE",
-            "in": "query",
-            "description": "validFrom is before this time",
-            "schema": {
-              "type": "string"
-            },
-            "example": ""
           },
           {
             "name": "page",
