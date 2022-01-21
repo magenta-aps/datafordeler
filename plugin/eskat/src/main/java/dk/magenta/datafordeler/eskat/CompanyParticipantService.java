@@ -125,9 +125,9 @@ public class CompanyParticipantService {
                 for(CompanyRecord company : companyEntities) {
                     List<CompanyParticipantRelationRecord> participants = company.getParticipants().current();
                     for(CompanyParticipantRelationRecord participant : participants) {
-                        FormRecord form = company.getCompanyForm().current().stream().findFirst().orElse(null);
-                        StatusRecord statusRecord = company.getStatus().current().stream().findFirst().orElse(null);
-                        LifecycleRecord lifeCycle = company.getLifecycle().current().stream().findFirst().orElse(null);
+                        FormRecord form = company.getCompanyForm().getLast(true, false);
+                        StatusRecord statusRecord = company.getStatus().getLast(true, false);
+                        LifecycleRecord lifeCycle = company.getLifecycle().getLast(true, false);
                         String companyFrom = null;
                         String companyTo = null;
                         if(lifeCycle!=null) {
@@ -161,14 +161,14 @@ public class CompanyParticipantService {
                         ParticipantEntity participantObject = new ParticipantEntity(
                                 Long.toString(relationCompany.getCvrNumber()),
                                 participant.getBusinessKey()!=null? Long.toString(participant.getBusinessKey()) : null,
-                                participant.getNames().current().stream().findFirst().get().getName(),
-                                relationCompany.getNames().stream().findFirst().get().getName(),
-                                relationCompany.getForm().stream().findFirst().get().getLongDescription(),
+                                participant.getNames().getLast(true, false).getName(),
+                                relationCompany.getNames().getLast(true, false).getName(),
+                                relationCompany.getForm().getLast(true, false).getLongDescription(),
                                 statusRecord!=null?statusRecord.getStatusText() : null,
                                 period!=null?DateConverter.dateConvert(period.getValidFrom()):null,
                                 period!=null?DateConverter.dateConvert(period.getValidTo()):null,
-                                DateConverter.dateConvert(relationCompany.getLifecycle().stream().findFirst().get().getValidFrom()),
-                                DateConverter.dateConvert(relationCompany.getLifecycle().stream().findFirst().get().getValidTo()));
+                                DateConverter.dateConvert(relationCompany.getLifecycle().getLast(true, false).getValidFrom()),
+                                DateConverter.dateConvert(relationCompany.getLifecycle().getLast(true, false).getValidTo()));
                         oList.add(participantObject);
                     }
                 }

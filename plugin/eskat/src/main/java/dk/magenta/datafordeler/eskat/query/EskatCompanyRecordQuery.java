@@ -30,12 +30,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
         }
     }
 
-    public void setCompanyStatus(int organizationType) {
-        this.companyStatus.clear();
-        this.addCompanyStatus(Integer.toString(organizationType));
-    }
     public void setCompanyStatus(String organizationType) {
-        this.companyStatus.clear();
+        this.clearCompanyStatus();
         this.addCompanyStatus(organizationType);
     }
 
