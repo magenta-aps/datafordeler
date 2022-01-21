@@ -17,7 +17,6 @@ import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
 import dk.magenta.datafordeler.eskat.query.EskatCompanyRecordQuery;
 import dk.magenta.datafordeler.eskat.query.EskatParticipantRecordQuery;
 import dk.magenta.datafordeler.eskat.utils.DateConverter;
-import dk.magenta.datafordeler.eskat.utils.ParticipantUnwrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -67,7 +66,7 @@ public class CompanyParticipantService {
 
         EskatParticipantRecordQuery participantRecordQuery = new EskatParticipantRecordQuery();
         EskatCompanyRecordQuery companyRecordQuery = new EskatCompanyRecordQuery();
-        if(!"".equals(cpr)) {
+        if(!cpr.isEmpty()) {
             participantRecordQuery.setBusinessKey(cpr);
         }
         if(!"".equals(personNavn)) {
