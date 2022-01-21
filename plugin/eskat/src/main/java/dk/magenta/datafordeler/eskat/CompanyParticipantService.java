@@ -139,7 +139,7 @@ public class CompanyParticipantService {
                         ParticipantEntity participantObject = new ParticipantEntity(company.getCvrNumberString(),
                                 participant.getParticipantRecord()!=null? Long.toString(participant.getRelationParticipantRecord().getBusinessKey()) : null,
                                 participant.getRelationParticipantRecord().getNames().stream().findFirst().get().getName(),
-                                company.getNames().current().stream().findFirst().get().getName(),
+                                company.getNames().getLast(true, false).getName(),
                                 form!=null?form.getLongDescription() : null,
                                 statusRecord!=null?statusRecord.getStatusText() : null,
                                 period!=null?DateConverter.dateConvert(period.getValidFrom()):null,
