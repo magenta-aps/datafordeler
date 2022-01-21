@@ -12,7 +12,9 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
+import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -62,14 +64,11 @@ public class CompanyRecordDetailService {
     @GetMapping("/{cvr}")
     @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     ResponseEntity companyDetail(HttpServletRequest request, @PathVariable String cvr) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
-        LoggerHelper loggerHelper = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            loggerHelper = new LoggerHelper(log, request, user);
-            loggerHelper.info(
-                    "Incoming REST request"
-            );
-            checkAccess(user);
+            LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
+            loggerHelper.info("Incoming request CompanyPunitRecordService ");
+            this.checkAndLogAccess(loggerHelper);
 
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setCvrNumre(cvr);
@@ -99,9 +98,13 @@ public class CompanyRecordDetailService {
         }
     }
 
-    protected void checkAccess(DafoUserDetails dafoUserDetails) throws AccessDeniedException {
-        CvrAccessChecker.checkAccess(dafoUserDetails);
+    protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        try {
+            loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
+        }
+        catch (AccessDeniedException e) {
+            loggerHelper.info("Access denied: " + e.getMessage());
+            throw(e);
+        }
     }
-
-
 }

@@ -59,7 +59,7 @@ public class CompanyParticipantService {
                                                  HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
-        loggerHelper.info("Incoming request for cvr ownership with cpr " + cpr);
+        loggerHelper.info("Incoming request CompanyParticipantService ");
         this.checkAndLogAccess(loggerHelper);
 
         OffsetDateTime now = OffsetDateTime.now();

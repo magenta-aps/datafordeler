@@ -9,7 +9,9 @@ import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
+import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.eskat.output.PunitRecordOutputWrapper;
@@ -53,14 +55,11 @@ public class CompanyPunitRecordService {
     @GetMapping("/{pnummer}")
     @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     ResponseEntity punitDetail(HttpServletRequest request, @PathVariable String pnummer) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
-        LoggerHelper loggerHelper = null;
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            loggerHelper = new LoggerHelper(log, request, user);
-            loggerHelper.info(
-                    "Incoming REST request"
-            );
-            checkAccess(user);
+            LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
+            loggerHelper.info("Incoming request CompanyPunitRecordService ");
+            this.checkAndLogAccess(loggerHelper);
 
             CompanyUnitRecordQuery query = new CompanyUnitRecordQuery();
             query.setPNummer(pnummer);
@@ -76,7 +75,7 @@ public class CompanyPunitRecordService {
 
             ObjectNode objectNode = punitOutputWrapper.fillContainer(companyUnitEntity);
             return ResponseEntity.ok(objectNode);
-        } catch (AccessDeniedException | AccessRequiredException | InvalidCertificateException | InvalidTokenException e) {
+        } catch (AccessDeniedException | InvalidCertificateException | InvalidTokenException e) {
             String errorMessage = "Failed accessing company";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
@@ -85,7 +84,13 @@ public class CompanyPunitRecordService {
         }
     }
 
-    protected void checkAccess(DafoUserDetails dafoUserDetails) throws AccessDeniedException, AccessRequiredException {
-        CvrAccessChecker.checkAccess(dafoUserDetails);
+    protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        try {
+            loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
+        }
+        catch (AccessDeniedException e) {
+            loggerHelper.info("Access denied: " + e.getMessage());
+            throw(e);
+        }
     }
 }
