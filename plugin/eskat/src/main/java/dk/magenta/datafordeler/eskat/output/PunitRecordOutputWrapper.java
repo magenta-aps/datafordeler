@@ -25,8 +25,8 @@ public class PunitRecordOutputWrapper {
         ObjectNode container = objectMapper.createObjectNode();
 
         container.put(CompanyUnitRecord.IO_FIELD_P_NUMBER, record.getpNumber());
-        AddressRecord addressList = record.getLocationAddress().current().stream().findFirst().orElse(null);
-        container.put(CompanyUnitRecord.IO_FIELD_NAMES, record.getNames().current().stream().findFirst().get().getName());
+        AddressRecord addressList = record.getLocationAddress().currentStream().findFirst().orElse(null);
+        container.put(CompanyUnitRecord.IO_FIELD_NAMES, record.getNames().currentStream().findFirst().get().getName());
         if(addressList!=null) {
             container.put(AddressRecord.IO_FIELD_CONAME, addressList.getCoName());
             container.put(AddressRecord.IO_FIELD_POSTBOX, addressList.getPostBox());
@@ -38,10 +38,10 @@ public class PunitRecordOutputWrapper {
             container.put(AddressRecord.IO_FIELD_COUNTRYCODE, addressList.getCountryCode());
         }
 
-        ContactRecord emailContact = record.getEmailAddress().current().stream().findFirst().orElse(null);
+        ContactRecord emailContact = record.getEmailAddress().currentStream().findFirst().orElse(null);
         container.put(CompanyUnitRecord.IO_FIELD_FAX, emailContact==null ? "":emailContact.getContactInformation());
 
-        ContactRecord faxContact = record.getFaxNumber().current().stream().findFirst().orElse(null);
+        ContactRecord faxContact = record.getFaxNumber().currentStream().findFirst().orElse(null);
         container.put(CompanyUnitRecord.IO_FIELD_EMAIL, faxContact==null ? "":faxContact.getContactInformation());
 
         container.put("startdato", DateConverter.dateConvert(record.getMetadata().getValidFrom()));

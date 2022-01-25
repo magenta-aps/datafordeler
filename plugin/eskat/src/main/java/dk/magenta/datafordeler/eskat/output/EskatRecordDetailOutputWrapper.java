@@ -56,7 +56,7 @@ public class EskatRecordDetailOutputWrapper {
 
         List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(Integer.toString(f.getpNumber()),
                 f.getNames().current().isEmpty() ? null : f.getNames().current().stream().findFirst().get().getName(),
-                f.getLocationAddress().current().size()>0?f.getLocationAddress().current().stream().findFirst().get().getCountryCode():null
+                f.getLocationAddress().current().isEmpty() ? null : f.getLocationAddress().current().stream().findFirst().get().getCountryCode()
         )).collect(Collectors.toList());
         ObjectMapper mapper = new ObjectMapper();
         container.putArray(CompanyUnitRecord.IO_FIELD_P_NUMBER, mapper.valueToTree(pUnitList));

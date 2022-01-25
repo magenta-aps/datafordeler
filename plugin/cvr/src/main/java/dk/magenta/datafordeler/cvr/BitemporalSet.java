@@ -23,7 +23,7 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
      * @return
      */
     public List<R> current() {
-        return this.stream().filter(r -> r.getRegistrationTo() == null).filter(r -> r.getEffectTo() == null).collect(Collectors.toList());
+        return this.currentStream().collect(Collectors.toList());
     }
 
     /**

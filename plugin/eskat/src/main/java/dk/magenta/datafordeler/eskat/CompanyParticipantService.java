@@ -59,7 +59,7 @@ public class CompanyParticipantService {
                                                  HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
-        loggerHelper.info("Incoming request CompanyParticipantService ");
+        loggerHelper.info("Incoming request CompanyParticipantService");
         this.checkAndLogAccess(loggerHelper);
 
         OffsetDateTime now = OffsetDateTime.now();
@@ -102,7 +102,8 @@ public class CompanyParticipantService {
 
         companyRecordQuery.setRegistrationFromBefore(now);
         companyRecordQuery.setRegistrationToAfter(now);
-        companyRecordQuery.setEffectFromBefore(now);
+        companyRecordQuery.setRegistrationAt(now);
+        companyRecordQuery.setEffectAt(now);
         companyRecordQuery.setPage(page);
         companyRecordQuery.setPageSize(pageSize);
 
