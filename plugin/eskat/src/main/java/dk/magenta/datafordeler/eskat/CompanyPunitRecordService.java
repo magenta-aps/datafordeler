@@ -58,7 +58,7 @@ public class CompanyPunitRecordService {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
-            loggerHelper.info("Incoming request CompanyPunitRecordService ");
+            loggerHelper.info("Incoming request CompanyPunitRecordService");
             this.checkAndLogAccess(loggerHelper);
 
             CompanyUnitRecordQuery query = new CompanyUnitRecordQuery();

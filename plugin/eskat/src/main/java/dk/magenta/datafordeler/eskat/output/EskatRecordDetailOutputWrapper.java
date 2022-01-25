@@ -29,11 +29,11 @@ public class EskatRecordDetailOutputWrapper {
         OutputWrapper.NodeWrapper container = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
 
         container.put(CompanyRecord.IO_FIELD_CVR_NUMBER, record.getCvrNumber());
-        container.put(BaseNameRecord.IO_FIELD_NAME, record.getNames().current().stream().findFirst().map(f -> f.getName()).orElse(null));
-        container.put(CompanyRecord.IO_FIELD_SECONDARY_NAMES, record.getSecondaryNames().current().stream().findFirst().map(f -> f.getName()).orElse(null));
-        container.put(StatusRecord.IO_FIELD_STATUSCODE, record.getStatus().current().stream().findFirst().map(f -> f.getStatusText()).orElse(null));
+        container.put(BaseNameRecord.IO_FIELD_NAME, record.getNames().currentStream().findFirst().map(f -> f.getName()).orElse(null));
+        container.put(CompanyRecord.IO_FIELD_SECONDARY_NAMES, record.getSecondaryNames().currentStream().findFirst().map(f -> f.getName()).orElse(null));
+        container.put(StatusRecord.IO_FIELD_STATUSCODE, record.getStatus().currentStream().findFirst().map(f -> f.getStatusText()).orElse(null));
 
-        AddressRecord adress = record.getLocationAddress().current().stream().findFirst().orElse(null);
+        AddressRecord adress = record.getLocationAddress().currentStream().findFirst().orElse(null);
         if(adress!=null) {
             container.put(AddressRecord.DB_FIELD_CONAME, adress.getCoName());
             container.put(AddressRecord.IO_FIELD_POSTCODE, adress.getPostnummer());
@@ -54,8 +54,8 @@ public class EskatRecordDetailOutputWrapper {
         container.put(CompanyIndustryRecord.IO_FIELD_TEXT, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryText()).orElse(null));
         container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(null));
 
-        List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(f.getpNumber()+"",
-                f.getNames().current().size()>0?f.getNames().current().stream().findFirst().get().getName():null,
+        List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(Integer.toString(f.getpNumber()),
+                f.getNames().current().isEmpty() ? null : f.getNames().current().stream().findFirst().get().getName(),
                 f.getLocationAddress().current().size()>0?f.getLocationAddress().current().stream().findFirst().get().getCountryCode():null
         )).collect(Collectors.toList());
         ObjectMapper mapper = new ObjectMapper();

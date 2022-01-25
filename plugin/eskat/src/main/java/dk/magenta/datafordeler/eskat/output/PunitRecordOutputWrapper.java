@@ -50,7 +50,7 @@ public class PunitRecordOutputWrapper {
         container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(""));
         container.put(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_CVR_RELATION, record.getMetadata().getNewestCvrRelation());
 
-        List<Integer> participantList = record.getParticipants().current().stream().map(participant -> participant.getRelationParticipantRecord().getBusinessKey()).collect(Collectors.toList());
+        List<Integer> participantList = record.getParticipants().currentStream().map(participant -> participant.getRelationParticipantRecord().getBusinessKey()).collect(Collectors.toList());
         ArrayNode arrayNode = container.putArray(CompanyUnitRecord.IO_FIELD_PARTICIPANTS);
         for (Integer item : participantList) {
             arrayNode.add(item);

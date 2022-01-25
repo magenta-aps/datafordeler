@@ -106,10 +106,8 @@ public class CompanyParticipantService {
         companyRecordQuery.setPage(page);
         companyRecordQuery.setPageSize(pageSize);
 
-        participantRecordQuery.setRegistrationFromBefore(now);
-        participantRecordQuery.setRegistrationToAfter(now);
-        participantRecordQuery.setEffectFromBefore(now);
-        participantRecordQuery.setEffectToAfter(now);
+        participantRecordQuery.setRegistrationAt(now);
+        participantRecordQuery.setEffectAt(now);
         participantRecordQuery.setPage(page);
         participantRecordQuery.setPageSize(pageSize);
         if(participantRecordQuery.getPageSize()>100) {

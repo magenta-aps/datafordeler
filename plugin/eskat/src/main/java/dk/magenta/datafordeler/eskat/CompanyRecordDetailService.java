@@ -82,7 +82,7 @@ public class CompanyRecordDetailService {
                 return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
             }
 
-            List<String> productionUnits = companyEntity.getProductionUnits().current().stream().map(f -> Integer.toString(f.getpNumber())).collect(Collectors.toList());
+            List<String> productionUnits = companyEntity.getProductionUnits().currentStream().map(f -> Integer.toString(f.getpNumber())).collect(Collectors.toList());
             CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
             companyUnitRecordQuery.setPNummer(productionUnits);
             Stream<CompanyUnitRecord> pUnitEntities = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);

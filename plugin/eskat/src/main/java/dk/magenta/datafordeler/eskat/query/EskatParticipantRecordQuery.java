@@ -151,12 +151,6 @@ public class EskatParticipantRecordQuery extends ParticipantRecordQuery {
 
 
     @Override
-    public Map<String, Object> getSearchParameters() {
-        Map<String, Object> map = super.getSearchParameters();
-        return map;
-    }
-
-    @Override
     protected boolean isEmpty() {
         return super.isEmpty() && this.cvrnumber.isEmpty() && this.companyNames.isEmpty() && this.companyStatuses.isEmpty() &&
                 this.relationstartTimeLTE == null && this.relationendTimeGTE == null;
