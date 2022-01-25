@@ -69,13 +69,13 @@ public class CompanyParticipantService {
         if(!cpr.isEmpty()) {
             participantRecordQuery.setBusinessKey(cpr);
         }
-        if(!"".equals(personNavn)) {
+        if(!personNavn.isEmpty()) {
             participantRecordQuery.setNavn(personNavn);
         }
-        if(!"".equals(cvr)) {
+        if(!cvr.isEmpty()) {
             companyRecordQuery.setCvrNumre(cvr);
         }
-        if(!"".equals(companyName)) {
+        if(!companyName.isEmpty()) {
             companyRecordQuery.setVirksomhedsnavn(companyName);
         }
         if("Aktiv".equals(aktivitet)) {
@@ -87,16 +87,16 @@ public class CompanyParticipantService {
             "UDEN RETSVIRKNING", "SLETTET", "UNDER TVANGSOPLØSNING", "OPLØST EFTER ERKLÆRING", "OPLØST EFTER FRIVILLIG LIKVIDATION", "OPLØST EFTER FUSION"));
         }
 
-        if(!"".equals(companystartTimeLTE)) {
+        if(!companystartTimeLTE.isEmpty()) {
             companyRecordQuery.setCompanyStartDateLTE(DateConverter.parseDate(companystartTimeLTE));
         }
-        if(!"".equals(companystartTimeGTE)) {
+        if(!companystartTimeGTE.isEmpty()) {
             companyRecordQuery.setCompanyStartDateGTE(DateConverter.parseDate(companystartTimeGTE));
         }
-        if(!"".equals(companyendTimeLTE)) {
+        if(!companyendTimeLTE.isEmpty()) {
             companyRecordQuery.setCompanyEndDateLTE(DateConverter.parseDate(companyendTimeLTE));
         }
-        if(!"".equals(companyendTimeGTE)) {
+        if(!companyendTimeGTE.isEmpty()) {
             companyRecordQuery.setCompanyEndDateGTE(DateConverter.parseDate(companyendTimeGTE));
         }
 
@@ -155,7 +155,7 @@ public class CompanyParticipantService {
                     for(CompanyParticipantRelationRecord participantRelation : relations) {
                         RelationCompanyRecord relationCompany = participantRelation.getRelationCompanyRecord();
 
-                        StatusRecord statusRecord = relationCompany.getStatus().stream().findFirst().orElse(null);
+                        StatusRecord statusRecord = relationCompany.getStatus().stream().reduce((first, second) -> second).orElse(null);
                         CvrRecordPeriod period = findValidity(participantRelation);
                         ParticipantEntity participantObject = new ParticipantEntity(
                                 Long.toString(relationCompany.getCvrNumber()),

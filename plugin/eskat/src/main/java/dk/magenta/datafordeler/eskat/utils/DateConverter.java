@@ -19,11 +19,11 @@ public class DateConverter {
         }
     }
 
-    public static String dateConvert(LocalDate datetime) {
-        if(datetime==null) {
+    public static String dateConvert(LocalDate date) {
+        if(date==null) {
             return null;
         } else {
-            return datetime.format(formatter);
+            return date.format(formatter);
         }
     }
 

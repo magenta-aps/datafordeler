@@ -99,8 +99,6 @@ public class EskatLookupTest {
             companyEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
-
-
     }
 
 
@@ -267,6 +265,16 @@ public class EskatLookupTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?navne=magent*",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
         response = restTemplate.exchange(
                 "/eskat/company/1/rest/search/?navne=MAGENH*",
                 HttpMethod.GET,
@@ -311,6 +319,16 @@ public class EskatLookupTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(true, response.getBody().contains("25052943"));
+
+        response = restTemplate.exchange(
+                "/eskat/company/1/rest/search/?companyStartDate.LTE=1985-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals(false, response.getBody().contains("25052943"));
+
     }
 
     @Test
@@ -376,7 +394,7 @@ public class EskatLookupTest {
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity;
+        HttpEntity<String> httpEntity;
         ResponseEntity<String> response;
 
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
@@ -431,7 +449,7 @@ public class EskatLookupTest {
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
         ResponseEntity<String> response;
 
         response = restTemplate.exchange(

@@ -44,19 +44,19 @@ public class EskatRecordDetailOutputWrapper {
             container.put(AddressRecord.IO_FIELD_CITY, adress.getCityName());
         }
 
-        container.put(CompanyRecord.IO_FIELD_PHONE, record.getPhoneNumber().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(null));
-        container.put(CompanyRecord.IO_FIELD_EMAIL, record.getEmailAddress().current().stream().findFirst().map(f -> f.getContactInformation()).orElse(null));
+        container.put(CompanyRecord.IO_FIELD_PHONE, record.getPhoneNumber().currentStream().findFirst().map(f -> f.getContactInformation()).orElse(null));
+        container.put(CompanyRecord.IO_FIELD_EMAIL, record.getEmailAddress().currentStream().findFirst().map(f -> f.getContactInformation()).orElse(null));
         container.put(CompanyRecord.DB_FIELD_FAX, record.getFaxNumber().stream().findFirst().map(f -> f.getContactInformation()).orElse(null));
         container.put("startdato", DateConverter.dateConvert(record.getMetadata().getValidFrom()));
         String driftsform = record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getCompanyFormCode()).orElse(null);
         driftsform += "/"+record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getLongDescription()).orElse(null);
         container.put(CompanyMetadataRecord.IO_FIELD_NEWEST_FORM, driftsform);
-        container.put(CompanyIndustryRecord.IO_FIELD_TEXT, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryText()).orElse(null));
-        container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().current().stream().findFirst().map(f -> f.getIndustryCode()).orElse(null));
+        container.put(CompanyIndustryRecord.IO_FIELD_TEXT, record.getPrimaryIndustry().currentStream().findFirst().map(f -> f.getIndustryText()).orElse(null));
+        container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().currentStream().findFirst().map(f -> f.getIndustryCode()).orElse(null));
 
         List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(Integer.toString(f.getpNumber()),
-                f.getNames().current().isEmpty() ? null : f.getNames().current().stream().findFirst().get().getName(),
-                f.getLocationAddress().current().isEmpty() ? null : f.getLocationAddress().current().stream().findFirst().get().getCountryCode()
+                f.getNames().current().isEmpty() ? null : f.getNames().currentStream().findFirst().get().getName(),
+                f.getLocationAddress().current().isEmpty() ? null : f.getLocationAddress().currentStream().findFirst().get().getCountryCode()
         )).collect(Collectors.toList());
         ObjectMapper mapper = new ObjectMapper();
         container.putArray(CompanyUnitRecord.IO_FIELD_P_NUMBER, mapper.valueToTree(pUnitList));

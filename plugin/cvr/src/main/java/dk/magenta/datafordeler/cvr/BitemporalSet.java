@@ -41,13 +41,15 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
      * @return
      */
     public R getLast(boolean removeClosedRegistration, boolean removeClosedRegistrationAndEffect) {
+        Stream<R> stream;
         if(removeClosedRegistrationAndEffect) {
-            return this.currentStream().reduce((first, second) -> second).orElse(null);
+            stream = this.currentStream();
         } else if(removeClosedRegistration) {
-            return this.currentRegistrationStream().reduce((first, second) -> second).orElse(null);
+            stream = this.currentRegistrationStream();
         } else {
-            return this.stream().reduce((first, second) -> second).orElse(null);
+            stream = this.stream();
         }
+        return stream.reduce((first, second) -> second).orElse(null);
     }
 
     /**
@@ -75,7 +77,7 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
     }
 
     /**
-     * Get the stream but with all records removed that is closed in either registrationtime
+     * Get the stream but with only records that are closed in registration-to
      * @return
      */
     public Stream<R> currentRegistrationStream() {

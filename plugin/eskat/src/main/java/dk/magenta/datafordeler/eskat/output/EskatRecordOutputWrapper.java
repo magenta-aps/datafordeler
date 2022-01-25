@@ -57,6 +57,7 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
             container.addNontemporal(AddressRecord.IO_FIELD_POSTCODE, addressSet.stream().reduce((first, second) -> second).get().getPostnummer());
             container.addNontemporal(AddressRecord.IO_FIELD_POSTDISTRICT, addressSet.stream().reduce((first, second) -> second).get().getPostdistrikt());
         }
+        //Det vælges her at levere den nyeste registrerede status på virksomheden
         StatusRecord statusRecord = record.getStatus().stream().reduce((first, second) -> second).orElse(null);
         if(statusRecord!=null) {
             container.addNontemporal(StatusRecord.IO_FIELD_STATUSCODE,  record.getStatus().stream().reduce((first, second) -> second).get().getStatusText());

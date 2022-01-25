@@ -67,12 +67,6 @@ public class CompanyRecordListService extends CompanyRecordService {
     }
 
     @Override
-    public Plugin getPlugin() {
-        return null;
-    }
-
-
-    @Override
     protected void checkAccess(DafoUserDetails dafoUserDetails) throws AccessDeniedException, AccessRequiredException {
         CvrAccessChecker.checkAccess(dafoUserDetails);
     }
