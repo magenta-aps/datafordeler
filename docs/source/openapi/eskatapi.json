@@ -1,0 +1,652 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Datafordeler",
+    "description": "Målgruppen for denne dokumentation er udviklere for systemer i E-skat, som benyttes som aftagere på data.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://dafo.data.gl"
+    }
+  ],
+  "paths": {
+    "/eskat/1/companystatus/list": {
+      "get": {
+        "summary": "Aktuelle status for virksomheder i datafordeleren",
+        "description": "Ved kald til denne service kan hentes alle aktuelle status for virksomheder i datafordeleren. Der appendes en status til den status der er hentet fra det danske CVR-register. For virksomheder med status forskellig fra NORMAL, Aktiv og Fremtid returneres 'Ophørt:  + status' for alle andre status returneres 'Aktiv: +status'. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/companystatus/list",
+        "responses": {
+          "200": {
+            "description": "Aktuelle status for virksomheder i datafordeleren",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": ["Ophørt: OPLØST EFTER FRIVILLIG LIKVIDATION","Aktiv: NORMAL","Ophørt: UNDER FRIVILLIG LIKVIDATION"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eskat/company/1/rest/search": {
+      "get": {
+        "summary": "Fremsøgning af virksomheder i datafordeleren",
+        "description": "Ved kald til denne service kan hentes en liste over virksomheder som matcher fremsøgningskriterierne. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/company/1/rest/search",
+        "parameters": [
+          {
+            "name": "cvrnummer",
+            "in": "query",
+            "description": "CVR nummer",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+          {
+            "name": "navne",
+            "in": "query",
+            "description": "Virksomhedsnavn",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "companyStatus",
+            "in": "query",
+            "description": "Virksomhedsstatus",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "under rekonstruktion": {
+                "value": "UNDER REKONSTRUKTION"
+              },
+              "opløst efter konkurs": {
+                "value": "OPLØST EFTER KONKURS"
+              },
+              "Under konkurs": {
+                "value": "UNDER KONKURS"
+              },
+              "Normalt aktiv virksomhed": {
+                "value": "NORMAL"
+              },
+              "Tvangsopløst": {
+                "value": "TVANGSOPLØST"
+              },
+              "Frivillig opøsning": {
+                "value": "UNDER FRIVILLIG LIKVIDATION"
+              },
+              "Under reassumering": {
+                "value": "UNDER REASSUMERING"
+              },
+              "Opløst efter spaltning": {
+                "value": "OPLØST EFTER SPALTNING"
+              },
+              "Uden retsvirkning": {
+                "value": "UDEN RETSVIRKNING"
+              },
+              "Slettet": {
+                "value": "SLETTET"
+              },
+              "Under tvangsopløsning": {
+                "value": "UNDER TVANGSOPLØSNING"
+              },
+              "Opløst efter erklæring": {
+                "value": "OPLØST EFTER ERKLÆRING"
+              },
+              "Frivilligt opløst": {
+                "value": "OPLØST EFTER FRIVILLIG LIKVIDATION"
+              },
+              "Fusioneret": {
+                "value": "OPLØST EFTER FUSION"
+              }
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Search page",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Size of response",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyStartDate.GTE",
+            "in": "query",
+            "description": "Company valid interval",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyStartDate.LTE",
+            "in": "query",
+            "description": "Company valid interval",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyEndDate.GTE",
+            "in": "query",
+            "description": "Company valid interval",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          },
+          {
+            "name": "companyEndDate.LTE",
+            "in": "query",
+            "description": "Company valid interval",
+            "schema": {
+              "type": "string"
+            },
+            "example": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste over virksomheder som matcher søgekriterierne",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "cvrNummer": {
+                            "type": "string",
+                            "example": "12345678"
+                          },
+                          "navn": {
+                            "type": "string",
+                            "example": "Testvirksomhed"
+                          },
+                          "kommuneKode": {
+                            "type": "string",
+                            "example": "956"
+                          },
+                          "postnummer": {
+                            "type": "string",
+                            "example": "3905"
+                          },
+                          "postdistrikt": {
+                            "type": "string",
+                            "example": "Nuuk"
+                          },
+                          "startdato": {
+                            "type": "string",
+                            "example": "2020-01-01"
+                          },
+                          "slutdato": {
+                            "type": "string",
+                            "example": "2020-01-01"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eskat/companydetail/1/rest/{cvr}": {
+      "get": {
+        "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer. Der fremsøges i virksomheder, som er i drift, og ikke i ophørte virksomheder.",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens beliggenhedsadresse. Hvis et felt ikke har nogen værdi, så udelades det. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companydetail/1/rest/{cvr}",
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den fremfundne virksomhed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "cvrNummer": {
+                      "type": "string",
+                      "example": "12345678"
+                    },
+                    "navn": {
+                      "type": "string",
+                      "example": "Anders And"
+                    },
+                    "binavne": {
+                      "type": "string",
+                      "example": "Anders And"
+                    },
+                    "branchetekst": {
+                      "type": "string",
+                      "example": "Handel"
+                    },
+                    "branchekode": {
+                      "type": "string",
+                      "example": "620200"
+                    },
+                    "statuskode": {
+                      "type": "string",
+                      "example": "Aktiv"
+                    },
+                    "kommuneKode": {
+                      "type": "integer",
+                      "example": 956
+                    },
+                    "adresseFritekst": {
+                      "type": "string",
+                      "example": "Mut Aqqut 1"
+                    },
+                    "postboks": {
+                      "type": "string",
+                      "example": "postbox"
+                    },
+                    "postnummer": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "postdistrikt": {
+                      "type": "integer",
+                      "example": 3900
+                    },
+                    "bynavn": {
+                      "type": "string",
+                      "example": "Nuuk"
+                    },
+                    "landekode": {
+                      "type": "string",
+                      "example": "GL"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "anders@and.gl"
+                    },
+                    "telefon": {
+                      "type": "string",
+                      "example": "123456"
+                    },
+                    "faxNumber": {
+                      "type": "string",
+                      "example": "123456"
+                    },
+                    "pNummer": {
+                      "type": "object",
+                      "example": [{
+                        "pNummer": "1008052391",
+                        "name": "Afdeling 1",
+                        "land": "GL"
+                      }]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte subscription ikke kan findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Entity could not be found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eskat/companyParticipantConnection/1/rest/search": {
+      "get": {
+        "summary": "Find ansvarlige deltagere i form af ejerskab af virksomheder",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden. <br/>Der kan enten fremsøges på CPR-nummer/Navn på personen, og der leveres så alle relationer som tilhører denne person. Alternativt kan der søges på CVR-nummer, selskabsnavn eller aktivitetsstatus for virksomheden, og her kan tilføjes datoattributter for virksomhedens start/stop. <br/>Datoansvarlighedsintervallet leveres som start slut tidspunkterne for den nyeste relation mellem personen og virksomheden<br/>Hvis en parameter har værdien null, så leveres denne ikke. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companyParticipantConnection1/rest/search",
+        "parameters": [
+          {
+            "name": "cpr",
+            "in": "query",
+            "description": "CPR nummer",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+          {
+            "name": "personNavn",
+            "in": "query",
+            "description": "personNavn",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "fuld": {
+                "value": "Anders And"
+              },
+              "wildcard": {
+                "value": "Anders*"
+              }
+            }
+          },
+          {
+            "name": "cvr",
+            "in": "query",
+            "description": "CVR nummer",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "fuld": {
+                "value": "12345678"
+              },
+              "wildcard": {
+                "value": "12345*"
+              }
+            }
+          },
+          {
+            "name": "firmaNavn",
+            "in": "query",
+            "description": "firmaNavn",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "fuld": {
+                "value": "Magenta Grønland ApS"
+              },
+              "wildcard": {
+                "value": "Magenta*"
+              }
+            }
+          },
+          {
+            "name": "aktivitet",
+            "in": "query",
+            "description": "Er virksomheden aktiv",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "Aktiv": {
+                "value": "Aktiv"
+              },
+              "Inaktiv": {
+                "value": "!Aktiv"
+              }
+            }
+          },
+          {
+            "name": "companystartTime.GTE",
+            "in": "query",
+            "description": "Virksomhedens starttidspunkt skal være efter denne dato",
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-01-01"
+          },
+          {
+            "name": "companystartTime.LTE",
+            "in": "query",
+            "description": "Virksomhedens starttidspunkt skal være før denne dato",
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-01-01"
+          },
+          {
+            "name": "companyendTime.GTE",
+            "in": "query",
+            "description": "Virksomhedens ophørstidspunkt skal være efter denne dato",
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-01-01"
+          },
+          {
+            "name": "companyendTime.LTE",
+            "in": "query",
+            "description": "Virksomhedens ophørstidspunkt skal være før denne dato",
+            "schema": {
+              "type": "string"
+            },
+            "example": "2020-01-01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på ansvarlighedsinformation mellem virksomhed og person",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cpr": {
+                        "type": "string",
+                        "example": "1234567890"
+                      },
+                      "personNavn": {
+                        "type": "string",
+                        "example": "Anders And"
+                      },
+                      "firmaNavn": {
+                        "type": "string",
+                        "example": "Vinduespudseren ApS"
+                      },
+                      "firmdriftformaNavn": {
+                        "type": "string",
+                        "example": "Interresentskab"
+                      },
+                      "ansvarlig-gyldigFra": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "ansvarlig-gyldigTil": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "virksomhed-gyldigFra": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "virksomhed-gyldigTil": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eskat/punit/1/rest/{pNummer}": {
+      "get": {
+        "summary": "Find produktionsenheder",
+        "description": "Servicen giver mulighed for at fremfinde detaljer om en specifik produktionsenhed. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/punit/1/rest{pNummer}",
+        "responses": {
+          "200": {
+            "description": "Ved succesfuldt opslag leveres information på den givne virksomhed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "pNummer": {
+                        "type": "string",
+                        "example": "1234567890"
+                      },
+                      "navne": {
+                        "type": "string",
+                        "example": "Vinduespudseren ApS"
+                      },
+                      "coName": {
+                        "type": "string",
+                        "example": "co kontorbygningen"
+                      },
+                      "postboks": {
+                        "type": "string",
+                        "example": "postboks 17"
+                      },
+                      "postnummer": {
+                        "type": "string",
+                        "example": "3900"
+                      },
+                      "postdistrikt": {
+                        "type": "string",
+                        "example": "Nuuk"
+                      },
+                      "bynavn": {
+                        "type": "string",
+                        "example": "Nuuk"
+                      },
+                      "adresseFritekst": {
+                        "type": "string",
+                        "example": "Mut Aqqut 1"
+                      },
+                      "kommuneKode": {
+                        "type": "string",
+                        "example": "956"
+                      },
+                      "landekode": {
+                        "type": "string",
+                        "example": "GL"
+                      },
+                      "telefaxNummer": {
+                        "type": "string",
+                        "example": "299 456789"
+                      },
+                      "elektroniskPost": {
+                        "type": "string",
+                        "example": "test@test.com"
+                      },
+                      "startdato": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "slutdato": {
+                        "type": "string",
+                        "example": "2020-01-01"
+                      },
+                      "branchetekst": {
+                        "type": "string",
+                        "example": "Fiskeri"
+                      },
+                      "branchekode": {
+                        "type": "string",
+                        "example": "92056"
+                      },
+                      "nyesteCvrNummerRelation": {
+                        "type": "string",
+                        "example": "12345678"
+                      },
+                      "deltagerRelation": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": ["1234567890", "2345678901"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Denne service returnere en fejlbesked, hvis den forespurgte enhed ikke kan findes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errorMessage": {
+                      "type": "string",
+                      "example": "Entity could not be found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

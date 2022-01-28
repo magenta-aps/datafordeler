@@ -100,6 +100,17 @@ test-eboks:
       junit:
         - /code/plugin/eboks/target/surefire-reports/*.xml
 
+test-eskat:
+  <<: *test-default
+  before_script:
+    - cd /code/plugin/eskat
+  script:
+    - mvn --batch-mode -T 2C test
+  artifacts:
+    reports:
+      junit:
+        - /code/plugin/eskat/target/surefire-reports/*.xml
+
 test-geo:
   <<: *test-default
   before_script:

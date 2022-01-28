@@ -23,7 +23,49 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
      * @return
      */
     public List<R> current() {
-        return this.stream().filter(r -> r.getRegistrationTo() == null).filter(r -> r.getEffectTo() == null).collect(Collectors.toList());
+        return this.currentStream().collect(Collectors.toList());
+    }
+
+    /**
+     * Get the stream but with all records removed that is closed in either registrationtime or effecttime
+     * @return
+     */
+    public Stream<R> currentStream() {
+        return this.stream().filter(r -> r.getRegistrationTo() == null).filter(r -> r.getEffectTo() == null);
+    }
+
+    /**
+     * Get the last registered record
+     * @param removeClosedRegistration
+     * @param removeClosedRegistrationAndEffect
+     * @return
+     */
+    public R getLast(boolean removeClosedRegistration, boolean removeClosedRegistrationAndEffect) {
+        Stream<R> stream;
+        if(removeClosedRegistrationAndEffect) {
+            stream = this.currentStream();
+        } else if(removeClosedRegistration) {
+            stream = this.currentRegistrationStream();
+        } else {
+            stream = this.stream();
+        }
+        return stream.reduce((first, second) -> second).orElse(null);
+    }
+
+    /**
+     * Get the last registered record
+     * @param removeClosedRegistration
+     * @param removeClosedRegistrationAndEffect
+     * @return
+     */
+    public R getFirst(boolean removeClosedRegistration, boolean removeClosedRegistrationAndEffect) {
+        if(removeClosedRegistrationAndEffect) {
+            return this.currentStream().findFirst().orElse(null);
+        } else if(removeClosedRegistration) {
+            return this.currentRegistrationStream().findFirst().orElse(null);
+        } else {
+            return this.stream().findFirst().orElse(null);
+        }
     }
 
     /**
@@ -32,6 +74,14 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
      */
     public List<R> currentRegistration() {
         return this.stream().filter(r -> r.getRegistrationTo() == null).collect(Collectors.toList());
+    }
+
+    /**
+     * Get the stream but with only records that are closed in registration-to
+     * @return
+     */
+    public Stream<R> currentRegistrationStream() {
+        return this.stream().filter(r -> r.getRegistrationTo() == null);
     }
 
     public List<R> registeredAt(OffsetDateTime dateTime) {

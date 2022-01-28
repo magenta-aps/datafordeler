@@ -259,6 +259,10 @@ function generate_openapi_documentation
     cp $SPHINX_SOURCE/openapi/combinedapi.html $OUTPUT_FOLDER/html/da/openapi/
     cp $SPHINX_SOURCE/openapi/combinedapi.json $OUTPUT_FOLDER/html/da/openapi/
 
+    # This will overwrite the sphinx-generated placeholder file that is referenced by the TOC
+    cp $SPHINX_SOURCE/openapi/eskatapi.html $OUTPUT_FOLDER/html/da/openapi/
+    cp $SPHINX_SOURCE/openapi/eskatapi.json $OUTPUT_FOLDER/html/da/openapi/
+
     cp -r $SPHINX_SOURCE/openapi/swagger/ $OUTPUT_FOLDER/html/da/openapi/
 }
 task "Generating openapi documentation..." generate_openapi_documentation
