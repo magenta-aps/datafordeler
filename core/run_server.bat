@@ -57,6 +57,11 @@ pushd %DIR%..\plugin\eboks
     call mvnw.cmd clean install
 popd
 
+echo "Build eskat"
+pushd %DIR%..\plugin\eskat
+    call mvnw.cmd clean install
+popd
+
 echo "Build prisme"
 pushd %DIR%..\plugin\prisme
     call mvnw.cmd clean install

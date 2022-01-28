@@ -53,4 +53,8 @@ public abstract class CvrBitemporalDataRecord extends CvrBitemporalRecord {
         this.participantRecord = participantRecord;
     }
 
+    public ParticipantRecord getParticipantRecord() {
+        return this.participantRecord;
+    }
+
 }

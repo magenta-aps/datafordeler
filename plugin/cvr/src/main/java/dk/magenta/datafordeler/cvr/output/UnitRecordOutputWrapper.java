@@ -92,7 +92,7 @@ public class UnitRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyUnitR
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode m) {
+    protected boolean fillMetadataContainer(OutputContainer oContainer, CompanyUnitRecord record, Mode m) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         CompanyUnitMetadataRecord meta = record.getMetadata();
@@ -108,6 +108,7 @@ public class UnitRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyUnitR
         container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_QUARTERLY_NUMBERS, Collections.singleton(meta.getNewestQuarterlyNumbers()));
         container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_MONTHLY_NUMBERS, Collections.singleton(meta.getNewestMonthlyNumbers()));
         container.addCvrBitemporal(CompanyUnitMetadataRecord.IO_FIELD_NEWEST_LOCATION, meta.getNewestLocation(), this::createAddressNode);
+        return true;
     }
 
 }

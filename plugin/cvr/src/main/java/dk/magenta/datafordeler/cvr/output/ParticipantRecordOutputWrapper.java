@@ -79,12 +79,13 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, ParticipantRecord record, Mode m) {
+    protected boolean fillMetadataContainer(OutputContainer oContainer, ParticipantRecord record, Mode m) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         ParticipantMetadataRecord meta = record.getMetadata();
         container.addCvrBitemporal(ParticipantMetadataRecord.IO_FIELD_NEWEST_LOCATION, meta.getNewestLocation(), this::createAddressNode);
         container.addCvrNontemporal(ParticipantMetadataRecord.IO_FIELD_NEWEST_CONTACT_DATA, meta.getMetadataContactRecords(), null, true, true);
+        return true;
     }
 
 }

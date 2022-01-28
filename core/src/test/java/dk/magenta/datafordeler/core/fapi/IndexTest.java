@@ -72,33 +72,6 @@ public class IndexTest {
         Assert.assertEquals("string", mappedFields.get("effectToBefore"));
         Assert.assertEquals("int", mappedFields.get("pageSize"));
         Assert.assertEquals("int", mappedFields.get("page"));
-
-
-        serviceDescriptor = entityService.getServiceDescriptor(path, true);
-        Assert.assertTrue(serviceDescriptor instanceof SoapServiceDescriptor);
-        Assert.assertEquals(plugin, serviceDescriptor.getPlugin());
-        Assert.assertEquals("soap", serviceDescriptor.getType());
-        Assert.assertEquals(path, serviceDescriptor.getServiceAddress());
-        Assert.assertEquals(path, serviceDescriptor.getMetaAddress());
-        Assert.assertEquals("postnummer", serviceDescriptor.getServiceName());
-        mappedFields = new HashMap<>();
-        for (ServiceDescriptor.ServiceQueryField queryField : serviceDescriptor.getFields()) {
-            for (String name : queryField.names) {
-                mappedFields.put(name, queryField.type);
-            }
-        }
-        Assert.assertEquals("int", mappedFields.get("postnr"));
-        Assert.assertEquals("string", mappedFields.get("bynavn"));
-        Assert.assertEquals("string", mappedFields.get("registrationFromAfter"));
-        Assert.assertEquals("string", mappedFields.get("registrationFromBefore"));
-        Assert.assertEquals("string", mappedFields.get("registrationToAfter"));
-        Assert.assertEquals("string", mappedFields.get("registrationToBefore"));
-        Assert.assertEquals("string", mappedFields.get("effectFromAfter"));
-        Assert.assertEquals("string", mappedFields.get("effectFromBefore"));
-        Assert.assertEquals("string", mappedFields.get("effectToAfter"));
-        Assert.assertEquals("string", mappedFields.get("effectToBefore"));
-        Assert.assertEquals("int", mappedFields.get("pageSize"));
-        Assert.assertEquals("int", mappedFields.get("page"));
     }
 
     @Test

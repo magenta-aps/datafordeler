@@ -102,7 +102,7 @@ public class CompanyRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyRe
     }
 
     @Override
-    protected void fillMetadataContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
+    protected boolean fillMetadataContainer(OutputContainer oContainer, CompanyRecord record, Mode mode) {
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         CompanyMetadataRecord meta = record.getMetadata();
@@ -124,6 +124,7 @@ public class CompanyRecordOutputWrapper extends CvrRecordOutputWrapper<CompanyRe
             container.addNontemporal(CompanyMetadataRecord.IO_FIELD_FOUNDING_DATE, meta.getFoundingDate());
             container.addNontemporal(CompanyMetadataRecord.IO_FIELD_EFFECT_DATE, meta.getEffectDate());
         }
+        return true;
     }
 
 }

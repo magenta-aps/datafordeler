@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 
 import javax.persistence.*;
@@ -104,8 +105,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<CompanyRegNumberRecord> getRegNumber() {
-        return this.regNumber;
+    public BitemporalSet<CompanyRegNumberRecord> getRegNumber() {
+        return new BitemporalSet<>(this.regNumber);
     }
 
 
@@ -131,8 +132,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<BaseNameRecord> getNames() {
-        return this.names;
+    public BitemporalSet<BaseNameRecord> getNames() {
+        return new BitemporalSet<>(this.names);
     }
 
 
@@ -158,8 +159,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<LifecycleRecord> getLifecycle() {
-        return this.lifecycle;
+    public BitemporalSet<LifecycleRecord> getLifecycle() {
+        return new BitemporalSet<>(this.lifecycle);
     }
 
 
@@ -186,8 +187,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<StatusRecord> getStatus() {
-        return this.status;
+    public BitemporalSet<StatusRecord> getStatus() {
+        return new BitemporalSet<>(this.status);
     }
 
 
@@ -214,8 +215,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<CompanyStatusRecord> getCompanyStatus() {
-        return this.companyStatus;
+    public BitemporalSet<CompanyStatusRecord> getCompanyStatus() {
+        return new BitemporalSet<>(this.companyStatus);
     }
 
 
@@ -242,8 +243,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<FormRecord> getForm() {
-        return this.form;
+    public BitemporalSet<FormRecord> getForm() {
+        return new BitemporalSet<>(this.form);
     }
 
 

@@ -2,14 +2,14 @@ package dk.magenta.datafordeler.cvr.query;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
-import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
-import dk.magenta.datafordeler.cvr.records.AddressRecord;
-import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import dk.magenta.datafordeler.cvr.records.SecNameRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 /**
@@ -223,11 +223,12 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.setEnhedsNummer(parameters.getI(UNITNUMBER));
         this.setNavn(parameters.getI(NAVN));
         this.setKommuneKode(parameters.getI(KOMMUNEKODE));
+        this.setBusinessKey(parameters.getI("businessKey"));
     }
 
     @Override
     protected boolean isEmpty() {
-        return this.enhedsNummer.isEmpty() && this.navn.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty();
+        return this.enhedsNummer.isEmpty() && this.navn.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty() && this.businessKey.isEmpty();
     }
 
     @Override
@@ -246,7 +247,7 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    public static HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("unit", ParticipantRecord.DB_FIELD_UNIT_NUMBER);
@@ -254,6 +255,8 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
         joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
         joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
+        joinHandles.put("unitCode", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
+
     }
 
     @Override
