@@ -1,0 +1,3153 @@
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "failed": 0
+  },
+  "hits": {
+    "total": 1,
+    "max_score": 17.219288,
+    "hits": [
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "virksomhed",
+        "_id": "4001248508",
+        "_score": 17.219288,
+        "_source": {
+          "Vrvirksomhed": {
+            "cvrNummer": 25052943,
+            "regNummer": [],
+            "brancheAnsvarskode": 0,
+            "reklamebeskyttet": true,
+            "navne": [
+              {
+                "navn": "ApS KBIL 17 NR. 1179",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": "2000-02-20"
+                },
+                "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
+              },
+              {
+                "navn": "MAGENTA",
+                "periode": {
+                  "gyldigFra": "2000-02-21",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2000-02-29T11:44:42.000+01:00"
+              }
+            ],
+            "binavne": [],
+            "postadresse": [],
+            "beliggenhedsadresse": [
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 3996,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                },
+                "husnummerFra": 18,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": "Advokatfirmaet Stakemann",
+                "postboks": null,
+                "vejnavn": "Kronprinsessegade",
+                "bynavn": null,
+                "postnummer": 1306,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": "2000-02-20"
+                },
+                "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+              },
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 2700,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                },
+                "husnummerFra": 39,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "4",
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Havnegade",
+                "bynavn": null,
+                "postnummer": 1058,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "2000-02-21",
+                  "gyldigTil": "2001-06-27"
+                },
+                "sidstOpdateret": "2000-03-07T17:29:48.000+01:00"
+              },
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 7540,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                },
+                "husnummerFra": 51,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": "B",
+                "bogstavTil": null,
+                "etage": "4",
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Toldbodgade",
+                "bynavn": null,
+                "postnummer": 1253,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "2001-06-28",
+                  "gyldigTil": "2004-09-08"
+                },
+                "sidstOpdateret": "2001-06-28T11:38:06.000+02:00"
+              },
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 7064,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerFra": 14,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "1",
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Studiestræde",
+                "bynavn": null,
+                "postnummer": 1455,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "2004-09-09",
+                  "gyldigTil": "2017-04-09"
+                },
+                "sidstOpdateret": "2017-04-10T09:01:06.000+02:00"
+              },
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 1,
+                "kommune": {
+                  "kommuneKode": 955,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerFra": 43,
+                "adresseId": null,
+                "sidstValideret": "2017-04-10T09:01:55.285+02:00",
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "3",
+                "sidedoer": null,
+                "conavn": "c/o Dummy CO",
+                "postboks": "1234",
+                "vejnavn": "Pilestræde",
+                "bynavn": null,
+                "postnummer": 1112,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "2017-04-10",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-04-10T09:01:06.000+02:00"
+              }
+            ],
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "33369696",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2001-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2001-08-29T19:34:30.000+02:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "info@magenta.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2017-04-10",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-04-10T09:01:06.000+02:00"
+              }
+            ],
+            "hjemmeside": [
+              {
+                "kontaktoplysning": "www.magenta.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2017-04-10",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-04-10T09:01:06.000+02:00"
+              }
+            ],
+            "obligatoriskEmail": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "1999-11-29T16:33:47.000+01:00"
+              }
+            ],
+            "hovedbranche": [
+              {
+                "branchekode": "980000",
+                "branchetekst": "Uoplyst",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": "2000-02-28"
+                },
+                "sidstOpdateret": "2013-11-22T22:19:29.000+01:00"
+              },
+              {
+                "branchekode": "726000",
+                "branchetekst": "Anden virksomhed i forbindelse med it-servicevirksomhed",
+                "periode": {
+                  "gyldigFra": "2000-02-29",
+                  "gyldigTil": "2007-12-31"
+                },
+                "sidstOpdateret": "2000-02-29T21:10:50.000+01:00"
+              },
+              {
+                "branchekode": "620900",
+                "branchetekst": "Anden it-servicevirksomhed",
+                "periode": {
+                  "gyldigFra": "2008-01-01",
+                  "gyldigTil": "2013-12-31"
+                },
+                "sidstOpdateret": "2015-05-22T11:37:32.000+02:00"
+              },
+              {
+                "branchekode": "620200",
+                "branchetekst": "Konsulentbistand vedrørende informationsteknologi",
+                "periode": {
+                  "gyldigFra": "2014-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-05-22T11:37:32.000+02:00"
+              }
+            ],
+            "bibranche1": [],
+            "bibranche2": [],
+            "bibranche3": [],
+            "status": [],
+            "virksomhedsstatus": [
+              {
+                "status": "NORMAL",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+              }
+            ],
+            "virksomhedsform": [
+              {
+                "virksomhedsformkode": 80,
+                "kortBeskrivelse": "APS",
+                "langBeskrivelse": "Anpartsselskab",
+                "ansvarligDataleverandoer": "E&S",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
+              }
+            ],
+            "aarsbeskaeftigelse": [
+            ],
+            "kvartalsbeskaeftigelse": [
+            ],
+            "attributter": [
+              {
+                "sekvensnr": 0,
+                "type": "ARKIV_REGISTRERINGSNUMMER",
+                "vaerditype": "string",
+                "vaerdier": [
+                  {
+                    "vaerdi": "ApS263062",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "EJERREGISTRERING_UNDER_5_PROCENT",
+                "vaerditype": "boolean",
+                "vaerdier": [
+                  {
+                    "vaerdi": "false",
+                    "periode": {
+                      "gyldigFra": "2015-06-17",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-06-17T21:27:19.000+02:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "FORMÅL",
+                "vaerditype": "string",
+                "vaerdier": [
+                  {
+                    "vaerdi": "Selskabets formål er at levere IT-løsninger til offentlige og private virksomheder samt hermed beslægtet virksomhed.",
+                    "periode": {
+                      "gyldigFra": "2013-11-13",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "FØRSTE_REGNSKABSPERIODE_SLUT",
+                "vaerditype": "date",
+                "vaerdier": [
+                  {
+                    "vaerdi": "2000-12-31",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "FØRSTE_REGNSKABSPERIODE_START",
+                "vaerditype": "date",
+                "vaerdier": [
+                  {
+                    "vaerdi": "1999-11-15",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "KAPITAL",
+                "vaerditype": "decimal",
+                "vaerdier": [
+                  {
+                    "vaerdi": "125000.00",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "KAPITALVALUTA",
+                "vaerditype": "string",
+                "vaerdier": [
+                  {
+                    "vaerdi": "DKK",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "NAVN_IDENTITET",
+                "vaerditype": "string",
+                "vaerdier": [
+                  {
+                    "vaerdi": "KBIL 17 NR. 1179",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": "2000-02-20"
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  },
+                  {
+                    "vaerdi": "MAGENTA",
+                    "periode": {
+                      "gyldigFra": "2000-02-21",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "PSEUDOCVRNR",
+                "vaerditype": "boolean",
+                "vaerdier": [
+                  {
+                    "vaerdi": "false",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "REGNSKABSÅR_SLUT",
+                "vaerditype": "gMonthDay",
+                "vaerdier": [
+                  {
+                    "vaerdi": "--12-31",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "REGNSKABSÅR_START",
+                "vaerditype": "gMonthDay",
+                "vaerdier": [
+                  {
+                    "vaerdi": "--01-01",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "REVISION_FRAVALGT",
+                "vaerditype": "boolean",
+                "vaerdier": [
+                  {
+                    "vaerdi": "false",
+                    "periode": {
+                      "gyldigFra": "1999-11-15",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-03-12T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "TEGNINGSREGEL",
+                "vaerditype": "string",
+                "vaerdier": [
+                  {
+                    "vaerdi": "Selskabet tegnes af den administrerende direktør",
+                    "periode": {
+                      "gyldigFra": "2013-11-13",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              },
+              {
+                "sekvensnr": 0,
+                "type": "VEDTÆGT_SENESTE",
+                "vaerditype": "date",
+                "vaerdier": [
+                  {
+                    "vaerdi": "2013-11-13",
+                    "periode": {
+                      "gyldigFra": "2013-11-13",
+                      "gyldigTil": null
+                    },
+                    "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                  }
+                ]
+              }
+            ],
+            "penheder": [
+              {
+                "pNummer": 1007256945,
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "1999-11-29T16:33:51.000+01:00"
+              },
+              {
+                "pNummer": 1019601052,
+                "periode": {
+                  "gyldigFra": "2014-08-07",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2014-08-07T09:53:14.000+02:00"
+              }
+            ],
+            "deltagerRelation": [
+              {
+                "deltager": {
+                  "enhedsNummer": 4000004988,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": 1234567890,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2012-05-30T17:31:08.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Morten Kjærsgaard",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 4356,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": "2006-12-31"
+                        },
+                        "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                      },
+                      "husnummerFra": 19,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": "A",
+                      "bogstavTil": null,
+                      "etage": "4",
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Lipkesgade",
+                      "bynavn": null,
+                      "postnummer": 2100,
+                      "postdistrikt": "København Ø",
+                      "periode": {
+                        "gyldigFra": "2000-04-11",
+                        "gyldigTil": "2005-07-13"
+                      },
+                      "sidstOpdateret": "2000-04-11T00:51:22.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 7996,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 15,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "2",
+                      "sidedoer": "th",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Vardegade",
+                      "bynavn": null,
+                      "postnummer": 2100,
+                      "postdistrikt": "København Ø",
+                      "periode": {
+                        "gyldigFra": "2005-07-14",
+                        "gyldigTil": "2008-07-08"
+                      },
+                      "sidstOpdateret": "2005-07-19T14:50:10.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 8696,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 82,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "03",
+                      "sidedoer": "tv",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Århusgade",
+                      "bynavn": null,
+                      "postnummer": 2100,
+                      "postdistrikt": "København Ø",
+                      "periode": {
+                        "gyldigFra": "2008-07-09",
+                        "gyldigTil": "2012-05-28"
+                      },
+                      "sidstOpdateret": "2008-07-18T09:05:21.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 40,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 28,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Agerlandsvej",
+                      "bynavn": null,
+                      "postnummer": 2300,
+                      "postdistrikt": "København S",
+                      "periode": {
+                        "gyldigFra": "2012-05-29",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2012-05-30T19:31:08.000+02:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733975,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Bestyrelse",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Bestyrelse",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": "2009-10-28"
+                            },
+                            "sidstOpdateret": "2015-08-13T00:00:00.000+02:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "formand",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2009-10-28"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "VALGFORM",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "generalforsamling",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2009-10-28"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "enhedsNummerOrganisation": 4004733976,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Direktion",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Direktion",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "adm. dir",
+                                "periode": {
+                                  "gyldigFra": "2009-10-28",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 4000032977,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": 1111111111,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2017-06-08T21:03:28.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Rene Seindal",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 4500,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": "2006-12-31"
+                        },
+                        "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                      },
+                      "husnummerFra": 11,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "3",
+                      "sidedoer": "tv",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Lysefjordsgade",
+                      "bynavn": null,
+                      "postnummer": 2300,
+                      "postdistrikt": "København S",
+                      "periode": {
+                        "gyldigFra": "2000-04-11",
+                        "gyldigTil": "2004-04-19"
+                      },
+                      "sidstOpdateret": "2000-04-11T00:25:51.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 8122,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 11,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "4",
+                      "sidedoer": "tv",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Weidekampsgade",
+                      "bynavn": null,
+                      "postnummer": 2300,
+                      "postdistrikt": "København S",
+                      "periode": {
+                        "gyldigFra": "2004-04-20",
+                        "gyldigTil": "2009-08-03"
+                      },
+                      "sidstOpdateret": "2004-04-27T19:33:37.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 651,
+                      "kommune": {
+                        "kommuneKode": 159,
+                        "kommuneNavn": "GLADSAXE",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 19,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "st",
+                      "sidedoer": "th",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Pilegårdsvej",
+                      "bynavn": null,
+                      "postnummer": 2730,
+                      "postdistrikt": "Herlev",
+                      "periode": {
+                        "gyldigFra": "2009-08-04",
+                        "gyldigTil": "2009-08-30"
+                      },
+                      "sidstOpdateret": "2009-08-05T19:31:26.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 357,
+                      "kommune": {
+                        "kommuneKode": 159,
+                        "kommuneNavn": "GLADSAXE",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 66,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": "c/o C/Omartinseindal",
+                      "postboks": null,
+                      "vejnavn": "Ilbjerg Alle",
+                      "bynavn": null,
+                      "postnummer": 2730,
+                      "postdistrikt": "Herlev",
+                      "periode": {
+                        "gyldigFra": "2009-08-31",
+                        "gyldigTil": "2012-06-12"
+                      },
+                      "sidstOpdateret": "2009-09-01T09:24:49.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 357,
+                      "kommune": {
+                        "kommuneKode": 159,
+                        "kommuneNavn": "GLADSAXE",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 66,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": "c/o Seindal",
+                      "postboks": null,
+                      "vejnavn": "Ilbjerg Alle",
+                      "bynavn": null,
+                      "postnummer": 2730,
+                      "postdistrikt": "Herlev",
+                      "periode": {
+                        "gyldigFra": "2012-06-13",
+                        "gyldigTil": "2017-06-07"
+                      },
+                      "sidstOpdateret": "2017-06-08T21:03:28.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": "Castello 1858\nI-30122 Venezia\nItalia\nValid from: 08/06/2017",
+                      "vejkode": 0,
+                      "kommune": null,
+                      "husnummerFra": null,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": null,
+                      "bynavn": null,
+                      "postnummer": 0,
+                      "postdistrikt": null,
+                      "periode": {
+                        "gyldigFra": "2017-06-08",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2017-06-08T21:03:28.000+02:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733975,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Bestyrelse",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Bestyrelse",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": "2009-10-28"
+                            },
+                            "sidstOpdateret": "2015-08-13T00:00:00.000+02:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "BESTYRELSE",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2002-01-17"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "VALGFORM",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "generalforsamling",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2002-01-17"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 4000355373,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": 1111111111,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2009-05-19T17:34:35.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Morten Ellegaard",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 6408,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": "2006-12-31"
+                        },
+                        "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                      },
+                      "husnummerFra": 35,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "st",
+                      "sidedoer": "tv",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Sjællandsgade",
+                      "bynavn": null,
+                      "postnummer": 2200,
+                      "postdistrikt": "København N",
+                      "periode": {
+                        "gyldigFra": "2000-09-28",
+                        "gyldigTil": "2000-10-22"
+                      },
+                      "sidstOpdateret": "2000-09-28T20:36:55.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 7284,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 4,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "4",
+                      "sidedoer": "tv",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Sønderborggade",
+                      "bynavn": null,
+                      "postnummer": 2100,
+                      "postdistrikt": "København Ø",
+                      "periode": {
+                        "gyldigFra": "2000-10-23",
+                        "gyldigTil": "2008-03-05"
+                      },
+                      "sidstOpdateret": "2004-06-02T13:57:00.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 7284,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 4,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "05",
+                      "sidedoer": "tv",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Sønderborggade",
+                      "bynavn": null,
+                      "postnummer": 2100,
+                      "postdistrikt": "København Ø",
+                      "periode": {
+                        "gyldigFra": "2008-03-06",
+                        "gyldigTil": "2009-05-17"
+                      },
+                      "sidstOpdateret": "2008-03-10T11:38:46.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 730,
+                      "kommune": {
+                        "kommuneKode": 147,
+                        "kommuneNavn": "FREDERIKSBERG",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 43,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Solsortvej",
+                      "bynavn": null,
+                      "postnummer": 2000,
+                      "postdistrikt": "Frederiksberg",
+                      "periode": {
+                        "gyldigFra": "2009-05-18",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2009-05-19T19:34:35.000+02:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733975,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Bestyrelse",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Bestyrelse",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": "2009-10-28"
+                            },
+                            "sidstOpdateret": "2015-08-13T00:00:00.000+02:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "BESTYRELSE",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2002-05-01"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "VALGFORM",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "generalforsamling",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2002-05-01"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 4000417793,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": 1111111111,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2013-03-22T19:30:57.000+01:00",
+                  "navne": [
+                    {
+                      "navn": "Kim Madsen",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 8116,
+                      "kommune": {
+                        "kommuneKode": 265,
+                        "kommuneNavn": "ROSKILDE",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 9,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Svendborgvej",
+                      "bynavn": "Himmelev",
+                      "postnummer": 4000,
+                      "postdistrikt": "Roskilde",
+                      "periode": {
+                        "gyldigFra": "2002-02-01",
+                        "gyldigTil": "2008-08-11"
+                      },
+                      "sidstOpdateret": "2002-02-05T19:41:28.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 3515,
+                      "kommune": {
+                        "kommuneKode": 265,
+                        "kommuneNavn": "ROSKILDE",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 24,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Ibsgården",
+                      "bynavn": "Himmelev",
+                      "postnummer": 4000,
+                      "postdistrikt": "Roskilde",
+                      "periode": {
+                        "gyldigFra": "2008-08-12",
+                        "gyldigTil": "2013-03-20"
+                      },
+                      "sidstOpdateret": "2008-08-13T15:14:50.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 6653,
+                      "kommune": {
+                        "kommuneKode": 265,
+                        "kommuneNavn": "ROSKILDE",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 11,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Rødbyvej",
+                      "bynavn": "Veddelev",
+                      "postnummer": 4000,
+                      "postdistrikt": "Roskilde",
+                      "periode": {
+                        "gyldigFra": "2013-03-21",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2013-03-22T19:30:57.000+01:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733976,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Direktion",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Direktion",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "DIREKTION",
+                                "periode": {
+                                  "gyldigFra": "1999-11-15",
+                                  "gyldigTil": "2000-02-21"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 41111111112,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": 1111111112,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00",
+                  "navne": [
+                    {
+                      "navn": "Testperson 1",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 8144,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": "2006-12-31"
+                        },
+                        "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                      },
+                      "husnummerFra": 20,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "2",
+                      "sidedoer": "th",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Vendersgade",
+                      "bynavn": null,
+                      "postnummer": 1363,
+                      "postdistrikt": "København K",
+                      "periode": {
+                        "gyldigFra": "2002-11-07",
+                        "gyldigTil": "2006-06-07"
+                      },
+                      "sidstOpdateret": "2004-06-02T14:13:40.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 3996,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 18,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "3",
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Kronprinsessegade",
+                      "bynavn": null,
+                      "postnummer": 1306,
+                      "postdistrikt": "København K",
+                      "periode": {
+                        "gyldigFra": "2006-06-08",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2006-06-14T19:34:48.000+02:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733975,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Bestyrelse",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Bestyrelse",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": "2009-10-28"
+                            },
+                            "sidstOpdateret": "2015-08-13T00:00:00.000+02:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "BESTYRELSE",
+                                "periode": {
+                                  "gyldigFra": "1999-11-15",
+                                  "gyldigTil": "2000-02-21"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "VALGFORM",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "generalforsamling",
+                                "periode": {
+                                  "gyldigFra": "1999-11-15",
+                                  "gyldigTil": "2000-02-21"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 4111111113,
+                  "enhedstype": "PERSON",
+                  "forretningsnoegle": 1111111113,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2015-10-08T19:06:12.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "Jørgen Ulrik Balslev Krag",
+                      "periode": {
+                        "gyldigFra": null,
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": null
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 1799,
+                      "kommune": {
+                        "kommuneKode": 730,
+                        "kommuneNavn": "RANDERS",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 113,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "03",
+                      "sidedoer": "tv",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Skelvangsvej",
+                      "bynavn": null,
+                      "postnummer": 8920,
+                      "postdistrikt": "Randers NV",
+                      "periode": {
+                        "gyldigFra": "2011-04-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-10-08T19:06:12.000+02:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4003851571,
+                    "hovedtype": "REGISTER",
+                    "organisationsNavn": [
+                      {
+                        "navn": "EJERREGISTER",
+                        "periode": {
+                          "gyldigFra": "1903-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-01-16T15:45:32.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "EJERREGISTER",
+                            "periode": {
+                              "gyldigFra": "1903-01-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-01-16T15:45:32.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_MEDDELELSE_DATO",
+                            "vaerditype": "date",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "2015-06-01",
+                                "periode": {
+                                  "gyldigFra": "2015-06-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-06-17T21:27:19.000+02:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_PROCENT",
+                            "vaerditype": "decimal",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "0.05",
+                                "periode": {
+                                  "gyldigFra": "2015-06-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-06-17T21:27:19.000+02:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_STEMMERET_PROCENT",
+                            "vaerditype": "decimal",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "0.05",
+                                "periode": {
+                                  "gyldigFra": "2015-06-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-06-17T21:27:19.000+02:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 1892035,
+                  "enhedstype": "VIRKSOMHED",
+                  "forretningsnoegle": 19270939,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2016-05-23T10:44:58.000+02:00",
+                  "navne": [
+                    {
+                      "navn": "ApS KBUS 38 NR. 3117",
+                      "periode": {
+                        "gyldigFra": "1996-05-01",
+                        "gyldigTil": "1999-06-28"
+                      },
+                      "sidstOpdateret": "2000-11-27T14:43:15.000+01:00"
+                    },
+                    {
+                      "navn": "MULTIFORM ÅRHUS 2000 ApS",
+                      "periode": {
+                        "gyldigFra": "1999-06-29",
+                        "gyldigTil": "1999-06-29"
+                      },
+                      "sidstOpdateret": "2015-03-19T00:00:00.000+01:00"
+                    },
+                    {
+                      "navn": "ApS KBUS 38 NR. 3117",
+                      "periode": {
+                        "gyldigFra": "1999-06-30",
+                        "gyldigTil": "2005-05-03"
+                      },
+                      "sidstOpdateret": "2015-03-19T00:00:00.000+01:00"
+                    },
+                    {
+                      "navn": "R&M HOLDING ApS",
+                      "periode": {
+                        "gyldigFra": "2005-05-04",
+                        "gyldigTil": "2005-05-11"
+                      },
+                      "sidstOpdateret": "2005-05-18T16:57:46.000+02:00"
+                    },
+                    {
+                      "navn": "ApS KBUS 38 nr.3117",
+                      "periode": {
+                        "gyldigFra": "2005-05-12",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2005-12-06T13:38:07.000+01:00"
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 3996,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": "2006-12-31"
+                        },
+                        "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                      },
+                      "husnummerFra": 18,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": "Adv.fa. Stakemann",
+                      "postboks": null,
+                      "vejnavn": "Kronprinsessegade",
+                      "bynavn": null,
+                      "postnummer": 1306,
+                      "postdistrikt": "København K",
+                      "periode": {
+                        "gyldigFra": "1996-05-01",
+                        "gyldigTil": "1999-06-28"
+                      },
+                      "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 3996,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 18,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": "Aktieselskabet Stakemann",
+                      "postboks": null,
+                      "vejnavn": "Kronprinsessegade",
+                      "bynavn": null,
+                      "postnummer": 1306,
+                      "postdistrikt": "København K",
+                      "periode": {
+                        "gyldigFra": "1999-06-29",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2003-12-02T13:53:32.000+01:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4111111114,
+                    "hovedtype": "STIFTERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Stiftere",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Stiftere",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "STIFTERE",
+                                "periode": {
+                                  "gyldigFra": "1999-11-15",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "STIFTELSESINFORMATION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "ApS KBUS 38 NR. 3117\n\nc/o Adv.fa. Stakemann,\nKronprinsessegade 18,\n1306 København K",
+                                "periode": {
+                                  "gyldigFra": "1999-11-15",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 4746629,
+                  "enhedstype": "VIRKSOMHED",
+                  "forretningsnoegle": 32067174,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2015-03-12T00:00:00.000+01:00",
+                  "navne": [
+                    {
+                      "navn": "HOLDING ApS",
+                      "periode": {
+                        "gyldigFra": "2009-02-20",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2009-02-23T08:38:56.000+01:00"
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 7064,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 14,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "4",
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Studiestræde",
+                      "bynavn": null,
+                      "postnummer": 1455,
+                      "postdistrikt": "København K",
+                      "periode": {
+                        "gyldigFra": "2009-02-20",
+                        "gyldigTil": "2011-01-04"
+                      },
+                      "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 7064,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 14,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "1",
+                      "sidedoer": null,
+                      "conavn": "Magenta ApS",
+                      "postboks": null,
+                      "vejnavn": "Studiestræde",
+                      "bynavn": null,
+                      "postnummer": 1455,
+                      "postdistrikt": "København K",
+                      "periode": {
+                        "gyldigFra": "2011-01-05",
+                        "gyldigTil": "2012-06-10"
+                      },
+                      "sidstOpdateret": "2011-01-05T12:41:35.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 40,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 28,
+                      "adresseId": "0a3f509d-0ca9-32b8-e044-0003ba298018",
+                      "sidstValideret": "2017-06-10T15:14:49.055+02:00",
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": "Testperson 4",
+                      "postboks": null,
+                      "vejnavn": "Agerlandsvej",
+                      "bynavn": null,
+                      "postnummer": 2300,
+                      "postdistrikt": "København S",
+                      "periode": {
+                        "gyldigFra": "2012-06-11",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2012-06-11T13:38:23.000+02:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4003851571,
+                    "hovedtype": "REGISTER",
+                    "organisationsNavn": [
+                      {
+                        "navn": "EJERREGISTER",
+                        "periode": {
+                          "gyldigFra": "1903-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-01-16T15:45:32.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "EJERREGISTER",
+                            "periode": {
+                              "gyldigFra": "1903-01-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-01-16T15:45:32.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_MEDDELELSE_DATO",
+                            "vaerditype": "date",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "2015-01-16",
+                                "periode": {
+                                  "gyldigFra": "2014-05-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-01-16T15:45:32.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_PROCENT",
+                            "vaerditype": "decimal",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "0.6667",
+                                "periode": {
+                                  "gyldigFra": "2014-05-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-01-16T15:45:32.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_STEMMERET_PROCENT",
+                            "vaerditype": "decimal",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "0.6667",
+                                "periode": {
+                                  "gyldigFra": "2014-05-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-01-16T15:45:32.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 1622744,
+                  "enhedstype": "VIRKSOMHED",
+                  "forretningsnoegle": 14119299,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2016-12-08T12:23:25.000+01:00",
+                  "navne": [
+                    {
+                      "navn": "A/S PSE 13 NR. 1303",
+                      "periode": {
+                        "gyldigFra": "1990-05-01",
+                        "gyldigTil": "1993-12-27"
+                      },
+                      "sidstOpdateret": "2015-03-19T00:00:00.000+01:00"
+                    },
+                    {
+                      "navn": "MUNKEBO, JENSEN & PENSBO A/S",
+                      "periode": {
+                        "gyldigFra": "1993-12-28",
+                        "gyldigTil": "1996-11-27"
+                      },
+                      "sidstOpdateret": "2015-03-19T00:00:00.000+01:00"
+                    },
+                    {
+                      "navn": "MUNKEBO, JENSEN & PENSBO STATSAUTORISEREDE REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "1996-11-28",
+                        "gyldigTil": "1997-06-18"
+                      },
+                      "sidstOpdateret": "2015-03-19T00:00:00.000+01:00"
+                    },
+                    {
+                      "navn": "MUNKEBO. JENSEN & PENSBO          STATSAUTORISERET                  REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "1997-06-19",
+                        "gyldigTil": "2005-09-15"
+                      },
+                      "sidstOpdateret": "2015-03-19T00:00:00.000+01:00"
+                    },
+                    {
+                      "navn": "MUNKEBO, JENSEN & VINDELEV,       STATSAUTORISERET                  REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "2005-09-16",
+                        "gyldigTil": "2007-01-23"
+                      },
+                      "sidstOpdateret": "2005-09-27T10:11:59.000+02:00"
+                    },
+                    {
+                      "navn": "PKF MUNKEBO JENSEN VINDELEV,      STATSAUTORISERET                  REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "2007-01-24",
+                        "gyldigTil": "2010-12-09"
+                      },
+                      "sidstOpdateret": "2007-01-24T13:25:37.000+01:00"
+                    },
+                    {
+                      "navn": "PKF MUNKEBO VINDELEV, STATSAUTORISERET REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "2010-12-10",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-03-12T17:58:02.000+01:00"
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 213,
+                      "kommune": {
+                        "kommuneKode": 161,
+                        "kommuneNavn": "GLOSTRUP",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 56,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Hovedvejen",
+                      "bynavn": null,
+                      "postnummer": 2600,
+                      "postdistrikt": "Glostrup",
+                      "periode": {
+                        "gyldigFra": "1990-05-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733977,
+                    "hovedtype": "REVISION",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Revision",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Revision",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "REVISION",
+                                "periode": {
+                                  "gyldigFra": "2005-05-30",
+                                  "gyldigTil": "2008-11-18"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 3127743,
+                  "enhedstype": "VIRKSOMHED",
+                  "forretningsnoegle": 17937987,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2016-01-08T14:49:27.000+01:00",
+                  "navne": [
+                    {
+                      "navn": "BJ REVISION AF 24/6 1994 ApS",
+                      "periode": {
+                        "gyldigFra": "1994-06-24",
+                        "gyldigTil": "2004-01-13"
+                      },
+                      "sidstOpdateret": "2013-11-22T22:09:56.000+01:00"
+                    },
+                    {
+                      "navn": "BENNY JENSEN, STATSAUTORISERET    REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "2004-01-14",
+                        "gyldigTil": "2008-11-13"
+                      },
+                      "sidstOpdateret": "2004-02-02T13:10:29.000+01:00"
+                    },
+                    {
+                      "navn": "REVISIONSFIRMAET BENNY JENSEN A/S,STATSAUTORISERET                  REVISIONSVIRKSOMHED",
+                      "periode": {
+                        "gyldigFra": "2008-11-14",
+                        "gyldigTil": "2014-10-27"
+                      },
+                      "sidstOpdateret": "2014-11-20T11:29:43.000+01:00"
+                    },
+                    {
+                      "navn": "REVISIONSFIRMAET BENNY JENSEN ApS, STATSAUTORISERET REVISIONSVIRKSOMHED",
+                      "periode": {
+                        "gyldigFra": "2014-10-28",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2014-11-20T11:29:43.000+01:00"
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 7644,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": "2006-12-31"
+                        },
+                        "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                      },
+                      "husnummerFra": 3,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "1",
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Trianglen",
+                      "bynavn": null,
+                      "postnummer": 2100,
+                      "postdistrikt": "København Ø",
+                      "periode": {
+                        "gyldigFra": "1994-06-24",
+                        "gyldigTil": "2004-01-13"
+                      },
+                      "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 8580,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 62,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Østerbrogade",
+                      "bynavn": null,
+                      "postnummer": 2100,
+                      "postdistrikt": "København Ø",
+                      "periode": {
+                        "gyldigFra": "2004-01-14",
+                        "gyldigTil": "2016-01-05"
+                      },
+                      "sidstOpdateret": "2016-01-06T14:09:43.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 5948,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 1,
+                      "adresseId": "0a3f50a0-5413-32b8-e044-0003ba298018",
+                      "sidstValideret": "2017-05-20T04:17:22.863+02:00",
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": "1",
+                      "sidedoer": "tv",
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Rosenvængets Allé",
+                      "bynavn": null,
+                      "postnummer": 2100,
+                      "postdistrikt": "København Ø",
+                      "periode": {
+                        "gyldigFra": "2016-01-06",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2016-01-06T14:09:43.000+01:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733977,
+                    "hovedtype": "REVISION",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Revision",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Revision",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "REVISION",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2005-05-30"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 5105513,
+                  "enhedstype": "VIRKSOMHED",
+                  "forretningsnoegle": 26052394,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2015-12-01T17:35:01.000+01:00",
+                  "navne": [
+                    {
+                      "navn": "JUT NR. 2180 A/S",
+                      "periode": {
+                        "gyldigFra": "2001-04-01",
+                        "gyldigTil": "2001-08-14"
+                      },
+                      "sidstOpdateret": "2001-05-30T10:43:50.000+02:00"
+                    },
+                    {
+                      "navn": "EASY BUSINESS STATSAUTORISERET    REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "2001-08-15",
+                        "gyldigTil": "2003-02-27"
+                      },
+                      "sidstOpdateret": "2001-09-06T13:50:57.000+02:00"
+                    },
+                    {
+                      "navn": "ENERGY BUSINESS ASSISTANCE        STATSAUTORISERET                  REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "2003-02-28",
+                        "gyldigTil": "2005-06-28"
+                      },
+                      "sidstOpdateret": "2003-04-14T10:01:07.000+02:00"
+                    },
+                    {
+                      "navn": "EY SERVICE STATSAUTORISERET       REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "2005-06-29",
+                        "gyldigTil": "2009-04-02"
+                      },
+                      "sidstOpdateret": "2005-06-30T10:44:44.000+02:00"
+                    },
+                    {
+                      "navn": "ERNST & YOUNG GODKENDT            REVISIONSAKTIESELSKAB",
+                      "periode": {
+                        "gyldigFra": "2009-04-03",
+                        "gyldigTil": "2009-07-01"
+                      },
+                      "sidstOpdateret": "2009-04-03T09:37:19.000+02:00"
+                    },
+                    {
+                      "navn": "ERNST & YOUNG  P/S",
+                      "periode": {
+                        "gyldigFra": "2009-07-02",
+                        "gyldigTil": "2014-06-30"
+                      },
+                      "sidstOpdateret": "2014-07-01T17:48:42.000+02:00"
+                    },
+                    {
+                      "navn": "ERNST & YOUNG DENMARK P/S",
+                      "periode": {
+                        "gyldigFra": "2014-07-01",
+                        "gyldigTil": "2014-10-10"
+                      },
+                      "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 2286,
+                      "kommune": {
+                        "kommuneKode": 751,
+                        "kommuneNavn": "ÅRHUS",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": "2006-12-31"
+                        },
+                        "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                      },
+                      "husnummerFra": 4,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": "Bech-Bruun Dragsted",
+                      "postboks": null,
+                      "vejnavn": "Frue Kirkeplads",
+                      "bynavn": null,
+                      "postnummer": 8000,
+                      "postdistrikt": "Århus C",
+                      "periode": {
+                        "gyldigFra": "2001-04-01",
+                        "gyldigTil": "2001-08-14"
+                      },
+                      "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 7336,
+                      "kommune": {
+                        "kommuneKode": 101,
+                        "kommuneNavn": "KØBENHAVN",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 86,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Tagensvej",
+                      "bynavn": null,
+                      "postnummer": 2200,
+                      "postdistrikt": "København N",
+                      "periode": {
+                        "gyldigFra": "2001-08-15",
+                        "gyldigTil": "2009-10-01"
+                      },
+                      "sidstOpdateret": "2001-09-06T13:50:57.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 259,
+                      "kommune": {
+                        "kommuneKode": 159,
+                        "kommuneNavn": "GLADSAXE",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 50,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Gyngemose Parkvej",
+                      "bynavn": null,
+                      "postnummer": 2860,
+                      "postdistrikt": "Søborg",
+                      "periode": {
+                        "gyldigFra": "2009-10-02",
+                        "gyldigTil": "2014-10-10"
+                      },
+                      "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733977,
+                    "hovedtype": "REVISION",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Revision",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Revision",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "REVISION",
+                                "periode": {
+                                  "gyldigFra": "1999-11-15",
+                                  "gyldigTil": "2000-02-21"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "deltager": {
+                  "enhedsNummer": 3503904,
+                  "enhedstype": "VIRKSOMHED",
+                  "forretningsnoegle": 57652551,
+                  "organisationstype": null,
+                  "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+                  "sidstOpdateret": "2015-12-01T17:30:46.000+01:00",
+                  "navne": [
+                    {
+                      "navn": "Revisionsfirmaet/Bent Jørgensen",
+                      "periode": {
+                        "gyldigFra": "1985-04-01",
+                        "gyldigTil": "2004-02-29"
+                      },
+                      "sidstOpdateret": "2004-03-02T15:11:58.000+01:00"
+                    },
+                    {
+                      "navn": "Statsautoriseret Revisor          Bent Jørgensen",
+                      "periode": {
+                        "gyldigFra": "2004-03-01",
+                        "gyldigTil": "2010-09-02"
+                      },
+                      "sidstOpdateret": "2004-03-02T15:12:05.000+01:00"
+                    },
+                    {
+                      "navn": "ebbegottlieb.dk",
+                      "periode": {
+                        "gyldigFra": "2010-09-03",
+                        "gyldigTil": "2010-10-05"
+                      },
+                      "sidstOpdateret": "2010-09-06T11:18:33.000+02:00"
+                    },
+                    {
+                      "navn": "Revisionsfirmaet Bent Jørgensen Statsautoriseret revisionsvirksomhed",
+                      "periode": {
+                        "gyldigFra": "2010-10-06",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2010-10-07T07:07:13.000+02:00"
+                    }
+                  ],
+                  "beliggenhedsadresse": [
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 72,
+                      "kommune": {
+                        "kommuneKode": 181,
+                        "kommuneNavn": "SØLLERØD",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": "2006-12-31"
+                        },
+                        "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                      },
+                      "husnummerFra": 5,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Bystykket",
+                      "bynavn": null,
+                      "postnummer": 2850,
+                      "postdistrikt": "Nærum",
+                      "periode": {
+                        "gyldigFra": "1985-04-01",
+                        "gyldigTil": "2006-12-31"
+                      },
+                      "sidstOpdateret": "2013-11-22T22:40:23.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 78,
+                      "kommune": {
+                        "kommuneKode": 230,
+                        "kommuneNavn": "RUDERSDAL",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 5,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": null,
+                      "postboks": null,
+                      "vejnavn": "Bystykket",
+                      "bynavn": null,
+                      "postnummer": 2850,
+                      "postdistrikt": "Nærum",
+                      "periode": {
+                        "gyldigFra": "2007-01-01",
+                        "gyldigTil": "2010-09-02"
+                      },
+                      "sidstOpdateret": "2006-12-27T16:54:25.000+01:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 1511,
+                      "kommune": {
+                        "kommuneKode": 260,
+                        "kommuneNavn": "HALSNÆS",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2014-05-27T20:00:54.000+02:00"
+                      },
+                      "husnummerFra": 7,
+                      "adresseId": null,
+                      "sidstValideret": null,
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": "Ebbbe Gottlieb",
+                      "postboks": null,
+                      "vejnavn": "Tolleruphusvej",
+                      "bynavn": null,
+                      "postnummer": 3300,
+                      "postdistrikt": "Frederiksværk",
+                      "periode": {
+                        "gyldigFra": "2010-09-03",
+                        "gyldigTil": "2010-10-05"
+                      },
+                      "sidstOpdateret": "2010-09-06T11:18:33.000+02:00"
+                    },
+                    {
+                      "landekode": "DK",
+                      "fritekst": null,
+                      "vejkode": 78,
+                      "kommune": {
+                        "kommuneKode": 230,
+                        "kommuneNavn": "RUDERSDAL",
+                        "periode": {
+                          "gyldigFra": "2007-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                      },
+                      "husnummerFra": 5,
+                      "adresseId": "0a3f50a6-c8a9-32b8-e044-0003ba298018",
+                      "sidstValideret": "2017-06-10T15:22:07.376+02:00",
+                      "husnummerTil": null,
+                      "bogstavFra": null,
+                      "bogstavTil": null,
+                      "etage": null,
+                      "sidedoer": null,
+                      "conavn": "Statsaut. revisor Bent Jørgensen",
+                      "postboks": null,
+                      "vejnavn": "Bystykket",
+                      "bynavn": null,
+                      "postnummer": 2850,
+                      "postdistrikt": "Nærum",
+                      "periode": {
+                        "gyldigFra": "2010-10-06",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2010-10-07T07:07:13.000+02:00"
+                    }
+                  ]
+                },
+                "kontorsteder": [],
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733977,
+                    "hovedtype": "REVISION",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Revision",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Revision",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "REVISION",
+                                "periode": {
+                                  "gyldigFra": "2008-11-18",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "fusioner": [],
+            "spaltninger": [],
+            "virksomhedMetadata": {
+              "nyesteNavn": {
+                "navn": "MAGENTA ApS",
+                "periode": {
+                  "gyldigFra": "2000-02-21",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2000-02-29T11:44:42.000+01:00"
+              },
+              "nyesteVirksomhedsform": {
+                "virksomhedsformkode": 80,
+                "kortBeskrivelse": "APS",
+                "langBeskrivelse": "Anpartsselskab",
+                "ansvarligDataleverandoer": "E&S",
+                "periode": {
+                  "gyldigFra": "1999-11-15",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 5520,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerFra": 43,
+                "adresseId": null,
+                "sidstValideret": "2017-04-10T09:01:55.285+02:00",
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "3",
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Pilestræde",
+                "bynavn": null,
+                "postnummer": 1112,
+                "postdistrikt": "København K",
+                "periode": {
+                  "gyldigFra": "2017-04-10",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-04-10T09:01:06.000+02:00"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "620200",
+                "branchetekst": "Konsulentbistand vedrørende informationsteknologi",
+                "periode": {
+                  "gyldigFra": "2014-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-05-22T11:37:32.000+02:00"
+              },
+              "nyesteBibranche1": null,
+              "nyesteBibranche2": null,
+              "nyesteBibranche3": null,
+              "nyesteStatus": null,
+              "nyesteKontaktoplysninger": [
+                "33369696",
+                "info@magenta.dk",
+                "www.magenta.dk"
+              ],
+              "antalPenheder": 2,
+              "nyesteAarsbeskaeftigelse": {
+                "aar": 2014,
+                "antalInklusivEjere": null,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2016-12-15T14:15:55.762+01:00",
+                "intervalKodeAntalInklusivEjere": "ANTAL_10_19",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_10_19"
+              },
+              "nyesteKvartalsbeskaeftigelse": {
+                "aar": 2016,
+                "kvartal": 3,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2017-03-03T16:29:43.402+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_20_49"
+              },
+              "nyesteMaanedsbeskaeftigelse": {
+                "aar": 2016,
+                "maaned": 12,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2017-03-03T16:29:44.934+01:00",
+                "intervalKodeAntalAarsvaerk": "ANTAL_10_19",
+                "intervalKodeAntalAnsatte": "ANTAL_20_49"
+              },
+              "sammensatStatus": "NORMAL",
+              "stiftelsesDato": "1999-11-15",
+              "virkningsDato": "1999-11-15"
+            },
+            "samtId": 57,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4001248508,
+            "enhedstype": "VIRKSOMHED",
+            "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
+            "sidstOpdateret": "2017-04-10T09:01:06.000+02:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "PO"
+          }
+        }
+      }
+    ]
+  }
+}

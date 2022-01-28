@@ -17,6 +17,7 @@
         <module>plugin/cpr</module>
         <module>plugin/cvr</module>
         <module>plugin/eboks</module>
+        <module>plugin/eskat</module>
         <module>plugin/ger</module>
         <module>plugin/prisme</module>
         <module>plugin/statistik</module>

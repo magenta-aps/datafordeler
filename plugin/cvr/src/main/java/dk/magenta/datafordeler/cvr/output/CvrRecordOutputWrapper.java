@@ -37,8 +37,6 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
             "virkningTil",
     }));
 
-
-
     @Override
     public Set<String> getRemoveFieldNames(Mode mode) {
         switch(mode) {
@@ -70,26 +68,28 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
         ObjectNode root = super.getNode(record, overlap, mode);
 
         CvrOutputContainer metadataRecordOutput = new CvrOutputContainer();
-        this.fillMetadataContainer(metadataRecordOutput, record, mode);
-        ObjectNode metaNode = this.getObjectMapper().createObjectNode();
-        root.set("metadata", metaNode);
-        metaNode.setAll(metadataRecordOutput.getBase());
-        switch (mode) {
-            case RVD:
-                metaNode.setAll(metadataRecordOutput.getRVD(overlap));
-                break;
-            case RDV:
-                metaNode.setAll(metadataRecordOutput.getRDV(overlap));
-                break;
-            case DRV:
-                metaNode.setAll(metadataRecordOutput.getDRV(overlap));
-                break;
-            case DATAONLY:
-                metaNode.setAll(metadataRecordOutput.getDataOnly(overlap));
-                break;
-            default:
-                metaNode.setAll(this.fallbackOutput(mode, metadataRecordOutput, overlap));
-                break;
+        boolean metadata = this.fillMetadataContainer(metadataRecordOutput, record, mode);
+        if(metadata) {
+            ObjectNode metaNode = this.getObjectMapper().createObjectNode();
+            root.set("metadata", metaNode);
+            metaNode.setAll(metadataRecordOutput.getBase());
+            switch (mode) {
+                case RVD:
+                    metaNode.setAll(metadataRecordOutput.getRVD(overlap));
+                    break;
+                case RDV:
+                    metaNode.setAll(metadataRecordOutput.getRDV(overlap));
+                    break;
+                case DRV:
+                    metaNode.setAll(metadataRecordOutput.getDRV(overlap));
+                    break;
+                case DATAONLY:
+                    metaNode.setAll(metadataRecordOutput.getDataOnly(overlap));
+                    break;
+                default:
+                    metaNode.setAll(this.fallbackOutput(mode, metadataRecordOutput, overlap));
+                    break;
+            }
         }
         return root;
     }
@@ -98,7 +98,7 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
         return this.getObjectMapper().createObjectNode();
     }
 
-    protected abstract void fillMetadataContainer(OutputContainer container, E item, Mode m);
+    protected abstract boolean fillMetadataContainer(OutputContainer container, E item, Mode m);
 
     protected JsonNode createAddressNode(AddressRecord record) {
         ObjectNode adresseNode = this.createItemNode(record);
