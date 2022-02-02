@@ -39,11 +39,18 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Webservice for finding out if a cpr- or cvr- number is allowed to recieve e-post
+ *
+ * Persons that should not recieve eboks-letters
+ * Persons that is under 15 years old
+ * Persons that is dead
+ * Persons that has had any adress in greenland either current or historic since 2017
+ *
  */
 @RestController
 @RequestMapping("/eboks/recipient")
@@ -91,12 +98,16 @@ public class EboksRecieveLookupService {
                 for (String cprNumber : cprs) {
                     personQuery.addPersonnummer(cprNumber);
                 }
+                // The date that the eboks-system was initiated
+                // This date is relevant in order to find out if the person can be excluded from recieving eboks-letters for not beeing from greenland.
+                // A person that has not had adress in greenland since 8. June 2017, gan not recieve eboks-letters
+                OffsetDateTime eboxStart = OffsetDateTime.of(2017,6,8,0,0,0,0, ZoneOffset.UTC);
 
                 OffsetDateTime now = OffsetDateTime.now();
                 personQuery.setRegistrationFromBefore(now);
                 personQuery.setRegistrationToAfter(now);
                 personQuery.setEffectFromBefore(now);
-                personQuery.setEffectToAfter(now);
+                personQuery.setEffectToAfter(eboxStart);
 
                 personQuery.applyFilters(session);
                 Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
@@ -108,10 +119,10 @@ public class EboksRecieveLookupService {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
                     } else if (FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus() == 90) {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
-                    } else if (k.getAddress().size()==0 || FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
-                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
-                    } else {
+                    } else if (k.getAddress().size()==0 || k.getAddress().stream().anyMatch(addres -> addres.getMunicipalityCode() > 950)) {
                         validCprList.add(k.getPersonnummer());
+                    } else {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
                     }
                     cprs.remove(k.getPersonnummer());
                 });
