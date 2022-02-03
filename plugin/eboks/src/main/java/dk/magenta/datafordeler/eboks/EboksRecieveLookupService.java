@@ -104,6 +104,7 @@ public class EboksRecieveLookupService {
 
                 OffsetDateTime now = OffsetDateTime.now();
                 personQuery.setRegistrationAt(now);
+                // All records that has an effecttointerval that is after 8. June 2017 has tried living after that date
                 personQuery.setEffectFromBefore(now);
                 personQuery.setEffectToAfter(eboxStart);
 
