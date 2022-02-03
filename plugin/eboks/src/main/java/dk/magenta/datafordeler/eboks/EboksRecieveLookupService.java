@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.AccessRequiredException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
@@ -104,8 +103,7 @@ public class EboksRecieveLookupService {
                 OffsetDateTime eboxStart = OffsetDateTime.of(2017,6,8,0,0,0,0, ZoneOffset.UTC);
 
                 OffsetDateTime now = OffsetDateTime.now();
-                personQuery.setRegistrationFromBefore(now);
-                personQuery.setRegistrationToAfter(now);
+                personQuery.setRegistrationAt(now);
                 personQuery.setEffectFromBefore(now);
                 personQuery.setEffectToAfter(eboxStart);
 
@@ -116,13 +114,13 @@ public class EboksRecieveLookupService {
                     BirthTimeDataRecord birthtime = FilterUtilities.findNewestUnclosedCpr(k.getBirthTime());
                     LocalDateTime fifteenYearsAgo = LocalDateTime.now().minusYears(15);
                     if (fifteenYearsAgo.isBefore(birthtime.getBirthDatetime())) {
-                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailState.MINOR));
                     } else if (FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus() == 90) {
-                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
-                    } else if (k.getAddress().size()==0 || k.getAddress().stream().anyMatch(address -> address.getMunicipalityCode() > 950)) {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailState.DEAD));
+                    } else if (k.getAddress().isEmpty() || k.getAddress().stream().anyMatch(address -> address.getMunicipalityCode() > 950)) {
                         validCprList.add(k.getPersonnummer());
                     } else {
-                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailState.NOTFROMGREENLAND));
                     }
                     cprs.remove(k.getPersonnummer());
                 });
@@ -145,9 +143,9 @@ public class EboksRecieveLookupService {
 
                     String status = k.getMetadata().getCompanyStatusRecord(k).getStatus();
                     if(!"NORMAL".equals(status) && !"Aktiv".equals(status) && !"Fremtid".equals(status)) {
-                        failedCvrs.add(new FailResult(cvrNumber, FailStrate.CEASED));
+                        failedCvrs.add(new FailResult(cvrNumber, FailState.CEASED));
                     } else if (adress.getMunicipality().getMunicipalityCode() < 950) {
-                        failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));
+                        failedCvrs.add(new FailResult(cvrNumber, FailState.NOTFROMGREENLAND));
                     } else {
                         cvrList.add(cvrNumber);
                     }
@@ -163,7 +161,7 @@ public class EboksRecieveLookupService {
                         if (k.getMunicipalityCode() >= 950) {
                             cvrList.add(gerNo);
                         } else {
-                            failedCvrs.add(new FailResult(gerNo, FailStrate.NOTFROMGREENLAND));
+                            failedCvrs.add(new FailResult(gerNo, FailState.NOTFROMGREENLAND));
                         }
                         cvrs.remove(gerNo);
                     });
@@ -183,7 +181,7 @@ public class EboksRecieveLookupService {
             cprs.stream().forEach((item) -> {
                 ObjectNode node = objectMapper.createObjectNode();
                 node.put("nr", item);
-                node.put("reason", FailStrate.MISSING.readableFailString);
+                node.put("reason", FailState.MISSING.readableFailString);
                 failedCpr.add(node);
             });
 
@@ -199,7 +197,7 @@ public class EboksRecieveLookupService {
             cvrs.stream().forEach((item) -> {
                 ObjectNode node = objectMapper.createObjectNode();
                 node.put("nr", item);
-                node.put("reason", FailStrate.MISSING.readableFailString);
+                node.put("reason", FailState.MISSING.readableFailString);
                 failedCvr.add(node);
             });
 
@@ -246,12 +244,12 @@ public class EboksRecieveLookupService {
     /**
      * Enumerations for indicating the reason for not accepting e-post
      */
-    public enum FailStrate {
+    public enum FailState {
 
         UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead"), MINOR("Minor"), CEASED("Ceased");
         private String readableFailString;
 
-        FailStrate(String readableFailString) {
+        FailState(String readableFailString) {
             this.readableFailString = readableFailString;
         }
     }
@@ -260,9 +258,9 @@ public class EboksRecieveLookupService {
     private class FailResult {
 
         private String id = "";
-        private FailStrate fail = FailStrate.UNDEFINED;
+        private FailState fail = FailState.UNDEFINED;
 
-        public FailResult(String id, FailStrate fail) {
+        public FailResult(String id, FailState fail) {
             this.id = id;
             this.fail = fail;
         }
