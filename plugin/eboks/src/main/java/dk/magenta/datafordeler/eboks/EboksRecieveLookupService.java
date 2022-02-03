@@ -119,7 +119,7 @@ public class EboksRecieveLookupService {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
                     } else if (FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus() == 90) {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
-                    } else if (k.getAddress().size()==0 || k.getAddress().stream().anyMatch(addres -> addres.getMunicipalityCode() > 950)) {
+                    } else if (k.getAddress().size()==0 || k.getAddress().stream().anyMatch(address -> address.getMunicipalityCode() > 950)) {
                         validCprList.add(k.getPersonnummer());
                     } else {
                         failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
