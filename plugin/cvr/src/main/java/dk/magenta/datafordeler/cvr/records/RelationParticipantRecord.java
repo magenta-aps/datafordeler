@@ -58,9 +58,9 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
 
     @Column(name = DB_FIELD_BUSINESS_KEY)
     @JsonProperty(value = IO_FIELD_BUSINESS_KEY)
-    public Integer businessKey;
+    public Long businessKey;
 
-    public Integer getBusinessKey() {
+    public Long getBusinessKey() {
         return this.businessKey;
     }
 
