@@ -129,20 +129,6 @@ public class EboksLookupTest {
         }
     }
 
-    private void loadGerParticipant() throws IOException, DataFordelerException {
-        InputStream testData = EboksLookupTest.class.getResourceAsStream("/GER.test.xlsx");
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
-            dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntityManager responsibleEntityManager = (dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntityManager) gerPlugin.getRegisterManager().getEntityManager(ResponsibleEntity.schema);
-            ImportMetadata importMetadata = new ImportMetadata();
-            importMetadata.setSession(session);
-            responsibleEntityManager.parseData(testData, importMetadata);
-        } finally {
-            session.close();
-            testData.close();
-        }
-    }
-
     public void loadManyCompanies(int count) throws Exception {
         this.loadManyCompanies(count, 0);
     }
@@ -221,6 +207,8 @@ public class EboksLookupTest {
         loadPerson("/personDead.txt");
         loadPerson("/personGL.txt");
         loadPerson("/personMinor.txt");
+        loadPerson("/adressChangeHistory1.txt");
+        loadPerson("/adressChangeHistory2.txt");
         loadManyPersons(5, 0);
 
         TestUserDetails testUserDetails = new TestUserDetails();
@@ -238,6 +226,8 @@ public class EboksLookupTest {
         cprList.add("0101003456");//Dead
         cprList.add("0101001235");//From GL
         cprList.add("0101003457");//Minor
+        cprList.add("0101011234");//Was from greenland
+        cprList.add("0101011235");//Was from greenland before eboks
 
         ArrayList cvrList = new ArrayList();
         cvrList.add("25052943");
@@ -274,7 +264,7 @@ public class EboksLookupTest {
 
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0101001235\",\"0000000000\",\"0000000001\",\"0000000002\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"},{\"nr\":\"0101003457\",\"reason\":\"Minor\"},{\"nr\":\"0101003456\",\"reason\":\"Dead\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
+        JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0101001235\",\"0000000000\",\"0000000001\",\"0000000002\",\"0101011234\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"},{\"nr\":\"0101003457\",\"reason\":\"Minor\"},{\"nr\":\"0101003456\",\"reason\":\"Dead\"},{\"nr\":\"0101011235\",\"reason\":\"NotFromGreenland\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
 
     }
 
