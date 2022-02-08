@@ -1,7 +1,7 @@
 @echo off
 
 set DIR=%~dp0%
-set RUN_ARGS=""
+set RUN_ARGS="-Dlog4j2.formatMsgNoLookups=true"
 set RUN_JAR=%DIR%target\dafo-dataprovider.war
 
 rem Load global settings
@@ -16,6 +16,11 @@ rem If a local_settings.properties file exists, make sure it's loaded after the 
 if exist "%DIR%local_settings.properties" (
     set RUN_ARGS=%RUN_ARGS% --spring.config.location="classpath:/application.properties,file:%DIR%local_settings.properties"
 )
+
+echo "Build parent"
+pushd %DIR%..\plugin\parent
+   call mvnw.cmd -DskipTests clean install
+popd
 
 echo "Build core"
 pushd %COREDIR%

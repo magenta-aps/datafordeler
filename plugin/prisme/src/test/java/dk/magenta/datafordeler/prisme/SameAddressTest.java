@@ -245,7 +245,7 @@ public class SameAddressTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001236\",\"Cohabitation\":true,\"ResidentDate\":\"2016-08-31\"}", response.getBody(), false);
+        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001236\",\"Cohabitation\":true,\"ResidentDate\":\"2008-07-03\"}", response.getBody(), false);
 
         response = restTemplate.exchange(
                 "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,1212121212",
@@ -256,13 +256,13 @@ public class SameAddressTest extends TestBase {
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
-                "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,0101001235,0101001236",
+                "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,0101001235",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001235\",\"cpr3\":\"0101001236\",\"Cohabitation\":false,\"ResidentDate\":null}", response.getBody(), false);
+        JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001235\",\"Cohabitation\":false,\"ResidentDate\":null}", response.getBody(), false);
     }
 
     private void applyAccess(TestUserDetails testUserDetails) {

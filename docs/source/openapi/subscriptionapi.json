@@ -158,10 +158,10 @@
         }
       }
     },
-    "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion": {
+    "/subscription/1/manager/subscriber/subscription/businesseventSubscription": {
       "post": {
         "summary": "Opret en subscription",
-        "description": "Der oprettes en businesseventSubscribtion i datafordeleren via en post til denne url. Denne subscription bliver tilknyttet den bruger, som opretter denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion",
+        "description": "Der oprettes en businesseventSubscription i datafordeleren via en post til denne url. Denne subscription bliver tilknyttet den bruger, som opretter denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscription",
         "parameters": [
           {
             "name": "businessEventId",
@@ -179,9 +179,6 @@
             "description": "kodeId benyttes som sammenligning for at identificere om ændringer i datafordeleren matcher den oprettede subscription \n\nKodeId består af 3 dele for businessevents:\n\npart 1: Definere hvilket domæne der observeres på cpr/cvr\n\nPart 2: Definere om der observeres på hændelser af typen businessevent eller dataevent\n\nPart 3: Definere i denne situation hvilket businessevent der observeres på. Businessevents er defineret på dette link: https://doc.test.data.gl/handelseskoder.pdf",
             "href": "/handelseskoder.pdf",
             "examples": {
-              "Hvad som helst": {
-                "value": "cpr.businessevent.anything"
-              },
               "Flytning": {
                 "value": "cpr.businessevent.A01"
               },
@@ -268,7 +265,7 @@
       },
       "get": {
         "summary": "Returner en liste over alle businesseventSubscription i datafordeleren",
-        "description": "Der returneres en liste over alle businesseventSubscription, der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion",
+        "description": "Der returneres en liste over alle businesseventSubscription, der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscription",
         "responses": {
           "200": {
             "description": "Denne service returnere en liste af subscriptions",
@@ -300,10 +297,10 @@
         }
       }
     },
-    "/subscription/1/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}": {
+    "/subscription/1/manager/subscriber/subscription/businesseventSubscription/{businessEventId}": {
       "put": {
         "summary": "Modificer en subscription",
-        "description": "Der rettes en businesseventSubscribtion i datafordeleren via en put til denne url. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}",
+        "description": "Der rettes en businesseventSubscription i datafordeleren via en put til denne url. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscription/{businessEventId}",
         "parameters": [
           {
             "name": "kodeId",
@@ -311,9 +308,6 @@
             "description": "kodeId benyttes som sammenligning for at identificere om ændringer i datafordeleren matcher den oprettede subscription \n\nKodeId består af 3 dele for businessevents:\n\npart 1: Definere hvilket domæne der observeres på cpr/cvr\n\nPart 2: Definere om der observeres på hændelser af typen businessevent eller dataevent\n\nPart 3: Definere i denne situation hvilket businessevent der observeres på. Businessevents er defineret på dette link: https://doc.test.data.gl/handelseskoder.pdf",
             "href": "/handelseskoder.pdf",
             "examples": {
-              "Hvad som helst": {
-                "value": "cpr.businessevent.anything"
-              },
               "Flytning": {
                 "value": "cpr.businessevent.A01"
               },
@@ -395,7 +389,7 @@
       },
       "delete": {
         "summary": "Slet en subscription",
-        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}",
+        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscription/{businessEventId}",
         "responses": {
           "200": {
             "description": "Denne service returnere den slettede subscription",
@@ -457,7 +451,7 @@
       },
       "get": {
         "summary": "Hent en subscription",
-        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscribtion/{businessEventId}",
+        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/businesseventSubscription/{businessEventId}",
         "responses": {
           "200": {
             "description": "Denne service returnere den fremfundne subscription",
@@ -502,10 +496,10 @@
         }
       }
     },
-    "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion": {
+    "/subscription/1/manager/subscriber/subscription/dataeventSubscription": {
       "post": {
         "summary": "Opret en subscription",
-        "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion",
+        "description": "Der oprettes en subscription i datafordeleren via en post til denne service. Denne subscription bliver tilknyttet den bruger, som opretter denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscription",
         "parameters": [
           {
             "name": "businessEventId",
@@ -609,7 +603,7 @@
       },
       "get": {
         "summary": "Der returneres en liste over alle dataeventSubscription i datafordeleren",
-        "description": "Der returneres en liste over alle dataeventSubscription der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion",
+        "description": "Der returneres en liste over alle dataeventSubscription der eksistere under den bruger som laver kaldet.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscription",
         "responses": {
           "200": {
             "description": "Denne service returnere en liste af subscriptions",
@@ -641,10 +635,10 @@
         }
       }
     },
-    "/subscription/1/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}": {
+    "/subscription/1/manager/subscriber/subscription/dataeventSubscription/{dataEventId}": {
       "put": {
         "summary": "Modificer en subscription",
-        "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}",
+        "description": "Der rettes en subscription i datafordeleren via en put til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscription/{dataEventId}",
         "parameters": [
           {
             "name": "kodeId",
@@ -743,7 +737,7 @@
       },
       "delete": {
         "summary": "Slet en subscription",
-        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}",
+        "description": "Der kan slettes en tidligere oprettet subscription ved kald til dette link.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscription/{dataEventId}",
         "parameters": [
         ],
         "responses": {
@@ -807,7 +801,7 @@
       },
       "get": {
         "summary": "Hent en subscription",
-        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscribtion/{dataEventId}",
+        "description": "Der hentes en subscription i datafordeleren via en get til denne service. Denne subscription er tilknyttet den bruger, som oprettede denne.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-SUBSCRIPTION/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/manager/subscriber/subscription/dataeventSubscription/{dataEventId}",
         "parameters": [
         ],
         "responses": {
@@ -1472,7 +1466,7 @@
             "example": "1"
           },
           {
-            "name": "subscribtion",
+            "name": "subscription",
             "description": "The unique ID of the subscription",
             "example": "subscriptionId01"
           },
@@ -1582,7 +1576,7 @@
             "example": "1"
           },
           {
-            "name": "subscribtion",
+            "name": "subscription",
             "description": "The unique ID of the subscription",
             "example": "subscriptionId01"
           },
@@ -1692,7 +1686,7 @@
             "example": "1"
           },
           {
-            "name": "subscribtion",
+            "name": "subscription",
             "description": "The unique ID of the subscription",
             "example": "subscriptionId01"
           },
