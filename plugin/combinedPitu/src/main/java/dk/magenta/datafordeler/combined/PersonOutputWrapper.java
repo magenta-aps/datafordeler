@@ -189,6 +189,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         AddressConameDataRecord personAddressConameData = this.getLatest(input.getConame());
         if (personAddressConameData != null && !personAddressConameData.getConame().isEmpty()) {
             String coname = personAddressConameData.getConame();
+            root.put("co", coname);
             if (coname != null && !coname.isEmpty()) {
                 coname = coname.toLowerCase();
                 Matcher m = postboxExtract.matcher(coname);
@@ -323,6 +324,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
             String coname = personAddressConameData.getConame();
             if (coname != null && !coname.isEmpty()) {
                 coname = coname.toLowerCase();
+                addressNode.put("co", coname);
                 Matcher m = postboxExtract.matcher(coname);
                 if (m.find()) {
                     try {
