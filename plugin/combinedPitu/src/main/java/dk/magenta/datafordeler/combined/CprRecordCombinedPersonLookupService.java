@@ -155,6 +155,7 @@ public class CprRecordCombinedPersonLookupService {
         }
 
         personQuery.setPersonnumre(cprNumbers);
+        personQuery.setPageSize(100);
         if (cprs.size() > 100) {
             throw new QueryBuildException("Maximum 100 numbers is allowed");
         }
