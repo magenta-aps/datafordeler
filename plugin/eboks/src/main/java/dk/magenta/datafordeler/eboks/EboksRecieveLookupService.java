@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.AccessRequiredException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
@@ -39,11 +38,18 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Webservice for finding out if a cpr- or cvr- number is allowed to recieve e-post
+ *
+ * Persons that should not recieve eboks-letters
+ * Persons that is under 15 years old
+ * Persons that is dead
+ * Persons that has had any adress in greenland either current or historic since 2017
+ *
  */
 @RestController
 @RequestMapping("/eboks/recipient")
@@ -91,12 +97,16 @@ public class EboksRecieveLookupService {
                 for (String cprNumber : cprs) {
                     personQuery.addPersonnummer(cprNumber);
                 }
+                // The date that the eboks-system was initiated
+                // This date is relevant in order to find out if the person can be excluded from recieving eboks-letters for not beeing from greenland.
+                // A person that has not had adress in greenland since 8. June 2017, gan not recieve eboks-letters
+                OffsetDateTime eboxStart = OffsetDateTime.of(2017,6,8,0,0,0,0, ZoneOffset.UTC);
 
                 OffsetDateTime now = OffsetDateTime.now();
-                personQuery.setRegistrationFromBefore(now);
-                personQuery.setRegistrationToAfter(now);
+                personQuery.setRegistrationAt(now);
+                // All records that has an effecttointerval that is after 8. June 2017 has tried living after that date
                 personQuery.setEffectFromBefore(now);
-                personQuery.setEffectToAfter(now);
+                personQuery.setEffectToAfter(eboxStart);
 
                 personQuery.applyFilters(session);
                 Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
@@ -105,13 +115,13 @@ public class EboksRecieveLookupService {
                     BirthTimeDataRecord birthtime = FilterUtilities.findNewestUnclosedCpr(k.getBirthTime());
                     LocalDateTime fifteenYearsAgo = LocalDateTime.now().minusYears(15);
                     if (fifteenYearsAgo.isBefore(birthtime.getBirthDatetime())) {
-                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.MINOR));
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailState.MINOR));
                     } else if (FilterUtilities.findNewestUnclosedCpr(k.getStatus()).getStatus() == 90) {
-                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.DEAD));
-                    } else if (k.getAddress().size()==0 || FilterUtilities.findNewestUnclosedCpr(k.getAddress()).getMunicipalityCode() < 950) {
-                        failedCprs.add(new FailResult(k.getPersonnummer(), FailStrate.NOTFROMGREENLAND));
-                    } else {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailState.DEAD));
+                    } else if (k.getAddress().isEmpty() || k.getAddress().stream().anyMatch(address -> address.getMunicipalityCode() > 950)) {
                         validCprList.add(k.getPersonnummer());
+                    } else {
+                        failedCprs.add(new FailResult(k.getPersonnummer(), FailState.NOTFROMGREENLAND));
                     }
                     cprs.remove(k.getPersonnummer());
                 });
@@ -134,9 +144,9 @@ public class EboksRecieveLookupService {
 
                     String status = k.getMetadata().getCompanyStatusRecord(k).getStatus();
                     if(!"NORMAL".equals(status) && !"Aktiv".equals(status) && !"Fremtid".equals(status)) {
-                        failedCvrs.add(new FailResult(cvrNumber, FailStrate.CEASED));
+                        failedCvrs.add(new FailResult(cvrNumber, FailState.CEASED));
                     } else if (adress.getMunicipality().getMunicipalityCode() < 950) {
-                        failedCvrs.add(new FailResult(cvrNumber, FailStrate.NOTFROMGREENLAND));
+                        failedCvrs.add(new FailResult(cvrNumber, FailState.NOTFROMGREENLAND));
                     } else {
                         cvrList.add(cvrNumber);
                     }
@@ -152,7 +162,7 @@ public class EboksRecieveLookupService {
                         if (k.getMunicipalityCode() >= 950) {
                             cvrList.add(gerNo);
                         } else {
-                            failedCvrs.add(new FailResult(gerNo, FailStrate.NOTFROMGREENLAND));
+                            failedCvrs.add(new FailResult(gerNo, FailState.NOTFROMGREENLAND));
                         }
                         cvrs.remove(gerNo);
                     });
@@ -172,7 +182,7 @@ public class EboksRecieveLookupService {
             cprs.stream().forEach((item) -> {
                 ObjectNode node = objectMapper.createObjectNode();
                 node.put("nr", item);
-                node.put("reason", FailStrate.MISSING.readableFailString);
+                node.put("reason", FailState.MISSING.readableFailString);
                 failedCpr.add(node);
             });
 
@@ -188,7 +198,7 @@ public class EboksRecieveLookupService {
             cvrs.stream().forEach((item) -> {
                 ObjectNode node = objectMapper.createObjectNode();
                 node.put("nr", item);
-                node.put("reason", FailStrate.MISSING.readableFailString);
+                node.put("reason", FailState.MISSING.readableFailString);
                 failedCvr.add(node);
             });
 
@@ -235,12 +245,12 @@ public class EboksRecieveLookupService {
     /**
      * Enumerations for indicating the reason for not accepting e-post
      */
-    public enum FailStrate {
+    public enum FailState {
 
         UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead"), MINOR("Minor"), CEASED("Ceased");
         private String readableFailString;
 
-        FailStrate(String readableFailString) {
+        FailState(String readableFailString) {
             this.readableFailString = readableFailString;
         }
     }
@@ -249,9 +259,9 @@ public class EboksRecieveLookupService {
     private class FailResult {
 
         private String id = "";
-        private FailStrate fail = FailStrate.UNDEFINED;
+        private FailState fail = FailState.UNDEFINED;
 
-        public FailResult(String id, FailStrate fail) {
+        public FailResult(String id, FailState fail) {
             this.id = id;
             this.fail = fail;
         }

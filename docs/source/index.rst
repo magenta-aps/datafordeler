@@ -35,6 +35,7 @@ Indholdsfortegnelse
    openapi/cprapi
    openapi/prismeapi
    openapi/combinedapi
+   openapi/eskatapi
 
    wordlist
    autopulled-codes/index

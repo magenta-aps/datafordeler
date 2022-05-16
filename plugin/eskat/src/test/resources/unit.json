@@ -1,0 +1,2215 @@
+{
+  "took": 12,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "failed": 0
+  },
+  "hits": {
+    "total": 1983849,
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4006331794",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-01-29T13:08:33.726+01:00",
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "jointo@outlook.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              }
+            ],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 36238208,
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              }
+            ],
+            "sidstOpdateret": "2017-01-29T13:06:04.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "855900",
+                "branchetekst": "Anden undervisning i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 36238208,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [
+                "jointo@outlook.dk"
+              ],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "Jointo",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteHovedbranche": {
+                "branchekode": "855900",
+                "branchetekst": "Anden undervisning i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": "55a42f3a-0bad-4d9a-9ab3-d14feccbc58a",
+                "conavn": null,
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00",
+                "sidstValideret": "2017-01-29T13:08:33.542+01:00",
+                "postboks": null,
+                "vejnavn": "Martine Christoffersens Vej",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": null
+                },
+                "postnummer": 7000,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 5765,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 607,
+                  "kommuneNavn": "FREDERICIA",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 67,
+                "postdistrikt": "Fredericia",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4006331794,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": "2016-12-31"
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              }
+            ],
+            "reklamebeskyttet": false,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": "55a42f3a-0bad-4d9a-9ab3-d14feccbc58a",
+                "conavn": null,
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00",
+                "sidstValideret": "2017-01-29T13:08:33.542+01:00",
+                "postboks": null,
+                "vejnavn": "Martine Christoffersens Vej",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": null
+                },
+                "postnummer": 7000,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 5765,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 607,
+                  "kommuneNavn": "FREDERICIA",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 67,
+                "postdistrikt": "Fredericia",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "Jointo",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-29T13:06:04.000+01:00"
+              }
+            ],
+            "samtId": 2,
+            "pNummer": 1020895337
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4006627697",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-01-30T14:06:19.327+01:00",
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "lc@retroognyt.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              }
+            ],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 37952273,
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              }
+            ],
+            "sidstOpdateret": "2017-01-30T14:06:04.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "478900",
+                "branchetekst": "Detailhandel med andre varer fra stadepladser og markeder",
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 37952273,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [
+                "28458209",
+                "lc@retroognyt.dk"
+              ],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "retroognyt.dk",
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteHovedbranche": {
+                "branchekode": "478900",
+                "branchetekst": "Detailhandel med andre varer fra stadepladser og markeder",
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": "0a3f50bc-fde6-32b8-e044-0003ba298018",
+                "conavn": "Lars Christiansen",
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00",
+                "sidstValideret": "2017-01-30T14:06:19.137+01:00",
+                "postboks": null,
+                "vejnavn": "Svinget",
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "postnummer": 7100,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 2362,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 630,
+                  "kommuneNavn": "VEJLE",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 7,
+                "postdistrikt": "Vejle",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4006627697,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              }
+            ],
+            "reklamebeskyttet": true,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": "0a3f50bc-fde6-32b8-e044-0003ba298018",
+                "conavn": "Lars Christiansen",
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00",
+                "sidstValideret": "2017-01-30T14:06:19.137+01:00",
+                "postboks": null,
+                "vejnavn": "Svinget",
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "postnummer": 7100,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 2362,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 630,
+                  "kommuneNavn": "VEJLE",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 7,
+                "postdistrikt": "Vejle",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "28458209",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "retroognyt.dk",
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              }
+            ],
+            "samtId": 2,
+            "pNummer": 1021686405
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4006446164",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-01-30T11:10:05.294+01:00",
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "Lalle@outlook.dk",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2016-02-11",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
+              }
+            ],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 37440612,
+                "periode": {
+                  "gyldigFra": "2016-02-11",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
+              }
+            ],
+            "sidstOpdateret": "2017-01-30T11:07:47.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "493200",
+                "branchetekst": "Taxikørsel",
+                "periode": {
+                  "gyldigFra": "2016-02-11",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 37440612,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [
+                "Lalle@outlook.dk"
+              ],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "Hallengreen v/lars hansen",
+                "periode": {
+                  "gyldigFra": "2016-02-11",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteHovedbranche": {
+                "branchekode": "493200",
+                "branchetekst": "Taxikørsel",
+                "periode": {
+                  "gyldigFra": "2016-02-11",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": "0a3f50a6-812f-32b8-e044-0003ba298018",
+                "conavn": null,
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00",
+                "sidstValideret": "2017-01-30T11:10:05.096+01:00",
+                "postboks": null,
+                "vejnavn": "Brandholms Alle",
+                "periode": {
+                  "gyldigFra": "2016-09-27",
+                  "gyldigTil": null
+                },
+                "postnummer": 2610,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": "D",
+                "vejkode": 85,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 175,
+                  "kommuneNavn": "RØDOVRE",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 32,
+                "postdistrikt": "Rødovre",
+                "etage": "st",
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4006446164,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2016-02-11",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
+              }
+            ],
+            "reklamebeskyttet": true,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2016-09-27T20:39:04.000+02:00",
+                "sidstValideret": null,
+                "postboks": null,
+                "vejnavn": "Brandholms Alle",
+                "periode": {
+                  "gyldigFra": "2016-02-11",
+                  "gyldigTil": null
+                },
+                "postnummer": 2610,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": "D",
+                "vejkode": 85,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 175,
+                  "kommuneNavn": "RØDOVRE",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 32,
+                "postdistrikt": "Rødovre",
+                "etage": "st",
+                "fritekst": null
+              },
+              {
+                "adresseId": "0a3f50a6-812f-32b8-e044-0003ba298018",
+                "conavn": null,
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00",
+                "sidstValideret": "2017-01-30T11:10:05.096+01:00",
+                "postboks": null,
+                "vejnavn": "Brandholms Alle",
+                "periode": {
+                  "gyldigFra": "2016-09-27",
+                  "gyldigTil": null
+                },
+                "postnummer": 2610,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": "D",
+                "vejkode": 85,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 175,
+                  "kommuneNavn": "RØDOVRE",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 32,
+                "postdistrikt": "Rødovre",
+                "etage": "st",
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "Hallengreen v/lars hansen",
+                "periode": {
+                  "gyldigFra": "2016-02-11",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:07:47.000+01:00"
+              }
+            ],
+            "samtId": 3,
+            "pNummer": 1021143606
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4006623251",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-01-30T11:10:11.777+01:00",
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "tovem.thomsen@hotmail.com",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              }
+            ],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 37940755,
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              }
+            ],
+            "sidstOpdateret": "2017-01-30T11:08:14.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "741020",
+                "branchetekst": "Kommunikationsdesign og grafisk design",
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2016-09-27T10:57:33.000+02:00"
+              },
+              {
+                "branchekode": "620200",
+                "branchetekst": "Konsulentbistand vedrørende informationsteknologi",
+                "periode": {
+                  "gyldigFra": "2016-09-03",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 37940755,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [
+                "75160418",
+                "tovem.thomsen@hotmail.com"
+              ],
+              "nyesteBibranche1": {
+                "branchekode": "741020",
+                "branchetekst": "Kommunikationsdesign og grafisk design",
+                "periode": {
+                  "gyldigFra": "2016-09-03",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              },
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "TM.Media Services",
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteHovedbranche": {
+                "branchekode": "620200",
+                "branchetekst": "Konsulentbistand vedrørende informationsteknologi",
+                "periode": {
+                  "gyldigFra": "2016-09-03",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": "0a3f50b8-f847-32b8-e044-0003ba298018",
+                "conavn": "TM.Media",
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00",
+                "sidstValideret": "2017-01-30T11:10:11.585+01:00",
+                "postboks": null,
+                "vejnavn": "Høstvej",
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "postnummer": 6705,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 3886,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 561,
+                  "kommuneNavn": "ESBJERG",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 7,
+                "postdistrikt": "Esbjerg Ø",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4006623251,
+            "bibranche1": [
+              {
+                "branchekode": "479120",
+                "branchetekst": "Detailhandel via Internettet med digitale produkter",
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2016-09-27T10:31:07.000+02:00"
+              },
+              {
+                "branchekode": "741020",
+                "branchetekst": "Kommunikationsdesign og grafisk design",
+                "periode": {
+                  "gyldigFra": "2016-09-03",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              }
+            ],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              }
+            ],
+            "reklamebeskyttet": true,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": "0a3f50b8-f847-32b8-e044-0003ba298018",
+                "conavn": "TM.Media",
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00",
+                "sidstValideret": "2017-01-30T11:10:11.585+01:00",
+                "postboks": null,
+                "vejnavn": "Høstvej",
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "postnummer": 6705,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 3886,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 561,
+                  "kommuneNavn": "ESBJERG",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 7,
+                "postdistrikt": "Esbjerg Ø",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "75160418",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "TM.Media Services",
+                "periode": {
+                  "gyldigFra": "2016-08-18",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T11:08:14.000+01:00"
+              }
+            ],
+            "samtId": 5,
+            "pNummer": 1021673729
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4003215846",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-01-30T15:17:34.254+01:00",
+            "elektroniskPost": [],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 27475922,
+                "periode": {
+                  "gyldigFra": "2003-08-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
+              }
+            ],
+            "sidstOpdateret": "2017-01-30T15:17:02.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "702040",
+                "branchetekst": "Udlejning af erhvervsejendomme",
+                "periode": {
+                  "gyldigFra": "2003-08-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T23:05:42.000+01:00"
+              },
+              {
+                "branchekode": "682040",
+                "branchetekst": "Udlejning af erhvervsejendomme",
+                "periode": {
+                  "gyldigFra": "2008-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 27475922,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "Henrik Ørbekker",
+                "periode": {
+                  "gyldigFra": "2003-08-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": {
+                "aar": 2009,
+                "antalInklusivEjere": null,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2016-12-15T14:15:45.197+01:00",
+                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
+                "intervalKodeAntalAarsvaerk": "ANTAL_0_0",
+                "intervalKodeAntalAnsatte": "ANTAL_0_0"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "682040",
+                "branchetekst": "Udlejning af erhvervsejendomme",
+                "periode": {
+                  "gyldigFra": "2008-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": "eafb1030-e79e-4c15-8d84-a4d60dc2ed75",
+                "conavn": "adv. Boris K. Frederiksen",
+                "sidstOpdateret": "2017-01-30T15:17:02.000+01:00",
+                "sidstValideret": "2017-01-30T15:17:34.054+01:00",
+                "postboks": null,
+                "vejnavn": "Vester Farimagsgade",
+                "periode": {
+                  "gyldigFra": "2010-11-03",
+                  "gyldigTil": null
+                },
+                "postnummer": 1606,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 8208,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 23,
+                "postdistrikt": "København V",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4003215846,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2003-08-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
+              }
+            ],
+            "reklamebeskyttet": false,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2013-11-22T23:26:49.000+01:00",
+                "sidstValideret": null,
+                "postboks": null,
+                "vejnavn": "Øresundshøj",
+                "periode": {
+                  "gyldigFra": "2003-08-01",
+                  "gyldigTil": "2006-01-25"
+                },
+                "postnummer": 2920,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 976,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 157,
+                  "kommuneNavn": "GENTOFTE",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 16,
+                "postdistrikt": "Charlottenlund",
+                "etage": null,
+                "fritekst": null
+              },
+              {
+                "adresseId": null,
+                "conavn": "C & K Administration",
+                "sidstOpdateret": "2010-11-08T15:25:46.000+01:00",
+                "sidstValideret": null,
+                "postboks": null,
+                "vejnavn": "Amaliegade",
+                "periode": {
+                  "gyldigFra": "2006-01-26",
+                  "gyldigTil": "2010-11-02"
+                },
+                "postnummer": 1256,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 128,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 12,
+                "postdistrikt": "København K",
+                "etage": "2",
+                "fritekst": null
+              },
+              {
+                "adresseId": "eafb1030-e79e-4c15-8d84-a4d60dc2ed75",
+                "conavn": "adv. Boris K. Frederiksen",
+                "sidstOpdateret": "2017-01-30T15:17:02.000+01:00",
+                "sidstValideret": "2017-01-30T15:17:34.054+01:00",
+                "postboks": null,
+                "vejnavn": "Vester Farimagsgade",
+                "periode": {
+                  "gyldigFra": "2010-11-03",
+                  "gyldigTil": "2010-11-03"
+                },
+                "postnummer": 1606,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 8208,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 23,
+                "postdistrikt": "København V",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [
+            ],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "Henrik Ørbekker",
+                "periode": {
+                  "gyldigFra": "2003-08-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:17:02.000+01:00"
+              }
+            ],
+            "samtId": 7,
+            "pNummer": 1010255879
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4006394627",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-01-30T15:16:32.425+01:00",
+            "elektroniskPost": [
+              {
+                "kontaktoplysning": "sanmus@me.com",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
+              }
+            ],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 37314161,
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
+              }
+            ],
+            "sidstOpdateret": "2017-01-30T15:16:04.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "949900",
+                "branchetekst": "Andre organisationer og foreninger i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 37314161,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [
+                "sanmus@me.com"
+              ],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "4 Beloved Paws",
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteHovedbranche": {
+                "branchekode": "949900",
+                "branchetekst": "Andre organisationer og foreninger i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": "eaddf35e-1719-4b57-97a9-227c0cbcf96d",
+                "conavn": "Sandra Musone",
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00",
+                "sidstValideret": "2017-01-30T15:16:32.233+01:00",
+                "postboks": null,
+                "vejnavn": "Skt. Knuds gade",
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "postnummer": 5000,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 7651,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 461,
+                  "kommuneNavn": "ODENSE",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 51,
+                "postdistrikt": "Odense C",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4006394627,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
+              }
+            ],
+            "reklamebeskyttet": true,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": "eaddf35e-1719-4b57-97a9-227c0cbcf96d",
+                "conavn": "Sandra Musone",
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00",
+                "sidstValideret": "2017-01-30T15:16:32.233+01:00",
+                "postboks": null,
+                "vejnavn": "Skt. Knuds gade",
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "postnummer": 5000,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 7651,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 461,
+                  "kommuneNavn": "ODENSE",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 51,
+                "postdistrikt": "Odense C",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "4 Beloved Paws",
+                "periode": {
+                  "gyldigFra": "2015-12-20",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:16:04.000+01:00"
+              }
+            ],
+            "samtId": 2,
+            "pNummer": 1020994432
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4006671911",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-01-30T15:58:28.096+01:00",
+            "elektroniskPost": [],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 38062980,
+                "periode": {
+                  "gyldigFra": "2016-09-28",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
+              }
+            ],
+            "sidstOpdateret": "2017-01-30T15:57:40.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "999999",
+                "branchetekst": "Uoplyst",
+                "periode": {
+                  "gyldigFra": "2016-09-28",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 38062980,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "BE 64 K/S",
+                "periode": {
+                  "gyldigFra": "2016-09-28",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteHovedbranche": {
+                "branchekode": "999999",
+                "branchetekst": "Uoplyst",
+                "periode": {
+                  "gyldigFra": "2016-09-28",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": null,
+                "conavn": "Better Energy Invest A/S",
+                "sidstOpdateret": "2017-01-30T15:57:40.000+01:00",
+                "sidstValideret": "2017-01-30T15:58:27.825+01:00",
+                "postboks": null,
+                "vejnavn": "Kigkurren",
+                "periode": {
+                  "gyldigFra": "2016-09-28",
+                  "gyldigTil": null
+                },
+                "postnummer": 2300,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": "D",
+                "vejkode": 3640,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 8,
+                "postdistrikt": "København S",
+                "etage": "1",
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4006671911,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2016-09-28",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
+              }
+            ],
+            "reklamebeskyttet": true,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": null,
+                "conavn": "Better Energy Invest A/S",
+                "sidstOpdateret": "2017-01-30T15:57:40.000+01:00",
+                "sidstValideret": "2017-01-30T15:58:27.825+01:00",
+                "postboks": null,
+                "vejnavn": "Kigkurren",
+                "periode": {
+                  "gyldigFra": "2016-09-28",
+                  "gyldigTil": null
+                },
+                "postnummer": 2300,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": "D",
+                "vejkode": 3640,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 8,
+                "postdistrikt": "København S",
+                "etage": "1",
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "BE 64 K/S",
+                "periode": {
+                  "gyldigFra": "2016-09-28",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-01-30T15:57:40.000+01:00"
+              }
+            ],
+            "samtId": 2,
+            "pNummer": 1021809213
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4003099943",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-02-01T21:34:24.785+01:00",
+            "elektroniskPost": [],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 27197531,
+                "periode": {
+                  "gyldigFra": "2003-06-13",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2003-06-13T13:59:48.000+02:00"
+              }
+            ],
+            "sidstOpdateret": "2017-02-01T20:33:45.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "513900",
+                "branchetekst": "Ikke-specialiseret engroshandel med føde-, drikke- og tobaksvarer",
+                "periode": {
+                  "gyldigFra": "2003-06-13",
+                  "gyldigTil": "2007-12-31"
+                },
+                "sidstOpdateret": "2003-08-05T14:12:13.000+02:00"
+              },
+              {
+                "branchekode": "463900",
+                "branchetekst": "Ikke-specialiseret engroshandel med føde-, drikke- og tobaksvarer",
+                "periode": {
+                  "gyldigFra": "2008-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T23:09:38.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 27197531,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [
+                "33222225",
+                "33215200"
+              ],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "LOTUS IMPORT ApS",
+                "periode": {
+                  "gyldigFra": "2003-06-13",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T22:55:56.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": {
+                "aar": 2011,
+                "antalInklusivEjere": null,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2016-12-15T14:15:45.197+01:00",
+                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
+                "intervalKodeAntalAarsvaerk": "ANTAL_1_1",
+                "intervalKodeAntalAnsatte": "ANTAL_1_1"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "463900",
+                "branchetekst": "Ikke-specialiseret engroshandel med føde-, drikke- og tobaksvarer",
+                "periode": {
+                  "gyldigFra": "2008-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T23:09:38.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2017-02-01T20:33:45.000+01:00",
+                "sidstValideret": "2017-02-01T21:34:24.595+01:00",
+                "postboks": null,
+                "vejnavn": "Frugtmarkedet",
+                "periode": {
+                  "gyldigFra": "2007-05-31",
+                  "gyldigTil": null
+                },
+                "postnummer": 2500,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 2006,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 19,
+                "postdistrikt": "Valby",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4003099943,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2003-06-13",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2003-06-13T13:59:48.000+02:00"
+              }
+            ],
+            "reklamebeskyttet": false,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2013-11-22T23:26:49.000+01:00",
+                "sidstValideret": null,
+                "postboks": null,
+                "vejnavn": "Brøndbyøster Torv",
+                "periode": {
+                  "gyldigFra": "2003-06-13",
+                  "gyldigTil": "2004-02-12"
+                },
+                "postnummer": 2605,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 86,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 153,
+                  "kommuneNavn": "BRØNDBY",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": "th",
+                "husnummerFra": 51,
+                "postdistrikt": "Brøndby",
+                "etage": "7",
+                "fritekst": null
+              },
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2004-02-25T10:56:52.000+01:00",
+                "sidstValideret": null,
+                "postboks": null,
+                "vejnavn": "Støberigade",
+                "periode": {
+                  "gyldigFra": "2004-02-13",
+                  "gyldigTil": "2007-05-30"
+                },
+                "postnummer": 2450,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 7084,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 3,
+                "postdistrikt": "København SV",
+                "etage": null,
+                "fritekst": null
+              },
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2017-02-01T20:33:45.000+01:00",
+                "sidstValideret": "2017-02-01T21:34:24.595+01:00",
+                "postboks": null,
+                "vejnavn": "Frugtmarkedet",
+                "periode": {
+                  "gyldigFra": "2007-05-31",
+                  "gyldigTil": "2013-06-20"
+                },
+                "postnummer": 2500,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 2006,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 19,
+                "postdistrikt": "Valby",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [
+            ],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "33222225",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2007-05-09",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T23:01:39.000+01:00"
+              }
+            ],
+            "telefaxNummer": [
+              {
+                "kontaktoplysning": "33215200",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2007-05-09",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T23:01:39.000+01:00"
+              }
+            ],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "LOTUS IMPORT ApS",
+                "periode": {
+                  "gyldigFra": "2003-06-13",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T22:55:56.000+01:00"
+              }
+            ],
+            "samtId": 9,
+            "pNummer": 1009917736
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4002434233",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-02-01T21:34:22.658+01:00",
+            "elektroniskPost": [],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 25218604,
+                "periode": {
+                  "gyldigFra": "2003-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
+              }
+            ],
+            "sidstOpdateret": "2017-02-01T20:33:34.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "980000",
+                "branchetekst": "Uoplyst",
+                "periode": {
+                  "gyldigFra": "2003-01-01",
+                  "gyldigTil": "2007-12-31"
+                },
+                "sidstOpdateret": "2013-11-22T23:05:42.000+01:00"
+              },
+              {
+                "branchekode": "561010",
+                "branchetekst": "Restauranter",
+                "periode": {
+                  "gyldigFra": "2008-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 25218604,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "J.J. MULTISERVICE ApS",
+                "periode": {
+                  "gyldigFra": "2006-08-14",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
+              },
+              "nyesteAarsbeskaeftigelse": null,
+              "nyesteHovedbranche": {
+                "branchekode": "561010",
+                "branchetekst": "Restauranter",
+                "periode": {
+                  "gyldigFra": "2008-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2017-02-01T20:33:34.000+01:00",
+                "sidstValideret": "2017-02-01T21:34:22.459+01:00",
+                "postboks": null,
+                "vejnavn": "Frugtmarkedet",
+                "periode": {
+                  "gyldigFra": "2010-10-08",
+                  "gyldigTil": null
+                },
+                "postnummer": 2500,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 2006,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 11,
+                "postdistrikt": "Valby",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4002434233,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2003-01-01",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
+              }
+            ],
+            "reklamebeskyttet": false,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2013-11-22T23:26:49.000+01:00",
+                "sidstValideret": null,
+                "postboks": null,
+                "vejnavn": "Strandmarksvej",
+                "periode": {
+                  "gyldigFra": "2003-01-01",
+                  "gyldigTil": null
+                },
+                "postnummer": 2650,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 8094,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 167,
+                  "kommuneNavn": "HVIDOVRE",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 61,
+                "postdistrikt": "Hvidovre",
+                "etage": null,
+                "fritekst": null
+              },
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2004-03-11T12:14:22.000+01:00",
+                "sidstValideret": null,
+                "postboks": null,
+                "vejnavn": "Hvidovrevej",
+                "periode": {
+                  "gyldigFra": "2003-12-18",
+                  "gyldigTil": "2010-10-07"
+                },
+                "postnummer": 2650,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 4032,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 167,
+                  "kommuneNavn": "HVIDOVRE",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 354,
+                "postdistrikt": "Hvidovre",
+                "etage": null,
+                "fritekst": null
+              },
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2017-02-01T20:33:34.000+01:00",
+                "sidstValideret": "2017-02-01T21:34:22.459+01:00",
+                "postboks": null,
+                "vejnavn": "Frugtmarkedet",
+                "periode": {
+                  "gyldigFra": "2010-10-08",
+                  "gyldigTil": "2015-01-08"
+                },
+                "postnummer": 2500,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 2006,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 11,
+                "postdistrikt": "Valby",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "HANDELSANPARTSSELSKABET           MR. DELIVERY'S TAKE OUT & DINERS",
+                "periode": {
+                  "gyldigFra": "2003-01-01",
+                  "gyldigTil": "2003-12-17"
+                },
+                "sidstOpdateret": "2013-11-22T22:52:26.000+01:00"
+              },
+              {
+                "navn": "PBC MANAGEMENT & ENTERTAIMENT ApS",
+                "periode": {
+                  "gyldigFra": "2003-12-18",
+                  "gyldigTil": "2006-08-13"
+                },
+                "sidstOpdateret": "2004-01-15T16:51:14.000+01:00"
+              },
+              {
+                "navn": "J.J. MULTISERVICE ApS",
+                "periode": {
+                  "gyldigFra": "2006-08-14",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2015-06-10T00:00:00.000+02:00"
+              }
+            ],
+            "samtId": 33,
+            "pNummer": 1009663777
+          }
+        }
+      },
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "produktionsenhed",
+        "_id": "4003214526",
+        "_score": 1,
+        "_source": {
+          "VrproduktionsEnhed": {
+            "attributter": [],
+            "sidstIndlaest": "2017-02-01T21:34:37.686+01:00",
+            "elektroniskPost": [],
+            "virksomhedsrelation": [
+              {
+                "cvrNummer": 27740960,
+                "periode": {
+                  "gyldigFra": "2004-05-14",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2004-05-14T16:17:19.000+02:00"
+              }
+            ],
+            "sidstOpdateret": "2017-02-01T20:33:53.000+01:00",
+            "hovedbranche": [
+              {
+                "branchekode": "519000",
+                "branchetekst": "Anden engroshandel",
+                "periode": {
+                  "gyldigFra": "2004-05-14",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T23:09:38.000+01:00"
+              }
+            ],
+            "enhedstype": "PRODUKTIONSENHED",
+            "fejlVedIndlaesning": false,
+            "postadresse": [],
+            "produktionsEnhedMetadata": {
+              "nyesteCvrNummerRelation": 27740960,
+              "sammensatStatus": "Ophørt",
+              "nyesteKontaktoplysninger": [
+                "43538668"
+              ],
+              "nyesteBibranche1": null,
+              "nyesteBibranche3": null,
+              "nyesteBibranche2": null,
+              "nyesteNavn": {
+                "navn": "B2B EUROPE ApS",
+                "periode": {
+                  "gyldigFra": "2004-05-14",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T22:55:56.000+01:00"
+              },
+              "nyesteAarsbeskaeftigelse": {
+                "aar": 2004,
+                "antalInklusivEjere": null,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2006-05-18T17:52:30.000+02:00",
+                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
+                "intervalKodeAntalAarsvaerk": "ANTAL_1_1",
+                "intervalKodeAntalAnsatte": "ANTAL_1_1"
+              },
+              "nyesteHovedbranche": {
+                "branchekode": "519000",
+                "branchetekst": "Anden engroshandel",
+                "periode": {
+                  "gyldigFra": "2004-05-14",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T23:09:38.000+01:00"
+              },
+              "nyesteBeliggenhedsadresse": {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2017-02-01T20:33:53.000+01:00",
+                "sidstValideret": "2017-02-01T21:34:37.486+01:00",
+                "postboks": null,
+                "vejnavn": "Frugtmarkedet",
+                "periode": {
+                  "gyldigFra": "2005-07-18",
+                  "gyldigTil": null
+                },
+                "postnummer": 2500,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 2006,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 19,
+                "postdistrikt": "Valby",
+                "etage": null,
+                "fritekst": null
+              },
+              "nyesteKvartalsbeskaeftigelse": null
+            },
+            "bibranche2": [],
+            "bibranche3": [],
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4003214526,
+            "bibranche1": [],
+            "livsforloeb": [
+              {
+                "periode": {
+                  "gyldigFra": "2004-05-14",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2004-05-14T16:17:19.000+02:00"
+              }
+            ],
+            "reklamebeskyttet": false,
+            "fejlBeskrivelse": null,
+            "beliggenhedsadresse": [
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2013-11-22T23:26:49.000+01:00",
+                "sidstValideret": null,
+                "postboks": null,
+                "vejnavn": "Industrigrenen",
+                "periode": {
+                  "gyldigFra": "2004-05-14",
+                  "gyldigTil": "2005-07-17"
+                },
+                "postnummer": 2635,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 247,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 183,
+                  "kommuneNavn": "ISHØJ",
+                  "periode": {
+                    "gyldigFra": null,
+                    "gyldigTil": "2006-12-31"
+                  },
+                  "sidstOpdateret": "1999-10-15T00:00:00.000+02:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 21,
+                "postdistrikt": "Ishøj",
+                "etage": null,
+                "fritekst": null
+              },
+              {
+                "adresseId": null,
+                "conavn": null,
+                "sidstOpdateret": "2017-02-01T20:33:53.000+01:00",
+                "sidstValideret": "2017-02-01T21:34:37.486+01:00",
+                "postboks": null,
+                "vejnavn": "Frugtmarkedet",
+                "periode": {
+                  "gyldigFra": "2005-07-18",
+                  "gyldigTil": "2007-09-20"
+                },
+                "postnummer": 2500,
+                "bogstavTil": null,
+                "landekode": "DK",
+                "bogstavFra": null,
+                "vejkode": 2006,
+                "bynavn": null,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-13T00:00:00.000+01:00"
+                },
+                "husnummerTil": null,
+                "sidedoer": null,
+                "husnummerFra": 19,
+                "postdistrikt": "Valby",
+                "etage": null,
+                "fritekst": null
+              }
+            ],
+            "deltagerRelation": [],
+            "aarsbeskaeftigelse": [
+              {
+                "aar": 2004,
+                "antalInklusivEjere": null,
+                "antalAarsvaerk": null,
+                "antalAnsatte": null,
+                "sidstOpdateret": "2006-05-18T15:52:30.000Z",
+                "intervalKodeAntalInklusivEjere": "ANTAL_1_1",
+                "intervalKodeAntalAarsvaerk": "ANTAL_1_1",
+                "intervalKodeAntalAnsatte": "ANTAL_1_1"
+              }
+            ],
+            "virkningsAktoer": "R",
+            "kvartalsbeskaeftigelse": [],
+            "brancheAnsvarskode": null,
+            "telefonNummer": [
+              {
+                "kontaktoplysning": "43538668",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2005-07-25",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T23:01:39.000+01:00"
+              }
+            ],
+            "telefaxNummer": [],
+            "naermesteFremtidigeDato": null,
+            "navne": [
+              {
+                "navn": "B2B EUROPE ApS",
+                "periode": {
+                  "gyldigFra": "2004-05-14",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2013-11-22T22:55:56.000+01:00"
+              }
+            ],
+            "samtId": 8,
+            "pNummer": 1010569970
+          }
+        }
+      }
+    ]
+  }
+}

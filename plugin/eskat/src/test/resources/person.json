@@ -1,0 +1,1065 @@
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 6,
+    "successful": 6,
+    "failed": 0
+  },
+  "hits": {
+    "total": 1,
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": "cvr-permanent-prod-20170205",
+        "_type": "deltager",
+        "_id": "4000004988",
+        "_score": 1,
+        "_source": {
+          "Vrdeltagerperson": {
+            "forretningsnoegle": "1234567890",
+            "navne": [
+              {
+                "navn": "TESTNAVN",
+                "periode": {
+                  "gyldigFra": null,
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2012-05-30T17:31:08.000+02:00"
+              }
+            ],
+            "postadresse": [],
+            "beliggenhedsadresse": [
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 40,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-12T21:00:00.000+01:00"
+                },
+                "husnummerFra": 28,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Agerlandsvej",
+                "bynavn": null,
+                "postnummer": 2300,
+                "postdistrikt": "København S",
+                "periode": {
+                  "gyldigFra": "2012-05-29",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2012-05-30T17:31:08.000+02:00"
+              },
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 4356,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-12T21:00:00.000+01:00"
+                },
+                "husnummerFra": 19,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": "A",
+                "bogstavTil": null,
+                "etage": "4",
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Lipkesgade",
+                "bynavn": null,
+                "postnummer": 2100,
+                "postdistrikt": "København Ø",
+                "periode": {
+                  "gyldigFra": "2000-04-11",
+                  "gyldigTil": "2005-07-13"
+                },
+                "sidstOpdateret": "2000-04-10T22:51:22.000+02:00"
+              },
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 7996,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-12T21:00:00.000+01:00"
+                },
+                "husnummerFra": 15,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "2",
+                "sidedoer": "th",
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Vardegade",
+                "bynavn": null,
+                "postnummer": 2100,
+                "postdistrikt": "København Ø",
+                "periode": {
+                  "gyldigFra": "2005-07-14",
+                  "gyldigTil": "2008-07-08"
+                },
+                "sidstOpdateret": "2005-07-19T12:50:10.000+02:00"
+              },
+              {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 8696,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-12T21:00:00.000+01:00"
+                },
+                "husnummerFra": 82,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": "03",
+                "sidedoer": "tv",
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Århusgade",
+                "bynavn": null,
+                "postnummer": 2100,
+                "postdistrikt": "København Ø",
+                "periode": {
+                  "gyldigFra": "2008-07-09",
+                  "gyldigTil": "2012-05-28"
+                },
+                "sidstOpdateret": "2008-07-18T07:05:21.000+02:00"
+              }
+            ],
+            "forretningsadresse": [],
+            "telefonNummer": [],
+            "telefaxNummer": [],
+            "elektroniskPost": [],
+            "stilling": null,
+            "statusKode": null,
+            "attributter": [],
+            "virksomhedSummariskRelation": [
+              {
+                "virksomhed": {
+                  "enhedsNummer": 4001060020,
+                  "enhedstype": "VIRKSOMHED",
+                  "fejlRegistreret": false,
+                  "sidstIndlaest": "2015-06-24T01:50:57.629+02:00",
+                  "sidstOpdateret": null,
+                  "cvrNummer": 21016632,
+                  "regNummer": [],
+                  "navne": [
+                    {
+                      "navn": "TESTNAVN",
+                      "periode": {
+                        "gyldigFra": "1998-07-20",
+                        "gyldigTil": "2008-12-31"
+                      },
+                      "sidstOpdateret": "2013-11-22T19:12:17.000+01:00"
+                    }
+                  ],
+                  "livsforloeb": [
+                    {
+                      "periode": {
+                        "gyldigFra": "1998-07-20",
+                        "gyldigTil": "2008-12-31"
+                      },
+                      "sidstOpdateret": "1999-10-16T17:50:06.000+02:00"
+                    }
+                  ],
+                  "status": [],
+                  "virksomhedsstatus": [],
+                  "virksomhedsform": [
+                    {
+                      "virksomhedsformkode": 10,
+                      "kortBeskrivelse": "ENK",
+                      "langBeskrivelse": "Enkeltmandsvirksomhed",
+                      "ansvarligDataleverandoer": "T&S",
+                      "periode": {
+                        "gyldigFra": "1998-07-20",
+                        "gyldigTil": "2008-12-31"
+                      },
+                      "sidstOpdateret": "2013-11-22T19:00:13.000+01:00"
+                    }
+                  ]
+                },
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 0,
+                    "hovedtype": "FULDT_ANSVARLIG_DELTAGERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Interessenter",
+                        "periode": {
+                          "gyldigFra": null,
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": null
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Interessenter",
+                            "periode": {
+                              "gyldigFra": "1998-07-20",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": null
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "INTERESSENTER",
+                                "periode": {
+                                  "gyldigFra": "1998-07-20",
+                                  "gyldigTil": "2008-12-31"
+                                },
+                                "sidstOpdateret": "1999-10-16T17:58:48.000+02:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "virksomhed": {
+                  "enhedsNummer": 4001740411,
+                  "enhedstype": "VIRKSOMHED",
+                  "fejlRegistreret": false,
+                  "sidstIndlaest": "2015-06-26T00:23:53.718+02:00",
+                  "sidstOpdateret": null,
+                  "cvrNummer": 32075541,
+                  "regNummer": [],
+                  "navne": [
+                    {
+                      "navn": "COPENHAGENSOURCE A/S",
+                      "periode": {
+                        "gyldigFra": "2009-03-03",
+                        "gyldigTil": "2010-11-09"
+                      },
+                      "sidstOpdateret": "2013-11-22T19:12:17.000+01:00"
+                    }
+                  ],
+                  "livsforloeb": [
+                    {
+                      "periode": {
+                        "gyldigFra": "2009-03-03",
+                        "gyldigTil": "2010-11-09"
+                      },
+                      "sidstOpdateret": "2009-03-11T10:34:01.000+01:00"
+                    }
+                  ],
+                  "status": [],
+                  "virksomhedsstatus": [
+                    {
+                      "status": "NORMAL",
+                      "periode": {
+                        "gyldigFra": "2009-03-03",
+                        "gyldigTil": "2009-10-21"
+                      },
+                      "sidstOpdateret": "2015-02-09T21:00:00.000+01:00"
+                    },
+                    {
+                      "status": "UNDER FRIVILLIG LIKVIDATION",
+                      "periode": {
+                        "gyldigFra": "2009-10-22",
+                        "gyldigTil": "2010-11-08"
+                      },
+                      "sidstOpdateret": "2015-02-09T21:00:00.000+01:00"
+                    },
+                    {
+                      "status": "OPLØST EFTER FRIVILLIG LIKVIDATION",
+                      "periode": {
+                        "gyldigFra": "2010-11-09",
+                        "gyldigTil": "2010-11-09"
+                      },
+                      "sidstOpdateret": "2015-02-09T21:00:00.000+01:00"
+                    }
+                  ],
+                  "virksomhedsform": [
+                    {
+                      "virksomhedsformkode": 60,
+                      "kortBeskrivelse": "A/S",
+                      "langBeskrivelse": "Aktieselskab",
+                      "ansvarligDataleverandoer": "E&S",
+                      "periode": {
+                        "gyldigFra": "2009-03-03",
+                        "gyldigTil": "2010-11-09"
+                      },
+                      "sidstOpdateret": "2013-11-22T19:00:13.000+01:00"
+                    }
+                  ]
+                },
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4005341484,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Bestyrelse",
+                        "periode": {
+                          "gyldigFra": "2009-03-03",
+                          "gyldigTil": "2010-11-09"
+                        },
+                        "sidstOpdateret": "2015-02-09T23:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Bestyrelse",
+                            "periode": {
+                              "gyldigFra": "2009-03-03",
+                              "gyldigTil": "2010-11-09"
+                            },
+                            "sidstOpdateret": "2015-02-09T21:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "VALGFORM",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "generalforsamling",
+                                "periode": {
+                                  "gyldigFra": "2009-03-03",
+                                  "gyldigTil": "2009-10-22"
+                                },
+                                "sidstOpdateret": "2015-02-09T21:00:00.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "BESTYRELSE",
+                                "periode": {
+                                  "gyldigFra": "2009-03-03",
+                                  "gyldigTil": "2009-10-22"
+                                },
+                                "sidstOpdateret": "2015-02-09T21:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "enhedsNummerOrganisation": 4005341485,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Direktion",
+                        "periode": {
+                          "gyldigFra": "2009-03-03",
+                          "gyldigTil": "2010-11-09"
+                        },
+                        "sidstOpdateret": "2015-02-09T23:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Direktion",
+                            "periode": {
+                              "gyldigFra": "2009-03-03",
+                              "gyldigTil": "2010-11-09"
+                            },
+                            "sidstOpdateret": "2015-02-09T21:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "DIREKTION",
+                                "periode": {
+                                  "gyldigFra": "2009-03-03",
+                                  "gyldigTil": "2009-10-22"
+                                },
+                                "sidstOpdateret": "2015-02-09T21:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "virksomhed": {
+                  "enhedsNummer": 4001248508,
+                  "enhedstype": "VIRKSOMHED",
+                  "fejlRegistreret": false,
+                  "sidstIndlaest": "2017-04-10T09:02:16.563+02:00",
+                  "sidstOpdateret": "2017-04-10T09:01:06.000+02:00",
+                  "cvrNummer": 25052943,
+                  "regNummer": [],
+                  "navne": [
+                    {
+                      "navn": "ApS KBIL 17 NR. 1179",
+                      "periode": {
+                        "gyldigFra": "1999-11-15",
+                        "gyldigTil": "2000-02-20"
+                      },
+                      "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
+                    },
+                    {
+                      "navn": "MAGENTA ApS",
+                      "periode": {
+                        "gyldigFra": "2000-02-21",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2000-02-29T11:44:42.000+01:00"
+                    }
+                  ],
+                  "livsforloeb": [
+                    {
+                      "periode": {
+                        "gyldigFra": "1999-11-15",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "1999-11-29T16:33:47.000+01:00"
+                    }
+                  ],
+                  "status": [],
+                  "virksomhedsstatus": [
+                    {
+                      "status": "NORMAL",
+                      "periode": {
+                        "gyldigFra": "1999-11-15",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                    }
+                  ],
+                  "virksomhedsform": [
+                    {
+                      "virksomhedsformkode": 80,
+                      "kortBeskrivelse": "APS",
+                      "langBeskrivelse": "Anpartsselskab",
+                      "ansvarligDataleverandoer": "E&S",
+                      "periode": {
+                        "gyldigFra": "1999-11-15",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
+                    }
+                  ]
+                },
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4004733975,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Bestyrelse",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Bestyrelse",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": "2009-10-28"
+                            },
+                            "sidstOpdateret": "2015-08-13T00:00:00.000+02:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "formand",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2009-10-28"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "VALGFORM",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "generalforsamling",
+                                "periode": {
+                                  "gyldigFra": "2000-02-21",
+                                  "gyldigTil": "2009-10-28"
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "enhedsNummerOrganisation": 4004733976,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Direktion",
+                        "periode": {
+                          "gyldigFra": "1999-11-15",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Direktion",
+                            "periode": {
+                              "gyldigFra": "1999-11-15",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "adm. dir",
+                                "periode": {
+                                  "gyldigFra": "2009-10-28",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "virksomhed": {
+                  "enhedsNummer": 4006289047,
+                  "enhedstype": "VIRKSOMHED",
+                  "fejlRegistreret": false,
+                  "sidstIndlaest": "2017-04-26T11:39:52.541+02:00",
+                  "sidstOpdateret": "2017-04-26T11:35:50.000+02:00",
+                  "cvrNummer": 37130737,
+                  "regNummer": [],
+                  "navne": [
+                    {
+                      "navn": "BComeSafe ApS",
+                      "periode": {
+                        "gyldigFra": "2015-10-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-10-05T10:38:11.000+02:00"
+                    }
+                  ],
+                  "livsforloeb": [
+                    {
+                      "periode": {
+                        "gyldigFra": "2015-10-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-10-05T10:38:11.000+02:00"
+                    }
+                  ],
+                  "status": [],
+                  "virksomhedsstatus": [
+                    {
+                      "status": "NORMAL",
+                      "periode": {
+                        "gyldigFra": "2015-10-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-10-05T10:38:11.000+02:00"
+                    }
+                  ],
+                  "virksomhedsform": [
+                    {
+                      "virksomhedsformkode": 80,
+                      "kortBeskrivelse": "APS",
+                      "langBeskrivelse": "Anpartsselskab",
+                      "ansvarligDataleverandoer": "E&S",
+                      "periode": {
+                        "gyldigFra": "2015-10-01",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-10-05T10:38:11.000+02:00"
+                    }
+                  ]
+                },
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4006289046,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Direktion",
+                        "periode": {
+                          "gyldigFra": "2015-10-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-10-05T10:38:11.000+02:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Direktion",
+                            "periode": {
+                              "gyldigFra": "2015-10-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-10-05T10:38:11.000+02:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "DIREKTØR",
+                                "periode": {
+                                  "gyldigFra": "2015-10-01",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-10-05T10:38:11.000+02:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "virksomhed": {
+                  "enhedsNummer": 4746629,
+                  "enhedstype": "VIRKSOMHED",
+                  "fejlRegistreret": false,
+                  "sidstIndlaest": "2017-06-10T15:14:49.696+02:00",
+                  "sidstOpdateret": "2015-03-12T00:00:00.000+01:00",
+                  "cvrNummer": 32067174,
+                  "regNummer": [],
+                  "navne": [
+                    {
+                      "navn": "HOLDINGSELSKAB",
+                      "periode": {
+                        "gyldigFra": "2009-02-20",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2009-02-23T08:38:56.000+01:00"
+                    }
+                  ],
+                  "livsforloeb": [
+                    {
+                      "periode": {
+                        "gyldigFra": "2009-02-20",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2009-02-23T08:38:40.000+01:00"
+                    }
+                  ],
+                  "status": [],
+                  "virksomhedsstatus": [
+                    {
+                      "status": "NORMAL",
+                      "periode": {
+                        "gyldigFra": "2009-02-20",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                    }
+                  ],
+                  "virksomhedsform": [
+                    {
+                      "virksomhedsformkode": 80,
+                      "kortBeskrivelse": "APS",
+                      "langBeskrivelse": "Anpartsselskab",
+                      "ansvarligDataleverandoer": "E&S",
+                      "periode": {
+                        "gyldigFra": "2009-02-20",
+                        "gyldigTil": null
+                      },
+                      "sidstOpdateret": "2009-02-23T08:38:56.000+01:00"
+                    }
+                  ]
+                },
+                "organisationer": [
+                  {
+                    "enhedsNummerOrganisation": 4003850884,
+                    "hovedtype": "REGISTER",
+                    "organisationsNavn": [
+                      {
+                        "navn": "EJERREGISTER",
+                        "periode": {
+                          "gyldigFra": "1903-01-01",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-01-16T11:13:33.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "EJERREGISTER",
+                            "periode": {
+                              "gyldigFra": "1903-01-01",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-01-16T11:13:33.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_MEDDELELSE_DATO",
+                            "vaerditype": "date",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "2015-01-16",
+                                "periode": {
+                                  "gyldigFra": "2009-02-20",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-01-16T11:13:33.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_PROCENT",
+                            "vaerditype": "decimal",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "1.0",
+                                "periode": {
+                                  "gyldigFra": "2009-02-20",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-01-16T11:13:33.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "EJERANDEL_STEMMERET_PROCENT",
+                            "vaerditype": "decimal",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "1.0",
+                                "periode": {
+                                  "gyldigFra": "2009-02-20",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-01-16T11:13:33.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "enhedsNummerOrganisation": 4005334575,
+                    "hovedtype": "STIFTERE",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Stiftere",
+                        "periode": {
+                          "gyldigFra": "2009-02-20",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Stiftere",
+                            "periode": {
+                              "gyldigFra": "2009-02-20",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "STIFTERE",
+                                "periode": {
+                                  "gyldigFra": "2009-02-20",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          },
+                          {
+                            "sekvensnr": 0,
+                            "type": "STIFTELSESINFORMATION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "STIFTER",
+                                "periode": {
+                                  "gyldigFra": "2009-02-20",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "enhedsNummerOrganisation": 4005334576,
+                    "hovedtype": "LEDELSESORGAN",
+                    "organisationsNavn": [
+                      {
+                        "navn": "Direktion",
+                        "periode": {
+                          "gyldigFra": "2009-02-20",
+                          "gyldigTil": null
+                        },
+                        "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                      }
+                    ],
+                    "attributter": [
+                      {
+                        "sekvensnr": 0,
+                        "type": "FUNKTION",
+                        "vaerditype": "string",
+                        "vaerdier": [
+                          {
+                            "vaerdi": "Direktion",
+                            "periode": {
+                              "gyldigFra": "2009-02-20",
+                              "gyldigTil": null
+                            },
+                            "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                          }
+                        ]
+                      }
+                    ],
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "vaerdi": "DIREKTION",
+                                "periode": {
+                                  "gyldigFra": "2009-02-20",
+                                  "gyldigTil": null
+                                },
+                                "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "deltagerpersonMetadata": {
+              "nyesteBeliggenhedsadresse": {
+                "landekode": "DK",
+                "fritekst": null,
+                "vejkode": 40,
+                "kommune": {
+                  "kommuneKode": 101,
+                  "kommuneNavn": "KØBENHAVN",
+                  "periode": {
+                    "gyldigFra": "2007-01-01",
+                    "gyldigTil": null
+                  },
+                  "sidstOpdateret": "2006-11-12T21:00:00.000+01:00"
+                },
+                "husnummerFra": 28,
+                "adresseId": null,
+                "sidstValideret": null,
+                "husnummerTil": null,
+                "bogstavFra": null,
+                "bogstavTil": null,
+                "etage": null,
+                "sidedoer": null,
+                "conavn": null,
+                "postboks": null,
+                "vejnavn": "Agerlandsvej",
+                "bynavn": null,
+                "postnummer": 2300,
+                "postdistrikt": "København S",
+                "periode": {
+                  "gyldigFra": "2012-05-29",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2012-05-30T17:31:08.000+02:00"
+              },
+              "nyesteKontaktoplysninger": []
+            },
+            "samtId": 1,
+            "fejlRegistreret": false,
+            "dataAdgang": 0,
+            "enhedsNummer": 4000004988,
+            "enhedstype": "PERSON",
+            "sidstIndlaest": "2017-06-10T15:14:49.696+02:00",
+            "sidstOpdateret": "2012-05-30T17:31:08.000+02:00",
+            "fejlVedIndlaesning": false,
+            "naermesteFremtidigeDato": null,
+            "fejlBeskrivelse": null,
+            "virkningsAktoer": "PO"
+          }
+        }
+      }
+    ]
+  }
+}
