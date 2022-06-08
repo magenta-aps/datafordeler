@@ -467,7 +467,6 @@ public abstract class StatisticsService {
         }
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-            loggerHelper.getUser().checkHasSystemRole(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
             throw (e);
