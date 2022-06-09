@@ -25,6 +25,9 @@ There is a project in the folder core, and 11 projects in the folder plugin.
 ## Plugins:
 Each plugin has its own pom.xml. Some plugins depends on other plugins the following projects exists in plugins:
 
+### parent:
+This project is the parent project of all other plugins, this makes it easyer to upgrade dependencies in the project.
+
 ### cpr:
 This project is parsing data from cpr, and persists it in the database.
 A more detailed description can be found in plugins/cpr/README.md
@@ -107,16 +110,22 @@ Some plugins are dependent on other plugins; it is necessary to compile the diff
 Building and testing the application can be done through maven.
 For small changes to the project it is sufficient. 
 
+It is possible to build the entire project Go to datafordeler and run "mvn -DskipTests clean install"
+
+Or it is possible to build the entire project by building one plugin at a time
+
 1. Go to datafordeler/core and run "mvn -DskipTests clean install"
-2. Go to datafordeler/plugin/cpr and run "mvn -DskipTests clean install"
-3. Go to datafordeler/plugin/cvr and run "mvn -DskipTests clean install"
-4. Go to datafordeler/plugin/geo and run "mvn -DskipTests clean install"
-5. Go to datafordeler/plugin/ger and run "mvn -DskipTests clean install"
-6. Go to datafordeler/plugin/subscription and run "mvn -DskipTests clean install"
-7. Go to datafordeler/plugin/eboks and run "mvn -DskipTests clean install"
-8. Go to datafordeler/plugin/prisme and run "mvn -DskipTests clean install"
-9. Go to datafordeler/plugin/combinedPitu and run "mvn -DskipTests clean install"
-10. Go to datafordeler/plugin/statistik and run "mvn -DskipTests clean install"
+2. Go to datafordeler/plugin/parent and run "mvn -DskipTests clean install"
+3. Go to datafordeler/plugin/cpr and run "mvn -DskipTests clean install"
+4. Go to datafordeler/plugin/cvr and run "mvn -DskipTests clean install"
+5. Go to datafordeler/plugin/geo and run "mvn -DskipTests clean install"
+6. Go to datafordeler/plugin/ger and run "mvn -DskipTests clean install"
+7. Go to datafordeler/plugin/subscription and run "mvn -DskipTests clean install"
+8. Go to datafordeler/plugin/eboks and run "mvn -DskipTests clean install"
+9. Go to datafordeler/plugin/prisme and run "mvn -DskipTests clean install"
+10. Go to datafordeler/plugin/combinedPitu and run "mvn -DskipTests clean install"
+11. Go to datafordeler/plugin/statistik and run "mvn -DskipTests clean install"
+
 
 After that go to the specific plugin where a code change is needed and run:
 "mvn test"
@@ -133,15 +142,16 @@ Some modules depend on other modules, in order to get started install all plugin
 The sequence of installing the plugins is:
 
 1. datafordeler/core
-2. datafordeler/plugin/cpr
-3. datafordeler/plugin/cvr
-4. datafordeler/plugin/geo
-5. datafordeler/plugin/ger
-6. datafordeler/plugin/subscription
-7. datafordeler/plugin/eboks
-8. datafordeler/plugin/prisme
-9. datafordeler/plugin/combinedPitu
-10.datafordeler/plugin/statistik
+2. datafordeler/plugin/parent
+3. datafordeler/plugin/cpr
+4. datafordeler/plugin/cvr
+5. datafordeler/plugin/geo
+6. datafordeler/plugin/ger
+7. datafordeler/plugin/subscription
+8. datafordeler/plugin/eboks
+9. datafordeler/plugin/prisme
+10. datafordeler/plugin/combinedPitu
+11.datafordeler/plugin/statistik
 
 ### Docker
 If a developer wants to build the project in docker, it is possible to run:
@@ -192,6 +202,11 @@ The different testfiles is created for different types of persons, which match t
 When deploying Datafordeler on the test- and production- servers, we run the file run_server_notests.bat. This file compiles and builds the full project.
 After running the *.bat file the project, including all plugins is compiles, and stored in the file-system, and the server is started.
 The *.bat file is created for the deployment om production-servers, but is can be used during development on windows machines as well.
+
+
+## Errorsearch and support
+Different sorts of helper-functionality is places as sql-files in different plugins in the project. The purpose is to help developers for quickly identifying how to find something
+
 
 
 

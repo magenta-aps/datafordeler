@@ -52,7 +52,6 @@ public class ListCompanyStatusService {
 
     @PostConstruct
     public void init() {
-        this.monitorService.addAccessCheckPoint("/eskat/1/companystatus");
 
     }
 
