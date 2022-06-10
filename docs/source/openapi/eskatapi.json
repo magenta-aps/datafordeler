@@ -14,7 +14,7 @@
     "/eskat/1/companystatus/list": {
       "get": {
         "summary": "Aktuelle status for virksomheder i datafordeleren",
-        "description": "Ved kald til denne service kan hentes alle aktuelle status for virksomheder i datafordeleren. Der appendes en status til den status der er hentet fra det danske CVR-register. For virksomheder med status forskellig fra NORMAL, Aktiv og Fremtid returneres 'Ophørt:  + status' for alle andre status returneres 'Aktiv: +status'. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/companystatus/list",
+        "description": "Ved kald til denne service kan hentes alle aktuelle status for virksomheder i datafordeleren. Der appendes en status til den status der er hentet fra det danske CVR-register. For virksomheder med status forskellig fra NORMAL, Aktiv og Fremtid returneres 'Ophørt:  + status' for alle andre status returneres 'Aktiv: +status'. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /1/companystatus/list<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/companystatus/list",
         "responses": {
           "200": {
             "description": "Aktuelle status for virksomheder i datafordeleren",
@@ -36,7 +36,7 @@
     "/eskat/company/1/rest/search": {
       "get": {
         "summary": "Fremsøgning af virksomheder i datafordeleren",
-        "description": "Ved kald til denne service kan hentes en liste over virksomheder som matcher fremsøgningskriterierne. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/company/1/rest/search",
+        "description": "Ved kald til denne service kan hentes en liste over virksomheder som matcher fremsøgningskriterierne. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /company/1/rest/search<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/company/1/rest/search",
         "parameters": [
           {
             "name": "cvrnummer",
@@ -255,7 +255,7 @@
     "/eskat/companydetail/1/rest/{cvr}": {
       "get": {
         "summary": "Find udvalgt virksomheds information, som fremsøges på baggrund af virksomhedens CVR-nummer. Der fremsøges i virksomheder, som er i drift, og ikke i ophørte virksomheder.",
-        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens beliggenhedsadresse. Hvis et felt ikke har nogen værdi, så udelades det. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companydetail/1/rest/{cvr}",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat.<br/>Hvis en parameter har værdien null, så leveres denne ikke. For adresse bruges virksomhedens beliggenhedsadresse. Hvis et felt ikke har nogen værdi, så udelades det. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /companydetail/1/rest/{cvr}<br/>Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companydetail/1/rest/{cvr}",
         "responses": {
           "200": {
             "description": "Ved succesfuldt opslag leveres information på den fremfundne virksomhed",
@@ -363,7 +363,7 @@
     "/eskat/companyParticipantConnection/1/rest/search": {
       "get": {
         "summary": "Find ansvarlige deltagere i form af ejerskab af virksomheder",
-        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden. <br/>Der kan enten fremsøges på CPR-nummer/Navn på personen, og der leveres så alle relationer som tilhører denne person. Alternativt kan der søges på CVR-nummer, selskabsnavn eller aktivitetsstatus for virksomheden, og her kan tilføjes datoattributter for virksomhedens start/stop. <br/>Datoansvarlighedsintervallet leveres som start slut tidspunkterne for den nyeste relation mellem personen og virksomheden<br/>Hvis en parameter har værdien null, så leveres denne ikke. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companyParticipantConnection1/rest/search",
+        "description": "Servicen leverer de informationer, som det er aftalt at der skal leveres i forhold til funktionaliteten, som skal benyttes fra E-skat. Der leveres kun virksomhedsansvarlige med en aktiv forbindelse til virksomheden. <br/>Der kan enten fremsøges på CPR-nummer/Navn på personen, og der leveres så alle relationer som tilhører denne person. Alternativt kan der søges på CVR-nummer, selskabsnavn eller aktivitetsstatus for virksomheden, og her kan tilføjes datoattributter for virksomhedens start/stop. <br/>Datoansvarlighedsintervallet leveres som start slut tidspunkterne for den nyeste relation mellem personen og virksomheden<br/>Hvis en parameter har værdien null, så leveres denne ikke. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /company/1/rest/search<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/companyParticipantConnection1/rest/search",
         "parameters": [
           {
             "name": "cpr",
@@ -536,7 +536,7 @@
     "/eskat/punit/1/rest/{pNummer}": {
       "get": {
         "summary": "Find produktionsenheder",
-        "description": "Servicen giver mulighed for at fremfinde detaljer om en specifik produktionsenhed. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/punit/1/rest{pNummer}",
+        "description": "Servicen giver mulighed for at fremfinde detaljer om en specifik produktionsenhed. <br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-ESKAT/1<br />Sti under /restapi/: /punit/1/rest{pNummer}<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/punit/1/rest{pNummer}",
         "responses": {
           "200": {
             "description": "Ved succesfuldt opslag leveres information på den givne virksomhed",
