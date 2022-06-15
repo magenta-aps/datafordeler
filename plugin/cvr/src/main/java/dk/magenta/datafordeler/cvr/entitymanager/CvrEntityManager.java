@@ -21,14 +21,12 @@ import dk.magenta.datafordeler.core.util.Stopwatch;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
-import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
-import dk.magenta.datafordeler.cvr.records.CvrEntityRecord;
-import dk.magenta.datafordeler.cvr.records.CvrRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -245,6 +243,9 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                     throw new DataStreamException(e);
                 }
             }
+            findMissingStuff(session);
+
+
             log.info("All chunks handled\n"+timer.formatAllTotal());
             Session progressSession = this.configurationSessionManager.getSessionFactory().openSession();
             progressSession.beginTransaction();
@@ -264,6 +265,30 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         log.info("Parse complete");
         return null;
     }
+
+    private List<String> missingCvrList = new ArrayList<String>();
+
+
+    public void findMissingStuff(Session session) {
+        String hql_companies = "SELECT DISTINCT companyUnit.newestCvrRelation FROM " + CompanyUnitMetadataRecord.class.getCanonicalName() + " companyUnit " +
+
+                "WHERE aggregateStatus = 'Aktiv' " +
+                "AND (newestCvrRelation) NOT IN " +
+                "(SELECT company.cvrNumber FROM " + CompanyRecord.class.getCanonicalName() + " company " +
+                "JOIN "+ CompanyMetadataRecord.class.getCanonicalName()+" companyMetadata ON company.id"+"=companyMetadata."+CompanyMetadataRecord.DB_FIELD_COMPANY+")";
+
+
+        Query querya = session.createQuery(hql_companies);
+        List<Integer> companies = querya.getResultList();
+        System.out.println("---------------------------------------------------------");
+        System.out.println(companies);
+        for(Integer cvr : companies) {
+            session.saveOrUpdate(new CompanySubscription(cvr));
+        }
+
+    }
+
+
 
     /**
      * Clean democompanys which has been initiated in the database.
