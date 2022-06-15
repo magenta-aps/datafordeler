@@ -10,6 +10,9 @@ public class CompanySubscription extends DatabaseEntry {
 
     public static final String DB_FIELD_CVR_NUMBER = "cvrNumber";
 
+    public CompanySubscription() {
+    }
+
     public CompanySubscription(Integer cvrNumber) {
         this.cvrNumber = cvrNumber;
     }

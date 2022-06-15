@@ -12,16 +12,21 @@ import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
+import dk.magenta.datafordeler.cvr.records.CompanySubscription;
 import dk.magenta.datafordeler.cvr.synchronization.CvrSourceData;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,6 +36,8 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CvrRegisterManager extends RegisterManager {
@@ -171,7 +178,7 @@ public class CvrRegisterManager extends RegisterManager {
                 final ArrayList<Throwable> errors = new ArrayList<>();
                 InputStream responseBody;
                 File cacheFile = new File("local/cvr/" + entityManager.getSchema() + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
-                try {
+                try (Session missingCompanySession = this.sessionManager.getSessionFactory().openSession()){
                     if (!cacheFile.exists()) {
                         log.info("Cache file "+cacheFile.getAbsolutePath()+" doesn't exist. Creating new and filling from source");
                         if (lastUpdateTime == null) {
@@ -180,8 +187,19 @@ public class CvrRegisterManager extends RegisterManager {
                         } else {
                             log.info("Last update time: "+lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
                         }
+
+                        CriteriaBuilder cb = missingCompanySession.getCriteriaBuilder();
+                        CriteriaQuery<CompanySubscription> cr = cb.createQuery(CompanySubscription.class);
+                        Root<CompanySubscription> root = cr.from(CompanySubscription.class);
+                        cr.select(root);
+
+                        Query<CompanySubscription> query = missingCompanySession.createQuery(cr);
+                        List<Integer> missingCompanyList = query.getResultList().stream().map(s -> s.getCvrNumber()).collect(Collectors.toList());
+
                         requestBody = String.format(
                                 configuration.getQuery(schema),
+                                lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                                missingCompanyList,
                                 lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
                         );
 

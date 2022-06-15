@@ -70,7 +70,7 @@ public class CvrConfiguration implements Configuration {
         this.companyRegisterPasswordEncryptionFile = companyRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 1024)
+    @Column(length = 8196)
     private String companyRegisterQuery = "{\n" +
             "    \"query\": {\n" +
             "        \"filtered\": {\n" +
@@ -84,6 +84,25 @@ public class CvrConfiguration implements Configuration {
             "        }\n" +
             "    }\n" +
             "}\n";
+
+    /*    @Column(length = 1024)
+    public String missingCompaniesRegisterQuery = "{\n" +
+            "    \"query\": {\n" +
+            "        \"bool\": {\n" +
+            "            \"must\": [\n" +
+            "                \"terms\": {\n" +
+            "                \"Vrvirksomhed.cvrNummer\":%s\n" +
+            "                },\n" +
+            "                \"range\": {\n" +
+            "                \"Vrvirksomhed.sidstOpdateret\": {\"gte\": \"%s\"}" +
+            "                }\n" +
+            "            ]\n" +
+            "        }\n" +
+            "    }\n" +
+            "}\n";
+*/
+
+
 
     @Column
     private String companyRegisterDirectLookupCertificate = "";
@@ -160,7 +179,7 @@ public class CvrConfiguration implements Configuration {
         this.companyUnitRegisterPasswordEncryptionFile = companyUnitRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 1024)
+    @Column(length = 8196)
     private String companyUnitRegisterQuery = "{\n" +
             "    \"query\": {\n" +
             "        \"filtered\": {\n" +
@@ -228,7 +247,7 @@ public class CvrConfiguration implements Configuration {
         this.participantRegisterPasswordEncryptionFile = participantRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 1024)
+    @Column(length = 8196)
     private String participantRegisterQuery = "{\n" +
             "    \"query\": {\n" +
             "        \"filtered\": {\n" +
