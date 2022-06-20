@@ -6,7 +6,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
@@ -70,39 +69,51 @@ public class CvrConfiguration implements Configuration {
         this.companyRegisterPasswordEncryptionFile = companyRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 8196)
-    private String companyRegisterQuery = "{\n" +
-            "    \"query\": {\n" +
-            "        \"filtered\": {\n" +
-            "            \"filter\": {\n" +
-            "                \"range\": {\n" +
-            "                    \"Vrvirksomhed.sidstOpdateret\": {\n" +
-            "                        \"gte\": \"%s\"\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            }\n" +
-            "        }\n" +
-            "    }\n" +
-            "}\n";
-
-    /*    @Column(length = 1024)
-    public String missingCompaniesRegisterQuery = "{\n" +
-            "    \"query\": {\n" +
-            "        \"bool\": {\n" +
+    @Column(length = 1024)
+    public String companyRegisterQuery = "{\n" +
+            "  \"query\": {\n" +
+            "    \"bool\": {\n" +
+            "      \"should\": [\n" +
+            "        {\n" +
+            "          \"bool\": {\n" +
             "            \"must\": [\n" +
+            "              {\n" +
             "                \"terms\": {\n" +
-            "                \"Vrvirksomhed.cvrNummer\":%s\n" +
-            "                },\n" +
-            "                \"range\": {\n" +
-            "                \"Vrvirksomhed.sidstOpdateret\": {\"gte\": \"%s\"}" +
+            "                  \"Vrvirksomhed.beliggenhedsadresse.kommune.kommuneKode\":[954, 955, 956, 957, 958, 959, 960, 961, 962]\n" +
             "                }\n" +
+            "              },\n" +
+            "              {\n" +
+            "                \"range\": {\n" +
+            "                  \"Vrvirksomhed.sidstOpdateret\": {\n" +
+            "                    \"gte\": \"%s\"\n" +
+            "                  }\n" +
+            "                }\n" +
+            "              }\n" +
             "            ]\n" +
+            "          }\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"bool\": {\n" +
+            "            \"must\": [\n" +
+            "              {\n" +
+            "                \"terms\": {\n" +
+            "                  \"Vrvirksomhed.cvrNummer\":%s\n" +
+            "                }\n" +
+            "              },\n" +
+            "              {\n" +
+            "                \"range\": {\n" +
+            "                  \"Vrvirksomhed.sidstOpdateret\": {\n" +
+            "                    \"gte\": \"%s\"\n" +
+            "                  }\n" +
+            "                }\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          }\n" +
             "        }\n" +
+            "      ]\n" +
             "    }\n" +
+            "  }\n" +
             "}\n";
-*/
-
-
 
     @Column
     private String companyRegisterDirectLookupCertificate = "";

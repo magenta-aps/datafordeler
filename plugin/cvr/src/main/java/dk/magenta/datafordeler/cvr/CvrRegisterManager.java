@@ -189,11 +189,11 @@ public class CvrRegisterManager extends RegisterManager {
                         }
 
                         CriteriaBuilder cb = missingCompanySession.getCriteriaBuilder();
-                        CriteriaQuery<CompanySubscription> cr = cb.createQuery(CompanySubscription.class);
-                        Root<CompanySubscription> root = cr.from(CompanySubscription.class);
-                        cr.select(root);
+                        CriteriaQuery<CompanySubscription> subscribedCompanyQuery = cb.createQuery(CompanySubscription.class);
+                        Root<CompanySubscription> root = subscribedCompanyQuery.from(CompanySubscription.class);
+                        subscribedCompanyQuery.select(root);
 
-                        Query<CompanySubscription> query = missingCompanySession.createQuery(cr);
+                        Query<CompanySubscription> query = missingCompanySession.createQuery(subscribedCompanyQuery);
                         List<Integer> missingCompanyList = query.getResultList().stream().map(s -> s.getCvrNumber()).collect(Collectors.toList());
 
                         requestBody = String.format(
@@ -299,7 +299,6 @@ public class CvrRegisterManager extends RegisterManager {
             });
             t.start();
 
-            //System.out.println("There are "+entityManagerParseStreams.size()+" streams");
             return new ItemInputStream<>(inputStream);
         } catch (IOException e) {
             throw new DataStreamException(e);
