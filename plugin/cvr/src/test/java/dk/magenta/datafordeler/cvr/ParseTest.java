@@ -142,7 +142,12 @@ public class ParseTest {
         }
     }
 
-
+    /**
+     * Validate that when parsing and creating data for companies and units. Then a subscription for missing companies is created
+     * @throws IOException
+     * @throws DataFordelerException
+     * @throws URISyntaxException
+     */
     @Test
     public void testUnitsWithNoMatchingCVR() throws IOException, DataFordelerException, URISyntaxException {
         ImportMetadata importMetadata = new ImportMetadata();
@@ -166,6 +171,8 @@ public class ParseTest {
         //Load companies from GLBASETEST.json
         ImportMetadata importMetadataCompany = new ImportMetadata();
         URL testData = ParseTest.class.getResource("/GLBASETEST.json");
+        String testDataPath = testData.toURI().toString();
+        registerManager.setCvrDemoFile(testDataPath);
 
         entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
