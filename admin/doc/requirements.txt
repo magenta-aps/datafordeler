@@ -7,7 +7,7 @@ django-markup==1.2
 git+http://github.com/magenta-aps/django-pyodbc-azure.git; sys_platform == 'win32'
 docutils==0.14
 flake8==3.3.0
-ipython==7.7.0
+ipython==7.16.3
 Markdown==2.6.8
 pyjks==17.1.0
 pyreadline==2.1
