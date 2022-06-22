@@ -1,1 +1,0 @@
-# datafordeler-sts
