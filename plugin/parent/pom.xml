@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <junit.version>4.13</junit.version>
+        <junit.version>4.13.2</junit.version>
         <jackson.version>2.12.4</jackson.version>
         <spring.version>5.2.16.RELEASE</spring.version>
         <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
