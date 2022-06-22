@@ -295,7 +295,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             sessionSub.flush();
             tx.commit();
         } catch(Exception e) {
-            log.error("Error creating subscription for CVR",e.getStackTrace());
+            log.error("Error creating subscription for CVR", e.getStackTrace());
         }
     }
 
