@@ -9,13 +9,10 @@ import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.io.Receipt;
-import dk.magenta.datafordeler.core.plugin.Communicator;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.plugin.ScanScrollCommunicator;
 import dk.magenta.datafordeler.core.util.Bitemporality;
-import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.core.util.Stopwatch;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
@@ -25,10 +22,15 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
 import dk.magenta.datafordeler.cvr.records.CvrEntityRecord;
 import dk.magenta.datafordeler.cvr.records.CvrRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitMetadataRecord;
+import dk.magenta.datafordeler.cvr.records.CompanySubscription;
+import dk.magenta.datafordeler.cvr.records.CompanyMetadataRecord;
 import dk.magenta.datafordeler.cvr.records.unversioned.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -245,6 +247,8 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                     throw new DataStreamException(e);
                 }
             }
+            subscribeToMissingCvr();
+
             log.info("All chunks handled\n"+timer.formatAllTotal());
             Session progressSession = this.configurationSessionManager.getSessionFactory().openSession();
             progressSession.beginTransaction();
@@ -264,6 +268,38 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         log.info("Parse complete");
         return null;
     }
+
+    /**
+     * If there is any P-numbers that is assigned under a CVR-number that does not exist in datafordeler, ad the missing CVR to a list for fetching
+     */
+    public void subscribeToMissingCvr() {
+        try (Session sessionSub = this.getSessionManager().getSessionFactory().openSession()){
+            Transaction tx = sessionSub.beginTransaction();
+            String hql_companies = "SELECT DISTINCT companyUnit.newestCvrRelation FROM " + CompanyUnitMetadataRecord.class.getCanonicalName() + " companyUnit " +
+
+                    "WHERE aggregateStatus = 'Aktiv' " +
+                    "AND (newestCvrRelation) NOT IN " +
+                    "(SELECT company.cvrNumber FROM " + CompanyRecord.class.getCanonicalName() + " company " +
+                    "JOIN " + CompanyMetadataRecord.class.getCanonicalName() + " companyMetadata ON company.id" + "=companyMetadata." + CompanyMetadataRecord.DB_FIELD_COMPANY + ")";
+
+            Query querya = sessionSub.createQuery(hql_companies);
+            List<Integer> companies = querya.getResultList();
+            for (Integer cvr : companies) {
+                try {
+                    CompanySubscription companySubscription = new CompanySubscription(cvr);
+                    sessionSub.save(companySubscription);
+                } catch (Exception e) {
+                    // Empty catch as a convenient way for if the system tries to add the same cvr twice
+                }
+            }
+            sessionSub.flush();
+            tx.commit();
+        } catch(Exception e) {
+            log.error("Error creating subscription for CVR",e.getStackTrace());
+        }
+    }
+
+
 
     /**
      * Clean democompanys which has been initiated in the database.

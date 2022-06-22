@@ -6,7 +6,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
@@ -70,19 +69,50 @@ public class CvrConfiguration implements Configuration {
         this.companyRegisterPasswordEncryptionFile = companyRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 1024)
-    private String companyRegisterQuery = "{\n" +
-            "    \"query\": {\n" +
-            "        \"filtered\": {\n" +
-            "            \"filter\": {\n" +
-            "                \"range\": {\n" +
-            "                    \"Vrvirksomhed.sidstOpdateret\": {\n" +
-            "                        \"gte\": \"%s\"\n" +
-            "                    }\n" +
+    @Column(length = 8192)
+    public String companyRegisterQuery = "{\n" +
+            "  \"query\": {\n" +
+            "    \"bool\": {\n" +
+            "      \"should\": [\n" +
+            "        {\n" +
+            "          \"bool\": {\n" +
+            "            \"must\": [\n" +
+            "              {\n" +
+            "                \"terms\": {\n" +
+            "                  \"Vrvirksomhed.beliggenhedsadresse.kommune.kommuneKode\":[954, 955, 956, 957, 958, 959, 960, 961, 962]\n" +
             "                }\n" +
-            "            }\n" +
+            "              },\n" +
+            "              {\n" +
+            "                \"range\": {\n" +
+            "                  \"Vrvirksomhed.sidstOpdateret\": {\n" +
+            "                    \"gte\": \"%s\"\n" +
+            "                  }\n" +
+            "                }\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          }\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"bool\": {\n" +
+            "            \"must\": [\n" +
+            "              {\n" +
+            "                \"terms\": {\n" +
+            "                  \"Vrvirksomhed.cvrNummer\":%s\n" +
+            "                }\n" +
+            "              },\n" +
+            "              {\n" +
+            "                \"range\": {\n" +
+            "                  \"Vrvirksomhed.sidstOpdateret\": {\n" +
+            "                    \"gte\": \"%s\"\n" +
+            "                  }\n" +
+            "                }\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          }\n" +
             "        }\n" +
+            "      ]\n" +
             "    }\n" +
+            "  }\n" +
             "}\n";
 
     @Column
@@ -160,7 +190,7 @@ public class CvrConfiguration implements Configuration {
         this.companyUnitRegisterPasswordEncryptionFile = companyUnitRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 1024)
+    @Column(length = 8192)
     private String companyUnitRegisterQuery = "{\n" +
             "    \"query\": {\n" +
             "        \"filtered\": {\n" +
@@ -228,7 +258,7 @@ public class CvrConfiguration implements Configuration {
         this.participantRegisterPasswordEncryptionFile = participantRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 1024)
+    @Column(length = 8192)
     private String participantRegisterQuery = "{\n" +
             "    \"query\": {\n" +
             "        \"filtered\": {\n" +

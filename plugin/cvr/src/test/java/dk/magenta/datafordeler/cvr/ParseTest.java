@@ -15,6 +15,8 @@ import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
+import dk.magenta.datafordeler.cvr.records.CompanySubscription;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitMetadataRecord;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -28,6 +30,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -35,6 +41,7 @@ import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -136,6 +143,94 @@ public class ParseTest {
             transaction.rollback();
             session.close();
             QueryManager.clearCaches();
+        }
+    }
+
+    /**
+     * Validate that when parsing and creating data for companies and units. Then a subscription for missing companies is created
+     * @throws IOException
+     * @throws DataFordelerException
+     * @throws URISyntaxException
+     */
+    @Test
+    public void testUnitsWithNoMatchingCVR() throws IOException, DataFordelerException, URISyntaxException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        Transaction transaction = null;
+        //Load units from unit.json
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            importMetadata.setSession(session);
+            InputStream input = ParseTest.class.getResourceAsStream("/unit.json");
+            JsonNode root = objectMapper.readTree(input);
+            JsonNode itemList = root.get("hits").get("hits");
+            Assert.assertTrue(itemList.isArray());
+            for (JsonNode item : itemList) {
+                String type = item.get("_type").asText();
+                CompanyUnitEntityManager entityManager = (CompanyUnitEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                entityManager.parseData(item.get("_source").get("VrproduktionsEnhed"), importMetadata, session);
+            }
+            transaction.commit();
+        }
+
+        //Load companies from GLBASETEST.json
+        ImportMetadata importMetadataCompany = new ImportMetadata();
+        URL testData = ParseTest.class.getResource("/GLBASETEST.json");
+        String testDataPath = testData.toURI().toString();
+        registerManager.setCvrDemoFile(testDataPath);
+
+        entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
+        InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
+        entityManager.parseData(stream, importMetadataCompany);
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            CompanyRecordQuery query = new CompanyRecordQuery();
+            OffsetDateTime time = OffsetDateTime.now();
+            query.setRegistrationFromBefore(time);
+            query.setRegistrationToAfter(time);
+            query.setEffectToAfter(time);
+            query.setEffectFromBefore(time);
+            query.applyFilters(session);
+            List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
+            Assert.assertEquals(4, companyList.size());
+        }
+
+        //Load companies from GLBASETEST.json again to lalidate error-handling
+        entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
+        stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
+        entityManager.parseData(stream, importMetadataCompany);
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            CompanyRecordQuery query = new CompanyRecordQuery();
+            OffsetDateTime time = OffsetDateTime.now();
+            query.setRegistrationFromBefore(time);
+            query.setRegistrationToAfter(time);
+            query.setEffectToAfter(time);
+            query.setEffectFromBefore(time);
+            query.applyFilters(session);
+            List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
+            Assert.assertEquals(4, companyList.size());
+        }
+
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+
+            // Read subscription to validate that missing companies gets subscribed
+            CriteriaBuilder subscriptionBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<CompanySubscription> subscriptionQuery = subscriptionBuilder.createQuery(CompanySubscription.class);
+            Root<CompanySubscription> subscriptionRootEntry = subscriptionQuery.from(CompanySubscription.class);
+            CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionQuery.select(subscriptionRootEntry);
+            TypedQuery<CompanySubscription> allSubscribed = session.createQuery(allCompanySubscription);
+            List<Integer> subscribedCompanyList = allSubscribed.getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
+
+            // Read companyunits to validate that their missing CVR'r is assigned to subscription
+            CriteriaQuery<CompanyUnitMetadataRecord> unitQuery = subscriptionBuilder.createQuery(CompanyUnitMetadataRecord.class);
+            Root<CompanyUnitMetadataRecord> unitRootEntry = unitQuery.from(CompanyUnitMetadataRecord.class);
+            CriteriaQuery<CompanyUnitMetadataRecord> unitc = unitQuery.select(unitRootEntry);
+            TypedQuery<CompanyUnitMetadataRecord> unit = session.createQuery(unitc);
+            List<Integer> unitCompanyList = unit.getResultList().stream().map(s -> s.getNewestCvrRelation()).sorted().collect(Collectors.toList());
+
+            Assert.assertEquals(unitCompanyList, subscribedCompanyList);
         }
     }
 
