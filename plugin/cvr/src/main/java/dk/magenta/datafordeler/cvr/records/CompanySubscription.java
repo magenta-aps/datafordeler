@@ -2,7 +2,9 @@ package dk.magenta.datafordeler.cvr.records;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Column;
 
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cvr_company_subscription")
