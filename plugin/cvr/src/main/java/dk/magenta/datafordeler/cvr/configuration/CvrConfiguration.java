@@ -69,7 +69,7 @@ public class CvrConfiguration implements Configuration {
         this.companyRegisterPasswordEncryptionFile = companyRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 1024)
+    @Column(length = 8192)
     public String companyRegisterQuery = "{\n" +
             "  \"query\": {\n" +
             "    \"bool\": {\n" +
@@ -190,7 +190,7 @@ public class CvrConfiguration implements Configuration {
         this.companyUnitRegisterPasswordEncryptionFile = companyUnitRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 8196)
+    @Column(length = 8192)
     private String companyUnitRegisterQuery = "{\n" +
             "    \"query\": {\n" +
             "        \"filtered\": {\n" +
@@ -258,7 +258,7 @@ public class CvrConfiguration implements Configuration {
         this.participantRegisterPasswordEncryptionFile = participantRegisterPasswordEncryptionFile;
     }
 
-    @Column(length = 8196)
+    @Column(length = 8192)
     private String participantRegisterQuery = "{\n" +
             "    \"query\": {\n" +
             "        \"filtered\": {\n" +
