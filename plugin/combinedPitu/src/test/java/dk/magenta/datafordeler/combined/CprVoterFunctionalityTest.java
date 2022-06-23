@@ -32,6 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.StringJoiner;
 
 import static org.mockito.Mockito.when;
@@ -116,20 +117,12 @@ public class CprVoterFunctionalityTest extends TestBase {
         this.loadPerson("/different_persons.txt");
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        ResponseEntity<String> response = restTemplate.exchange(
-                "/combined/localityList/1/search/",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
-        );
-        //Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        ResponseEntity<String> response;
 
         TestUserDetails testUserDetails = new TestUserDetails();
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
-        //"municipalitycode"
-        //"localitycode"
         response = restTemplate.exchange(
                 "/combined/localityList/1/search/",
                 HttpMethod.GET,
@@ -137,8 +130,9 @@ public class CprVoterFunctionalityTest extends TestBase {
                 String.class
         );
 
-        System.out.println(response.getBody());
-
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        String results = "[\"1706\",\"1700\",\"1704\",\"1701\",\"1601\",\"1606\",\"1600\",\"1602\",\"1605\",\"1603\",\"1608\",\"1610\",\"1607\",\"1604\",\"1609\",\"1200\",\"0600\",\"1403\",\"1203\",\"0906\",\"1504\",\"0703\",\"1502\",\"1201\",\"1101\",\"0803\",\"0902\",\"0701\",\"0601\",\"0605\",\"1503\",\"1100\",\"1500\",\"0900\",\"1003\",\"1507\",\"1000\",\"0500\",\"1400\",\"0801\",\"0501\",\"0908\",\"0905\",\"0702\",\"1204\",\"1505\",\"1506\",\"0800\",\"1202\",\"1004\",\"0700\",\"1501\",\"0204\",\"0321\",\"0305\",\"0300\",\"0104\",\"0201\",\"0108\",\"0200\",\"0103\",\"0302\",\"0102\",\"0202\",\"0106\",\"0100\",\"1805\",\"1803\",\"1804\",\"1802\",\"1800\",\"1806\",\"1900\",\"1902\",\"1901\",\"1906\"]";
+        Assert.assertEquals(results, objectMapper.readTree(response.getBody()).get("results").toString());
     }
 
 

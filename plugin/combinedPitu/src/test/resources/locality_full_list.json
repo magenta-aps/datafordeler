@@ -1,3 +1,3555 @@
 [
-{"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"EPSG:4326"}},"features":[{"type":"Feature","id":1,"geometry":{"type":"Polygon","coordinates":[[[-69.855847572999949,76.747897717000058],[-69.824588017999986,76.748000045000083],[-69.825135809999949,76.756960489000051],[-69.856416124999953,76.756858088000058],[-69.855847572999949,76.747897717000058]]]},"properties":{"OBJECTID":1,"Lokalitetsnavn":"Moriusaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1706","Kommunekode":960,"Lokalitetsnavn_forkortelse":"MOR","Location_type":4,"GlobalID":"{99247EAB-56BE-40A7-A320-59B78C4BC2CC}","LokalitetSumiffik":"{8B2DDC7D-396E-43FF-A5AD-CCDAA2489A6C}","Lokalitetvejkode":0}},{"type":"Feature","id":2,"geometry":{"type":"Polygon","coordinates":[[[-69.441359711999951,77.456893151000031],[-69.144372488999977,77.457215064000081],[-69.144830534999983,77.49753886700006],[-69.442759948999935,77.49721588400007],[-69.441359711999951,77.456893151000031]]]},"properties":{"OBJECTID":2,"Lokalitetsnavn":"Qaanaaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1700","Kommunekode":960,"Lokalitetsnavn_forkortelse":"QNQ","Location_type":1,"GlobalID":"{A5877CD5-5BFA-4171-8581-2A1FD0311F85}","LokalitetSumiffik":"{62F2DC21-82B1-4633-92FE-64C9C759C7A5}","Lokalitetvejkode":257}},{"type":"Feature","id":3,"geometry":{"type":"Polygon","coordinates":[[[-70.663948084999959,77.783804273000044],[-70.596239641999944,77.784202880000066],[-70.597393093999983,77.793160068000077],[-70.665150408999978,77.792761160000055],[-70.663948084999959,77.783804273000044]]]},"properties":{"OBJECTID":3,"Lokalitetsnavn":"Siorapaluk","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1704","Kommunekode":960,"Lokalitetsnavn_forkortelse":"SIO","Location_type":3,"GlobalID":"{9641179F-F53B-4805-84DC-F2500198BAD3}","LokalitetSumiffik":"{CB43BE80-CC56-4900-9887-4EAD072EC167}","Lokalitetvejkode":308}},{"type":"Feature","id":4,"geometry":{"type":"Polygon","coordinates":[[[-65.120657754999968,76.014225456000077],[-65.06138905399996,76.014733138000054],[-65.062683723999953,76.023689237000042],[-65.12198958099998,76.023181217000058],[-65.120657754999968,76.014225456000077]]]},"properties":{"OBJECTID":4,"Lokalitetsnavn":"Savissivik","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1701","Kommunekode":960,"Lokalitetsnavn_forkortelse":"SAV","Location_type":3,"GlobalID":"{C5EF8A02-8F85-498A-B57D-E9B9B1918DE1}","LokalitetSumiffik":"{BAA93A01-48D1-4F64-8DE3-40D09FD8DD49}","Lokalitetvejkode":301}},{"type":"Feature","id":5,"geometry":{"type":"Polygon","coordinates":[[[-55.558994495999968,72.14861920900006],[-55.512247299999956,72.14827028600007],[-55.510801273999959,72.166194473000076],[-55.557593865999934,72.166543770000033],[-55.558994495999968,72.14861920900006]]]},"properties":{"OBJECTID":5,"Lokalitetsnavn":"Upernavik Kujalleq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1601","Kommunekode":960,"Lokalitetsnavn_forkortelse":"UPK","Location_type":3,"GlobalID":"{9F3F3A01-2B55-4812-BBF6-4D8870B3BF94}","LokalitetSumiffik":"{D3D07252-D304-4CA6-B0A9-515052B1AD6E}","Lokalitetvejkode":359}},{"type":"Feature","id":6,"geometry":{"type":"Polygon","coordinates":[[[-57.078518306999968,74.107205800000031],[-57.026172782999936,74.107218402000058],[-57.026187164999953,74.116181804000064],[-57.078561451999974,74.116169195000055],[-57.078518306999968,74.107205800000031]]]},"properties":{"OBJECTID":6,"Lokalitetsnavn":"Nuussuaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1606","Kommunekode":960,"Lokalitetsnavn_forkortelse":"NUS","Location_type":3,"GlobalID":"{196D2816-990B-45A4-81AF-B4D1664D2FF6}","LokalitetSumiffik":"{E847D96E-25BB-43FC-BD3D-57594074590F}","Lokalitetvejkode":220}},{"type":"Feature","id":7,"geometry":{"type":"Polygon","coordinates":[[[-56.164841373999934,72.777036613000064],[-56.092230039999947,72.77672405900006],[-56.091083829999945,72.799132608000036],[-56.163786820999974,72.799445594000076],[-56.164841373999934,72.777036613000064]]]},"properties":{"OBJECTID":7,"Lokalitetsnavn":"Upernavik","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1600","Kommunekode":960,"Lokalitetsnavn_forkortelse":"UPV","Location_type":1,"GlobalID":"{2EC49D05-DD98-4276-BB0E-04FDA5A1826D}","LokalitetSumiffik":"{02C0ACB3-0FD9-4D27-825C-4235A4092B9B}","Lokalitetvejkode":0}},{"type":"Feature","id":8,"geometry":{"type":"Polygon","coordinates":[[[-55.570925587999966,72.371992132000059],[-55.52360532199998,72.371645558000068],[-55.522514800999943,72.385088464000034],[-55.569869989999972,72.385435319000067],[-55.570925587999966,72.371992132000059]]]},"properties":{"OBJECTID":8,"Lokalitetsnavn":"Kangersuatsiaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1602","Kommunekode":960,"Lokalitetsnavn_forkortelse":"KAQ","Location_type":3,"GlobalID":"{1D449CC4-7AC1-4EE7-96D7-76645B7B00D1}","LokalitetSumiffik":"{69B75664-8BEB-4717-AE83-A5A2DC7262A8}","Lokalitetvejkode":157}},{"type":"Feature","id":9,"geometry":{"type":"Polygon","coordinates":[[[-56.083066574999975,73.363906611000061],[-56.033004007999978,73.363680696000074],[-56.032244367999965,73.377124829000081],[-56.082346248999954,73.377350938000063],[-56.083066574999975,73.363906611000061]]]},"properties":{"OBJECTID":9,"Lokalitetsnavn":"Tasiusaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1605","Kommunekode":960,"Lokalitetsnavn_forkortelse":"TSS","Location_type":3,"GlobalID":"{EF8CA05D-499C-483A-BC34-0A556313FC28}","LokalitetSumiffik":"{38F36B7B-26C1-4778-A580-B547D39C2776}","Lokalitetvejkode":326}},{"type":"Feature","id":10,"geometry":{"type":"Polygon","coordinates":[[[-55.606341534999956,72.875285718000043],[-55.557674119999945,72.874946517000069],[-55.556575404999933,72.888388947000067],[-55.605279862999964,72.888728431000061],[-55.606341534999956,72.875285718000043]]]},"properties":{"OBJECTID":10,"Lokalitetsnavn":"Aappilattoq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1603","Kommunekode":960,"Lokalitetsnavn_forkortelse":"AAP","Location_type":3,"GlobalID":"{618E77DD-39F2-4FFB-A880-59C200B96CD5}","LokalitetSumiffik":"{40C85601-09CC-4B2B-8479-A3B2592CE964}","Lokalitetvejkode":5}},{"type":"Feature","id":11,"geometry":{"type":"Polygon","coordinates":[[[-55.826456632999964,73.134892627000056],[-55.777058365999949,73.13460559400005],[-55.776111512999933,73.148048879000044],[-55.825548003999984,73.148336153000059],[-55.826456632999964,73.134892627000056]]]},"properties":{"OBJECTID":11,"Lokalitetsnavn":"Naajaat","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1608","Kommunekode":960,"Lokalitetsnavn_forkortelse":"NAJ","Location_type":3,"GlobalID":"{70A174A3-0D3C-4F41-8A07-8C4067358381}","LokalitetSumiffik":"{97CC9F49-BDDD-474B-8EAD-B2F9EAF33DE0}","Lokalitetvejkode":196}},{"type":"Feature","id":12,"geometry":{"type":"Polygon","coordinates":[[[-56.463467561999948,73.508659779000084],[-56.412973635999947,73.508524942000065],[-56.412352865999935,73.526451813000051],[-56.462900180999952,73.526586805000079],[-56.463467561999948,73.508659779000084]]]},"properties":{"OBJECTID":12,"Lokalitetsnavn":"Nutaarmiut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1610","Kommunekode":960,"Lokalitetsnavn_forkortelse":"NUT","Location_type":3,"GlobalID":"{55A8D5EC-5E77-48C0-9353-72F8C238C944}","LokalitetSumiffik":"{B60DF3BE-0407-4860-B6A9-5CD8B8BD3EAA}","Lokalitetvejkode":217}},{"type":"Feature","id":13,"geometry":{"type":"Polygon","coordinates":[[[-57.249264386999982,74.575856978000047],[-57.19536984299998,74.575910619000069],[-57.195536071999982,74.589355066000053],[-57.249476469999934,74.589301376000037],[-57.249264386999982,74.575856978000047]]]},"properties":{"OBJECTID":13,"Lokalitetsnavn":"Kullorsuaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1607","Kommunekode":960,"Lokalitetsnavn_forkortelse":"KLQ","Location_type":3,"GlobalID":"{5C0C955E-576F-4E18-BDC2-558D3EEC82A8}","LokalitetSumiffik":"{DF21E49F-DC0F-430B-B199-5B01A001679C}","Lokalitetvejkode":171}},{"type":"Feature","id":14,"geometry":{"type":"Polygon","coordinates":[[[-56.191936700999975,73.046101781000061],[-56.167360093999946,73.04600356800006],[-56.16714650199998,73.050485252000044],[-56.191729412999962,73.050583493000033],[-56.191936700999975,73.046101781000061]]]},"properties":{"OBJECTID":14,"Lokalitetsnavn":"Tussaaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1604","Kommunekode":960,"Lokalitetsnavn_forkortelse":"TUS","Location_type":4,"GlobalID":"{787B364A-1A52-43F1-A86A-719A64F3DC61}","LokalitetSumiffik":"{2D142004-D40D-4044-BAE3-627CE610EF35}","Lokalitetvejkode":0}},{"type":"Feature","id":15,"geometry":{"type":"Polygon","coordinates":[[[-56.03332521599998,73.191550752000069],[-55.983761868999977,73.19131317800003],[-55.982972220999955,73.204757337000046],[-56.032574064999949,73.204995111000073],[-56.03332521599998,73.191550752000069]]]},"properties":{"OBJECTID":15,"Lokalitetsnavn":"Innaarsuit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1609","Kommunekode":960,"Lokalitetsnavn_forkortelse":"INN","Location_type":3,"GlobalID":"{1F563531-3029-4864-BECD-30E595607529}","LokalitetSumiffik":"{96ED2177-ED65-44DF-AD24-A3AE0A0B3E02}","Lokalitetvejkode":114}},{"type":"Feature","id":16,"geometry":{"type":"Polygon","coordinates":[[[-51.151375160999976,69.196675432000063],[-51.030275095999968,69.19673922100003],[-51.03035633199994,69.255031276000068],[-51.151781338999967,69.25496729200006],[-51.151375160999976,69.196675432000063]]]},"properties":{"OBJECTID":16,"Lokalitetsnavn":"Ilulissat","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1200","Kommunekode":960,"Lokalitetsnavn_forkortelse":"ILU","Location_type":1,"GlobalID":"{CEEAD6F7-B845-4984-BF21-FD856B74E60D}","LokalitetSumiffik":"{0E5053EC-1780-47AC-B517-BDE615E760E0}","Lokalitetvejkode":0}},{"type":"Feature","id":17,"geometry":{"type":"Polygon","coordinates":[[[-51.753789267999935,64.128045732000032],[-51.573056784999949,64.128868457000067],[-51.574911854999982,64.218602015000045],[-51.756229276999932,64.217776012000058],[-51.753789267999935,64.128045732000032]]]},"properties":{"OBJECTID":17,"Lokalitetsnavn":"Nuuk","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0600","Kommunekode":956,"Lokalitetsnavn_forkortelse":"NUK","Location_type":1,"GlobalID":"{F0966470-F09F-474D-A820-E8A46ED6FCC7}","LokalitetSumiffik":"{4F46D110-E6AD-46D1-B403-B12063152564}","Lokalitetvejkode":0}},{"type":"Feature","id":18,"geometry":{"type":"Polygon","coordinates":[[[-53.963629021999964,69.480054987000074],[-53.922783168999956,69.48074497600004],[-53.924615521999954,69.49417907000003],[-53.965486890999955,69.493488589000037],[-53.963629021999964,69.480054987000074]]]},"properties":{"OBJECTID":18,"Lokalitetsnavn":"Kangerluk","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1403","Kommunekode":959,"Lokalitetsnavn_forkortelse":"KLK","Location_type":3,"GlobalID":"{A714D65C-E3EC-405B-937E-422F1575A780}","LokalitetSumiffik":"{0F4A65F1-5BCF-4E7F-81BB-297FC5176F97}","Lokalitetvejkode":155}},{"type":"Feature","id":19,"geometry":{"type":"Polygon","coordinates":[[[-51.974938515999952,70.007437698000047],[-51.912049606999972,70.007770720000053],[-51.912638042999959,70.021219808000069],[-51.97556751299993,70.020886544000064],[-51.974938515999952,70.007437698000047]]]},"properties":{"OBJECTID":19,"Lokalitetsnavn":"Saqqaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1203","Kommunekode":960,"Lokalitetsnavn_forkortelse":"SQQ","Location_type":3,"GlobalID":"{9BCFC73E-3BA5-4D2F-90F3-091B13DC6AC4}","LokalitetSumiffik":"{94DF3E19-E274-461E-9C63-F9E00EBA5E57}","Lokalitetvejkode":299}},{"type":"Feature","id":20,"geometry":{"type":"Polygon","coordinates":[[[-52.867879657999936,68.230198260000066],[-52.829241928999977,68.230628163000063],[-52.830316984999968,68.244074902000079],[-52.868977389999941,68.243644706000055],[-52.867879657999936,68.230198260000066]]]},"properties":{"OBJECTID":20,"Lokalitetsnavn":"Niaqornaarsuk","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0906","Kommunekode":959,"Lokalitetsnavn_forkortelse":"NQK","Location_type":3,"GlobalID":"{110840B0-DFD2-42AF-ABC1-3AC0D8A09C8C}","LokalitetSumiffik":"{EC182F0A-3BBF-4153-AF12-1A6046F605CE}","Lokalitetvejkode":206}},{"type":"Feature","id":21,"geometry":{"type":"Polygon","coordinates":[[[-51.645792636999943,70.802535764000083],[-51.602197968999974,70.802683315000081],[-51.602603947999967,70.816132174000074],[-51.64622800099994,70.815984513000046],[-51.645792636999943,70.802535764000083]]]},"properties":{"OBJECTID":21,"Lokalitetsnavn":"Saattut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1504","Kommunekode":960,"Lokalitetsnavn_forkortelse":"SAA","Location_type":3,"GlobalID":"{1BA04A65-6E80-4A5F-B31C-7CC67C1C32C8}","LokalitetSumiffik":"{E8DDF688-E209-46D0-BF8C-50478392B33F}","Lokalitetvejkode":293}},{"type":"Feature","id":22,"geometry":{"type":"Polygon","coordinates":[[[-53.358924082999977,65.819356174000063],[-53.323947661999966,65.819891179000081],[-53.325162359999979,65.833337809000056],[-53.360157020999964,65.832802469000057],[-53.358924082999977,65.819356174000063]]]},"properties":{"OBJECTID":22,"Lokalitetsnavn":"Kangaamiut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0703","Kommunekode":957,"Lokalitetsnavn_forkortelse":"KAM","Location_type":3,"GlobalID":"{367C0F4D-243F-414F-BC8A-E5F22578C5C2}","LokalitetSumiffik":"{FC951DEA-7BE0-4E3B-8903-36D08A71A8CC}","Lokalitetvejkode":69}},{"type":"Feature","id":23,"geometry":{"type":"Polygon","coordinates":[[[-52.723440632999939,70.721161474000041],[-52.61493362899995,70.722147620000044],[-52.617102561999957,70.749036344000046],[-52.725755124999978,70.748048715000039],[-52.723440632999939,70.721161474000041]]]},"properties":{"OBJECTID":23,"Lokalitetsnavn":"Qaarsut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1502","Kommunekode":960,"Lokalitetsnavn_forkortelse":"QST","Location_type":3,"GlobalID":"{C4B3466E-17D3-4F22-B133-B385B27633C6}","LokalitetSumiffik":"{269DE339-AE73-4968-8A44-49D268B4D607}","Lokalitetvejkode":258}},{"type":"Feature","id":24,"geometry":{"type":"Polygon","coordinates":[[[-51.017773926999951,69.335744463000083],[-50.977147808999973,69.335743868000066],[-50.977128840999967,69.353679638000074],[-51.017788679999967,69.353680233000034],[-51.017773926999951,69.335744463000083]]]},"properties":{"OBJECTID":24,"Lokalitetsnavn":"Oqaatsut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1201","Kommunekode":960,"Lokalitetsnavn_forkortelse":"OQA","Location_type":3,"GlobalID":"{614AB3A3-5653-46CE-B5D5-7933EA090E51}","LokalitetSumiffik":"{FFBE6C4B-1EBC-4DC7-9671-740B3913A3CF}","Lokalitetvejkode":222}},{"type":"Feature","id":25,"geometry":{"type":"Polygon","coordinates":[[[-51.848288700999944,68.62691286900008],[-51.808952775999956,68.627106120000064],[-51.809276179999983,68.636073866000061],[-51.848627826999973,68.635880526000051],[-51.848288700999944,68.62691286900008]]]},"properties":{"OBJECTID":25,"Lokalitetsnavn":"Ikamiut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1101","Kommunekode":959,"Lokalitetsnavn_forkortelse":"IKA","Location_type":3,"GlobalID":"{7227C4F5-6107-4E64-BB27-CABB75A976BD}","LokalitetSumiffik":"{7AF04482-A6BA-4FB7-87FB-233C8BFE5A25}","Lokalitetvejkode":92}},{"type":"Feature","id":26,"geometry":{"type":"Polygon","coordinates":[[[-52.881566136999936,66.890338529000076],[-52.845054413999947,66.890767768000046],[-52.845730815999957,66.899733678000075],[-52.882255904999965,66.899304254000072],[-52.881566136999936,66.890338529000076]]]},"properties":{"OBJECTID":26,"Lokalitetsnavn":"Sarfannguit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0803","Kommunekode":957,"Lokalitetsnavn_forkortelse":"SFN","Location_type":3,"GlobalID":"{7FA574ED-0322-499B-BDB6-DDDB7648BB86}","LokalitetSumiffik":"{22FA67C6-F423-434B-A80F-AEF4F756A8B3}","Lokalitetvejkode":124}},{"type":"Feature","id":27,"geometry":{"type":"Polygon","coordinates":[[[-53.63157003699996,67.933516439000073],[-53.593445569999972,67.934122660000071],[-53.594946892999985,67.94756295600007],[-53.633093367999948,67.946956328000056],[-53.63157003699996,67.933516439000073]]]},"properties":{"OBJECTID":27,"Lokalitetsnavn":"Attu","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0902","Kommunekode":959,"Lokalitetsnavn_forkortelse":"ATT","Location_type":3,"GlobalID":"{D900815A-5101-4856-8910-83A438AF1735}","LokalitetSumiffik":"{D403430B-4106-49EC-BA01-D0895CCB5F21}","Lokalitetvejkode":10}},{"type":"Feature","id":28,"geometry":{"type":"Polygon","coordinates":[[[-52.189226682999958,64.798242645000073],[-52.155557893999969,64.798508436000077],[-52.156134304999966,64.811965241000053],[-52.18981987899997,64.811699289000046],[-52.189226682999958,64.798242645000073]]]},"properties":{"OBJECTID":28,"Lokalitetsnavn":"Atammik","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0701","Kommunekode":957,"Lokalitetsnavn_forkortelse":"ATA","Location_type":3,"GlobalID":"{1D929917-4833-4FEE-B877-2D7D0784D65B}","LokalitetSumiffik":"{8F913C56-9641-43BC-A7A0-BE7E09B48271}","Lokalitetvejkode":21}},{"type":"Feature","id":29,"geometry":{"type":"Polygon","coordinates":[[[-50.68916867799993,63.082328122000035],[-50.657492246999936,63.082255118000035],[-50.657386681999981,63.091230132000078],[-50.689072875999955,63.091303164000067],[-50.68916867799993,63.082328122000035]]]},"properties":{"OBJECTID":29,"Lokalitetsnavn":"Qeqertarsuatsiaat","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0601","Kommunekode":956,"Lokalitetsnavn_forkortelse":"QTT","Location_type":3,"GlobalID":"{3E523547-CA88-46E2-83DB-46584BDACFF4}","LokalitetSumiffik":"{5583C8E6-0D18-468E-8028-E7EB213B3955}","Lokalitetvejkode":261}},{"type":"Feature","id":30,"geometry":{"type":"Polygon","coordinates":[[[-50.281613440999934,64.42706264900005],[-50.231788399999971,64.426810634000049],[-50.231411549999962,64.440269651000051],[-50.28126102799996,64.440521817000047],[-50.281613440999934,64.42706264900005]]]},"properties":{"OBJECTID":30,"Lokalitetsnavn":"Kapisillit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0605","Kommunekode":956,"Lokalitetsnavn_forkortelse":"KAP","Location_type":3,"GlobalID":"{8B013CC6-9ABA-4754-B1C8-78644B1A55DD}","LokalitetSumiffik":"{37CA1653-7475-4FFD-9114-C558BEBB03B3}","Lokalitetvejkode":142}},{"type":"Feature","id":31,"geometry":{"type":"Polygon","coordinates":[[[-51.31931095799996,70.493143509000049],[-51.276379069999962,70.493213807000075],[-51.276623307999955,70.511147009000069],[-51.319593133999945,70.511076641000045],[-51.31931095799996,70.493143509000049]]]},"properties":{"OBJECTID":31,"Lokalitetsnavn":"Ikerasak","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1503","Kommunekode":960,"Lokalitetsnavn_forkortelse":"IKE","Location_type":3,"GlobalID":"{65D7C18B-BDEB-4B77-9B6A-3283CFC74A78}","LokalitetSumiffik":"{0AB778F7-A25E-49B7-A50B-64073E6B76C1}","Lokalitetvejkode":95}},{"type":"Feature","id":32,"geometry":{"type":"Polygon","coordinates":[[[-51.210731229999965,68.81187353200005],[-51.13139745899997,68.81195342400008],[-51.131530132999956,68.834374453000066],[-51.210944008999945,68.834294468000053],[-51.210731229999965,68.81187353200005]]]},"properties":{"OBJECTID":32,"Lokalitetsnavn":"Qasigiannguit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1100","Kommunekode":959,"Lokalitetsnavn_forkortelse":"QAS","Location_type":1,"GlobalID":"{3E98C7E6-7CE4-4CC5-B4DE-AC7F7EA2BC19}","LokalitetSumiffik":"{28CFB7BE-7E98-41D6-A2BC-ED77F69A04F9}","Lokalitetvejkode":0}},{"type":"Feature","id":33,"geometry":{"type":"Polygon","coordinates":[[[-52.16947268499996,70.670819085000062],[-52.104517641999962,70.67122203100007],[-52.105503375999945,70.689151754000079],[-52.17051635699994,70.688748405000069],[-52.16947268499996,70.670819085000062]]]},"properties":{"OBJECTID":33,"Lokalitetsnavn":"Uummannaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1500","Kommunekode":960,"Lokalitetsnavn_forkortelse":"UUM","Location_type":1,"GlobalID":"{220D302C-682E-4DCA-87FA-68F4D16C7339}","LokalitetSumiffik":"{6A9EEDD8-F281-4045-8565-E865B1AA9CA3}","Lokalitetvejkode":0}},{"type":"Feature","id":34,"geometry":{"type":"Polygon","coordinates":[[[-53.470516323999959,68.304001018000065],[-53.431768834999957,68.304571272000032],[-53.433203183999979,68.318012626000041],[-53.471973471999945,68.317441984000084],[-53.470516323999959,68.304001018000065]]]},"properties":{"OBJECTID":34,"Lokalitetsnavn":"Kangaatsiaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0900","Kommunekode":959,"Lokalitetsnavn_forkortelse":"KAT","Location_type":1,"GlobalID":"{27045764-E92B-4D39-B6F0-23919CC1F2BD}","LokalitetSumiffik":"{EE0F6412-D91F-4334-8C7F-80C86F25B6D5}","Lokalitetvejkode":153}},{"type":"Feature","id":35,"geometry":{"type":"Polygon","coordinates":[[[-52.354105766999965,68.736637448000067],[-52.314582988999973,68.736948854000048],[-52.315375909999943,68.750398091000079],[-52.354922508999948,68.750086469000053],[-52.354105766999965,68.736637448000067]]]},"properties":{"OBJECTID":35,"Lokalitetsnavn":"Akunnaaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1003","Kommunekode":959,"Lokalitetsnavn_forkortelse":"AKU","Location_type":3,"GlobalID":"{453C4252-A91A-452D-A9A1-59133E9386D1}","LokalitetSumiffik":"{87FBBF95-59F3-44A8-B136-283E8792DB93}","Lokalitetvejkode":15}},{"type":"Feature","id":36,"geometry":{"type":"Polygon","coordinates":[[[-53.229133906999948,71.531224800000075],[-53.183914367999932,71.531748666000055],[-53.185448956999949,71.545187437000038],[-53.230700207999973,71.544663163000052],[-53.229133906999948,71.531224800000075]]]},"properties":{"OBJECTID":36,"Lokalitetsnavn":"Nuugaatsiaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1507","Kommunekode":960,"Lokalitetsnavn_forkortelse":"NUG","Location_type":3,"GlobalID":"{D565A48A-704C-4F3D-8565-B1461EC8DBEE}","LokalitetSumiffik":"{7CE068D4-5D9C-4296-B55F-C48D92DBE039}","Lokalitetvejkode":218}},{"type":"Feature","id":37,"geometry":{"type":"Polygon","coordinates":[[[-52.899064669999973,68.692821775000084],[-52.761035292999964,68.694316052000033],[-52.763510297999971,68.725691150000046],[-52.901733389999947,68.724194460000035],[-52.899064669999973,68.692821775000084]]]},"properties":{"OBJECTID":37,"Lokalitetsnavn":"Aasiaat","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1000","Kommunekode":959,"Lokalitetsnavn_forkortelse":"AAS","Location_type":1,"GlobalID":"{5DF29A9D-9330-49AA-BAF6-BD946F28FDA4}","LokalitetSumiffik":"{46A69DD9-D0B0-44D0-8701-5EFBD11CBEB0}","Lokalitetvejkode":0}},{"type":"Feature","id":38,"geometry":{"type":"Polygon","coordinates":[[[-49.694629507999935,61.98592403300006],[-49.633579686999951,61.985332812000081],[-49.631970568999975,62.021228891000078],[-49.693092231999969,62.021821002000081],[-49.694629507999935,61.98592403300006]]]},"properties":{"OBJECTID":38,"Lokalitetsnavn":"Paamiut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0500","Kommunekode":956,"Lokalitetsnavn_forkortelse":"PAA","Location_type":1,"GlobalID":"{50788605-AE70-464F-A5D0-8C00922865C9}","LokalitetSumiffik":"{A155822D-952D-4E0A-8B9F-6E9D8E68B01D}","Lokalitetvejkode":0}},{"type":"Feature","id":39,"geometry":{"type":"Polygon","coordinates":[[[-53.577804973999946,69.228615449000074],[-53.456639232999976,69.230383163000056],[-53.460189157999935,69.261742231000028],[-53.581529523999961,69.259971604000043],[-53.577804973999946,69.228615449000074]]]},"properties":{"OBJECTID":39,"Lokalitetsnavn":"Qeqertarsuaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1400","Kommunekode":959,"Lokalitetsnavn_forkortelse":"QEQ","Location_type":1,"GlobalID":"{67EF0684-1EFA-4E1C-9081-EE9ED3B76EFA}","LokalitetSumiffik":"{91EF7652-04DD-42D9-A409-59C88A23EAB9}","Lokalitetvejkode":0}},{"type":"Feature","id":40,"geometry":{"type":"Polygon","coordinates":[[[-53.520200086999978,66.569975181000075],[-53.466161392999936,66.570834536000064],[-53.467496930999971,66.58427845500006],[-53.521564814999977,66.583418549000044],[-53.520200086999978,66.569975181000075]]]},"properties":{"OBJECTID":40,"Lokalitetsnavn":"Itilleq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0801","Kommunekode":957,"Lokalitetsnavn_forkortelse":"ITI","Location_type":3,"GlobalID":"{6C5EC5B7-15FA-4579-B9E9-6A83FA491634}","LokalitetSumiffik":"{2F89DE3C-A90D-4EED-9084-97EDF5953934}","Lokalitetvejkode":54}},{"type":"Feature","id":41,"geometry":{"type":"Polygon","coordinates":[[[-48.466056421999951,61.168527974000028],[-48.406636431999971,61.167402259000028],[-48.405530757999941,61.180854966000027],[-48.464976014999934,61.181981305000079],[-48.466056421999951,61.168527974000028]]]},"properties":{"OBJECTID":41,"Lokalitetsnavn":"Arsuk","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0501","Kommunekode":956,"Lokalitetsnavn_forkortelse":"ARS","Location_type":3,"GlobalID":"{7C202C06-B230-481C-873B-5E9150B2B6A8}","LokalitetSumiffik":"{72A69DA1-9037-40E3-8792-11C7E819AA1F}","Lokalitetvejkode":20}},{"type":"Feature","id":42,"geometry":{"type":"Polygon","coordinates":[[[-53.455100244999983,68.138190455000029],[-53.435866230999977,68.138474601000041],[-53.436340940999969,68.142955133000044],[-53.455578693999939,68.142670924000072],[-53.455100244999983,68.138190455000029]]]},"properties":{"OBJECTID":42,"Lokalitetsnavn":"Ikerasaarsuk","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0908","Kommunekode":959,"Lokalitetsnavn_forkortelse":"IKS","Location_type":3,"GlobalID":"{D7776D8F-E60A-4376-94DD-D27ECD3B92FF}","LokalitetSumiffik":"{002841B1-5D88-445C-BA56-36F180081FF4}","Lokalitetvejkode":99}},{"type":"Feature","id":43,"geometry":{"type":"Polygon","coordinates":[[[-53.195228091999979,68.140045461000057],[-53.15674947499997,68.140551165000034],[-53.158011163999959,68.153995374000033],[-53.196512247999976,68.153489328000035],[-53.195228091999979,68.140045461000057]]]},"properties":{"OBJECTID":43,"Lokalitetsnavn":"Iginniarfik","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0905","Kommunekode":959,"Lokalitetsnavn_forkortelse":"IGF","Location_type":3,"GlobalID":"{68EA1EDD-4B74-441E-B545-27BFDDF5A133}","LokalitetSumiffik":"{2BCC4C3B-3B68-4A6B-9AE9-E3682C6B8320}","Lokalitetvejkode":91}},{"type":"Feature","id":44,"geometry":{"type":"Polygon","coordinates":[[[-52.393403625999952,65.042371008000032],[-52.359429936999959,65.042683657000055],[-52.360115589999964,65.056138966000049],[-52.394106400999931,65.055826126000056],[-52.393403625999952,65.042371008000032]]]},"properties":{"OBJECTID":44,"Lokalitetsnavn":"Napasoq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0702","Kommunekode":957,"Lokalitetsnavn_forkortelse":"NAP","Location_type":3,"GlobalID":"{621D5DD0-95EA-4CB7-A423-0DB5F79325B8}","LokalitetSumiffik":"{89D04F4C-657E-4721-B1FB-7FC12703EDE0}","Lokalitetvejkode":87}},{"type":"Feature","id":45,"geometry":{"type":"MultiPolygon","coordinates":[[[[-50.906099094999945,66.971315467000068],[-50.906069076999984,66.971317871000053]]]]},"properties":{"OBJECTID":45,"Lokalitetsnavn":"Kangerlussuaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1548234090000,"Lokalitetskode":"0820","Kommunekode":957,"Lokalitetsnavn_forkortelse":"KAN","Location_type":3,"GlobalID":"{07CBCBC8-8247-4257-848C-EBCB14D92534}","LokalitetSumiffik":"{A28A3714-168E-4244-821F-590180B69236}","Lokalitetvejkode":71}},{"type":"Feature","id":46,"geometry":{"type":"Polygon","coordinates":[[[-51.125438956999972,69.073832994000043],[-51.085298558999966,69.073857642000064],[-51.085350922999964,69.087309871000059],[-51.125515961999952,69.087285205000057],[-51.125438956999972,69.073832994000043]]]},"properties":{"OBJECTID":46,"Lokalitetsnavn":"Ilimanaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1204","Kommunekode":960,"Lokalitetsnavn_forkortelse":"ILQ","Location_type":3,"GlobalID":"{3E5D3BC9-6889-4F38-85D7-23EE1A6AE055}","LokalitetSumiffik":"{786A804A-2377-4863-AF17-A57478D74CE4}","Lokalitetvejkode":101}},{"type":"Feature","id":47,"geometry":{"type":"Polygon","coordinates":[[[-51.896426691999977,71.043600585000036],[-51.874364089999972,71.043705413000055],[-51.875160992999952,71.061635652000064],[-51.897243695999975,71.061530717000039],[-51.896426691999977,71.043600585000036]]]},"properties":{"OBJECTID":47,"Lokalitetsnavn":"Ukkusissat","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1505","Kommunekode":960,"Lokalitetsnavn_forkortelse":"UKK","Location_type":3,"GlobalID":"{AA8AEA22-E701-4DD2-95C8-48F3133F83F5}","LokalitetSumiffik":"{E262253F-A400-4135-AA4E-7E748E0FD700}","Lokalitetvejkode":350}},{"type":"Feature","id":48,"geometry":{"type":"Polygon","coordinates":[[[-53.588305172999981,71.23595189200006],[-53.543783277999978,71.236560023000038],[-53.546713244999978,71.258952848000035],[-53.591286282999931,71.258343938000053],[-53.588305172999981,71.23595189200006]]]},"properties":{"OBJECTID":48,"Lokalitetsnavn":"Illorsuit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1506","Kommunekode":960,"Lokalitetsnavn_forkortelse":"ILL","Location_type":3,"GlobalID":"{540252D7-C4F2-4E41-8196-2DC6C547B78C}","LokalitetSumiffik":"{375BEF04-F419-4A94-9DF4-B0B1C3D43D38}","Lokalitetvejkode":106}},{"type":"Feature","id":49,"geometry":{"type":"Polygon","coordinates":[[[-53.750295549999976,66.916243450000081],[-53.56763379299997,66.919306148000032],[-53.571880756999974,66.959632854000063],[-53.754843742999981,66.956564191000041],[-53.750295549999976,66.916243450000081]]]},"properties":{"OBJECTID":49,"Lokalitetsnavn":"Sisimiut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0800","Kommunekode":957,"Lokalitetsnavn_forkortelse":"SIS","Location_type":1,"GlobalID":"{666A703F-1F6F-48A3-A26F-4B53BB41DB16}","LokalitetSumiffik":"{F7C62D01-5BDB-46B1-A8F2-E713B2FC1CD9}","Lokalitetvejkode":0}},{"type":"Feature","id":50,"geometry":{"type":"Polygon","coordinates":[[[-51.316911278999953,69.994578604000083],[-51.29595883099995,69.994614656000067],[-51.296086013999968,70.003581748000045],[-51.317047465999963,70.00354567800008],[-51.316911278999953,69.994578604000083]]]},"properties":{"OBJECTID":50,"Lokalitetsnavn":"Qeqertaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1202","Kommunekode":960,"Lokalitetsnavn_forkortelse":"QQT","Location_type":3,"GlobalID":"{D25B8E15-D6A3-4F10-96F9-86EEF769BBFB}","LokalitetSumiffik":"{B3D2FB40-1BFC-450F-8C49-868D2270E9C0}","Lokalitetvejkode":269}},{"type":"Feature","id":51,"geometry":{"type":"Polygon","coordinates":[[[-53.138757206999969,68.851474538000048],[-53.099046146999967,68.851969354000062],[-53.100319618999947,68.865412917000072],[-53.140054726999949,68.864917757000057],[-53.138757206999969,68.851474538000048]]]},"properties":{"OBJECTID":51,"Lokalitetsnavn":"Kitsissuarsuit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1004","Kommunekode":959,"Lokalitetsnavn_forkortelse":"KIT","Location_type":3,"GlobalID":"{7BAF46BE-A6DA-436E-B4C9-B67825ECFCB4}","LokalitetSumiffik":"{B9FBAFBF-5CF3-49D3-A3BB-8012ACDB2DFC}","Lokalitetvejkode":165}},{"type":"Feature","id":52,"geometry":{"type":"Polygon","coordinates":[[[-52.961515947999942,65.400421335000033],[-52.87544758599995,65.401513776000058],[-52.878656904999957,65.446351115000027],[-52.964872322999952,65.445256419000032],[-52.961515947999942,65.400421335000033]]]},"properties":{"OBJECTID":52,"Lokalitetsnavn":"Maniitsoq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0700","Kommunekode":957,"Lokalitetsnavn_forkortelse":"MAN","Location_type":1,"GlobalID":"{BFBED5C6-D8A3-4CCC-9428-86709B208AAA}","LokalitetSumiffik":"{5F2E1652-1796-4A39-8594-87D5616A4719}","Lokalitetvejkode":0}},{"type":"Feature","id":53,"geometry":{"type":"Polygon","coordinates":[[[-53.687320001999979,70.781375053000033],[-53.643815507999932,70.782005062000053],[-53.645595196999977,70.795440369000062],[-53.689128890999939,70.794809885000063],[-53.687320001999979,70.781375053000033]]]},"properties":{"OBJECTID":53,"Lokalitetsnavn":"Niaqornat","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1501","Kommunekode":960,"Lokalitetsnavn_forkortelse":"NIA","Location_type":3,"GlobalID":"{864F8531-B756-4340-9293-5D1515885BE7}","LokalitetSumiffik":"{38B486B9-6E39-45E9-A0F3-76110DAB3BCB}","Lokalitetvejkode":207}},{"type":"Feature","id":54,"geometry":{"type":"Polygon","coordinates":[[[-47.17213980899993,60.774249630000043],[-47.142786049999984,60.774721580000062],[-47.143685092999931,60.78817945600008],[-47.173051143999942,60.787707248000061],[-47.17213980899993,60.774249630000043]]]},"properties":{"OBJECTID":54,"Lokalitetsnavn":"Qassimiut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0204","Kommunekode":955,"Lokalitetsnavn_forkortelse":"QSM","Location_type":3,"GlobalID":"{3D798D9B-4169-4F57-A096-20F65B99CDDF}","LokalitetSumiffik":"{6DA79002-6BB8-4401-9D3F-84E49DE63F35}","Lokalitetvejkode":165}},{"type":"Feature","id":55,"geometry":{"type":"Polygon","coordinates":[[[-45.447591584999941,61.142120598000076],[-45.388162066999939,61.142304105000051],[-45.388548195999931,61.173725316000059],[-45.448036827999942,61.173541572000033],[-45.447591584999941,61.142120598000076]]]},"properties":{"OBJECTID":55,"Lokalitetsnavn":"Narsarsuaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0321","Kommunekode":955,"Lokalitetsnavn_forkortelse":"NRS","Location_type":3,"GlobalID":"{A0A895FA-CDEC-4A55-9A5C-BD296C96D122}","LokalitetSumiffik":"{83E28CA0-757D-418D-B784-206B5D94DE4C}","Lokalitetvejkode":120}},{"type":"Feature","id":56,"geometry":{"type":"Polygon","coordinates":[[[-45.532944350999969,61.137322421000079],[-45.503234556999985,61.137436172000037],[-45.503735053999947,61.16885691400006],[-45.53347439199996,61.168743016000064],[-45.532944350999969,61.137322421000079]]]},"properties":{"OBJECTID":56,"Lokalitetsnavn":"Qassiarsuk","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0305","Kommunekode":955,"Lokalitetsnavn_forkortelse":"QSK","Location_type":5,"GlobalID":"{27098BDC-B3F8-4C49-8246-4CCC84BA3AFA}","LokalitetSumiffik":"{6A0A88E5-BEDA-4806-8DA2-279D35E50A3A}","Lokalitetvejkode":159}},{"type":"Feature","id":57,"geometry":{"type":"Polygon","coordinates":[[[-46.08537763399994,60.892490507000048],[-45.996942248999972,60.893174674000079],[-45.998345163999943,60.938057967000077],[-46.086904939999954,60.937372543000038],[-46.08537763399994,60.892490507000048]]]},"properties":{"OBJECTID":57,"Lokalitetsnavn":"Narsaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0300","Kommunekode":955,"Lokalitetsnavn_forkortelse":"NAR","Location_type":1,"GlobalID":"{4E5798D6-A7F7-46AD-B8CF-40839C946A7F}","LokalitetSumiffik":"{3FD2B167-629E-4DFB-90C7-AEAF36423703}","Lokalitetvejkode":0}},{"type":"Feature","id":58,"geometry":{"type":"Polygon","coordinates":[[[-44.828687526999943,60.191942273000052],[-44.799835090999977,60.191901862000066],[-44.799780409999983,60.200880801000039],[-44.828640727999982,60.200921226000048],[-44.828687526999943,60.191942273000052]]]},"properties":{"OBJECTID":58,"Lokalitetsnavn":"Tasiusaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0104","Kommunekode":955,"Lokalitetsnavn_forkortelse":"TAQ","Location_type":3,"GlobalID":"{65E70FCE-F3C0-499F-AE67-60BA6A2FECD3}","LokalitetSumiffik":"{0010EFE3-C93B-417D-B66A-104F3B9CD0F7}","Lokalitetvejkode":196}},{"type":"Feature","id":59,"geometry":{"type":"Polygon","coordinates":[[[-46.033224016999952,60.53284095500004],[-46.004073107999943,60.533063308000067],[-46.004351207999946,60.542040458000031],[-46.03351018799998,60.541818025000055],[-46.033224016999952,60.53284095500004]]]},"properties":{"OBJECTID":59,"Lokalitetsnavn":"Saarloq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0201","Kommunekode":955,"Lokalitetsnavn_forkortelse":"SAL","Location_type":3,"GlobalID":"{C033825D-BE4C-4D69-AAF0-0F9DDD0E4C89}","LokalitetSumiffik":"{04D77C8C-06EA-4838-9A15-4D9CF2414B3D}","Lokalitetvejkode":180}},{"type":"Feature","id":60,"geometry":{"type":"Polygon","coordinates":[[[-45.592652488999931,60.456508944000063],[-45.549024070999963,60.456695718000049],[-45.549251503999983,60.470163045000049],[-45.592897992999951,60.469976169000063],[-45.592652488999931,60.456508944000063]]]},"properties":{"OBJECTID":60,"Lokalitetsnavn":"Alluitsup Paa","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0108","Kommunekode":955,"Lokalitetsnavn_forkortelse":"ALP","Location_type":3,"GlobalID":"{0271101F-B53D-4833-9681-83ADEDA1DBF7}","LokalitetSumiffik":"{C4988941-56E5-47F2-B0E3-D7DF098ABE1D}","Lokalitetvejkode":15}},{"type":"Feature","id":61,"geometry":{"type":"Polygon","coordinates":[[[-46.080788025999937,60.702172313000062],[-45.992875692999974,60.702852392000068],[-45.993984404999935,60.738760121000041],[-46.081994862999977,60.738079047000042],[-46.080788025999937,60.702172313000062]]]},"properties":{"OBJECTID":61,"Lokalitetsnavn":"Qaqortoq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0200","Kommunekode":955,"Lokalitetsnavn_forkortelse":"QAQ","Location_type":1,"GlobalID":"{8342BAA1-998A-4DE2-B264-889862AA27A6}","LokalitetSumiffik":"{E45E8723-5BA8-453E-A61C-FDAC819801A2}","Lokalitetvejkode":0}},{"type":"Feature","id":62,"geometry":{"type":"Polygon","coordinates":[[[-44.68270696899998,59.995926715000053],[-44.639685117999932,59.995816361000038],[-44.63948974799996,60.013774517000058],[-44.68253492499997,60.01388495100008],[-44.68270696899998,59.995926715000053]]]},"properties":{"OBJECTID":62,"Lokalitetsnavn":"Narsarmijit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"TELDWLL","EditDate":1578620713000,"Lokalitetskode":"0103","Kommunekode":955,"Lokalitetsnavn_forkortelse":"NKJ","Location_type":3,"GlobalID":"{4F62F8E1-8556-4EE1-A05F-ABE4232E0701}","LokalitetSumiffik":"{50A6C796-0B87-421C-8C1D-520CFD10AFA5}","Lokalitetvejkode":118}},{"type":"Feature","id":63,"geometry":{"type":"Polygon","coordinates":[[[-45.439762189999954,60.979645087000051],[-45.410199268999975,60.979738257000065],[-45.410430770999938,60.99769364000008],[-45.440010374999986,60.997600402000046],[-45.439762189999954,60.979645087000051]]]},"properties":{"OBJECTID":63,"Lokalitetsnavn":"Igaliku","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0302","Kommunekode":955,"Lokalitetsnavn_forkortelse":"IGA","Location_type":3,"GlobalID":"{FFEBFB24-2EE6-4CC8-B68E-433FA6C45B78}","LokalitetSumiffik":"{D0D95693-C2E5-484F-BA6E-149F88BDF52A}","Lokalitetvejkode":50}},{"type":"Feature","id":64,"geometry":{"type":"Polygon","coordinates":[[[-44.294142273999967,60.143481575000067],[-44.279738330999976,60.143404045000068],[-44.279443728999979,60.156871565000074],[-44.293853562999971,60.156949137000026],[-44.294142273999967,60.143481575000067]]]},"properties":{"OBJECTID":64,"Lokalitetsnavn":"Aappilattoq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0102","Kommunekode":955,"Lokalitetsnavn_forkortelse":"APL","Location_type":3,"GlobalID":"{6DAEFF31-1005-4257-A243-6E082F55E378}","LokalitetSumiffik":"{F7F62B45-14F9-41CD-89CF-BB49F02DD5F2}","Lokalitetvejkode":4}},{"type":"Feature","id":65,"geometry":{"type":"Polygon","coordinates":[[[-45.924439646999986,60.616245848000062],[-45.895212607999952,60.616444609000041],[-45.895585859999983,60.629910586000051],[-45.924825080999938,60.629711715000042],[-45.924439646999986,60.616245848000062]]]},"properties":{"OBJECTID":65,"Lokalitetsnavn":"Eqalugaarsuit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0202","Kommunekode":955,"Lokalitetsnavn_forkortelse":"EQA","Location_type":3,"GlobalID":"{AF0EC090-D3BB-4920-AAD9-0BD52E66CA7D}","LokalitetSumiffik":"{6678A5B0-907C-40A6-9ECC-F6C082550DBD}","Lokalitetvejkode":32}},{"type":"Feature","id":66,"geometry":{"type":"Polygon","coordinates":[[[-45.397903170999939,60.586525047000066],[-45.368700005999983,60.586608762000083],[-45.368853550999972,60.600076165000075],[-45.398068876999957,60.599992404000034],[-45.397903170999939,60.586525047000066]]]},"properties":{"OBJECTID":66,"Lokalitetsnavn":"Ammassivik","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0106","Kommunekode":955,"Lokalitetsnavn_forkortelse":"AMS","Location_type":3,"GlobalID":"{959770F6-B0E8-4204-8AE1-9592AE19BB2D}","LokalitetSumiffik":"{7D7FFE83-BE26-4B56-8558-8EB8C8FB1147}","Lokalitetvejkode":17}},{"type":"Feature","id":67,"geometry":{"type":"Polygon","coordinates":[[[-45.262812905999965,60.133428435000042],[-45.205210569999963,60.133530202000031],[-45.205350453999984,60.155977719000077],[-45.262992054999984,60.155875860000037],[-45.262812905999965,60.133428435000042]]]},"properties":{"OBJECTID":67,"Lokalitetsnavn":"Nanortalik","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"0100","Kommunekode":955,"Lokalitetsnavn_forkortelse":"NAN","Location_type":1,"GlobalID":"{3372DB51-6E97-4D33-961F-41928D8EC542}","LokalitetSumiffik":"{03237CFF-A25B-41C9-8D1D-B583EF760612}","Lokalitetvejkode":0}},{"type":"Feature","id":68,"geometry":{"type":"Polygon","coordinates":[[[-37.795886042999939,65.882142814000076],[-37.760803356999929,65.881863482000028],[-37.760153637999963,65.895317929000043],[-37.79525470699997,65.89559743600006],[-37.795886042999939,65.882142814000076]]]},"properties":{"OBJECTID":68,"Lokalitetsnavn":"Tiilerilaaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1805","Kommunekode":956,"Lokalitetsnavn_forkortelse":"TIN","Location_type":3,"GlobalID":"{A048EFEE-506E-4321-B692-47D64C5A620A}","LokalitetSumiffik":"{38E95575-CFA8-4E6D-AF9B-8991B7F34463}","Lokalitetvejkode":322}},{"type":"Feature","id":69,"geometry":{"type":"Polygon","coordinates":[[[-39.002164277999952,65.538755627000057],[-38.967535836999957,65.538752172000045],[-38.967519083999946,65.552210377000051],[-39.002165394999963,65.552213834000042],[-39.002164277999952,65.538755627000057]]]},"properties":{"OBJECTID":69,"Lokalitetsnavn":"Isertoq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1803","Kommunekode":956,"Lokalitetsnavn_forkortelse":"ISO","Location_type":3,"GlobalID":"{21A0DD17-2472-4E47-9047-E1ED041D28A0}","LokalitetSumiffik":"{0FF44111-B49E-4D67-9BD4-BF0BAC77F23A}","Lokalitetvejkode":115}},{"type":"Feature","id":70,"geometry":{"type":"Polygon","coordinates":[[[-37.210068625999952,65.568589599000063],[-37.088797048999936,65.567112374000033],[-37.087480298999935,65.585046586000033],[-37.208835315999977,65.586525035000079],[-37.210068625999952,65.568589599000063]]]},"properties":{"OBJECTID":70,"Lokalitetsnavn":"Kulusuk","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1804","Kommunekode":956,"Lokalitetsnavn_forkortelse":"KUL","Location_type":3,"GlobalID":"{0096A12D-A0AD-4805-9A74-AD9DD3460140}","LokalitetSumiffik":"{6EB62134-DE33-4D4C-A826-ED67480E2B37}","Lokalitetvejkode":160}},{"type":"Feature","id":71,"geometry":{"type":"Polygon","coordinates":[[[-36.398515633999978,65.901613582000039],[-36.363435249999952,65.901014816000043],[-36.362052023999979,65.914458123000031],[-36.397150762999956,65.91505726500003],[-36.398515633999978,65.901613582000039]]]},"properties":{"OBJECTID":71,"Lokalitetsnavn":"Sermiligaaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1802","Kommunekode":956,"Lokalitetsnavn_forkortelse":"SML","Location_type":3,"GlobalID":"{518DD633-ED68-475B-AF8D-C8BA3128889B}","LokalitetSumiffik":"{8C7B4F18-3488-4FFB-9C8D-6EF290C93AB7}","Lokalitetvejkode":292}},{"type":"Feature","id":72,"geometry":{"type":"Polygon","coordinates":[[[-37.695841408999968,65.605840375000071],[-37.609072393999952,65.605071743000053],[-37.607631739999931,65.631979953000041],[-37.694490561999942,65.632749543000045],[-37.695841408999968,65.605840375000071]]]},"properties":{"OBJECTID":72,"Lokalitetsnavn":"Tasiilaq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1800","Kommunekode":956,"Lokalitetsnavn_forkortelse":"TAS","Location_type":1,"GlobalID":"{BA68D3E4-26BC-46CB-BBD6-9ACE51AA6952}","LokalitetSumiffik":"{9D078405-8C27-4833-8B53-69E7E7CC6B0F}","Lokalitetvejkode":0}},{"type":"Feature","id":73,"geometry":{"type":"Polygon","coordinates":[[[-37.036490803999982,65.858146668000074],[-36.983936066999945,65.857464432000029],[-36.982880373999933,65.870913736000034],[-37.035462585999937,65.871596400000044],[-37.036490803999982,65.858146668000074]]]},"properties":{"OBJECTID":73,"Lokalitetsnavn":"Kuummiut","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1806","Kommunekode":956,"Lokalitetsnavn_forkortelse":"KUM","Location_type":3,"GlobalID":"{66286CFD-BBD8-416E-A52E-605845C80E69}","LokalitetSumiffik":"{5137634D-4358-496A-82D3-029B25621311}","Lokalitetvejkode":166}},{"type":"Feature","id":74,"geometry":{"type":"Polygon","coordinates":[[[-21.986800190999929,70.479088722000029],[-21.922454522999942,70.479426653000075],[-21.923065272999963,70.492874991000065],[-21.987453526999957,70.492536809000057],[-21.986800190999929,70.479088722000029]]]},"properties":{"OBJECTID":74,"Lokalitetsnavn":"Ittoqqortoormiit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1900","Kommunekode":956,"Lokalitetsnavn_forkortelse":"ILT","Location_type":1,"GlobalID":"{0A7F4023-655F-4822-8CAC-F73B7896C943}","LokalitetSumiffik":"{E01F5BF8-99B2-4810-89B3-5611A87966EF}","Lokalitetvejkode":0}},{"type":"Feature","id":75,"geometry":{"type":"Polygon","coordinates":[[[-22.350066999999967,70.457022299000073],[-22.307222000999957,70.457335796000052],[-22.307798135999974,70.466300207000074],[-22.350662004999947,70.465986555000029],[-22.350066999999967,70.457022299000073]]]},"properties":{"OBJECTID":75,"Lokalitetsnavn":"Itterajivit","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1902","Kommunekode":956,"Lokalitetsnavn_forkortelse":"ITR","Location_type":4,"GlobalID":"{8457DC04-75F8-4003-8909-F97C72821F5C}","LokalitetSumiffik":"{F56CFD59-DEB9-4B6D-AD8A-D7DA89E44EB8}","Lokalitetvejkode":0}},{"type":"Feature","id":76,"geometry":{"type":"Polygon","coordinates":[[[-21.983460808999951,70.410054854000066],[-21.940709059999961,70.410281805000068],[-21.941536529999951,70.428212962000032],[-21.984325868999974,70.427985787000068],[-21.983460808999951,70.410054854000066]]]},"properties":{"OBJECTID":76,"Lokalitetsnavn":"Uunarteq","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1901","Kommunekode":956,"Lokalitetsnavn_forkortelse":"UUN","Location_type":4,"GlobalID":"{0FC7BD2B-6C3F-4ED5-B2C6-06DD958B677C}","LokalitetSumiffik":"{30FC82AC-7BF3-429A-A92A-62A96784DD56}","Lokalitetvejkode":0}},{"type":"Feature","id":77,"geometry":{"type":"Polygon","coordinates":[[[-22.661496138999951,70.727113968000083],[-22.618080460999977,70.72750149400008],[-22.61989153899998,70.749908723000033],[-22.663355757999966,70.749520712000049],[-22.661496138999951,70.727113968000083]]]},"properties":{"OBJECTID":77,"Lokalitetsnavn":"Nerlerit Inaat","Creator":"GREENADMIN","CreationDate":1533816004000,"Editor":"COREDATA","EditDate":1539673013000,"Lokalitetskode":"1906","Kommunekode":956,"Lokalitetsnavn_forkortelse":"NRI","Location_type":3,"GlobalID":"{7E46ABA6-E359-46CE-89D5-8157AD704526}","LokalitetSumiffik":"{99AFD749-C755-4C98-9790-F2087A4C5E6B}","Lokalitetvejkode":0}}]}
+  {
+    "type": "FeatureCollection",
+    "crs": {
+      "type": "name",
+      "properties": {
+        "name": "EPSG:4326"
+      }
+    },
+    "features": [
+      {
+        "type": "Feature",
+        "id": 1,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -69.855847572999949,
+                76.747897717000058
+              ],
+              [
+                -69.824588017999986,
+                76.748000045000083
+              ],
+              [
+                -69.825135809999949,
+                76.756960489000051
+              ],
+              [
+                -69.856416124999953,
+                76.756858088000058
+              ],
+              [
+                -69.855847572999949,
+                76.747897717000058
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 1,
+          "Lokalitetsnavn": "Moriusaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1706",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "MOR",
+          "Location_type": 4,
+          "GlobalID": "{99247EAB-56BE-40A7-A320-59B78C4BC2CC}",
+          "LokalitetSumiffik": "{8B2DDC7D-396E-43FF-A5AD-CCDAA2489A6C}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 2,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -69.441359711999951,
+                77.456893151000031
+              ],
+              [
+                -69.144372488999977,
+                77.457215064000081
+              ],
+              [
+                -69.144830534999983,
+                77.49753886700006
+              ],
+              [
+                -69.442759948999935,
+                77.49721588400007
+              ],
+              [
+                -69.441359711999951,
+                77.456893151000031
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 2,
+          "Lokalitetsnavn": "Qaanaaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1700",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "QNQ",
+          "Location_type": 1,
+          "GlobalID": "{A5877CD5-5BFA-4171-8581-2A1FD0311F85}",
+          "LokalitetSumiffik": "{62F2DC21-82B1-4633-92FE-64C9C759C7A5}",
+          "Lokalitetvejkode": 257
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 3,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -70.663948084999959,
+                77.783804273000044
+              ],
+              [
+                -70.596239641999944,
+                77.784202880000066
+              ],
+              [
+                -70.597393093999983,
+                77.793160068000077
+              ],
+              [
+                -70.665150408999978,
+                77.792761160000055
+              ],
+              [
+                -70.663948084999959,
+                77.783804273000044
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 3,
+          "Lokalitetsnavn": "Siorapaluk",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1704",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "SIO",
+          "Location_type": 3,
+          "GlobalID": "{9641179F-F53B-4805-84DC-F2500198BAD3}",
+          "LokalitetSumiffik": "{CB43BE80-CC56-4900-9887-4EAD072EC167}",
+          "Lokalitetvejkode": 308
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 4,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -65.120657754999968,
+                76.014225456000077
+              ],
+              [
+                -65.06138905399996,
+                76.014733138000054
+              ],
+              [
+                -65.062683723999953,
+                76.023689237000042
+              ],
+              [
+                -65.12198958099998,
+                76.023181217000058
+              ],
+              [
+                -65.120657754999968,
+                76.014225456000077
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 4,
+          "Lokalitetsnavn": "Savissivik",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1701",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "SAV",
+          "Location_type": 3,
+          "GlobalID": "{C5EF8A02-8F85-498A-B57D-E9B9B1918DE1}",
+          "LokalitetSumiffik": "{BAA93A01-48D1-4F64-8DE3-40D09FD8DD49}",
+          "Lokalitetvejkode": 301
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 5,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -55.558994495999968,
+                72.14861920900006
+              ],
+              [
+                -55.512247299999956,
+                72.14827028600007
+              ],
+              [
+                -55.510801273999959,
+                72.166194473000076
+              ],
+              [
+                -55.557593865999934,
+                72.166543770000033
+              ],
+              [
+                -55.558994495999968,
+                72.14861920900006
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 5,
+          "Lokalitetsnavn": "Upernavik Kujalleq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1601",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "UPK",
+          "Location_type": 3,
+          "GlobalID": "{9F3F3A01-2B55-4812-BBF6-4D8870B3BF94}",
+          "LokalitetSumiffik": "{D3D07252-D304-4CA6-B0A9-515052B1AD6E}",
+          "Lokalitetvejkode": 359
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 6,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -57.078518306999968,
+                74.107205800000031
+              ],
+              [
+                -57.026172782999936,
+                74.107218402000058
+              ],
+              [
+                -57.026187164999953,
+                74.116181804000064
+              ],
+              [
+                -57.078561451999974,
+                74.116169195000055
+              ],
+              [
+                -57.078518306999968,
+                74.107205800000031
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 6,
+          "Lokalitetsnavn": "Nuussuaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1606",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "NUS",
+          "Location_type": 3,
+          "GlobalID": "{196D2816-990B-45A4-81AF-B4D1664D2FF6}",
+          "LokalitetSumiffik": "{E847D96E-25BB-43FC-BD3D-57594074590F}",
+          "Lokalitetvejkode": 220
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 7,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -56.164841373999934,
+                72.777036613000064
+              ],
+              [
+                -56.092230039999947,
+                72.77672405900006
+              ],
+              [
+                -56.091083829999945,
+                72.799132608000036
+              ],
+              [
+                -56.163786820999974,
+                72.799445594000076
+              ],
+              [
+                -56.164841373999934,
+                72.777036613000064
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 7,
+          "Lokalitetsnavn": "Upernavik",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1600",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "UPV",
+          "Location_type": 1,
+          "GlobalID": "{2EC49D05-DD98-4276-BB0E-04FDA5A1826D}",
+          "LokalitetSumiffik": "{02C0ACB3-0FD9-4D27-825C-4235A4092B9B}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 8,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -55.570925587999966,
+                72.371992132000059
+              ],
+              [
+                -55.52360532199998,
+                72.371645558000068
+              ],
+              [
+                -55.522514800999943,
+                72.385088464000034
+              ],
+              [
+                -55.569869989999972,
+                72.385435319000067
+              ],
+              [
+                -55.570925587999966,
+                72.371992132000059
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 8,
+          "Lokalitetsnavn": "Kangersuatsiaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1602",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "KAQ",
+          "Location_type": 3,
+          "GlobalID": "{1D449CC4-7AC1-4EE7-96D7-76645B7B00D1}",
+          "LokalitetSumiffik": "{69B75664-8BEB-4717-AE83-A5A2DC7262A8}",
+          "Lokalitetvejkode": 157
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 9,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -56.083066574999975,
+                73.363906611000061
+              ],
+              [
+                -56.033004007999978,
+                73.363680696000074
+              ],
+              [
+                -56.032244367999965,
+                73.377124829000081
+              ],
+              [
+                -56.082346248999954,
+                73.377350938000063
+              ],
+              [
+                -56.083066574999975,
+                73.363906611000061
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 9,
+          "Lokalitetsnavn": "Tasiusaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1605",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "TSS",
+          "Location_type": 3,
+          "GlobalID": "{EF8CA05D-499C-483A-BC34-0A556313FC28}",
+          "LokalitetSumiffik": "{38F36B7B-26C1-4778-A580-B547D39C2776}",
+          "Lokalitetvejkode": 326
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 10,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -55.606341534999956,
+                72.875285718000043
+              ],
+              [
+                -55.557674119999945,
+                72.874946517000069
+              ],
+              [
+                -55.556575404999933,
+                72.888388947000067
+              ],
+              [
+                -55.605279862999964,
+                72.888728431000061
+              ],
+              [
+                -55.606341534999956,
+                72.875285718000043
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 10,
+          "Lokalitetsnavn": "Aappilattoq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1603",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "AAP",
+          "Location_type": 3,
+          "GlobalID": "{618E77DD-39F2-4FFB-A880-59C200B96CD5}",
+          "LokalitetSumiffik": "{40C85601-09CC-4B2B-8479-A3B2592CE964}",
+          "Lokalitetvejkode": 5
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 11,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -55.826456632999964,
+                73.134892627000056
+              ],
+              [
+                -55.777058365999949,
+                73.13460559400005
+              ],
+              [
+                -55.776111512999933,
+                73.148048879000044
+              ],
+              [
+                -55.825548003999984,
+                73.148336153000059
+              ],
+              [
+                -55.826456632999964,
+                73.134892627000056
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 11,
+          "Lokalitetsnavn": "Naajaat",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1608",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "NAJ",
+          "Location_type": 3,
+          "GlobalID": "{70A174A3-0D3C-4F41-8A07-8C4067358381}",
+          "LokalitetSumiffik": "{97CC9F49-BDDD-474B-8EAD-B2F9EAF33DE0}",
+          "Lokalitetvejkode": 196
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 12,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -56.463467561999948,
+                73.508659779000084
+              ],
+              [
+                -56.412973635999947,
+                73.508524942000065
+              ],
+              [
+                -56.412352865999935,
+                73.526451813000051
+              ],
+              [
+                -56.462900180999952,
+                73.526586805000079
+              ],
+              [
+                -56.463467561999948,
+                73.508659779000084
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 12,
+          "Lokalitetsnavn": "Nutaarmiut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1610",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "NUT",
+          "Location_type": 3,
+          "GlobalID": "{55A8D5EC-5E77-48C0-9353-72F8C238C944}",
+          "LokalitetSumiffik": "{B60DF3BE-0407-4860-B6A9-5CD8B8BD3EAA}",
+          "Lokalitetvejkode": 217
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 13,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -57.249264386999982,
+                74.575856978000047
+              ],
+              [
+                -57.19536984299998,
+                74.575910619000069
+              ],
+              [
+                -57.195536071999982,
+                74.589355066000053
+              ],
+              [
+                -57.249476469999934,
+                74.589301376000037
+              ],
+              [
+                -57.249264386999982,
+                74.575856978000047
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 13,
+          "Lokalitetsnavn": "Kullorsuaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1607",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "KLQ",
+          "Location_type": 3,
+          "GlobalID": "{5C0C955E-576F-4E18-BDC2-558D3EEC82A8}",
+          "LokalitetSumiffik": "{DF21E49F-DC0F-430B-B199-5B01A001679C}",
+          "Lokalitetvejkode": 171
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 14,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -56.191936700999975,
+                73.046101781000061
+              ],
+              [
+                -56.167360093999946,
+                73.04600356800006
+              ],
+              [
+                -56.16714650199998,
+                73.050485252000044
+              ],
+              [
+                -56.191729412999962,
+                73.050583493000033
+              ],
+              [
+                -56.191936700999975,
+                73.046101781000061
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 14,
+          "Lokalitetsnavn": "Tussaaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1604",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "TUS",
+          "Location_type": 4,
+          "GlobalID": "{787B364A-1A52-43F1-A86A-719A64F3DC61}",
+          "LokalitetSumiffik": "{2D142004-D40D-4044-BAE3-627CE610EF35}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 15,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -56.03332521599998,
+                73.191550752000069
+              ],
+              [
+                -55.983761868999977,
+                73.19131317800003
+              ],
+              [
+                -55.982972220999955,
+                73.204757337000046
+              ],
+              [
+                -56.032574064999949,
+                73.204995111000073
+              ],
+              [
+                -56.03332521599998,
+                73.191550752000069
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 15,
+          "Lokalitetsnavn": "Innaarsuit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1609",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "INN",
+          "Location_type": 3,
+          "GlobalID": "{1F563531-3029-4864-BECD-30E595607529}",
+          "LokalitetSumiffik": "{96ED2177-ED65-44DF-AD24-A3AE0A0B3E02}",
+          "Lokalitetvejkode": 114
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 16,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.151375160999976,
+                69.196675432000063
+              ],
+              [
+                -51.030275095999968,
+                69.19673922100003
+              ],
+              [
+                -51.03035633199994,
+                69.255031276000068
+              ],
+              [
+                -51.151781338999967,
+                69.25496729200006
+              ],
+              [
+                -51.151375160999976,
+                69.196675432000063
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 16,
+          "Lokalitetsnavn": "Ilulissat",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1200",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "ILU",
+          "Location_type": 1,
+          "GlobalID": "{CEEAD6F7-B845-4984-BF21-FD856B74E60D}",
+          "LokalitetSumiffik": "{0E5053EC-1780-47AC-B517-BDE615E760E0}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 17,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.753789267999935,
+                64.128045732000032
+              ],
+              [
+                -51.573056784999949,
+                64.128868457000067
+              ],
+              [
+                -51.574911854999982,
+                64.218602015000045
+              ],
+              [
+                -51.756229276999932,
+                64.217776012000058
+              ],
+              [
+                -51.753789267999935,
+                64.128045732000032
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 17,
+          "Lokalitetsnavn": "Nuuk",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0600",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "NUK",
+          "Location_type": 1,
+          "GlobalID": "{F0966470-F09F-474D-A820-E8A46ED6FCC7}",
+          "LokalitetSumiffik": "{4F46D110-E6AD-46D1-B403-B12063152564}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 18,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.963629021999964,
+                69.480054987000074
+              ],
+              [
+                -53.922783168999956,
+                69.48074497600004
+              ],
+              [
+                -53.924615521999954,
+                69.49417907000003
+              ],
+              [
+                -53.965486890999955,
+                69.493488589000037
+              ],
+              [
+                -53.963629021999964,
+                69.480054987000074
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 18,
+          "Lokalitetsnavn": "Kangerluk",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1403",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "KLK",
+          "Location_type": 3,
+          "GlobalID": "{A714D65C-E3EC-405B-937E-422F1575A780}",
+          "LokalitetSumiffik": "{0F4A65F1-5BCF-4E7F-81BB-297FC5176F97}",
+          "Lokalitetvejkode": 155
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 19,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.974938515999952,
+                70.007437698000047
+              ],
+              [
+                -51.912049606999972,
+                70.007770720000053
+              ],
+              [
+                -51.912638042999959,
+                70.021219808000069
+              ],
+              [
+                -51.97556751299993,
+                70.020886544000064
+              ],
+              [
+                -51.974938515999952,
+                70.007437698000047
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 19,
+          "Lokalitetsnavn": "Saqqaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1203",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "SQQ",
+          "Location_type": 3,
+          "GlobalID": "{9BCFC73E-3BA5-4D2F-90F3-091B13DC6AC4}",
+          "LokalitetSumiffik": "{94DF3E19-E274-461E-9C63-F9E00EBA5E57}",
+          "Lokalitetvejkode": 299
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 20,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.867879657999936,
+                68.230198260000066
+              ],
+              [
+                -52.829241928999977,
+                68.230628163000063
+              ],
+              [
+                -52.830316984999968,
+                68.244074902000079
+              ],
+              [
+                -52.868977389999941,
+                68.243644706000055
+              ],
+              [
+                -52.867879657999936,
+                68.230198260000066
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 20,
+          "Lokalitetsnavn": "Niaqornaarsuk",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0906",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "NQK",
+          "Location_type": 3,
+          "GlobalID": "{110840B0-DFD2-42AF-ABC1-3AC0D8A09C8C}",
+          "LokalitetSumiffik": "{EC182F0A-3BBF-4153-AF12-1A6046F605CE}",
+          "Lokalitetvejkode": 206
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 21,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.645792636999943,
+                70.802535764000083
+              ],
+              [
+                -51.602197968999974,
+                70.802683315000081
+              ],
+              [
+                -51.602603947999967,
+                70.816132174000074
+              ],
+              [
+                -51.64622800099994,
+                70.815984513000046
+              ],
+              [
+                -51.645792636999943,
+                70.802535764000083
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 21,
+          "Lokalitetsnavn": "Saattut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1504",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "SAA",
+          "Location_type": 3,
+          "GlobalID": "{1BA04A65-6E80-4A5F-B31C-7CC67C1C32C8}",
+          "LokalitetSumiffik": "{E8DDF688-E209-46D0-BF8C-50478392B33F}",
+          "Lokalitetvejkode": 293
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 22,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.358924082999977,
+                65.819356174000063
+              ],
+              [
+                -53.323947661999966,
+                65.819891179000081
+              ],
+              [
+                -53.325162359999979,
+                65.833337809000056
+              ],
+              [
+                -53.360157020999964,
+                65.832802469000057
+              ],
+              [
+                -53.358924082999977,
+                65.819356174000063
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 22,
+          "Lokalitetsnavn": "Kangaamiut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0703",
+          "Kommunekode": 957,
+          "Lokalitetsnavn_forkortelse": "KAM",
+          "Location_type": 3,
+          "GlobalID": "{367C0F4D-243F-414F-BC8A-E5F22578C5C2}",
+          "LokalitetSumiffik": "{FC951DEA-7BE0-4E3B-8903-36D08A71A8CC}",
+          "Lokalitetvejkode": 69
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 23,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.723440632999939,
+                70.721161474000041
+              ],
+              [
+                -52.61493362899995,
+                70.722147620000044
+              ],
+              [
+                -52.617102561999957,
+                70.749036344000046
+              ],
+              [
+                -52.725755124999978,
+                70.748048715000039
+              ],
+              [
+                -52.723440632999939,
+                70.721161474000041
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 23,
+          "Lokalitetsnavn": "Qaarsut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1502",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "QST",
+          "Location_type": 3,
+          "GlobalID": "{C4B3466E-17D3-4F22-B133-B385B27633C6}",
+          "LokalitetSumiffik": "{269DE339-AE73-4968-8A44-49D268B4D607}",
+          "Lokalitetvejkode": 258
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 24,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.017773926999951,
+                69.335744463000083
+              ],
+              [
+                -50.977147808999973,
+                69.335743868000066
+              ],
+              [
+                -50.977128840999967,
+                69.353679638000074
+              ],
+              [
+                -51.017788679999967,
+                69.353680233000034
+              ],
+              [
+                -51.017773926999951,
+                69.335744463000083
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 24,
+          "Lokalitetsnavn": "Oqaatsut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1201",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "OQA",
+          "Location_type": 3,
+          "GlobalID": "{614AB3A3-5653-46CE-B5D5-7933EA090E51}",
+          "LokalitetSumiffik": "{FFBE6C4B-1EBC-4DC7-9671-740B3913A3CF}",
+          "Lokalitetvejkode": 222
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 25,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.848288700999944,
+                68.62691286900008
+              ],
+              [
+                -51.808952775999956,
+                68.627106120000064
+              ],
+              [
+                -51.809276179999983,
+                68.636073866000061
+              ],
+              [
+                -51.848627826999973,
+                68.635880526000051
+              ],
+              [
+                -51.848288700999944,
+                68.62691286900008
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 25,
+          "Lokalitetsnavn": "Ikamiut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1101",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "IKA",
+          "Location_type": 3,
+          "GlobalID": "{7227C4F5-6107-4E64-BB27-CABB75A976BD}",
+          "LokalitetSumiffik": "{7AF04482-A6BA-4FB7-87FB-233C8BFE5A25}",
+          "Lokalitetvejkode": 92
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 26,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.881566136999936,
+                66.890338529000076
+              ],
+              [
+                -52.845054413999947,
+                66.890767768000046
+              ],
+              [
+                -52.845730815999957,
+                66.899733678000075
+              ],
+              [
+                -52.882255904999965,
+                66.899304254000072
+              ],
+              [
+                -52.881566136999936,
+                66.890338529000076
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 26,
+          "Lokalitetsnavn": "Sarfannguit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0803",
+          "Kommunekode": 957,
+          "Lokalitetsnavn_forkortelse": "SFN",
+          "Location_type": 3,
+          "GlobalID": "{7FA574ED-0322-499B-BDB6-DDDB7648BB86}",
+          "LokalitetSumiffik": "{22FA67C6-F423-434B-A80F-AEF4F756A8B3}",
+          "Lokalitetvejkode": 124
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 27,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.63157003699996,
+                67.933516439000073
+              ],
+              [
+                -53.593445569999972,
+                67.934122660000071
+              ],
+              [
+                -53.594946892999985,
+                67.94756295600007
+              ],
+              [
+                -53.633093367999948,
+                67.946956328000056
+              ],
+              [
+                -53.63157003699996,
+                67.933516439000073
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 27,
+          "Lokalitetsnavn": "Attu",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0902",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "ATT",
+          "Location_type": 3,
+          "GlobalID": "{D900815A-5101-4856-8910-83A438AF1735}",
+          "LokalitetSumiffik": "{D403430B-4106-49EC-BA01-D0895CCB5F21}",
+          "Lokalitetvejkode": 10
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 28,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.189226682999958,
+                64.798242645000073
+              ],
+              [
+                -52.155557893999969,
+                64.798508436000077
+              ],
+              [
+                -52.156134304999966,
+                64.811965241000053
+              ],
+              [
+                -52.18981987899997,
+                64.811699289000046
+              ],
+              [
+                -52.189226682999958,
+                64.798242645000073
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 28,
+          "Lokalitetsnavn": "Atammik",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0701",
+          "Kommunekode": 957,
+          "Lokalitetsnavn_forkortelse": "ATA",
+          "Location_type": 3,
+          "GlobalID": "{1D929917-4833-4FEE-B877-2D7D0784D65B}",
+          "LokalitetSumiffik": "{8F913C56-9641-43BC-A7A0-BE7E09B48271}",
+          "Lokalitetvejkode": 21
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 29,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -50.68916867799993,
+                63.082328122000035
+              ],
+              [
+                -50.657492246999936,
+                63.082255118000035
+              ],
+              [
+                -50.657386681999981,
+                63.091230132000078
+              ],
+              [
+                -50.689072875999955,
+                63.091303164000067
+              ],
+              [
+                -50.68916867799993,
+                63.082328122000035
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 29,
+          "Lokalitetsnavn": "Qeqertarsuatsiaat",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0601",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "QTT",
+          "Location_type": 3,
+          "GlobalID": "{3E523547-CA88-46E2-83DB-46584BDACFF4}",
+          "LokalitetSumiffik": "{5583C8E6-0D18-468E-8028-E7EB213B3955}",
+          "Lokalitetvejkode": 261
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 30,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -50.281613440999934,
+                64.42706264900005
+              ],
+              [
+                -50.231788399999971,
+                64.426810634000049
+              ],
+              [
+                -50.231411549999962,
+                64.440269651000051
+              ],
+              [
+                -50.28126102799996,
+                64.440521817000047
+              ],
+              [
+                -50.281613440999934,
+                64.42706264900005
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 30,
+          "Lokalitetsnavn": "Kapisillit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0605",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "KAP",
+          "Location_type": 3,
+          "GlobalID": "{8B013CC6-9ABA-4754-B1C8-78644B1A55DD}",
+          "LokalitetSumiffik": "{37CA1653-7475-4FFD-9114-C558BEBB03B3}",
+          "Lokalitetvejkode": 142
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 31,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.31931095799996,
+                70.493143509000049
+              ],
+              [
+                -51.276379069999962,
+                70.493213807000075
+              ],
+              [
+                -51.276623307999955,
+                70.511147009000069
+              ],
+              [
+                -51.319593133999945,
+                70.511076641000045
+              ],
+              [
+                -51.31931095799996,
+                70.493143509000049
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 31,
+          "Lokalitetsnavn": "Ikerasak",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1503",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "IKE",
+          "Location_type": 3,
+          "GlobalID": "{65D7C18B-BDEB-4B77-9B6A-3283CFC74A78}",
+          "LokalitetSumiffik": "{0AB778F7-A25E-49B7-A50B-64073E6B76C1}",
+          "Lokalitetvejkode": 95
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 32,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.210731229999965,
+                68.81187353200005
+              ],
+              [
+                -51.13139745899997,
+                68.81195342400008
+              ],
+              [
+                -51.131530132999956,
+                68.834374453000066
+              ],
+              [
+                -51.210944008999945,
+                68.834294468000053
+              ],
+              [
+                -51.210731229999965,
+                68.81187353200005
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 32,
+          "Lokalitetsnavn": "Qasigiannguit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1100",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "QAS",
+          "Location_type": 1,
+          "GlobalID": "{3E98C7E6-7CE4-4CC5-B4DE-AC7F7EA2BC19}",
+          "LokalitetSumiffik": "{28CFB7BE-7E98-41D6-A2BC-ED77F69A04F9}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 33,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.16947268499996,
+                70.670819085000062
+              ],
+              [
+                -52.104517641999962,
+                70.67122203100007
+              ],
+              [
+                -52.105503375999945,
+                70.689151754000079
+              ],
+              [
+                -52.17051635699994,
+                70.688748405000069
+              ],
+              [
+                -52.16947268499996,
+                70.670819085000062
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 33,
+          "Lokalitetsnavn": "Uummannaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1500",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "UUM",
+          "Location_type": 1,
+          "GlobalID": "{220D302C-682E-4DCA-87FA-68F4D16C7339}",
+          "LokalitetSumiffik": "{6A9EEDD8-F281-4045-8565-E865B1AA9CA3}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 34,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.470516323999959,
+                68.304001018000065
+              ],
+              [
+                -53.431768834999957,
+                68.304571272000032
+              ],
+              [
+                -53.433203183999979,
+                68.318012626000041
+              ],
+              [
+                -53.471973471999945,
+                68.317441984000084
+              ],
+              [
+                -53.470516323999959,
+                68.304001018000065
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 34,
+          "Lokalitetsnavn": "Kangaatsiaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0900",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "KAT",
+          "Location_type": 1,
+          "GlobalID": "{27045764-E92B-4D39-B6F0-23919CC1F2BD}",
+          "LokalitetSumiffik": "{EE0F6412-D91F-4334-8C7F-80C86F25B6D5}",
+          "Lokalitetvejkode": 153
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 35,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.354105766999965,
+                68.736637448000067
+              ],
+              [
+                -52.314582988999973,
+                68.736948854000048
+              ],
+              [
+                -52.315375909999943,
+                68.750398091000079
+              ],
+              [
+                -52.354922508999948,
+                68.750086469000053
+              ],
+              [
+                -52.354105766999965,
+                68.736637448000067
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 35,
+          "Lokalitetsnavn": "Akunnaaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1003",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "AKU",
+          "Location_type": 3,
+          "GlobalID": "{453C4252-A91A-452D-A9A1-59133E9386D1}",
+          "LokalitetSumiffik": "{87FBBF95-59F3-44A8-B136-283E8792DB93}",
+          "Lokalitetvejkode": 15
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 36,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.229133906999948,
+                71.531224800000075
+              ],
+              [
+                -53.183914367999932,
+                71.531748666000055
+              ],
+              [
+                -53.185448956999949,
+                71.545187437000038
+              ],
+              [
+                -53.230700207999973,
+                71.544663163000052
+              ],
+              [
+                -53.229133906999948,
+                71.531224800000075
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 36,
+          "Lokalitetsnavn": "Nuugaatsiaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1507",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "NUG",
+          "Location_type": 3,
+          "GlobalID": "{D565A48A-704C-4F3D-8565-B1461EC8DBEE}",
+          "LokalitetSumiffik": "{7CE068D4-5D9C-4296-B55F-C48D92DBE039}",
+          "Lokalitetvejkode": 218
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 37,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.899064669999973,
+                68.692821775000084
+              ],
+              [
+                -52.761035292999964,
+                68.694316052000033
+              ],
+              [
+                -52.763510297999971,
+                68.725691150000046
+              ],
+              [
+                -52.901733389999947,
+                68.724194460000035
+              ],
+              [
+                -52.899064669999973,
+                68.692821775000084
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 37,
+          "Lokalitetsnavn": "Aasiaat",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1000",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "AAS",
+          "Location_type": 1,
+          "GlobalID": "{5DF29A9D-9330-49AA-BAF6-BD946F28FDA4}",
+          "LokalitetSumiffik": "{46A69DD9-D0B0-44D0-8701-5EFBD11CBEB0}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 38,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -49.694629507999935,
+                61.98592403300006
+              ],
+              [
+                -49.633579686999951,
+                61.985332812000081
+              ],
+              [
+                -49.631970568999975,
+                62.021228891000078
+              ],
+              [
+                -49.693092231999969,
+                62.021821002000081
+              ],
+              [
+                -49.694629507999935,
+                61.98592403300006
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 38,
+          "Lokalitetsnavn": "Paamiut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0500",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "PAA",
+          "Location_type": 1,
+          "GlobalID": "{50788605-AE70-464F-A5D0-8C00922865C9}",
+          "LokalitetSumiffik": "{A155822D-952D-4E0A-8B9F-6E9D8E68B01D}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 39,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.577804973999946,
+                69.228615449000074
+              ],
+              [
+                -53.456639232999976,
+                69.230383163000056
+              ],
+              [
+                -53.460189157999935,
+                69.261742231000028
+              ],
+              [
+                -53.581529523999961,
+                69.259971604000043
+              ],
+              [
+                -53.577804973999946,
+                69.228615449000074
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 39,
+          "Lokalitetsnavn": "Qeqertarsuaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1400",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "QEQ",
+          "Location_type": 1,
+          "GlobalID": "{67EF0684-1EFA-4E1C-9081-EE9ED3B76EFA}",
+          "LokalitetSumiffik": "{91EF7652-04DD-42D9-A409-59C88A23EAB9}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 40,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.520200086999978,
+                66.569975181000075
+              ],
+              [
+                -53.466161392999936,
+                66.570834536000064
+              ],
+              [
+                -53.467496930999971,
+                66.58427845500006
+              ],
+              [
+                -53.521564814999977,
+                66.583418549000044
+              ],
+              [
+                -53.520200086999978,
+                66.569975181000075
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 40,
+          "Lokalitetsnavn": "Itilleq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0801",
+          "Kommunekode": 957,
+          "Lokalitetsnavn_forkortelse": "ITI",
+          "Location_type": 3,
+          "GlobalID": "{6C5EC5B7-15FA-4579-B9E9-6A83FA491634}",
+          "LokalitetSumiffik": "{2F89DE3C-A90D-4EED-9084-97EDF5953934}",
+          "Lokalitetvejkode": 54
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 41,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -48.466056421999951,
+                61.168527974000028
+              ],
+              [
+                -48.406636431999971,
+                61.167402259000028
+              ],
+              [
+                -48.405530757999941,
+                61.180854966000027
+              ],
+              [
+                -48.464976014999934,
+                61.181981305000079
+              ],
+              [
+                -48.466056421999951,
+                61.168527974000028
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 41,
+          "Lokalitetsnavn": "Arsuk",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0501",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "ARS",
+          "Location_type": 3,
+          "GlobalID": "{7C202C06-B230-481C-873B-5E9150B2B6A8}",
+          "LokalitetSumiffik": "{72A69DA1-9037-40E3-8792-11C7E819AA1F}",
+          "Lokalitetvejkode": 20
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 42,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.455100244999983,
+                68.138190455000029
+              ],
+              [
+                -53.435866230999977,
+                68.138474601000041
+              ],
+              [
+                -53.436340940999969,
+                68.142955133000044
+              ],
+              [
+                -53.455578693999939,
+                68.142670924000072
+              ],
+              [
+                -53.455100244999983,
+                68.138190455000029
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 42,
+          "Lokalitetsnavn": "Ikerasaarsuk",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0908",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "IKS",
+          "Location_type": 3,
+          "GlobalID": "{D7776D8F-E60A-4376-94DD-D27ECD3B92FF}",
+          "LokalitetSumiffik": "{002841B1-5D88-445C-BA56-36F180081FF4}",
+          "Lokalitetvejkode": 99
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 43,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.195228091999979,
+                68.140045461000057
+              ],
+              [
+                -53.15674947499997,
+                68.140551165000034
+              ],
+              [
+                -53.158011163999959,
+                68.153995374000033
+              ],
+              [
+                -53.196512247999976,
+                68.153489328000035
+              ],
+              [
+                -53.195228091999979,
+                68.140045461000057
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 43,
+          "Lokalitetsnavn": "Iginniarfik",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0905",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "IGF",
+          "Location_type": 3,
+          "GlobalID": "{68EA1EDD-4B74-441E-B545-27BFDDF5A133}",
+          "LokalitetSumiffik": "{2BCC4C3B-3B68-4A6B-9AE9-E3682C6B8320}",
+          "Lokalitetvejkode": 91
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 44,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.393403625999952,
+                65.042371008000032
+              ],
+              [
+                -52.359429936999959,
+                65.042683657000055
+              ],
+              [
+                -52.360115589999964,
+                65.056138966000049
+              ],
+              [
+                -52.394106400999931,
+                65.055826126000056
+              ],
+              [
+                -52.393403625999952,
+                65.042371008000032
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 44,
+          "Lokalitetsnavn": "Napasoq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0702",
+          "Kommunekode": 957,
+          "Lokalitetsnavn_forkortelse": "NAP",
+          "Location_type": 3,
+          "GlobalID": "{621D5DD0-95EA-4CB7-A423-0DB5F79325B8}",
+          "LokalitetSumiffik": "{89D04F4C-657E-4721-B1FB-7FC12703EDE0}",
+          "Lokalitetvejkode": 87
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 45,
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                -51.896426691999977,
+                71.043600585000036
+              ],
+              [
+                -51.874364089999972,
+                71.043705413000055
+              ],
+              [
+                -51.875160992999952,
+                71.061635652000064
+              ],
+              [
+                -51.897243695999975,
+                71.061530717000039
+              ],
+              [
+                -51.896426691999977,
+                71.043600585000036
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 45,
+          "Lokalitetsnavn": "Kangerlussuaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1548234090000,
+          "Lokalitetskode": "0820",
+          "Kommunekode": 957,
+          "Lokalitetsnavn_forkortelse": "KAN",
+          "Location_type": 3,
+          "GlobalID": "{07CBCBC8-8247-4257-848C-EBCB14D92534}",
+          "LokalitetSumiffik": "{A28A3714-168E-4244-821F-590180B69236}",
+          "Lokalitetvejkode": 71
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 46,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.125438956999972,
+                69.073832994000043
+              ],
+              [
+                -51.085298558999966,
+                69.073857642000064
+              ],
+              [
+                -51.085350922999964,
+                69.087309871000059
+              ],
+              [
+                -51.125515961999952,
+                69.087285205000057
+              ],
+              [
+                -51.125438956999972,
+                69.073832994000043
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 46,
+          "Lokalitetsnavn": "Ilimanaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1204",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "ILQ",
+          "Location_type": 3,
+          "GlobalID": "{3E5D3BC9-6889-4F38-85D7-23EE1A6AE055}",
+          "LokalitetSumiffik": "{786A804A-2377-4863-AF17-A57478D74CE4}",
+          "Lokalitetvejkode": 101
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 47,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.896426691999977,
+                71.043600585000036
+              ],
+              [
+                -51.874364089999972,
+                71.043705413000055
+              ],
+              [
+                -51.875160992999952,
+                71.061635652000064
+              ],
+              [
+                -51.897243695999975,
+                71.061530717000039
+              ],
+              [
+                -51.896426691999977,
+                71.043600585000036
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 47,
+          "Lokalitetsnavn": "Ukkusissat",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1505",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "UKK",
+          "Location_type": 3,
+          "GlobalID": "{AA8AEA22-E701-4DD2-95C8-48F3133F83F5}",
+          "LokalitetSumiffik": "{E262253F-A400-4135-AA4E-7E748E0FD700}",
+          "Lokalitetvejkode": 350
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 48,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.588305172999981,
+                71.23595189200006
+              ],
+              [
+                -53.543783277999978,
+                71.236560023000038
+              ],
+              [
+                -53.546713244999978,
+                71.258952848000035
+              ],
+              [
+                -53.591286282999931,
+                71.258343938000053
+              ],
+              [
+                -53.588305172999981,
+                71.23595189200006
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 48,
+          "Lokalitetsnavn": "Illorsuit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1506",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "ILL",
+          "Location_type": 3,
+          "GlobalID": "{540252D7-C4F2-4E41-8196-2DC6C547B78C}",
+          "LokalitetSumiffik": "{375BEF04-F419-4A94-9DF4-B0B1C3D43D38}",
+          "Lokalitetvejkode": 106
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 49,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.750295549999976,
+                66.916243450000081
+              ],
+              [
+                -53.56763379299997,
+                66.919306148000032
+              ],
+              [
+                -53.571880756999974,
+                66.959632854000063
+              ],
+              [
+                -53.754843742999981,
+                66.956564191000041
+              ],
+              [
+                -53.750295549999976,
+                66.916243450000081
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 49,
+          "Lokalitetsnavn": "Sisimiut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0800",
+          "Kommunekode": 957,
+          "Lokalitetsnavn_forkortelse": "SIS",
+          "Location_type": 1,
+          "GlobalID": "{666A703F-1F6F-48A3-A26F-4B53BB41DB16}",
+          "LokalitetSumiffik": "{F7C62D01-5BDB-46B1-A8F2-E713B2FC1CD9}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 50,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -51.316911278999953,
+                69.994578604000083
+              ],
+              [
+                -51.29595883099995,
+                69.994614656000067
+              ],
+              [
+                -51.296086013999968,
+                70.003581748000045
+              ],
+              [
+                -51.317047465999963,
+                70.00354567800008
+              ],
+              [
+                -51.316911278999953,
+                69.994578604000083
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 50,
+          "Lokalitetsnavn": "Qeqertaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1202",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "QQT",
+          "Location_type": 3,
+          "GlobalID": "{D25B8E15-D6A3-4F10-96F9-86EEF769BBFB}",
+          "LokalitetSumiffik": "{B3D2FB40-1BFC-450F-8C49-868D2270E9C0}",
+          "Lokalitetvejkode": 269
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 51,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.138757206999969,
+                68.851474538000048
+              ],
+              [
+                -53.099046146999967,
+                68.851969354000062
+              ],
+              [
+                -53.100319618999947,
+                68.865412917000072
+              ],
+              [
+                -53.140054726999949,
+                68.864917757000057
+              ],
+              [
+                -53.138757206999969,
+                68.851474538000048
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 51,
+          "Lokalitetsnavn": "Kitsissuarsuit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1004",
+          "Kommunekode": 959,
+          "Lokalitetsnavn_forkortelse": "KIT",
+          "Location_type": 3,
+          "GlobalID": "{7BAF46BE-A6DA-436E-B4C9-B67825ECFCB4}",
+          "LokalitetSumiffik": "{B9FBAFBF-5CF3-49D3-A3BB-8012ACDB2DFC}",
+          "Lokalitetvejkode": 165
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 52,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -52.961515947999942,
+                65.400421335000033
+              ],
+              [
+                -52.87544758599995,
+                65.401513776000058
+              ],
+              [
+                -52.878656904999957,
+                65.446351115000027
+              ],
+              [
+                -52.964872322999952,
+                65.445256419000032
+              ],
+              [
+                -52.961515947999942,
+                65.400421335000033
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 52,
+          "Lokalitetsnavn": "Maniitsoq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0700",
+          "Kommunekode": 957,
+          "Lokalitetsnavn_forkortelse": "MAN",
+          "Location_type": 1,
+          "GlobalID": "{BFBED5C6-D8A3-4CCC-9428-86709B208AAA}",
+          "LokalitetSumiffik": "{5F2E1652-1796-4A39-8594-87D5616A4719}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 53,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -53.687320001999979,
+                70.781375053000033
+              ],
+              [
+                -53.643815507999932,
+                70.782005062000053
+              ],
+              [
+                -53.645595196999977,
+                70.795440369000062
+              ],
+              [
+                -53.689128890999939,
+                70.794809885000063
+              ],
+              [
+                -53.687320001999979,
+                70.781375053000033
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 53,
+          "Lokalitetsnavn": "Niaqornat",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1501",
+          "Kommunekode": 960,
+          "Lokalitetsnavn_forkortelse": "NIA",
+          "Location_type": 3,
+          "GlobalID": "{864F8531-B756-4340-9293-5D1515885BE7}",
+          "LokalitetSumiffik": "{38B486B9-6E39-45E9-A0F3-76110DAB3BCB}",
+          "Lokalitetvejkode": 207
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 54,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -47.17213980899993,
+                60.774249630000043
+              ],
+              [
+                -47.142786049999984,
+                60.774721580000062
+              ],
+              [
+                -47.143685092999931,
+                60.78817945600008
+              ],
+              [
+                -47.173051143999942,
+                60.787707248000061
+              ],
+              [
+                -47.17213980899993,
+                60.774249630000043
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 54,
+          "Lokalitetsnavn": "Qassimiut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0204",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "QSM",
+          "Location_type": 3,
+          "GlobalID": "{3D798D9B-4169-4F57-A096-20F65B99CDDF}",
+          "LokalitetSumiffik": "{6DA79002-6BB8-4401-9D3F-84E49DE63F35}",
+          "Lokalitetvejkode": 165
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 55,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -45.447591584999941,
+                61.142120598000076
+              ],
+              [
+                -45.388162066999939,
+                61.142304105000051
+              ],
+              [
+                -45.388548195999931,
+                61.173725316000059
+              ],
+              [
+                -45.448036827999942,
+                61.173541572000033
+              ],
+              [
+                -45.447591584999941,
+                61.142120598000076
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 55,
+          "Lokalitetsnavn": "Narsarsuaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0321",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "NRS",
+          "Location_type": 3,
+          "GlobalID": "{A0A895FA-CDEC-4A55-9A5C-BD296C96D122}",
+          "LokalitetSumiffik": "{83E28CA0-757D-418D-B784-206B5D94DE4C}",
+          "Lokalitetvejkode": 120
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 56,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -45.532944350999969,
+                61.137322421000079
+              ],
+              [
+                -45.503234556999985,
+                61.137436172000037
+              ],
+              [
+                -45.503735053999947,
+                61.16885691400006
+              ],
+              [
+                -45.53347439199996,
+                61.168743016000064
+              ],
+              [
+                -45.532944350999969,
+                61.137322421000079
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 56,
+          "Lokalitetsnavn": "Qassiarsuk",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0305",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "QSK",
+          "Location_type": 5,
+          "GlobalID": "{27098BDC-B3F8-4C49-8246-4CCC84BA3AFA}",
+          "LokalitetSumiffik": "{6A0A88E5-BEDA-4806-8DA2-279D35E50A3A}",
+          "Lokalitetvejkode": 159
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 57,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -46.08537763399994,
+                60.892490507000048
+              ],
+              [
+                -45.996942248999972,
+                60.893174674000079
+              ],
+              [
+                -45.998345163999943,
+                60.938057967000077
+              ],
+              [
+                -46.086904939999954,
+                60.937372543000038
+              ],
+              [
+                -46.08537763399994,
+                60.892490507000048
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 57,
+          "Lokalitetsnavn": "Narsaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0300",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "NAR",
+          "Location_type": 1,
+          "GlobalID": "{4E5798D6-A7F7-46AD-B8CF-40839C946A7F}",
+          "LokalitetSumiffik": "{3FD2B167-629E-4DFB-90C7-AEAF36423703}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 58,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -44.828687526999943,
+                60.191942273000052
+              ],
+              [
+                -44.799835090999977,
+                60.191901862000066
+              ],
+              [
+                -44.799780409999983,
+                60.200880801000039
+              ],
+              [
+                -44.828640727999982,
+                60.200921226000048
+              ],
+              [
+                -44.828687526999943,
+                60.191942273000052
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 58,
+          "Lokalitetsnavn": "Tasiusaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0104",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "TAQ",
+          "Location_type": 3,
+          "GlobalID": "{65E70FCE-F3C0-499F-AE67-60BA6A2FECD3}",
+          "LokalitetSumiffik": "{0010EFE3-C93B-417D-B66A-104F3B9CD0F7}",
+          "Lokalitetvejkode": 196
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 59,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -46.033224016999952,
+                60.53284095500004
+              ],
+              [
+                -46.004073107999943,
+                60.533063308000067
+              ],
+              [
+                -46.004351207999946,
+                60.542040458000031
+              ],
+              [
+                -46.03351018799998,
+                60.541818025000055
+              ],
+              [
+                -46.033224016999952,
+                60.53284095500004
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 59,
+          "Lokalitetsnavn": "Saarloq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0201",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "SAL",
+          "Location_type": 3,
+          "GlobalID": "{C033825D-BE4C-4D69-AAF0-0F9DDD0E4C89}",
+          "LokalitetSumiffik": "{04D77C8C-06EA-4838-9A15-4D9CF2414B3D}",
+          "Lokalitetvejkode": 180
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 60,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -45.592652488999931,
+                60.456508944000063
+              ],
+              [
+                -45.549024070999963,
+                60.456695718000049
+              ],
+              [
+                -45.549251503999983,
+                60.470163045000049
+              ],
+              [
+                -45.592897992999951,
+                60.469976169000063
+              ],
+              [
+                -45.592652488999931,
+                60.456508944000063
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 60,
+          "Lokalitetsnavn": "Alluitsup Paa",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0108",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "ALP",
+          "Location_type": 3,
+          "GlobalID": "{0271101F-B53D-4833-9681-83ADEDA1DBF7}",
+          "LokalitetSumiffik": "{C4988941-56E5-47F2-B0E3-D7DF098ABE1D}",
+          "Lokalitetvejkode": 15
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 61,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -46.080788025999937,
+                60.702172313000062
+              ],
+              [
+                -45.992875692999974,
+                60.702852392000068
+              ],
+              [
+                -45.993984404999935,
+                60.738760121000041
+              ],
+              [
+                -46.081994862999977,
+                60.738079047000042
+              ],
+              [
+                -46.080788025999937,
+                60.702172313000062
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 61,
+          "Lokalitetsnavn": "Qaqortoq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0200",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "QAQ",
+          "Location_type": 1,
+          "GlobalID": "{8342BAA1-998A-4DE2-B264-889862AA27A6}",
+          "LokalitetSumiffik": "{E45E8723-5BA8-453E-A61C-FDAC819801A2}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 62,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -44.68270696899998,
+                59.995926715000053
+              ],
+              [
+                -44.639685117999932,
+                59.995816361000038
+              ],
+              [
+                -44.63948974799996,
+                60.013774517000058
+              ],
+              [
+                -44.68253492499997,
+                60.01388495100008
+              ],
+              [
+                -44.68270696899998,
+                59.995926715000053
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 62,
+          "Lokalitetsnavn": "Narsarmijit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "TELDWLL",
+          "EditDate": 1578620713000,
+          "Lokalitetskode": "0103",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "NKJ",
+          "Location_type": 3,
+          "GlobalID": "{4F62F8E1-8556-4EE1-A05F-ABE4232E0701}",
+          "LokalitetSumiffik": "{50A6C796-0B87-421C-8C1D-520CFD10AFA5}",
+          "Lokalitetvejkode": 118
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 63,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -45.439762189999954,
+                60.979645087000051
+              ],
+              [
+                -45.410199268999975,
+                60.979738257000065
+              ],
+              [
+                -45.410430770999938,
+                60.99769364000008
+              ],
+              [
+                -45.440010374999986,
+                60.997600402000046
+              ],
+              [
+                -45.439762189999954,
+                60.979645087000051
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 63,
+          "Lokalitetsnavn": "Igaliku",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0302",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "IGA",
+          "Location_type": 3,
+          "GlobalID": "{FFEBFB24-2EE6-4CC8-B68E-433FA6C45B78}",
+          "LokalitetSumiffik": "{D0D95693-C2E5-484F-BA6E-149F88BDF52A}",
+          "Lokalitetvejkode": 50
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 64,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -44.294142273999967,
+                60.143481575000067
+              ],
+              [
+                -44.279738330999976,
+                60.143404045000068
+              ],
+              [
+                -44.279443728999979,
+                60.156871565000074
+              ],
+              [
+                -44.293853562999971,
+                60.156949137000026
+              ],
+              [
+                -44.294142273999967,
+                60.143481575000067
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 64,
+          "Lokalitetsnavn": "Aappilattoq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0102",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "APL",
+          "Location_type": 3,
+          "GlobalID": "{6DAEFF31-1005-4257-A243-6E082F55E378}",
+          "LokalitetSumiffik": "{F7F62B45-14F9-41CD-89CF-BB49F02DD5F2}",
+          "Lokalitetvejkode": 4
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 65,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -45.924439646999986,
+                60.616245848000062
+              ],
+              [
+                -45.895212607999952,
+                60.616444609000041
+              ],
+              [
+                -45.895585859999983,
+                60.629910586000051
+              ],
+              [
+                -45.924825080999938,
+                60.629711715000042
+              ],
+              [
+                -45.924439646999986,
+                60.616245848000062
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 65,
+          "Lokalitetsnavn": "Eqalugaarsuit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0202",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "EQA",
+          "Location_type": 3,
+          "GlobalID": "{AF0EC090-D3BB-4920-AAD9-0BD52E66CA7D}",
+          "LokalitetSumiffik": "{6678A5B0-907C-40A6-9ECC-F6C082550DBD}",
+          "Lokalitetvejkode": 32
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 66,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -45.397903170999939,
+                60.586525047000066
+              ],
+              [
+                -45.368700005999983,
+                60.586608762000083
+              ],
+              [
+                -45.368853550999972,
+                60.600076165000075
+              ],
+              [
+                -45.398068876999957,
+                60.599992404000034
+              ],
+              [
+                -45.397903170999939,
+                60.586525047000066
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 66,
+          "Lokalitetsnavn": "Ammassivik",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0106",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "AMS",
+          "Location_type": 3,
+          "GlobalID": "{959770F6-B0E8-4204-8AE1-9592AE19BB2D}",
+          "LokalitetSumiffik": "{7D7FFE83-BE26-4B56-8558-8EB8C8FB1147}",
+          "Lokalitetvejkode": 17
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 67,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -45.262812905999965,
+                60.133428435000042
+              ],
+              [
+                -45.205210569999963,
+                60.133530202000031
+              ],
+              [
+                -45.205350453999984,
+                60.155977719000077
+              ],
+              [
+                -45.262992054999984,
+                60.155875860000037
+              ],
+              [
+                -45.262812905999965,
+                60.133428435000042
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 67,
+          "Lokalitetsnavn": "Nanortalik",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "0100",
+          "Kommunekode": 955,
+          "Lokalitetsnavn_forkortelse": "NAN",
+          "Location_type": 1,
+          "GlobalID": "{3372DB51-6E97-4D33-961F-41928D8EC542}",
+          "LokalitetSumiffik": "{03237CFF-A25B-41C9-8D1D-B583EF760612}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 68,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -37.795886042999939,
+                65.882142814000076
+              ],
+              [
+                -37.760803356999929,
+                65.881863482000028
+              ],
+              [
+                -37.760153637999963,
+                65.895317929000043
+              ],
+              [
+                -37.79525470699997,
+                65.89559743600006
+              ],
+              [
+                -37.795886042999939,
+                65.882142814000076
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 68,
+          "Lokalitetsnavn": "Tiilerilaaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1805",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "TIN",
+          "Location_type": 3,
+          "GlobalID": "{A048EFEE-506E-4321-B692-47D64C5A620A}",
+          "LokalitetSumiffik": "{38E95575-CFA8-4E6D-AF9B-8991B7F34463}",
+          "Lokalitetvejkode": 322
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 69,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -39.002164277999952,
+                65.538755627000057
+              ],
+              [
+                -38.967535836999957,
+                65.538752172000045
+              ],
+              [
+                -38.967519083999946,
+                65.552210377000051
+              ],
+              [
+                -39.002165394999963,
+                65.552213834000042
+              ],
+              [
+                -39.002164277999952,
+                65.538755627000057
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 69,
+          "Lokalitetsnavn": "Isertoq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1803",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "ISO",
+          "Location_type": 3,
+          "GlobalID": "{21A0DD17-2472-4E47-9047-E1ED041D28A0}",
+          "LokalitetSumiffik": "{0FF44111-B49E-4D67-9BD4-BF0BAC77F23A}",
+          "Lokalitetvejkode": 115
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 70,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -37.210068625999952,
+                65.568589599000063
+              ],
+              [
+                -37.088797048999936,
+                65.567112374000033
+              ],
+              [
+                -37.087480298999935,
+                65.585046586000033
+              ],
+              [
+                -37.208835315999977,
+                65.586525035000079
+              ],
+              [
+                -37.210068625999952,
+                65.568589599000063
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 70,
+          "Lokalitetsnavn": "Kulusuk",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1804",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "KUL",
+          "Location_type": 3,
+          "GlobalID": "{0096A12D-A0AD-4805-9A74-AD9DD3460140}",
+          "LokalitetSumiffik": "{6EB62134-DE33-4D4C-A826-ED67480E2B37}",
+          "Lokalitetvejkode": 160
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 71,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -36.398515633999978,
+                65.901613582000039
+              ],
+              [
+                -36.363435249999952,
+                65.901014816000043
+              ],
+              [
+                -36.362052023999979,
+                65.914458123000031
+              ],
+              [
+                -36.397150762999956,
+                65.91505726500003
+              ],
+              [
+                -36.398515633999978,
+                65.901613582000039
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 71,
+          "Lokalitetsnavn": "Sermiligaaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1802",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "SML",
+          "Location_type": 3,
+          "GlobalID": "{518DD633-ED68-475B-AF8D-C8BA3128889B}",
+          "LokalitetSumiffik": "{8C7B4F18-3488-4FFB-9C8D-6EF290C93AB7}",
+          "Lokalitetvejkode": 292
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 72,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -37.695841408999968,
+                65.605840375000071
+              ],
+              [
+                -37.609072393999952,
+                65.605071743000053
+              ],
+              [
+                -37.607631739999931,
+                65.631979953000041
+              ],
+              [
+                -37.694490561999942,
+                65.632749543000045
+              ],
+              [
+                -37.695841408999968,
+                65.605840375000071
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 72,
+          "Lokalitetsnavn": "Tasiilaq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1800",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "TAS",
+          "Location_type": 1,
+          "GlobalID": "{BA68D3E4-26BC-46CB-BBD6-9ACE51AA6952}",
+          "LokalitetSumiffik": "{9D078405-8C27-4833-8B53-69E7E7CC6B0F}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 73,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -37.036490803999982,
+                65.858146668000074
+              ],
+              [
+                -36.983936066999945,
+                65.857464432000029
+              ],
+              [
+                -36.982880373999933,
+                65.870913736000034
+              ],
+              [
+                -37.035462585999937,
+                65.871596400000044
+              ],
+              [
+                -37.036490803999982,
+                65.858146668000074
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 73,
+          "Lokalitetsnavn": "Kuummiut",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1806",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "KUM",
+          "Location_type": 3,
+          "GlobalID": "{66286CFD-BBD8-416E-A52E-605845C80E69}",
+          "LokalitetSumiffik": "{5137634D-4358-496A-82D3-029B25621311}",
+          "Lokalitetvejkode": 166
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 74,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -21.986800190999929,
+                70.479088722000029
+              ],
+              [
+                -21.922454522999942,
+                70.479426653000075
+              ],
+              [
+                -21.923065272999963,
+                70.492874991000065
+              ],
+              [
+                -21.987453526999957,
+                70.492536809000057
+              ],
+              [
+                -21.986800190999929,
+                70.479088722000029
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 74,
+          "Lokalitetsnavn": "Ittoqqortoormiit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1900",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "ILT",
+          "Location_type": 1,
+          "GlobalID": "{0A7F4023-655F-4822-8CAC-F73B7896C943}",
+          "LokalitetSumiffik": "{E01F5BF8-99B2-4810-89B3-5611A87966EF}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 75,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -22.350066999999967,
+                70.457022299000073
+              ],
+              [
+                -22.307222000999957,
+                70.457335796000052
+              ],
+              [
+                -22.307798135999974,
+                70.466300207000074
+              ],
+              [
+                -22.350662004999947,
+                70.465986555000029
+              ],
+              [
+                -22.350066999999967,
+                70.457022299000073
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 75,
+          "Lokalitetsnavn": "Itterajivit",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1902",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "ITR",
+          "Location_type": 4,
+          "GlobalID": "{8457DC04-75F8-4003-8909-F97C72821F5C}",
+          "LokalitetSumiffik": "{F56CFD59-DEB9-4B6D-AD8A-D7DA89E44EB8}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 76,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -21.983460808999951,
+                70.410054854000066
+              ],
+              [
+                -21.940709059999961,
+                70.410281805000068
+              ],
+              [
+                -21.941536529999951,
+                70.428212962000032
+              ],
+              [
+                -21.984325868999974,
+                70.427985787000068
+              ],
+              [
+                -21.983460808999951,
+                70.410054854000066
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 76,
+          "Lokalitetsnavn": "Uunarteq",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1901",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "UUN",
+          "Location_type": 4,
+          "GlobalID": "{0FC7BD2B-6C3F-4ED5-B2C6-06DD958B677C}",
+          "LokalitetSumiffik": "{30FC82AC-7BF3-429A-A92A-62A96784DD56}",
+          "Lokalitetvejkode": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "id": 77,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -22.661496138999951,
+                70.727113968000083
+              ],
+              [
+                -22.618080460999977,
+                70.72750149400008
+              ],
+              [
+                -22.61989153899998,
+                70.749908723000033
+              ],
+              [
+                -22.663355757999966,
+                70.749520712000049
+              ],
+              [
+                -22.661496138999951,
+                70.727113968000083
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "OBJECTID": 77,
+          "Lokalitetsnavn": "Nerlerit Inaat",
+          "Creator": "GREENADMIN",
+          "CreationDate": 1533816004000,
+          "Editor": "COREDATA",
+          "EditDate": 1539673013000,
+          "Lokalitetskode": "1906",
+          "Kommunekode": 956,
+          "Lokalitetsnavn_forkortelse": "NRI",
+          "Location_type": 3,
+          "GlobalID": "{7E46ABA6-E359-46CE-89D5-8157AD704526}",
+          "LokalitetSumiffik": "{99AFD749-C755-4C98-9790-F2087A4C5E6B}",
+          "Lokalitetvejkode": 0
+        }
+      }
+    ]
+  }
 ]

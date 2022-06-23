@@ -95,7 +95,6 @@ public class GeoLocalityListService {
             LocalityQuery lq = new LocalityQuery();
             List<GeoLocalityEntity> localityEntities;
 
-
             lq.setStatus(1);
 
             if (localityCode != null) {
@@ -105,9 +104,7 @@ public class GeoLocalityListService {
                 lq.setMunicipality(municipalitycode);
             }
 
-
             localityEntities = QueryManager.getAllItems(session, GeoLocalityEntity.class);
-
 
             envelope.setRequestTimestamp(user.getCreationTime());
             envelope.setUsername(user.toString());
