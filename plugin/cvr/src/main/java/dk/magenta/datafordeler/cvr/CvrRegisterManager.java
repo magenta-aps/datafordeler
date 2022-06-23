@@ -188,13 +188,10 @@ public class CvrRegisterManager extends RegisterManager {
                             log.info("Last update time: "+lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
                         }
 
-                        CriteriaBuilder cb = missingCompanySession.getCriteriaBuilder();
-                        CriteriaQuery<CompanySubscription> subscribedCompanyQuery = cb.createQuery(CompanySubscription.class);
-                        Root<CompanySubscription> root = subscribedCompanyQuery.from(CompanySubscription.class);
-                        subscribedCompanyQuery.select(root);
-
-                        Query<CompanySubscription> query = missingCompanySession.createQuery(subscribedCompanyQuery);
-                        List<Integer> missingCompanyList = query.getResultList().stream().map(s -> s.getCvrNumber()).collect(Collectors.toList());
+                        CriteriaBuilder subscriptionBuilder = session.getCriteriaBuilder();
+                        CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
+                        allCompanySubscription.from(CompanySubscription.class);
+                        List<Integer> missingCompanyList = session.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
 
                         requestBody = String.format(
                                 configuration.getQuery(schema),

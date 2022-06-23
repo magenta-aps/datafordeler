@@ -191,19 +191,26 @@ public class CvrConfiguration implements Configuration {
     }
 
     @Column(length = 8192)
-    private String companyUnitRegisterQuery = "{\n" +
-            "    \"query\": {\n" +
-            "        \"filtered\": {\n" +
-            "            \"filter\": {\n" +
-            "                \"range\": {\n" +
-            "                    \"VrproduktionsEnhed.sidstOpdateret\": {\n" +
-            "                        \"gte\": \"%s\"\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            }\n" +
-            "        }\n" +
-            "    }\n" +
-            "}\n";
+    private String companyUnitRegisterQuery = "{ \n" +
+            "    \"query\":{ \n" +
+            "        \"bool\":{ \n" +
+            "            \"must\": [ \n" +
+            "                { \n" +
+            "                    \"terms\": { \n" +
+            "                        \"VrproduktionsEnhed.beliggenhedsadresse.kommune.kommuneKode\":[954, 955, 956, 957, 958, 959, 960, 961, 962] \n" +
+            "                    } \n" +
+            "                }, \n" +
+            "                { \n" +
+            "                    \"range\": { \n" +
+            "                        \"VrproduktionsEnhed.sidstOpdateret\": { \n" +
+            "                            \"gte\": \"%s\" \n" +
+            "                        } \n" +
+            "                    } \n" +
+            "                } \n" +
+            "            ] \n" +
+            "        } \n" +
+            "    } \n" +
+            "}";
 
     public RegisterType getCompanyUnitRegisterType() {
         return this.companyUnitRegisterType;
@@ -259,19 +266,26 @@ public class CvrConfiguration implements Configuration {
     }
 
     @Column(length = 8192)
-    private String participantRegisterQuery = "{\n" +
-            "    \"query\": {\n" +
-            "        \"filtered\": {\n" +
-            "            \"filter\": {\n" +
-            "                \"range\": {\n" +
-            "                    \"Vrdeltagerperson.sidstOpdateret\": {\n" +
-            "                        \"gte\": \"%s\"\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            }\n" +
-            "        }\n" +
-            "    }\n" +
-            "}\n";
+    private String participantRegisterQuery = "{ \n" +
+            "    \"query\":{ \n" +
+            "        \"bool\":{ \n" +
+            "            \"must\": [ \n" +
+            "                { \n" +
+            "                    \"terms\": { \n" +
+            "                        \"Vrdeltagerperson.beliggenhedsadresse.kommune.kommuneKode\":[954, 955, 956, 957, 958, 959, 960, 961, 962] \n" +
+            "                    } \n" +
+            "                }, \n" +
+            "                { \n" +
+            "                    \"range\": { \n" +
+            "                        \"Vrdeltagerperson.sidstOpdateret\": { \n" +
+            "                            \"gte\": \"%s\" \n" +
+            "                        } \n" +
+            "                    } \n" +
+            "                } \n" +
+            "            ] \n" +
+            "        } \n" +
+            "    } \n" +
+            "}";
 
 
     @Column
