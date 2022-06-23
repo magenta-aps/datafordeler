@@ -46,7 +46,7 @@ public abstract class TestBase {
 
 
     protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
-        this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
+        this.loadGeoData(sessionManager, localityEntityManager, "/locality_full_list.json");
         this.loadGeoData(sessionManager, roadEntityManager,"/road.json");
         this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
         this.loadGeoData(sessionManager, municipalityEntityManager, "/municipality.json");
