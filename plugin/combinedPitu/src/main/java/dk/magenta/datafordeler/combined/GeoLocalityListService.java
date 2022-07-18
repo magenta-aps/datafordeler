@@ -75,13 +75,7 @@ public class GeoLocalityListService {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             String pageSize = requestParams.getFirst("pageSize");
-            int pageSizeInt = 10;
-            if (pageSize != null) {
-                pageSizeInt = Integer.valueOf(pageSize);
-                if (pageSizeInt > 1000) {
-                    throw new InvalidParameterException("pageSize");
-                }
-            }
+
             String page = requestParams.getFirst("page");
             String municipalitycode = requestParams.getFirst("kommune_kode");
             String localityCode = requestParams.getFirst("lokalitet_kode");
@@ -90,12 +84,13 @@ public class GeoLocalityListService {
 
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("GeoLocalityListService");
-            //this.checkAndLogAccess(loggerHelper);
             Envelope envelope = new Envelope();
             LocalityQuery lq = new LocalityQuery();
             List<GeoLocalityEntity> localityEntities;
 
             lq.setStatus(1);
+            lq.setPage(page);
+            lq.setPageSize(pageSize);
 
             if (localityCode != null) {
                 lq.setCode(localityCode);

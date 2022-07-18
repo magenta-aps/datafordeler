@@ -136,6 +136,36 @@ public class CprVoterFunctionalityTest extends TestBase {
     }
 
 
+    @Test
+    public void testFetcingOfVoter() throws Exception {
+        this.loadPerson("/different_persons.txt");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> response;
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/search/?valgdato=2010-01-01&order_by=pnr",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        System.out.println(response.getBody());
+
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/search/?valgdato=2010-01-01&order_by=efternavn",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        System.out.println(response.getBody());
+
+    }
+
+
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
