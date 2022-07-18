@@ -214,14 +214,12 @@ public class ParseTest {
 
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
+            CriteriaBuilder subscriptionBuilder = session.getCriteriaBuilder();
 
             // Read subscription to validate that missing companies gets subscribed
-            CriteriaBuilder subscriptionBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<CompanySubscription> subscriptionQuery = subscriptionBuilder.createQuery(CompanySubscription.class);
-            Root<CompanySubscription> subscriptionRootEntry = subscriptionQuery.from(CompanySubscription.class);
-            CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionQuery.select(subscriptionRootEntry);
-            TypedQuery<CompanySubscription> allSubscribed = session.createQuery(allCompanySubscription);
-            List<Integer> subscribedCompanyList = allSubscribed.getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
+            CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
+            allCompanySubscription.from(CompanySubscription.class);
+            List<Integer> subscribedCompanyList = session.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
 
             // Read companyunits to validate that their missing CVR'r is assigned to subscription
             CriteriaQuery<CompanyUnitMetadataRecord> unitQuery = subscriptionBuilder.createQuery(CompanyUnitMetadataRecord.class);
