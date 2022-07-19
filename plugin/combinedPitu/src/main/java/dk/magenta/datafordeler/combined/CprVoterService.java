@@ -11,10 +11,7 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.CitizenshipDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressLocalityRecord;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressRoadRecord;
@@ -81,7 +78,7 @@ public class CprVoterService {
         }
 
         String birthBefore = requestParams.getFirst("foedsel.LTE");
-        LocalDateTime birthBeforeTS = null;
+        LocalDateTime birthBeforeTS = voteDateMinus18Years;
         if(birthBefore!=null) {
             LocalDateTime birthBeforeTSLimit = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime();
             birthBeforeTS = birthBeforeTSLimit.isBefore(voteDateMinus18Years) ? birthBeforeTSLimit : voteDateMinus18Years;
@@ -118,6 +115,7 @@ public class CprVoterService {
                     " JOIN "+ AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord."+AddressDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
                     " JOIN "+ NameDataRecord.class.getCanonicalName() + " nameDataRecord ON nameDataRecord."+ NameDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
                     " JOIN "+ CitizenshipDataRecord.class.getCanonicalName() + " citizenDataRecord ON citizenDataRecord."+ CitizenshipDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
+                    " LEFT OUTER JOIN "+ GuardianDataRecord.class.getCanonicalName() + " guardianDataRecord ON guardianDataRecord."+ GuardianDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
 
                     " JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+"=addressDataRecord."+AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE+
                     " AND accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+"=addressDataRecord."+AddressDataRecord.DB_FIELD_ROAD_CODE+
@@ -128,6 +126,7 @@ public class CprVoterService {
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO +" IS null "+
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE +" = 0 " +
                     "AND citizenDataRecord.countryCode = 5100 "+
+                    "AND guardianDataRecord."+ GuardianDataRecord.DB_FIELD_ENTITY +" IS null "+
 
                     "AND (:bta IS NULL OR birthDataRecord.birthDatetime <= :bta) " +
                     "AND birthDataRecord.birthDatetime <= :btb " +

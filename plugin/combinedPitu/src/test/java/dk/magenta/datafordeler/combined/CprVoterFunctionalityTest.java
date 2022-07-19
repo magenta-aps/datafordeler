@@ -102,10 +102,6 @@ public class CprVoterFunctionalityTest extends TestBase {
     @Before
     public void load() throws Exception {
         this.loadAllGeoAdress(sessionManager);
-        //this.loadPerson("/voter.txt");
-
-        //this.loadPerson("/person.txt");
-        //loadManyPersons(50);
     }
 
 
@@ -132,37 +128,26 @@ public class CprVoterFunctionalityTest extends TestBase {
         Assert.assertEquals(results, objectMapper.readTree(response.getBody()).get("results").toString());
     }
 
-
+    /**
+     * Validate that different conditions deliveres different lists of voters
+     * @throws Exception
+     */
     @Test
     public void testFetcingOfVoter() throws Exception {
-        //this.loadPerson("/different_persons.txt");
-
         this.loadPerson("/voters/voter_born_2010_loc_600.txt");
         this.loadPerson("/voters/voter_born_2011_loc_600.txt");
         this.loadPerson("/voters/voter_born_2010_german.txt");
         this.loadPerson("/voters/voter_born_2010_loc_601.txt");
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            ImportMetadata importMetadata = new ImportMetadata();
-            importMetadata.setSession(session);
-            PersonRecordQuery query = new PersonRecordQuery();
-            OffsetDateTime time = OffsetDateTime.now();
-            query.setRegistrationToAfter(time);
-
-            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            System.out.println(entities);
-        }
-
-
-
-
+        this.loadPerson("/voters/voter_born_2010_custody.txt");
+        this.loadPerson("/voters/voter_born_2010_danish.txt");
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> response;
 
         TestUserDetails testUserDetails = new TestUserDetails();
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+
+        //Confirm that the list of voters can only be fetched with someone who has access to CPR-data
         this.applyAccess(testUserDetails);
         response = restTemplate.exchange(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&order_by=pnr&foedsel.LTE=2020-01-01",
@@ -170,24 +155,28 @@ public class CprVoterFunctionalityTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        System.out.println(response.getBody());
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals("Forbidden", objectMapper.readTree(response.getBody()).get("error").asText());
+        Assert.assertEquals(null, objectMapper.readTree(response.getBody()).get("results"));
 
+        //Confirm that an election in year 2020 returns no voters, since no voters is over 18 years in the testset
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         response = restTemplate.exchange(
-                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&order_by=efternavn&foedsel.LTE=2020-01-01",
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01&order_by=efternavn&foedsel.LTE=2020-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        System.out.println(response.getBody());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assert.assertEquals("", objectMapper.readTree(response.getBody()).get("results").asText());
 
-
-        /*response = restTemplate.exchange(
+        response = restTemplate.exchange(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        System.out.println(response.getBody());*/
+        System.out.println(response.getBody());
 
     }
 
