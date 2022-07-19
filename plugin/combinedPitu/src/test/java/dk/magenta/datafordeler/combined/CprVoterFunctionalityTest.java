@@ -1,25 +1,22 @@
 package dk.magenta.datafordeler.combined;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -30,8 +27,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -107,7 +104,7 @@ public class CprVoterFunctionalityTest extends TestBase {
         this.loadAllGeoAdress(sessionManager);
         //this.loadPerson("/voter.txt");
 
-        this.loadPerson("/person.txt");
+        //this.loadPerson("/person.txt");
         //loadManyPersons(50);
     }
 
@@ -138,7 +135,27 @@ public class CprVoterFunctionalityTest extends TestBase {
 
     @Test
     public void testFetcingOfVoter() throws Exception {
-        this.loadPerson("/different_persons.txt");
+        //this.loadPerson("/different_persons.txt");
+
+        this.loadPerson("/voters/voter_born_2010_loc_600.txt");
+        this.loadPerson("/voters/voter_born_2011_loc_600.txt");
+        this.loadPerson("/voters/voter_born_2010_german.txt");
+        this.loadPerson("/voters/voter_born_2010_loc_601.txt");
+
+        try(Session session = sessionManager.getSessionFactory().openSession()) {
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            PersonRecordQuery query = new PersonRecordQuery();
+            OffsetDateTime time = OffsetDateTime.now();
+            query.setRegistrationToAfter(time);
+
+            List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
+            System.out.println(entities);
+        }
+
+
+
+
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> response;
@@ -148,7 +165,7 @@ public class CprVoterFunctionalityTest extends TestBase {
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
         response = restTemplate.exchange(
-                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01&order_by=pnr&foedsel.LTE=2001-01-01",
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&order_by=pnr&foedsel.LTE=2020-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -156,12 +173,21 @@ public class CprVoterFunctionalityTest extends TestBase {
         System.out.println(response.getBody());
 
         response = restTemplate.exchange(
-                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01&order_by=efternavn&foedsel.LTE=2001-01-01",
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&order_by=efternavn&foedsel.LTE=2020-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         System.out.println(response.getBody());
+
+
+        /*response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        System.out.println(response.getBody());*/
 
     }
 

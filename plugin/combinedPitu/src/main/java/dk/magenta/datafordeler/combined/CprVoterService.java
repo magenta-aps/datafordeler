@@ -117,7 +117,7 @@ public class CprVoterService {
                     " JOIN "+ BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord ON birthDataRecord."+BirthTimeDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
                     " JOIN "+ AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord."+AddressDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
                     " JOIN "+ NameDataRecord.class.getCanonicalName() + " nameDataRecord ON nameDataRecord."+ NameDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
-                    " JOIN "+ CitizenshipDataRecord.class.getCanonicalName() + " citizenDataRecord ON nameDataRecord."+ CitizenshipDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
+                    " JOIN "+ CitizenshipDataRecord.class.getCanonicalName() + " citizenDataRecord ON citizenDataRecord."+ CitizenshipDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
 
                     " JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+"=addressDataRecord."+AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE+
                     " AND accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+"=addressDataRecord."+AddressDataRecord.DB_FIELD_ROAD_CODE+
