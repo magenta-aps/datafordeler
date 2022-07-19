@@ -68,12 +68,11 @@ public class CprVoterService {
 
     }
 
-    @GetMapping("/search")
+    @GetMapping("/landstingsvalg")
     public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, MissingParameterException, InvalidTokenException, InvalidCertificateException, InvalidParameterException {
 
-        LocalDateTime voteDateMinus18Years = null;
         String voteDate = requestParams.getFirst("valgdato");
-        voteDateMinus18Years = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(voteDate).toLocalDateTime().minusYears(18);
+        LocalDateTime voteDateMinus18Years = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(voteDate).toLocalDateTime().minusYears(18);
 
         String birthAfter = requestParams.getFirst("foedsel.GTE");
         LocalDateTime birthAfterTS = null;
@@ -82,10 +81,10 @@ public class CprVoterService {
         }
 
         String birthBefore = requestParams.getFirst("foedsel.LTE");
-        LocalDateTime birthBeforeTS = voteDateMinus18Years;
+        LocalDateTime birthBeforeTS = null;
         if(birthBefore!=null) {
-            birthBeforeTS = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime();
-            birthBeforeTS = voteDateMinus18Years;
+            LocalDateTime birthBeforeTSLimit = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(birthBefore).toLocalDateTime();
+            birthBeforeTS = birthBeforeTSLimit.isBefore(voteDateMinus18Years) ? birthBeforeTSLimit : voteDateMinus18Years;
         }
 
         String pageSize = requestParams.getFirst("pageSize");
@@ -131,7 +130,7 @@ public class CprVoterService {
                     "AND citizenDataRecord.countryCode = 5100 "+
 
                     "AND (:bta IS NULL OR birthDataRecord.birthDatetime <= :bta) " +
-                    "AND (:btb IS NULL OR birthDataRecord.birthDatetime <= :btb) " +
+                    "AND birthDataRecord.birthDatetime <= :btb " +
                     "AND (:locality IS NULL OR accessAddressLocalityRecord.code = :locality) " +
                     "AND (:municipality=0 OR addressDataRecord.municipalityCode = :municipality) ";
 

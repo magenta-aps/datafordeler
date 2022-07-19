@@ -105,10 +105,10 @@ public class CprVoterFunctionalityTest extends TestBase {
     @Before
     public void load() throws Exception {
         this.loadAllGeoAdress(sessionManager);
-        this.loadPerson("/voter.txt");
+        //this.loadPerson("/voter.txt");
 
         this.loadPerson("/person.txt");
-        loadManyPersons(50);
+        //loadManyPersons(50);
     }
 
 
@@ -148,7 +148,7 @@ public class CprVoterFunctionalityTest extends TestBase {
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
         response = restTemplate.exchange(
-                "/combined/cpr/voterlist/1/search/?valgdato=2010-01-01&order_by=pnr",
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01&order_by=pnr&foedsel.LTE=2001-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -156,7 +156,7 @@ public class CprVoterFunctionalityTest extends TestBase {
         System.out.println(response.getBody());
 
         response = restTemplate.exchange(
-                "/combined/cpr/voterlist/1/search/?valgdato=2010-01-01&order_by=efternavn",
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01&order_by=efternavn&foedsel.LTE=2001-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
