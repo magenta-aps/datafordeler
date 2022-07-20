@@ -70,6 +70,7 @@ public class CprVoterService {
 
         String voteDate = requestParams.getFirst("valgdato");
         LocalDateTime voteDateMinus18Years = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(voteDate).toLocalDateTime().minusYears(18);
+        OffsetDateTime voteDateMinus6Month = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(voteDate).minusMonths(6);
 
         String birthAfter = requestParams.getFirst("foedsel.GTE");
         LocalDateTime birthAfterTS = null;
@@ -123,6 +124,7 @@ public class CprVoterService {
                     " JOIN "+ AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id";
 
             String condition = " WHERE addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO +" IS null " +
+                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_FROM +"  <= :halfyear "+
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO +" IS null "+
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE +" = 0 " +
                     "AND citizenDataRecord.countryCode = 5100 "+
@@ -142,6 +144,7 @@ public class CprVoterService {
             hql += condition;
 
             Query query = session.createQuery(hql);
+            query.setParameter("halfyear", voteDateMinus6Month);
             query.setParameter("btb", birthBeforeTS);
             query.setParameter("bta", birthAfterTS);
             query.setParameter("locality", localityCode);
