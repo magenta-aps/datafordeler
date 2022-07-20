@@ -1,17 +1,16 @@
 package dk.magenta.datafordeler.combined;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
+import org.apache.commons.collections.IteratorUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.*;
@@ -28,9 +27,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
@@ -41,6 +39,10 @@ import static org.mockito.Mockito.when;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class CprVoterFunctionalityTest extends TestBase {
+
+    /*
+    Denne funktionalitet er implementeret efter dokument på denne sti: https://docs.google.com/document/d/1bFfPJhYmbzcNyiO740TA27w3rYwWg6_kYoWANrSkQkI/edit
+     */
 
     @Autowired
     private SessionManager sessionManager;
@@ -107,14 +109,11 @@ public class CprVoterFunctionalityTest extends TestBase {
 
     @Test
     public void testFetcingOfLocalitiesForVoting() throws Exception {
-        this.loadPerson("/different_persons.txt");
-
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> response;
 
         TestUserDetails testUserDetails = new TestUserDetails();
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
         response = restTemplate.exchange(
                 "/combined/localityList/1/search/",
@@ -124,16 +123,25 @@ public class CprVoterFunctionalityTest extends TestBase {
         );
 
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        String results = "[\"1706\",\"1700\",\"1704\",\"1701\",\"1601\",\"1606\",\"1600\",\"1602\",\"1605\",\"1603\",\"1608\",\"1610\",\"1607\",\"1604\",\"1609\",\"1200\",\"0600\",\"1403\",\"1203\",\"0906\",\"1504\",\"0703\",\"1502\",\"1201\",\"1101\",\"0803\",\"0902\",\"0701\",\"0601\",\"0605\",\"1503\",\"1100\",\"1500\",\"0900\",\"1003\",\"1507\",\"1000\",\"0500\",\"1400\",\"0801\",\"0501\",\"0908\",\"0905\",\"0702\",\"1204\",\"1505\",\"1506\",\"0800\",\"1202\",\"1004\",\"0700\",\"1501\",\"0204\",\"0321\",\"0305\",\"0300\",\"0104\",\"0201\",\"0108\",\"0200\",\"0103\",\"0302\",\"0102\",\"0202\",\"0106\",\"0100\",\"1805\",\"1803\",\"1804\",\"1802\",\"1800\",\"1806\",\"1900\",\"1902\",\"1901\",\"1906\"]";
-        Assert.assertEquals(results, objectMapper.readTree(response.getBody()).get("results").toString());
+        List<String> expected = Arrays.asList("1706","1700","1704","1701","1601","1606","1600","1602","1605","1603","1608","1610","1607","1604","1609","1200","0600","1403","1203","0906","1504","0703","1502","1201","1101","0803","0902","0701","0601","0605","1503","1100","1500","0900","1003","1507","1000","0500","1400","0801","0501","0908","0905","0702","1204","1505","1506","0800","1202","1004","0700","1501","0204","0321","0305","0300","0104","0201","0108","0200","0103","0302","0102","0202","0106","0100","1805","1803","1804","1802","1800","1806","1900","1902","1901","1906");
+        ArrayList<JsonNode> result = (ArrayList<JsonNode>)IteratorUtils.toList(objectMapper.readTree(response.getBody()).get("results").elements());
+        List<String> valueResult = result.stream().map(element -> element.asText()).collect(Collectors.toList());
+        Assert.assertTrue(expected.size() == valueResult.size() && expected.containsAll(valueResult) && valueResult.containsAll(expected));
     }
 
     /**
      * Validate that different conditions deliveres different lists of voters
+     *
+     * Dansk indfødsret
+     * Over 18 år på datoen “valgdato”
+     * Haft fast registreret adresse indenfor grønlandske kommuner (>950) i mindst 6 måneder siden “valgdato”
+     * Ingen umyndighedsmarkering fra CPR
+     * Ingen markering af flytning væk fra Danmark, Grønland, færøerne inden for de sidste 3 år (Det er så tæt vi kommer på opfyldelsen af riget, som beskrevet under afsnittet “Undtagelser, forbehold og håndtering af disse”)
+     *
      * @throws Exception
      */
     @Test
-    public void testFetcingOfVoter() throws Exception {
+    public void testFetcingOfVoterLandstingsvalg() throws Exception {
         this.loadPerson("/voters/voter_born_2010_loc_600.txt");
         this.loadPerson("/voters/voter_born_2011_loc_600.txt");
         this.loadPerson("/voters/voter_born_2010_german.txt");
@@ -150,7 +158,7 @@ public class CprVoterFunctionalityTest extends TestBase {
         //Confirm that the list of voters can only be fetched with someone who has access to CPR-data
         this.applyAccess(testUserDetails);
         response = restTemplate.exchange(
-                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&order_by=pnr&foedsel.LTE=2020-01-01",
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -162,7 +170,7 @@ public class CprVoterFunctionalityTest extends TestBase {
         //Confirm that an election in year 2020 returns no voters, since no voters is over 18 years in the testset
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         response = restTemplate.exchange(
-                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01&order_by=efternavn&foedsel.LTE=2020-01-01",
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -170,14 +178,101 @@ public class CprVoterFunctionalityTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals("", objectMapper.readTree(response.getBody()).get("results").asText());
 
+        //Confirm that an election in year 2030 returns the voters "0101101236", "0101101234", "0101111234"
         response = restTemplate.exchange(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        System.out.println(response.getBody());
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        List<String> expected = Arrays.asList("0101101236", "0101101234", "0101111234");
+        List<String> result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
 
+        //Confirm that an election in year 2028 returns the voters "0101101236", "0101101234"
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2028-01-02",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        expected = Arrays.asList("0101101236", "0101101234");
+        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
+
+        //Confirm that an election in year 2030 limitated to locality 0600 returns the voters "0101101234", "0101111234"
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&lokalitet_kode=0600",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        expected = Arrays.asList("0101101234", "0101111234");
+        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
+
+        //Confirm that an election in year 2030 limitated to locality 0601 returns the voters "0101101236"
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&lokalitet_kode=0601",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        expected = Arrays.asList("0101101236");
+        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
+
+        //Confirm that an election in year 2030 limitated to kommunekode 957 returns the voters ""
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&kommune_kode=957",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        expected = Arrays.asList();
+        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
+
+        //Confirm that an election in year 2030 limitated to kommunekode 956 returns the voters "0101101236", "0101101234", "0101111234"
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&kommune_kode=956",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        expected = Arrays.asList("0101101236", "0101101234", "0101111234");
+        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
+
+        //Confirm that an election in year 2030 limitated to born after 2010-05-01 returns the voters "0101111234"
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&foedsel.GTE=2010-05-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        expected = Arrays.asList("0101111234");
+        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
+
+        //Confirm that an election in year 2030 limitated to born after 2010-05-01 returns the voters "0101101236", "0101101234"
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&foedsel.LTE=2010-05-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        expected = Arrays.asList("0101101236", "0101101234");
+        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
     }
 
 

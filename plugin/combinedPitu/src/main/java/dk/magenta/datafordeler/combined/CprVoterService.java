@@ -128,7 +128,7 @@ public class CprVoterService {
                     "AND citizenDataRecord.countryCode = 5100 "+
                     "AND guardianDataRecord."+ GuardianDataRecord.DB_FIELD_ENTITY +" IS null "+
 
-                    "AND (:bta IS NULL OR birthDataRecord.birthDatetime <= :bta) " +
+                    "AND (:bta IS NULL OR birthDataRecord.birthDatetime >= :bta) " +
                     "AND birthDataRecord.birthDatetime <= :btb " +
                     "AND (:locality IS NULL OR accessAddressLocalityRecord.code = :locality) " +
                     "AND (:municipality=0 OR addressDataRecord.municipalityCode = :municipality) ";
