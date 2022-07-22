@@ -74,6 +74,12 @@ public class cprLoadTestdatasetTest {
         ImportInputStream inputstream2 = new ImportInputStream(labeledInputStream2);
         personEntityManager.parseData(inputstream2, importMetadata);
         testData2.close();
+
+        InputStream testData3 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST_MEDCOM");
+        LabeledSequenceInputStream labeledInputStream3 = new LabeledSequenceInputStream("GLBASETEST_MEDCOM", new ByteArrayInputStream("GLBASETEST_MEDCOM".getBytes()), "GLBASETEST_MEDCOM", testData3);
+        ImportInputStream inputstream3 = new ImportInputStream(labeledInputStream3);
+        personEntityManager.parseData(inputstream3, importMetadata);
+        testData3.close();
     }
 
 
@@ -113,7 +119,7 @@ public class cprLoadTestdatasetTest {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(51, persons.size());
+            Assert.assertEquals(87, persons.size());
 
             for(PersonEntity person : persons) {
                 System.out.print(person.getPersonnummer());
