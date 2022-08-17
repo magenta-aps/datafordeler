@@ -131,7 +131,7 @@ public class EboksRecieveLookupService {
 
             if (cvrs != null &&!cvrs.isEmpty()) {
                 CompanyRecordQuery query = new CompanyRecordQuery();
-                query.setCvrNumre(cvrs);
+                query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrs);
                 Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
 
                 companyEntities.forEach((k) -> {

@@ -308,9 +308,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     public void cleanDemoData(Session session) {
         CompanyRecordQuery personQuery = new CompanyRecordQuery();
         List<String> testCompanyList = Arrays.asList(cvrDemoList.split(","));
-        for(String testCompany : testCompanyList) {
-            personQuery.addCvrNummer(testCompany);
-        }
+        personQuery.setParameter(CompanyRecordQuery.CVRNUMMER, testCompanyList);
         session.beginTransaction();
         personQuery.setPageSize(1000);
         personQuery.applyFilters(session);

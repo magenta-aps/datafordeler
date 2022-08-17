@@ -16,38 +16,8 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
 
     public static final String COMPANYDATAEVENTTIME = CompanyDataEventRecord.DB_FIELD_TIMESTAMP;
 
+    public static final String STATUS = CompanyRecord.IO_FIELD_STATUS;
 
-    private List<String> companyStatus = new ArrayList<>();
-
-    public Collection<String> getCompanyStatus() {
-        return this.companyStatus;
-    }
-
-    public void addCompanyStatus(String organizationType) {
-        if (organizationType != null) {
-            this.companyStatus.add(organizationType);
-            this.updatedParameters();
-        }
-    }
-
-    public void setCompanyStatus(String organizationType) {
-        this.clearCompanyStatus();
-        this.addCompanyStatus(organizationType);
-    }
-
-    public void setCompanyStatus(Collection<String> organizationTypes) {
-        this.clearCompanyStatus();
-        if (companyStatus != null) {
-            for (String organizationType : organizationTypes) {
-                this.addCompanyStatus(organizationType);
-            }
-        }
-    }
-
-    public void clearCompanyStatus() {
-        this.companyStatus.clear();
-        this.updatedParameters();
-    }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = COMPANYDATAEVENTTIME)
     private LocalDate companyrecordValidityTimeGTE;
@@ -102,7 +72,7 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     @Override
     public Map<String, Object> getSearchParameters() {
         Map<String, Object> map = super.getSearchParameters();
-        map.put("companyStatus", this.companyStatus);
+        map.put("companyStatus", this.getParameters(STATUS));
         map.put("companyStatusValidity.GTE", this.companyrecordValidityTimeGTE);
         map.put("companyStatusValidity.LTE", this.companyrecordValidityTimeLTE);
         map.put("companyStartDate.GTE", this.companyStartDateGTE);
@@ -115,7 +85,7 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
-        this.setCompanyStatus(parameters.getI("companyStatus"));
+        this.setParameter(STATUS, parameters.getI("companyStatus"));
         this.setCompanyStatusValidityFromGTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidity.GTE")));
         this.setCompanyStatusValidityFromLTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidity.LTE")));
 
@@ -127,7 +97,7 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
 
     @Override
     protected boolean isEmpty() {
-        return super.isEmpty() && this.companyStatus.isEmpty() &&
+        return this.parametersEmpty() &&
                 this.companyrecordValidityTimeGTE == null && this.companyrecordValidityTimeLTE == null &&
                 this.companyStartDateGTE == null && this.companyStartDateLTE == null && this.companyEndDateGTE == null && this.companyEndDateLTE == null;
     }
@@ -152,7 +122,7 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
 
     protected void setupConditions() throws QueryBuildException {
         super.setupConditions();
-        this.addCondition("companyStatus", this.companyStatus);
+        this.addCondition("companyStatus", STATUS, String.class);
         if (this.companyrecordValidityTimeGTE != null) {
             this.addCondition("companyStatusValidity.GTE", Condition.Operator.GTE, this.companyrecordValidityTimeGTE, LocalDate.class, false);
         }

@@ -71,7 +71,7 @@ public class CompanyRecordDetailService {
             this.checkAndLogAccess(loggerHelper);
 
             CompanyRecordQuery query = new CompanyRecordQuery();
-            query.setCvrNumre(cvr);
+            query.setParameter(CompanyRecordQuery.CVRNUMMER, cvr);
             Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
             CompanyRecord companyEntity = companyEntities.findFirst().orElse(null);
 
@@ -84,7 +84,7 @@ public class CompanyRecordDetailService {
 
             List<String> productionUnits = companyEntity.getProductionUnits().currentStream().map(f -> Integer.toString(f.getpNumber())).collect(Collectors.toList());
             CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
-            companyUnitRecordQuery.setPNummer(productionUnits);
+            companyUnitRecordQuery.setParameter(CompanyUnitRecordQuery.P_NUMBER, productionUnits);
             Stream<CompanyUnitRecord> pUnitEntities = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);
 
             ObjectNode objectNode = companyRecordOutputWrapper.fillContainer(companyEntity, pUnitEntities);

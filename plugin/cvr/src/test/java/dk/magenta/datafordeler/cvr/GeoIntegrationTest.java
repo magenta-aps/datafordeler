@@ -52,7 +52,7 @@ public class GeoIntegrationTest {
         query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality cvr_company__locationAddress__municipality");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress__municipality.municipality cvr_company__locationAddress__municipality__municipality");
-        query.setCvrNumre("12345678");
+        query.setParameter(CompanyRecordQuery.CVRNUMMER,"12345678");
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {

@@ -1,13 +1,11 @@
 package dk.magenta.datafordeler.eskat.query;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
-import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.fapi.Condition;
-import dk.magenta.datafordeler.core.fapi.ParameterMap;
-import dk.magenta.datafordeler.core.fapi.QueryField;
+import dk.magenta.datafordeler.core.fapi.*;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -17,105 +15,9 @@ import java.util.*;
  */
 public class EskatParticipantRecordQuery extends ParticipantRecordQuery {
 
-    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private List<String> cvrnumber = new ArrayList<>();
-
-    public List<String> getCvrnumber() {
-        return this.cvrnumber;
-    }
-
-    public void addCvrnumber(String cvrnumber) {
-        if (cvrnumber != null) {
-            this.cvrnumber.add(cvrnumber);
-            this.updatedParameters();
-        }
-    }
-
-    public void setCvrnumber(String cvrnumber) {
-        this.clearCvrnumber();
-        this.addCvrnumber(cvrnumber);
-    }
-
-    public void setCvrnumber(Collection<String> cvrnumbers) {
-        this.clearCvrnumber();
-        if (cvrnumbers != null) {
-            for (String cvrnumber : cvrnumbers) {
-                this.addCvrnumber(cvrnumber);
-            }
-        }
-    }
-
-    public void clearCvrnumber() {
-        this.cvrnumber.clear();
-        this.updatedParameters();
-    }
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private List<String> companyNames = new ArrayList<>();
-
-    public List<String> getCompanyNames() {
-        return this.companyNames;
-    }
-
-    public void addCompanyNames(String companyName) {
-        if (companyName != null) {
-            this.companyNames.add(companyName);
-            this.updatedParameters();
-        }
-    }
-
-    public void setCompanyNames(String companyName) {
-        this.clearCompanyNames();
-        this.addCompanyNames(companyName);
-    }
-
-    public void setCompanyNames(Collection<String> companyNames) {
-        this.clearCompanyNames();
-        if (companyNames != null) {
-            for (String companyName : companyNames) {
-                this.addCompanyNames(companyName);
-            }
-        }
-    }
-
-    public void clearCompanyNames() {
-        this.companyNames.clear();
-        this.updatedParameters();
-    }
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private List<String> companyStatuses = new ArrayList<>();
-
-    public List<String> getStatuses() {
-        return this.companyStatuses;
-    }
-
-    public void addStatuses(String status) {
-        if (companyStatuses != null) {
-            this.companyStatuses.add(status);
-            this.updatedParameters();
-        }
-    }
-
-    public void setStatuses(String status) {
-        this.clearStatuses();
-        this.addStatuses(status);
-    }
-
-    public void setStatuses(Collection<String> companyStatuses) {
-        this.clearStatuses();
-        if (companyStatuses != null) {
-            for (String status : companyStatuses) {
-                this.addStatuses(status);
-            }
-        }
-    }
-
-    public void clearStatuses() {
-        this.companyStatuses.clear();
-        this.updatedParameters();
-    }
-
+    public static final String ASSOCIATED_COMPANY_CVR = CompanyRecord.IO_FIELD_CVR_NUMBER;
+    public static final String ASSOCIATED_COMPANY_NAME = CompanyRecord.IO_FIELD_NAMES;
+    public static final String ASSOCIATED_COMPANY_STATUS = CompanyRecord.IO_FIELD_STATUS;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
     private LocalDate relationstartTimeGTE;
@@ -152,12 +54,24 @@ public class EskatParticipantRecordQuery extends ParticipantRecordQuery {
 
     @Override
     protected boolean isEmpty() {
-        return super.isEmpty() && this.cvrnumber.isEmpty() && this.companyNames.isEmpty() && this.companyStatuses.isEmpty() &&
-                this.relationstartTimeLTE == null && this.relationendTimeGTE == null;
+        return this.parametersEmpty()
+                && this.relationstartTimeGTE == null && this.relationstartTimeLTE == null
+                && this.relationendTimeGTE == null && this.relationendTimeLTE == null;
     }
 
     public boolean isSearchSet() {
         return !this.isEmpty();
+    }
+
+
+    @Override
+    public void setFromParameters(ParameterMap parameters) {
+        super.setFromParameters(parameters);
+        for (String key : new String[]{
+                ASSOCIATED_COMPANY_CVR, ASSOCIATED_COMPANY_NAME, ASSOCIATED_COMPANY_STATUS,
+        }) {
+            this.setParameter(key, parameters.getI(key));
+        }
     }
 
     @Override
@@ -177,9 +91,9 @@ public class EskatParticipantRecordQuery extends ParticipantRecordQuery {
 
     protected void setupConditions() throws QueryBuildException {
         super.setupConditions();
-        this.addCondition("cvrNumber", this.getCvrnumber(), Long.class);
-        this.addCondition("companyNames", this.getCompanyNames(), String.class);
-        this.addCondition("companyStatus", this.getStatuses(), String.class);
+        this.addCondition("cvrNumber", ASSOCIATED_COMPANY_CVR, Long.class);
+        this.addCondition("companyNames", ASSOCIATED_COMPANY_NAME, String.class);
+        this.addCondition("companyStatus", ASSOCIATED_COMPANY_STATUS, String.class);
 
         if (this.relationstartTimeGTE != null) {
             this.addCondition("companyStatusStart.GTE", Condition.Operator.GTE, this.relationstartTimeGTE, LocalDate.class, false);

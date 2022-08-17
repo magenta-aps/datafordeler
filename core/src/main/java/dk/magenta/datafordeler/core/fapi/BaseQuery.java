@@ -155,6 +155,48 @@ public abstract class BaseQuery {
     }
 
 
+
+
+    private HashMap<String, QueryParameter> urlParameters = new HashMap<>();
+
+    public void setParameter(String name, Collection<String> values) {
+        QueryParameter parameter = this.urlParameters.get(name);
+        if (parameter == null) {
+            parameter = new QueryParameter(this);
+            this.urlParameters.put(name, parameter);
+        }
+        parameter.set(values);
+    }
+
+    public void setParameter(String name, String value) {
+        this.setParameter(name, Collections.singletonList(value));
+    }
+
+    public void clearParameter(String name) {
+        this.urlParameters.remove(name);
+    }
+
+    public boolean parameterEmpty(String name) {
+        if (!this.urlParameters.keySet().contains(name)) {
+            return true;
+        }
+        return this.urlParameters.get(name).isEmpty();
+    }
+
+    public boolean parametersEmpty() {
+        for (QueryParameter qp : this.urlParameters.values()) {
+            if (!qp.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public QueryParameter getParameters(String name) {
+        return this.urlParameters.get(name);
+    }
+
+
     public int getPageSize() {
         return this.pageSize;
     }
@@ -830,6 +872,10 @@ public abstract class BaseQuery {
         return condition;
     }
 
+    public SingleCondition addCondition(String handle, String parameterName, Class type) throws QueryBuildException {
+        return this.addCondition(handle, this.urlParameters.get(parameterName), type);
+    }
+
     public SingleCondition addCondition(String handle, List values) throws QueryBuildException {
         return this.addCondition(handle, values, String.class);
     }
@@ -934,7 +980,7 @@ public abstract class BaseQuery {
     }
 
 
-    public Map<String, Object> getParameters() {
+    public Map<String, Object> getConditionParameters() {
         this.finalizeConditions();
         return this.condition.getParameters();
     }

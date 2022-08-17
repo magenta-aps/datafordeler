@@ -5,12 +5,8 @@ import dk.magenta.datafordeler.core.exception.AccessRequiredException;
 import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
-import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
-import dk.magenta.datafordeler.core.util.LoggerHelper;
-import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
-import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import dk.magenta.datafordeler.eskat.output.EskatRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
@@ -93,10 +89,10 @@ public class CompanyRecordListService extends CompanyRecordService {
             allRecords.addAll(localResults);
         }
 
-        HashSet<String> cvrNumbers = new HashSet<>(query.getCvrNumre());
+        HashSet<String> cvrNumbers = new HashSet<>(query.getParameters(CompanyRecordQuery.CVRNUMMER));
         if (!cvrNumbers.isEmpty()) {
             cvrNumbers.removeAll(allRecords.stream().map(resultset -> Integer.toString(resultset.getPrimaryEntity().getCvrNumber())).collect(Collectors.toSet()));
-            query.setCvrNumre(cvrNumbers);
+            query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
         }
         return allRecords;
     }

@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
@@ -120,10 +119,12 @@ public class CompanyUnitRecordService extends FapiBaseService<CompanyUnitRecord,
             allRecords.addAll(localResults);
         }
 
-        HashSet<String> pNumbers = new HashSet<>(query.getPNummer());
+        HashSet<String> pNumbers = new HashSet<>(query.getParameters(CompanyUnitRecordQuery.P_NUMBER));
         if (!pNumbers.isEmpty()) {
-            pNumbers.removeAll(localResults.stream().map(resultset -> Integer.toString(resultset.getPrimaryEntity().getpNumber())).collect(Collectors.toSet()));
-            query.setPNummer(pNumbers);
+            pNumbers.removeAll(localResults.stream().map(
+                    resultset -> Integer.toString(resultset.getPrimaryEntity().getpNumber())
+            ).collect(Collectors.toSet()));
+            query.setParameter(CompanyUnitRecordQuery.P_NUMBER, pNumbers);
         }
         return allRecords;
     }

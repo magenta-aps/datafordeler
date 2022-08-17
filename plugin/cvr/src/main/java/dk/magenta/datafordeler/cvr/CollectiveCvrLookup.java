@@ -34,7 +34,7 @@ public class CollectiveCvrLookup {
 
     public Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers) throws DataFordelerException {
         CompanyRecordQuery query = new CompanyRecordQuery();
-        query.setCvrNumre(cvrNumbers);
+        query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
 
         Collection<CompanyRecord> companyRecords = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class).collect(Collectors.toList());;
 
@@ -52,7 +52,7 @@ public class CollectiveCvrLookup {
 
     public Collection<ParticipantRecord> participantLookup(Session session, Collection<String> unitNumbers) throws DataFordelerException {
         ParticipantRecordQuery query = new ParticipantRecordQuery();
-        query.setEnhedsNummer(unitNumbers);
+        query.setParameter(ParticipantRecordQuery.UNITNUMBER, unitNumbers);
         Collection<ParticipantRecord> participantRecords = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
 
         for(ParticipantRecord record : participantRecords) {

@@ -12,6 +12,8 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
+import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
 import dk.magenta.datafordeler.eskat.query.EskatCompanyRecordQuery;
@@ -67,22 +69,22 @@ public class CompanyParticipantService {
         EskatParticipantRecordQuery participantRecordQuery = new EskatParticipantRecordQuery();
         EskatCompanyRecordQuery companyRecordQuery = new EskatCompanyRecordQuery();
         if(!cpr.isEmpty()) {
-            participantRecordQuery.setBusinessKey(cpr);
+            participantRecordQuery.setParameter(ParticipantRecordQuery.FORRETNINGSNOEGLE, cpr);
         }
         if(!personNavn.isEmpty()) {
-            participantRecordQuery.setNavn(personNavn);
+            participantRecordQuery.setParameter(ParticipantRecordQuery.NAVN, personNavn);
         }
         if(!cvr.isEmpty()) {
-            companyRecordQuery.setCvrNumre(cvr);
+            companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, cvr);
         }
         if(!companyName.isEmpty()) {
-            companyRecordQuery.setVirksomhedsnavn(companyName);
+            companyRecordQuery.setParameter(CompanyRecordQuery.NAVN, companyName);
         }
         if("Aktiv".equals(aktivitet)) {
-            companyRecordQuery.setCompanyStatus(Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
+            companyRecordQuery.setParameter(EskatCompanyRecordQuery.STATUS, Arrays.asList("NORMAL", "Aktiv", "Fremtid"));
         }
         if("!Aktiv".equals(aktivitet)) {
-            companyRecordQuery.setCompanyStatus(Arrays.asList("Ikke Aktiv", "UNDER REKONSTRUKTION", "OPLØST EFTER KONKURS",
+            companyRecordQuery.setParameter(EskatCompanyRecordQuery.STATUS, Arrays.asList("Ikke Aktiv", "UNDER REKONSTRUKTION", "OPLØST EFTER KONKURS",
             "UNDER KONKURS", "TVANGSOPLØST", "UNDER FRIVILLIG LIKVIDATION", "UNDER REASSUMERING", "OPLØST EFTER SPALTNING",
             "UDEN RETSVIRKNING", "SLETTET", "UNDER TVANGSOPLØSNING", "OPLØST EFTER ERKLÆRING", "OPLØST EFTER FRIVILLIG LIKVIDATION", "OPLØST EFTER FUSION"));
         }

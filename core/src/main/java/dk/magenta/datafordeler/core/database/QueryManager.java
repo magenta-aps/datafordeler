@@ -198,7 +198,7 @@ public class QueryManager {
         org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
 
         // Insert parameters, casting as necessary
-        Map<String, Object> extraParameters = query.getParameters();
+        Map<String, Object> extraParameters = query.getConditionParameters();
 
         for (String key : extraParameters.keySet()) {
             Object value = extraParameters.get(key);

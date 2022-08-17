@@ -61,11 +61,11 @@ public class CompanyOwnerService {
         this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_AFTER, Bitemporal.FILTERPARAM_EFFECTTO_AFTER, now);
 
         CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-        companyRecordQuery.setVirksomhedsform(10);
-        companyRecordQuery.setOrganizationType("FULDT_ANSVARLIG_DELTAGERE");
+        companyRecordQuery.setParameter(CompanyRecordQuery.VIRKSOMHEDSFORM, "10");
+        companyRecordQuery.setParameter(CompanyRecordQuery.ORGANIZATIONTYPE, "FULDT_ANSVARLIG_DELTAGERE");
 
         ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-        participantRecordQuery.setBusinessKey(cpr);
+        participantRecordQuery.setParameter(ParticipantRecordQuery.FORRETNINGSNOEGLE, cpr);
 
         companyRecordQuery.addRelated(participantRecordQuery, Collections.singletonMap("participantUnitNumber", "unit"));
 

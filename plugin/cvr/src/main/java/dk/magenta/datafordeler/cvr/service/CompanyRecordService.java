@@ -4,7 +4,6 @@ import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
-import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
@@ -13,7 +12,6 @@ import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
@@ -157,10 +155,10 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
             allRecords.addAll(localResults);
         }
 
-        HashSet<String> cvrNumbers = new HashSet<>(query.getCvrNumre());
+        HashSet<String> cvrNumbers = new HashSet<>(query.getParameters(CompanyRecordQuery.CVRNUMMER));
         if (!cvrNumbers.isEmpty()) {
             cvrNumbers.removeAll(allRecords.stream().map(resultset -> Integer.toString(resultset.getPrimaryEntity().getCvrNumber())).collect(Collectors.toSet()));
-            query.setCvrNumre(cvrNumbers);
+            query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
         }
         return allRecords;
     }
