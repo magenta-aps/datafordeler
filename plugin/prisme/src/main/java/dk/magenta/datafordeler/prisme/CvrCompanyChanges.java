@@ -77,9 +77,7 @@ public class CvrCompanyChanges {
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setPageSize("50000");
             query.setRecordAfter(updatedSinceTimestamp);
-            for (String form : companyForms) {
-                query.addVirksomhedsform(form);
-            }
+            query.setParameter(CompanyRecordQuery.VIRKSOMHEDSFORM, companyForms);
             ArrayNode companyChanges = objectMapper.createArrayNode();
 
             //Get the companies

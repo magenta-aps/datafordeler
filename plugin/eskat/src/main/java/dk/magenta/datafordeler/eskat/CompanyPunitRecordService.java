@@ -62,7 +62,7 @@ public class CompanyPunitRecordService {
             this.checkAndLogAccess(loggerHelper);
 
             CompanyUnitRecordQuery query = new CompanyUnitRecordQuery();
-            query.setPNummer(pnummer);
+            query.setParameter(CompanyUnitRecordQuery.P_NUMBER, pnummer);
             Stream<CompanyUnitRecord> companyUnitEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyUnitRecord.class);
             CompanyUnitRecord companyUnitEntity = companyUnitEntities.findFirst().orElse(null);
 

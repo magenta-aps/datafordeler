@@ -125,7 +125,7 @@ public class CvrRecordCombinedService {
      */
     protected Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers, DafoUserDetails user) throws DataFordelerException {
         CompanyRecordQuery query = new CompanyRecordQuery();
-        query.setCvrNumre(cvrNumbers);
+        query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
         this.applyAreaRestrictionsToQuery(query, user);
         return QueryManager.getAllEntities(session, query, CompanyRecord.class);
     }

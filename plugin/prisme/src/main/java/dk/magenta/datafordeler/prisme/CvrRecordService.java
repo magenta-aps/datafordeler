@@ -166,7 +166,7 @@ public class CvrRecordService {
 
     protected Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers, DafoUserDetails user) throws DataFordelerException {
         CompanyRecordQuery query = new CompanyRecordQuery();
-        query.setCvrNumre(cvrNumbers);
+        query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
         this.applyAreaRestrictionsToQuery(query, user);
         return QueryManager.getAllEntities(session, query, CompanyRecord.class);
     }
@@ -221,7 +221,7 @@ public class CvrRecordService {
         }
 
         CompanyRecordQuery query = new CompanyRecordQuery();
-        query.setCvrNumre(cvrNumbers);
+        query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
         query.setRecordAfter(updatedSince);
         this.applyAreaRestrictionsToQuery(query, user);
 

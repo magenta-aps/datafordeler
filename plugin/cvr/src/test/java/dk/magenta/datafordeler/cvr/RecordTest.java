@@ -178,26 +178,26 @@ public class RecordTest {
             query.setEffectToAfter(time);
             query.applyFilters(session);
 
-            query.setKommuneKode(101);
+            query.setParameter(CompanyRecordQuery.KOMMUNEKODE, "101");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearKommuneKoder();
-            query.setTelefonnummer("33369696");
+            query.clearParameter(CompanyRecordQuery.KOMMUNEKODE);
+            query.setParameter(CompanyRecordQuery.TELEFONNUMMER, "33369696");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearTelefonnummer();
-            query.setEmailadresse("info@magenta.dk");
+            query.clearParameter(CompanyRecordQuery.TELEFONNUMMER);
+            query.setParameter(CompanyRecordQuery.EMAILADRESSE, "info@magenta.dk");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearEmailadresse();
-            query.setReklamebeskyttelse("true");
+            query.clearParameter(CompanyRecordQuery.EMAILADRESSE);
+            query.setParameter(CompanyRecordQuery.REKLAMEBESKYTTELSE, "true");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearReklamebeskyttelse();
-            query.setVirksomhedsform(80);
+            query.clearParameter(CompanyRecordQuery.REKLAMEBESKYTTELSE);
+            query.setParameter(CompanyRecordQuery.VIRKSOMHEDSFORM, "80");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearVirksomhedsform();
-            query.setVirksomhedsnavn("MAGENTA ApS");
+            query.clearParameter(CompanyRecordQuery.VIRKSOMHEDSFORM);
+            query.setParameter(CompanyRecordQuery.NAVN, "MAGENTA ApS");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
 
             System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.companyRecordOutputWrapper.wrapResult(QueryManager.getAllEntities(session, query, CompanyRecord.class).get(0), query)));
-            query.clearKommuneKoder();
+            query.clearParameter(CompanyRecordQuery.KOMMUNEKODE);
 
 
             time = OffsetDateTime.parse("1998-01-01T00:00:00Z");
@@ -206,24 +206,24 @@ public class RecordTest {
             query.setEffectToAfter(time);
             query.applyFilters(session);
 
-            query.setKommuneKode(101);
+            query.setParameter(CompanyRecordQuery.KOMMUNEKODE, "101");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearKommuneKoder();
-            query.setTelefonnummer("33369696");
+            query.clearParameter(CompanyRecordQuery.KOMMUNEKODE);
+            query.setParameter(CompanyRecordQuery.TELEFONNUMMER, "33369696");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearTelefonnummer();
-            query.setEmailadresse("info@magenta.dk");
+            query.clearParameter(CompanyRecordQuery.TELEFONNUMMER);
+            query.setParameter(CompanyRecordQuery.EMAILADRESSE, "info@magenta.dk");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearEmailadresse();
-            query.setReklamebeskyttelse("true");
+            query.clearParameter(CompanyRecordQuery.EMAILADRESSE);
+            query.setParameter(CompanyRecordQuery.REKLAMEBESKYTTELSE, "true");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.setReklamebeskyttelse(null);
-            query.setVirksomhedsform(80);
+            query.setParameter(CompanyRecordQuery.REKLAMEBESKYTTELSE, "true");
+            query.setParameter(CompanyRecordQuery.VIRKSOMHEDSFORM, "80");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearVirksomhedsform();
-            query.setVirksomhedsnavn("MAGENTA ApS");
+            query.clearParameter(CompanyRecordQuery.VIRKSOMHEDSFORM);
+            query.setParameter(CompanyRecordQuery.NAVN, "MAGENTA ApS");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
-            query.clearVirksomhedsnavn();
+            query.clearParameter(CompanyRecordQuery.NAVN);
 
 
         } finally {
@@ -237,7 +237,7 @@ public class RecordTest {
         loadCompany("/company_in2.json");
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
-            query.setCvrNumre("25052943");
+            query.setParameter(CompanyRecordQuery.CVRNUMMER, "25052943");
             List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
             CompanyRecord companyRecord = records.get(0);
 
@@ -343,7 +343,7 @@ public class RecordTest {
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
             CompanyRecordQuery query = new CompanyRecordQuery();
-            query.setCvrNumre("25052943");
+            query.setParameter(CompanyRecordQuery.CVRNUMMER, "25052943");
             List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
             CompanyRecord companyRecord = records.get(0);
 
@@ -486,18 +486,18 @@ public class RecordTest {
             query.setEffectToAfter(time);
             query.applyFilters(session);
 
-            query.setPrimaryIndustry("478900");
+            query.setParameter(CompanyUnitRecordQuery.PRIMARYINDUSTRY, "478900");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
-            query.clearPrimaryIndustry();
-            query.setAssociatedCompanyCvrNummer("37952273");
+            query.clearParameter(CompanyUnitRecordQuery.PRIMARYINDUSTRY);
+            query.setParameter(CompanyUnitRecordQuery.ASSOCIATED_COMPANY_CVR, "37952273");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
-            query.clearAssociatedCompanyCvrNummer();
-            query.setPNummer("1021686405");
+            query.clearParameter(CompanyUnitRecordQuery.ASSOCIATED_COMPANY_CVR);
+            query.setParameter(CompanyUnitRecordQuery.P_NUMBER, "1021686405");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
-            query.clearPNummer();
-            query.setKommuneKode("561");
+            query.clearParameter(CompanyUnitRecordQuery.P_NUMBER);
+            query.setParameter(CompanyUnitRecordQuery.KOMMUNEKODE, "561");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
-            query.clearKommuneKode();
+            query.clearParameter(CompanyUnitRecordQuery.KOMMUNEKODE);
 
 
             time = OffsetDateTime.parse("1900-01-01T00:00:00Z");
@@ -507,18 +507,18 @@ public class RecordTest {
             query.applyFilters(session);
 
 
-            query.setPrimaryIndustry("478900");
+            query.setParameter(CompanyUnitRecordQuery.PRIMARYINDUSTRY, "478900");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
-            query.clearPrimaryIndustry();
-            query.setAssociatedCompanyCvrNummer("37952273");
+            query.clearParameter(CompanyUnitRecordQuery.PRIMARYINDUSTRY);
+            query.setParameter(CompanyUnitRecordQuery.ASSOCIATED_COMPANY_CVR, "37952273");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
-            query.clearAssociatedCompanyCvrNummer();
-            query.setPNummer("1021686405");
+            query.clearParameter(CompanyUnitRecordQuery.ASSOCIATED_COMPANY_CVR);
+            query.setParameter(CompanyUnitRecordQuery.P_NUMBER, "1021686405");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
-            query.clearPNummer();
-            query.setKommuneKode("101");
+            query.clearParameter(CompanyUnitRecordQuery.P_NUMBER);
+            query.setParameter(CompanyUnitRecordQuery.KOMMUNEKODE, "101");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
-            query.clearKommuneKode();
+            query.clearParameter(CompanyUnitRecordQuery.KOMMUNEKODE);
 
         } finally {
             session.close();
@@ -533,7 +533,7 @@ public class RecordTest {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             CompanyUnitRecordQuery query = new CompanyUnitRecordQuery();
-            query.setPNummer("1020895337");
+            query.setParameter(CompanyUnitRecordQuery.P_NUMBER, "1020895337");
             List<CompanyUnitRecord> records = QueryManager.getAllEntities(session, query, CompanyUnitRecord.class);
             Assert.assertEquals(1, records.size());
             CompanyUnitRecord companyUnitRecord = records.get(0);
@@ -660,17 +660,17 @@ public class RecordTest {
             query.setEffectToAfter(time);
             query.applyFilters(session);
 
-            query.setEnhedsNummer("4000004988");
+            query.setParameter(ParticipantRecordQuery.UNITNUMBER, "4000004988");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
-            query.clearEnhedsNummer();
+            query.clearParameter(ParticipantRecordQuery.UNITNUMBER);
 
-            query.setNavn("Morten*");
+            query.setParameter(ParticipantRecordQuery.NAVN, "Morten*");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
-            query.clearNavn();
+            query.clearParameter(ParticipantRecordQuery.NAVN);
 
-            query.setKommuneKode("101");
+            query.setParameter(ParticipantRecordQuery.KOMMUNEKODE, "101");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
-            query.clearKommuneKode();
+            query.clearParameter(ParticipantRecordQuery.KOMMUNEKODE);
 
 
 
@@ -682,15 +682,15 @@ public class RecordTest {
 
 
 
-            query.setEnhedsNummer("4000004988");
+            query.setParameter(ParticipantRecordQuery.UNITNUMBER, "4000004988");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
-            query.clearEnhedsNummer();
-            query.setNavn("Morten*");
+            query.clearParameter(ParticipantRecordQuery.UNITNUMBER);
+            query.setParameter(ParticipantRecordQuery.NAVN, "Morten*");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
-            query.clearNavn();
-            query.setKommuneKode("101");
+            query.clearParameter(ParticipantRecordQuery.NAVN);
+            query.setParameter(ParticipantRecordQuery.KOMMUNEKODE, "101");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
-            query.setKommuneKode((String) null);
+            query.clearParameter(ParticipantRecordQuery.KOMMUNEKODE);
 
         } finally {
             session.close();
@@ -704,7 +704,7 @@ public class RecordTest {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             ParticipantRecordQuery query = new ParticipantRecordQuery();
-            query.setEnhedsNummer("4000004988");
+            query.setParameter(ParticipantRecordQuery.UNITNUMBER, "4000004988");
             List<ParticipantRecord> records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
             Assert.assertEquals(1, records.size());
             ParticipantRecord participantRecord = records.get(0);
@@ -929,7 +929,7 @@ public class RecordTest {
         query.setEffectFromBefore(now);
         query.setRegistrationToAfter(now);
         query.setEffectToAfter(now);
-        query.setCvrNumre("25052943");
+        query.setParameter(CompanyRecordQuery.CVRNUMMER, "25052943");
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {
@@ -952,7 +952,7 @@ public class RecordTest {
     public void testEnrich() throws IOException, DataFordelerException {
         loadParticipant("/person.json");
         ParticipantRecordQuery query = new ParticipantRecordQuery();
-        query.setNavn("Morten*");
+        query.setParameter(ParticipantRecordQuery.NAVN, "Morten*");
         Session session = sessionManager.getSessionFactory().openSession();
         List<ParticipantRecord> records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
         session.close();

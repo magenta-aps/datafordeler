@@ -98,7 +98,7 @@ public class CvrCompanyOwnerHistory {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
-            query.setCvrNumre(cvrNummer);
+            query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNummer);
             //Get the company, there can only be 0-1
             List<CompanyRecord> companyrecords = QueryManager.getAllEntities(session, query, CompanyRecord.class);
             if (companyrecords.isEmpty()) {
@@ -146,7 +146,7 @@ public class CvrCompanyOwnerHistory {
                         try {
 
                             ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-                            participantRecordQuery.setEnhedsNummer(participantNumber.toString());
+                            participantRecordQuery.setParameter(ParticipantRecordQuery.UNITNUMBER, participantNumber.toString());
                             List<ParticipantRecord> participantList = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
                             if(participantList.size()>0 && participantList.get(0)!= null && participantList.get(0).getBusinessKey()!=null) {
                                 deltagerPnr = participantList.get(0).getBusinessKey();

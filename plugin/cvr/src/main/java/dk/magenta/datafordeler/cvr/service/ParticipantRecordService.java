@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
@@ -28,8 +27,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -122,10 +119,10 @@ public class ParticipantRecordService extends FapiBaseService<ParticipantRecord,
             allRecords.addAll(localResults);
         }
 
-        HashSet<String> eNumbers = new HashSet<>(query.getEnhedsNummer());
+        HashSet<String> eNumbers = new HashSet<>(query.getParameters(ParticipantRecordQuery.UNITNUMBER));
         if (!eNumbers.isEmpty()) {
             eNumbers.removeAll(localResults.stream().map(resultset -> Long.toString(resultset.getPrimaryEntity().getUnitNumber())).collect(Collectors.toSet()));
-            query.setEnhedsNummer(eNumbers);
+            query.setParameter(ParticipantRecordQuery.UNITNUMBER, eNumbers);
         }
 
         return allRecords;

@@ -2,14 +2,15 @@ package dk.magenta.datafordeler.cvr.query;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
-import dk.magenta.datafordeler.core.fapi.QueryField;
-import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
+import dk.magenta.datafordeler.cvr.records.RelationParticipantRecord;
+import dk.magenta.datafordeler.cvr.records.SecNameRecord;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.*;
 
 /**
@@ -21,214 +22,31 @@ public class ParticipantRecordQuery extends BaseQuery {
     public static final String NAVN = ParticipantRecord.IO_FIELD_NAMES;
     public static final String KOMMUNEKODE = Municipality.IO_FIELD_CODE;
     public static final String VEJKODE = AddressRecord.IO_FIELD_ROADCODE;
-
-
-
-    @QueryField(type = QueryField.FieldType.LONG, queryName = UNITNUMBER)
-    private List<String> enhedsNummer = new ArrayList<>();
-
-    public Collection<String> getEnhedsNummer() {
-        return enhedsNummer;
-    }
-
-    public void addEnhedsNummer(String enhedsNummer) {
-        if (enhedsNummer != null) {
-            this.enhedsNummer.add(enhedsNummer);
-            this.updatedParameters();
-        }
-    }
-
-    public void setEnhedsNummer(String enhedsNumre) {
-        this.clearEnhedsNummer();
-        this.addEnhedsNummer(enhedsNumre);
-    }
-
-    public void setEnhedsNummer(Collection<String> enhedsNumre) {
-        this.clearEnhedsNummer();
-        if (enhedsNumre != null) {
-            for (String enhedsNummer : enhedsNumre) {
-                this.addEnhedsNummer(enhedsNummer);
-            }
-        }
-    }
-
-    public void clearEnhedsNummer() {
-        this.enhedsNummer.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = KOMMUNEKODE)
-    private List<String> kommunekode = new ArrayList<>();
-
-    public Collection<String> getKommuneKode() {
-        return kommunekode;
-    }
-
-    public void addKommuneKode(String kommunekode) {
-        if (kommunekode != null) {
-            this.kommunekode.add(kommunekode);
-            this.updatedParameters();
-        }
-    }
-
-    public void addKommuneKode(int kommunekode) {
-        this.addKommuneKode(String.format("%03d", kommunekode));
-    }
-
-    public void setKommuneKode(String kommunekode) {
-        this.clearKommuneKode();
-        this.addKommuneKode(kommunekode);
-    }
-
-    public void setKommuneKode(Collection<String> kommunekoder) {
-        this.clearKommuneKode();
-        if (kommunekoder != null) {
-            for (String kommunekode : kommunekoder) {
-                this.addKommuneKode(kommunekode);
-            }
-        }
-    }
-
-    public void clearKommuneKode() {
-        this.kommunekode.clear();
-        this.updatedParameters();
-    }
-
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
-    private List<String> vejkode = new ArrayList<>();
-
-    public Collection<String> getVejkode() {
-        return vejkode;
-    }
-
-    public void addVejkode(String vejkode) {
-        if (vejkode != null) {
-            this.vejkode.add(vejkode);
-            this.updatedParameters();
-        }
-    }
-
-    public void addVejkode(int vejkode) {
-        this.addVejkode(String.format("%03d", vejkode));
-    }
-
-    public void setVejkode(String vejkode) {
-        this.clearVejkode();
-        this.addVejkode(vejkode);
-    }
-
-    public void setVejkode(Collection<String> vejkoder) {
-        this.clearVejkode();
-        if (vejkoder != null) {
-            for (String vejkode : vejkoder) {
-                this.addVejkode(vejkode);
-            }
-        }
-    }
-
-    public void clearVejkode() {
-        this.vejkode.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private List<String> navn = new ArrayList<>();
-
-    public List<String> getNavn() {
-        return this.navn;
-    }
-
-    public void addNavn(String navn) {
-        if (navn != null) {
-            this.navn.add(navn);
-            this.updatedParameters();
-        }
-    }
-
-    public void setNavn(String navn) {
-        this.clearNavn();
-        this.addNavn(navn);
-    }
-
-    public void setNavn(Collection<String> navne) {
-        this.clearNavn();
-        if (navne != null) {
-            for (String navn : navne) {
-                this.addNavn(navn);
-            }
-        }
-    }
-
-    public void clearNavn() {
-        this.navn.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private List<String> businessKey = new ArrayList<>();
-
-    public List<String> getBusinessKey() {
-        return this.businessKey;
-    }
-
-    public void addBusinessKey(String businessKey) {
-        if (businessKey != null) {
-            this.businessKey.add(businessKey);
-            this.updatedParameters();
-        }
-    }
-
-    public void setBusinessKey(String businessKey) {
-        this.clearBusinessKey();
-        this.addBusinessKey(businessKey);
-    }
-
-    public void setBusinessKey(Collection<String> businessKeys) {
-        this.clearBusinessKey();
-        if (businessKeys != null) {
-            for (String businessKey : businessKeys) {
-                this.addBusinessKey(businessKey);
-            }
-        }
-    }
-
-    public void clearBusinessKey() {
-        this.businessKey.clear();
-        this.updatedParameters();
-    }
-
-
+    public static final String FORRETNINGSNOEGLE = ParticipantRecord.IO_FIELD_BUSINESS_KEY;
 
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put(UNITNUMBER, this.enhedsNummer);
-        map.put(NAVN, this.navn);
-        map.put(KOMMUNEKODE, this.kommunekode);
-        map.put(VEJKODE, this.vejkode);
+        for (String key : new String[]{
+                UNITNUMBER, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
+        }) {
+            map.put(key, this.getParameters(key));
+        }
         return map;
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) {
-        this.setEnhedsNummer(parameters.getI(UNITNUMBER));
-        this.setNavn(parameters.getI(NAVN));
-        this.setKommuneKode(parameters.getI(KOMMUNEKODE));
-        this.setBusinessKey(parameters.getI("businessKey"));
+        for (String key : new String[]{
+                UNITNUMBER, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
+        }) {
+            this.setParameter(key, parameters.getI(key));
+        }
     }
 
     @Override
     protected boolean isEmpty() {
-        return this.enhedsNummer.isEmpty() && this.navn.isEmpty() && this.kommunekode.isEmpty() && this.vejkode.isEmpty() && this.businessKey.isEmpty();
+        return this.parametersEmpty();
     }
 
     @Override
@@ -256,7 +74,6 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
         joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
         joinHandles.put("unitCode", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
-
     }
 
     @Override
@@ -265,11 +82,11 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws QueryBuildException {
-        this.addCondition("unit", this.enhedsNummer, Long.class);
-        this.addCondition("name", this.navn);
-        this.addCondition("municipalitycode", this.kommunekode, Integer.class);
-        this.addCondition("roadcode", this.vejkode, Integer.class);
-        this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
-        this.addCondition("businessKey", this.getBusinessKey(), Long.class);
+        this.addCondition("unit", UNITNUMBER, Long.class);
+        this.addCondition("name", NAVN, String.class);
+        this.addCondition("municipalitycode", KOMMUNEKODE, Integer.class);
+        this.addCondition("roadcode", VEJKODE, Integer.class);
+        this.addCondition("municipalitycode", KOMMUNEKODE, Integer.class);
+        this.addCondition("businessKey", FORRETNINGSNOEGLE, Long.class);
     }
 }

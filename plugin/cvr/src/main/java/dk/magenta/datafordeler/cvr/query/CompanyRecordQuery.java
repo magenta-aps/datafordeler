@@ -30,493 +30,10 @@ public class CompanyRecordQuery extends BaseQuery {
     public static final String HUSNUMMER = "husnummer";
     public static final String ETAGE = AddressRecord.IO_FIELD_FLOOR;
     public static final String DOOR = AddressRecord.IO_FIELD_DOOR;
+    public static final String ORGANIZATIONTYPE = "organisationstype";
     public static final String LASTUPDATED = CvrBitemporalRecord.IO_FIELD_LAST_UPDATED;
     public static final String COMPANYDATAEVENT = CompanyDataEventRecord.DB_FIELD_FIELD;
     public static final String COMPANYDATAEVENTTIME = CompanyDataEventRecord.DB_FIELD_TIMESTAMP;
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = CVRNUMMER)
-    private List<String> cvrNumre = new ArrayList<>();
-
-    public Collection<String> getCvrNumre() {
-        return cvrNumre;
-    }
-
-    public void addCvrNummer(String cvrnummer) {
-        if (cvrnummer != null) {
-            this.cvrNumre.add(cvrnummer);
-            this.updatedParameters();
-        }
-    }
-
-    public void setCvrNumre(String cvrNumre) {
-        this.clearCvrNumre();
-        this.addCvrNummer(cvrNumre);
-    }
-
-    public void setCvrNumre(Collection<String> cvrNumre) {
-        this.clearCvrNumre();
-        if (cvrNumre != null) {
-            for (String cvrNummer : cvrNumre) {
-                this.addCvrNummer(cvrNummer);
-            }
-        }
-    }
-
-    public void clearCvrNumre() {
-        this.cvrNumre.clear();
-        this.updatedParameters();
-    }
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = REKLAMEBESKYTTELSE)
-    private String reklamebeskyttelse;
-
-    public String getReklamebeskyttelse() {
-        return this.reklamebeskyttelse;
-    }
-
-    public void setReklamebeskyttelse(String reklamebeskyttelse) {
-        this.clearReklamebeskyttelse();
-        if (reklamebeskyttelse != null) {
-            this.reklamebeskyttelse = reklamebeskyttelse;
-            this.updatedParameters();
-        }
-    }
-
-    public void clearReklamebeskyttelse() {
-        this.reklamebeskyttelse = null;
-    }
-
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = NAVN)
-    private List<String> virksomhedsnavn = new ArrayList<>();
-
-    public List<String> getVirksomhedsnavn() {
-        return this.virksomhedsnavn;
-    }
-
-    public void addVirksomhedsnavn(String virksomhedsnavn) {
-        if (virksomhedsnavn != null) {
-            this.virksomhedsnavn.add(virksomhedsnavn);
-            this.updatedParameters();
-        }
-    }
-
-    public void setVirksomhedsnavn(String virksomhedsnavn) {
-        this.clearVirksomhedsnavn();
-        this.addVirksomhedsnavn(virksomhedsnavn);
-    }
-
-    public void setVirksomhedsnavn(Collection<String> virksomhedsnavne) {
-        this.clearVirksomhedsnavn();
-        if (virksomhedsnavne != null) {
-            for (String virksomhedsnavn : virksomhedsnavne) {
-                this.addVirksomhedsnavn(virksomhedsnavn);
-            }
-        }
-    }
-
-    public void clearVirksomhedsnavn() {
-        this.virksomhedsnavn.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = TELEFONNUMMER)
-    private List<String> telefonnummer = new ArrayList<>();
-
-    public List<String> getTelefonnummer() {
-        return this.telefonnummer;
-    }
-
-    public void addTelefonnummer(String telefonnummer) {
-        if (telefonnummer != null) {
-            this.telefonnummer.add(telefonnummer);
-            this.updatedParameters();
-        }
-    }
-
-    public void setTelefonnummer(String telefonnummer) {
-        this.clearTelefonnummer();
-        this.addTelefonnummer(telefonnummer);
-    }
-
-    public void setTelefonnummer(Collection<String> telefonnumre) {
-        this.clearTelefonnummer();
-        if (telefonnumre != null) {
-            for (String telefonnummer : telefonnumre) {
-                this.addTelefonnummer(telefonnummer);
-            }
-        }
-    }
-
-    public void clearTelefonnummer() {
-        this.telefonnummer.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = TELEFAXNUMMER)
-    private List<String> telefaxnummer = new ArrayList<>();
-
-    public List<String> getTelefaxnummer() {
-        return this.telefaxnummer;
-    }
-
-    public void addTelefaxnummer(String telefaxnummer) {
-        if (telefaxnummer != null) {
-            this.telefaxnummer.add(telefaxnummer);
-            this.updatedParameters();
-        }
-    }
-
-    public void setTelefaxnummer(String telefaxnummer) {
-        this.clearTelefaxnummer();
-        this.addTelefaxnummer(telefaxnummer);
-    }
-
-    public void setTelefaxnummer(Collection<String> telefaxnumre) {
-        this.clearTelefaxnummer();
-        if (telefaxnumre != null) {
-            for (String telefaxnummer : telefaxnumre) {
-                this.addTelefaxnummer(telefaxnummer);
-            }
-        }
-    }
-
-    public void clearTelefaxnummer() {
-        this.telefaxnummer.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = EMAILADRESSE)
-    private List<String> emailadresse = new ArrayList<>();
-
-    public List<String> getEmailadresse() {
-        return this.emailadresse;
-    }
-
-    public void addEmailadresse(String emailadresse) {
-        if (emailadresse != null) {
-            this.emailadresse.add(emailadresse);
-            this.updatedParameters();
-        }
-    }
-
-    public void setEmailadresse(String emailadresse) {
-        this.clearEmailadresse();
-        this.addEmailadresse(emailadresse);
-    }
-
-    public void setEmailadresse(Collection<String> emailadresser) {
-        this.emailadresse.clear();
-        if (emailadresser != null) {
-            for (String emailadresse : emailadresser) {
-                this.addEmailadresse(emailadresse);
-            }
-        }
-    }
-
-    public void clearEmailadresse() {
-        this.emailadresse.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = VIRKSOMHEDSFORM)
-    private List<String> virksomhedsform = new ArrayList<>();
-
-    public List<String> getVirksomhedsform() {
-        return this.virksomhedsform;
-    }
-
-    public void addVirksomhedsform(String virksomhedsform) {
-        if (virksomhedsform != null) {
-            this.virksomhedsform.add(virksomhedsform);
-            this.updatedParameters();
-        }
-    }
-
-    public void addVirksomhedsform(int virksomhedsform) {
-        this.addVirksomhedsform(Integer.toString(virksomhedsform));
-    }
-
-    public void setVirksomhedsform(String virksomhedsform) {
-        this.clearVirksomhedsform();
-        this.addVirksomhedsform(virksomhedsform);
-    }
-
-    public void setVirksomhedsform(int virksomhedsform) {
-        this.setVirksomhedsform(Integer.toString(virksomhedsform));
-    }
-
-    public void setVirksomhedsform(Collection<String> virksomhedsformer) {
-        this.clearVirksomhedsform();
-        if (virksomhedsformer != null) {
-            for (String virksomhedsform : virksomhedsformer) {
-                this.addVirksomhedsform(virksomhedsform);
-            }
-        }
-    }
-
-    public void clearVirksomhedsform() {
-        this.virksomhedsform.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = KOMMUNEKODE)
-    private List<String> kommunekode = new ArrayList<>();
-
-    public Collection<String> getKommuneKode() {
-        return this.kommunekode;
-    }
-
-    public void addKommuneKode(String kommunekode) {
-        if (kommunekode != null) {
-            this.kommunekode.add(kommunekode);
-            this.updatedParameters();
-        }
-    }
-
-    public void addKommuneKode(int kommunekode) {
-        this.addKommuneKode(String.format("%03d", kommunekode));
-    }
-
-    public void setKommuneKode(String kommunekode) {
-        this.kommunekode.clear();
-        this.addKommuneKode(kommunekode);
-    }
-
-    public void setKommuneKode(Collection<String> kommunekoder) {
-        this.clearKommuneKoder();
-        if (kommunekoder != null) {
-            for (String kommunekode : kommunekoder) {
-                this.addKommuneKode(kommunekode);
-            }
-        }
-    }
-
-    public void setKommuneKode(int kommunekode) {
-        this.setKommuneKode(String.format("%03d", kommunekode));
-    }
-
-    public void clearKommuneKoder() {
-        this.kommunekode.clear();
-        this.updatedParameters();
-    }
-
-
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
-    private List<String> vejkode = new ArrayList<>();
-
-    public Collection<String> getVejKode() {
-        return this.vejkode;
-    }
-
-    public void addVejKode(String vejkode) {
-        if (vejkode != null) {
-            this.vejkode.add(vejkode);
-            this.updatedParameters();
-        }
-    }
-
-    public void addVejKode(int vejkode) {
-        this.addVejKode(String.format("%03d", vejkode));
-    }
-
-    public void setVejkode(String vejkode) {
-        this.vejkode.clear();
-        this.addVejKode(vejkode);
-    }
-
-    public void setVejkode(Collection<String> vejkoder) {
-        this.clearVejKoder();
-        if (vejkoder != null) {
-            for (String vejkode : vejkoder) {
-                this.addVejKode(vejkode);
-            }
-        }
-    }
-
-    public void setVejKode(int vejkode) {
-        this.setVejkode(String.format("%03d", vejkode));
-    }
-
-    public void clearVejKoder() {
-        this.vejkode.clear();
-        this.updatedParameters();
-    }
-
-
-
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = HUSNUMMER)
-    private List<String> husnummer = new ArrayList<>();
-
-    public Collection<String> getHusnummer() {
-        return this.husnummer;
-    }
-
-    public void addHusnummer(String husnummer) {
-        if (husnummer != null) {
-            this.husnummer.add(husnummer);
-            this.updatedParameters();
-        }
-    }
-
-    public void setHusnummer(String husnummer) {
-        this.husnummer.clear();
-        this.addHusnummer(husnummer);
-    }
-
-    public void setHusnummer(Collection<String> husnumre) {
-        this.clearHusnummer();
-        if (husnumre != null) {
-            for (String husnummer : husnumre) {
-                this.addHusnummer(husnummer);
-            }
-        }
-    }
-
-    public void clearHusnummer() {
-        this.husnummer.clear();
-        this.updatedParameters();
-    }
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = ETAGE)
-    private List<String> etage = new ArrayList<>();
-
-    public Collection<String> getEtage() {
-        return this.etage;
-    }
-
-    public void addEtage(String etage) {
-        if (etage != null) {
-            this.etage.add(etage);
-            this.updatedParameters();
-        }
-    }
-
-    public void setEtage(String etage) {
-        this.etage.clear();
-        this.addEtage(etage);
-    }
-
-    public void setEtage(Collection<String> etager) {
-        this.clearEtager();
-        if (etager != null) {
-            for (String etage : etager) {
-                this.addEtage(etage);
-            }
-        }
-    }
-
-    public void clearEtager() {
-        this.etage.clear();
-        this.updatedParameters();
-    }
-
-
-
-
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = DOOR)
-    private List<String> door = new ArrayList<>();
-
-    public Collection<String> getDoor() {
-        return this.door;
-    }
-
-    public void addDoor(String door) {
-        if (door != null) {
-            this.door.add(door);
-            this.updatedParameters();
-        }
-    }
-
-    public void setDoor(String door) {
-        this.door.clear();
-        this.addDoor(door);
-    }
-
-    public void setDoor(Collection<String> doors) {
-        this.clearDoor();
-        if (doors != null) {
-            for (String door : doors) {
-                this.addDoor(door);
-            }
-        }
-    }
-
-    public void clearDoor() {
-        this.door.clear();
-        this.updatedParameters();
-    }
-
-    
-
-    private List<String> organizationType = new ArrayList<>();
-
-    public Collection<String> getOrganizationType() {
-        return this.organizationType;
-    }
-
-    public void addOrganizationType(String organizationType) {
-        if (organizationType != null) {
-            this.organizationType.add(organizationType);
-            this.updatedParameters();
-        }
-    }
-
-    public void setOrganizationType(int organizationType) {
-        this.organizationType.clear();
-        this.addOrganizationType(Integer.toString(organizationType));
-    }
-    public void setOrganizationType(String organizationType) {
-        this.organizationType.clear();
-        this.addOrganizationType(organizationType);
-    }
-
-    public void setOrganizationType(Collection<String> organizationTypes) {
-        this.clearOrganizationType();
-        if (organizationType != null) {
-            for (String organizationType : organizationTypes) {
-                this.addOrganizationType(organizationType);
-            }
-        }
-    }
-
-    public void clearOrganizationType() {
-        this.organizationType.clear();
-        this.updatedParameters();
-    }
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = LASTUPDATED)
-    private String lastUpdated;
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-
-
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = COMPANYDATAEVENT)
@@ -571,44 +88,36 @@ public class CompanyRecordQuery extends BaseQuery {
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put(CVRNUMMER, this.cvrNumre);
-        map.put(REKLAMEBESKYTTELSE, this.reklamebeskyttelse);
-        map.put(NAVN, this.virksomhedsnavn);
-        map.put(TELEFONNUMMER, this.telefonnummer);
-        map.put(TELEFAXNUMMER, this.telefaxnummer);
-        map.put(EMAILADRESSE, this.emailadresse);
-        map.put(VIRKSOMHEDSFORM, this.virksomhedsform);
-        map.put(KOMMUNEKODE, this.kommunekode);
-        map.put(VEJKODE, this.vejkode);
-        map.put(HUSNUMMER, this.husnummer);
-        map.put(ETAGE, this.etage);
-        map.put(DOOR, this.door);
-        map.put(LASTUPDATED, this.lastUpdated);
+        for (String key : new String[]{
+                CVRNUMMER, REKLAMEBESKYTTELSE, NAVN, TELEFONNUMMER, TELEFAXNUMMER,
+                EMAILADRESSE, VIRKSOMHEDSFORM, KOMMUNEKODE, VEJKODE, HUSNUMMER,
+                ETAGE, DOOR, ORGANIZATIONTYPE, LASTUPDATED
+        }) {
+            map.put(key, this.getParameters(key));
+        }
         return map;
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) {
-        this.setCvrNumre(parameters.getI(CVRNUMMER));
-        this.setReklamebeskyttelse(parameters.getFirst(REKLAMEBESKYTTELSE));
-        this.setVirksomhedsnavn(parameters.getI(NAVN));
-        this.setTelefonnummer(parameters.getI(TELEFONNUMMER));
-        this.setTelefaxnummer(parameters.getI(TELEFAXNUMMER));
-        this.setEmailadresse(parameters.getI(EMAILADRESSE));
-        this.setVirksomhedsform(parameters.getI(VIRKSOMHEDSFORM));
-        this.setKommuneKode(parameters.getI(KOMMUNEKODE));
-        this.setVejkode(parameters.getI(VEJKODE));
-        this.setHusnummer(parameters.getI(HUSNUMMER));
-        this.setEtage(parameters.getI(ETAGE));
-        this.setDoor(parameters.getI(DOOR));
-        this.setLastUpdated(parameters.getFirst(LASTUPDATED));
+        for (String key : new String[]{
+                CVRNUMMER, NAVN, TELEFONNUMMER, TELEFAXNUMMER,
+                EMAILADRESSE, VIRKSOMHEDSFORM, KOMMUNEKODE, VEJKODE, HUSNUMMER,
+                ETAGE, DOOR, ORGANIZATIONTYPE
+        }) {
+            this.setParameter(key, parameters.getI(key));
+        }
+
+        for (String key : new String[]{
+                REKLAMEBESKYTTELSE, LASTUPDATED
+        }) {
+            this.setParameter(key, parameters.getFirst(key));
+        }
     }
 
     @Override
     protected boolean isEmpty() {
-        return this.cvrNumre.isEmpty() && this.virksomhedsform.isEmpty() && this.reklamebeskyttelse == null && this.virksomhedsnavn.isEmpty() &&
-                this.telefonnummer.isEmpty() && this.telefaxnummer.isEmpty() && this.emailadresse.isEmpty() && this.kommunekode.isEmpty() &&
-                this.vejkode.isEmpty() && this.husnummer.isEmpty() && this.etage.isEmpty() && this.door.isEmpty();
+        return this.parametersEmpty();
     }
 
     @Override
@@ -655,35 +164,38 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws QueryBuildException {
-        this.addCondition("cvr", this.cvrNumre, Integer.class);
-        this.addCondition("formcode", this.virksomhedsform);
-        this.addCondition("advertprotection", this.reklamebeskyttelse != null ? Collections.singletonList(this.reklamebeskyttelse) : Collections.emptyList(), Boolean.class);
-        this.addCondition("name", this.virksomhedsnavn);
-        this.addCondition("phone", this.telefonnummer);
-        this.addCondition("fax", this.telefaxnummer);
-        this.addCondition("email", this.emailadresse);
-        this.addCondition("municipalitycode", this.kommunekode, Integer.class);
-        this.addCondition("roadcode", this.vejkode, Integer.class);
-        this.addCondition("floor", this.etage);
-        this.addCondition("door", this.door);
+        this.addCondition("cvr", CVRNUMMER, Integer.class);
+        this.addCondition("formcode", VIRKSOMHEDSFORM, String.class);
+        this.addCondition("advertprotection", REKLAMEBESKYTTELSE, Boolean.class);
+        this.addCondition("name", NAVN, String.class);
+        this.addCondition("phone", TELEFONNUMMER, String.class);
+        this.addCondition("fax", TELEFAXNUMMER, String.class);
+        this.addCondition("email", EMAILADRESSE, String.class);
+        this.addCondition("municipalitycode", KOMMUNEKODE, Integer.class);
+        this.addCondition("roadcode", VEJKODE, Integer.class);
+        this.addCondition("floor", ETAGE, String.class);
+        this.addCondition("door", DOOR, String.class);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
 
-        if (!this.husnummer.isEmpty()) {
+        List<String> husnummer = this.getParameters(HUSNUMMER);
+        if (husnummer != null && !husnummer.isEmpty()) {
             // Match hvis housenumberfrom == value   eller   housenumberfrom <= value og housenumberto >= value
             MultiCondition multiCondition = new MultiCondition(this.getCondition(), "OR");
             this.addCondition(multiCondition);
-            this.makeCondition(multiCondition, "housenumberfrom", Condition.Operator.EQ, this.husnummer, Integer.class, false);
+            this.makeCondition(multiCondition, "housenumberfrom", Condition.Operator.EQ, husnummer, Integer.class, false);
             MultiCondition rangeCondition = new MultiCondition(multiCondition);
             multiCondition.add(rangeCondition);
-            this.makeCondition(rangeCondition, "housenumberfrom", Condition.Operator.LTE, this.husnummer, Integer.class, false);
-            this.makeCondition(rangeCondition, "housenumberto", Condition.Operator.GTE, this.husnummer, Integer.class, false);
+            this.makeCondition(rangeCondition, "housenumberfrom", Condition.Operator.LTE, husnummer, Integer.class, false);
+            this.makeCondition(rangeCondition, "housenumberto", Condition.Operator.GTE, husnummer, Integer.class, false);
         }
 
-        if (this.organizationType != null) {
-            this.addCondition("participantOrganizationType", this.organizationType);
+        List<String> organizationType = this.getParameters(ORGANIZATIONTYPE);
+        if (organizationType != null) {
+            this.addCondition("participantOrganizationType", organizationType);
         }
-        if (this.lastUpdated != null) {
-            this.addCondition("lastUpdated", Condition.Operator.GT, Collections.singletonList(this.lastUpdated), OffsetDateTime.class, false);
+        QueryParameter lastUpdated = this.getParameters(LASTUPDATED);
+        if (lastUpdated != null) {
+            this.addCondition("lastUpdated", Condition.Operator.GT, lastUpdated, OffsetDateTime.class, false);
         }
         if (this.companyrecordeventTimeAfter != null) {
             this.addCondition("companyrecordeventTime.GTE", Condition.Operator.GTE, this.companyrecordeventTimeAfter, OffsetDateTime.class, false);
@@ -701,11 +213,12 @@ public class CompanyRecordQuery extends BaseQuery {
         ObjectNode bool = DirectLookup.addObject(objectMapper, query, "bool");
         ArrayNode must = DirectLookup.addList(objectMapper, bool, "must");
 
-        if (this.getCvrNumre() != null && !this.getCvrNumre().isEmpty()) {
+        List<String> cvrNumre = this.getParameters(CVRNUMMER);
+        if (cvrNumre != null && !cvrNumre.isEmpty()) {
             ObjectNode wrap = DirectLookup.addObject(objectMapper, must);
             ObjectNode terms = DirectLookup.addObject(objectMapper, wrap, "terms");
             ArrayNode cvrNumber = DirectLookup.addList(objectMapper, terms, "Vrvirksomhed.cvrNummer");
-            for (String cvr : this.getCvrNumre()) {
+            for (String cvr : cvrNumre) {
                 cvrNumber.add(cvr);
             }
             anySet = true;
