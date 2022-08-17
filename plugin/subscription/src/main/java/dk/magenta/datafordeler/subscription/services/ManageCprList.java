@@ -162,9 +162,13 @@ public class ManageCprList {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
+            Query<CprList> query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId ", CprList.class);
             query.setParameter("listId", listId);
-            CprList foundList = (CprList)query.getResultList().get(0);
+            List<CprList> lists = query.getResultList();
+            if (lists.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            CprList foundList = lists.get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
@@ -211,22 +215,30 @@ public class ManageCprList {
         String listId = requestParams.getFirst("listId");
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where  listId = :listId", CprList.class);
-            if(pageSize != null) {
-                query.setMaxResults(Integer.valueOf(pageSize));
-            } else {
-                query.setMaxResults(10);
-            }
-            if(page != null) {
-                int pageIndex = (Integer.valueOf(page)-1)*query.getMaxResults();
-                query.setFirstResult(pageIndex);
-            } else {
-                query.setFirstResult(0);
+            Query<CprList> query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            try {
+                if (pageSize != null) {
+                    query.setMaxResults(Integer.parseInt(pageSize));
+                } else {
+                    query.setMaxResults(10);
+                }
+                if (page != null) {
+                    int pageIndex = (Integer.parseInt(page) - 1) * query.getMaxResults();
+                    query.setFirstResult(pageIndex);
+                } else {
+                    query.setFirstResult(0);
+                }
+            } catch (NumberFormatException e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("listId", listId);
-            CprList foundList = (CprList)query.getResultList().get(0);
+            List<CprList> lists = query.getResultList();
+            if (lists.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            CprList foundList = lists.get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();

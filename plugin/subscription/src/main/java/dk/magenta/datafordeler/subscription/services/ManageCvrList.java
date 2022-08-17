@@ -73,16 +73,17 @@ public class ManageCvrList {
      * @throws InvalidCertificateException
      */
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList", required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query<Subscriber> query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-            if(query.getResultList().size()==0) {
+            List<Subscriber> subscribers = query.getResultList();
+            if (subscribers.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                Subscriber subscriber = subscribers.get(0);
                 CvrList cvrCreateList = new CvrList(cvrList, subscriber);
                 session.save(cvrCreateList);
                 subscriber.addCvrList(cvrCreateList);
@@ -114,12 +115,13 @@ public class ManageCvrList {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
 
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query<Subscriber> query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-            if(query.getResultList().size()==0) {
+            List<Subscriber> subscribers = query.getResultList();
+            if (subscribers.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+                Subscriber subscriber = subscribers.get(0);
                 return ResponseEntity.ok(subscriber.getCvrLists().stream().collect(Collectors.toList()));
             }
         }
@@ -131,9 +133,13 @@ public class ManageCvrList {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
+            Query<CvrList> query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
             query.setParameter("listId", listId);
-            CvrList foundList = (CvrList)query.getResultList().get(0);
+            List<CvrList> lists = query.getResultList();
+            if (lists.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            CvrList foundList = lists.get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
@@ -163,9 +169,13 @@ public class ManageCvrList {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
+            Query<CvrList> query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
             query.setParameter("listId", listId);
-            CvrList foundList = (CvrList)query.getResultList().get(0);
+            List<CvrList> lists = query.getResultList();
+            if (lists.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            CvrList foundList = lists.get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
@@ -208,22 +218,30 @@ public class ManageCvrList {
         String listId = requestParams.getFirst("listId");
 
         try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
-            if(pageSize != null) {
-                query.setMaxResults(Integer.valueOf(pageSize));
-            } else {
-                query.setMaxResults(10);
-            }
-            if(page != null) {
-                int pageIndex = (Integer.valueOf(page)-1)*query.getMaxResults();
-                query.setFirstResult(pageIndex);
-            } else {
-                query.setFirstResult(0);
+            Query<CvrList> query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+            try {
+                if (pageSize != null) {
+                    query.setMaxResults(Integer.parseInt(pageSize));
+                } else {
+                    query.setMaxResults(10);
+                }
+                if (page != null) {
+                    int pageIndex = (Integer.parseInt(page) - 1) * query.getMaxResults();
+                    query.setFirstResult(pageIndex);
+                } else {
+                    query.setFirstResult(0);
+                }
+            } catch (NumberFormatException e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             query.setParameter("listId", listId);
-            CvrList foundList = (CvrList)query.getResultList().get(0);
+            List<CvrList> lists = query.getResultList();
+            if (lists.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            CvrList foundList = lists.get(0);
             if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();

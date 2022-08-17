@@ -212,7 +212,7 @@ public class CvrListTest {
                 "{\"listId\":\"myList2\"}," +
                 "{\"listId\":\"cvrTestList1\"}]", response.getBody(), false);
 
-        //ADD an element to the CPR-list
+        //ADD an element to the CVR list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/?cvrList=cvrTestList2",
@@ -275,6 +275,14 @@ public class CvrListTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
+        response = restTemplate.exchange(
+                "/subscription/1/manager/subscriber/cvrList/cvr/nonexistent",
+                HttpMethod.POST,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/?listId=cvrTestList1",
@@ -296,6 +304,15 @@ public class CvrListTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
+
+        response = restTemplate.exchange(
+                "/subscription/1/manager/subscriber/cvrList/cvr/nonexistent?cvr=11111115,11111117",
+                HttpMethod.DELETE,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/?listId=cvrTestList1",
                 HttpMethod.GET,
@@ -306,6 +323,14 @@ public class CvrListTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(7, results.size());
+
+        response = restTemplate.exchange(
+                "/subscription/1/manager/subscriber/cvrList/cvr/?listId=nonexistent",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
 }
