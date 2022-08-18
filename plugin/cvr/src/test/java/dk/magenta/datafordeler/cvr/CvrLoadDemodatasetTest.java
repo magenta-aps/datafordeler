@@ -75,7 +75,7 @@ public class CvrLoadDemodatasetTest {
 
         URL testData = ParseTest.class.getResource("/GLBASETEST.json");
         String testDataPath = testData.toURI().toString();
-        registerManager.setCvrDemoFile(testDataPath);
+        registerManager.setCvrDemoCompanyFile(testDataPath);
 
         entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
@@ -136,7 +136,7 @@ public class CvrLoadDemodatasetTest {
             entityManager.setCvrDemoList("88888881,88888882,88888883,88888884");
             URL testData = ParseTest.class.getResource("/GLBASETEST.json");
             String testDataPath = testData.toURI().toString();
-            registerManager.setCvrDemoFile(testDataPath);
+            registerManager.setCvrDemoCompanyFile(testDataPath);
             entityManager.cleanDemoData(session);
         }
     }
@@ -214,10 +214,10 @@ public class CvrLoadDemodatasetTest {
     }
 
     private void when(RegisterManager registerManager, CvrRegisterManager registerManager1, String testSet) throws URISyntaxException {
-        registerManager1.setCvrDemoFile("88888881,88888882,88888883,88888884");
+        registerManager1.setCvrDemoCompanyFile("88888881,88888882,88888883,88888884");
         URL testData = ParseTest.class.getResource(testSet);
         String testDataPath = testData.toURI().toString();
-        registerManager1.setCvrDemoFile(testDataPath);
+        registerManager1.setCvrDemoCompanyFile(testDataPath);
     }
 
 }
