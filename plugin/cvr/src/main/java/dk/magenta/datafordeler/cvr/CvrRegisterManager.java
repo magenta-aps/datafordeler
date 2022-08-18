@@ -56,8 +56,14 @@ public class CvrRegisterManager extends RegisterManager {
     @Autowired
     private SessionManager sessionManager;
 
-    @Value("${dafo.cpr.demoCompanyFile}")
-    private String cvrDemoFile;
+    @Value("${dafo.cvr.demoCompanyFile}")
+    private String cvrDemoCompanyFile;
+
+    @Value("${dafo.cvr.demoUnitFile}")
+    private String cvrDemoUnitFile;
+
+    @Value("${dafo.cvr.demoParticipantFile}")
+    private String cvrDemoParticipantFile;
 
 
     private Logger log = LogManager.getLogger("CvrRegisterManager");
@@ -66,8 +72,16 @@ public class CvrRegisterManager extends RegisterManager {
 
     }
 
-    public void setCvrDemoFile(String cvrDemoFile) {
-        this.cvrDemoFile = cvrDemoFile;
+    public void setCvrDemoCompanyFile(String cvrDemoCompanyFile) {
+        this.cvrDemoCompanyFile = cvrDemoCompanyFile;
+    }
+
+    public void setCvrDemoUnitFile(String cvrDemoUnitFile) {
+        this.cvrDemoUnitFile = cvrDemoUnitFile;
+    }
+
+    public void setCvrDemoParticipantFile(String cvrDemoParticipantFile) {
+        this.cvrDemoParticipantFile = cvrDemoParticipantFile;
     }
 
     /**
@@ -163,13 +177,26 @@ public class CvrRegisterManager extends RegisterManager {
                 break;
             case LOCAL_FILE:
                 try {
-                    URI uri = new URI(cvrDemoFile);
-                    File demoCompanyFile = new File(uri);
-                    FileInputStream demoCompanyFileInputStream = new FileInputStream(demoCompanyFile);
-                    String content = new String(demoCompanyFileInputStream.readAllBytes());
-                    String noLineContent =content.replace("\n", "").replace("\r", "");
-                    InputStream stream = new ByteArrayInputStream(noLineContent.getBytes(StandardCharsets.UTF_8));
-                    return new ImportInputStream(stream, demoCompanyFile);
+                    URI uri = null;
+                    switch (schema) {
+                        case "virksomhed":
+                            uri = new URI(cvrDemoCompanyFile);
+                            break;
+                        case "produktionsenhed":
+                            uri = new URI(cvrDemoUnitFile);
+                            break;
+                        case "deltager":
+                            uri = new URI(cvrDemoParticipantFile);
+                            break;
+                    }
+                    if (uri != null) {
+                        File demoCompanyFile = new File(uri);
+                        FileInputStream demoCompanyFileInputStream = new FileInputStream(demoCompanyFile);
+                        String content = new String(demoCompanyFileInputStream.readAllBytes());
+                        String noLineContent = content.replace("\n", "").replace("\r", "");
+                        InputStream stream = new ByteArrayInputStream(noLineContent.getBytes(StandardCharsets.UTF_8));
+                        return new ImportInputStream(stream, demoCompanyFile);
+                    }
                 } catch (Exception e) {
                     log.error("Failed loading demodata", e);
                 }

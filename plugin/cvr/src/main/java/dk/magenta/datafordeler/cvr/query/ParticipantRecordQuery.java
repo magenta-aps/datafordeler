@@ -3,12 +3,7 @@ package dk.magenta.datafordeler.cvr.query;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
-import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
-import dk.magenta.datafordeler.cvr.records.AddressRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
-import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import dk.magenta.datafordeler.cvr.records.RelationParticipantRecord;
-import dk.magenta.datafordeler.cvr.records.SecNameRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
 import java.util.*;
@@ -19,6 +14,7 @@ import java.util.*;
 public class ParticipantRecordQuery extends BaseQuery {
 
     public static final String UNITNUMBER = ParticipantRecord.IO_FIELD_UNIT_NUMBER;
+    public static final String ASSOCIATED_COMPANY_CVR = CompanyRecord.IO_FIELD_CVR_NUMBER;
     public static final String NAVN = ParticipantRecord.IO_FIELD_NAMES;
     public static final String KOMMUNEKODE = Municipality.IO_FIELD_CODE;
     public static final String VEJKODE = AddressRecord.IO_FIELD_ROADCODE;
@@ -28,7 +24,7 @@ public class ParticipantRecordQuery extends BaseQuery {
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
         for (String key : new String[]{
-                UNITNUMBER, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
+                UNITNUMBER, ASSOCIATED_COMPANY_CVR, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
         }) {
             map.put(key, this.getParameters(key));
         }
@@ -38,7 +34,7 @@ public class ParticipantRecordQuery extends BaseQuery {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         for (String key : new String[]{
-                UNITNUMBER, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
+                UNITNUMBER, ASSOCIATED_COMPANY_CVR, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
         }) {
             this.setParameter(key, parameters.getI(key));
         }
@@ -69,6 +65,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     static {
         joinHandles.put("unit", ParticipantRecord.DB_FIELD_UNIT_NUMBER);
+        joinHandles.put("cvr", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + RelationCompanyRecord.DB_FIELD_CVRNUMBER);
         joinHandles.put("name", ParticipantRecord.DB_FIELD_NAMES + BaseQuery.separator + SecNameRecord.DB_FIELD_NAME);
         joinHandles.put("municipalitycode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + BaseQuery.separator + Municipality.DB_FIELD_CODE);
         joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
@@ -83,6 +80,7 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     protected void setupConditions() throws QueryBuildException {
         this.addCondition("unit", UNITNUMBER, Long.class);
+        this.addCondition("cvr", ASSOCIATED_COMPANY_CVR, Long.class);
         this.addCondition("name", NAVN, String.class);
         this.addCondition("municipalitycode", KOMMUNEKODE, Integer.class);
         this.addCondition("roadcode", VEJKODE, Integer.class);

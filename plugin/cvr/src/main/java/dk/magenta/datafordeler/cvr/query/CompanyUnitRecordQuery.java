@@ -1,12 +1,22 @@
 package dk.magenta.datafordeler.cvr.query;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
-import dk.magenta.datafordeler.core.fapi.*;
-import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.Condition;
+import dk.magenta.datafordeler.core.fapi.ParameterMap;
+import dk.magenta.datafordeler.core.fapi.QueryParameter;
+import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyIndustryRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyLinkRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Container for a query for Company units, defining fields and database lookup

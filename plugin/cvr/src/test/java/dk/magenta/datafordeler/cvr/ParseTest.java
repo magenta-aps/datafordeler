@@ -100,7 +100,7 @@ public class ParseTest {
 
         URL testData = ParseTest.class.getResource("/GLBASETEST.json");
         String testDataPath = testData.toURI().toString();
-        registerManager.setCvrDemoFile(testDataPath);
+        registerManager.setCvrDemoCompanyFile(testDataPath);
 
         entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
@@ -176,7 +176,7 @@ public class ParseTest {
         ImportMetadata importMetadataCompany = new ImportMetadata();
         URL testData = ParseTest.class.getResource("/GLBASETEST.json");
         String testDataPath = testData.toURI().toString();
-        registerManager.setCvrDemoFile(testDataPath);
+        registerManager.setCvrDemoCompanyFile(testDataPath);
 
         entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);

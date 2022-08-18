@@ -11,6 +11,8 @@ services:
       - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
       - ./plugin/cpr/src/test/resources/GLBASETEST2:/app/dev-env/local/cpr/download/d170610.l534901
       - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
+      - ./plugin/cvr/src/test/resources/unit.json:/app/dev-env/local/cvr/unit.json
+      - ./plugin/cvr/src/test/resources/person.json:/app/dev-env/local/cvr/person.json
       - ./plugin/geo/src/test/resources/municipality.json:/app/dev-env/local/geo/municipality.json
       - ./plugin/geo/src/test/resources/locality.json:/app/dev-env/local/geo/locality.json
       - ./plugin/geo/src/test/resources/post.json:/app/dev-env/local/geo/post.json

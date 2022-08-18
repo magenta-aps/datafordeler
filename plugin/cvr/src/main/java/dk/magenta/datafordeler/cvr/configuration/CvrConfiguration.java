@@ -166,7 +166,7 @@ public class CvrConfiguration implements Configuration {
 
     @Column
     @Enumerated(EnumType.ORDINAL)
-    private RegisterType companyUnitRegisterType = RegisterType.DISABLED;
+    private RegisterType companyUnitRegisterType = RegisterType.LOCAL_FILE;
 
     @Column
     private String companyUnitRegisterStartAddress = "http://distribution.virk.dk/cvr-permanent/produktionsenhed/_search";
@@ -241,7 +241,7 @@ public class CvrConfiguration implements Configuration {
 
     @Column
     @Enumerated(EnumType.ORDINAL)
-    private RegisterType participantRegisterType = RegisterType.DISABLED;
+    private RegisterType participantRegisterType = RegisterType.LOCAL_FILE;
 
     @Column
     private String participantRegisterStartAddress = "http://distribution.virk.dk/cvr-permanent/deltager/_search";
