@@ -117,20 +117,17 @@ public class ParticipantRecord extends CvrEntityRecord {
         this.confidentialEnriched = confidentialEnriched;
     }
 
-
-
     public static final String DB_FIELD_BUSINESS_KEY = "businessKey";
     public static final String IO_FIELD_BUSINESS_KEY = "forretningsnoegle";
 
     @Column(name = DB_FIELD_BUSINESS_KEY)
+    @JsonProperty(value = IO_FIELD_BUSINESS_KEY)
     private Long businessKey;
 
-    @JsonProperty(value = IO_FIELD_BUSINESS_KEY)
     public void setBusinessKey(Long businessKey) {
         this.businessKey = businessKey;
     }
 
-    @JsonIgnore
     public Long getBusinessKey() {
         return this.businessKey;
     }
