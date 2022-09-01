@@ -111,51 +111,66 @@ public class CprVoterService {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             String hql = "SELECT DISTINCT personEntity.personnummer, accessAddressLocalityRecord.code, birthDataRecord.birthDatetime , nameDataRecord.lastName " +
-                    " FROM "+ PersonEntity.class.getCanonicalName() + " personEntity "+
-                    " JOIN "+ BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord ON birthDataRecord."+BirthTimeDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
-                    " JOIN "+ AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord."+AddressDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
-                    " JOIN "+ NameDataRecord.class.getCanonicalName() + " nameDataRecord ON nameDataRecord."+ NameDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
-                    " JOIN "+ CitizenshipDataRecord.class.getCanonicalName() + " citizenDataRecord ON citizenDataRecord."+ CitizenshipDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
-                    " LEFT OUTER JOIN "+ GuardianDataRecord.class.getCanonicalName() + " guardianDataRecord ON guardianDataRecord."+ GuardianDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+
+                    " FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
+                    " JOIN " + BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord ON birthDataRecord." + BirthTimeDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
+                    " JOIN " + AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord." + AddressDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
+                    " JOIN " + NameDataRecord.class.getCanonicalName() + " nameDataRecord ON nameDataRecord." + NameDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
+                    " JOIN " + CitizenshipDataRecord.class.getCanonicalName() + " citizenDataRecord ON citizenDataRecord." + CitizenshipDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
+                    " LEFT OUTER JOIN " + GuardianDataRecord.class.getCanonicalName() + " guardianDataRecord ON guardianDataRecord." + GuardianDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
 
                     //TODO: The personal adresses is joined with adresses in GAR. It is important to inform customers about quality-issues if GAR is the only adress-date used
-                    " JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+"=addressDataRecord."+AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE+
-                    " AND accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE+"=addressDataRecord."+AddressDataRecord.DB_FIELD_ROAD_CODE+
-                    " JOIN "+ AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+
-                    " JOIN "+ AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id";
+                    " JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE + "=addressDataRecord." + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE +
+                    " AND accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE + "=addressDataRecord." + AddressDataRecord.DB_FIELD_ROAD_CODE +
+                    " JOIN " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" +
+                    " JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id";
 
-            String condition = " WHERE addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO +" IS null " +
-                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_FROM +"  <= :halfyear "+ //TODO: There is no need to optimize this now, we still do not know if the output is a json-based webservice og *.csv files as VoteListDataService, but we know that there can be more then one adress within the interval
+            String condition = " WHERE addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO + " IS null " +
+                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_FROM + "  <= :halfyear " + //TODO: There is no need to optimize this now, we still do not know if the output is a json-based webservice og *.csv files as VoteListDataService, but we know that there can be more then one adress within the interval
                     // If a *.CSV file is needed, I would get all adresses in the interval within hibernate model and find out is any of them is outside the requested municipality-code
-                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO +" IS null "+
-                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE +" = 0 " +
-                    "AND citizenDataRecord.countryCode = 5100 "+
-                    "AND guardianDataRecord."+ GuardianDataRecord.DB_FIELD_ENTITY +" IS null "+
+                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO + " IS null " +
+                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE + " = 0 " +
+                    "AND citizenDataRecord.countryCode = 5100 " +
+                    "AND guardianDataRecord." + GuardianDataRecord.DB_FIELD_ENTITY + " IS null ";
 
-                    "AND (:bta IS NULL OR birthDataRecord.birthDatetime >= :bta) " +
-                    "AND birthDataRecord.birthDatetime <= :btb " +
-                    "AND (:locality IS NULL OR accessAddressLocalityRecord.code = :locality) " +
-                    "AND addressDataRecord.municipalityCode >= 950 " +
-                    "AND (:municipality=0 OR addressDataRecord.municipalityCode = :municipality) ";
+            if (birthAfterTS != null) {
+                condition += "AND (birthDataRecord.birthDatetime >= :bta) ";
+            }
 
-                    if("pnr".equals(order_by)) {
-                        condition += " ORDER BY personEntity.personnummer";
-                    } else if("efternavn".equals(order_by)) {
-                        condition += " ORDER BY nameDataRecord.lastName";
-                    }
+            condition += "AND birthDataRecord.birthDatetime <= :btb ";
+
+            if (localityCode != null) {
+                condition += "AND (accessAddressLocalityRecord.code = :locality) ";
+            }
+
+            condition += "AND addressDataRecord.municipalityCode >= 950 ";
+            if (municipalitycodeInt != 0) {
+                condition += "AND (addressDataRecord.municipalityCode = :municipality) ";
+            }
+
+            if ("pnr".equals(order_by)) {
+                condition += " ORDER BY personEntity.personnummer";
+            } else if ("efternavn".equals(order_by)) {
+                condition += " ORDER BY nameDataRecord.lastName";
+            }
 
             hql += condition;
 
             Query query = session.createQuery(hql);
             query.setParameter("halfyear", voteDateMinus6Month);
             query.setParameter("btb", birthBeforeTS);
-            query.setParameter("bta", birthAfterTS);
-            query.setParameter("locality", localityCode);
-            query.setParameter("municipality", municipalitycodeInt);
+            if (birthAfterTS != null) {
+                query.setParameter("bta", birthAfterTS);
+            }
+            if (localityCode != null) {
+                query.setParameter("locality", localityCode);
+            }
+            if (municipalitycodeInt != 0) {
+                query.setParameter("municipality", municipalitycodeInt);
+            }
 
             query.setMaxResults(pageSizeInt);
             if(page != null) {
-                int pageIndex = (Integer.valueOf(page)-1)*query.getMaxResults();
+                int pageIndex = (Integer.parseInt(page)-1)*query.getMaxResults();
                 query.setFirstResult(pageIndex);
             } else {
                 query.setFirstResult(0);
@@ -163,7 +178,9 @@ public class CprVoterService {
 
             List<Object[]> resultList = query.getResultList();
 
-            List<PersonLocationObject> personLocationObjectList = resultList.stream().map(ob -> new PersonLocationObject(ob[0].toString(), ob[1].toString(), ((LocalDateTime)ob[2]).format(formatter))).collect(Collectors.toList());
+            List<PersonLocationObject> personLocationObjectList = resultList.stream().map(
+                    ob -> new PersonLocationObject(ob[0].toString(), ob[1].toString(), ((LocalDateTime)ob[2]).format(formatter))
+            ).collect(Collectors.toList());
 
             Envelope envelope = new Envelope();
             envelope.setRequestTimestamp(user.getCreationTime());
