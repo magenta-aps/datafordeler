@@ -60,7 +60,7 @@ import java.util.*;
 
 
  Og til kommunalvalget benyttes følgende url i datafordeleren
- statistik/vote_list_data/?effectDate=2021-03-29&registrationAt=2021-03-29&filterTime1=2021-03-29&munipialicityFilter=956
+ statistik/vote_list_data/?effectDate=2021-03-29&registrationAt=2021-03-29&filterTime1=2021-03-29&municipalityFilter=956
 
  Alle personerne i listerne har stemmeret til valget ud fra de kriterier jeg har fået oplyst
 

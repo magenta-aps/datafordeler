@@ -49,7 +49,7 @@ public class GenericUnitAddressService {
         husNummer("accessAddressNumberRecord.number", false),
         etage("unitAddressFloor.floor", false),
         bloknavn("accessAddressBlockNameRecord.name", false),
-        kommune_kode("geoMunipialicityEntity.code", true),
+        kommune_kode("geoMunicipalityEntity.code", true),
         kommune_navn("municipalityName.name", false),
         lokalitet_kode("localityRecord.code", false),
         lokalitet_navn("localityName.name", false),
@@ -124,7 +124,7 @@ public class GenericUnitAddressService {
             envelope.setRequestTimestamp(user.getCreationTime());
             envelope.setUsername(user.toString());
 
-            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity, geoMunipialicityEntity.name AS munipialicityName " +
+            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunicipalityEntity, geoMunicipalityEntity.name AS MunicipalityName " +
                     "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
                     "JOIN "+ UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity."+UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS+"=accessAddressEntity."+AccessAddressEntity.DB_FIELD_IDENTIFICATION+" "+
                     "JOIN "+ UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor."+UnitAddressFloorRecord.DB_FIELD_ENTITY+"=unitAddressEntity."+"id"+" "+
@@ -145,11 +145,11 @@ public class GenericUnitAddressService {
                     "JOIN "+ GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE+"=roadEntity."+ GeoRoadEntity.DB_FIELD_IDENTIFICATION+" "+
                     "JOIN "+ RoadNameRecord.class.getCanonicalName() + " roadName ON roadName."+RoadNameRecord.DB_FIELD_ENTITY+"=roadEntity."+ "id"+" "+
 
-                    "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
-                    "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
-                    "JOIN "+ MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName."+MunicipalityNameRecord.DB_FIELD_ENTITY+"=geoMunipialicityEntity."+ "id"+" "+
+                    "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunicipalityRecord ON roadMunicipalityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
+                    "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunicipalityEntity ON geoMunicipalityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunicipalityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
+                    "JOIN "+ MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName."+MunicipalityNameRecord.DB_FIELD_ENTITY+"=geoMunicipalityEntity."+ "id"+" "+
 
-                    " WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
+                    " WHERE geoMunicipalityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
 
             for(String key : requestParams.keySet()) {
                 String parameterName = key;

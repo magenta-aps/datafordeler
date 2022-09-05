@@ -42,11 +42,11 @@ public class GeoHardcode {
         munipialicities.get(958).put(9901, new HardcodedAdressStructure("Skattesty,Qaasuitsup",3952,"Ilulissat","1200"));
     }
 
-    public static HardcodedAdressStructure getHardcodedRoadname(int munipialicity, int roadcode) {
-        if(munipialicities.get(munipialicity)==null || munipialicities.get(munipialicity).get(roadcode)==null) {
+    public static HardcodedAdressStructure getHardcodedRoadname(int municipality, int roadcode) {
+        if(munipialicities.get(municipality)==null || munipialicities.get(municipality).get(roadcode)==null) {
             return null;
         }
-        return munipialicities.get(munipialicity).get(roadcode);
+        return munipialicities.get(municipality).get(roadcode);
     }
 
 

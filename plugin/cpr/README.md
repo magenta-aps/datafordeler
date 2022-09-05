@@ -14,7 +14,7 @@ This is to make sure that the previous fetched files from CPR is parsed before t
 
 ##Roads
 The Danish roadregiser is imported manually by copying the file from CPR-kontoret, and place it on the server.
-The roadregister contains information about how a roadcode and munipialicitycode can be translated into a readable roadname.
+The roadregister contains information about how a roadcode and municipalitycode can be translated into a readable roadname.
 This register is used for generating readable Danish adresses in datafordeleren.
 
 

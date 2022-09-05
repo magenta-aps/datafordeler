@@ -54,8 +54,8 @@ public class Filter {
         this.originBefore = parseLocaldate(request.getParameter(StatisticsService.ORIGIN_BEFORE));
         this.filterTime1 = Query.parseDateTime(request.getParameter("filterTime1"));
         this.municipalityFilter = null;
-        String munipialicityString = request.getParameter("municipalityFilter");
-        if(munipialicityString != null) {
+        String municipalityString = request.getParameter("municipalityFilter");
+        if(municipalityString != null) {
             municipalityFilter = Integer.parseInt(request.getParameter("municipalityFilter"));
         }
         this.timeintervallimit =timeintervallimit;
