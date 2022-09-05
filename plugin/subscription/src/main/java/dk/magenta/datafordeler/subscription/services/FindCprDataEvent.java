@@ -46,6 +46,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -121,15 +122,22 @@ public class FindCprDataEvent {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
                 OffsetDateTime offsetTimestampGTE;
-                if(timestampGTE==null) {
-                    offsetTimestampGTE = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
+                OffsetDateTime offsetTimestampLTE = null;
+                if (timestampGTE == null) {
+                    offsetTimestampGTE = OffsetDateTime.of(0, 1, 1, 1, 1, 1, 1, ZoneOffset.ofHours(0));
                 } else {
-                    offsetTimestampGTE = BaseQuery.parseDateTime(timestampGTE);
+                    try {
+                        offsetTimestampGTE = BaseQuery.parseDateTime(timestampGTE);
+                    } catch (DateTimeParseException e) {
+                        return this.getErrorMessage("Cannot parse date "+timestampGTE, HttpStatus.BAD_REQUEST);
+                    }
                 }
-
-                OffsetDateTime offsetTimestampLTE=null;
-                if(timestampLTE!=null) {
-                    offsetTimestampLTE = BaseQuery.parseDateTime(timestampLTE);
+                if (timestampLTE != null) {
+                    try {
+                        offsetTimestampLTE = BaseQuery.parseDateTime(timestampLTE);
+                    } catch (DateTimeParseException e) {
+                        return this.getErrorMessage("Cannot parse date "+timestampLTE, HttpStatus.BAD_REQUEST);
+                    }
                 }
 
                 String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
