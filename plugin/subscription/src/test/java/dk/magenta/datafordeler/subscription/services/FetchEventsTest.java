@@ -306,6 +306,35 @@ public class FetchEventsTest {
         results = responseContent.get("results");
         Assert.assertEquals(0, results.size());
 
+        response = restTemplate.exchange(
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2020091&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.LTE=2020091&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.LTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
     }
 
 
@@ -386,6 +415,36 @@ public class FetchEventsTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(0, results.size());
+
+
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=2020102&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.LTE=2020102&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.LTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     /**
@@ -463,6 +522,36 @@ public class FetchEventsTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(4, results.size());
+
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=2020012&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.LTE=2020012&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.LTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
     }
 
 
@@ -545,6 +634,35 @@ public class FetchEventsTest {
         Assert.assertTrue(pnrs.contains(results.get(1).get("pnr").asText()));
         Assert.assertTrue(pnrs.contains(results.get(2).get("pnr").asText()));
 
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.GTE=2010112&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.GTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.LTE=2010112&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.LTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
     }
 
     /**
@@ -621,6 +739,37 @@ public class FetchEventsTest {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
         Assert.assertEquals(1, results.size());
+
+
+        response = restTemplate.exchange(
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=2020102&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.LTE=2020102&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.LTE=FOOBAR&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
 
     }
 
