@@ -75,7 +75,6 @@ public class GeoLocalityListService {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             String pageSize = requestParams.getFirst("pageSize");
-
             String page = requestParams.getFirst("page");
             String municipalitycode = requestParams.getFirst("kommune_kode");
             String localityCode = requestParams.getFirst("lokalitet_kode");

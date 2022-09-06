@@ -1,11 +1,13 @@
 package dk.magenta.datafordeler.core.fapi;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,10 @@ public class ParameterMap extends ListHashMap<String, String> {
         if (decode) {
             this.urldecode();
         }
+    }
+
+    public ParameterMap(MultiValueMap<String, String> initial) {
+        super(initial);
     }
 
     public ParameterMap set(String key, String value) {
@@ -95,6 +101,39 @@ public class ParameterMap extends ListHashMap<String, String> {
             map.put(key, this.get(key));
         }
         return map;
+    }
+
+    public LocalDateTime getLocalDateTime(String parameterName) {
+        String value = this.getFirst(parameterName);
+        if (value != null) {
+            return Query.parseDateTime(value).toLocalDateTime();
+        }
+        return null;
+    }
+
+    public Integer getInt(String parameterName) throws InvalidClientInputException {
+        String value = this.getFirst(parameterName);
+        try {
+            return value != null ? Integer.parseInt(value) : null;
+        } catch (NumberFormatException e) {
+            throw new InvalidClientInputException("Parameter '"+parameterName+"' must be integer", e);
+        }
+    }
+
+    public int getInt(String parameterName, int fallback) throws InvalidClientInputException {
+        Integer value = this.getInt(parameterName);
+        return value != null ? value : fallback;
+    }
+
+    public int getInt(String parameterName, int fallback, int min, int max) throws InvalidClientInputException {
+        int value = this.getInt(parameterName, fallback);
+        if (value < min) {
+            throw new InvalidClientInputException("Parameter '"+parameterName+"' must not be less than "+min);
+        }
+        if (value > max) {
+            throw new InvalidClientInputException("Parameter '"+parameterName+"' must not be greater than "+max);
+        }
+        return value;
     }
 
 }
