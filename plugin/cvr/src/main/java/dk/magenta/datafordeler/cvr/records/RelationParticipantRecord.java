@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.records;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,6 +17,7 @@ import java.util.*;
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + RelationParticipantRecord.TABLE_NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonFilter("ParticipantRecordFilter")  // Keeps businessKey from being outputted in normal outputwrappers
 public class RelationParticipantRecord extends CvrBitemporalRecord {
 
     public static final String TABLE_NAME = CompanyParticipantRelationRecord.TABLE_NAME + "_participant";
@@ -58,7 +60,7 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
 
     @Column(name = DB_FIELD_BUSINESS_KEY)
     @JsonProperty(value = IO_FIELD_BUSINESS_KEY)
-    public Long businessKey;
+    private Long businessKey;
 
     public Long getBusinessKey() {
         return this.businessKey;

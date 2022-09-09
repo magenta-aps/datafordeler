@@ -1478,7 +1478,7 @@
                 "deltager": {
                   "enhedsNummer": 4000004988,
                   "enhedstype": "PERSON",
-                  "forretningsnoegle": null,
+                  "forretningsnoegle": 3333333333,
                   "organisationstype": null,
                   "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
                   "sidstOpdateret": "2012-05-30T17:31:08.000+02:00",
@@ -1863,7 +1863,7 @@
                 "deltager": {
                   "enhedsNummer": 4000032977,
                   "enhedstype": "PERSON",
-                  "forretningsnoegle": null,
+                  "forretningsnoegle": 3333333331,
                   "organisationstype": null,
                   "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
                   "sidstOpdateret": "2017-06-08T21:03:28.000+02:00",
@@ -2369,7 +2369,7 @@
                 "deltager": {
                   "enhedsNummer": 4000417793,
                   "enhedstype": "PERSON",
-                  "forretningsnoegle": null,
+                  "forretningsnoegle": 3333333332,
                   "organisationstype": null,
                   "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
                   "sidstOpdateret": "2013-03-22T19:30:57.000+01:00",
@@ -2545,7 +2545,7 @@
                 "deltager": {
                   "enhedsNummer": 4000448343,
                   "enhedstype": "PERSON",
-                  "forretningsnoegle": null,
+                  "forretningsnoegle": 3333333334,
                   "organisationstype": null,
                   "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
                   "sidstOpdateret": "2006-11-13T00:00:00.000+01:00",
@@ -2703,7 +2703,7 @@
                 "deltager": {
                   "enhedsNummer": 4006182867,
                   "enhedstype": "PERSON",
-                  "forretningsnoegle": null,
+                  "forretningsnoegle": 3333333335,
                   "organisationstype": null,
                   "sidstIndlaest": "2017-06-10T15:22:08.806+02:00",
                   "sidstOpdateret": "2015-10-08T19:06:12.000+02:00",
