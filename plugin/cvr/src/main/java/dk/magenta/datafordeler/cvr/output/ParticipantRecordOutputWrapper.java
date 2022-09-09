@@ -49,11 +49,9 @@ public class ParticipantRecordOutputWrapper extends CvrRecordOutputWrapper<Parti
 
     @Override
     protected void fillContainer(OutputContainer oContainer, ParticipantRecord record, Mode mode) {
-
         CvrOutputContainer container = (CvrOutputContainer) oContainer;
 
         container.addNontemporal(ParticipantRecord.IO_FIELD_UNIT_NUMBER, record.getUnitNumber());
-        container.addNontemporal(ParticipantRecord.IO_FIELD_BUSINESS_KEY, record.getBusinessKey());
         container.addNontemporal(ParticipantRecord.IO_FIELD_UNIT_TYPE, record.getUnitType());
         container.addNontemporal(ParticipantRecord.IO_FIELD_POSITION, record.getPosition());
         container.addNontemporal(ParticipantRecord.IO_FIELD_STATUS_CODE, record.getStatusCode());

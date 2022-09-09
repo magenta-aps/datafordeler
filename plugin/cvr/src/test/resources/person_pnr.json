@@ -17,7 +17,7 @@
         "_score": 1,
         "_source": {
           "Vrdeltagerperson": {
-            "forretningsnoegle": null,
+            "forretningsnoegle": 1234567890,
             "navne": [
               {
                 "navn": "Morten Kjærsgaard",
@@ -25,44 +25,10 @@
                   "gyldigFra": null,
                   "gyldigTil": null
                 },
-                "sidstOpdateret": "2016-05-30T17:31:08.000+02:00"
-              }
-            ],
-            "postadresse": [
-              {
-                "landekode": "DK",
-                "fritekst": null,
-                "vejkode": 40,
-                "kommune": {
-                  "kommuneKode": 101,
-                  "kommuneNavn": "KØBENHAVN",
-                  "periode": {
-                    "gyldigFra": "2007-01-01",
-                    "gyldigTil": null
-                  },
-                  "sidstOpdateret": "2006-11-12T21:00:00.000+01:00"
-                },
-                "husnummerFra": 28,
-                "adresseId": null,
-                "sidstValideret": null,
-                "husnummerTil": null,
-                "bogstavFra": null,
-                "bogstavTil": null,
-                "etage": null,
-                "sidedoer": null,
-                "conavn": null,
-                "postboks": null,
-                "vejnavn": "Agerlandsvej",
-                "bynavn": null,
-                "postnummer": 2300,
-                "postdistrikt": "København S",
-                "periode": {
-                  "gyldigFra": "2012-05-29",
-                  "gyldigTil": null
-                },
                 "sidstOpdateret": "2012-05-30T17:31:08.000+02:00"
               }
             ],
+            "postadresse": [],
             "beliggenhedsadresse": [
               {
                 "landekode": "DK",
@@ -95,7 +61,7 @@
                   "gyldigFra": "2012-05-29",
                   "gyldigTil": null
                 },
-                "sidstOpdateret": "2016-05-30T17:31:08.000+02:00"
+                "sidstOpdateret": "2012-05-30T17:31:08.000+02:00"
               },
               {
                 "landekode": "DK",
@@ -197,64 +163,10 @@
                 "sidstOpdateret": "2008-07-18T07:05:21.000+02:00"
               }
             ],
-            "forretningsadresse": [
-              {
-                "landekode": "DK",
-                "fritekst": null,
-                "vejkode": 40,
-                "kommune": {
-                  "kommuneKode": 101,
-                  "kommuneNavn": "KØBENHAVN",
-                  "periode": {
-                    "gyldigFra": "2007-01-01",
-                    "gyldigTil": null
-                  },
-                  "sidstOpdateret": "2006-11-12T21:00:00.000+01:00"
-                },
-                "husnummerFra": 28,
-                "adresseId": null,
-                "sidstValideret": null,
-                "husnummerTil": null,
-                "bogstavFra": null,
-                "bogstavTil": null,
-                "etage": null,
-                "sidedoer": null,
-                "conavn": null,
-                "postboks": null,
-                "vejnavn": "Agerlandsvej",
-                "bynavn": null,
-                "postnummer": 2300,
-                "postdistrikt": "København S",
-                "periode": {
-                  "gyldigFra": "2012-05-29",
-                  "gyldigTil": null
-                },
-                "sidstOpdateret": "2012-05-30T17:31:08.000+02:00"
-              }
-            ],
-            "telefonNummer": [
-              {
-                "kontaktoplysning": "12345678",
-                "hemmelig": false,
-                "periode": {
-                  "gyldigFra": "2000-01-01",
-                  "gyldigTil": null
-                },
-                "sidstOpdateret": "2001-01-01T00:00:00.000+01:00"
-              }
-            ],
+            "forretningsadresse": [],
+            "telefonNummer": [],
             "telefaxNummer": [],
-            "elektroniskPost": [
-              {
-                "kontaktoplysning": "test@example.com",
-                "hemmelig": false,
-                "periode": {
-                  "gyldigFra": "2000-01-01",
-                  "gyldigTil": null
-                },
-                "sidstOpdateret": "2001-01-01T00:00:00.000+01:00"
-              }
-            ],
+            "elektroniskPost": [],
             "stilling": null,
             "statusKode": null,
             "attributter": [],
@@ -573,7 +485,7 @@
                         "gyldigFra": "2000-02-21",
                         "gyldigTil": null
                       },
-                      "sidstOpdateret": "2018-02-28T11:44:42.000+01:00"
+                      "sidstOpdateret": "2000-02-29T11:44:42.000+01:00"
                     }
                   ],
                   "livsforloeb": [
@@ -593,7 +505,7 @@
                         "gyldigFra": "1999-11-15",
                         "gyldigTil": null
                       },
-                      "sidstOpdateret": "2018-02-10T00:00:00.000+01:00"
+                      "sidstOpdateret": "2015-02-10T00:00:00.000+01:00"
                     }
                   ],
                   "virksomhedsform": [
@@ -606,7 +518,7 @@
                         "gyldigFra": "1999-11-15",
                         "gyldigTil": null
                       },
-                      "sidstOpdateret": "2018-11-29T16:37:10.000+01:00"
+                      "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
                     }
                   ]
                 },
@@ -1132,9 +1044,7 @@
                 },
                 "sidstOpdateret": "2012-05-30T17:31:08.000+02:00"
               },
-              "nyesteKontaktoplysninger": [
-                "12345678"
-              ]
+              "nyesteKontaktoplysninger": []
             },
             "samtId": 1,
             "fejlRegistreret": false,

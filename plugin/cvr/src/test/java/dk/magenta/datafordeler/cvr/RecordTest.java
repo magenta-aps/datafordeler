@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.QueryManager;
@@ -15,13 +17,13 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
-import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
-import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
+import dk.magenta.datafordeler.cvr.output.CompanyRecordOutputWrapper;
+import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
-import dk.magenta.datafordeler.cvr.output.CompanyRecordOutputWrapper;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -56,6 +58,15 @@ public class RecordTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private ObjectMapper getObjectMapper() {
+        return this.objectMapper.setFilterProvider(
+                new SimpleFilterProvider().addFilter(
+                        "ParticipantRecordFilter",
+                        SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
+                )
+        );
+    }
 
     @Autowired
     private SessionManager sessionManager;
@@ -106,6 +117,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
+        ObjectMapper objectMapper = this.getObjectMapper();
 
         HashMap<Integer, JsonNode> companies = new HashMap<>();
         try {
@@ -157,6 +169,7 @@ public class RecordTest {
     public void testCompany() throws DataFordelerException, IOException {
         this.loadCompany();
         this.loadCompany();
+        ObjectMapper objectMapper = this.getObjectMapper();
         HashMap<Integer, JsonNode> companies = this.loadCompany();
         Session session = sessionManager.getSessionFactory().openSession();
         try {
@@ -235,6 +248,7 @@ public class RecordTest {
     public void testUpdateCompany() throws IOException, DataFordelerException {
         loadCompany("/company_in.json");
         loadCompany("/company_in2.json");
+        ObjectMapper objectMapper = this.getObjectMapper();
         try(Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setParameter(CompanyRecordQuery.CVRNUMMER, "25052943");
@@ -361,6 +375,7 @@ public class RecordTest {
     public void testRestCompany() throws IOException, DataFordelerException {
         loadCompany("/company_in.json");
         whitelistLocalhost();
+        ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943", HttpMethod.GET, httpEntity, String.class);
@@ -379,6 +394,7 @@ public class RecordTest {
     public void testDataOnlyRestCompany() throws IOException, DataFordelerException {
         loadCompany("/company_in.json");
         whitelistLocalhost();
+        ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
@@ -406,6 +422,7 @@ public class RecordTest {
 
     private HashMap<Integer, JsonNode> loadUnit(String resource) throws IOException, DataFordelerException {
         ImportMetadata importMetadata = new ImportMetadata();
+        ObjectMapper objectMapper = this.getObjectMapper();
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         InputStream input = RecordTest.class.getResourceAsStream(resource);
@@ -464,6 +481,7 @@ public class RecordTest {
     public void testCompanyUnit() throws DataFordelerException, IOException {
         this.loadUnit("/unit.json");
         this.loadUnit("/unit.json");
+        ObjectMapper objectMapper = this.getObjectMapper();
         HashMap<Integer, JsonNode> units = this.loadUnit("/unit.json");
         Session session = sessionManager.getSessionFactory().openSession();
         try {
@@ -564,6 +582,7 @@ public class RecordTest {
     @Test
     public void testRestCompanyUnit() throws IOException, DataFordelerException {
         loadUnit("/unit.json");
+        ObjectMapper objectMapper = this.getObjectMapper();
         whitelistLocalhost();
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -580,6 +599,7 @@ public class RecordTest {
     }
 
     private HashMap<Long, JsonNode> loadParticipant(String resource) throws IOException, DataFordelerException {
+        ObjectMapper objectMapper = this.getObjectMapper();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -639,6 +659,7 @@ public class RecordTest {
     public void testParticipant() throws DataFordelerException, IOException {
         loadParticipant("/person.json");
         loadParticipant("/person.json");
+        ObjectMapper objectMapper = this.getObjectMapper();
         HashMap<Long, JsonNode> persons = loadParticipant("/person.json");
         Session session = sessionManager.getSessionFactory().openSession();
         try {
@@ -701,6 +722,7 @@ public class RecordTest {
     public void testUpdateParticipant() throws IOException, DataFordelerException {
         loadParticipant("/person.json");
         loadParticipant("/person2.json");
+        ObjectMapper objectMapper = this.getObjectMapper();
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             ParticipantRecordQuery query = new ParticipantRecordQuery();
@@ -740,6 +762,7 @@ public class RecordTest {
     @Test
     public void testRestParticipant() throws IOException, DataFordelerException {
         loadParticipant("/person.json");
+        ObjectMapper objectMapper = this.getObjectMapper();
         whitelistLocalhost();
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -749,17 +772,37 @@ public class RecordTest {
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
 
-        resp = restTemplate.exchange("/cvr/participant/1/rest/search?enhedsNummer=4000004988&virkningFra=2001-01-01&virkningTil=2001-01-01", HttpMethod.GET, httpEntity, String.class);
-        String body = resp.getBody();
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(body)));
+        resp = restTemplate.exchange("/cvr/participant/1/rest/search?enhedsNummer=4000004988&virkningFra=2001-01-01&virkningTil=2001-01-01&format=legacy", HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(200, resp.getStatusCodeValue());
+        String body = resp.getBody();
+        Assert.assertNull(objectMapper.readTree(body).get("results").get(0).get("forretningsnoegle"));
     }
 
+    @Test
+    public void testRestParticipantPnr() throws IOException, DataFordelerException {
+        loadParticipant("/person_pnr.json");
+        whitelistLocalhost();
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        // Test that participant_pnr yields the pnr
+        ResponseEntity<String> resp = restTemplate.exchange("/cvr/participant_pnr/1/rest/search?enhedsNummer=4000004988&virkningFra=2001-01-01&virkningTil=2001-01-01&format=legacy", HttpMethod.GET, httpEntity, String.class);
+        String body = resp.getBody();
+        Assert.assertEquals(1234567890L, objectMapper.readTree(body).get("results").get(0).get("forretningsnoegle").asLong());
+
+        // Test that participant does not yield the pnr
+        resp = restTemplate.exchange("/cvr/participant/1/rest/search?enhedsNummer=4000004988&virkningFra=2001-01-01&virkningTil=2001-01-01&format=legacy", HttpMethod.GET, httpEntity, String.class);
+        body = resp.getBody();
+        Assert.assertNull(objectMapper.readTree(body).get("results").get(0).get("forretningsnoegle"));
+    }
 
     @Test
     public void testCollectiveLookup() throws IOException, DataFordelerException {
         whitelistLocalhost();
+        ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
@@ -788,6 +831,7 @@ public class RecordTest {
     @Test
     public void testCollectiveLookupDifferentSearchParameters() throws IOException, DataFordelerException {
         whitelistLocalhost();
+        ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
@@ -854,6 +898,7 @@ public class RecordTest {
      * @throws JsonProcessingException
      */
     private void compareJson(JsonNode n1, JsonNode n2, List<String> path) throws JsonProcessingException {
+        ObjectMapper objectMapper = this.getObjectMapper();
         if (n1 == null && n2 != null) {
             System.out.println("Mismatch: "+n1+" != "+n2+" at "+path);
         } else if (n1 != null && n2 == null) {

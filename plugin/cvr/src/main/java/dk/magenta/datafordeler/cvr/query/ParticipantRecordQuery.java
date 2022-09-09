@@ -6,7 +6,8 @@ import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Container for a query for Participants, defining fields and database lookup

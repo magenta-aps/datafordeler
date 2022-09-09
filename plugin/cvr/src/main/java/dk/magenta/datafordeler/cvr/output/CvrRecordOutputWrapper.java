@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.RecordOutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
@@ -59,10 +62,17 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
         return new CvrOutputContainer();
     }
 
+    protected FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider().addFilter(
+                "ParticipantRecordFilter",
+                SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
+        );
+    }
+
     @Override
     public ObjectNode getNode(E record, Bitemporality overlap, Mode mode) {
         if (mode == LEGACY) {
-            return this.getObjectMapper().valueToTree(record);
+            return this.getObjectMapper().setFilterProvider(this.getFilterProvider()).valueToTree(record);
         }
 
         ObjectNode root = super.getNode(record, overlap, mode);

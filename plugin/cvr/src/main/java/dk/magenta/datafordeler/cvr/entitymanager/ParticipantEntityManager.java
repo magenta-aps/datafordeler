@@ -17,6 +17,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +37,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
         ZoneOffset.UTC
     );
 
+    @Qualifier("participantRecordService")
     @Autowired
     private ParticipantRecordService participantEntityService;
 
