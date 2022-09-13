@@ -283,8 +283,6 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                             for (UUID uuid : uuids) {
                                 E entity = entityCache.get(uuid);
                                 List<T> records = recordMap.get(entity);
-
-
                                 session.saveOrUpdate(entity);
                                 this.parseAlternate(entity, records, importMetadata);
                                 session.saveOrUpdate(entity);

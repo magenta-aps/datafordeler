@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.combined;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
@@ -130,7 +131,7 @@ public class CprVoterFunctionalityTest extends TestBase {
     }
 
     /**
-     * Validate that different conditions deliveres different lists of voters
+     * Validate that different conditions delivers different lists of voters
      *
      * Dansk indfødsret
      * Over 18 år på datoen “valgdato”
@@ -149,11 +150,10 @@ public class CprVoterFunctionalityTest extends TestBase {
         this.loadPerson("/voters/voter_born_2010_custody.txt");
         this.loadPerson("/voters/voter_born_2010_danish.txt");
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> response;
 
         TestUserDetails testUserDetails = new TestUserDetails();
-        httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<>("", new HttpHeaders());
 
         //Confirm that the list of voters can only be fetched with someone who has access to CPR-data
         this.applyAccess(testUserDetails);
@@ -165,114 +165,177 @@ public class CprVoterFunctionalityTest extends TestBase {
         );
         Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
         Assert.assertEquals("Forbidden", objectMapper.readTree(response.getBody()).get("error").asText());
-        Assert.assertEquals(null, objectMapper.readTree(response.getBody()).get("results"));
+        Assert.assertNull(objectMapper.readTree(response.getBody()).get("results"));
+
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
 
         //Confirm that an election in year 2020 returns no voters, since no voters is over 18 years in the testset
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2020-01-01",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                Collections.emptyList(), httpEntity
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("", objectMapper.readTree(response.getBody()).get("results").asText());
 
         //Confirm that an election in year 2030 returns the voters "0101101236", "0101101234", "0101111234"
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                Arrays.asList("0101101236", "0101101234", "0101111234"), httpEntity
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        List<String> expected = Arrays.asList("0101101236", "0101101234", "0101111234");
-        List<String> result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
-        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
 
         //Confirm that an election in year 2028 returns the voters "0101101236", "0101101234"
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2028-01-02",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                Arrays.asList("0101101236", "0101101234"), httpEntity
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        expected = Arrays.asList("0101101236", "0101101234");
-        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
-        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
 
         //Confirm that an election in year 2030 limitated to locality 0600 returns the voters "0101101234", "0101111234"
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&lokalitet_kode=0600",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                Arrays.asList("0101101234", "0101111234"), httpEntity
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        expected = Arrays.asList("0101101234", "0101111234");
-        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
-        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
 
         //Confirm that an election in year 2030 limitated to locality 0601 returns the voters "0101101236"
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&lokalitet_kode=0601",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                Collections.singletonList("0101101236"), httpEntity
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        expected = Arrays.asList("0101101236");
-        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
-        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
 
         //Confirm that an election in year 2030 limitated to kommunekode 957 returns the voters ""
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&kommune_kode=957",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                Collections.emptyList(), httpEntity
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        expected = Arrays.asList();
-        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
-        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
 
         //Confirm that an election in year 2030 limitated to kommunekode 956 returns the voters "0101101236", "0101101234", "0101111234"
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&kommune_kode=956",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                Arrays.asList("0101101236", "0101101234", "0101111234"), httpEntity
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        expected = Arrays.asList("0101101236", "0101101234", "0101111234");
-        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
-        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
 
         //Confirm that an election in year 2030 limitated to born after 2010-05-01 returns the voters "0101111234"
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&foedsel.GTE=2010-05-01",
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                Collections.singletonList("0101111234"), httpEntity
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        expected = Arrays.asList("0101111234");
-        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
-        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
 
         //Confirm that an election in year 2030 limitated to born after 2010-05-01 returns the voters "0101101236", "0101101234"
-        response = restTemplate.exchange(
+        this.testRequest(
                 "/combined/cpr/voterlist/1/landstingsvalg/?valgdato=2030-01-01&foedsel.LTE=2010-05-01",
+                Arrays.asList("0101101236", "0101101234"), httpEntity
+        );
+    }
+
+
+
+
+    /**
+     * Validate that different conditions delivers different lists of voters
+     *
+     * Dansk indfødsret
+     * Over 18 år på datoen “valgdato”
+     * Ingen umyndighedsmarkering fra CPR
+     * Ingen markering af flytning væk fra Danmark, Grønland, færøerne inden for de sidste 3 år (Det er så tæt vi kommer på opfyldelsen af riget, som beskrevet under afsnittet “Undtagelser, forbehold og håndtering af disse”)
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testFetcingOfVoterFolketingsvalg() throws Exception {
+        this.loadPerson("/voters/voter_born_2010_loc_600.txt");
+        this.loadPerson("/voters/voter_born_2011_loc_600.txt");
+        this.loadPerson("/voters/voter_born_2010_german.txt");
+        this.loadPerson("/voters/voter_born_2010_loc_601.txt");
+        this.loadPerson("/voters/voter_born_2010_custody.txt");
+        this.loadPerson("/voters/voter_born_2010_danish.txt");
+
+        ResponseEntity<String> response;
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        HttpEntity<String> httpEntity = new HttpEntity<>("", new HttpHeaders());
+
+        //Confirm that the list of voters can only be fetched with someone who has access to CPR-data
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2020-01-01",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assert.assertEquals("Forbidden", objectMapper.readTree(response.getBody()).get("error").asText());
+        Assert.assertNull(objectMapper.readTree(response.getBody()).get("results"));
+
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+
+        //Confirm that an election in year 2020 returns no voters, since no voters is over 18 years in the testset
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2020-01-01",
+                Collections.emptyList(), httpEntity
+        );
+
+        //Confirm that an election in year 2030 returns the voters "0101101236", "0101101234", "0101111234"
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2030-01-01",
+                Arrays.asList("0101101236", "0101101234", "0101111234"), httpEntity
+        );
+
+        //Confirm that an election in year 2028 returns the voters "0101101236", "0101101234"
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2028-01-02",
+                Arrays.asList("0101101236", "0101101234"), httpEntity
+        );
+
+        //Confirm that an election in year 2030 limitated to locality 0600 returns the voters "0101101234", "0101111234"
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2030-01-01&lokalitet_kode=0600",
+                Arrays.asList("0101101234", "0101111234"), httpEntity
+        );
+
+        //Confirm that an election in year 2030 limitated to locality 0601 returns the voters "0101101236"
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2030-01-01&lokalitet_kode=0601",
+                Collections.singletonList("0101101236"), httpEntity
+        );
+
+        //Confirm that an election in year 2030 limitated to kommunekode 957 returns the voters ""
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2030-01-01&kommune_kode=957",
+                Collections.emptyList(), httpEntity
+        );
+
+        //Confirm that an election in year 2030 limitated to kommunekode 956 returns the voters "0101101236", "0101101234", "0101111234"
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2030-01-01&kommune_kode=956",
+                Arrays.asList("0101101236", "0101101234", "0101111234"), httpEntity
+        );
+
+        //Confirm that an election in year 2030 limitated to born after 2010-05-01 returns the voters "0101111234"
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2030-01-01&foedsel.GTE=2010-05-01",
+                Collections.singletonList("0101111234"), httpEntity
+        );
+
+        //Confirm that an election in year 2030 limitated to born after 2010-05-01 returns the voters "0101101236", "0101101234"
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2030-01-01&foedsel.LTE=2010-05-01",
+                Arrays.asList("0101101236", "0101101234"), httpEntity
+        );
+
+        //Confirm that an election in year 2016 limitated to born after 2010-05-01 returns no voters
+        this.testRequest(
+                "/combined/cpr/voterlist/1/folketingsvalg/?valgdato=2016-10-01&foedsel.LTE=2010-05-01",
+                Collections.emptyList(), httpEntity
+        );
+    }
+
+    private void testRequest(String url, List<String> expectedPnrs, HttpEntity<String> httpEntity) throws JsonProcessingException {
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        expected = Arrays.asList("0101101236", "0101101234");
-        result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
-        Assert.assertTrue(expected.size() == result.size() && expected.containsAll(result) && result.containsAll(expected));
+        List<String> result = objectMapper.readTree(response.getBody()).get("results").findValuesAsText("pnr");
+        Assert.assertTrue(expectedPnrs.size() == result.size() && expectedPnrs.containsAll(result) && result.containsAll(expectedPnrs));
     }
 
 

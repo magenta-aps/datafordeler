@@ -68,13 +68,26 @@ public class CprVoterService {
     }
 
     @GetMapping("/landstingsvalg")
-    public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, MissingParameterException, InvalidTokenException, InvalidCertificateException, InvalidParameterException, InvalidClientInputException {
+    public Envelope landstingsvalg(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws InvalidTokenException, InvalidParameterException, AccessDeniedException, InvalidClientInputException, MissingParameterException, InvalidCertificateException {
+        return this.findAll(request, new ParameterMap(requestParams), response, true);
+    }
 
-        ParameterMap parameters = new ParameterMap(requestParams);
+    @GetMapping("/folketingsvalg")
+    public Envelope folketingsvalg(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws InvalidTokenException, InvalidParameterException, AccessDeniedException, InvalidClientInputException, MissingParameterException, InvalidCertificateException {
+        return this.findAll(request, new ParameterMap(requestParams), response, false);
+    }
+
+    public Envelope findAll(HttpServletRequest request, ParameterMap parameters, HttpServletResponse response, boolean restrictAddress6monthsPrior) throws AccessDeniedException, MissingParameterException, InvalidTokenException, InvalidCertificateException, InvalidParameterException, InvalidClientInputException {
+
+        String serviceName = "CprVoterService";
+
+        int limit = parameters.getInt("pageSize", 100, 1, 100);
+        int page = parameters.getInt("page", 1, 1, Integer.MAX_VALUE);
+        int offset = (page - 1) * limit;
 
         LocalDateTime voteDate = parameters.getLocalDateTime("valgdato");
         LocalDateTime voteDateMinus18Years = voteDate.minusYears(18);
-        OffsetDateTime voteDateMinus6Month = voteDate.minusMonths(6).atOffset(ZoneOffset.UTC);
+        OffsetDateTime voteDateMinus6Month = restrictAddress6monthsPrior ? voteDate.minusMonths(6).atOffset(ZoneOffset.UTC) : null;
 
         LocalDateTime birthAfterTS = parameters.getLocalDateTime("foedsel.GTE");
         LocalDateTime birthBeforeTSLimit = parameters.getLocalDateTime("foedsel.LTE");
@@ -82,69 +95,94 @@ public class CprVoterService {
         if (birthBeforeTSLimit != null) {
             birthBeforeTS = birthBeforeTSLimit.isBefore(voteDateMinus18Years) ? birthBeforeTSLimit : voteDateMinus18Years;
         }
-
-        int limit = parameters.getInt("pageSize", 100, 1, 100);
-        int page = parameters.getInt("page", 1, 1, Integer.MAX_VALUE);
-        int offset = (page - 1) * limit;
-
         int municipalityCode = parameters.getInt("kommune_kode", 0, 0, 999);
         String localityCode = parameters.getFirst("lokalitet_kode");
-
-        String order_by = parameters.getFirst("order_by");
+        String orderBy = parameters.getFirst("order_by");
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
-        loggerHelper.urlInvokePersistablelogs("CprBirthIntervalDateService");
+        loggerHelper.urlInvokePersistablelogs(serviceName);
         this.checkAndLogAccess(loggerHelper);
+        List<PersonLocationObject> results = this.query(birthAfterTS, birthBeforeTS, voteDateMinus6Month, municipalityCode, localityCode, offset, limit, orderBy);
+        loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), serviceName+" done");
+        CprVoterService.setHeaders(response);
+        return CprVoterService.envelop(user, page, limit, request.getServletPath(), results);
+    }
+
+    protected List<PersonLocationObject> query(LocalDateTime birthAfterTS, LocalDateTime birthBeforeTS, OffsetDateTime voteDateMinus6Month, int municipalityCode, String localityCode, int offset, int limit, String orderBy) throws InvalidParameterException {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             StringBuilder hql = new StringBuilder();
-            hql.append("SELECT DISTINCT personEntity.personnummer, accessAddressLocalityRecord.code, birthDataRecord.birthDatetime , nameDataRecord.lastName " +
-                    " FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
-                    " JOIN " + BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord ON birthDataRecord." + BirthTimeDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
-                    " JOIN " + AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord." + AddressDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
-                    " JOIN " + NameDataRecord.class.getCanonicalName() + " nameDataRecord ON nameDataRecord." + NameDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
-                    " JOIN " + CitizenshipDataRecord.class.getCanonicalName() + " citizenDataRecord ON citizenDataRecord." + CitizenshipDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
-                    " LEFT OUTER JOIN " + GuardianDataRecord.class.getCanonicalName() + " guardianDataRecord ON guardianDataRecord." + GuardianDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" +
+            hql.append(
+                    "SELECT DISTINCT " +
+                            "personEntity.personnummer, " +
+                            "accessAddressLocalityRecord.code, " +
+                            "birthDataRecord.birthDatetime, " +
+                            "nameDataRecord.lastName, " +
+                    "FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
+                    "JOIN " + BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord " +
+                        "ON birthDataRecord." + BirthTimeDataRecord.DB_FIELD_ENTITY + "=personEntity.id " +
+                        "AND birthDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO + " IS null " +
+                        "AND birthDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO + " IS null "+
+                        "AND birthDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE + " = 0 " +
+                    "JOIN " + AddressDataRecord.class.getCanonicalName() + " addressDataRecord " +
+                        "ON addressDataRecord." + AddressDataRecord.DB_FIELD_ENTITY + "=personEntity.id "+
+                        "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO + " IS null " +
+                        "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO + " IS null "+
+                        "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE + " = 0 " +
 
-                    //TODO: The personal adresses is joined with adresses in GAR. It is important to inform customers about quality-issues if GAR is the only adress-date used
-                    " JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE + "=addressDataRecord." + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE +
-                    " AND accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE + "=addressDataRecord." + AddressDataRecord.DB_FIELD_ROAD_CODE +
-                    " JOIN " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" +
-                    " JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id");
+                    "JOIN " + NameDataRecord.class.getCanonicalName() + " nameDataRecord " +
+                        "ON nameDataRecord." + NameDataRecord.DB_FIELD_ENTITY + "=personEntity.id " +
+                    "JOIN " + CitizenshipDataRecord.class.getCanonicalName() + " citizenDataRecord " +
+                        "ON citizenDataRecord." + CitizenshipDataRecord.DB_FIELD_ENTITY + "=personEntity.id " +
+                    "LEFT OUTER JOIN " + GuardianDataRecord.class.getCanonicalName() + " guardianDataRecord " +
+                        "ON guardianDataRecord." + GuardianDataRecord.DB_FIELD_ENTITY + "=personEntity.id " +
 
-            hql.append(" WHERE addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO + " IS null " +
-                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_FROM + "  <= :halfyear " + //TODO: There is no need to optimize this now, we still do not know if the output is a json-based webservice og *.csv files as VoteListDataService, but we know that there can be more then one adress within the interval
-                    // If a *.CSV file is needed, I would get all adresses in the interval within hibernate model and find out is any of them is outside the requested municipality-code
-                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO + " IS null " +
-                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE + " = 0 " +
-                    "AND citizenDataRecord.countryCode = 5100 " +
-                    "AND guardianDataRecord." + GuardianDataRecord.DB_FIELD_ENTITY + " IS null ");
+                    //TODO: The personal addresses are joined with adresses in GAR. It is important to inform customers about quality-issues if GAR is the only address-date used
+                    "JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord " +
+                        "ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE + "=addressDataRecord." + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE + " " +
+                        "AND accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE + "=addressDataRecord." + AddressDataRecord.DB_FIELD_ROAD_CODE + " " +
+                    "JOIN " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity " +
+                        "ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity.id " +
+                    "JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord " +
+                        "ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity.id "
+            );
 
-            if (birthAfterTS != null) {
-                hql.append("AND (birthDataRecord.birthDatetime >= :bta) ");
+                // If a *.CSV file is needed, I would get all adresses in the interval within hibernate model and find out is any of them is outside the requested municipality-code
+                hql.append(" WHERE citizenDataRecord.countryCode = 5100 " +
+                        "AND guardianDataRecord." + GuardianDataRecord.DB_FIELD_ENTITY + " IS null "
+                );
+
+            if (voteDateMinus6Month != null) {
+                hql.append(
+                        //TODO: There is no need to optimize this now, we still do not know if the output is a json-based webservice og *.csv files as VoteListDataService, but we know that there can be more then one address within the interval
+                        "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_FROM + "  <= :halfyear "
+                );
             }
 
             hql.append("AND birthDataRecord.birthDatetime <= :btb ");
-
-            if (localityCode != null) {
-                hql.append("AND (accessAddressLocalityRecord.code = :locality) ");
-            }
-
             hql.append("AND addressDataRecord.municipalityCode >= 950 ");
+            if (birthAfterTS != null) {
+                hql.append("AND birthDataRecord.birthDatetime >= :bta ");
+            }
+            if (localityCode != null) {
+                hql.append("AND accessAddressLocalityRecord.code = :locality ");
+            }
             if (municipalityCode != 0) {
-                hql.append("AND (addressDataRecord.municipalityCode = :municipality) ");
+                hql.append("AND addressDataRecord.municipalityCode = :municipality ");
             }
 
-            if ("pnr".equals(order_by)) {
-                hql.append(" ORDER BY personEntity.personnummer");
-            } else if ("efternavn".equals(order_by)) {
-                hql.append(" ORDER BY nameDataRecord.lastName");
+            if ("pnr".equals(orderBy)) {
+                hql.append("ORDER BY personEntity.personnummer ");
+            } else if ("efternavn".equals(orderBy)) {
+                hql.append("ORDER BY nameDataRecord.lastName ");
             }
 
             Query<Object[]> query = session.createQuery(hql.toString());
-            query.setParameter("halfyear", voteDateMinus6Month);
+            if (voteDateMinus6Month != null) {
+                query.setParameter("halfyear", voteDateMinus6Month);
+            }
             query.setParameter("btb", birthBeforeTS);
             if (birthAfterTS != null) {
                 query.setParameter("bta", birthAfterTS);
@@ -161,37 +199,35 @@ public class CprVoterService {
 
             List<Object[]> resultList = query.getResultList();
 
-            List<PersonLocationObject> personLocationObjectList = resultList.stream().map(
-                obj -> new PersonLocationObject(
-                    obj[0].toString(),
-                    obj[1].toString(),
-                    ((LocalDateTime)obj[2]).format(formatter)
-                )
+            return resultList.stream().map(
+                    obj -> new PersonLocationObject(
+                            obj[0].toString(),
+                            obj[1].toString(),
+                            ((LocalDateTime)obj[2]).format(formatter)
+                    )
             ).collect(Collectors.toList());
-
-            Envelope envelope = new Envelope();
-            envelope.setRequestTimestamp(user.getCreationTime());
-            envelope.setUsername(user.toString());
-            envelope.setPageSize(query.getMaxResults());
-            envelope.setPage(query.getFirstResult()+1);
-            envelope.setPath(request.getServletPath());
-            envelope.setResponseTimestamp(OffsetDateTime.now());
-            envelope.setResults(personLocationObjectList);
-            setHeaders(response);
-            loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprBirthIntervalDateService done");
-            return envelope;
         } catch(NumberFormatException | DateTimeParseException e) {
             throw new InvalidParameterException("Invalid parameters");
         }
-
     }
 
-    private static void setHeaders(HttpServletResponse response) {
+    protected static Envelope envelop(DafoUserDetails user, int page, int pageSize, String path, List<PersonLocationObject> results) {
+        Envelope envelope = new Envelope();
+        envelope.setRequestTimestamp(user.getCreationTime());
+        envelope.setUsername(user.toString());
+        envelope.setPageSize(pageSize);
+        envelope.setPage(page);
+        envelope.setPath(path);
+        envelope.setResponseTimestamp(OffsetDateTime.now());
+        envelope.setResults(results);
+        return envelope;
+    }
+
+    protected static void setHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Content-Type", "application/json; charset=utf-8");
         response.setStatus(200);
     }
-
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {
