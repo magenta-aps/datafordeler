@@ -32,13 +32,13 @@ pushd %DIR%..\plugin\cpr
     call mvnw.cmd -DskipTests clean install
 popd
 
-echo "Build cvr"
-pushd %DIR%..\plugin\cvr
+echo "Build geo"
+pushd %DIR%..\plugin\geo
     call mvnw.cmd -DskipTests clean install
 popd
 
-echo "Build geo"
-pushd %DIR%..\plugin\geo
+echo "Build cvr"
+pushd %DIR%..\plugin\cvr
     call mvnw.cmd -DskipTests clean install
 popd
 
