@@ -4,6 +4,7 @@ import json
 import os.path
 import sys
 from datetime import date
+from pyxlsx import open_xlsx
 
 from requests import Session
 
@@ -159,18 +160,33 @@ def scan(nr):
         print(e)
 
 
+def scan_worksheet_row(index, row):
+    number_cell = row["CPR_CVR"]
+    row.update({"Kommunekode": 957, "Vejkode": 66, "Postnummer": 11, "Status": "fundet"})
+    return row
+
 if __name__ == "__main__":
-    filename = sys.argv[1]
+    input_filename = sys.argv[1]
     certificate = sys.argv[2]
     private_key = sys.argv[3]
-    if not os.path.exists(filename):
-        print(f"Input file {filename} does not exist")
+    output_filename = sys.argv[4]
+    if not os.path.exists(input_filename):
+        print(f"Input file {input_filename} does not exist")
         exit(1)
-    if not os.path.isfile(filename):
-        print(f"Input file {filename} is not a file")
+    if not os.path.isfile(input_filename):
+        print(f"Input file {input_filename} is not a file")
         exit(1)
     session = create_session(certificate, private_key)
-    with open(filename, "r") as fp:
-        lines = [line.strip() for line in fp.readlines()]
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-            executor.map(scan, lines)
+
+    with open_xlsx(input_filename) as wb:
+        wb.filename = output_filename
+        for sheet in wb.worksheets:
+            sheet.header_row = 1
+            with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+                updated_rows = {
+                    executor.submit(scan_worksheet_row, index, row)
+                    for index, row in enumerate(sheet.content_rows)
+                }
+                for future in concurrent.futures.as_completed(updated_rows):
+                    result = future.result()
+        wb.save(filename=output_filename)
