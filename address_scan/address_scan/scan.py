@@ -120,40 +120,43 @@ def is_cvr(nr: str):
 
 def scan(nr):
     nr = nr.strip()
-    if len(nr) == 11:
-        nr = nr[0:6] + nr[7:11]
-    if not is_cpr(nr) and not is_cvr(nr):
-        print(f"Input {nr} er hverken et CPR- eller CVR-nummer")
-        return
+    try:
+        if len(nr) == 11:
+            nr = nr[0:6] + nr[7:11]
+        if not is_cpr(nr) and not is_cvr(nr):
+            print(f"Input {nr} er hverken et CPR- eller CVR-nummer")
+            return
 
-    # Mulighed: Prisme giver os ikke vejkode og kommunekode
-    komkod, vejkod, postnr = get_prisme_road(nr)
+        # Mulighed: Prisme giver os ikke vejkode og kommunekode
+        komkod, vejkod, postnr = get_prisme_road(nr)
 
-    if not komkod or not vejkod:
-        print(f"{nr}  Fik ikke kommunekode/vejkode fra kald til Dafo-prisme")
-        return
+        if not komkod or not vejkod:
+            print(f"{nr}  Fik ikke kommunekode/vejkode fra kald til Dafo-prisme")
+            return
 
-    # Mulighed: Opslaget giver os faktisk et postnummer
-    if postnr:
-        print(f"{nr}  Har postnummer ({postnr})")
-        return
+        # Mulighed: Opslaget giver os faktisk et postnummer
+        if postnr:
+            print(f"{nr}  Har postnummer ({postnr})")
+            return
 
-    # Mulighed: Vejkode og kommunekode findes ikke
-    road = get_road(komkod, vejkod)
-    if not road:
-        print(f"{nr}  Fik ikke vejnavn fra kald til geodata ({komkod}/{vejkod})")
-        return
+        # Mulighed: Vejkode og kommunekode findes ikke
+        road = get_road(komkod, vejkod)
+        if not road:
+            print(f"{nr}  Fik ikke vejnavn fra kald til geodata ({komkod}/{vejkod})")
+            return
 
-    postnr, husnr = get_address(nr, komkod, vejkod)
-    if not husnr:
-        print(f"{nr}  Fik ikke et husnummer fra kald til geodata ({komkod}/{vejkod})")
-        return
-    if not postnr:
-        print(
-            f"{nr}  Fik ikke en adgangsadresse fra kald til geodata ({komkod}/{vejkod}/{husnr})"
-        )
-        return
-    print(f"{nr}  OK")
+        postnr, husnr = get_address(nr, komkod, vejkod)
+        if not husnr:
+            print(f"{nr}  Fik ikke et husnummer fra kald til geodata ({komkod}/{vejkod})")
+            return
+        if not postnr:
+            print(
+                f"{nr}  Fik ikke en adgangsadresse fra kald til geodata ({komkod}/{vejkod}/{husnr})"
+            )
+            return
+        print(f"{nr}  OK")
+    except Exception as e:
+        print(e)
 
 
 if __name__ == "__main__":
@@ -168,6 +171,6 @@ if __name__ == "__main__":
         exit(1)
     session = create_session(certificate, private_key)
     with open(filename, "r") as fp:
-        lines = fp.readlines()
+        lines = [line.strip() for line in fp.readlines()]
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             executor.map(scan, lines)
