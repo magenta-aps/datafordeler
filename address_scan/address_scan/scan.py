@@ -3,6 +3,7 @@ import concurrent.futures
 import json
 import os.path
 import sys
+import traceback
 from datetime import date
 from pyxlsx import open_xlsx
 
@@ -61,7 +62,11 @@ def get_prisme_road(nr):
     komkod = result.get("myndighedskode")
     vejkod = result.get("vejkode")
     postnr = result.get("postnummer")
-    return (komkod, vejkod, postnr)
+    adresse = result.get("adresse")
+    status = None
+    if result.get("civilstand") == "D":
+        status = f"Død {result.get('civilstandsdato', '')}"
+    return (komkod, vejkod, postnr, adresse, status)
 
 
 def get_road(komkod, vejkod):
@@ -96,6 +101,8 @@ def get_address(nr, komkod, vejkod):
         for adresse in generic_data["adresse"]:
             if komkod == adresse["kommunekode"] and vejkod == adresse["vejkode"]:
                 husnummer = adresse["husnummer"]
+                if not husnummer:
+                    return adresse["postnummer"], husnummer
                 postnummer = None
                 adresse_result = pitu_get(
                     "PITU/GOV/DIA/magenta_services/DAFO-ADDRESS-GENERIC/1",
@@ -121,49 +128,51 @@ def is_cvr(nr: str):
 
 def scan(nr):
     nr = nr.strip()
+    komkod, vejkod, husnr, adresse, postnr = None, None, None, None, None
     try:
         if len(nr) == 11:
             nr = nr[0:6] + nr[7:11]
         if not is_cpr(nr) and not is_cvr(nr):
-            print(f"Input {nr} er hverken et CPR- eller CVR-nummer")
-            return
+            return komkod, vejkod, husnr, postnr, adresse, f"{nr} er hverken et CPR- eller CVR-nummer"
 
         # Mulighed: Prisme giver os ikke vejkode og kommunekode
-        komkod, vejkod, postnr = get_prisme_road(nr)
+        komkod, vejkod, postnr, adresse, status = get_prisme_road(nr)
+        if status:
+            return komkod, vejkod, husnr, postnr, adresse, status
 
         if not komkod or not vejkod:
-            print(f"{nr}  Fik ikke kommunekode/vejkode fra kald til Dafo-prisme")
-            return
+            return komkod, vejkod, husnr, postnr, adresse, f"Fik ikke kommunekode/vejkode fra kald til Dafo-prisme"
 
         # Mulighed: Opslaget giver os faktisk et postnummer
         if postnr:
-            print(f"{nr}  Har postnummer ({postnr})")
-            return
+            return komkod, vejkod, husnr, postnr, adresse, f"Har postnummer ({postnr})"
 
         # Mulighed: Vejkode og kommunekode findes ikke
         road = get_road(komkod, vejkod)
         if not road:
-            print(f"{nr}  Fik ikke vejnavn fra kald til geodata ({komkod}/{vejkod})")
-            return
+            return komkod, vejkod, husnr, postnr, adresse, f"Mangler vej i geodata (komkod: {komkod} / vejkod: {vejkod})"
 
         postnr, husnr = get_address(nr, komkod, vejkod)
         if not husnr:
-            print(f"{nr}  Fik ikke et husnummer fra kald til geodata ({komkod}/{vejkod})")
-            return
+            return komkod, vejkod, husnr, postnr, adresse, f"Adressen har ikke noget husnummer (komkod: {komkod} / vejkod: {vejkod})"
         if not postnr:
-            print(
-                f"{nr}  Fik ikke en adgangsadresse fra kald til geodata ({komkod}/{vejkod}/{husnr})"
-            )
-            return
-        print(f"{nr}  OK")
+            return komkod, vejkod, husnr, postnr, adresse, f"Mangler adgangsadresse i geodata (komkod: {komkod} / vejkod: {vejkod} / husnr: {husnr})"
+        return komkod, vejkod, husnr, postnr, adresse, "OK"
     except Exception as e:
-        print(e)
+        print(f"{type(e)} {e}")
+        traceback.print_exc()
+        return komkod, vejkod, husnr, postnr, adresse, "Fejl"
 
 
 def scan_worksheet_row(index, row):
     number_cell = row["CPR_CVR"]
-    row.update({"Kommunekode": 957, "Vejkode": 66, "Postnummer": 11, "Status": "fundet"})
+    nr = str(number_cell)
+    if len(nr) == 9:
+        nr = "0" + nr
+    kommunekode, vejkode, husnr, postnummer, adresse, status = scan(nr)
+    row.update({"Kommunekode": kommunekode, "Vejkode": vejkode, "Husnummer": husnr, "Postnummer": postnummer, "CPR-adresse": adresse, "Status": status})
     return row
+
 
 if __name__ == "__main__":
     input_filename = sys.argv[1]
