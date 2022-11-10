@@ -12,43 +12,43 @@ import java.util.Set;
  */
 public abstract class UserQueryManager {
 
-  public static int INVALID_USERPROFILE_ID = -1;
+    public static int INVALID_USERPROFILE_ID = -1;
 
-  public UserProfile getUserProfileByName(String name) {
-    UserProfile userProfile = null;
+    public UserProfile getUserProfileByName(String name) {
+        UserProfile userProfile = null;
 
-    int userProfileId = getUserProfileIdByName(name);
-    if (userProfileId != INVALID_USERPROFILE_ID) {
-      userProfile = new UserProfile(name);
-      userProfile.setDatabaseId(userProfileId);
-      userProfile.getSystemRoles().addAll(
-          getSystemRoleNamesByUserProfileId(userProfile.getDatabaseId())
-      );
-      for (AreaRestriction area : getAreaRestrictionsByUserProfileId(userProfile.getDatabaseId())) {
-        userProfile.getAreaRestrictions().add(area);
-      }
+        int userProfileId = getUserProfileIdByName(name);
+        if (userProfileId != INVALID_USERPROFILE_ID) {
+            userProfile = new UserProfile(name);
+            userProfile.setDatabaseId(userProfileId);
+            userProfile.getSystemRoles().addAll(
+                    getSystemRoleNamesByUserProfileId(userProfile.getDatabaseId())
+            );
+            for (AreaRestriction area : getAreaRestrictionsByUserProfileId(userProfile.getDatabaseId())) {
+                userProfile.getAreaRestrictions().add(area);
+            }
+        }
+
+        return userProfile;
     }
 
-    return userProfile;
-  }
+    public abstract int getUserProfileIdByName(String name);
 
-  public abstract int getUserProfileIdByName(String name);
+    public abstract List<String> getSystemRoleNamesByUserProfileId(int databaseId);
 
-  public abstract List<String> getSystemRoleNamesByUserProfileId(int databaseId);
+    public abstract List<AreaRestriction> getAreaRestrictionsByUserProfileId(int databaseId);
 
-  public abstract List<AreaRestriction> getAreaRestrictionsByUserProfileId(int databaseId);
+    public abstract Set<String> getAllStoredSystemRoleNames();
 
-  public abstract Set<String> getAllStoredSystemRoleNames();
+    public abstract void insertSystemRole(SystemRole systemRole);
 
-  public abstract void insertSystemRole(SystemRole systemRole);
+    public abstract Set<String> getAllAreaRestrictionTypeLookupNames();
 
-  public abstract Set<String> getAllAreaRestrictionTypeLookupNames();
+    public abstract Set<String> getAllAreaRestrictionLookupNames();
 
-  public abstract Set<String> getAllAreaRestrictionLookupNames();
+    public abstract void insertAreaRestrictionType(AreaRestrictionType areaRestrictionType);
 
-  public abstract void insertAreaRestrictionType(AreaRestrictionType areaRestrictionType);
+    public abstract void insertAreaRestriction(AreaRestriction areaRestriction);
 
-  public abstract void insertAreaRestriction(AreaRestriction areaRestriction);
-
-  public abstract void checkConnection();
+    public abstract void checkConnection();
 }

@@ -19,12 +19,14 @@ public class ChurchRecord extends PersonDataRecord {
     public ChurchRecord(String line) throws ParseException {
         this(line, traditionalMapping);
     }
+
     public ChurchRecord(String line, Mapping mapping) throws ParseException {
         super(line);
         this.obtain(mapping);
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("start_mynkod-folkekirke", 14, 4);
         traditionalMapping.add("fkirk_ts", 18, 12);

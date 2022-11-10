@@ -11,7 +11,7 @@ public class MonotemporalityComparator implements Comparator<Monotemporality> {
         ALL
     }
 
-    private Type type;
+    private final Type type;
 
     public MonotemporalityComparator(Type type) {
         this.type = type;
@@ -20,7 +20,7 @@ public class MonotemporalityComparator implements Comparator<Monotemporality> {
     private static final Comparator<OffsetDateTime> nullsFirst = Comparator.nullsFirst(OffsetDateTime.timeLineOrder());
     private static final Comparator<OffsetDateTime> nullsLast = Comparator.nullsLast(OffsetDateTime.timeLineOrder());
 
-    private static final Type[] comparisonOrder = new Type[] {Type.REGISTRATION_FROM, Type.REGISTRATION_TO};
+    private static final Type[] comparisonOrder = new Type[]{Type.REGISTRATION_FROM, Type.REGISTRATION_TO};
 
     @Override
     public int compare(Monotemporality o1, Monotemporality o2) {

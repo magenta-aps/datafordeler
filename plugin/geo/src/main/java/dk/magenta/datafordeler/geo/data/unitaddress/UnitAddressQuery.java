@@ -20,14 +20,13 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     public static final String BNR = AccessAddressEntity.IO_FIELD_BNR;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = BNR)
-    private List<String> bnr = new ArrayList<>();
+    private final List<String> bnr = new ArrayList<>();
 
 
     public static final String HOUSE_NUMBER = AccessAddressEntity.IO_FIELD_HOUSE_NUMBER;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = HOUSE_NUMBER)
-    private List<String> houseNumber = new ArrayList<>();
-
+    private final List<String> houseNumber = new ArrayList<>();
 
 
     public List<String> getBnr() {
@@ -38,6 +37,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         this.clearBnr();
         this.addBnr(bnr);
     }
+
     public void setBnr(Collection<String> bnrs) {
         this.clearBnr();
         for (String bnr : bnrs) {
@@ -76,12 +76,10 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     }
 
 
-
-
     public static final String FLOOR = UnitAddressEntity.IO_FIELD_FLOOR;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = FLOOR)
-    private List<String> floor = new ArrayList<>();
+    private final List<String> floor = new ArrayList<>();
 
 
     public List<String> getFloor() {
@@ -131,7 +129,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         return "geo_unitaddress";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseQuery.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);

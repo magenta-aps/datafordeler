@@ -13,7 +13,7 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     public static final String NAME = ResponsibleEntity.IO_FIELD_NAME;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAME)
-    private List<String> name = new ArrayList<>();
+    private final List<String> name = new ArrayList<>();
 
     public List<String> getName() {
         return name;
@@ -38,11 +38,10 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     }
 
 
-
     public static final String CVR_GUID = ResponsibleEntity.IO_FIELD_CVR_PARTICIPANT_GUID;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CVR_GUID)
-    private List<String> cvrGuid = new ArrayList<>();
+    private final List<String> cvrGuid = new ArrayList<>();
 
     public List<String> getCvrGuid() {
         return this.cvrGuid;
@@ -70,7 +69,6 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     }
 
 
-
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>(super.getSearchParameters());
@@ -81,7 +79,7 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
 
     @Override
     protected boolean isEmpty() {
-        return super.isEmpty () && this.name.isEmpty() && this.cvrGuid.isEmpty();
+        return super.isEmpty() && this.name.isEmpty() && this.cvrGuid.isEmpty();
     }
 
     @Override
@@ -102,7 +100,7 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
         return "ger_responsible";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("name", ResponsibleEntity.DB_FIELD_NAME);

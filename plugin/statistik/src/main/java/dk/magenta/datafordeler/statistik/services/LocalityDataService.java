@@ -60,7 +60,7 @@ public class LocalityDataService extends StatisticsService {
     }
 
 
-    private Logger log = LogManager.getLogger(GeoLookupService.class);
+    private final Logger log = LogManager.getLogger(GeoLookupService.class.getCanonicalName());
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
     public void get(HttpServletRequest request, HttpServletResponse response)
@@ -77,10 +77,8 @@ public class LocalityDataService extends StatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{
-                MUNICIPALITY_CODE, MUNICIPALITY_SHORT_NAME, MUNICIPALITY_NAME, LOCALITY_CODE, LOCALITY_ABBREVIATION, LOCALITY_NAME,
-                LOC_TYPE_CODE, LOC_TYPE_NAME, LOC_STATUS_CODE, LOC_STATUS_NAME, "Void"
-        });
+        return Arrays.asList(MUNICIPALITY_CODE, MUNICIPALITY_SHORT_NAME, MUNICIPALITY_NAME, LOCALITY_CODE, LOCALITY_ABBREVIATION, LOCALITY_NAME,
+                LOC_TYPE_CODE, LOC_TYPE_NAME, LOC_STATUS_CODE, LOC_STATUS_NAME, "Void");
     }
 
     @Override
@@ -138,7 +136,7 @@ public class LocalityDataService extends StatisticsService {
                 csvRow.put(LOCALITY_CODE, localityCode);
                 csvRow.put(LOCALITY_ABBREVIATION, LokKortNavn);
                 csvRow.put(LOCALITY_NAME, localityName);
-                csvRow.put(LOC_TYPE_CODE, LokBetegn+"");
+                csvRow.put(LOC_TYPE_CODE, LokBetegn + "");
                 csvRow.put(LOC_TYPE_NAME, LokTypeNavn);
                 csvRow.put(LOC_STATUS_NAME, LokStatusNavn);
                 concatenation.add(csvRow);
@@ -160,7 +158,7 @@ public class LocalityDataService extends StatisticsService {
     }
 
     private static String municipalityIdToName(Integer code) {
-        switch(code) {
+        switch (code) {
             case 955:
                 return "Kujalleq";
             case 956:
@@ -180,7 +178,7 @@ public class LocalityDataService extends StatisticsService {
 
 
     private static String municipalityIdToMapName(Integer code) {
-        switch(code) {
+        switch (code) {
             case 955:
                 return "KU";
             case 956:
@@ -201,7 +199,7 @@ public class LocalityDataService extends StatisticsService {
 
     private static String typeCodeToName(Integer lokalitetBetegn) {
 
-        switch(lokalitetBetegn) {
+        switch (lokalitetBetegn) {
             case 0:
                 return "Ukendt";
             case 1:
@@ -222,7 +220,7 @@ public class LocalityDataService extends StatisticsService {
     }
 
     private static String typeCodeToStatusCode(Integer typeCode) {
-        switch(typeCode) {
+        switch (typeCode) {
             case 1:
                 return "15";
             case 2:
@@ -255,7 +253,7 @@ public class LocalityDataService extends StatisticsService {
     }
 
     private static String typeCodeToStatusName(Integer typeCode) {
-        switch(typeCode) {
+        switch (typeCode) {
             case 0:
                 return "Inaktiv";
             case 1:
@@ -264,7 +262,6 @@ public class LocalityDataService extends StatisticsService {
                 return "Undefined";
         }
     }
-
 
 
     protected int writeItems(Iterator<Map<String, String>> items, OutputStream outputStream, Consumer<Object> afterEach) throws IOException {
@@ -340,7 +337,7 @@ public class LocalityDataService extends StatisticsService {
     }
 
 
-    private static Comparator bitemporalComparator = Comparator.comparing(PersonStatisticsService::getBitemporality, BitemporalityComparator.ALL)
+    private static final Comparator bitemporalComparator = Comparator.comparing(PersonStatisticsService::getBitemporality, BitemporalityComparator.ALL)
             .thenComparing(CprNontemporalRecord::getDafoUpdated)
             .thenComparing(DatabaseEntry::getId);
 
@@ -348,6 +345,7 @@ public class LocalityDataService extends StatisticsService {
     /**
      * Find the newest unclosed record from the list of records
      * Records with a missing OriginDate is also removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return

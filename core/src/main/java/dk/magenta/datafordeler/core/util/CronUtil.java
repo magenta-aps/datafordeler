@@ -27,7 +27,7 @@ public abstract class CronUtil {
 
             return String.join(" ", parts);
         } catch (Exception e) {
-            throw new ConfigurationException("Invalid CRON expression: "+schedule, e);
+            throw new ConfigurationException("Invalid CRON expression: " + schedule, e);
         }
     }
 

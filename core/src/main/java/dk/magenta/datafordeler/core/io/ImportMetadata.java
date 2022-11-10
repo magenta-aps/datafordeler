@@ -13,7 +13,6 @@ public class ImportMetadata {
     }
 
 
-
     private OffsetDateTime importTime;
 
     public OffsetDateTime getImportTime() {
@@ -23,7 +22,6 @@ public class ImportMetadata {
     public void setImportTime(OffsetDateTime importTime) {
         this.importTime = importTime;
     }
-
 
 
     private Session session;
@@ -37,7 +35,6 @@ public class ImportMetadata {
     }
 
 
-
     private URI currentURI;
 
     public URI getCurrentURI() {
@@ -47,7 +44,6 @@ public class ImportMetadata {
     public void setCurrentURI(URI currentURI) {
         this.currentURI = currentURI;
     }
-
 
 
     private boolean stop = false;
@@ -61,7 +57,6 @@ public class ImportMetadata {
     }
 
 
-    
     private boolean transactionInProgress;
 
     public boolean isTransactionInProgress() {
@@ -73,7 +68,6 @@ public class ImportMetadata {
     }
 
 
-
     private long startChunk = 0;
 
     public long getStartChunk() {
@@ -83,7 +77,6 @@ public class ImportMetadata {
     public void setStartChunk(long startChunk) {
         this.startChunk = startChunk;
     }
-
 
 
     private ObjectNode importConfiguration = null;

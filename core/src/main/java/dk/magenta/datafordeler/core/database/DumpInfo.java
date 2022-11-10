@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 @javax.persistence.Entity
 @Table(name = "dump_info")
 public final class DumpInfo extends DatabaseEntry implements
-    Comparable<DumpInfo> {
+        Comparable<DumpInfo> {
 
     @Column(nullable = false)
     private String name, requestPath, charset, format;
@@ -21,7 +21,7 @@ public final class DumpInfo extends DatabaseEntry implements
     private OffsetDateTime timestamp;
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, optional = true,
-        cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     @Lob
     private DumpData data;
 
@@ -30,8 +30,8 @@ public final class DumpInfo extends DatabaseEntry implements
     }
 
     public DumpInfo(DumpConfiguration config,
-        OffsetDateTime timestamp,
-        byte[] data) {
+                    OffsetDateTime timestamp,
+                    byte[] data) {
         this.name = config.getName();
         this.requestPath = config.getRequestPath();
         this.format = config.getFormat().name();
@@ -85,8 +85,8 @@ public final class DumpInfo extends DatabaseEntry implements
 
     public String toString() {
         return String.format(
-            "DumpInfo(%s, %s, %s, %s, %s)",
-            name, requestPath, format, timestamp, data
+                "DumpInfo(%s, %s, %s, %s, %s)",
+                name, requestPath, format, timestamp, data
         );
     }
 

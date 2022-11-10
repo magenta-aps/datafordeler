@@ -15,12 +15,13 @@ import java.util.List;
  */
 public class BirthRecord extends PersonDataRecord {
 
-    private CprBitemporality birthTemporality;
-    private CprBitemporality documentTemporality;
+    private final CprBitemporality birthTemporality;
+    private final CprBitemporality documentTemporality;
 
     public BirthRecord(String line) throws ParseException {
         this(line, traditionalMapping);
     }
+
     public BirthRecord(String line, Mapping mapping) throws ParseException {
         super(line);
         this.obtain(mapping);
@@ -30,6 +31,7 @@ public class BirthRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("start_mynkod-fødested", 14, 4);
         traditionalMapping.add("fødested_ts", 18, 12);

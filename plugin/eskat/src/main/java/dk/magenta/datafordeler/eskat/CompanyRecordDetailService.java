@@ -12,8 +12,6 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
-import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
@@ -57,14 +55,13 @@ public class CompanyRecordDetailService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CompanyRecordDetailService.class.getCanonicalName());
-
+    private final Logger log = LogManager.getLogger(CompanyRecordDetailService.class.getCanonicalName());
 
 
     @GetMapping("/{cvr}")
-    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     ResponseEntity companyDetail(HttpServletRequest request, @PathVariable String cvr) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
             loggerHelper.info("Incoming request CompanyPunitRecordService ");
@@ -75,7 +72,7 @@ public class CompanyRecordDetailService {
             Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
             CompanyRecord companyEntity = companyEntities.findFirst().orElse(null);
 
-            if(companyEntity==null) {
+            if (companyEntity == null) {
                 String errorMessage = "Company not found";
                 ObjectNode obj = objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
@@ -101,10 +98,9 @@ public class CompanyRecordDetailService {
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 }

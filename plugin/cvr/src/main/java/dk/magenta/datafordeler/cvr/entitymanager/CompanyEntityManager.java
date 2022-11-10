@@ -53,7 +53,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     @Autowired
     private SessionManager sessionManager;
 
-    private Logger log = LogManager.getLogger(CompanyEntityManager.class);
+    private final Logger log = LogManager.getLogger(CompanyEntityManager.class.getCanonicalName());
 
     public CompanyEntityManager() {
     }
@@ -105,7 +105,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
 
     public HashSet<CompanyRecord> directLookup(HashSet<String> cvrNumbers, OffsetDateTime since, List<Integer> municipalityCodes) {
         HashSet<CompanyRecord> records = new HashSet<>();
-        CvrRegisterManager registerManager = (CvrRegisterManager) this.getRegisterManager();
+        CvrRegisterManager registerManager = this.getRegisterManager();
         ScanScrollCommunicator eventCommunicator = (ScanScrollCommunicator) registerManager.getEventFetcher();
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
 

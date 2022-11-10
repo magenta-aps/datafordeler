@@ -15,12 +15,13 @@ import java.util.List;
  */
 public class CitizenshipRecord extends PersonDataRecord {
 
-    private CprBitemporality citizenshipTemporality;
-    private CprBitemporality documentTemporality;
+    private final CprBitemporality citizenshipTemporality;
+    private final CprBitemporality documentTemporality;
 
     public CitizenshipRecord(String line) throws ParseException {
         this(line, traditionalMapping);
     }
+
     public CitizenshipRecord(String line, Mapping mapping) throws ParseException {
         super(line);
         this.obtain(mapping);
@@ -30,6 +31,7 @@ public class CitizenshipRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("stat_ts", 18, 12);
         traditionalMapping.add("landekod", 30, 4);
@@ -40,7 +42,7 @@ public class CitizenshipRecord extends PersonDataRecord {
         traditionalMapping.add("dok-statsborgerskab", 63, 3);
     }
 
-        @Override
+    @Override
     public String getRecordType() {
         return RECORDTYPE_CITIZENSHIP;
     }

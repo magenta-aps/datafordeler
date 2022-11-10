@@ -22,7 +22,7 @@ public class GeoConfiguration implements Configuration {
         LOCAL_FILE(1),
         REMOTE_HTTP(2);
 
-        private int value;
+        private final int value;
 
         RegisterType(int value) {
             this.value = value;
@@ -37,7 +37,7 @@ public class GeoConfiguration implements Configuration {
         UTF_8(0),
         ISO_8859_1(1);
 
-        private int value;
+        private final int value;
 
         CharsetValue(int value) {
             this.value = value;
@@ -69,7 +69,6 @@ public class GeoConfiguration implements Configuration {
     }
 
 
-
     @Column
     @Enumerated(EnumType.ORDINAL)
     private CharsetValue charsetName = CharsetValue.UTF_8;
@@ -85,7 +84,6 @@ public class GeoConfiguration implements Configuration {
     public void setCharsetName(CharsetValue charsetName) {
         this.charsetName = charsetName;
     }
-
 
 
     @Column(length = 1024)
@@ -120,7 +118,6 @@ public class GeoConfiguration implements Configuration {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
 
     @Column
@@ -159,7 +156,6 @@ public class GeoConfiguration implements Configuration {
     }
 
 
-
     @Column
     @Enumerated(EnumType.ORDINAL)
     private RegisterType postcodeRegisterType = RegisterType.DISABLED;
@@ -194,7 +190,6 @@ public class GeoConfiguration implements Configuration {
     public void setPostcodeDeletionRegisterURL(String postcodeDeletionRegisterURL) {
         this.postcodeDeletionRegisterURL = postcodeDeletionRegisterURL;
     }
-
 
 
     @Column
@@ -233,7 +228,6 @@ public class GeoConfiguration implements Configuration {
     }
 
 
-
     @Column
     @Enumerated(EnumType.ORDINAL)
     private RegisterType roadRegisterType = RegisterType.DISABLED;
@@ -267,7 +261,6 @@ public class GeoConfiguration implements Configuration {
     public void setRoadDeletionRegisterURL(String roadDeletionRegisterURL) {
         this.roadDeletionRegisterURL = roadDeletionRegisterURL;
     }
-
 
 
     @Column
@@ -306,7 +299,6 @@ public class GeoConfiguration implements Configuration {
     }
 
 
-
     @Column
     @Enumerated(EnumType.ORDINAL)
     private RegisterType accessAddressRegisterType = RegisterType.DISABLED;
@@ -340,7 +332,6 @@ public class GeoConfiguration implements Configuration {
     public void setAccessAddressDeletionRegisterURL(String accessAddressDeletionRegisterURL) {
         this.accessAddressDeletionRegisterURL = accessAddressDeletionRegisterURL;
     }
-
 
 
     @Column
@@ -377,7 +368,6 @@ public class GeoConfiguration implements Configuration {
     public void setUnitAddressDeletionRegisterURL(String unitAddressDeletionRegisterURL) {
         this.unitAddressDeletionRegisterURL = unitAddressDeletionRegisterURL;
     }
-
 
 
     public RegisterType getRegisterType(String schema) {

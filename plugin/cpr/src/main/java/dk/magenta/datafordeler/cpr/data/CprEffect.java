@@ -61,6 +61,7 @@ public abstract class CprEffect<R extends Registration, V extends CprEffect, D e
     public void setRegistration(R registrering) {
         super.setRegistration(registrering);
     }
+
     public boolean compareRange(V other) {
         return (other != null && this.compareRange(other.getEffectFrom(), other.getEffectFromUncertain(), other.getEffectTo(), other.getEffectToUncertain()));
     }
@@ -68,7 +69,7 @@ public abstract class CprEffect<R extends Registration, V extends CprEffect, D e
     public boolean compareRange(OffsetDateTime effectFrom, boolean effectFromUncertain, OffsetDateTime effectTo, boolean effectToUncertain) {
         return (
                 Equality.equal(this.getEffectFrom(), effectFrom) &&
-                Equality.equal(this.getEffectTo(), effectTo) &&
+                        Equality.equal(this.getEffectTo(), effectTo) &&
                         (this.getEffectFromUncertain() == effectFromUncertain) &&
                         (this.getEffectToUncertain() == effectToUncertain)
         );
@@ -90,6 +91,6 @@ public abstract class CprEffect<R extends Registration, V extends CprEffect, D e
     }
 
     public String toString() {
-        return this.registration.getRegistrationFrom()+"|"+this.registration.getRegistrationTo()+"|"+this.getEffectFrom()+"|"+this.getEffectFromUncertain()+"|"+this.getEffectTo()+"|"+this.getEffectToUncertain();
+        return this.registration.getRegistrationFrom() + "|" + this.registration.getRegistrationTo() + "|" + this.getEffectFrom() + "|" + this.getEffectFromUncertain() + "|" + this.getEffectTo() + "|" + this.getEffectToUncertain();
     }
 }

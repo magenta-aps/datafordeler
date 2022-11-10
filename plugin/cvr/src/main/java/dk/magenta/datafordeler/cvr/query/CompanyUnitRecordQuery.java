@@ -5,13 +5,7 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryParameter;
-import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
-import dk.magenta.datafordeler.cvr.records.AddressRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyIndustryRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyLinkRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
-import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
 import java.time.OffsetDateTime;
@@ -77,7 +71,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         return "cvr_companyunit";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("pnr", CompanyUnitRecord.DB_FIELD_P_NUMBER);

@@ -9,7 +9,10 @@ import java.io.Serializable;
  */
 public interface PluginSourceData extends Serializable {
     String getData();
+
     String getReference();
+
     String getSchema();
+
     String getId();
 }

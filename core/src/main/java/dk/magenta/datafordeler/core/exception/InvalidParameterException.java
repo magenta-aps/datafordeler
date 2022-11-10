@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class InvalidParameterException extends DataFordelerException {
 
     public InvalidParameterException(String parameterName) {
-        super("Invalid parameter '"+parameterName+"'");
+        super("Invalid parameter '" + parameterName + "'");
     }
 
     @Override

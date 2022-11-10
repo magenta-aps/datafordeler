@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class AddressRecord extends PersonDataRecord {
 
-    private CprBitemporality addressTemporality;
-    private CprBitemporality conameTemporality;
-    private CprBitemporality municipalityTemporality;
+    private final CprBitemporality addressTemporality;
+    private final CprBitemporality conameTemporality;
+    private final CprBitemporality municipalityTemporality;
 
     public AddressRecord(String line) throws ParseException {
         this(line, traditionalMapping);
@@ -35,6 +35,7 @@ public class AddressRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("start_mynkod-personbolig", 14, 4);
         traditionalMapping.add("adr_ts", 18, 12);

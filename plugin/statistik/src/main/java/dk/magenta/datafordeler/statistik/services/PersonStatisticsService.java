@@ -17,7 +17,6 @@ import dk.magenta.datafordeler.cpr.records.BitemporalSet;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonStatusDataRecord;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportSyncHandler;
@@ -31,7 +30,6 @@ import java.io.OutputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.naturalOrder;
@@ -41,7 +39,7 @@ import static java.util.stream.Collectors.toSet;
 public abstract class PersonStatisticsService extends StatisticsService {
 
     public static final ZoneId cprDataOffset = ZoneId.of("Europe/Copenhagen");
-    private Logger log = LogManager.getLogger(PersonStatisticsService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(PersonStatisticsService.class.getCanonicalName());
 
     protected String[] requiredParameters() {
         return new String[]{};
@@ -52,9 +50,9 @@ public abstract class PersonStatisticsService extends StatisticsService {
     public int run(Filter filter, OutputStream outputStream, String reportUuid) {
 
 
-        try(final Session primarySession = this.getSessionManager().getSessionFactory().openSession();
-            final Session secondarySession = this.getSessionManager().getSessionFactory().openSession();
-            final Session repSyncSession = this.getSessionManager().getSessionFactory().openSession();) {
+        try (final Session primarySession = this.getSessionManager().getSessionFactory().openSession();
+             final Session secondarySession = this.getSessionManager().getSessionFactory().openSession();
+             final Session repSyncSession = this.getSessionManager().getSessionFactory().openSession()) {
 
             ReportSyncHandler repSyncHandler = new ReportSyncHandler(repSyncSession);
             repSyncHandler.setReportStatus(reportUuid, ReportProgressStatus.running);
@@ -86,7 +84,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
 
         } finally {
             log.info("Done writing report");
-            try(final Session repSyncSession = this.getSessionManager().getSessionFactory().openSession();) {
+            try (final Session repSyncSession = this.getSessionManager().getSessionFactory().openSession()) {
                 ReportSyncHandler repSyncHandler = new ReportSyncHandler(repSyncSession);
                 repSyncHandler.setReportStatus(reportUuid, ReportProgressStatus.done);
             }
@@ -133,7 +131,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
     }
 
     public static <R extends CprBitemporalRecord> Set<R> filterRecordsByEffect(Collection<R> records, OffsetDateTime effectAt) {
-        HashSet<R> filtered = (HashSet<R>) records.stream().filter(r -> effectAt==null || r.getBitemporality().containsEffect(effectAt, effectAt)).collect(toSet());
+        HashSet<R> filtered = (HashSet<R>) records.stream().filter(r -> effectAt == null || r.getBitemporality().containsEffect(effectAt, effectAt)).collect(toSet());
         return filtered;
     }
 
@@ -157,7 +155,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
         return filtered;
     }
 
-    private static Comparator bitemporalComparator = Comparator.comparing(PersonStatisticsService::getBitemporality, BitemporalityComparator.ALL)
+    private static final Comparator bitemporalComparator = Comparator.comparing(PersonStatisticsService::getBitemporality, BitemporalityComparator.ALL)
             .thenComparing(CprNontemporalRecord::getOriginDate, Comparator.nullsLast(naturalOrder()))
             .thenComparing(CprNontemporalRecord::getDafoUpdated)
             .thenComparing(DatabaseEntry::getId);
@@ -173,15 +171,16 @@ public abstract class PersonStatisticsService extends StatisticsService {
      * Find a record which is uncloced in effect, and has a registrationFrom equal to changedToOrIsTime.
      * If none is found find the record with the newest registrationFrom.
      * Otherwise return null
+     *
      * @param records
      * @param <R>
      * @return
      */
     public static <R extends CprBitemporalRecord> R findRegistrationAtMatchingChangedtimePost(Collection<R> records, OffsetDateTime changedToOrIsTime) {
-        R filtered = records.stream().filter(r -> r.getEffectTo()==null && r.getRegistrationFrom().equals(changedToOrIsTime)).findFirst().orElse(null);
-        if(filtered==null) {
+        R filtered = records.stream().filter(r -> r.getEffectTo() == null && r.getRegistrationFrom().equals(changedToOrIsTime)).findFirst().orElse(null);
+        if (filtered == null) {
             Comparator regTimeComparator = Comparator.comparing(R::getRegistrationFrom);
-            filtered = (R)records.stream().max(regTimeComparator).orElse(null);
+            filtered = (R) records.stream().max(regTimeComparator).orElse(null);
         }
         return filtered;
     }
@@ -190,16 +189,17 @@ public abstract class PersonStatisticsService extends StatisticsService {
      * Find a record which is uncloced in effect, and has a registrationto equal to changedToOrIsTime.
      * If none is found find the record with the newest registrationFrom.
      * Otherwise return null
+     *
      * @param records
      * @param <R>
      * @return
      */
     public static <R extends CprBitemporalRecord> R findRegistrationAtMatchingChangedtimePre(Collection<R> records, OffsetDateTime changedToOrIsTime) {
         R result = null;
-        List<R> filtered = records.stream().filter(r -> r.getEffectTo()==null && r.getRegistrationTo()!=null && r.getRegistrationTo().equals(changedToOrIsTime)).collect(toList());
-        if(filtered.size()==0) {
+        List<R> filtered = records.stream().filter(r -> r.getEffectTo() == null && r.getRegistrationTo() != null && r.getRegistrationTo().equals(changedToOrIsTime)).collect(toList());
+        if (filtered.size() == 0) {
             Comparator regTimeComparator = Comparator.comparing(R::getRegistrationFrom);
-            result = (R)records.stream().max(regTimeComparator).orElse(null);
+            result = (R) records.stream().max(regTimeComparator).orElse(null);
         } else {
             result = filtered.get(0);
         }
@@ -210,6 +210,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
     /**
      * Find the most important registration according to "bitemporalComparator"
      * Records with a missing OriginDate is removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return
@@ -221,6 +222,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
     /**
      * Find the newest unclosed record from the list of records
      * Records with a missing OriginDate is also removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return
@@ -232,6 +234,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
     /**
      * Find all records which is unclosed in registrationinterval, and which is not undone.
      * Beside of that it has to be either unclosed in the registration interval, or a part of it has to be active at the time defined by intervalstart
+     *
      * @param records
      * @param <R>
      * @return
@@ -245,6 +248,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
     /**
      * Find the newest unclosed record from the list of records
      * Records with a missing OriginDate is also removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return
@@ -257,6 +261,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
     /**
      * Find the newest unclosed record with specified effect from the list of records
      * Records with a missing OriginDate is also removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return
@@ -266,7 +271,6 @@ public abstract class PersonStatisticsService extends StatisticsService {
     }
 
     /**
-     *
      * @param records
      * @param effectAt
      * @param <R>
@@ -277,14 +281,13 @@ public abstract class PersonStatisticsService extends StatisticsService {
     }
 
 
-
     public static CprBitemporality getBitemporality(CprBitemporalRecord record) {
         return record.getBitemporality();
     }
 
 
     public static <R extends CprBitemporalRecord> List<R> FilterOnRegistrationFrom(Collection<R> records, OffsetDateTime registrationTimeStart, OffsetDateTime registrationTimeEnd) {
-        List<R> filtered = records.stream().filter(r -> r.getRegistrationFrom()!= null && (registrationTimeStart==null || r.getRegistrationFrom().isAfter(registrationTimeStart)) && (registrationTimeEnd==null || r.getRegistrationFrom().isBefore(registrationTimeEnd))).collect(toList());
+        List<R> filtered = records.stream().filter(r -> r.getRegistrationFrom() != null && (registrationTimeStart == null || r.getRegistrationFrom().isAfter(registrationTimeStart)) && (registrationTimeEnd == null || r.getRegistrationFrom().isBefore(registrationTimeEnd))).collect(toList());
         return filtered;
     }
 }

@@ -19,8 +19,7 @@ public class RecordMetadataWrapper {
     private ObjectMapper objectMapper;
 
 
-
-    public ObjectNode fillContainer(String pnr, String fieldname, CprBitemporalPersonRecord valueBeforeEvent, CprBitemporalPersonRecord valueAfterEvent)  {
+    public ObjectNode fillContainer(String pnr, String fieldname, CprBitemporalPersonRecord valueBeforeEvent, CprBitemporalPersonRecord valueAfterEvent) {
 
         ObjectNode root = this.objectMapper.createObjectNode();
         root.put(PersonEntity.IO_FIELD_CPR_NUMBER, pnr);
@@ -28,22 +27,21 @@ public class RecordMetadataWrapper {
         JsonNode nodeBeforeDataEvent = null;
         JsonNode nodeAfterDataEvent = null;
 
-        if(valueBeforeEvent!=null) {
+        if (valueBeforeEvent != null) {
             nodeBeforeDataEvent = objectMapper.convertValue(valueBeforeEvent, JsonNode.class);
         }
 
-        if(valueAfterEvent!=null) {
+        if (valueAfterEvent != null) {
             nodeAfterDataEvent = objectMapper.convertValue(valueAfterEvent, JsonNode.class);
         }
 
-        root.put("before_"+fieldname, cleanupObjectNode(nodeBeforeDataEvent));
-        root.put("after_"+fieldname, cleanupObjectNode(nodeAfterDataEvent));
+        root.put("before_" + fieldname, cleanupObjectNode(nodeBeforeDataEvent));
+        root.put("after_" + fieldname, cleanupObjectNode(nodeAfterDataEvent));
         return root;
     }
 
 
-
-    public ObjectNode fillContainer(String cvr, String fieldname, CvrBitemporalDataRecord valueBeforeEvent, CvrBitemporalDataRecord valueAfterEvent)  {
+    public ObjectNode fillContainer(String cvr, String fieldname, CvrBitemporalDataRecord valueBeforeEvent, CvrBitemporalDataRecord valueAfterEvent) {
 
         ObjectNode root = this.objectMapper.createObjectNode();
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule())
@@ -53,22 +51,22 @@ public class RecordMetadataWrapper {
         JsonNode nodeBeforeDataEvent = null;
         JsonNode nodeAfterDataEvent = null;
 
-        if(valueBeforeEvent!=null) {
+        if (valueBeforeEvent != null) {
             nodeBeforeDataEvent = mapper.convertValue(valueBeforeEvent, JsonNode.class);
         }
 
-        if(valueAfterEvent!=null) {
+        if (valueAfterEvent != null) {
             nodeAfterDataEvent = mapper.convertValue(valueAfterEvent, JsonNode.class);
         }
 
-        root.put("before_"+fieldname, cleanupObjectNode(nodeBeforeDataEvent));
-        root.put("after_"+fieldname, cleanupObjectNode(nodeAfterDataEvent));
+        root.put("before_" + fieldname, cleanupObjectNode(nodeBeforeDataEvent));
+        root.put("after_" + fieldname, cleanupObjectNode(nodeAfterDataEvent));
         return root;
     }
 
 
     private JsonNode cleanupObjectNode(JsonNode objectNode) {
-        if(objectNode != null) {
+        if (objectNode != null) {
             ((ObjectNode) objectNode).remove("cnt");
             ((ObjectNode) objectNode).remove("sidstOpdateret");
             ((ObjectNode) objectNode).remove("undone");

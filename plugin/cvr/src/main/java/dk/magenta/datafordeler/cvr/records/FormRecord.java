@@ -47,7 +47,6 @@ public class FormRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String IO_FIELD_CODE = "virksomhedsformkode";
 
     @Transient
@@ -105,7 +104,6 @@ public class FormRecord extends CvrBitemporalDataRecord {
     @ManyToOne(targetEntity = CompanyForm.class)
     @JsonIgnore
     private CompanyForm companyForm;
-
 
 
     public static final String DB_FIELD_PARTICIPANT_COMPANY_RELATION = "relationCompanyRecord";

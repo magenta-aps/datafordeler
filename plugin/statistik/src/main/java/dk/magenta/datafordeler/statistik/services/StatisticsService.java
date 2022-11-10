@@ -12,7 +12,6 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.statistik.StatistikRolesDefinition;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportAssignment;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportSyncHandler;
@@ -55,7 +54,7 @@ public abstract class StatisticsService {
     @Autowired
     SessionManager sessionManager;
 
-    private Logger log = LogManager.getLogger(StatisticsService.class);
+    private final Logger log = LogManager.getLogger(StatisticsService.class.getCanonicalName());
 
     static {
         StatisticsService.PATH_FILE = "statistik";
@@ -72,6 +71,7 @@ public abstract class StatisticsService {
     /**
      * If the request is a get-request we look for the Header "Authorization" to fund the user-rights
      * If the request is a Post-request we look for the parameter "token" to fund the user-rights
+     *
      * @param request
      * @return
      * @throws InvalidTokenException
@@ -80,7 +80,7 @@ public abstract class StatisticsService {
      */
     protected DafoUserDetails getUser(HttpServletRequest request) throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
         boolean isPost = "POST".equals(request.getMethod());
-        if(isPost) {
+        if (isPost) {
             String formToken = request.getParameter("token");
             if (formToken != null) {
                 return this.getDafoUserManager().getSamlUserDetailsFromToken(formToken);
@@ -112,15 +112,15 @@ public abstract class StatisticsService {
      */
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response, ServiceName serviceName) throws AccessDeniedException, AccessRequiredException, InvalidTokenException, IOException, MissingParameterException, InvalidClientInputException, HttpNotFoundException, InvalidCertificateException {
         DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-        if(user.isAnonymous() && request.getParameter("token")!=null) {
+        if (user.isAnonymous() && request.getParameter("token") != null) {
             String formToken = request.getParameter("token");
             if (formToken != null) {
                 user = this.getDafoUserManager().getSamlUserDetailsFromToken(formToken);
             }
         } else {
             //If the showfrontpage flag is set, only show that, login is not nessesary for that
-            String showfrontpage= request.getParameter("showfrontpage");
-            if(Boolean.parseBoolean(showfrontpage)) {
+            String showfrontpage = request.getParameter("showfrontpage");
+            if (Boolean.parseBoolean(showfrontpage)) {
                 IOUtils.copy(
                         StatisticsService.class.getResourceAsStream("/generalServiceForm.html"),
                         response.getWriter(), StandardCharsets.UTF_8
@@ -138,7 +138,7 @@ public abstract class StatisticsService {
             this.requireParameter(required, request.getParameter(required));
         }
 
-        try(Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
+        try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
             Filter filter = this.getFilter(request);
             String outputDescription = null;
             OutputStream outputStream = null;
@@ -146,14 +146,14 @@ public abstract class StatisticsService {
             String reportUuid = request.getParameter("reportUuid");
             String collectionUuid = request.getParameter("collectionUuid");
             ReportSyncHandler rps = new ReportSyncHandler(reportProgressSession);
-            if(reportUuid==null) {
+            if (reportUuid == null) {
                 ReportAssignment report = new ReportAssignment();
                 String registrationAfter = request.getParameter("registrationAfter");
                 String registrationBefore = request.getParameter("registrationBefore");
                 report.setRegistrationAfter(registrationAfter);
                 report.setRegistrationBefore(registrationBefore);
                 report.setTemplateName(serviceName.getIdentifier());
-                if(!rps.createReportStatusObject(report)) {
+                if (!rps.createReportStatusObject(report)) {
                     response.setStatus(HttpServletResponse.SC_CONFLICT);
                     response.getWriter().print("Execution of this report is rejected, another report is currently getting generated");
                     return;
@@ -164,10 +164,10 @@ public abstract class StatisticsService {
 
 
             if (this.getWriteToLocalFile()) {
-                response.getWriter().print("collectionUuid: "+collectionUuid);
+                response.getWriter().print("collectionUuid: " + collectionUuid);
 
                 if (PATH_FILE != null) {
-                    File file = new File(PATH_FILE, serviceName.getIdentifier()+"_"+reportUuid + ".csv");
+                    File file = new File(PATH_FILE, serviceName.getIdentifier() + "_" + reportUuid + ".csv");
                     file.createNewFile();
                     outputStream = new FileOutputStream(file);
                     outputDescription = "Written to file " + file.getCanonicalPath();
@@ -437,7 +437,7 @@ public abstract class StatisticsService {
         return String.format("%04d", localityCode);
     }
 
-    private static Pattern onlyDigits = Pattern.compile("^\\s*[0-9]+$");
+    private static final Pattern onlyDigits = Pattern.compile("^\\s*[0-9]+$");
 
     protected static String formatFloor(String floor) {
         if (floor == null || floor.isEmpty()) return "";
@@ -462,7 +462,7 @@ public abstract class StatisticsService {
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
-        if(!statisticsEnabled) {
+        if (!statisticsEnabled) {
             throw new AccessDeniedException("Statistics is disabled on the server");
         }
         try {
@@ -473,7 +473,7 @@ public abstract class StatisticsService {
         }
     }
 
-    private static ZoneId timezone = ZoneId.systemDefault();
+    private static final ZoneId timezone = ZoneId.systemDefault();
 
     protected String formatTime(OffsetDateTime time) {
         if (time == null) return "";

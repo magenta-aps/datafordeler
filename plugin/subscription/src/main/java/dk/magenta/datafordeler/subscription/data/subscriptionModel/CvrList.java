@@ -2,8 +2,11 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+
 import javax.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = CvrList.TABLE_NAME, indexes = {
@@ -29,9 +32,11 @@ public class CvrList extends DatabaseEntry {
         this.subscriber = subscriber;
     }
 
+
+    public static final String DB_FIELD_SUBSCRIBER = "subscriber_id";
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="subscriber_id")
+    @JoinColumn(name = DB_FIELD_SUBSCRIBER)
     private Subscriber subscriber;
 
     public Subscriber getSubscriber() {
@@ -42,7 +47,8 @@ public class CvrList extends DatabaseEntry {
         this.subscriber = subscriber;
     }
 
-    @Column(name="listId", unique = true, nullable=false)
+    public static final String DB_FIELD_LIST_ID = "listId";
+    @Column(name = DB_FIELD_LIST_ID, unique = true, nullable = false)
     private String listId;
 
     public String getListId() {
@@ -54,15 +60,16 @@ public class CvrList extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<DataEventSubscription> dataSubscription;
 
     @ElementCollection
     @JsonIgnore
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<SubscribedCvrNumber> cvrs = new HashSet<SubscribedCvrNumber>();
 
-    @Column(name="cvr", nullable=false)
+    public static final String DB_FIELD_CVR = "cvr";
+    @Column(name = DB_FIELD_CVR, nullable = false)
     @JsonIgnore
     public Set<SubscribedCvrNumber> getCvr() {
         return cvrs;
@@ -77,7 +84,7 @@ public class CvrList extends DatabaseEntry {
     }
 
     public void addCvrStrings(List<String> cvrs) {
-        for(String cvr : cvrs) {
+        for (String cvr : cvrs) {
             this.cvrs.add(new SubscribedCvrNumber(cvr));
         }
     }

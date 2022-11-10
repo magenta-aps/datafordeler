@@ -6,13 +6,13 @@ import java.time.format.DateTimeFormatter;
 
 public class MismatchingRegistrationBoundaryException extends InvalidDataInputException {
 
-    private Registration newRegistration;
-    private Registration existingRegistration;
+    private final Registration newRegistration;
+    private final Registration existingRegistration;
 
     public MismatchingRegistrationBoundaryException(Registration newRegistration, Registration existingRegistration) {
-        super("Mismatching timestamps; incoming registration "+newRegistration.getRegisterChecksum()+
-                " with registrationFromBefore "+newRegistration.getRegistrationFrom().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)+
-                " does not match existing registration "+existingRegistration.getRegisterChecksum()+" with registrationToBefore "+
+        super("Mismatching timestamps; incoming registration " + newRegistration.getRegisterChecksum() +
+                " with registrationFromBefore " + newRegistration.getRegistrationFrom().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) +
+                " does not match existing registration " + existingRegistration.getRegisterChecksum() + " with registrationToBefore " +
                 existingRegistration.getRegistrationTo().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         this.newRegistration = newRegistration;
         this.existingRegistration = existingRegistration;

@@ -77,14 +77,12 @@ public class PersonCoreDataRecord extends CprBitemporalPersonRecord<PersonCoreDa
     }
 
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<PersonCoreDataRecord> correctors = new HashSet<>();
+    private final Set<PersonCoreDataRecord> correctors = new HashSet<>();
 
     public Set<PersonCoreDataRecord> getCorrectors() {
         return this.correctors;
     }
-
 
 
     @Override

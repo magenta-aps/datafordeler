@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class PersonSubscription extends DatabaseEntry {
 
     public static final String DB_FIELD_CPR_NUMBER = "personNumber";
-    public static final String  DB_FIELD_CPR_ASSIGNMENT_STATUS = "personAssignmentStatus";
-    public static final String  DB_FIELD_CPR_ASSIGNMENT_REASON = "personAssignmentReason";
+    public static final String DB_FIELD_CPR_ASSIGNMENT_STATUS = "personAssignmentStatus";
+    public static final String DB_FIELD_CPR_ASSIGNMENT_REASON = "personAssignmentReason";
 
 
     @CreationTimestamp

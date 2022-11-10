@@ -3,13 +3,15 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import java.util.*;
 
 /**
@@ -73,7 +75,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     }
 
 
-
     public static final String IO_FIELD_VALUES = "vaerdier";
 
     @OneToMany(mappedBy = AttributeValueRecord.DB_FIELD_ATTRIBUTE, targetEntity = AttributeValueRecord.class, cascade = CascadeType.ALL)
@@ -111,10 +112,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     }
 
 
-
-
-
-
     public static final String DB_FIELD_ORGANIZATION = "organizationRecord";
 
     @JsonIgnore
@@ -131,7 +128,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_ORGANIZATION_MEMBERDATA = "organizationMemberdataRecord";
 
     @JsonIgnore
@@ -142,7 +138,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     public void setOrganizationMemberdataRecord(OrganizationMemberdataRecord organizationMemberdataRecord) {
         this.organizationMemberdataRecord = organizationMemberdataRecord;
     }
-
 
 
     public static final String DB_FIELD_FUSION = "fusionSplitRecord";
@@ -157,7 +152,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_FUSION_OUTGOING = "fusionOutgoing";
 
     @JsonIgnore
@@ -167,7 +161,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     public void setFusionOutgoing(boolean fusionOutgoing) {
         this.fusionOutgoing = fusionOutgoing;
     }
-
 
 
     public static final String DB_FIELD_OFFICE = "officeRelationRecord";
@@ -202,10 +195,10 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     public void merge(AttributeRecord otherRecord) {
         if (
                 otherRecord != null &&
-                this.sequenceNumber == otherRecord.getSequenceNumber() &&
-                Objects.equals(this.type, otherRecord.getType()) &&
-                Objects.equals(this.valueType, otherRecord.getValueType())
-            ) {
+                        this.sequenceNumber == otherRecord.getSequenceNumber() &&
+                        Objects.equals(this.type, otherRecord.getType()) &&
+                        Objects.equals(this.valueType, otherRecord.getValueType())
+        ) {
             for (AttributeValueRecord attributeValueRecord : otherRecord.getValues()) {
                 this.addValue(attributeValueRecord);
             }

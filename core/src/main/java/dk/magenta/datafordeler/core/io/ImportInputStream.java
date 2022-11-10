@@ -23,7 +23,7 @@ public class ImportInputStream extends WrappedInputStream {
     }
 
 
-    private ArrayList<File> cacheFiles = new ArrayList<>();
+    private final ArrayList<File> cacheFiles = new ArrayList<>();
 
     public void addCacheFile(File cacheFile) {
         this.cacheFiles.add(cacheFile);
@@ -33,7 +33,6 @@ public class ImportInputStream extends WrappedInputStream {
     public ArrayList<File> getCacheFiles() {
         return this.cacheFiles;
     }
-
 
 
     private int lineCount = 0;

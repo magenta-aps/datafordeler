@@ -29,37 +29,37 @@ public abstract class FapiService<E extends Entity, Q extends Query> extends Fap
 
 
     protected void sendAsCSV(Stream<E> entities, HttpServletRequest request,
-        HttpServletResponse response)
-        throws IOException, HttpNotFoundException {
+                             HttpServletResponse response)
+            throws IOException, HttpNotFoundException {
         List<MediaType> acceptedTypes = MediaType.parseMediaTypes
-            (request.getHeader("Accept"));
+                (request.getHeader("Accept"));
 
         Iterator<Map<String, Object>> dataIter =
-            entities.map(Entity::getRegistrations).flatMap(
-                List::stream
-            ).flatMap(
-                r -> ((Registration) r).getEffects().stream()
-            ).map(
-                obj -> {
-                    Effect e = (Effect) obj;
-                    Registration r = e.getRegistration();
-                    Map<String, Object> data = e.getData();
+                entities.map(Entity::getRegistrations).flatMap(
+                        List::stream
+                ).flatMap(
+                        r -> ((Registration) r).getEffects().stream()
+                ).map(
+                        obj -> {
+                            Effect e = (Effect) obj;
+                            Registration r = e.getRegistration();
+                            Map<String, Object> data = e.getData();
 
-                    data.put("effectFrom",
-                        e.getEffectFrom());
-                    data.put("effectTo",
-                        e.getEffectTo());
-                    data.put("registrationFrom",
-                        r.getRegistrationFrom());
-                    data.put("registrationTo",
-                        r.getRegistrationFrom());
-                    data.put("sequenceNumber",
-                        r.getSequenceNumber());
-                    data.put("uuid", r.getEntity().getUUID());
+                            data.put("effectFrom",
+                                    e.getEffectFrom());
+                            data.put("effectTo",
+                                    e.getEffectTo());
+                            data.put("registrationFrom",
+                                    r.getRegistrationFrom());
+                            data.put("registrationTo",
+                                    r.getRegistrationFrom());
+                            data.put("sequenceNumber",
+                                    r.getSequenceNumber());
+                            data.put("uuid", r.getEntity().getUUID());
 
-                    return data;
-                }
-            ).iterator();
+                            return data;
+                        }
+                ).iterator();
 
         if (!dataIter.hasNext()) {
             response.sendError(HttpStatus.NO_CONTENT.value());
@@ -67,22 +67,22 @@ public abstract class FapiService<E extends Entity, Q extends Query> extends Fap
         }
 
         CsvSchema.Builder builder =
-            new CsvSchema.Builder();
+                new CsvSchema.Builder();
 
         Map<String, Object> first = dataIter.next();
         ArrayList<String> keys =
-            new ArrayList<>(first.keySet());
+                new ArrayList<>(first.keySet());
         Collections.sort(keys);
 
         for (int i = 0; i < keys.size(); i++) {
             builder.addColumn(new CsvSchema.Column(
-                i, keys.get(i),
-                CsvSchema.ColumnType.NUMBER_OR_STRING
+                    i, keys.get(i),
+                    CsvSchema.ColumnType.NUMBER_OR_STRING
             ));
         }
 
         CsvSchema schema =
-            builder.build().withHeader();
+                builder.build().withHeader();
 
         if (acceptedTypes.contains(new MediaType("text", "tsv"))) {
             schema = schema.withColumnSeparator('\t');
@@ -92,7 +92,7 @@ public abstract class FapiService<E extends Entity, Q extends Query> extends Fap
         }
 
         SequenceWriter writer =
-            csvMapper.writer(schema).writeValues(response.getOutputStream());
+                csvMapper.writer(schema).writeValues(response.getOutputStream());
 
         writer.write(first);
 

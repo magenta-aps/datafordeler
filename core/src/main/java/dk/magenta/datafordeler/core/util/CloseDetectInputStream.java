@@ -12,15 +12,15 @@ import java.util.List;
  */
 public class CloseDetectInputStream extends WrappedInputStream {
 
-    private List<Runnable> beforeCloseListeners = new ArrayList<>();
-    private List<Runnable> afterCloseListeners = new ArrayList<>();
+    private final List<Runnable> beforeCloseListeners = new ArrayList<>();
+    private final List<Runnable> afterCloseListeners = new ArrayList<>();
 
     public CloseDetectInputStream(InputStream in) {
         super(in);
     }
 
     /**
-     * Add a callback to be run when the close() method is called, before the 
+     * Add a callback to be run when the close() method is called, before the
      * wrapped stream close() method is called
      */
     public void addBeforeCloseListener(Runnable closeListener) {
@@ -28,7 +28,7 @@ public class CloseDetectInputStream extends WrappedInputStream {
     }
 
     /**
-     * Add a callback to be run when the close() method is called, after the 
+     * Add a callback to be run when the close() method is called, after the
      * wrapped stream close() method is called
      */
     public void addAfterCloseListener(Runnable closeListener) {
@@ -49,7 +49,8 @@ public class CloseDetectInputStream extends WrappedInputStream {
         for (Runnable closeListener : listeners) {
             try {
                 closeListener.run();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
     }
 

@@ -16,7 +16,7 @@ public abstract class CprSubParser<T extends Record> {
     public CprSubParser() {
     }
 
-    private Logger log = LogManager.getLogger(CprSubParser.class);
+    private final Logger log = LogManager.getLogger(CprSubParser.class.getCanonicalName());
 
     public Logger getLog() {
         return this.log;
@@ -31,7 +31,7 @@ public abstract class CprSubParser<T extends Record> {
         String origin = null;
         if (colonIndex != -1) {
             origin = line.substring(2, colonIndex);
-            line = line.substring(colonIndex+1);
+            line = line.substring(colonIndex + 1);
         }
         T record = this.parseLine(line.substring(0, 3), line);
         if (origin != null && record != null) {
@@ -41,7 +41,7 @@ public abstract class CprSubParser<T extends Record> {
     }
 
     protected void logType(String recordType) {
-        this.getLog().debug("Parsing record of type "+recordType);
+        this.getLog().debug("Parsing record of type " + recordType);
     }
 
     public abstract T parseLine(String recordType, String line);

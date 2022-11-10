@@ -60,7 +60,6 @@ public class BirthPlaceDataRecord extends CprBitemporalPersonRecord<BirthPlaceDa
     }
 
 
-
     // Supplerende fødselsregistreringssted tekst
     public static final String DB_FIELD_BIRTH_PLACE_NAME = "birthPlaceName";
     public static final String IO_FIELD_BIRTH_PLACE_NAME = "cprFødselsregistreringsstedsnavn";
@@ -76,7 +75,6 @@ public class BirthPlaceDataRecord extends CprBitemporalPersonRecord<BirthPlaceDa
     public void setBirthPlaceName(String birthPlaceName) {
         this.birthPlaceName = birthPlaceName;
     }
-
 
 
     @Override

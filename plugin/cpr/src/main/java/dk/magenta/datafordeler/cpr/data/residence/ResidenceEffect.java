@@ -11,10 +11,11 @@ import java.time.temporal.TemporalAccessor;
 
 /**
  * Representation of effects in the bitemporal model for residences.
+ *
  * @see dk.magenta.datafordeler.core.database.Entity
  */
 @javax.persistence.Entity
-@Table(name= CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_effect", indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_effect", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_effect_registration", columnList = "registration_id"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_effect_from", columnList = "effectFrom"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_effect_to", columnList = "effectTo")

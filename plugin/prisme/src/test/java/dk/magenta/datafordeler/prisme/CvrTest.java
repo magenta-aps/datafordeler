@@ -13,9 +13,7 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
-import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.ger.GerPlugin;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;

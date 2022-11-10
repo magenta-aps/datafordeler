@@ -36,6 +36,7 @@ public class XlsConverter extends SpreadsheetConverter {
     public Map<String, List<RawData>> convert(InputStream data) throws Exception {
         return this.convert(new HSSFWorkbook(data));
     }
+
     public Map<String, List<RawData>> convert(File data) throws Exception {
         return this.convert((HSSFWorkbook) WorkbookFactory.create(data));
     }

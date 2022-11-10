@@ -22,7 +22,6 @@
             "brancheAnsvarskode": 0,
             "reklamebeskyttet": true,
             "navne": [
-
             ],
             "binavne": [
             ],
@@ -62,59 +61,43 @@
               }
             ],
             "beliggenhedsadresse": [
-
             ],
             "telefonNummer": [
-
             ],
             "telefaxNummer": [],
             "elektroniskPost": [
-
             ],
             "hjemmeside": [
-
             ],
             "obligatoriskEmail": [],
             "livsforloeb": [
-
             ],
             "hovedbranche": [
-
             ],
             "bibranche1": [
-
             ],
             "bibranche2": [],
             "bibranche3": [],
             "status": [],
             "virksomhedsstatus": [
-
             ],
             "virksomhedsform": [
-
             ],
             "aarsbeskaeftigelse": [
-
             ],
             "kvartalsbeskaeftigelse": [
-
             ],
             "attributter": [
-
             ],
             "penheder": [
-
             ],
             "deltagerRelation": [
             ],
             "fusioner": [
-
             ],
             "spaltninger": [
-
             ],
             "virksomhedMetadata": {
-
             }
           }
         }

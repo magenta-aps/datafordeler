@@ -109,7 +109,7 @@ public class StatusDataServiceTest extends TestBase {
 
         FileInputStream fileInputStream = new FileInputStream(StatisticsService.PATH_FILE + File.separator + statusFiles[0]);
         String contents = InputStreamReader.readInputStream(
-                fileInputStream,"UTF-8"
+                fileInputStream, "UTF-8"
         );
         fileInputStream.close();
 

@@ -22,10 +22,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String FILTERPARAMTYPE_EFFECTTO = "java.time.OffsetDateTime";
 
 
-
-
-
-
     public static final String DB_FIELD_ENTITY = CprMonotemporalRecord.DB_FIELD_ENTITY;
 
     public static final String DB_FIELD_REGISTRATION_FROM = CprMonotemporalRecord.DB_FIELD_REGISTRATION_FROM;
@@ -94,8 +90,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     }
 
 
-
-
     // Whether this record should replace any equal records? (equal except effectTo)
     @JsonIgnore
     @XmlTransient
@@ -109,7 +103,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public boolean isHistoric() {
         return this.historic;
     }
-
 
 
     public CprBitemporalRecord setAnnKor(Character annkor) {
@@ -152,7 +145,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public boolean isTechnicalCorrection() {
         return this.technicalCorrection;
     }
-
 
 
     public static final String DB_FIELD_UNDO = "undo";

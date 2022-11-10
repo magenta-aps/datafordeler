@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.*;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.exception.DataStreamException;
+import dk.magenta.datafordeler.core.exception.ImportInterruptedException;
+import dk.magenta.datafordeler.core.exception.ParseException;
 import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
@@ -18,13 +21,7 @@ import dk.magenta.datafordeler.core.util.Stopwatch;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
-import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
-import dk.magenta.datafordeler.cvr.records.CvrEntityRecord;
-import dk.magenta.datafordeler.cvr.records.CvrRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyUnitMetadataRecord;
-import dk.magenta.datafordeler.cvr.records.CompanySubscription;
-import dk.magenta.datafordeler.cvr.records.CompanyMetadataRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -71,14 +69,14 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     private static final String TASK_SAVE = "CvrSave";
     private static final String TASK_COMMIT = "Transaction commit";
 
-    private static boolean IMPORT_ONLY_CURRENT = false;
-    private static boolean DONT_IMPORT_CURRENT = false;
+    private static final boolean IMPORT_ONLY_CURRENT = false;
+    private static final boolean DONT_IMPORT_CURRENT = false;
 
-    private ScanScrollCommunicator commonFetcher;
+    private final ScanScrollCommunicator commonFetcher;
 
-    protected Logger log = LogManager.getLogger(this.getClass().getSimpleName());
+    protected Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
 
-    private Collection<String> handledURISubstrings;
+    private final Collection<String> handledURISubstrings;
 
     protected abstract String getBaseName();
 
@@ -148,6 +146,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * Takes a stream of data, parses it in chunks, and saves it to the database.
      * The Stream is read in chunks (separated by newline), each chunk expected to be a properly formatted JSON object.
      * In accordance with the flow laid out in Pull, an ImportInterruptedException will be thrown if the importMetadata signals an orderly halt
+     *
      * @param registrationData
      * @param importMetadata
      * @return
@@ -158,7 +157,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         Session session = importMetadata.getSession();
         if (session != null) {
             //With this flag true initiated testdata is cleared before initiation of new data is initiated
-            if(importMetadata.getImportConfiguration()!=null &&
+            if (importMetadata.getImportConfiguration() != null &&
                     importMetadata.getImportConfiguration().has("cleantestdatafirst") &&
                     importMetadata.getImportConfiguration().get("cleantestdatafirst").booleanValue()) {
                 cleanDemoData(session);
@@ -177,7 +176,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             lines = importStream.getLineCount();
         }
 
-        Scanner scanner = new Scanner(registrationData, "UTF-8").useDelimiter(String.valueOf(this.commonFetcher.delimiter));
+        Scanner scanner = new Scanner(registrationData, StandardCharsets.UTF_8).useDelimiter(String.valueOf(ScanScrollCommunicator.delimiter));
         boolean wrappedInTransaction = importMetadata.isTransactionInProgress();
         long chunkCount = 1;
         long startChunk = importMetadata.getStartChunk();
@@ -249,7 +248,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             }
             subscribeToMissingCvr();
 
-            log.info("All chunks handled\n"+timer.formatAllTotal());
+            log.info("All chunks handled\n" + timer.formatAllTotal());
             Session progressSession = this.configurationSessionManager.getSessionFactory().openSession();
             progressSession.beginTransaction();
             progressSession.delete(progress);
@@ -273,7 +272,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * If there is any P-numbers that is assigned under a CVR-number that does not exist in datafordeler, ad the missing CVR to a list for fetching
      */
     public void subscribeToMissingCvr() {
-        try (Session sessionSub = this.getSessionManager().getSessionFactory().openSession()){
+        try (Session sessionSub = this.getSessionManager().getSessionFactory().openSession()) {
             Transaction tx = sessionSub.beginTransaction();
             String hql_companies = "SELECT DISTINCT companyUnit.newestCvrRelation FROM " + CompanyUnitMetadataRecord.class.getCanonicalName() + " companyUnit " +
 
@@ -294,11 +293,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             }
             sessionSub.flush();
             tx.commit();
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("Error creating subscription for CVR", e.getStackTrace());
         }
     }
-
 
 
     /**
@@ -313,7 +311,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         personQuery.setPageSize(1000);
         personQuery.applyFilters(session);
         List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
-        for(CompanyRecord companyForDeletion : companyEntities) {
+        for (CompanyRecord companyForDeletion : companyEntities) {
             session.delete(companyForDeletion);
         }
         session.getTransaction().commit();
@@ -321,15 +319,18 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
 
     protected abstract SessionManager getSessionManager();
+
     protected abstract String getJsonTypeName();
+
     protected abstract Class<T> getRecordClass();
+
     protected abstract UUID generateUUID(T record);
 
     /**
      * Parse an incoming JsonNode containing CVR data. A node may be a collection of nodes, in which case
      * this method recurses to handle each node separately.
      * Must be idempotent: Running a second time with the same input should not result in new data added to the database
-     *
+     * <p>
      * The input data for a given entity (e.g. a company) is parsed into a collection of records (instances of subclasses of CvrRecord),
      * then sorted into buckets sharing bitemporality. For each unique bitemporality (representing one or more records),
      * a list of registrations and effects are found and/or created, and one basedata item (instance of subclass of CvrData)
@@ -363,7 +364,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                 jsonNode = jsonNode.get("hits");
             }
             if (jsonNode.isArray()) {
-                log.debug("Node contains "+jsonNode.size()+" subnodes");
+                log.debug("Node contains " + jsonNode.size() + " subnodes");
                 for (JsonNode item : jsonNode) {
                     //this.parseData(item, importMetadata, session);
                     items.addAll(this.parseNode(item));
@@ -390,6 +391,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     /**
      * Sorts a collection of records into buckets sharing bitemporality
+     *
      * @param records
      * @return
      */
@@ -438,6 +440,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * This class saves to the database during import, again to achieve better performance,
      * instead of returning potentially millions of unsaved objects for others to save.
      * (Which quickly fills up the heap, leading to OutOfMemory errors)
+     *
      * @return true
      */
     @Override

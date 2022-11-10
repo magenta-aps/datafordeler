@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class Join {
-    private String base;
-    private String member;
-    private String alias;
+    private final String base;
+    private final String member;
+    private final String alias;
 
     public Join(String base, String member) {
         this.base = base;
@@ -33,8 +33,8 @@ public class Join {
         String[] parts = path.split("\\.");
         int r = lastIsField ? 2 : 1;
         String base = parts[0];
-        for (int i=0; i<parts.length - r; i++) {
-            Join join = new Join(base, parts[i+1]);
+        for (int i = 0; i < parts.length - r; i++) {
+            Join join = new Join(base, parts[i + 1]);
             base = join.getAlias();
             joins.add(join);
         }

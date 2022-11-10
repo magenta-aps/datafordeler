@@ -92,7 +92,7 @@ public class AdresseServiceTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
                 objectMapper.readTree("[{\"uuid\":\"4d9cd2a0-89f1-4acc-a259-4fd139006d87\",\"navn\":\"Paamiut\",\"forkortelse\":\"PAA\"}]").equals(
-                    objectMapper.readTree(response.getBody())
+                        objectMapper.readTree(response.getBody())
                 )
         );
     }
@@ -124,7 +124,7 @@ public class AdresseServiceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[{\"uuid\":\"e4dc6c09-baae-40b1-8696-57771b2f7a81\",\"vejkode\":1,\"navn\":\"Aadarujuup Aqquserna\",\"forkortet_navn\":\"Aadarujuup Aqq.\",\"andet_navn\":null,\"cpr_navn\":null}]").equals(
                         objectMapper.readTree(response.getBody())
                 )
@@ -150,7 +150,7 @@ public class AdresseServiceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[{\"husnummer\":\"05\",\"b_nummer\":\"293\",\"b_kaldenavn\":\"testhus\"}]").equals(
                         objectMapper.readTree(response.getBody())
                 )
@@ -178,19 +178,19 @@ public class AdresseServiceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[" +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}," +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"2\",\"doer\":null}" +
                         "]").equals(
                         objectMapper.readTree(response.getBody())
                 ) ||
-                objectMapper.readTree("[" +
-                        "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"2\",\"doer\":null}," +
-                        "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}" +
-                        "]").equals(
-                        objectMapper.readTree(response.getBody())
-                )
+                        objectMapper.readTree("[" +
+                                "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"2\",\"doer\":null}," +
+                                "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}" +
+                                "]").equals(
+                                objectMapper.readTree(response.getBody())
+                        )
         );
 
         response = restTemplate.exchange(
@@ -209,7 +209,7 @@ public class AdresseServiceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[" +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}," +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"2\",\"doer\":null}" +
@@ -232,7 +232,7 @@ public class AdresseServiceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[]").equals(
                         objectMapper.readTree(response.getBody())
                 )
@@ -246,7 +246,7 @@ public class AdresseServiceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[" +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}," +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"2\",\"doer\":null}" +
@@ -254,10 +254,10 @@ public class AdresseServiceTest {
                         objectMapper.readTree(response.getBody())
                 ) ||
                         objectMapper.readTree("[" +
-                        "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"2\",\"doer\":null}," +
-                        "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}" +
-                        "]").equals(
-                        objectMapper.readTree(response.getBody())
+                                "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"2\",\"doer\":null}," +
+                                "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}" +
+                                "]").equals(
+                                objectMapper.readTree(response.getBody())
                         )
         );
 
@@ -269,7 +269,7 @@ public class AdresseServiceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[]").equals(
                         objectMapper.readTree(response.getBody())
                 )
@@ -296,7 +296,7 @@ public class AdresseServiceTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree("{}").equals(
                         objectMapper.readTree(response.getBody())
                 )
@@ -314,10 +314,10 @@ public class AdresseServiceTest {
         String expected2 = "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"vej_uuid\":\"e4dc6c09-baae-40b1-8696-57771b2f7a81\",\"vejkode\":1,\"vejnavn\":\"Aadarujuup Aqquserna\",\"lokalitet\":\"4d9cd2a0-89f1-4acc-a259-4fd139006d87\",\"lokalitetsnavn\":\"Paamiut\",\"kommunekode\":955,\"etage\":\"2\",\"doer\":null,\"bolig\":true}";
 
         Assert.assertTrue(
-        "Non-matching response "+response.getBody(),
-        objectMapper.readTree(expected1).equals(
-                objectMapper.readTree(response.getBody())
-        ));
+                "Non-matching response " + response.getBody(),
+                objectMapper.readTree(expected1).equals(
+                        objectMapper.readTree(response.getBody())
+                ));
 
 
         response = restTemplate.exchange(
@@ -329,7 +329,7 @@ public class AdresseServiceTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         Assert.assertTrue(
-                "Non-matching response "+response.getBody(),
+                "Non-matching response " + response.getBody(),
                 objectMapper.readTree(expected2).equals(
                         objectMapper.readTree(response.getBody())
                 ));

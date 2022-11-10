@@ -7,7 +7,10 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
+import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
+import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -56,7 +59,7 @@ public class CprAdressHistoryService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CprAdressHistoryService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprAdressHistoryService.class.getCanonicalName());
 
     @Autowired
     private PersonAdressHistoryOutputWrapperPrisme personOutputWrapper;
@@ -78,7 +81,7 @@ public class CprAdressHistoryService {
         this.checkAndLogAccess(loggerHelper);
         loggerHelper.urlInvokePersistablelogs("CprAdressHistoryService");
 
-        try(final Session session = sessionManager.getSessionFactory().openSession();) {
+        try (final Session session = sessionManager.getSessionFactory().openSession()) {
             GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
@@ -104,10 +107,9 @@ public class CprAdressHistoryService {
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 

@@ -587,7 +587,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public static UUID generateUUID(String unitType, long unitNumber) {
-        String uuidInput = "participant:"+unitType+"/"+unitNumber;
+        String uuidInput = "participant:" + unitType + "/" + unitNumber;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
 

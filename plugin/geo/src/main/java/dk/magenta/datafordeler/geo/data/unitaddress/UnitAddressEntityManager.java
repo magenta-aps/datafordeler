@@ -82,11 +82,11 @@ public class UnitAddressEntityManager extends GeoEntityManager<UnitAddressEntity
         UUID accessAddressUUID = record.properties.getAccessAddressSumiffiikAsUUID();
         unitAddressEntity.setAccessAddress(
                 accessAddressUUID != null ?
-                QueryManager.getOrCreateIdentification(
-                    session,
-                    accessAddressUUID,
-                    accessAddressEntityManager.getDomain()
-                ) : null
+                        QueryManager.getOrCreateIdentification(
+                                session,
+                                accessAddressUUID,
+                                accessAddressEntityManager.getDomain()
+                        ) : null
         );
         return unitAddressEntity;
     }

@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public class QueryParameter extends ArrayList<String> {
 
-    private BaseQuery query;
+    private final BaseQuery query;
 
     public QueryParameter(BaseQuery query) {
         this.query = query;

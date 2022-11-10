@@ -38,7 +38,7 @@ public abstract class RegisterManager {
 
     protected HashSet<String> handledSchemas;
 
-    private static Logger log = LogManager.getLogger(RegisterManager.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(RegisterManager.class.getCanonicalName());
 
     public RegisterManager() {
         this.handledSchemas = new HashSet<>();
@@ -58,12 +58,14 @@ public abstract class RegisterManager {
 
     /**
      * Plugins must return a Fetcher instance from this method
+     *
      * @return
      */
     protected abstract Communicator getEventFetcher();
 
     /**
      * Plugins must return an autowired ObjectMapper instance from this method
+     *
      * @return
      */
     protected abstract ObjectMapper getObjectMapper();
@@ -115,12 +117,11 @@ public abstract class RegisterManager {
     }
 
 
-
-
     /** Event fetching **/
 
     /**
      * Obtain remote URI from which data can be pulled, given an EntityManager
+     *
      * @param entityManager
      * @return
      */
@@ -130,6 +131,7 @@ public abstract class RegisterManager {
      * General data pull. Will perform a pull for all EntityManagers registered under the RegisterManager.
      * Subclasses may override this, but should endeavour to avoid doing so, instead overriding
      * pullEvents(URI eventInterface, EntityManager entityManager) and/or parseEventResponse(InputStream responseContent, EntityManager entityManager)
+     *
      * @return
      * @throws DataFordelerException
      */
@@ -143,6 +145,7 @@ public abstract class RegisterManager {
      * Communicator returned by this.getEventFetcher(), and parses the raw data through
      * parseEventResponse(InputStream responseContent, EntityManager entityManager)
      * which must be implemented in subclasses.
+     *
      * @param eventInterface
      * @param entityManager
      * @return
@@ -153,7 +156,7 @@ public abstract class RegisterManager {
     }
 
     public InputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
-        this.getLog().info("Pulling events from "+eventInterface+", for entityManager "+entityManager);
+        this.getLog().info("Pulling events from " + eventInterface + ", for entityManager " + entityManager);
         Communicator eventCommunicator = this.getEventFetcher();
         return eventCommunicator.fetch(eventInterface);
     }
@@ -184,6 +187,7 @@ public abstract class RegisterManager {
     /**
      * Parses the raw inputstream from a data source into a stream of PluginSourceData objects, usually by wrapping the important parts.
      * The resultant objects should be consumable by
+     *
      * @param responseContent
      * @param entityManager
      * @return
@@ -194,6 +198,7 @@ public abstract class RegisterManager {
     /**
      * Return a Cron expression telling when to perform a pull from the register
      * Subclasses that want to enable pull must override this and return a valid cron expression
+     *
      * @return
      */
     public String getPullCronSchedule() {
@@ -202,6 +207,7 @@ public abstract class RegisterManager {
 
     /**
      * Utility method to be used by subclasses
+     *
      * @param base
      * @param path
      * @return Expanded URI, with scheme, host and port from the base, a custom path, and no query or fragment
@@ -210,8 +216,10 @@ public abstract class RegisterManager {
     public static URI expandBaseURI(URI base, String path) {
         return expandBaseURI(base, path, null, null);
     }
+
     /**
      * Utility method to be used by subclasses
+     *
      * @param base
      * @param path
      * @return Expanded URI, with scheme, host and port from the base, and a custom path query and fragment
@@ -219,20 +227,20 @@ public abstract class RegisterManager {
      */
     public static URI expandBaseURI(URI base, String path, String query, String fragment) {
         try {
-            return new URI(base.getScheme(), base.getUserInfo(), base.getHost(), base.getPort(),base.getPath() + path, query, fragment);
+            return new URI(base.getScheme(), base.getUserInfo(), base.getHost(), base.getPort(), base.getPath() + path, query, fragment);
         } catch (URISyntaxException e) {
             log.error("URLEXPANDFAIL", e);
             return null;
         }
     }
 
-    public static String joinQueryString(ListHashMap<String, String> params)  {
+    public static String joinQueryString(ListHashMap<String, String> params) {
         StringJoiner sj = new StringJoiner("&");
         for (String key : params.keySet()) {
             ArrayList<String> values = params.get(key);
             if (values != null && !values.isEmpty()) {
                 for (String value : values) {
-                    sj.add(key+"="+ UriUtils.encodeQueryParam(value, StandardCharsets.UTF_8));
+                    sj.add(key + "=" + UriUtils.encodeQueryParam(value, StandardCharsets.UTF_8));
                 }
             }
         }

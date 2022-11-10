@@ -9,8 +9,8 @@ import java.util.*;
 
 public class TestUserDetails extends DafoUserDetails {
 
-    private HashMap<String, UserProfile> userProfiles = new HashMap<>();
-    private HashMap<String, Set<UserProfile>> systemRoles = new HashMap<>();
+    private final HashMap<String, UserProfile> userProfiles = new HashMap<>();
+    private final HashMap<String, Set<UserProfile>> systemRoles = new HashMap<>();
     private static final String profileName = "TestProfile";
 
     public void addUserProfile(UserProfile userprofile) {

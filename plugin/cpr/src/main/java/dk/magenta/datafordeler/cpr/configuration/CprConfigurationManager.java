@@ -29,7 +29,7 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
     @Value("${cpr.encryption.keyfile:local/cpr/encryptedpassword}")
     private String encryptedPassword;
 
-    private Logger log = LogManager.getLogger("CprConfigurationManager");
+    private final Logger log = LogManager.getLogger(CprConfigurationManager.class.getCanonicalName());
 
     @PostConstruct
     public void init() {
@@ -106,10 +106,10 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
         try {
             CprConfiguration configuration = super.getConfiguration();
             File encryptedPasswordFile = new File(encryptedPassword);
-            if(encryptedPasswordFile.getParentFile().isDirectory() && encryptedPassword!=null && configuration.getEncryptedDirectPassword()!=null) {
+            if (encryptedPasswordFile.getParentFile().isDirectory() && encryptedPassword != null && configuration.getEncryptedDirectPassword() != null) {
                 Files.write(new File(encryptedPassword + UUID.randomUUID()).toPath(), configuration.getEncryptedDirectPassword());
             }
-        } catch(Exception ioe) {
+        } catch (Exception ioe) {
             log.error("Exception", ioe);
         }
     }

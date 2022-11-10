@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class ReportValidationAndConversion {
 
-    private static String reportRegex = ".*?_([A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12})";
+    private static final String reportRegex = ".*?_([A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12})";
 
     public static boolean validateReportName(String reportName) {
         Pattern splitter = Pattern.compile(reportRegex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);

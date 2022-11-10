@@ -11,14 +11,14 @@ import java.util.UUID;
  * Identifier for Entity objects, easing cross-referencing. A reference need not
  * locate the referenced Entity in the database (it may not even exist yet), but only
  * locate/generate the relevant Identification based on data that it should know.
- * Each UUID used here should be generated from identifying data, such as Person 
- * Number, Company Number etc, so that a given one of these always results in the 
+ * Each UUID used here should be generated from identifying data, such as Person
+ * Number, Company Number etc, so that a given one of these always results in the
  * same UUID.
- * That way, we can always locate/create an Identification when we know this seed 
+ * That way, we can always locate/create an Identification when we know this seed
  * data.
  */
 @javax.persistence.Entity
-@Table(name = "identification", indexes = {@Index(name="uuid", columnList = "uuid"), @Index(name="id", columnList = "uuid, domain")})
+@Table(name = "identification", indexes = {@Index(name = "uuid", columnList = "uuid"), @Index(name = "id", columnList = "uuid, domain")})
 public final class Identification extends DatabaseEntry implements Comparable<Identification> {
 
     public Identification() {
@@ -45,7 +45,6 @@ public final class Identification extends DatabaseEntry implements Comparable<Id
     }
 
 
-
     public static final String DB_FIELD_DOMAIN = "domain";
     public static final String IO_FIELD_DOMAIN = "domæne";
 
@@ -61,7 +60,6 @@ public final class Identification extends DatabaseEntry implements Comparable<Id
     public void setDomain(String domaene) {
         this.domain = domaene;
     }
-
 
 
     public static String getTableName() {

@@ -14,9 +14,11 @@ public abstract class Condition {
         GTE(">="),
         NE("!=");
         private final String name;
+
         Operator(String s) {
             name = s;
         }
+
         public String toString() {
             return this.name;
         }

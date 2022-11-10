@@ -19,7 +19,7 @@ public abstract class SpreadsheetConverter {
 
     protected static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private static Logger log = LogManager.getLogger(SpreadsheetConverter.class);
+    private static final Logger log = LogManager.getLogger(SpreadsheetConverter.class.getCanonicalName());
 
     protected String[] getApplicableContentTypes() {
         return new String[0];
@@ -59,6 +59,7 @@ public abstract class SpreadsheetConverter {
 
     private static HashMap<String, SpreadsheetConverter> mimetypeMap = null;
     private static HashMap<String, SpreadsheetConverter> extensionMap = null;
+
     private static void loadConverters() {
         ArrayList<SpreadsheetConverter> converterList = new ArrayList<SpreadsheetConverter>();
         converterList.add(new OdfConverter());
@@ -81,7 +82,7 @@ public abstract class SpreadsheetConverter {
             loadConverters();
         }
         if (!mimetypeMap.containsKey(contentType)) {
-            log.error("Could not find converter for mimetype '"+contentType+"'");
+            log.error("Could not find converter for mimetype '" + contentType + "'");
         }
         return mimetypeMap.get(contentType);
     }
@@ -91,7 +92,7 @@ public abstract class SpreadsheetConverter {
             loadConverters();
         }
         if (!extensionMap.containsKey(extension)) {
-            log.error("Could not find converter for extension '"+extension+"'");
+            log.error("Could not find converter for extension '" + extension + "'");
         }
         return extensionMap.get(extension);
     }

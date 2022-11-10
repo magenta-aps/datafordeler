@@ -27,14 +27,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.annotation.Resource;
 import javax.jws.WebMethod;
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.annotation.XmlElement;
-
-
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -52,21 +47,17 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     protected ObjectMapper objectMapper;
 
 
-
-
-
     @Autowired
     protected SessionManager sessionManager;
 
     /**
      * Obtains the autowired SessionManager
+     *
      * @return SessionManager instance
      */
     public SessionManager getSessionManager() {
         return this.sessionManager;
     }
-
-
 
 
     @Autowired
@@ -77,22 +68,15 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     }
 
 
-
-
-
-
-
     @Autowired
     protected CsvMapper csvMapper;
-
-
-
 
 
     private OutputWrapper<E> outputWrapper;
 
     /**
      * Obtains the version number of the service. This will be used in the path that requests may interface with
+     *
      * @return service version, e.g. 1
      */
     @WebMethod(exclude = true)
@@ -101,6 +85,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Obtains the name of the service. This will be used in the path that requests may interface with
+     *
      * @return service name, e.g. "postnummer"
      */
     @WebMethod(exclude = true)
@@ -114,9 +99,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     protected abstract Class<E> getEntityClass();
 
 
-
     public abstract Plugin getPlugin();
-
 
 
     public OutputWrapper<E> getOutputWrapper() {
@@ -128,7 +111,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     }
 
 
-    private Logger log = LogManager.getLogger(FapiBaseService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(FapiBaseService.class.getCanonicalName());
 
     protected OutputWrapper.Mode getDefaultMode() {
         return OutputWrapper.Mode.DATAONLY;
@@ -143,7 +126,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
         return null;
     }
 
-    @RequestMapping(path="", produces="application/json")
+    @RequestMapping(path = "", produces = "application/json")
     public String index(HttpServletRequest request) throws JsonProcessingException {
         String servletPath = request.getServletPath();
         return this.objectMapper.writeValueAsString(this.getServiceDescriptor(servletPath, false));
@@ -159,10 +142,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Checks that the user has access to the service
-     * @param user DafoUserDetails object representing the user provided from a SAML token.
-     * @throws AccessDeniedException
      *
-     * Implementing this method as a noop will make the service publicly accessible.
+     * @param user DafoUserDetails object representing the user provided from a SAML token.
+     * @throws AccessDeniedException Implementing this method as a noop will make the service publicly accessible.
      */
     protected abstract void checkAccess(DafoUserDetails user)
             throws AccessDeniedException, AccessRequiredException;
@@ -171,24 +153,22 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             throws AccessDeniedException, AccessRequiredException {
         try {
             this.checkAccess(loggerHelper.getUser());
-        }
-        catch (AccessDeniedException|AccessRequiredException e) {
+        } catch (AccessDeniedException | AccessRequiredException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 
 
-
-
     /**
      * Handle a lookup-by-UUID request in REST. This method is called by the Servlet
-     * @param uuid Identifier coming from the client
+     *
+     * @param uuid          Identifier coming from the client
      * @param requestParams url parameters
      * @return Found Entity, or null if none found.
      */
     @WebMethod(exclude = true)
-    @RequestMapping(path="/{uuid}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(path = "/{uuid}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Envelope getRest(@PathVariable("uuid") String uuid, @RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request)
             throws DataFordelerException {
         Envelope envelope = new Envelope();
@@ -231,8 +211,8 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                 e.printStackTrace();
                 throw new InvalidClientInputException(e.getMessage());
             }
-        } catch (AccessDeniedException|AccessRequiredException|InvalidClientInputException|InvalidTokenException|InvalidCertificateException e) {
-            this.log.warn("Error in REST getById ("+request.getRequestURI()+"): " + e.getMessage());
+        } catch (AccessDeniedException | AccessRequiredException | InvalidClientInputException | InvalidTokenException | InvalidCertificateException e) {
+            this.log.warn("Error in REST getById (" + request.getRequestURI() + "): " + e.getMessage());
             throw e;
         } catch (Exception e) {
             this.log.error("Error in REST getById", e);
@@ -246,24 +226,25 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Handle a lookup-by-UUID request in REST, returning CSV text.
+     *
      * @see #getRest(String, MultiValueMap, HttpServletRequest)
      */
     @WebMethod(exclude = true)
-    @RequestMapping(path="/{id}", produces = {
-        "text/csv",
-        "text/tsv",
+    @RequestMapping(path = "/{id}", produces = {
+            "text/csv",
+            "text/tsv",
     })
     public void getRestCSV(@PathVariable("id") String id,
-        @RequestParam MultiValueMap<String, String> requestParams,
-        HttpServletRequest request, HttpServletResponse response)
-        throws Exception {
+                           @RequestParam MultiValueMap<String, String> requestParams,
+                           HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
         Session session = this.getSessionManager().getSessionFactory().openSession();
         try {
             DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.info(
-                "Incoming CSV REST request for " + this.getServiceName() +
-                    " with id " + id
+                    "Incoming CSV REST request for " + this.getServiceName() +
+                            " with id " + id
             );
             this.checkAndLogAccess(loggerHelper);
             Q query = this.getQuery(requestParams, true);
@@ -272,11 +253,11 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             E entity = this.searchById(id, query, session);
 
             sendAsCSV(Stream.of(entity), request, response);
-        } catch (AccessDeniedException|AccessRequiredException|InvalidClientInputException|InvalidTokenException|HttpNotFoundException e) {
-            this.log.warn("Error in REST getRestCsv ("+request.getRequestURI()+"): " + e.getMessage());
+        } catch (AccessDeniedException | AccessRequiredException | InvalidClientInputException | InvalidTokenException | HttpNotFoundException e) {
+            this.log.warn("Error in REST getRestCsv (" + request.getRequestURI() + "): " + e.getMessage());
             throw e;
         } catch (Exception e) {
-            this.log.error("Error in REST getRestCsv ("+request.getRequestURI()+")", e);
+            this.log.error("Error in REST getRestCsv (" + request.getRequestURI() + ")", e);
             throw e;
         } finally {
             session.close();
@@ -286,8 +267,9 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Parse a registration boundary into a Query object of the correct subclass
+     *
      * @param registrationFrom Low boundary for registration inclusion
-     * @param registrationTo High boundary for registration inclusion
+     * @param registrationTo   High boundary for registration inclusion
      * @return Query subclass instance
      */
     protected Q getQuery(String registrationFrom, String registrationTo) {
@@ -301,11 +283,12 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Handle a lookup-by-parameters request in REST. This method is called by the Servlet
+     *
      * @param requestParams Request Parameters from spring boot
      * @return Found Entities
      */
     @WebMethod(exclude = true)
-    @RequestMapping(path="/search", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(path = "/search", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Envelope searchRest(@RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request) throws DataFordelerException {
         Session session = this.getSessionManager().getSessionFactory().openSession();
         Envelope envelope = new Envelope();
@@ -324,10 +307,10 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             envelope.addRequestData(request);
             List<ResultSet<E>> results = this.searchByQuery(query, session);
             if (this.getOutputWrapper() != null) {
-                this.log.info("Wrapping resultset with "+this.getOutputWrapper().getClass().getCanonicalName());
+                this.log.info("Wrapping resultset with " + this.getOutputWrapper().getClass().getCanonicalName());
                 envelope.setResults(this.getOutputWrapper().wrapResultSets(results, query, query.getMode(this.getDefaultMode())));
             } else {
-                this.log.info("No outputwrapper defined for "+this.getClass().getCanonicalName()+", not wrapping output");
+                this.log.info("No outputwrapper defined for " + this.getClass().getCanonicalName() + ", not wrapping output");
                 ArrayNode jacksonConverted = objectMapper.valueToTree(results.stream().map(resultset -> resultset.getPrimaryEntity()).collect(Collectors.toList()));
                 ArrayList<Object> wrapper = new ArrayList<>();
                 for (JsonNode node : jacksonConverted) {
@@ -337,12 +320,12 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             }
             envelope.close();
             loggerHelper.logResult(envelope, requestParams.toString());
-        } catch (AccessDeniedException|AccessRequiredException|InvalidClientInputException|InvalidTokenException e) {
-            this.log.warn("Error in REST search ("+request.getRequestURI()+"): " + e.getMessage());
+        } catch (AccessDeniedException | AccessRequiredException | InvalidClientInputException | InvalidTokenException e) {
+            this.log.warn("Error in REST search (" + request.getRequestURI() + "): " + e.getMessage());
             throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            this.log.error("Error in REST search ("+request.getRequestURI()+")", e);
+            this.log.error("Error in REST search (" + request.getRequestURI() + ")", e);
             throw e;
         } finally {
             session.close();
@@ -352,23 +335,24 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Handle a lookup-by-parameters request in REST, outputting CSV text.
+     *
      * @see #searchRest(MultiValueMap, HttpServletRequest)
      */
     @WebMethod(exclude = true)
-    @RequestMapping(path="/search", produces = {
-        "text/csv",
-        "text/tsv",
+    @RequestMapping(path = "/search", produces = {
+            "text/csv",
+            "text/tsv",
     })
     public void searchRestCSV(@RequestParam MultiValueMap<String, String>
-        requestParams, HttpServletRequest request,
-        HttpServletResponse response) throws DataFordelerException, IOException {
+                                      requestParams, HttpServletRequest request,
+                              HttpServletResponse response) throws DataFordelerException, IOException {
         Session session = this.getSessionManager().getSessionFactory().openSession();
         try {
             DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.info(
-                "Incoming CSV REST request for " + this.getServiceName() +
-                    " with query " + requestParams.toString()
+                    "Incoming CSV REST request for " + this.getServiceName() +
+                            " with query " + requestParams.toString()
             );
 
             this.checkAndLogAccess(loggerHelper);
@@ -376,12 +360,12 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
             this.applyAreaRestrictionsToQuery(query, user);
 
             sendAsCSV(this.searchByQueryAsStream(query, session),
-                request, response);
-        } catch (AccessDeniedException|AccessRequiredException|InvalidClientInputException|HttpNotFoundException|InvalidTokenException e) {
-            this.log.warn("Error in REST CSV search ("+request.getRequestURI()+"): " + e.getMessage());
+                    request, response);
+        } catch (AccessDeniedException | AccessRequiredException | InvalidClientInputException | HttpNotFoundException | InvalidTokenException e) {
+            this.log.warn("Error in REST CSV search (" + request.getRequestURI() + "): " + e.getMessage());
             throw e;
         } catch (Exception e) {
-            this.log.error("Error in REST CSV search ("+request.getRequestURI()+")", e);
+            this.log.error("Error in REST CSV search (" + request.getRequestURI() + ")", e);
             throw e;
         } finally {
             session.close();
@@ -389,15 +373,16 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     }
 
 
-
     /**
      * Obtain an empty Query instance of the correct subclass
+     *
      * @return Query subclass instance
      */
     protected abstract Q getEmptyQuery();
 
     /**
      * Parse a map of URL parameters into a Query object of the correct subclass
+     *
      * @param parameters URL parameters received in a request
      * @return Query subclass instance
      */
@@ -415,6 +400,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Perform a search for Entities by a Query object
+     *
      * @param query Query objects to search by
      * @return Found Entities
      */
@@ -427,6 +413,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Perform a search for Entities by a Query object
+     *
      * @param query Query objects to search by
      * @return Found Entities
      */
@@ -442,7 +429,8 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Perform a search for Entities by id
-     * @param id Identifier to search by. Must be parseable as a UUID
+     *
+     * @param id    Identifier to search by. Must be parseable as a UUID
      * @param query Query object modifying the output (such as a bitemporal range)
      * @return Found Entities
      */
@@ -454,7 +442,8 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     /**
      * Perform a search for Entities by id
-     * @param uuid Identifier to search by
+     *
+     * @param uuid  Identifier to search by
      * @param query Query object modifying the output (such as a bitemporal range)
      * @return Found Entities
      */
@@ -469,7 +458,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     }
 
     //protected abstract void sendAsCSV(Stream<E> entities, HttpServletRequest request, HttpServletResponse response) throws IOException, HttpNotFoundException;
-
 
 
     private static Map<String, String> objectNodeToFlatMap(ObjectNode node, Set<String> omitKeys) {
@@ -507,7 +495,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                     if (registrationNode != null) {
                         ArrayNode effects = (ArrayNode) registrationNode.get("virkninger");
                         if (effects != null) {
-                            for (int j=0; j<effects.size(); j++) {
+                            for (int j = 0; j < effects.size(); j++) {
                                 ObjectNode effectNode = (ObjectNode) effects.get(j);
                                 if (effectNode != null) {
                                     Map<String, String> output = new HashMap<>();

@@ -55,7 +55,6 @@ public class ContactRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_SECRET = "secret";
     public static final String IO_FIELD_SECRET = "hemmelig";
 
@@ -66,7 +65,6 @@ public class ContactRecord extends CvrBitemporalDataRecord {
     public boolean isSecret() {
         return this.secret;
     }
-
 
 
     public static final String DB_FIELD_SECONDARY = "secondary";
@@ -82,7 +80,6 @@ public class ContactRecord extends CvrBitemporalDataRecord {
     public boolean isSecondary() {
         return this.secondary;
     }
-
 
 
     public static final String DB_FIELD_TYPE = "type";

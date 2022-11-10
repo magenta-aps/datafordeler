@@ -7,15 +7,12 @@ import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.ImportInterruptedException;
-import dk.magenta.datafordeler.core.exception.WrongSubclassException;
 import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.io.Receipt;
 import dk.magenta.datafordeler.core.plugin.Communicator;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.HttpCommunicator;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
-import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.core.util.Stopwatch;
 import dk.magenta.datafordeler.ger.GerRegisterManager;
 import dk.magenta.datafordeler.ger.configuration.GerConfiguration;
@@ -28,10 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.time.OffsetDateTime;
 import java.util.*;
 
 @Component
@@ -52,11 +47,11 @@ public abstract class GerEntityManager<E extends GerEntity> extends EntityManage
     @Autowired
     private SessionManager sessionManager;
 
-    private HttpCommunicator commonFetcher;
+    private final HttpCommunicator commonFetcher;
 
-    protected Logger log = LogManager.getLogger(this.getClass().getSimpleName());
+    protected Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
 
-    private Collection<String> handledURISubstrings;
+    private final Collection<String> handledURISubstrings;
 
     protected abstract String getBaseName();
 
@@ -118,7 +113,9 @@ public abstract class GerEntityManager<E extends GerEntity> extends EntityManage
 
 
     protected abstract Class<E> getEntityClass();
+
     protected abstract UUID generateUUID(RawData rawData);
+
     protected abstract E createBasicEntity(RawData record, Session session);
 
     @Override

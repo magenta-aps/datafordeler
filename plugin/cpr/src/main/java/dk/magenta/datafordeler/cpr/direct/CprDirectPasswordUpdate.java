@@ -12,7 +12,7 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 
 public class CprDirectPasswordUpdate extends Worker implements Runnable {
-    
+
     public static class Task extends AbstractTask<CprDirectPasswordUpdate> {
         public static final String DATA_CONFIGURATIONMANAGER = "configurationManager";
         public static final String DATA_DIRECTLOOKUP = "directLookup";
@@ -26,9 +26,9 @@ public class CprDirectPasswordUpdate extends Worker implements Runnable {
     }
 
 
-    private CprConfigurationManager configurationManager;
-    private CprDirectLookup directLookup;
-    private SecureRandom random = new SecureRandom();
+    private final CprConfigurationManager configurationManager;
+    private final CprDirectLookup directLookup;
+    private final SecureRandom random = new SecureRandom();
 
     public CprDirectPasswordUpdate(CprConfigurationManager configurationManager, CprDirectLookup directLookup) {
         this.configurationManager = configurationManager;

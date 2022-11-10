@@ -11,6 +11,7 @@ public final class InputStreamReader {
     public static String readInputStream(InputStream stream) {
         return readInputStream(stream, "UTF-8");
     }
+
     public static String readInputStream(InputStream stream, String charsetName) {
         String data = new Scanner(stream, charsetName).useDelimiter(STREAM_DELIMITER).next();
         try {

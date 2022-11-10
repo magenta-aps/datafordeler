@@ -2,11 +2,13 @@ package dk.magenta.datafordeler.prisme;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
+import dk.magenta.datafordeler.core.exception.InvalidReferenceException;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -72,7 +74,7 @@ public class CvrCompanyOwnerHistory {
     @Autowired
     private DirectLookup directLookup;
 
-    private Logger log = LogManager.getLogger(CvrCompanyOwnerHistory.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CvrCompanyOwnerHistory.class.getCanonicalName());
 
     @PostConstruct
     public void init() {
@@ -108,9 +110,9 @@ public class CvrCompanyOwnerHistory {
             CompanyRecord companyrecord = companyrecords.get(0);
 
             FormRecord formRecord = companyrecord.getMetadata().getNewestForm().stream().findFirst().orElse(null);
-            if(formRecord==null) {
+            if (formRecord == null) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
-                throw new AccessDeniedException("The requested company \""+cvrNummer+"\" not active");
+                throw new AccessDeniedException("The requested company \"" + cvrNummer + "\" not active");
             }
             String formCodeString = formRecord.getCompanyFormCode();
             Integer formCode = Integer.parseInt(formCodeString);
@@ -122,7 +124,7 @@ public class CvrCompanyOwnerHistory {
             //It is legally forbidden to supply this information from companies with other formcodes then 10, 30 and 50
             if (formCode != 10 && formCode != 30 && formCode != 50) {
                 loggerHelper.urlResponsePersistablelogs(HttpStatus.FORBIDDEN.value(), "CvrCompanyOwnerHistory done");
-                throw new AccessDeniedException("The requested company \""+cvrNummer+"\" is not of a formcode where this request is accepted. Accepted form codes are 10, 30 and 50");
+                throw new AccessDeniedException("The requested company \"" + cvrNummer + "\" is not of a formcode where this request is accepted. Accepted form codes are 10, 30 and 50");
             }
 
             Set<CompanyParticipantRelationRecord> participants = companyrecord.getParticipants();
@@ -131,7 +133,7 @@ public class CvrCompanyOwnerHistory {
             List<CompanyOwnerItem> personalOwnerList = new ArrayList<CompanyOwnerItem>();
             List<CompanyOwnerItem> companyOwnerList = new ArrayList<CompanyOwnerItem>();
 
-            for(CompanyParticipantRelationRecord participant : participants) {
+            for (CompanyParticipantRelationRecord participant : participants) {
                 String from = null;
                 String to = null;
                 Number deltagerPnr = null;
@@ -139,16 +141,16 @@ public class CvrCompanyOwnerHistory {
                 Long participantNumber = participant.getParticipantUnitNumber();
 
                 //We expose all owners of the company
-                if(participant.getOrganizations().stream().anyMatch(o -> o.getMainType().equals("FULDT_ANSVARLIG_DELTAGERE"))) {
+                if (participant.getOrganizations().stream().anyMatch(o -> o.getMainType().equals("FULDT_ANSVARLIG_DELTAGERE"))) {
 
-                    if("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
+                    if ("PERSON".equals(participant.getRelationParticipantRecord().getUnitType())) {
                         //A company can be owned by a person, then we need to find the persons cpr-number from live-lookup
                         try {
 
                             ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
                             participantRecordQuery.setParameter(ParticipantRecordQuery.UNITNUMBER, participantNumber.toString());
                             List<ParticipantRecord> participantList = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-                            if(participantList.size()>0 && participantList.get(0)!= null && participantList.get(0).getBusinessKey()!=null) {
+                            if (participantList.size() > 0 && participantList.get(0) != null && participantList.get(0).getBusinessKey() != null) {
                                 deltagerPnr = participantList.get(0).getBusinessKey();
                             } else {
                                 deltagerPnr = directLookup.participantLookup(participantNumber.toString()).getBusinessKey();
@@ -176,10 +178,10 @@ public class CvrCompanyOwnerHistory {
                                     }
                                 }
                             }
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                         }
-                    } else if("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {
+                    } else if ("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {
                         //A company can be owned by a company, then we need to find the companys cvr-number from the database
                         Iterator<OrganizationRecord> orgRecord = participant.getOrganizations().iterator();
                         if (orgRecord.hasNext()) {
@@ -187,7 +189,7 @@ public class CvrCompanyOwnerHistory {
                             from = Optional.ofNullable(attributes.getValidFrom()).map(o -> o.toString()).orElse(null);
                             to = Optional.ofNullable(attributes.getValidTo()).map(o -> o.toString()).orElse(null);
                         }
-                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber,  participant.getRelationParticipantRecord().getBusinessKey(), null, from, to);
+                        CompanyOwnerItem ownerItem = new CompanyOwnerItem(participantNumber, participant.getRelationParticipantRecord().getBusinessKey(), null, from, to);
                         companyOwnerList.add(ownerItem);
                     }
                 }

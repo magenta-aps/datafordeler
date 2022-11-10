@@ -34,7 +34,7 @@ public class EskatRecordDetailOutputWrapper {
         container.put(StatusRecord.IO_FIELD_STATUSCODE, record.getStatus().currentStream().findFirst().map(f -> f.getStatusText()).orElse(null));
 
         AddressRecord adress = record.getLocationAddress().currentStream().findFirst().orElse(null);
-        if(adress!=null) {
+        if (adress != null) {
             container.put(AddressRecord.DB_FIELD_CONAME, adress.getCoName());
             container.put(AddressRecord.IO_FIELD_POSTCODE, adress.getPostnummer());
             container.put(AddressRecord.DB_FIELD_TEXT, adress.getAddressText());
@@ -49,12 +49,12 @@ public class EskatRecordDetailOutputWrapper {
         container.put(CompanyRecord.DB_FIELD_FAX, record.getFaxNumber().stream().findFirst().map(f -> f.getContactInformation()).orElse(null));
         container.put("startdato", DateConverter.dateConvert(record.getMetadata().getValidFrom()));
         String driftsform = record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getCompanyFormCode()).orElse(null);
-        driftsform += "/"+record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getLongDescription()).orElse(null);
+        driftsform += "/" + record.getMetadata().getNewestForm().stream().findFirst().map(f -> f.getLongDescription()).orElse(null);
         container.put(CompanyMetadataRecord.IO_FIELD_NEWEST_FORM, driftsform);
         container.put(CompanyIndustryRecord.IO_FIELD_TEXT, record.getPrimaryIndustry().currentStream().findFirst().map(f -> f.getIndustryText()).orElse(null));
         container.put(CompanyIndustryRecord.IO_FIELD_CODE, record.getPrimaryIndustry().currentStream().findFirst().map(f -> f.getIndustryCode()).orElse(null));
 
-        List<PunitEntity> pUnitList =  pUnitEntities.map(f -> new PunitEntity(Integer.toString(f.getpNumber()),
+        List<PunitEntity> pUnitList = pUnitEntities.map(f -> new PunitEntity(Integer.toString(f.getpNumber()),
                 f.getNames().current().isEmpty() ? null : f.getNames().currentStream().findFirst().get().getName(),
                 f.getLocationAddress().current().isEmpty() ? null : f.getLocationAddress().currentStream().findFirst().get().getCountryCode()
         )).collect(Collectors.toList());

@@ -60,7 +60,7 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
     }
 
     public static class NodeWrapper {
-        private ObjectNode node;
+        private final ObjectNode node;
 
         public NodeWrapper(ObjectNode node) {
             this.node = node;
@@ -75,21 +75,25 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
                 this.node.put(key, value);
             }
         }
+
         public void put(String key, Short value) {
             if (value != null) {
                 this.node.put(key, value);
             }
         }
+
         public void put(String key, Integer value) {
             if (value != null) {
                 this.node.put(key, value);
             }
         }
+
         public void put(String key, Long value) {
             if (value != null) {
                 this.node.put(key, value);
             }
         }
+
         public void put(String key, String value) {
             if (value != null) {
                 this.node.put(key, value);
@@ -107,6 +111,7 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
                 this.node.set(key, value);
             }
         }
+
         public void putPOJO(String key, Object value) {
             if (value != null) {
                 this.node.putPOJO(key, value);

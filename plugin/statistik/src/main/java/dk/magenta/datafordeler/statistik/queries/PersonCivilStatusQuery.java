@@ -26,7 +26,7 @@ public class PersonCivilStatusQuery extends PersonStatisticsQuery {
         civilStatus = filter.getCivilStatus();
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("civilstatus", PersonEntity.DB_FIELD_CIVILSTATUS + BaseQuery.separator + CivilStatusDataRecord.DB_FIELD_CIVIL_STATUS);

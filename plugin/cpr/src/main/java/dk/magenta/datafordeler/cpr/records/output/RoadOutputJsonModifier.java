@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class RoadOutputJsonModifier extends JsonModifier {
 
-    private RoadRecordOutputWrapper outputWrapper;
+    private final RoadRecordOutputWrapper outputWrapper;
     protected DoubleHashMap<Integer, Integer, RoadEntity> entities = new DoubleHashMap<>();
 
     public RoadOutputJsonModifier(RoadRecordOutputWrapper outputWrapper, ResultSet resultSet) {
@@ -27,6 +27,7 @@ public class RoadOutputJsonModifier extends JsonModifier {
 
     /**
      * Modifies a JsonNode by adding data from this.entities
+     *
      * @param node
      */
     @Override

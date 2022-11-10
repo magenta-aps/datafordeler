@@ -4,11 +4,11 @@ import dk.magenta.datafordeler.core.database.Registration;
 
 public class SkippedSequenceNumberException extends InvalidDataInputException {
 
-    private Registration registration;
-    private int highestSequenceNumber;
+    private final Registration registration;
+    private final int highestSequenceNumber;
 
     public SkippedSequenceNumberException(Registration newRegistration, int highestSequenceNumber) {
-        super("Sequencenumber "+newRegistration.getSequenceNumber()+" not matching existing highest sequencenumber "+highestSequenceNumber+"; must be exactly one higher");
+        super("Sequencenumber " + newRegistration.getSequenceNumber() + " not matching existing highest sequencenumber " + highestSequenceNumber + "; must be exactly one higher");
         this.registration = newRegistration;
         this.highestSequenceNumber = highestSequenceNumber;
     }

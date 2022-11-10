@@ -26,9 +26,9 @@ import java.util.List;
 
 public class GeoLookupService extends CprLookupService {
 
-    private Logger log = LogManager.getLogger("dk.magenta.datafordeler.geo.GeoLookupService");
+    private final Logger log = LogManager.getLogger(GeoLookupService.class.getCanonicalName());
 
-    private HashMap<Integer, String> municipalityCacheGR = new HashMap<>();
+    private final HashMap<Integer, String> municipalityCacheGR = new HashMap<>();
 
     public GeoLookupService(SessionManager sessionManager) {
         super(sessionManager);
@@ -43,7 +43,7 @@ public class GeoLookupService extends CprLookupService {
     }
 
     public GeoLookupDTO doLookupBestEffort(int municipalityCode, int roadCode) {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
             String municipalityEntity = municipalityCacheGR.get(municipalityCode);
@@ -124,7 +124,7 @@ public class GeoLookupService extends CprLookupService {
         if (municipalityCode < 950) {
             return new GeoLookupDTO(super.doLookup(municipalityCode, roadCode, houseNumber));
         } else {
-            try(Session session = sessionManager.getSessionFactory().openSession()) {
+            try (Session session = sessionManager.getSessionFactory().openSession()) {
 
                 GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
                 String municipalityEntity = municipalityCacheGR.get(municipalityCode);
@@ -208,7 +208,7 @@ public class GeoLookupService extends CprLookupService {
     }
 
     private static String formatBNumber(String bnr) {
-        if(bnr==null || bnr.equals("")) {
+        if (bnr == null || bnr.equals("")) {
             return null;
         }
         bnr = bnr.replaceAll("^0+", "");
@@ -218,7 +218,7 @@ public class GeoLookupService extends CprLookupService {
 
 
     public String getPostalCodeDistrict(int code) {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(code), PostcodeEntity.class);
             return entity.getName().iterator().next().getName();
         }

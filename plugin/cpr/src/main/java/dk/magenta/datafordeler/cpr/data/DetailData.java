@@ -45,6 +45,7 @@ public abstract class DetailData extends DatabaseEntry {
     /**
      * Obtain contained data as a Map
      * Internally used for comparing DataItems
+     *
      * @return Map of all relevant attributes
      */
     public Map<String, Object> databaseFields() {

@@ -36,7 +36,7 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
 
     public static final String TABLE_NAME = "geo_unit_address";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "UnitAddress";
 
     public UnitAddressEntity() {
@@ -45,8 +45,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     public UnitAddressEntity(UnitAddressRawData record) {
         super(record);
     }
-
-
 
 
     public static final String DB_FIELD_ACCESS_ADDRESS = "accessAddress";
@@ -61,8 +59,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     public void setAccessAddress(Identification accessAddress) {
         this.accessAddress = accessAddress;
     }
-
-
 
 
     public static final String DB_FIELD_FLOOR = "floor";
@@ -82,7 +78,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
-
     public static final String DB_FIELD_DOOR = "door";
     public static final String IO_FIELD_DOOR = "sidedør";
     @OneToMany(mappedBy = UnitAddressDoorRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -98,7 +93,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     public MonotemporalSet<UnitAddressDoorRecord> getDoor() {
         return new MonotemporalSet(this.door);
     }
-
 
 
     public static final String DB_FIELD_NUMBER = "number";
@@ -118,7 +112,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
-
     public static final String DB_FIELD_USAGE = "usage";
     public static final String IO_FIELD_USAGE = "anvendelse";
     @OneToMany(mappedBy = UnitAddressUsageRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -134,8 +127,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     public MonotemporalSet<UnitAddressUsageRecord> getUsage() {
         return new MonotemporalSet<>(this.usage);
     }
-
-
 
 
     public static final String DB_FIELD_STATUS = "status";
@@ -155,7 +146,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
-
     public static final String DB_FIELD_SOURCE = "source";
     public static final String IO_FIELD_SOURCE = "source";
     @OneToMany(mappedBy = UnitAddressSourceRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -171,7 +161,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
     public MonotemporalSet<UnitAddressSourceRecord> getSource() {
         return new MonotemporalSet<>(this.source);
     }
-
 
 
     @Override
@@ -222,7 +211,6 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
         records.add(this.status);
         return records;
     }
-
 
 
     @JsonIgnore

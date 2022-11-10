@@ -10,14 +10,11 @@ import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.ImportInterruptedException;
-import dk.magenta.datafordeler.core.exception.WrongSubclassException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.io.Receipt;
 import dk.magenta.datafordeler.core.plugin.Communicator;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.HttpCommunicator;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
-import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.core.util.Stopwatch;
 import dk.magenta.datafordeler.geo.GeoRegisterManager;
 import dk.magenta.datafordeler.geo.configuration.GeoConfiguration;
@@ -34,7 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.time.OffsetDateTime;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -56,11 +53,11 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     @Autowired
     private SessionManager sessionManager;
 
-    private HttpCommunicator commonFetcher;
+    private final HttpCommunicator commonFetcher;
 
-    protected Logger log = LogManager.getLogger(this.getClass().getSimpleName());
+    protected Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
 
-    private Collection<String> handledURISubstrings;
+    private final Collection<String> handledURISubstrings;
 
     protected abstract String getBaseName();
 
@@ -120,8 +117,11 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
 
 
     protected abstract Class<E> getEntityClass();
+
     protected abstract Class<T> getRawClass();
+
     protected abstract UUID generateUUID(T rawData);
+
     protected abstract E createBasicEntity(T record, Session session);
 
     @Override
@@ -167,7 +167,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 timer.measure(TASK_SAVE);
 
             } catch (IOException e) {
-                log.error("Error importing "+this.getEntityClass().getSimpleName()+": "+jsonNode.toString(), e);
+                log.error("Error importing " + this.getEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
             }
         });
 
@@ -180,7 +180,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     }
 
     public static long parseJsonStream(String jsonData, String searchKey, ObjectMapper objectMapper, Consumer<JsonNode> callback) throws DataStreamException {
-        Charset charset = Charset.forName("utf-8");
+        Charset charset = StandardCharsets.UTF_8;
         return parseJsonStream(new ByteArrayInputStream(jsonData.getBytes(charset)), charset, searchKey, objectMapper, callback);
     }
 

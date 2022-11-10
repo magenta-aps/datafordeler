@@ -18,7 +18,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -66,7 +64,7 @@ public class CvrRegisterManager extends RegisterManager {
     private String cvrDemoParticipantFile;
 
 
-    private Logger log = LogManager.getLogger("CvrRegisterManager");
+    private final Logger log = LogManager.getLogger(CvrRegisterManager.class.getCanonicalName());
 
     public CvrRegisterManager() {
 
@@ -85,8 +83,8 @@ public class CvrRegisterManager extends RegisterManager {
     }
 
     /**
-    * RegisterManager initialization; set up configuration, source fetcher and source url
-    */
+     * RegisterManager initialization; set up configuration, source fetcher and source url
+     */
     @PostConstruct
     public void init() {
         this.commonFetcher = new ScanScrollCommunicator();
@@ -205,14 +203,14 @@ public class CvrRegisterManager extends RegisterManager {
                 final ArrayList<Throwable> errors = new ArrayList<>();
                 InputStream responseBody;
                 File cacheFile = new File("local/cvr/" + entityManager.getSchema() + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
-                try (Session missingCompanySession = this.sessionManager.getSessionFactory().openSession()){
+                try (Session missingCompanySession = this.sessionManager.getSessionFactory().openSession()) {
                     if (!cacheFile.exists()) {
-                        log.info("Cache file "+cacheFile.getAbsolutePath()+" doesn't exist. Creating new and filling from source");
+                        log.info("Cache file " + cacheFile.getAbsolutePath() + " doesn't exist. Creating new and filling from source");
                         if (lastUpdateTime == null) {
                             lastUpdateTime = OffsetDateTime.parse("0000-01-01T00:00:00Z");
                             log.info("Last update time not found");
                         } else {
-                            log.info("Last update time: "+lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                            log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
                         }
 
                         CriteriaBuilder subscriptionBuilder = missingCompanySession.getCriteriaBuilder();
@@ -250,10 +248,10 @@ public class CvrRegisterManager extends RegisterManager {
                         responseBody.close();
                         log.info("Loaded into cache file");
                     } else {
-                        log.info("Cache file "+cacheFile.getAbsolutePath()+" already exists.");
+                        log.info("Cache file " + cacheFile.getAbsolutePath() + " already exists.");
                     }
                 } catch (URISyntaxException e) {
-                    throw new ConfigurationException("Invalid pull URI '"+e.getInput()+"'");
+                    throw new ConfigurationException("Invalid pull URI '" + e.getInput() + "'");
                 } catch (IOException e) {
                     throw new DataStreamException(e);
                 } catch (GeneralSecurityException e) {
@@ -261,7 +259,7 @@ public class CvrRegisterManager extends RegisterManager {
                 }
 
                 if (!errors.isEmpty()) {
-                    throw new ParseException("Error while loading data for "+entityManager.getSchema(), errors.get(0));
+                    throw new ParseException("Error while loading data for " + entityManager.getSchema(), errors.get(0));
                 }
 
                 try {

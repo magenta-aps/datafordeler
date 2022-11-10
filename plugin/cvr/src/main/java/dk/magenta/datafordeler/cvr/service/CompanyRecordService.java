@@ -4,7 +4,10 @@ import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.AccessRequiredException;
+import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
@@ -29,7 +32,10 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,7 +49,7 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
     @Autowired
     private CvrPlugin cvrPlugin;
 
-    private Logger log = LogManager.getLogger(CompanyRecordService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CompanyRecordService.class.getCanonicalName());
 
     @Autowired
     private CompanyRecordOutputWrapper companyRecordOutputWrapper;
@@ -151,7 +157,7 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
 
         List<ResultSet<CompanyRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {
-            log.info("There are "+localResults.size()+" local results");
+            log.info("There are " + localResults.size() + " local results");
             allRecords.addAll(localResults);
         }
 

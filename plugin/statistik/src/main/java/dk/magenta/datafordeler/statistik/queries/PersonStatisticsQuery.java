@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.MultiCondition;
 import dk.magenta.datafordeler.core.fapi.Query;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.statistik.services.StatisticsService;
@@ -35,6 +36,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
             this.setPersonnummer(pnr);
         }
         this.setPageSize(1000000);
+        this.addOrderField(this.getEntityIdentifier(), PersonEntity.DB_FIELD_CPR_NUMBER);
     }
 
 
@@ -53,6 +55,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
             }
         }
         this.setPageSize(1000000);
+        this.addOrderField(this.getEntityIdentifier(), PersonEntity.DB_FIELD_CPR_NUMBER);
     }
 
 
@@ -187,6 +190,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
     protected MultiCondition applyBitemporalConditions(Condition parentCondition, String handle) throws QueryBuildException {
         return this.applyBitemporalConditions(parentCondition.asMultiCondition(), handle);
     }
+
     protected MultiCondition applyBitemporalConditions(MultiCondition parentCondition, String handle) throws QueryBuildException {
         MultiCondition condition = new MultiCondition(parentCondition, "AND");
         parentCondition.add(condition);

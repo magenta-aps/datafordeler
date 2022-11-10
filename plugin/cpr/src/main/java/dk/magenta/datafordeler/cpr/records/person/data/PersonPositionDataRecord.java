@@ -58,10 +58,8 @@ public class PersonPositionDataRecord extends CprBitemporalPersonRecord<PersonPo
     }
 
 
-
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<PersonPositionDataRecord> correctors = new HashSet<>();
+    private final Set<PersonPositionDataRecord> correctors = new HashSet<>();
 
     public Set<PersonPositionDataRecord> getCorrectors() {
         return this.correctors;

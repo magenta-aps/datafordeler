@@ -26,7 +26,8 @@ public class RoadRawData extends SumiffiikRawData {
         public void setCode(String code) {
             try {
                 this.code = Integer.parseInt(code, 10);
-            } catch (NumberFormatException|NullPointerException e) {}
+            } catch (NumberFormatException | NullPointerException e) {
+            }
         }
 
         public int code;

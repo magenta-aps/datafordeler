@@ -17,7 +17,7 @@ import static java.util.Comparator.naturalOrder;
 
 public class FilterUtilities {
 
-    private static Comparator bitemporalComparator = Comparator.comparing(FilterUtilities::getBitemporality, BitemporalityComparator.ALL)
+    private static final Comparator bitemporalComparator = Comparator.comparing(FilterUtilities::getBitemporality, BitemporalityComparator.ALL)
             .thenComparing(CprNontemporalRecord::getOriginDate, Comparator.nullsLast(naturalOrder()))
             .thenComparing(CprNontemporalRecord::getDafoUpdated)
             .thenComparing(DatabaseEntry::getId);
@@ -28,17 +28,19 @@ public class FilterUtilities {
     /**
      * Find the newest unclosed record from the list of records
      * Records with a missing OriginDate is also removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return
      */
     public static <R extends CprBitemporalRecord> R findNewestUnclosed(Collection<R> records) {
         return (R) records.stream().filter(r -> r.getBitemporality().registrationTo == null &&
-                 r.getBitemporality().effectTo == null).max(bitemporalComparator).orElse(null);
+                r.getBitemporality().effectTo == null).max(bitemporalComparator).orElse(null);
     }
 
     /**
      * Get a sorted list of the items with the items sorted by effectFrom, and the newest item first
+     *
      * @param records
      * @param <R>
      * @return
@@ -48,7 +50,6 @@ public class FilterUtilities {
         recordList.sort(bitemporalComparator.reversed());
         return recordList;
     }
-
 
 
     public static CprBitemporality getBitemporality(CprBitemporalRecord record) {

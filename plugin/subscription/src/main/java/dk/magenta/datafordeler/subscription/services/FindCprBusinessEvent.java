@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.util.Value;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.AccessRequiredException;
+import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
+import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -26,7 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +64,7 @@ public class FindCprBusinessEvent {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(FindCprBusinessEvent.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(FindCprBusinessEvent.class.getCanonicalName());
 
 
     @PostConstruct
@@ -69,6 +75,7 @@ public class FindCprBusinessEvent {
 
     /**
      * Get a list of all subscribtions
+     *
      * @return
      */
     @GetMapping("/fetchEvents")
@@ -84,44 +91,44 @@ public class FindCprBusinessEvent {
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.urlInvokePersistablelogs("fetchEvents");
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             this.checkAndLogAccess(loggerHelper);
 
-            Query eventQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
+            Query eventQuery = session.createQuery(" from " + BusinessEventSubscription.class.getName() + " where businessEventId = :businessEventId", BusinessEventSubscription.class);
             eventQuery.setParameter("businessEventId", businessEventId);
-            if(eventQuery.getResultList().isEmpty()) {
+            if (eventQuery.getResultList().isEmpty()) {
                 return this.getErrorMessage("Subscription not found", HttpStatus.NOT_FOUND);
             } else {
                 BusinessEventSubscription subscription = (BusinessEventSubscription) eventQuery.getResultList().get(0);
-                if(!allowCallingOtherConsumersSubscriptions && !subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+                if (!allowCallingOtherConsumersSubscriptions && !subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
-                String hql = "SELECT max(event.timestamp) FROM "+ PersonEventDataRecord.class.getCanonicalName()+" event ";
+                String hql = "SELECT max(event.timestamp) FROM " + PersonEventDataRecord.class.getCanonicalName() + " event ";
                 Query timestampQuery = session.createQuery(hql);
-                OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
+                OffsetDateTime newestEventTimestamp = (OffsetDateTime) timestampQuery.getResultList().get(0);
                 OffsetDateTime offsetTimestampGTE;
-                if(timestampGTE==null) {
-                    offsetTimestampGTE = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
+                if (timestampGTE == null) {
+                    offsetTimestampGTE = OffsetDateTime.of(0, 1, 1, 1, 1, 1, 1, ZoneOffset.ofHours(0));
                 } else {
                     try {
                         offsetTimestampGTE = BaseQuery.parseDateTime(timestampGTE);
                     } catch (DateTimeParseException e) {
-                        return this.getErrorMessage("Cannot parse date "+timestampGTE, HttpStatus.BAD_REQUEST);
+                        return this.getErrorMessage("Cannot parse date " + timestampGTE, HttpStatus.BAD_REQUEST);
                     }
                 }
 
-                OffsetDateTime offsetTimestampLTE=null;
-                if(timestampLTE!=null) {
+                OffsetDateTime offsetTimestampLTE = null;
+                if (timestampLTE != null) {
                     try {
                         offsetTimestampLTE = BaseQuery.parseDateTime(timestampLTE);
                     } catch (DateTimeParseException e) {
-                        return this.getErrorMessage("Cannot parse date "+timestampLTE, HttpStatus.BAD_REQUEST);
+                        return this.getErrorMessage("Cannot parse date " + timestampLTE, HttpStatus.BAD_REQUEST);
                     }
                 }
 
-                String[] subscribtionKodeId = subscription.getKodeId().split("[.]");
-                if(!"cpr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
+                String[] subscriptionKodeId = subscription.getKodeId().split("[.]");
+                if (!"cpr".equals(subscriptionKodeId[0]) && !"dataevent".equals(subscriptionKodeId[1])) {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
 
@@ -158,7 +165,7 @@ public class FindCprBusinessEvent {
                         .setParameter("offsetTimestampGTE", offsetTimestampGTE)
                         .setParameter("offsetTimestampLTE", offsetTimestampLTE)
                         .setParameter("listId", listId)
-                        .setParameter("eventId", subscribtionKodeId[2])
+                        .setParameter("eventId", subscriptionKodeId[2])
                         .stream();
 
                 Envelope envelope = new Envelope();
@@ -176,7 +183,7 @@ public class FindCprBusinessEvent {
             obj.put("errorMessage", errorMessage);
             log.warn(errorMessage);
             return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("Failed pulling events from subscribtion", e);
         }
         return ResponseEntity.status(500).build();
@@ -194,10 +201,9 @@ public class FindCprBusinessEvent {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 }

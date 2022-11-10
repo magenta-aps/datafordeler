@@ -22,6 +22,7 @@ public class MonotemporalSet<R extends GeoMonotemporalRecord> implements Set<R> 
 
     /**
      * Get the record that is current
+     *
      * @return
      */
     public R current() {
@@ -34,7 +35,6 @@ public class MonotemporalSet<R extends GeoMonotemporalRecord> implements Set<R> 
                         && (r.getRegistrationTo() == null || r.getRegistrationTo().isAfter(dateTime) || r.getRegistrationTo().isEqual(dateTime))
         ).findFirst().orElse(null);
     }
-
 
 
     //--------------------------------------------------------------------------

@@ -1,7 +1,5 @@
 package dk.magenta.datafordeler.prisme;
 
-import dk.magenta.datafordeler.geo.data.GeoHardcode;
-
 import java.util.HashMap;
 import java.util.Map;
 

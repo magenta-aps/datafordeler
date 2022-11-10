@@ -20,7 +20,7 @@ public class RoadRecordQuery extends BaseQuery {
     public static final String KOMMUNEKODE = RoadEntity.IO_FIELD_MUNIPALITY_CODE;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
-    private List<String> vejkoder = new ArrayList<>();
+    private final List<String> vejkoder = new ArrayList<>();
 
     public Collection<String> getVejkoder() {
         return this.vejkoder;
@@ -42,15 +42,14 @@ public class RoadRecordQuery extends BaseQuery {
         this.clearVejkode();
         this.addVejkode(vejkode);
     }
+
     public void setVejkode(int vejkode) {
         this.setVejkode(Integer.toString(vejkode));
     }
 
 
-
-
     @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
-    private List<String> vejnavne = new ArrayList<>();
+    private final List<String> vejnavne = new ArrayList<>();
 
     public Collection<String> getVejnavne() {
         return this.vejnavne;
@@ -74,10 +73,8 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
 
-
-
     @QueryField(type = QueryField.FieldType.STRING, queryName = KOMMUNEKODE)
-    private List<String> kommunekoder = new ArrayList<>();
+    private final List<String> kommunekoder = new ArrayList<>();
 
     public List<String> getKommunekoder() {
         return kommunekoder;
@@ -145,7 +142,7 @@ public class RoadRecordQuery extends BaseQuery {
         return "cpr_road";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("municipalitycode", RoadEntity.DB_FIELD_MUNIPALITY_CODE);

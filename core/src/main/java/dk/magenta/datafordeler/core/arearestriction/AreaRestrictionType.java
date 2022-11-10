@@ -11,10 +11,10 @@ import java.util.Map;
  */
 public class AreaRestrictionType {
 
-    private String name;
-    private String description;
-    private Plugin sourcePlugin;
-    private Map<String, AreaRestriction> choices = new HashMap<>();
+    private final String name;
+    private final String description;
+    private final Plugin sourcePlugin;
+    private final Map<String, AreaRestriction> choices = new HashMap<>();
 
     public AreaRestrictionType(String name, String description, Plugin sourcePlugin) {
         this.name = name;

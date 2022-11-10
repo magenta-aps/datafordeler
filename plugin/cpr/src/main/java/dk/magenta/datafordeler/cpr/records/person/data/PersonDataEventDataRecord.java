@@ -9,8 +9,6 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 

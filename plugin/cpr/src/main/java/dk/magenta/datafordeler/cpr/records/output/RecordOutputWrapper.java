@@ -48,12 +48,12 @@ public abstract class RecordOutputWrapper<E extends CprEntity> extends OutputWra
 
     protected class OutputContainer {
 
-        private DoubleListHashMap<CprBitemporality, String, ObjectNode> bitemporalData = new DoubleListHashMap<>();
+        private final DoubleListHashMap<CprBitemporality, String, ObjectNode> bitemporalData = new DoubleListHashMap<>();
 
-        private ListHashMap<String, JsonNode> nontemporalData = new ListHashMap<>();
+        private final ListHashMap<String, JsonNode> nontemporalData = new ListHashMap<>();
 
-        private HashSet<String> trySingle = new HashSet<>();
-        private HashSet<String> forceList = new HashSet<>();
+        private final HashSet<String> trySingle = new HashSet<>();
+        private final HashSet<String> forceList = new HashSet<>();
 
         public <T extends CprBitemporalRecord> void addBitemporal(String key, Set<T> records) {
             this.addBitemporal(key, records, null, false, false);
@@ -151,7 +151,7 @@ public abstract class RecordOutputWrapper<E extends CprEntity> extends OutputWra
             terminators.sort(Comparator.nullsFirst(OffsetDateTime::compareTo));
             terminators.add(null);
             HashSet<CprBitemporality> presentBitemporalities = new HashSet<>();
-            for (int i=0; i<terminators.size(); i++) {
+            for (int i = 0; i < terminators.size(); i++) {
                 OffsetDateTime t = terminators.get(i);
                 List<CprBitemporality> startingHere = startTerminators.get(t);
                 List<CprBitemporality> endingHere = endTerminators.get(t);
@@ -196,9 +196,11 @@ public abstract class RecordOutputWrapper<E extends CprEntity> extends OutputWra
             output.set("registreringer", registrationsNode);
             return output;
         }
+
         public ObjectNode getRDV(CprBitemporality mustOverlap) {
             return this.getRDV(mustOverlap, null, null);
         }
+
         public ObjectNode getRDV(CprBitemporality mustOverlap, Map<String, String> keyConversion, Function<Pair<String, ObjectNode>, ObjectNode> dataConversion) {
             ObjectMapper objectMapper = RecordOutputWrapper.this.objectMapper;
             ArrayNode registrationsNode = objectMapper.createArrayNode();
@@ -217,7 +219,7 @@ public abstract class RecordOutputWrapper<E extends CprEntity> extends OutputWra
             terminators.sort(Comparator.nullsFirst(OffsetDateTime::compareTo));
             terminators.add(null);
             HashSet<CprBitemporality> presentBitemporalities = new HashSet<>();
-            for (int i=0; i<terminators.size(); i++) {
+            for (int i = 0; i < terminators.size(); i++) {
                 OffsetDateTime t = terminators.get(i);
                 List<CprBitemporality> startingHere = startTerminators.get(t);
                 List<CprBitemporality> endingHere = endTerminators.get(t);

@@ -59,7 +59,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     }
 
 
-
     public static final String DB_FIELD_MUNICIPALITY_CODE = "municipalityCode";
     public static final String IO_FIELD_MUNICIPALITY_CODE = "kommunekode";
     @Column(name = DB_FIELD_MUNICIPALITY_CODE)
@@ -76,9 +75,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     }
 
 
-
-
-
     public static final String DB_FIELD_ROAD_CODE = "roadCode";
     public static final String IO_FIELD_ROAD_CODE = "vejkode";
     @Column(name = DB_FIELD_ROAD_CODE)
@@ -86,13 +82,13 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     @XmlElement(name = IO_FIELD_ROAD_CODE)
     private int roadCode;
 
-    public int getRoadCode() { return this.roadCode; }
+    public int getRoadCode() {
+        return this.roadCode;
+    }
 
     public void setRoadCode(int roadCode) {
         this.roadCode = roadCode;
     }
-
-
 
 
     public static final String DB_FIELD_BUILDING_NUMBER = "buildingNumber";
@@ -109,10 +105,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public void setBuildingNumber(String buildingNumber) {
         this.buildingNumber = buildingNumber;
     }
-
-
-
-
 
 
     public static final String DB_FIELD_HOUSENUMBER = "houseNumber";
@@ -146,9 +138,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     }
 
 
-
-
-
     public static final String DB_FIELD_DOOR = "door";
     public static final String IO_FIELD_DOOR = "sidedør";
     @Column(name = DB_FIELD_DOOR)
@@ -163,9 +152,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public void setDoor(String door) {
         this.door = door;
     }
-
-
-
 
 
     public static final String DB_FIELD_ADDRESS_LINE1 = "roadAddressLine1";
@@ -186,7 +172,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     }
 
 
-
     public static final String DB_FIELD_ADDRESS_LINE2 = "roadAddressLine2";
     public static final String IO_FIELD_ADDRESS_LINE2 = "adresselinie2";
     @Column(name = DB_FIELD_ADDRESS_LINE2)
@@ -203,7 +188,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
             this.roadAddressLine2 = roadAddressLine2;
         }
     }
-
 
 
     public static final String DB_FIELD_ADDRESS_LINE3 = "roadAddressLine3";
@@ -224,7 +208,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     }
 
 
-
     public static final String DB_FIELD_ADDRESS_LINE4 = "roadAddressLine4";
     public static final String IO_FIELD_ADDRESS_LINE4 = "adresselinie4";
     @Column(name = DB_FIELD_ADDRESS_LINE4)
@@ -243,7 +226,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     }
 
 
-
     public static final String DB_FIELD_ADDRESS_LINE5 = "roadAddressLine5";
     public static final String IO_FIELD_ADDRESS_LINE5 = "adresselinie5";
     @Column(name = DB_FIELD_ADDRESS_LINE5)
@@ -260,8 +242,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
             this.roadAddressLine5 = roadAddressLine5;
         }
     }
-
-
 
 
     public static final String DB_FIELD_ADDRESS_TEXT_TYPE = "addressTextType";
@@ -295,7 +275,7 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<AddressDataRecord> correctors = new HashSet<>();
+    private final Set<AddressDataRecord> correctors = new HashSet<>();
 
     public Set<AddressDataRecord> getCorrectors() {
         return this.correctors;
@@ -315,27 +295,23 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
 
         if (!(
                 (municipalityCode == that.municipalityCode || (equateMunicipality && this.oldMunicipalityCode() == that.oldMunicipalityCode())) &&
-                roadCode == that.roadCode &&
-                Objects.equals(buildingNumber, that.buildingNumber) &&
-                Objects.equals(houseNumber, that.houseNumber) &&
-                Objects.equals(floor, that.floor) &&
-                Objects.equals(door, that.door)
+                        roadCode == that.roadCode &&
+                        Objects.equals(buildingNumber, that.buildingNumber) &&
+                        Objects.equals(houseNumber, that.houseNumber) &&
+                        Objects.equals(floor, that.floor) &&
+                        Objects.equals(door, that.door)
         )) {
             return false;
         }
 
         if (!this.isHistoric() && !that.isHistoric()) {
-            if (!(
-            addressTextType == that.addressTextType &&
-            startAuthority == that.startAuthority &&
-            Objects.equals(roadAddressLine1, that.roadAddressLine1) &&
-            Objects.equals(roadAddressLine2, that.roadAddressLine2) &&
-            Objects.equals(roadAddressLine3, that.roadAddressLine3) &&
-            Objects.equals(roadAddressLine4, that.roadAddressLine4) &&
-            Objects.equals(roadAddressLine5, that.roadAddressLine5)
-            )) {
-                return false;
-            }
+            return addressTextType == that.addressTextType &&
+                    startAuthority == that.startAuthority &&
+                    Objects.equals(roadAddressLine1, that.roadAddressLine1) &&
+                    Objects.equals(roadAddressLine2, that.roadAddressLine2) &&
+                    Objects.equals(roadAddressLine3, that.roadAddressLine3) &&
+                    Objects.equals(roadAddressLine4, that.roadAddressLine4) &&
+                    Objects.equals(roadAddressLine5, that.roadAddressLine5);
         }
         return true;
     }
@@ -344,18 +320,18 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public boolean hasData() {
         return
                 municipalityCode != 0 ||
-                roadCode != 0 ||
-                addressTextType != 0 ||
-                startAuthority != 0 ||
-                stringNonEmpty(buildingNumber) ||
-                stringNonEmpty(houseNumber) ||
-                stringNonEmpty(floor) ||
-                stringNonEmpty(door) ||
-                stringNonEmpty(roadAddressLine1) ||
-                stringNonEmpty(roadAddressLine2) ||
-                stringNonEmpty(roadAddressLine3) ||
-                stringNonEmpty(roadAddressLine4) ||
-                stringNonEmpty(roadAddressLine5);
+                        roadCode != 0 ||
+                        addressTextType != 0 ||
+                        startAuthority != 0 ||
+                        stringNonEmpty(buildingNumber) ||
+                        stringNonEmpty(houseNumber) ||
+                        stringNonEmpty(floor) ||
+                        stringNonEmpty(door) ||
+                        stringNonEmpty(roadAddressLine1) ||
+                        stringNonEmpty(roadAddressLine2) ||
+                        stringNonEmpty(roadAddressLine3) ||
+                        stringNonEmpty(roadAddressLine4) ||
+                        stringNonEmpty(roadAddressLine5);
     }
 
     private int oldMunicipalityCode() {

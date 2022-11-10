@@ -124,19 +124,19 @@ public class Envelope {
 
     public String toLogString(String queryString) {
         return String.format(
-            "Path: %s, query: %s, results: %s, request timestamp: %s, "
-            + "response timestamp: %s, page: %s, pagesize: %s",
-            path,
-            queryString == null ? "<empty>" : queryString,
-            results.size(),
-            requestTimestamp == null ?
-                "<null>" :
-                requestTimestamp.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-            responseTimestamp == null ?
-                "<null>" :
-                responseTimestamp.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-            page,
-            pageSize
+                "Path: %s, query: %s, results: %s, request timestamp: %s, "
+                        + "response timestamp: %s, page: %s, pagesize: %s",
+                path,
+                queryString == null ? "<empty>" : queryString,
+                results.size(),
+                requestTimestamp == null ?
+                        "<null>" :
+                        requestTimestamp.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                responseTimestamp == null ?
+                        "<null>" :
+                        responseTimestamp.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                page,
+                pageSize
         );
     }
 

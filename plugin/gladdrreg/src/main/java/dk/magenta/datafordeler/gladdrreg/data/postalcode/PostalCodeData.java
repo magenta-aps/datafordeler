@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by lars on 16-05-17.
  */
 @javax.persistence.Entity
-@Table(name="gladdrreg_postalcode_data", indexes = {
+@Table(name = "gladdrreg_postalcode_data", indexes = {
         @Index(name = "gladdrreg_postalcode_code", columnList = PostalCodeData.DB_FIELD_CODE),
         @Index(name = "gladdrreg_postalcode_name", columnList = PostalCodeData.DB_FIELD_NAME)
 })

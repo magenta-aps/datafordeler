@@ -26,6 +26,7 @@ public class PersonEventRecord extends HistoricPersonDataRecord {
 
     /**
      * Get a list of events
+     *
      * @return
      */
     public List<PersonEventDataRecord> getPersonEvents() {
@@ -38,6 +39,7 @@ public class PersonEventRecord extends HistoricPersonDataRecord {
 
     /**
      * Eventinformation does not result in any bitemporal records
+     *
      * @return
      */
     @Override

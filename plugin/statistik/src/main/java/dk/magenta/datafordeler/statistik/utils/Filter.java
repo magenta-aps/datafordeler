@@ -10,7 +10,10 @@ import dk.magenta.datafordeler.statistik.services.StatisticsService;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Filter {
@@ -55,21 +58,21 @@ public class Filter {
         this.filterTime1 = Query.parseDateTime(request.getParameter("filterTime1"));
         this.municipalityFilter = null;
         String munipialicityString = request.getParameter("municipalityFilter");
-        if(munipialicityString != null) {
+        if (munipialicityString != null) {
             municipalityFilter = Integer.parseInt(request.getParameter("municipalityFilter"));
         }
-        this.timeintervallimit =timeintervallimit;
+        this.timeintervallimit = timeintervallimit;
         String[] pnr = request.getParameterValues("pnr");
         if (pnr != null && pnr.length > 0) {
             this.onlyPnr = Arrays.asList(pnr);
         }
         OffsetDateTime beforeValidationDate = this.registrationBefore;
-        if(beforeValidationDate==null) {
+        if (beforeValidationDate == null) {
             beforeValidationDate = OffsetDateTime.now();
         }
 
-        if((this.registrationAfter!=null &&this.registrationAfter.plusDays(120).isBefore(beforeValidationDate) &&
-                this.onlyPnr==null  && this.effectAt==null)
+        if ((this.registrationAfter != null && this.registrationAfter.plusDays(120).isBefore(beforeValidationDate) &&
+                this.onlyPnr == null && this.effectAt == null)
                 && this.timeintervallimit) {
             throw new Exception("Invalid filters in request");
         }
@@ -155,9 +158,7 @@ public class Filter {
 
         if (this.originAfter != null && record.getOriginDate() != null && record.getOriginDate().isBefore(this.originAfter))
             return false;
-        if (this.originBefore != null && record.getOriginDate() != null && record.getOriginDate().isAfter(this.originBefore))
-            return false;
-        return true;
+        return this.originBefore == null || record.getOriginDate() == null || !record.getOriginDate().isAfter(this.originBefore);
     }
 
     public <R extends CprBitemporalRecord> Collection<R> accept(Collection<R> records) {

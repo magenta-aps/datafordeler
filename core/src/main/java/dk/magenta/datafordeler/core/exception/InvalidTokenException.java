@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class InvalidTokenException extends DataFordelerException {
 
-  public InvalidTokenException(String message) {
-    super(message);
-  }
+    public InvalidTokenException(String message) {
+        super(message);
+    }
 
-  public InvalidTokenException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public InvalidTokenException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public String getCode() {
-    return "datafordeler.authorization.invalid_token";
-  }
+    public String getCode() {
+        return "datafordeler.authorization.invalid_token";
+    }
 }

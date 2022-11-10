@@ -55,14 +55,12 @@ public class ChurchDataRecord extends CprBitemporalPersonRecord<ChurchDataRecord
     }
 
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<ChurchDataRecord> correctors = new HashSet<>();
+    private final Set<ChurchDataRecord> correctors = new HashSet<>();
 
     public Set<ChurchDataRecord> getCorrectors() {
         return this.correctors;
     }
-
 
 
     @Override
@@ -72,7 +70,7 @@ public class ChurchDataRecord extends CprBitemporalPersonRecord<ChurchDataRecord
 
     @Override
     public boolean equalData(Object o) {
-        if (o==null || (getClass() != o.getClass())) return false;
+        if (o == null || (getClass() != o.getClass())) return false;
         ChurchDataRecord that = (ChurchDataRecord) o;
         return Objects.equals(this.churchRelation, that.churchRelation);
     }

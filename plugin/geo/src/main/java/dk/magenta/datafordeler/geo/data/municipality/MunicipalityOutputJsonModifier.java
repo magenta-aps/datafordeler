@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class MunicipalityOutputJsonModifier extends JsonModifier {
 
-    private MunicipalityOutputWrapper outputWrapper;
+    private final MunicipalityOutputWrapper outputWrapper;
     protected HashMap<Integer, GeoMunicipalityEntity> entities = new HashMap<>();
 
     public MunicipalityOutputJsonModifier(MunicipalityOutputWrapper outputWrapper, Collection<GeoMunicipalityEntity> MunicipalityEntities) {
@@ -21,6 +21,7 @@ public class MunicipalityOutputJsonModifier extends JsonModifier {
 
     /**
      * Modifies a JsonNode by adding data from this.entities
+     *
      * @param node
      */
     @Override

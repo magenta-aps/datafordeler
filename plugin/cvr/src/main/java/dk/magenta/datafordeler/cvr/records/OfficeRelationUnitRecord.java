@@ -45,7 +45,6 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_UNITTYPE = "unitType";
     public static final String IO_FIELD_UNITTYPE = "enhedsType";
 
@@ -56,7 +55,6 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     public String getUnitType() {
         return this.unitType;
     }
-
 
 
     public static final String DB_FIELD_BUSINESS_KEY = "businessKey";
@@ -71,7 +69,6 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     }
 
 
-
     //This field is null for every single input
     public static final String IO_FIELD_ORGANIZATION_TYPE = "organisationstype";
 
@@ -82,7 +79,6 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     public Integer getOrganizationType() {
         return this.organizationType;
     }
-
 
 
     public static final String IO_FIELD_NAME = "navne";
@@ -108,7 +104,6 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
             this.names.add(record);
         }
     }
-
 
 
     public static final String DB_FIELD_LOCATION_ADDRESS = "locationAddress";

@@ -10,10 +10,9 @@ import java.util.Vector;
 
 public class LabeledSequenceInputStream extends InputStream {
 
-    private Enumeration<Pair<String, InputStream>> e;
+    private final Enumeration<Pair<String, InputStream>> e;
     Pair<String, InputStream> current;
     private InputStream in;
-
 
 
     public LabeledSequenceInputStream(List<Pair<String, InputStream>> e) {
@@ -48,7 +47,7 @@ public class LabeledSequenceInputStream extends InputStream {
     }
 
     /**
-     *  Continues reading in the next stream if an EOF is reached.
+     * Continues reading in the next stream if an EOF is reached.
      */
     private final void nextStream() throws IOException {
         if (in != null) {
@@ -61,8 +60,7 @@ public class LabeledSequenceInputStream extends InputStream {
             if (in == null) {
                 throw new NullPointerException();
             }
-        }
-        else in = null;
+        } else in = null;
 
     }
 
@@ -84,7 +82,7 @@ public class LabeledSequenceInputStream extends InputStream {
         return -1;
     }
 
-    public int read(byte b[], int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         if (in == null) {
             return -1;
         } else if (b == null) {

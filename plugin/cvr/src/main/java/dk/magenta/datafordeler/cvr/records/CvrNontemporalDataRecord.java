@@ -27,7 +27,6 @@ public class CvrNontemporalDataRecord extends CvrRecord {
     }
 
 
-
     public static final String DB_FIELD_COMPANYUNIT = "companyUnitRecord";
 
     @JsonIgnore

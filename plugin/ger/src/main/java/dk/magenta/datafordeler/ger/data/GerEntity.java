@@ -10,8 +10,6 @@ import org.hibernate.Session;
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @MappedSuperclass
 public class GerEntity extends DatabaseEntry implements IdentifiedEntity {

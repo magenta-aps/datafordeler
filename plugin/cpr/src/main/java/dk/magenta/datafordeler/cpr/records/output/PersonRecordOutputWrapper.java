@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.cpr.records.output;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -8,9 +7,9 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
-import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.GenericParentOutputDTO;
-import dk.magenta.datafordeler.cpr.records.person.data.*;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
@@ -89,7 +88,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         container.addBitemporal(PersonEntity.IO_FIELD_ADDRESS, record.getAddress());
         container.addBitemporal(PersonEntity.IO_FIELD_ADDRESS_NAME, record.getAddressName());
         container.addBitemporal(PersonEntity.IO_FIELD_BIRTHPLACE, record.getBirthPlace());
-        if(!Mode.DATAONLY.equals(mode)) {
+        if (!Mode.DATAONLY.equals(mode)) {
             container.addBitemporal(PersonEntity.IO_FIELD_BIRTHPLACE_VERIFICATION, record.getBirthPlaceVerification(), true);
             container.addBitemporal(PersonEntity.IO_FIELD_CHURCH_VERIFICATION, record.getChurchRelationVerification(), true);
             container.addBitemporal(PersonEntity.IO_FIELD_CITIZENSHIP_VERIFICATION, record.getCitizenshipVerification(), true);
@@ -113,7 +112,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
         container.addBitemporal(PersonEntity.IO_FIELD_FOREIGN_ADDRESS_EMIGRATION, record.getEmigration(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_MOVE_MUNICIPALITY, record.getMunicipalityMove());
         container.addBitemporal(PersonEntity.IO_FIELD_NAME, record.getName());
-        container.addBitemporal(PersonEntity.IO_FIELD_CORE, record.getCore(),true);
+        container.addBitemporal(PersonEntity.IO_FIELD_CORE, record.getCore(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_PNR, record.getPersonNumber(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_POSITION, record.getPosition(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_STATUS, record.getStatus(), true);
@@ -135,7 +134,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
 
     public HashSet<GenericParentOutputDTO> getParentOutputDTO(Iterator<ParentDataRecord> parent) {
         HashSet<GenericParentOutputDTO> parentList = new HashSet();
-        while(parent.hasNext()) {
+        while (parent.hasNext()) {
             GenericParentOutputDTO genericParentOutputDTO = new GenericParentOutputDTO();
             ParentDataRecord p = parent.next();
             genericParentOutputDTO.setPnr(p.getCprNumber());

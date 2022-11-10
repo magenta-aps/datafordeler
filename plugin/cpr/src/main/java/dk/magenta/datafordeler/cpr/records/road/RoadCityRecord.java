@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class RoadCityRecord extends RoadDataRecord {
 
-    private CprBitemporality cityTemporality;
+    private final CprBitemporality cityTemporality;
 
     public RoadCityRecord(String line) throws ParseException {
         super(line);

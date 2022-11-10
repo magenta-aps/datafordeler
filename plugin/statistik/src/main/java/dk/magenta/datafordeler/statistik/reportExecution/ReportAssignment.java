@@ -16,11 +16,11 @@ public class ReportAssignment extends DatabaseEntry {
     public static final String DB_FIELD_REPORTTEMPLATENAME = "reportTemplateName";
     public static final String DB_FIELD_REPORTUUID = "reportUuid";
     public static final String DB_FIELD_COLLECTIONUUID = "collectionUuid";
-    public static final String  DB_FIELD_REPORT_STATUS = "reportStatus";
-    public static final String  DB_FIELD_REPORTID_REASON = "reportIdReason";
-    public static final String  DB_FIELD_REPORT_FILE_NAME = "reportFileName";
-    public static final String  DB_FIELD_REGISTRATIONAFTER = "registrationAfter";
-    public static final String  DB_FIELD_REGISTRATIONBEFORE = "registrationBefore";
+    public static final String DB_FIELD_REPORT_STATUS = "reportStatus";
+    public static final String DB_FIELD_REPORTID_REASON = "reportIdReason";
+    public static final String DB_FIELD_REPORT_FILE_NAME = "reportFileName";
+    public static final String DB_FIELD_REGISTRATIONAFTER = "registrationAfter";
+    public static final String DB_FIELD_REGISTRATIONBEFORE = "registrationBefore";
 
 
     public ReportAssignment() {
@@ -102,8 +102,6 @@ public class ReportAssignment extends DatabaseEntry {
     @Column(name = DB_FIELD_REPORT_STATUS)
     @Enumerated(EnumType.ORDINAL)
     private ReportProgressStatus reportStatus;
-
-
 
 
     public String getReason() {

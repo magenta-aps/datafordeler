@@ -55,7 +55,7 @@ public class AdresseService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Logger log = LogManager.getLogger(AdresseService.class);
+    private Logger log = LogManager.getLogger(AdresseService.class.getCanonicalName());
 
     public static final String PARAM_MUNICIPALITY = "kommune";
     public static final String PARAM_LOCALITY = "lokalitet";
@@ -82,7 +82,6 @@ public class AdresseService {
     public static final String OUTPUT_FLOOR = "etage";
     public static final String OUTPUT_DOOR = "doer";
     public static final String OUTPUT_RESIDENCE = "bolig";
-
 
 
     HashMap<Integer, UUID> municipalities = new HashMap<>();
@@ -124,6 +123,7 @@ public class AdresseService {
 
     /**
      * Finds all localities in a municipality. Only current data is included.
+     *
      * @param request HTTP request containing a municipality parameter
      * @return Json-formatted string containing a list of found objects
      */
@@ -144,7 +144,7 @@ public class AdresseService {
         int code = parameterAsInt(PARAM_MUNICIPALITY, municipalityCode);
         UUID municipality = this.municipalities.get(code);
         if (municipality == null) {
-            throw new HttpNotFoundException("Municipality with code "+code+" not found");
+            throw new HttpNotFoundException("Municipality with code " + code + " not found");
         }
 
         LocalityQuery query = new LocalityQuery();
@@ -180,6 +180,7 @@ public class AdresseService {
 
     /**
      * Finds all roads in a locality. Only current data is included.
+     *
      * @param request HTTP request containing a locality parameter
      * @return Json-formatted string containing a list of found objects
      */
@@ -243,6 +244,7 @@ public class AdresseService {
 
     /**
      * Finds all buildings on a road. Only current data is included.
+     *
      * @param request HTTP request containing a road parameter
      * @return Json-formatted string containing a list of found objects
      */
@@ -326,6 +328,7 @@ public class AdresseService {
     /**
      * Finds all addreses on a road, filtered by housenumber or bnumber.
      * Only current data is included.
+     *
      * @param request HTTP request containing a road parameter,
      *                and optionally a house parameter or bnr parameter
      * @return Json-formatted string containing a list of found objects
@@ -358,8 +361,8 @@ public class AdresseService {
             if (houseNumber != null && !houseNumber.trim().isEmpty()) {
                 houseNumber = houseNumber.trim();
                 query.addHouseNumber(houseNumber);
-                query.addHouseNumber("0"+houseNumber);
-                query.addHouseNumber("00"+houseNumber);
+                query.addHouseNumber("0" + houseNumber);
+                query.addHouseNumber("00" + houseNumber);
             }
             if (buildingNumber != null && !buildingNumber.trim().isEmpty()) {
                 BNumberQuery bNumberQuery = new BNumberQuery();
@@ -424,6 +427,7 @@ public class AdresseService {
     /**
      * Finds all addreses on a road, filtered by housenumber or bnumber.
      * Only current data is included.
+     *
      * @param request HTTP request containing a road parameter,
      *                and optionally a house parameter or bnr parameter
      * @return Json-formatted string containing a list of found objects
@@ -571,7 +575,6 @@ public class AdresseService {
     }
 
 
-
     private static HashMap<Identification, RoadEntity> getRoads(Session session, Collection<AddressEntity> addressEntities) {
         HashSet<Identification> identifications = new HashSet<>();
         for (AddressEntity addressEntity : addressEntities) {
@@ -637,7 +640,6 @@ public class AdresseService {
     }
 
 
-
     private static void checkParameterExistence(String name, String value) throws MissingParameterException {
         if (value == null || value.trim().isEmpty()) {
             throw new MissingParameterException(name);
@@ -648,7 +650,7 @@ public class AdresseService {
         try {
             return Integer.parseInt(value, 10);
         } catch (NumberFormatException e) {
-            throw new InvalidClientInputException("Parameter "+name+" must be a number", e);
+            throw new InvalidClientInputException("Parameter " + name + " must be a number", e);
         }
     }
 
@@ -656,7 +658,7 @@ public class AdresseService {
         try {
             return UUID.fromString(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidClientInputException("Parameter "+name+" must be a uuid", e);
+            throw new InvalidClientInputException("Parameter " + name + " must be a uuid", e);
         }
     }
 
@@ -667,10 +669,12 @@ public class AdresseService {
         query.setEffectFrom(now);
         query.setEffectTo(now);
     }
+
     private static void setQueryNoLimit(Query query) {
         query.setPage(1);
         query.setPageSize(Integer.MAX_VALUE);
     }
+
     private static void setHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Content-Type", "application/json; charset=utf-8");

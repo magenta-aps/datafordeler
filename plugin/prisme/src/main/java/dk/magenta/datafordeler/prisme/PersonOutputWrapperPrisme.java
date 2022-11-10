@@ -57,7 +57,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         if (latest.size() > 1) {
             latest.sort(Comparator.comparing(CprBitemporalPersonRecord::getId));
         }
-        return latest.isEmpty() ? null : latest.get(latest.size()-1);
+        return latest.isEmpty() ? null : latest.get(latest.size() - 1);
     }
 
     public Object wrapRecordResult(PersonEntity input, BaseQuery query) {
@@ -65,7 +65,6 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         // Root
         NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
         root.put("cprNummer", input.getPersonnummer());
-
 
 
         NameDataRecord nameData = this.getLatest(input.getName());
@@ -138,7 +137,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         PersonStatusDataRecord personStatusData = this.getLatest(input.getStatus());
         if (personStatusData != null) {
             root.put("statuskode", personStatusData.getStatus());
-            root.put("statuskodedato", this.formatDate(
+            root.put("statuskodedato", formatDate(
                     personStatusData.getEffectFrom() != null ? personStatusData.getEffectFrom() : personStatusData.getRegistrationFrom()
             ));
         }
@@ -173,7 +172,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
                     String roadName = lookup.getRoadName();
 
                     if (roadName != null) {
-                        root.put("adresse", this.getAddressFormatted(
+                        root.put("adresse", getAddressFormatted(
                                 roadName,
                                 personAddressData.getHouseNumber(),
                                 null,
@@ -209,7 +208,8 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
                     try {
                         int postbox = Integer.parseInt(m.group(1), 10);
                         root.put("postboks", postbox);
-                    } catch (NumberFormatException e) {}
+                    } catch (NumberFormatException e) {
+                    }
                 }
             }
         }
@@ -307,6 +307,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
     }
 
     public static HashMap<Integer, String> countryCodeMap = new HashMap<>();
+
     static {
         countryCodeMap.put(5404, "AF");
         countryCodeMap.put(5299, "XX");

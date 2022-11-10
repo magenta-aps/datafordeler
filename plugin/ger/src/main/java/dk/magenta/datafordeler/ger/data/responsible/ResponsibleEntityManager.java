@@ -89,6 +89,7 @@ public class ResponsibleEntityManager extends GerEntityManager<ResponsibleEntity
 
     private static final HashMap<String, String> keyMappingEntityToRaw = new HashMap<>();
     private static final HashMap<String, String> keyMappingRawToEntity = new HashMap<>();
+
     static {
         keyMappingEntityToRaw.put(ResponsibleEntity.IO_FIELD_GERNR, "GERNR");
         keyMappingEntityToRaw.put(ResponsibleEntity.IO_FIELD_OPERATION_FORM_CODE, "DRIFTFORMKODE");

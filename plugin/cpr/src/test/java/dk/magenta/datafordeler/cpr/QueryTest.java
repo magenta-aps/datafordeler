@@ -100,6 +100,7 @@ public class QueryTest {
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
+
     private void whitelistLocalhost() {
         when(dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
     }
@@ -108,14 +109,14 @@ public class QueryTest {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange("/cpr/"+type+"/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
+        return this.restTemplate.exchange("/cpr/" + type + "/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
     }
 
     private ResponseEntity<String> uuidSearch(String id, String type) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange("/cpr/"+type+"/1/rest/" + id, HttpMethod.GET, httpEntity, String.class);
+        return this.restTemplate.exchange("/cpr/" + type + "/1/rest/" + id, HttpMethod.GET, httpEntity, String.class);
     }
 
 
@@ -301,8 +302,6 @@ public class QueryTest {
         registreringer = firstElement.get("registreringer");
         Assert.assertNull(registreringer);
     }
-
-
 
 
     @Test

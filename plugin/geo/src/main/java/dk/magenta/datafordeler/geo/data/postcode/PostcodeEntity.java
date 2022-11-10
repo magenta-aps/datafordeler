@@ -36,7 +36,7 @@ public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity 
 
     public static final String TABLE_NAME = "geo_postcode";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "Postcode";
 
     public PostcodeEntity() {
@@ -48,10 +48,9 @@ public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity 
     }
 
     public static UUID generateUUID(int postcode) {
-        String uuidInput = "postcode:"+postcode;
+        String uuidInput = "postcode:" + postcode;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
-
 
 
     public static final String DB_FIELD_CODE = "code";
@@ -67,8 +66,6 @@ public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity 
     public void setCode(int code) {
         this.code = code;
     }
-
-
 
 
     public static final String DB_FIELD_NAME = "name";
@@ -88,11 +85,6 @@ public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity 
     }
 
 
-
-
-
-
-
     public static final String DB_FIELD_SHAPE = "shape";
     public static final String IO_FIELD_SHAPE = "form";
     @OneToMany(mappedBy = PostcodeShapeRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -108,8 +100,6 @@ public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity 
     public MonotemporalSet<PostcodeShapeRecord> getShape() {
         return new MonotemporalSet<>(this.shape);
     }
-
-
 
 
     @Override

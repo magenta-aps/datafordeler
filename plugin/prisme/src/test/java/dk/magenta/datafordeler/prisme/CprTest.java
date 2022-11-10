@@ -14,10 +14,12 @@ import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cpr.data.person.*;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
+import dk.magenta.datafordeler.cpr.data.person.PersonSubscriptionAssignmentStatus;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.geo.GeoLookupService;
-
 import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -40,13 +42,12 @@ import javax.persistence.FlushModeType;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.StringJoiner;
 
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 
@@ -120,7 +121,7 @@ public class CprTest extends TestBase {
                 line = line.substring(0, 3) + newCpr + line.substring(13);
                 sb.add(line);
             }
-            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8));
             personEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
@@ -130,6 +131,7 @@ public class CprTest extends TestBase {
 
     /**
      * Load a person with a specified age
+     *
      * @param age
      * @throws Exception
      */
@@ -147,12 +149,12 @@ public class CprTest extends TestBase {
         String birthYear = String.format("%04d", OffsetDateTime.now().minusYears(age).getYear());
         for (int j = 0; j < lines.length; j++) {
             String line = lines[j];
-            if(line.startsWith("0010101001234")) {
+            if (line.startsWith("0010101001234")) {
                 line = line.substring(0, 67) + birthYear + line.substring(71);
             }
             sb.add(line);
         }
-        ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+        ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8));
         personEntityManager.parseData(bais, importMetadata);
         bais.close();
         transaction.commit();
@@ -351,6 +353,7 @@ public class CprTest extends TestBase {
 
     /**
      * Validate that it is possible to find if a person is currently citizen in greenland, and if yes how long the person has been living here
+     *
      * @throws Exception
      */
     @Test
@@ -475,7 +478,6 @@ public class CprTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
     }
-
 
 
     @Test
@@ -786,7 +788,8 @@ public class CprTest extends TestBase {
     }
 
     /**
-     * Validate that when a person is without address it finds the address direct, if the person is not dead it will also create subscribtion
+     * Validate that when a person is without address it finds the address direct, if the person is not dead it will also create subscription
+     *
      * @throws Exception
      */
     @Test
@@ -853,9 +856,9 @@ public class CprTest extends TestBase {
     }
 
 
-
     /**
-     * Validate that when a person is without address it finds the address direct, if the person is not dead it will also create subscribtion
+     * Validate that when a person is without address it finds the address direct, if the person is not dead it will also create subscription
+     *
      * @throws Exception
      */
     @Test

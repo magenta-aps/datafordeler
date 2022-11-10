@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @javax.persistence.Entity
-@Table(name=CprPlugin.DEBUG_TABLE_PREFIX + RoadMemoBitemporalRecord.TABLE_NAME, indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadMemoBitemporalRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadMemoBitemporalRecord.TABLE_NAME + RoadMemoBitemporalRecord.DB_FIELD_ENTITY, columnList = CprBitemporalRoadRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadMemoBitemporalRecord.TABLE_NAME + RoadMemoBitemporalRecord.DB_FIELD_REPLACED_BY, columnList = CprBitemporalRoadRecord.DB_FIELD_REPLACED_BY + DatabaseEntry.REF),
 })
@@ -35,6 +35,7 @@ public class RoadMemoBitemporalRecord extends CprBitemporalRoadRecord<RoadMemoBi
     @JsonProperty(value = IO_FIELD_NOTE_NUMBER)
     @XmlElement(name = IO_FIELD_NOTE_NUMBER)
     private int noteNumber;
+
     public int getNoteNumber() {
         return noteNumber;
     }
@@ -50,6 +51,7 @@ public class RoadMemoBitemporalRecord extends CprBitemporalRoadRecord<RoadMemoBi
     @JsonProperty(value = IO_FIELD_NOTE_LINE)
     @XmlElement(name = IO_FIELD_NOTE_LINE)
     private String noteLine;
+
     public String getNoteLine() {
         return noteLine;
     }
@@ -70,7 +72,7 @@ public class RoadMemoBitemporalRecord extends CprBitemporalRoadRecord<RoadMemoBi
 
     @Override
     public boolean hasData() {
-        return this.noteNumber!=0 || stringNonEmpty(this.noteLine);
+        return this.noteNumber != 0 || stringNonEmpty(this.noteLine);
     }
 
     @Override

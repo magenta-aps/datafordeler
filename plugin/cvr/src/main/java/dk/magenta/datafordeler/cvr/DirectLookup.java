@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +42,7 @@ public class DirectLookup {
 
     public Collection<CompanyRecord> companyLookup(Collection<String> cvrNumbers) throws DataFordelerException {
         List<CompanyRecord> records = new ArrayList<CompanyRecord>();
-        for(String cvrNumber : cvrNumbers) {
+        for (String cvrNumber : cvrNumbers) {
             records.add(companyLookup(cvrNumber));
         }
         return records;
@@ -76,7 +77,7 @@ public class DirectLookup {
         httpCommunicator.setScrollIdJsonKey("_scroll_id");
 
         try (InputStream response = httpCommunicator.fetch(queryUri, scrollURI, requestBody.toString())) {
-            Scanner scanner = new Scanner(response, "UTF-8").useDelimiter(String.valueOf(httpCommunicator.delimiter));
+            Scanner scanner = new Scanner(response, StandardCharsets.UTF_8).useDelimiter(String.valueOf(ScanScrollCommunicator.delimiter));
             List<R> companyRecords = new ArrayList<>();
             while (scanner.hasNext()) {
                 String data = scanner.next();
@@ -118,7 +119,7 @@ public class DirectLookup {
 
     public Collection<ParticipantRecord> participantLookup(Collection<String> unitNumbers) throws DataFordelerException {
         List<ParticipantRecord> records = new ArrayList<ParticipantRecord>();
-        for(String unitNumber : unitNumbers) {
+        for (String unitNumber : unitNumbers) {
             records.add(participantLookup(unitNumber));
         }
         return records;
@@ -155,8 +156,6 @@ public class DirectLookup {
     }
 
 
-
-
     public static ObjectNode addObject(ObjectMapper objectMapper, ObjectNode parent, String key) {
         ObjectNode object = objectMapper.createObjectNode();
         if (parent != null) {
@@ -164,6 +163,7 @@ public class DirectLookup {
         }
         return object;
     }
+
     public static ObjectNode addObject(ObjectMapper objectMapper, ArrayNode parent) {
         ObjectNode object = objectMapper.createObjectNode();
         if (parent != null) {
@@ -171,6 +171,7 @@ public class DirectLookup {
         }
         return object;
     }
+
     public static ArrayNode addList(ObjectMapper objectMapper, ObjectNode parent, String key) {
         ArrayNode object = objectMapper.createArrayNode();
         if (parent != null) {
@@ -178,6 +179,7 @@ public class DirectLookup {
         }
         return object;
     }
+
     public static ArrayNode addList(ObjectMapper objectMapper, ArrayNode parent) {
         ArrayNode object = objectMapper.createArrayNode();
         if (parent != null) {

@@ -47,12 +47,11 @@ import java.util.stream.Stream;
 
 /**
  * Webservice for finding out if a cpr- or cvr- number is allowed to recieve e-post
- *
+ * <p>
  * Persons that should not recieve eboks-letters
  * Persons that is under 15 years old
  * Persons that is dead
  * Persons that has had any adress in greenland either current or historic since 2017
- *
  */
 @RestController
 @RequestMapping("/eboks/recipient")
@@ -70,7 +69,7 @@ public class EboksRecieveLookupService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(EboksRecieveLookupService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(EboksRecieveLookupService.class.getCanonicalName());
 
 
     @PostConstruct
@@ -80,7 +79,7 @@ public class EboksRecieveLookupService {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String getSingle(@RequestParam(value = "cpr",required=false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
+    public String getSingle(@RequestParam(value = "cpr", required = false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -103,7 +102,7 @@ public class EboksRecieveLookupService {
                 // The date that the eboks-system was initiated
                 // This date is relevant in order to find out if the person can be excluded from recieving eboks-letters for not beeing from greenland.
                 // A person that has not had adress in greenland since 8. June 2017, gan not recieve eboks-letters
-                OffsetDateTime eboxStart = OffsetDateTime.of(2017,6,8,0,0,0,0, ZoneOffset.UTC);
+                OffsetDateTime eboxStart = OffsetDateTime.of(2017, 6, 8, 0, 0, 0, 0, ZoneOffset.UTC);
 
                 OffsetDateTime now = OffsetDateTime.now();
                 personQuery.setRegistrationAt(now);
@@ -132,7 +131,7 @@ public class EboksRecieveLookupService {
 
             ArrayNode cvrList = objectMapper.createArrayNode();
 
-            if (cvrs != null &&!cvrs.isEmpty()) {
+            if (cvrs != null && !cvrs.isEmpty()) {
                 CompanyRecordQuery query = new CompanyRecordQuery();
                 query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrs);
                 Stream<CompanyRecord> companyEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class);
@@ -141,12 +140,12 @@ public class EboksRecieveLookupService {
                     String cvrNumber = Integer.toString(k.getCvrNumber());
 
                     AddressRecord adress = FilterUtilities.findNewestUnclosedCvr(k.getLocationAddress());
-                    if(adress==null) {
+                    if (adress == null) {
                         adress = FilterUtilities.findNewestCvr(k.getPostalAddress().currentRegistration());
                     }
 
                     String status = k.getMetadata().getCompanyStatusRecord(k).getStatus();
-                    if(!"NORMAL".equals(status) && !"Aktiv".equals(status) && !"Fremtid".equals(status)) {
+                    if (!"NORMAL".equals(status) && !"Aktiv".equals(status) && !"Fremtid".equals(status)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.CEASED));
                     } else if (adress.getMunicipality().getMunicipalityCode() < 950) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.NOTFROMGREENLAND));
@@ -157,7 +156,7 @@ public class EboksRecieveLookupService {
                 });
             }
             //Find the company as a ger company, if CVR-company does not exist
-            if (cvrs != null &&!cvrs.isEmpty()) {
+            if (cvrs != null && !cvrs.isEmpty()) {
                 Collection<CompanyEntity> companyEntities = this.gerCompanyLookup(session, cvrs);
                 if (!companyEntities.isEmpty()) {
                     companyEntities.forEach((k) -> {
@@ -251,7 +250,7 @@ public class EboksRecieveLookupService {
     public enum FailState {
 
         UNDEFINED("Undefined"), MISSING("Missing"), NOTFROMGREENLAND("NotFromGreenland"), DEAD("Dead"), MINOR("Minor"), CEASED("Ceased");
-        private String readableFailString;
+        private final String readableFailString;
 
         FailState(String readableFailString) {
             this.readableFailString = readableFailString;

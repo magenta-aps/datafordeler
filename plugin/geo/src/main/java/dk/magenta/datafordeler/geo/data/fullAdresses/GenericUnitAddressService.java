@@ -42,7 +42,7 @@ import static dk.magenta.datafordeler.geo.AdresseService.PARAM_DEBUG;
 @RequestMapping("/geo/fullAddress/1/rest")
 public class GenericUnitAddressService {
 
-    private static Map<String, ParameterType> parameterMappings = new HashMap<String, ParameterType>();
+    private static final Map<String, ParameterType> parameterMappings = new HashMap<String, ParameterType>();
 
     public enum ParameterType {
         bnr("accessAddressEntity.bnr", false),
@@ -101,7 +101,7 @@ public class GenericUnitAddressService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Logger log = LogManager.getLogger(AdresseService.class);
+    private final Logger log = LogManager.getLogger(AdresseService.class.getCanonicalName());
 
 
     @RequestMapping("/search")
@@ -113,7 +113,7 @@ public class GenericUnitAddressService {
         String page = requestParams.getFirst("page");
         boolean debug = "1".equals(request.getParameter(PARAM_DEBUG));
 
-        try(Session session = sessionManager.getSessionFactory().openSession();) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Envelope envelope = new Envelope();
             DafoUserDetails user = this.dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -125,60 +125,57 @@ public class GenericUnitAddressService {
             envelope.setUsername(user.toString());
 
             String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity, geoMunipialicityEntity.name AS munipialicityName " +
-                    "FROM "+ AccessAddressEntity.class.getCanonicalName()+" accessAddressEntity "+
-                    "JOIN "+ UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity."+UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS+"=accessAddressEntity."+AccessAddressEntity.DB_FIELD_IDENTIFICATION+" "+
-                    "JOIN "+ UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor."+UnitAddressFloorRecord.DB_FIELD_ENTITY+"=unitAddressEntity."+"id"+" "+
+                    "FROM " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity " +
+                    "JOIN " + UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity." + UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + "=accessAddressEntity." + AccessAddressEntity.DB_FIELD_IDENTIFICATION + " " +
+                    "JOIN " + UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor." + UnitAddressFloorRecord.DB_FIELD_ENTITY + "=unitAddressEntity." + "id" + " " +
 
-                    "JOIN "+ AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord."+AccessAddressHouseNumberRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
+                    "JOIN " + AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord." + AccessAddressHouseNumberRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
 
-                    "JOIN "+ AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
-                    "JOIN "+ GeoLocalityEntity.class.getCanonicalName() + " localityRecord ON accessAddressLocalityRecord."+AccessAddressLocalityRecord.DB_FIELD_CODE+"=localityRecord."+GeoLocalityEntity.DB_FIELD_CODE+" "+
-                    "JOIN "+ LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName."+LocalityNameRecord.DB_FIELD_ENTITY+"=localityRecord."+ "id"+" "+
+                    "JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "JOIN " + GeoLocalityEntity.class.getCanonicalName() + " localityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_CODE + "=localityRecord." + GeoLocalityEntity.DB_FIELD_CODE + " " +
+                    "JOIN " + LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName." + LocalityNameRecord.DB_FIELD_ENTITY + "=localityRecord." + "id" + " " +
 
-                    "JOIN "+ AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord."+AccessAddressBlockNameRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
+                    "JOIN " + AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord." + AccessAddressBlockNameRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
 
-                    "JOIN "+ AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord."+AccessAddressPostcodeRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
-                    "JOIN "+ PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord."+AccessAddressPostcodeRecord.DB_FIELD_CODE+"=postcodeEntity."+PostcodeEntity.DB_FIELD_CODE+" "+
-                    "JOIN "+ PostcodeNameRecord.class.getCanonicalName() + " postcodeName ON postcodeName."+PostcodeNameRecord.DB_FIELD_ENTITY+"=postcodeEntity."+ "id"+" "+
+                    "JOIN " + AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "JOIN " + PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_CODE + "=postcodeEntity." + PostcodeEntity.DB_FIELD_CODE + " " +
+                    "JOIN " + PostcodeNameRecord.class.getCanonicalName() + " postcodeName ON postcodeName." + PostcodeNameRecord.DB_FIELD_ENTITY + "=postcodeEntity." + "id" + " " +
 
-                    "JOIN "+ AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ENTITY+"=accessAddressEntity."+"id"+" "+
-                    "JOIN "+ GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord."+AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE+"=roadEntity."+ GeoRoadEntity.DB_FIELD_IDENTIFICATION+" "+
-                    "JOIN "+ RoadNameRecord.class.getCanonicalName() + " roadName ON roadName."+RoadNameRecord.DB_FIELD_ENTITY+"=roadEntity."+ "id"+" "+
+                    "JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "JOIN " + GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE + "=roadEntity." + GeoRoadEntity.DB_FIELD_IDENTIFICATION + " " +
+                    "JOIN " + RoadNameRecord.class.getCanonicalName() + " roadName ON roadName." + RoadNameRecord.DB_FIELD_ENTITY + "=roadEntity." + "id" + " " +
 
-                    "JOIN "+ RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+"=accessAddressRoadRecord."+"municipalityCode"+" "+
-                    "JOIN "+ GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity."+GeoMunicipalityEntity.DB_FIELD_CODE+"=roadMunipialicityRecord."+RoadMunicipalityRecord.DB_FIELD_CODE+" "+
-                    "JOIN "+ MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName."+MunicipalityNameRecord.DB_FIELD_ENTITY+"=geoMunipialicityEntity."+ "id"+" "+
+                    "JOIN " + RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord." + RoadMunicipalityRecord.DB_FIELD_CODE + "=accessAddressRoadRecord." + "municipalityCode" + " " +
+                    "JOIN " + GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity." + GeoMunicipalityEntity.DB_FIELD_CODE + "=roadMunipialicityRecord." + RoadMunicipalityRecord.DB_FIELD_CODE + " " +
+                    "JOIN " + MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName." + MunicipalityNameRecord.DB_FIELD_ENTITY + "=geoMunipialicityEntity." + "id" + " " +
 
                     " WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
 
-            for(String key : requestParams.keySet()) {
+            for (String key : requestParams.keySet()) {
                 String parameterName = key;
                 String comparator = null;
 
-                if(key.contains(".")) {
+                if (key.contains(".")) {
                     StringTokenizer tokens = new StringTokenizer(parameterName, ".");
-                    parameterName = (String)tokens.nextElement();
-                    comparator = (String)tokens.nextElement();
+                    parameterName = (String) tokens.nextElement();
+                    comparator = (String) tokens.nextElement();
                 }
 
-                if(parameterMappings.containsKey(parameterName)) {
-                    if(parameterMappings.get(parameterName).isNumberType()) {
-
-                        System.out.println(comparator);
-
-                        if("lt".equals(comparator)) {
-                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+"<:"+parameterName;
-                        } else if("gt".equals(comparator)) {
-                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+">:"+parameterName;
+                if (parameterMappings.containsKey(parameterName)) {
+                    if (parameterMappings.get(parameterName).isNumberType()) {
+                        if ("lt".equals(comparator)) {
+                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + "<:" + parameterName;
+                        } else if ("gt".equals(comparator)) {
+                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + ">:" + parameterName;
                         } else {
-                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+"=:"+parameterName;
+                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + "=:" + parameterName;
                         }
                     } else {
                         String value = requestParams.getFirst(key);
-                        if(value.contains("*")) {
-                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+" LIKE :"+parameterName;
+                        if (value.contains("*")) {
+                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + " LIKE :" + parameterName;
                         } else {
-                            hql += " AND "+parameterMappings.get(parameterName).getSerarchString()+" = :"+parameterName;
+                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + " = :" + parameterName;
                         }
                     }
                 }
@@ -186,13 +183,13 @@ public class GenericUnitAddressService {
 
             Query query = session.createQuery(hql);
 
-            if(pageSize != null) {
+            if (pageSize != null) {
                 query.setMaxResults(Integer.valueOf(pageSize));
             } else {
                 query.setMaxResults(10);
             }
-            if(page != null) {
-                int pageIndex = (Integer.valueOf(page)-1)*query.getMaxResults();
+            if (page != null) {
+                int pageIndex = (Integer.valueOf(page) - 1) * query.getMaxResults();
                 query.setFirstResult(pageIndex);
             } else {
                 query.setFirstResult(0);
@@ -200,16 +197,16 @@ public class GenericUnitAddressService {
 
             Set<String> params = query.getParameterMetadata().getNamedParameterNames();
 
-            for(String key : requestParams.keySet()) {
+            for (String key : requestParams.keySet()) {
                 String parameterName = key;
                 String comparator = null;
-                if(key.contains(".")) {
+                if (key.contains(".")) {
                     StringTokenizer tokens = new StringTokenizer(parameterName, ".");
-                    parameterName = (String)tokens.nextElement();
-                    comparator = (String)tokens.nextElement();
+                    parameterName = (String) tokens.nextElement();
+                    comparator = (String) tokens.nextElement();
                 }
-                if(params.contains(parameterName)) {
-                    if(parameterMappings.get(parameterName).isNumberType()) {
+                if (params.contains(parameterName)) {
+                    if (parameterMappings.get(parameterName).isNumberType()) {
 
                         int numberValue = Integer.parseInt(requestParams.getFirst(key));
                         query.setParameter(parameterName, numberValue);
@@ -225,13 +222,13 @@ public class GenericUnitAddressService {
             List<Object[]> resultList = query.getResultList();
             ArrayList<FullAddressDTO> adressElementList = new ArrayList<FullAddressDTO>();
 
-            for(Object[] item : resultList) {
-                AccessAddressEntity accessAddressEntity = (AccessAddressEntity)item[0];
-                UnitAddressEntity unitAddressEntity = (UnitAddressEntity)item[1];
-                GeoLocalityEntity localityRecord = (GeoLocalityEntity)item[2];
-                PostcodeEntity postcodeRecord = (PostcodeEntity)item[3];
-                GeoRoadEntity roadRecord = (GeoRoadEntity)item[4];
-                GeoMunicipalityEntity geoMunicipalityEntity = (GeoMunicipalityEntity)item[5];
+            for (Object[] item : resultList) {
+                AccessAddressEntity accessAddressEntity = (AccessAddressEntity) item[0];
+                UnitAddressEntity unitAddressEntity = (UnitAddressEntity) item[1];
+                GeoLocalityEntity localityRecord = (GeoLocalityEntity) item[2];
+                PostcodeEntity postcodeRecord = (PostcodeEntity) item[3];
+                GeoRoadEntity roadRecord = (GeoRoadEntity) item[4];
+                GeoMunicipalityEntity geoMunicipalityEntity = (GeoMunicipalityEntity) item[5];
 
                 FullAddressDTO output = new FullAddressDTO();
 
@@ -254,7 +251,7 @@ public class GenericUnitAddressService {
                 output.setPost_navn(postcodeRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setVej_navn(roadRecord.getName().stream().findFirst().orElse(null).getName());
                 output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
-                if(debug) {
+                if (debug) {
                     output.setAccessAddress_objectId(Integer.toString(accessAddressEntity.getObjectId()));
                     output.setUnitAddress_objectId(Integer.toString(unitAddressEntity.getObjectId()));
                 }
@@ -262,7 +259,7 @@ public class GenericUnitAddressService {
             }
 
             envelope.setPageSize(query.getMaxResults());
-            envelope.setPage(query.getFirstResult()+1);
+            envelope.setPage(query.getFirstResult() + 1);
             envelope.setPath(request.getServletPath());
             envelope.setResponseTimestamp(OffsetDateTime.now());
 

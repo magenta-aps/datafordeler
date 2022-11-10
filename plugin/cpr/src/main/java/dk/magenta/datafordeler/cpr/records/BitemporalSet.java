@@ -18,6 +18,7 @@ public class BitemporalSet<R extends CprBitemporalRecord> implements Set<R> {
 
     /**
      * Get the record that is current
+     *
      * @return
      */
     public List<R> current() {
@@ -44,7 +45,6 @@ public class BitemporalSet<R extends CprBitemporalRecord> implements Set<R> {
                         && (r.getEffectTo() == null || r.getEffectTo().isAfter(dateTime) || r.getEffectTo().isEqual(dateTime))
         ).findFirst().orElse(null);
     }
-
 
 
     //--------------------------------------------------------------------------

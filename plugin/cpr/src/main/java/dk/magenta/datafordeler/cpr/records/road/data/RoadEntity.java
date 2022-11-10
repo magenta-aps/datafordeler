@@ -24,9 +24,9 @@ import java.util.*;
  * described in {@link dk.magenta.datafordeler.core.database.Entity}
  */
 @javax.persistence.Entity
-@Table(name=CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME, indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "road_identification", columnList = RoadEntity.DB_FIELD_IDENTIFICATION, unique = true),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE + RoadEntity.DB_FIELD_ROAD_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE+","+RoadEntity.DB_FIELD_ROAD_CODE),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE + RoadEntity.DB_FIELD_ROAD_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE + "," + RoadEntity.DB_FIELD_ROAD_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_ROAD_CODE, columnList = RoadEntity.DB_FIELD_ROAD_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_DAFO_UPDATED, columnList = RoadEntity.DB_FIELD_DAFO_UPDATED)
@@ -77,7 +77,6 @@ public class RoadEntity extends CprRecordEntity {
     }
 
 
-
     public static final String DB_FIELD_ROAD_CODE = "roadcode";
     public static final String IO_FIELD_ROAD_CODE = "vejkode";
     @Column(name = DB_FIELD_ROAD_CODE)
@@ -91,7 +90,6 @@ public class RoadEntity extends CprRecordEntity {
     public void setRoadcode(int roadcode) {
         this.roadcode = roadcode;
     }
-
 
 
     public static final String DB_FIELD_NAME_CODE = "name";
@@ -118,7 +116,6 @@ public class RoadEntity extends CprRecordEntity {
     }
 
 
-
     public static final String DB_FIELD_CITY_CODE = "city";
     public static final String IO_FIELD_CITY_CODE = "by";
     @Column(name = DB_FIELD_CITY_CODE)
@@ -141,7 +138,6 @@ public class RoadEntity extends CprRecordEntity {
     public BitemporalSet<RoadCityBitemporalRecord> getCity() {
         return new BitemporalSet<>(this.city);
     }
-
 
 
     public static final String DB_FIELD_MEMO_CODE = "memo";
@@ -168,7 +164,6 @@ public class RoadEntity extends CprRecordEntity {
     }
 
 
-
     public static final String DB_FIELD_POST_CODE = "postcode";
     public static final String IO_FIELD_POST_CODE = "postnr";
     @Column(name = DB_FIELD_POST_CODE)
@@ -193,12 +188,10 @@ public class RoadEntity extends CprRecordEntity {
     }
 
 
-
     public static UUID generateUUID(int municipalityCode, int roadCode) {
-        String uuidInput = "road:"+municipalityCode+":"+roadCode;
+        String uuidInput = "road:" + municipalityCode + ":" + roadCode;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
-
 
 
     public void addBitemporalRecord(CprBitemporalRoadRecord record, Session session) {
@@ -240,7 +233,7 @@ public class RoadEntity extends CprRecordEntity {
     }
 
 
-        @Override
+    @Override
     public IdentifiedEntity getNewest(Collection<IdentifiedEntity> collection) {
         return null;
     }

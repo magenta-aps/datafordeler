@@ -4,7 +4,7 @@ import dk.magenta.datafordeler.core.io.PluginSourceData;
 
 public class MissingReferenceException extends DataFordelerException {
 
-    private PluginSourceData event;
+    private final PluginSourceData event;
 
     public MissingReferenceException(PluginSourceData event) {
         super();

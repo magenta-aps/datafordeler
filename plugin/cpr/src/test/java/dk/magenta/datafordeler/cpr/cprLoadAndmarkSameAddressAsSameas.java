@@ -61,7 +61,8 @@ public class cprLoadAndmarkSameAddressAsSameas {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("person", PersonEntity.schema);
     }
@@ -102,12 +103,13 @@ public class cprLoadAndmarkSameAddressAsSameas {
 
         List<AddressDataRecord> addresslist = new ArrayList<AddressDataRecord>(entities.get(0).getAddress());
         Assert.assertEquals(2, addresslist.size());
-        List<AddressDataRecord> addresslistRemovedSameas = addresslist.stream().filter(add -> add.getSameAs()==null).collect(Collectors.toList());
+        List<AddressDataRecord> addresslistRemovedSameas = addresslist.stream().filter(add -> add.getSameAs() == null).collect(Collectors.toList());
         Assert.assertEquals(1, addresslistRemovedSameas.size());
     }
 
     /**
      * This unittest validates that it is possible to filter out addresschanges that do not happen based on the eventtype A01
+     *
      * @throws DataFordelerException
      * @throws IOException
      */
@@ -144,7 +146,7 @@ public class cprLoadAndmarkSameAddressAsSameas {
         List<AddressDataRecord> addresslist = new ArrayList<AddressDataRecord>(entities.get(0).getAddress());
         Assert.assertEquals(true, addresslist.size() > 2);
 
-        List<AddressDataRecord> emplList = addresslist.stream().filter(add -> add.getSameAs()==null).collect(Collectors.toList());
+        List<AddressDataRecord> emplList = addresslist.stream().filter(add -> add.getSameAs() == null).collect(Collectors.toList());
         Assert.assertEquals(true, emplList.size() >= 2);
 
         Set<PersonEventDataRecord> eventList = entities3.get(0).getEvent();

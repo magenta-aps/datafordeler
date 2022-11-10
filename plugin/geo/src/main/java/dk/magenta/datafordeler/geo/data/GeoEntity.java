@@ -54,7 +54,6 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     }
 
 
-
     public static final String DB_FIELD_CREATION_DATE = "creationDate";
     @Column(name = DB_FIELD_CREATION_DATE)
     private OffsetDateTime creationDate;
@@ -72,7 +71,6 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     public void setCreationDate(long creationDate) {
         this.setCreationDate(Instant.ofEpochMilli(creationDate).atOffset(ZoneOffset.UTC));
     }
-
 
 
     public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;

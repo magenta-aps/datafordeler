@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class HistoricForeignAddressRecord extends HistoricPersonDataRecord {
 
-    private CprBitemporality emigrationTemporality;
-    private CprBitemporality immigrationTemporality;
-    private CprBitemporality foreignAddressTemporality;
+    private final CprBitemporality emigrationTemporality;
+    private final CprBitemporality immigrationTemporality;
+    private final CprBitemporality foreignAddressTemporality;
 
     public HistoricForeignAddressRecord(String line) throws ParseException {
         super(line);
-        this.obtain("annkor", 14,1);
+        this.obtain("annkor", 14, 1);
         this.obtain("start_mynkod-udrindrejse", 16, 4);
         this.obtain("udr_ts", 19, 12);
         this.obtain("udr_landekod", 31, 4);

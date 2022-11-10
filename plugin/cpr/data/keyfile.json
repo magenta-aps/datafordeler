@@ -1,15 +1,15 @@
 {
-    "primaryKeyId": 775739487,
-    "key": [
-        {
-            "keyData": {
-                "typeUrl": "type.googleapis.com\/google.crypto.tink.AesGcmKey",
-                "keyMaterialType": "SYMMETRIC",
-                "value": "GhDuIoe5\/RwBH9ajKLhoNYgt"
-            },
-            "outputPrefixType": "TINK",
-            "keyId": 775739487,
-            "status": "ENABLED"
-        }
-    ]
+  "primaryKeyId": 775739487,
+  "key": [
+    {
+      "keyData": {
+        "typeUrl": "type.googleapis.com\/google.crypto.tink.AesGcmKey",
+        "keyMaterialType": "SYMMETRIC",
+        "value": "GhDuIoe5\/RwBH9ajKLhoNYgt"
+      },
+      "outputPrefixType": "TINK",
+      "keyId": 775739487,
+      "status": "ENABLED"
+    }
+  ]
 }

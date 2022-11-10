@@ -2,10 +2,8 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Entity;
-import dk.magenta.datafordeler.core.database.Identification;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 /**
  * Query object specifying a search, with basic filter parameters
@@ -35,6 +33,7 @@ public abstract class Query<E extends Entity> extends BaseQuery {
 
     /**
      * Subclasses should return the EntityClass that the Query class pertains to
+     *
      * @return
      */
     public abstract Class<E> getEntityClass();
@@ -42,6 +41,7 @@ public abstract class Query<E extends Entity> extends BaseQuery {
 
     /**
      * Subclasses should return the base Data class that the Query class pertains to
+     *
      * @return
      */
     public abstract Class<? extends DataItem> getDataClass();

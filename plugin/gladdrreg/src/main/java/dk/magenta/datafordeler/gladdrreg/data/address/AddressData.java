@@ -15,7 +15,7 @@ import java.util.Map;
  * Created by lars on 16-05-17.
  */
 @javax.persistence.Entity
-@Table(name="gladdrreg_address_data", indexes = {
+@Table(name = "gladdrreg_address_data", indexes = {
         @Index(name = "gladdrreg_address_road", columnList = AddressData.DB_FIELD_ROAD + DatabaseEntry.REF),
         @Index(name = "gladdrreg_address_housenumber", columnList = AddressData.DB_FIELD_HOUSENUMBER),
         @Index(name = "gladdrreg_address_floor", columnList = AddressData.DB_FIELD_FLOOR),
@@ -105,7 +105,6 @@ public class AddressData extends SumiffiikData<AddressEffect, AddressData> {
     }
 
 
-
     public static final String DB_FIELD_RESIDENCE = "residence";
     public static final String IO_FIELD_RESIDENCE = "bolig";
 
@@ -120,7 +119,6 @@ public class AddressData extends SumiffiikData<AddressEffect, AddressData> {
     public void setResidence(Boolean residence) {
         this.residence = residence;
     }
-
 
 
     @Override

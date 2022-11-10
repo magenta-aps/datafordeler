@@ -22,7 +22,7 @@ public class PersonBirthQuery extends PersonStatisticsQuery {
         super(filter);
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("birth", PersonEntity.DB_FIELD_BIRTHTIME + BaseQuery.separator + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME);
@@ -38,7 +38,7 @@ public class PersonBirthQuery extends PersonStatisticsQuery {
 
     protected void setupConditions() throws QueryBuildException {
         super.setupConditions();
-        Condition condition = (this.getEffectTimeAfter() == null) ? this.getCondition() :  this.addCondition("birth", Condition.Operator.GTE, this.getEffectTimeAfter().toLocalDateTime(), LocalDateTime.class);
+        Condition condition = (this.getEffectTimeAfter() == null) ? this.getCondition() : this.addCondition("birth", Condition.Operator.GTE, this.getEffectTimeAfter().toLocalDateTime(), LocalDateTime.class);
         this.applyBitemporalConditions(condition, "birth");
     }
 

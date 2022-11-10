@@ -24,10 +24,10 @@ public abstract class ServiceDescriptor {
 
     }
 
-    private Plugin plugin;
-    private String serviceName;
-    private String serviceAddress;
-    private Class<? extends BaseQuery> queryClass;
+    private final Plugin plugin;
+    private final String serviceName;
+    private final String serviceAddress;
+    private final Class<? extends BaseQuery> queryClass;
 
 
     public ServiceDescriptor(Plugin plugin, String serviceName, String serviceAddress, Class<? extends BaseQuery> queryClass) {

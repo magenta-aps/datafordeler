@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SystemRole {
-    private SystemRole parent;
-    private SystemRoleType type;
-    private SystemRoleGrant grantType;
-    private List<SystemRole> children;
-    private List<SystemRoleVersion> versions;
+    private final SystemRole parent;
+    private final SystemRoleType type;
+    private final SystemRoleGrant grantType;
+    private final List<SystemRole> children;
+    private final List<SystemRoleVersion> versions;
     private SystemRoleVersion currentVersion;
 
     protected SystemRole(

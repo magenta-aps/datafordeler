@@ -7,10 +7,12 @@ import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
-import java.util.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + ChildrenDataRecord.TABLE_NAME, indexes = {

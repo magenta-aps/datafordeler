@@ -16,7 +16,7 @@ public class ResidenceParser extends CprSubParser<ResidenceRecord> {
     public ResidenceParser() {
     }
 
-    private Logger log = LogManager.getLogger(ResidenceParser.class);
+    private final Logger log = LogManager.getLogger(ResidenceParser.class.getCanonicalName());
 
     @Override
     public Logger getLog() {
@@ -28,7 +28,7 @@ public class ResidenceParser extends CprSubParser<ResidenceRecord> {
         this.logType(recordType);
         try {
             switch (recordType) {
-               case ResidenceRecord.RECORDTYPE_RESIDENCE:
+                case ResidenceRecord.RECORDTYPE_RESIDENCE:
                     return new ResidenceRecord(line);
                 // TODO: Add one of these for each type...
             }

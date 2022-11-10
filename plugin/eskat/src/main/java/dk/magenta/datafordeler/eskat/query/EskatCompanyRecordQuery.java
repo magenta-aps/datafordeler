@@ -1,13 +1,17 @@
 package dk.magenta.datafordeler.eskat.query;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
-import dk.magenta.datafordeler.core.fapi.*;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.Condition;
+import dk.magenta.datafordeler.core.fapi.ParameterMap;
+import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.cvr.records.CompanyDataEventRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.eskat.utils.DateConverter;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Map;
 
 /**
  * Container for a query for Companies, defining fields and database lookup
@@ -66,7 +70,6 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
         this.companyEndDateLTE = companyrecordValidityTimeLTE;
         this.updatedParameters();
     }
-
 
 
     @Override

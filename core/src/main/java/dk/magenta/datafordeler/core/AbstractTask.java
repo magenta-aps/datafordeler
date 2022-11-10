@@ -9,11 +9,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.UnableToInterruptJobException;
 
 public abstract class AbstractTask<W extends Worker> implements
-    InterruptableJob {
+        InterruptableJob {
 
     public static final String DATA_DUMMYRUN = "dummyRun";
 
-    private static Logger log = LogManager.getLogger(AbstractTask.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(AbstractTask.class.getCanonicalName());
 
     private W worker;
 

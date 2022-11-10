@@ -14,11 +14,12 @@ import java.util.*;
 @Component
 public class Stopwatch {
 
-    private HashMap<String, Long> results = new HashMap<>();
-    private HashMap<String, Long> running = new HashMap<>();
+    private final HashMap<String, Long> results = new HashMap<>();
+    private final HashMap<String, Long> running = new HashMap<>();
 
     /**
      * Start a timer for the given key
+     *
      * @param key
      */
     public void start(String key) {
@@ -29,6 +30,7 @@ public class Stopwatch {
      * Measure and store the time since start() was called for the given key.
      * If you want to call measure() several times in a row for a key, be sure
      * to call start() for each instance as well
+     *
      * @param key
      */
     public void measure(String key) {
@@ -41,6 +43,7 @@ public class Stopwatch {
 
     /**
      * Get the total accumulated time for the key
+     *
      * @param key
      * @return
      */
@@ -51,6 +54,7 @@ public class Stopwatch {
 
     /**
      * Set the acumulated time for the key to 0
+     *
      * @param key
      */
     public void reset(String key) {
@@ -64,6 +68,7 @@ public class Stopwatch {
 
     /**
      * Get the key and time in a pretty format: "key: [time]ms"
+     *
      * @param key
      * @return
      */
@@ -74,9 +79,9 @@ public class Stopwatch {
     public String formatAllTotal() {
         StringJoiner sj = new StringJoiner("\n");
         List<Map.Entry<String, Long>> list = new LinkedList<Map.Entry<String, Long>>(this.results.entrySet());
-        Collections.sort( list, new Comparator<Map.Entry<String, Long>>() {
+        Collections.sort(list, new Comparator<Map.Entry<String, Long>>() {
             public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
-                return (o1.getValue()).compareTo( o2.getValue() );
+                return (o1.getValue()).compareTo(o2.getValue());
             }
         });
         for (Map.Entry<String, Long> entry : list) {

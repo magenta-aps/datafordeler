@@ -536,7 +536,6 @@ public class FapiTest {
         JsonNode jsonBody = objectMapper.readTree(resp.getBody());
 
         ArrayNode list = (ArrayNode) jsonBody.get("results");
-        System.out.println("results: "+objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list));
         Assert.assertEquals(expected.length, list.size());
         int i = 0;
         for (JsonNode entity : list) {
@@ -562,47 +561,46 @@ public class FapiTest {
 
         StringBuilder sb = new StringBuilder();
         sb.append(urlBase);
-            ParameterMap parameters = new ParameterMap();
-            if (registerFromAfter != null) {
-                parameters.add(Query.PARAM_REGISTRATION_FROM_AFTER[0], registerFromAfter);
-            }
-            if (registerFromBefore != null) {
-                parameters.add(Query.PARAM_REGISTRATION_FROM_BEFORE[0], registerFromBefore);
-            } else {
-                parameters.add(Query.PARAM_REGISTRATION_FROM_BEFORE[0], now);
-            }
-            if (registerToAfter != null) {
-                parameters.add(Query.PARAM_REGISTRATION_TO_AFTER[0], registerToAfter);
-            } else {
-                parameters.add(Query.PARAM_REGISTRATION_TO_AFTER[0], now);
-            }
-            if (registerToBefore != null) {
-                parameters.add(Query.PARAM_REGISTRATION_TO_BEFORE[0], registerToBefore);
-            }
-            if (effectFromAfter != null) {
-                parameters.add(Query.PARAM_EFFECT_FROM_AFTER[0], effectFromAfter);
-            }
-            if (effectFromBefore != null) {
-                parameters.add(Query.PARAM_EFFECT_FROM_BEFORE[0], effectFromBefore);
-            } else {
-                parameters.add(Query.PARAM_EFFECT_FROM_BEFORE[0], now);
-            }
-            if (effectToAfter != null) {
-                parameters.add(Query.PARAM_EFFECT_TO_AFTER[0], effectToAfter);
-            } else {
-                parameters.add(Query.PARAM_EFFECT_TO_AFTER[0], now);
-            }
-            if (effectToBefore != null) {
-                parameters.add(Query.PARAM_EFFECT_TO_BEFORE[0], effectToBefore);
-            }
-            if (mode != null) {
-                parameters.add(Query.PARAM_OUTPUT_WRAPPING[0], mode);
-            }
-            if (parameters.size() > 0) {
-                sb.append(urlBase.contains("?") ? "&" : "?");
-                sb.append(parameters.asUrlParams());
-            }
-        System.out.println("\n------------------------\n" + sb.toString());
+        ParameterMap parameters = new ParameterMap();
+        if (registerFromAfter != null) {
+            parameters.add(Query.PARAM_REGISTRATION_FROM_AFTER[0], registerFromAfter);
+        }
+        if (registerFromBefore != null) {
+            parameters.add(Query.PARAM_REGISTRATION_FROM_BEFORE[0], registerFromBefore);
+        } else {
+            parameters.add(Query.PARAM_REGISTRATION_FROM_BEFORE[0], now);
+        }
+        if (registerToAfter != null) {
+            parameters.add(Query.PARAM_REGISTRATION_TO_AFTER[0], registerToAfter);
+        } else {
+            parameters.add(Query.PARAM_REGISTRATION_TO_AFTER[0], now);
+        }
+        if (registerToBefore != null) {
+            parameters.add(Query.PARAM_REGISTRATION_TO_BEFORE[0], registerToBefore);
+        }
+        if (effectFromAfter != null) {
+            parameters.add(Query.PARAM_EFFECT_FROM_AFTER[0], effectFromAfter);
+        }
+        if (effectFromBefore != null) {
+            parameters.add(Query.PARAM_EFFECT_FROM_BEFORE[0], effectFromBefore);
+        } else {
+            parameters.add(Query.PARAM_EFFECT_FROM_BEFORE[0], now);
+        }
+        if (effectToAfter != null) {
+            parameters.add(Query.PARAM_EFFECT_TO_AFTER[0], effectToAfter);
+        } else {
+            parameters.add(Query.PARAM_EFFECT_TO_AFTER[0], now);
+        }
+        if (effectToBefore != null) {
+            parameters.add(Query.PARAM_EFFECT_TO_BEFORE[0], effectToBefore);
+        }
+        if (mode != null) {
+            parameters.add(Query.PARAM_OUTPUT_WRAPPING[0], mode);
+        }
+        if (parameters.size() > 0) {
+            sb.append(urlBase.contains("?") ? "&" : "?");
+            sb.append(parameters.asUrlParams());
+        }
         ResponseEntity<String> resp = this.restTemplate.exchange(sb.toString(), HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(200, resp.getStatusCode().value());
         return resp;
@@ -656,7 +654,6 @@ public class FapiTest {
                 session.delete(entity);
             }
             transaction.commit();
-            System.out.println("Test object " + uuid.toString() + " removed");
         } finally {
             session.close();
         }

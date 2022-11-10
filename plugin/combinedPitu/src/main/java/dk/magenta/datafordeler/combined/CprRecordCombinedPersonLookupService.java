@@ -57,7 +57,7 @@ public class CprRecordCombinedPersonLookupService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CprRecordCombinedPersonLookupService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprRecordCombinedPersonLookupService.class.getCanonicalName());
 
     @Autowired
     private PersonOutputWrapper personOutputWrapper;
@@ -102,7 +102,7 @@ public class CprRecordCombinedPersonLookupService {
             this.applyAreaRestrictionsToQuery(personQuery, user);
             if ("true".equals(forceDirect)) {
                 PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
-                if(personEntity==null) {
+                if (personEntity == null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
                 Object obj = personOutputWrapper.wrapRecordResult(personEntity, null);
@@ -119,13 +119,13 @@ public class CprRecordCombinedPersonLookupService {
                 entityManager.createSubscription(Collections.singleton(cprNummer));
             }
 
-            if(personEntity==null) {
+            if (personEntity == null) {
                 throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
 
             Object obj = personOutputWrapper.wrapRecordResult(personEntity, null);
             return obj.toString();
-        } catch(DataStreamException e) {
+        } catch (DataStreamException e) {
             log.error(e);
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
         }
@@ -148,7 +148,7 @@ public class CprRecordCombinedPersonLookupService {
         List<String> cprNumbers = new ArrayList<String>();
 
         for (String cpr : cprs) {
-            List<String> subCprList = Arrays.asList(cpr.split(","));
+            String[] subCprList = cpr.split(",");
             for (String subCpr : subCprList) {
                 cprNumbers.add(subCpr);
             }

@@ -14,10 +14,10 @@ public class Event implements PluginSourceData {
 
     public class MessageData implements Serializable {
 
-        @JsonProperty(value="Objektdata", required=false)
+        @JsonProperty(value = "Objektdata", required = false)
         private ObjectData objectData;
 
-        @JsonProperty(value="Objektreference", required=false)
+        @JsonProperty(value = "Objektreference", required = false)
         private ObjectReference objectReference;
 
         @JsonIgnore
@@ -71,10 +71,10 @@ public class Event implements PluginSourceData {
 
     public static class ObjectData implements Serializable {
 
-        @JsonProperty(value="dataskema", required=true)
+        @JsonProperty(value = "dataskema", required = true)
         private String dataskema;
 
-        @JsonProperty(value="objectdata", required=true)
+        @JsonProperty(value = "objectdata", required = true)
         private String objektData;
 
         public ObjectData() {
@@ -103,12 +103,12 @@ public class Event implements PluginSourceData {
         public ObjectReference() {
         }
 
-        @JsonProperty(value="objektreference", required=true)
+        @JsonProperty(value = "objektreference", required = true)
         public String getObjektReference() {
             return objektReference;
         }
 
-        @JsonProperty(value="objektreference", required=true)
+        @JsonProperty(value = "objektreference", required = true)
         public void setObjektReference(String objektReference) {
             this.objektReference = objektReference;
         }
@@ -154,7 +154,7 @@ public class Event implements PluginSourceData {
         return null;
     }
 
-    @JsonProperty(required=false, value = "dataskema")
+    @JsonProperty(required = false, value = "dataskema")
     public void setSchema(String dataskema) {
         this.ensureMessageData().setDataskema(dataskema);
     }
@@ -186,12 +186,12 @@ public class Event implements PluginSourceData {
         StringBuilder sb = new StringBuilder();
         sb.append("Event(");
         StringJoiner joiner = new StringJoiner(", ");
-        joiner.add("eventID: "+this.getId());
-        joiner.add("beskedVersion: "+this.getVersion());
-        joiner.add("dataskema: "+this.getSchema());
-        joiner.add("objektData: "+this.getData());
-        joiner.add("objektReference: "+this.getReference());
-        sb.append(joiner.toString());
+        joiner.add("eventID: " + this.getId());
+        joiner.add("beskedVersion: " + this.getVersion());
+        joiner.add("dataskema: " + this.getSchema());
+        joiner.add("objektData: " + this.getData());
+        joiner.add("objektReference: " + this.getReference());
+        sb.append(joiner);
         sb.append(")");
         return sb.toString();
     }

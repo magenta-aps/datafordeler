@@ -5,12 +5,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.AccessRequiredException;
+import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
+import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
-import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cvr.access.CvrAccessChecker;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Stream;
 
@@ -49,13 +51,13 @@ public class CompanyPunitRecordService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CompanyRecordDetailService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CompanyRecordDetailService.class.getCanonicalName());
 
 
     @GetMapping("/{pnummer}")
-    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     ResponseEntity punitDetail(HttpServletRequest request, @PathVariable String pnummer) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
             loggerHelper.info("Incoming request CompanyPunitRecordService");
@@ -66,7 +68,7 @@ public class CompanyPunitRecordService {
             Stream<CompanyUnitRecord> companyUnitEntities = QueryManager.getAllEntitiesAsStream(session, query, CompanyUnitRecord.class);
             CompanyUnitRecord companyUnitEntity = companyUnitEntities.findFirst().orElse(null);
 
-            if(companyUnitEntity==null) {
+            if (companyUnitEntity == null) {
                 String errorMessage = "Company not found";
                 ObjectNode obj = objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
@@ -87,10 +89,9 @@ public class CompanyPunitRecordService {
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 }

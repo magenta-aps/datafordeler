@@ -76,6 +76,7 @@ public class CompanyStatus extends DatabaseEntry {
 
     /**
      * Obtain a CompanyStatus object, either from cache or from database, if it exists, or creates one if it doesn't.
+     *
      * @param statusText
      * @param session
      * @return
@@ -89,16 +90,16 @@ public class CompanyStatus extends DatabaseEntry {
                 status = session.get(CompanyStatus.class, id);
             }
             if (status == null) {
-                log.debug("CompanyStatus code "+statusText+" not found in cache, querying database");
+                log.debug("CompanyStatus code " + statusText + " not found in cache, querying database");
                 status = QueryManager.getItem(session, CompanyStatus.class, Collections.singletonMap(DB_FIELD_NAME, statusText));
             }
             if (status == null) {
-                log.debug("CompanyStatus "+statusText+" not found; creating new");
+                log.debug("CompanyStatus " + statusText + " not found; creating new");
                 status = new CompanyStatus();
                 status.setStatus(statusText);
                 session.save(status);
             } else {
-                log.debug("CompanyStatus "+statusText+" found in cache ("+status.getId()+")");
+                log.debug("CompanyStatus " + statusText + " found in cache (" + status.getId() + ")");
             }
             statusCache.put(statusText, status.getId());
             return status;

@@ -67,7 +67,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     }
 
 
-
     public static final String DB_FIELD_FIRST_NAMES = "firstNames";
     public static final String IO_FIELD_FIRST_NAMES = "fornavn";
     @Column(name = DB_FIELD_FIRST_NAMES)
@@ -82,7 +81,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public void setFirstNames(String firstNames) {
         this.firstNames = firstNames;
     }
-
 
 
     public static final String DB_FIELD_FIRST_NAMES_MARKING = "firstNamesMarking";
@@ -101,7 +99,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     }
 
 
-
     public static final String DB_FIELD_MIDDLE_NAME = "middleName";
     public static final String IO_FIELD_MIDDLE_NAME = "mellemnavn";
     @Column(name = DB_FIELD_MIDDLE_NAME)
@@ -116,7 +113,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
-
 
 
     public static final String DB_FIELD_MIDDLE_NAME_MARKING = "middleNameMarking";
@@ -135,7 +131,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     }
 
 
-
     public static final String DB_FIELD_LAST_NAME = "lastName";
     public static final String IO_FIELD_LAST_NAME = "efternavn";
     @Column(name = DB_FIELD_LAST_NAME)
@@ -150,7 +145,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
 
 
     public static final String DB_FIELD_LAST_NAME_MARKING = "lastNameMarking";
@@ -193,7 +187,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public void setEgetEfternavnMarkering(boolean egetEfternavnMarkering) {
         this.egetEfternavnMarkering = egetEfternavnMarkering;
     }
-
 
 
     @Override

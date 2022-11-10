@@ -26,7 +26,7 @@ public class EntityManagerNotFoundException extends DataFordelerException {
     @Override
     public String getMessage() {
         if (this.uri != null) {
-            return "EntityManager that handles URI " + this.uri.toString() + " was not found";
+            return "EntityManager that handles URI " + this.uri + " was not found";
         } else {
             return "EntityManager that handles schema " + this.schema + " was not found";
         }

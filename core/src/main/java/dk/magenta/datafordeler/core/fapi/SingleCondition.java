@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
  * input values.
  */
 public class SingleCondition extends Condition {
-    private String left;
-    private ArrayList<Object> wildcardValues = new ArrayList<>();
-    private ArrayList<Object> staticValues = new ArrayList<>();
-    private Operator operator;
-    private String placeholder;
+    private final String left;
+    private final ArrayList<Object> wildcardValues = new ArrayList<>();
+    private final ArrayList<Object> staticValues = new ArrayList<>();
+    private final Operator operator;
+    private final String placeholder;
 
     public SingleCondition(MultiCondition parent, String left, Object right, Operator operator, String placeholder, Class type) throws QueryBuildException {
         this(parent, left, Collections.singletonList(right), operator, placeholder, type);
@@ -26,14 +26,14 @@ public class SingleCondition extends Condition {
     public SingleCondition(MultiCondition parent, String left, List<Object> right, Operator operator, String placeholder, Class type) throws QueryBuildException {
         super(parent);
         if (right.isEmpty()) {
-            throw new QueryBuildException("No comparison value for "+left);
+            throw new QueryBuildException("No comparison value for " + left);
         }
         this.left = left;
         this.operator = operator;
         this.placeholder = placeholder;
 
         for (Object value : right) {
-            if (value instanceof String && hasWildcard((String)value)) {
+            if (value instanceof String && hasWildcard((String) value)) {
                 this.wildcardValues.add(replaceWildcard(value));
             } else {
                 Object v = castValue(type, value);
@@ -46,7 +46,7 @@ public class SingleCondition extends Condition {
         ArrayList<String> s = new ArrayList<>(this.wildcardValues.size() + this.staticValues.size());
 
         // Wildcards must be cast on database level - DB values may be non-strings, so cast them to string before comparison
-        for (int i=0; i<this.wildcardValues.size(); i++) {
+        for (int i = 0; i < this.wildcardValues.size(); i++) {
             s.add("cast(" + this.left + " as string) like :" + this.placeholder + "_w" + i + " escape '\\'");
         }
         if (!this.staticValues.isEmpty()) {
@@ -60,7 +60,7 @@ public class SingleCondition extends Condition {
                 }
             }
         }
-        return (s.size() == 1) ? s.get(0) : s.stream().map(x -> "("+x+")").collect(Collectors.joining(" OR "));
+        return (s.size() == 1) ? s.get(0) : s.stream().map(x -> "(" + x + ")").collect(Collectors.joining(" OR "));
     }
 
     public Map<String, Object> getParameters() {
@@ -68,7 +68,7 @@ public class SingleCondition extends Condition {
         // Items that are treated together as a list ("where x in :list") go in a list.
         // The rest go separately. Order is important here, as placeholders are named based on iteration order
         HashMap<String, Object> parameters = new HashMap<>();
-        for (int i=0; i<this.wildcardValues.size(); i++) {
+        for (int i = 0; i < this.wildcardValues.size(); i++) {
             String placeholder = this.placeholder + "_w" + i;
             Object value = this.wildcardValues.get(i);
             parameters.put(placeholder, value);
@@ -106,7 +106,9 @@ public class SingleCondition extends Condition {
     }
 
     private static Object castValue(Class cls, Object value) {
-        if (cls == null) {return value;}
+        if (cls == null) {
+            return value;
+        }
         if ((cls == Long.TYPE || cls == Long.class) && !(value instanceof Long)) {
             if (value instanceof Number) {
                 return ((Number) value).longValue();

@@ -51,7 +51,8 @@ import java.time.format.DateTimeFormatter;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Ignore // Unittests in gladreg is failing, it if now disabled since plugin-gladreg is going to be replaced by plugin-geo
+@Ignore
+// Unittests in gladreg is failing, it if now disabled since plugin-gladreg is going to be replaced by plugin-geo
 public class QueryTest {
 
     @Autowired
@@ -151,12 +152,11 @@ public class QueryTest {
     }
 
 
-
     private ResponseEntity<String> restSearch(ParameterMap parameters, String type) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange("/gladdrreg/"+type+"/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
+        return this.restTemplate.exchange("/gladdrreg/" + type + "/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
     }
 
 
@@ -218,10 +218,6 @@ public class QueryTest {
     }
 
 
-
-
-
-
     @Test
     public void testBNumberQuery() throws Exception {
         loadBnumber();
@@ -235,7 +231,6 @@ public class QueryTest {
         response = restSearch(searchParameters, type);
         Assert.assertEquals(200, response.getStatusCode().value());
         JsonNode jsonBody = objectMapper.readTree(response.getBody());
-        System.out.println(jsonBody);
         JsonNode results = jsonBody.get("results");
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(1, results.size());
@@ -307,10 +302,6 @@ public class QueryTest {
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(1, results.size());
     }
-
-
-
-
 
 
     @Test
@@ -386,9 +377,6 @@ public class QueryTest {
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(1, results.size());
     }
-
-
-
 
 
     @Test
@@ -495,7 +483,6 @@ public class QueryTest {
     }
 
 
-
     @Test
     public void testMunicipalityQuery() throws Exception {
         loadMunicipality();
@@ -571,8 +558,6 @@ public class QueryTest {
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(1, results.size());
     }
-
-
 
 
     @Test
@@ -652,7 +637,6 @@ public class QueryTest {
     }
 
 
-
     @Test
     public void testRoadQuery() throws Exception {
         loadRoad();
@@ -727,7 +711,6 @@ public class QueryTest {
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(1, results.size());
     }
-
 
 
     @Test

@@ -49,7 +49,7 @@ import java.util.HashSet;
 import java.util.StringJoiner;
 
 @Controller
-@RequestMapping(path="/monitor")
+@RequestMapping(path = "/monitor")
 public class MonitorService {
 
     @Autowired
@@ -64,9 +64,9 @@ public class MonitorService {
     @Autowired
     UserQueryManager userQueryManager;
 
-    private Logger log = LogManager.getLogger(MonitorService.class.getName());
+    private final Logger log = LogManager.getLogger(MonitorService.class.getName());
 
-    @RequestMapping(path="/database")
+    @RequestMapping(path = "/database")
     public void checkDatabaseConnections(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = sessionManager.getSessionFactory().openSession();
         Query query = session.createQuery("select 1 from Identification").setMaxResults(1);
@@ -86,7 +86,7 @@ public class MonitorService {
         response.setStatus(200);
     }
 
-    @RequestMapping(path="/pull")
+    @RequestMapping(path = "/pull")
     public void checkPulls(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException, DataFordelerException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkPulls");
@@ -119,7 +119,7 @@ public class MonitorService {
                             if (
                                     Instant.now().isAfter(expectedStart.plus(4, ChronoUnit.HOURS)) &&
                                             (lastStartTime == null || lastStartTime.toInstant().plusSeconds(60).isBefore(expectedStart))
-                                    ) {
+                            ) {
                                 output.println("It is more than 4 hours after expected start, and last start has not been updated to be after expected start");
                                 response.setStatus(500);
                             }
@@ -136,7 +136,7 @@ public class MonitorService {
     @Value("${dafo.error_file:cache/log/${PID}.err}")
     private String errorFileConfig;
 
-    @RequestMapping(path="/errors")
+    @RequestMapping(path = "/errors")
     public void checkErrors(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkErrors");
@@ -147,22 +147,22 @@ public class MonitorService {
         String filePath = errorFile.getAbsolutePath();
         if (!errorFile.exists()) {
             response.setStatus(500);
-            output.println("Error file "+filePath+" does not exist");
+            output.println("Error file " + filePath + " does not exist");
             return;
         }
         if (!errorFile.isFile()) {
             response.setStatus(500);
-            output.println("Error file "+filePath+" is not a file");
+            output.println("Error file " + filePath + " is not a file");
             return;
         }
         if (!errorFile.canRead()) {
             response.setStatus(500);
-            output.println("Error file "+filePath+" is not readable");
+            output.println("Error file " + filePath + " is not readable");
             return;
         }
         if (errorFile.length() > 0) {
             response.setStatus(500);
-            output.println("There are errors present in file "+errorFile.getName());
+            output.println("There are errors present in file " + errorFile.getName());
         } else {
             response.setStatus(200);
         }
@@ -179,7 +179,7 @@ public class MonitorService {
         public String requestBody;
     }
 
-    private HashSet<AccessCheckpoint> accessCheckPoints = new HashSet<>();
+    private final HashSet<AccessCheckpoint> accessCheckPoints = new HashSet<>();
 
     public void addAccessCheckPoint(String path) {
         AccessCheckpoint accessCheckpoint = new AccessCheckpoint();
@@ -194,12 +194,13 @@ public class MonitorService {
         accessCheckpoint.requestBody = body;
         this.accessCheckPoints.add(accessCheckpoint);
     }
+
     public void addAccessCheckPoint(String method, String path, String body) {
         this.addAccessCheckPoint(HttpMethod.valueOf(method), path, body);
     }
 
 
-    @RequestMapping(path="/access")
+    @RequestMapping(path = "/access")
     public void checkAccess(HttpServletRequest request, HttpServletResponse response) throws IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkAccess");
@@ -226,7 +227,7 @@ public class MonitorService {
             try {
                 int code = resp.getStatusLine().getStatusCode();
                 StringJoiner joiner = (code == 403) ? successes : failures;
-                joiner.add(endpoint.method.name()+" "+endpoint.path+" : " + code + " " +resp.getStatusLine().getReasonPhrase());
+                joiner.add(endpoint.method.name() + " " + endpoint.path + " : " + code + " " + resp.getStatusLine().getReasonPhrase());
                 resp.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -252,7 +253,7 @@ public class MonitorService {
         // Go back from date until we pass at least one instance where the cron would fire
         long a = 1;
         Instant d = date;
-        for (int i=0; i<1000 && someTimeBefore == null; i++) {
+        for (int i = 0; i < 1000 && someTimeBefore == null; i++) {
             Instant earlier = d.minus(a, ChronoUnit.SECONDS);
             Date cronDate = cronExpression.getTimeAfter(
                     Date.from(earlier)

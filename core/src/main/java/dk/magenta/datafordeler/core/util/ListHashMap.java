@@ -20,7 +20,8 @@ public class ListHashMap<K, V> extends HashMap<K, ArrayList<V>> {
 
     /**
      * Inserts a value in the list identified by the specified key. Creates a list if none exists.
-     * @param key Key to insert by
+     *
+     * @param key   Key to insert by
      * @param value Value to insert
      */
     public void add(K key, V value) {
@@ -43,7 +44,8 @@ public class ListHashMap<K, V> extends HashMap<K, ArrayList<V>> {
 
     /**
      * Obtains an item from the collection, by key and index
-     * @param key Key to look up by
+     *
+     * @param key   Key to look up by
      * @param index Index to look up by
      * @return
      */

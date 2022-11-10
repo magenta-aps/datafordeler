@@ -91,15 +91,17 @@ public class PullTest {
     }
 
     private static SSLSocketFactory getTrustAllSSLSocketFactory() {
-        TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
+        TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
+
             public void checkClientTrusted(X509Certificate[] certs, String authType) {
             }
+
             public void checkServerTrusted(X509Certificate[] certs, String authType) {
             }
-        } };
+        }};
         SSLContext sslContext = null;
         try {
             sslContext = SSLContext.getInstance("SSL");
@@ -114,6 +116,7 @@ public class PullTest {
 
     /**
      * Load the GLBASETEST, which is the file with testpersons recieved from CPR-office
+     *
      * @param importMetadata
      * @throws DataFordelerException
      * @throws IOException
@@ -223,7 +226,7 @@ public class PullTest {
         configuration.setPersonRegisterFtpPassword(password);
         configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
 
-        ObjectNode config = (ObjectNode) objectMapper.readTree("{\""+ CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE+"\": [5], \"remote\":true}");
+        ObjectNode config = (ObjectNode) objectMapper.readTree("{\"" + CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE + "\": [5], \"remote\":true}");
         Pull pull = new Pull(engine, plugin, config);
         pull.run();
 
@@ -353,40 +356,41 @@ public class PullTest {
 
     /**
      * Verify that testdata can be cleaned through calling pull with flag "cleantestdatafirst":true
+     *
      * @throws Exception
      */
     @Test
     public void testCleanTestdataThroughPull() throws Exception {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(0, personEntities.size());//Validate that no persons is initiated in the beginning of this test
         }
         pull();//Pull 1 person from persondata
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
 
         //Pull 39 persons from GLBASETEST
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPersonWithOrigin(importMetadata);
             session.close();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(52, personEntities.size());//Validate that 52 persons is now initiated
         }
 
         //Clean the testdata
-        ObjectNode config = (ObjectNode) objectMapper.readTree("{\""+ CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE+"\": [5], \"cleantestdatafirst\":true}");
+        ObjectNode config = (ObjectNode) objectMapper.readTree("{\"" + CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE + "\": [5], \"cleantestdatafirst\":true}");
         Pull pull = new Pull(engine, plugin, config);
         pull.run();
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }

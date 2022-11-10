@@ -16,11 +16,11 @@ import java.util.StringJoiner;
  * "roadCode" representing "person__address.roadCode"
  */
 public class JoinedQuery extends Condition {
-    private BaseQuery base;
-    private BaseQuery joined;
+    private final BaseQuery base;
+    private final BaseQuery joined;
     Map<String, String> joinHandles;
 
-    private static Logger log = LogManager.getLogger(JoinedQuery.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(JoinedQuery.class.getCanonicalName());
 
 
     public JoinedQuery(BaseQuery base, BaseQuery joined, Map<String, String> joinHandleKeys, MultiCondition parentCondition) throws QueryBuildException {
@@ -60,13 +60,13 @@ public class JoinedQuery extends Condition {
                 String[] baseJoinHandleItems = baseJoinHandle.split(",");
                 String[] remoteJoinHandleItems = remoteJoinHandle.split(",");
                 if (baseJoinHandleItems.length != remoteJoinHandleItems.length) {
-                    log.error("Error: csep mismatch in join: "+baseJoinHandle+" vs "+remoteJoinHandle);
+                    log.error("Error: csep mismatch in join: " + baseJoinHandle + " vs " + remoteJoinHandle);
                 } else {
                     StringJoiner o = new StringJoiner(" OR ");
-                    for (int i=0; i<baseJoinHandleItems.length; i++) {
+                    for (int i = 0; i < baseJoinHandleItems.length; i++) {
                         o.add("(" + baseJoinHandleItems[i] + " = " + remoteJoinHandleItems[i] + ")");
                     }
-                    s.add("(" + o.toString() + ")");
+                    s.add("(" + o + ")");
                 }
             } else {
                 s.add("(" + baseJoinHandle + " = " + remoteJoinHandle + ")");

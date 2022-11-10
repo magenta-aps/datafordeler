@@ -15,11 +15,12 @@ import java.util.List;
  */
 public class ChildrenRecord extends PersonDataRecord {
 
-    private CprBitemporality childrenTemporality;
+    private final CprBitemporality childrenTemporality;
 
     public ChildrenRecord(String line) throws ParseException {
         this(line, traditionalMapping);
     }
+
     public ChildrenRecord(String line, Mapping mapping) throws ParseException {
         super(line);
         this.obtain(mapping);
@@ -27,6 +28,7 @@ public class ChildrenRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("pnrchild", 14, 10);
         traditionalMapping.add("status", 24, 2);
@@ -54,7 +56,7 @@ public class ChildrenRecord extends PersonDataRecord {
 
         records.add(new ChildrenDataRecord(
                 this.getString("pnrchild", false), 1
-            ).setBitemporality(
+        ).setBitemporality(
                 this.childrenTemporality
         ));
 

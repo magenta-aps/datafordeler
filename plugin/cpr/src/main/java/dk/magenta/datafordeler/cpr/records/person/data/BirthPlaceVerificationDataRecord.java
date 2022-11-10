@@ -27,10 +27,8 @@ public class BirthPlaceVerificationDataRecord extends VerificationDataRecord<Bir
     public static final String TABLE_NAME = "cpr_person_birthplace_verification_record";
 
 
-
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<BirthPlaceVerificationDataRecord> correctors = new HashSet<>();
+    private final Set<BirthPlaceVerificationDataRecord> correctors = new HashSet<>();
 
     public Set<BirthPlaceVerificationDataRecord> getCorrectors() {
         return this.correctors;

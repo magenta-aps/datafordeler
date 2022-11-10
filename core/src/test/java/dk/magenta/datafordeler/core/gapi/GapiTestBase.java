@@ -98,7 +98,6 @@ public abstract class GapiTestBase {
     // Solution: always start at around x.500
     protected void waitToMilliseconds(int millis, int tolerance) throws
         InterruptedException {
-        System.out.println(OffsetDateTime.now());
         int current = OffsetDateTime.now().getNano() / 1000000;
         int wait = 0;
         if (current > millis + tolerance) {
@@ -106,6 +105,5 @@ public abstract class GapiTestBase {
         } else if (current < millis - tolerance) {
             wait = millis - current;
         }
-        System.out.println("wait: "+wait);
         Thread.sleep(wait);
     }}

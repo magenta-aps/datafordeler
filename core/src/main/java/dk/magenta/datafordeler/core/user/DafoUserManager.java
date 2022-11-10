@@ -13,12 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * Manages DAFO users that are created from incoming SAML tokens.
@@ -40,17 +35,17 @@ public class DafoUserManager {
     @Value("${dafo.userdatabase.securitydisabled:false}")
     private boolean securityDisabled;
 
-    private HashSet<String> pituSDNWhitelist = new HashSet<>();
+    private final HashSet<String> pituSDNWhitelist = new HashSet<>();
 
     @Value("${pitu.idn.whitelist:}")
     private String[] pituIDNWhitelistCsep;
 
-    private HashSet<String> pituIDNWhitelist = new HashSet<>();
+    private final HashSet<String> pituIDNWhitelist = new HashSet<>();
 
     @Value("${ip.whitelist:}")
     private String[] ipWhitelistCsep;
 
-    private HashSet<String> ipWhitelist = new HashSet<>();
+    private final HashSet<String> ipWhitelist = new HashSet<>();
 
     public Set<String> getIpWhitelist() {
         return this.ipWhitelist;
@@ -92,7 +87,7 @@ public class DafoUserManager {
 
     public DafoUserDetails getUserFromRequest(HttpServletRequest request, boolean samlOnly)
             throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
-        if(securityDisabled) {
+        if (securityDisabled) {
 
             //VALIDATE SECURITY
             return new DafoUserDetails(null) {

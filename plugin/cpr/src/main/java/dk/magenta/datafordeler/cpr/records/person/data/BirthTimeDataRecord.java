@@ -62,7 +62,6 @@ public class BirthTimeDataRecord extends CprBitemporalPersonRecord<BirthTimeData
     }
 
 
-
     public static final String DB_FIELD_BIRTH_DATETIME_UNCERTAIN = "birthDatetimeUncertain";
     public static final String IO_FIELD_BIRTH_DATETIME_UNCERTAIN = "fødselsdatoUsikkerhedsmarkering";
     @Column(name = DB_FIELD_BIRTH_DATETIME_UNCERTAIN)
@@ -92,14 +91,12 @@ public class BirthTimeDataRecord extends CprBitemporalPersonRecord<BirthTimeData
     }
 
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<BirthTimeDataRecord> correctors = new HashSet<>();
+    private final Set<BirthTimeDataRecord> correctors = new HashSet<>();
 
     public Set<BirthTimeDataRecord> getCorrectors() {
         return this.correctors;
     }
-
 
 
     @Override

@@ -20,8 +20,8 @@ import java.util.*;
 /**
  * An Entity represents a top-level item in the database as well as in service
  * output, such as a Person or a Company (to be implemented as subclasses in plugins)
- * Entities usually hold very little data on their own, but links to a series of 
- * bitemporality objects (Registrations, and further down Effects), that in turn 
+ * Entities usually hold very little data on their own, but links to a series of
+ * bitemporality objects (Registrations, and further down Effects), that in turn
  * hold leaf nodes (DataItems) containing the bulk of the associated data.
  */
 @MappedSuperclass
@@ -29,7 +29,7 @@ import java.util.*;
 public abstract class Entity<E extends Entity, R extends Registration> extends DatabaseEntry implements IdentifiedEntity {
 
     @Transient
-    private Logger log;
+    private final Logger log;
 
     protected Logger getLog() {
         return this.log;
@@ -44,8 +44,8 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "entity")
     @OrderBy("registrationFrom asc") // Refers to sequenceNumber in Registration class
     @Filters({
-            @Filter(name = Registration.FILTER_REGISTRATION_FROM, condition="(registrationToBefore >= :"+Registration.FILTERPARAM_REGISTRATION_FROM+" OR registrationToBefore is null)"),
-            @Filter(name = Registration.FILTER_REGISTRATION_TO, condition="(registrationFromBefore < :"+Registration.FILTERPARAM_REGISTRATION_TO+")")
+            @Filter(name = Registration.FILTER_REGISTRATION_FROM, condition = "(registrationToBefore >= :" + Registration.FILTERPARAM_REGISTRATION_FROM + " OR registrationToBefore is null)"),
+            @Filter(name = Registration.FILTER_REGISTRATION_TO, condition = "(registrationFromBefore < :" + Registration.FILTERPARAM_REGISTRATION_TO + ")")
     })
     protected List<R> registrations;
 
@@ -98,6 +98,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
 
 
     public static final String IO_FIELD_DOMAIN = "domain";
+
     @JsonProperty(value = IO_FIELD_DOMAIN)
     public String getDomain() {
         if (this.identification != null) {
@@ -117,7 +118,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
 
     @OrderBy("registrationFrom asc")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = IO_FIELD_REGISTRATIONS)
-    @XmlElement(name=IO_FIELD_REGISTRATIONS)
+    @XmlElement(name = IO_FIELD_REGISTRATIONS)
     @JacksonXmlProperty(localName = IO_FIELD_REGISTRATIONS)
     @JacksonXmlElementWrapper(useWrapping = false)
     public List<R> getRegistrations() {
@@ -194,7 +195,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
     protected abstract R createEmptyRegistration();
 
     /**
-     * For import purposes, creates an empty Registration of the associated class, 
+     * For import purposes, creates an empty Registration of the associated class,
      * pointing to this Entity
      */
     public final R createRegistration() {
@@ -211,7 +212,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
         HashSet<R> toDelete = new HashSet<>();
         for (R registration : orderedRegistrations) {
             if (last != null && last.equalTime(registration)) {
-                this.log.info("Registration collision on entity "+this.getId()+": "+registration.registrationFrom+"|"+registration.registrationTo);
+                this.log.info("Registration collision on entity " + this.getId() + ": " + registration.registrationFrom + "|" + registration.registrationTo);
                 if (!onlyDetect) {
                     registration.mergeInto(last);
                     toDelete.add(registration);
@@ -232,7 +233,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
     public List<R> findRegistrations(OffsetDateTime registrationFrom, OffsetDateTime registrationTo) {
         // Find/create all necessary Registrations
         Logger log = this.getLog();
-        log.debug("Finding registrations within bounds "+registrationFrom+" - "+registrationTo);
+        log.debug("Finding registrations within bounds " + registrationFrom + " - " + registrationTo);
 
         ArrayList<R> registrations = new ArrayList<>();
         ArrayList<R> orderedRegistrations = new ArrayList<>(this.getRegistrations());
@@ -241,15 +242,15 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
         OffsetDateTime latestEnd = OffsetDateTime.MIN;
         for (R existingRegistration : orderedRegistrations) {
             R registration = existingRegistration;
-            log.debug("Looking at registration "+registration.getRegistrationFrom()+" - "+registration.getRegistrationTo());
+            log.debug("Looking at registration " + registration.getRegistrationFrom() + " - " + registration.getRegistrationTo());
 
             // There is a gap, or a missing registration at the start
             if (
                     latestEnd != null &&
-                    latestEnd.isBefore(nFrom(registration.getRegistrationFrom())) &&
+                            latestEnd.isBefore(nFrom(registration.getRegistrationFrom())) &&
                             (latestEnd.isAfter(nFrom(registrationFrom)) || nFrom(registrationFrom).isBefore(nFrom(registration.getRegistrationFrom())))
-                    ) {
-                log.debug("Gap found at "+latestEnd+" - "+registration.getRegistrationFrom()+", creating registration");
+            ) {
+                log.debug("Gap found at " + latestEnd + " - " + registration.getRegistrationFrom() + ", creating registration");
                 R newReg = this.createRegistration();
                 newReg.setRegistrationFrom(latestEnd.isEqual(OffsetDateTime.MIN) ? registrationFrom : latestEnd);
                 newReg.setRegistrationTo(registration.getRegistrationFrom());
@@ -261,19 +262,19 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
             if (
                     nFrom(registration.getRegistrationFrom()).isBefore(nFrom(registrationFrom)) &&
                             nTo(registration.getRegistrationTo()).isAfter(nFrom(registrationFrom))
-                    ) {
-                log.debug("Registration straddles our start, split it at "+registrationFrom);
+            ) {
+                log.debug("Registration straddles our start, split it at " + registrationFrom);
                 registration = (R) registration.split(registrationFrom);
-                log.debug("Registration is now "+registration.getRegistrationFrom()+" - "+registration.getRegistrationTo());
+                log.debug("Registration is now " + registration.getRegistrationFrom() + " - " + registration.getRegistrationTo());
             }
             // If the registration ends after our requested end, but begins before that, do a split
             if (
                     nFrom(registration.getRegistrationFrom()).isBefore(nTo(registrationTo)) &&
                             nTo(registration.getRegistrationTo()).isAfter(nTo(registrationTo))
-                    ) {
-                log.debug("Registration straddles our end, split it at "+registrationTo);
+            ) {
+                log.debug("Registration straddles our end, split it at " + registrationTo);
                 registration.split(registrationTo);
-                log.debug("Registration is now "+registration.getRegistrationFrom()+" - "+registration.getRegistrationTo());
+                log.debug("Registration is now " + registration.getRegistrationFrom() + " - " + registration.getRegistrationTo());
             }
             // If the registration lies within our bounds, include it
             if (
@@ -284,7 +285,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
                             Equality.equal(registration.getRegistrationTo(), registrationTo) || // Check exact match
                                     (nTo(registration.getRegistrationTo()).isBefore(nTo(registrationTo))) // Check if it lies before our requested end
                     )
-                    ) {
+            ) {
                 log.debug("Registration lies within bounds, adding it to list");
                 registrations.add(registration);
             }
@@ -293,7 +294,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
         // If the last existing registration ends before our requested end, create a new registration there
         OffsetDateTime requestedEndTime = registrationTo == null ? OffsetDateTime.MAX : registrationTo;
         if (latestEnd != null && latestEnd.isBefore(requestedEndTime)) {
-            log.debug(this.getUUID()+" Last registration ended before our requested end, create missing registration at "+(latestEnd.isEqual(OffsetDateTime.MIN) ? registrationFrom : latestEnd)+" - "+registrationTo);
+            log.debug(this.getUUID() + " Last registration ended before our requested end, create missing registration at " + (latestEnd.isEqual(OffsetDateTime.MIN) ? registrationFrom : latestEnd) + " - " + registrationTo);
             R registration = this.createRegistration();
             registration.setRegistrationFrom(latestEnd.isEqual(OffsetDateTime.MIN) ? registrationFrom : latestEnd);
             registration.setRegistrationTo(registrationTo);

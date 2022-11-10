@@ -189,15 +189,17 @@
             "fejlRegistreret": false,
             "dataAdgang": 0,
             "enhedsNummer": 4006331794,
-            "bibranche1": [{
-              "branchekode": "855900",
-              "branchetekst": "Anden undervisning i.a.n.",
-              "periode": {
-                "gyldigFra": "2015-11-13",
-                "gyldigTil": null
-              },
-              "sidstOpdateret": "2017-06-01T00:00:00.000+01:00"
-            }],
+            "bibranche1": [
+              {
+                "branchekode": "855900",
+                "branchetekst": "Anden undervisning i.a.n.",
+                "periode": {
+                  "gyldigFra": "2015-11-13",
+                  "gyldigTil": null
+                },
+                "sidstOpdateret": "2017-06-01T00:00:00.000+01:00"
+              }
+            ],
             "livsforloeb": [
               {
                 "periode": {
@@ -299,14 +301,14 @@
             "brancheAnsvarskode": null,
             "telefonNummer": [
               {
-              "kontaktoplysning": "12345678",
-              "hemmelig": false,
-              "periode": {
-                "gyldigFra": "2016-08-23",
-                "gyldigTil": "2017-01-30"
-              },
-              "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
-            }
+                "kontaktoplysning": "12345678",
+                "hemmelig": false,
+                "periode": {
+                  "gyldigFra": "2016-08-23",
+                  "gyldigTil": "2017-01-30"
+                },
+                "sidstOpdateret": "2017-01-30T14:06:04.000+01:00"
+              }
             ],
             "telefaxNummer": [],
             "naermesteFremtidigeDato": null,

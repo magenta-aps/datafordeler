@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class HistoricAddressRecord extends HistoricPersonDataRecord {
 
-    private CprBitemporality addressTemporality;
-    private CprBitemporality conameTemporality;
-    private CprBitemporality municipalityTemporality;
+    private final CprBitemporality addressTemporality;
+    private final CprBitemporality conameTemporality;
+    private final CprBitemporality municipalityTemporality;
 
     public HistoricAddressRecord(String line) throws ParseException {
         super(line);

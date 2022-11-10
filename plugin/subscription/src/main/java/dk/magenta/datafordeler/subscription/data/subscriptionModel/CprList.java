@@ -3,8 +3,11 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+
 import javax.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = CprList.TABLE_NAME, indexes = {
@@ -31,9 +34,10 @@ public class CprList extends DatabaseEntry {
         this.subscriber = subscriber;
     }
 
+    public static final String DB_FIELD_SUBSCRIBER = "subscriber_id";
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="subscriber_id")
+    @JoinColumn(name = DB_FIELD_SUBSCRIBER)
     private Subscriber subscriber;
 
     public Subscriber getSubscriber() {
@@ -45,7 +49,8 @@ public class CprList extends DatabaseEntry {
     }
 
 
-    @Column(name="listId", unique = true, nullable=false)
+    public static final String DB_FIELD_LIST_ID = "listId";
+    @Column(name = DB_FIELD_LIST_ID, unique = true, nullable = false)
     private String listId;
 
     public String getListId() {
@@ -56,20 +61,21 @@ public class CprList extends DatabaseEntry {
         this.listId = listId;
     }
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<BusinessEventSubscription> businessSubscription = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private final Set<BusinessEventSubscription> businessSubscription = new HashSet<>();
 
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<DataEventSubscription> dataSubscription;
 
 
     @ElementCollection
     @JsonIgnore
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<SubscribedCprNumber> cprs = new HashSet<SubscribedCprNumber>();
 
-    @Column(name="cpr", nullable=false)
+    public static final String DB_FIELD_CPR = "cpr";
+    @Column(name = DB_FIELD_CPR, nullable = false)
     @JsonIgnore
     public Set<SubscribedCprNumber> getCpr() {
         return cprs;
@@ -84,7 +90,7 @@ public class CprList extends DatabaseEntry {
     }
 
     public void addCprStrings(List<String> cprs) {
-        for(String cpr : cprs) {
+        for (String cpr : cprs) {
             this.cprs.add(new SubscribedCprNumber(this, cpr));
         }
     }

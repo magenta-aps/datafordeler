@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  */
 public class QueryManager {
 
-    private static Logger log = LogManager.getLogger(QueryManager.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(QueryManager.class.getCanonicalName());
 
     public static final String ENTITY = "e";
 
@@ -32,11 +32,12 @@ public class QueryManager {
      * Looking in the database to see if an Identification exists is an expensive workload when it happens thousands of times per minute during an import.
      * This cache holds the object ID of all known identifications in a domain, findable by domain string and UUID.
      */
-    private static DoubleHashMap<String, UUID, Long> identifications = new DoubleHashMap<>();
+    private static final DoubleHashMap<String, UUID, Long> identifications = new DoubleHashMap<>();
 
 
     /**
      * Populate the Identification cache from the database, if the given domain is not already fetched
+     *
      * @param session
      * @param domain
      */
@@ -56,6 +57,7 @@ public class QueryManager {
     /**
      * Obtain the object id from the cache, and find the corresponding Identification from Hibernate L1 cache
      * If the id is not found in the cache, or the Identification is not in L1 cache, return null
+     *
      * @param session
      * @param uuid
      * @param domain
@@ -73,8 +75,9 @@ public class QueryManager {
 
     /**
      * Get one Identification object based on a UUID
+     *
      * @param session Database session to work from
-     * @param uuid UUID to search for
+     * @param uuid    UUID to search for
      * @return
      */
     public static Identification getIdentification(Session session, UUID uuid) {
@@ -104,6 +107,7 @@ public class QueryManager {
 
     /**
      * Determine whether an Identification exists.
+     *
      * @param session
      * @param uuid
      * @param domain
@@ -119,6 +123,7 @@ public class QueryManager {
      * First look in the Hibernate L1 cache (fast).
      * If that fails, see if our local cache tells us whether the object even exists in the database (also fast), and if so do a DB lookup (slow).
      * If no object is found, we know that the DB doesn't hold it for us, so create the objects and save it, then put it in the cache.
+     *
      * @param session
      * @param uuid
      * @param domain
@@ -128,22 +133,22 @@ public class QueryManager {
         Identification identification;
         identification = getIdentificationFromCache(session, uuid, domain);
         if (identification == null) {
-            log.debug("Didn't find identification for "+domain+"/"+uuid+" in cache");
+            log.debug("Didn't find identification for " + domain + "/" + uuid + " in cache");
             //if (hasIdentification(session, uuid, domain)) {
             //    log.debug("Cache for "+domain+"/"+uuid+" had a broken DB link");
-                identification = getIdentification(session, uuid);
+            identification = getIdentification(session, uuid);
             //}
             if (identification == null) {
-                log.debug("Creating new for "+domain+"/"+uuid);
+                log.debug("Creating new for " + domain + "/" + uuid);
                 identification = new Identification(uuid, domain);
                 session.save(identification);
                 identifications.put(domain, uuid, identification.getId());
             } else {
-                log.debug("Identification for "+domain+"/"+uuid+" found in database: "+identification.getId());
+                log.debug("Identification for " + domain + "/" + uuid + " found in database: " + identification.getId());
                 identifications.put(domain, uuid, identification.getId());
             }
         } else {
-            log.debug("Identification for "+domain+"/"+uuid+" found in cache: "+identification.getId());
+            log.debug("Identification for " + domain + "/" + uuid + " found in cache: " + identification.getId());
         }
         return identification;
     }
@@ -159,7 +164,7 @@ public class QueryManager {
         }
     }
 
-    private static List<HashMap> caches = new ArrayList<>();
+    private static final List<HashMap> caches = new ArrayList<>();
 
     public static void addCache(HashMap map) {
         caches.add(map);
@@ -167,17 +172,18 @@ public class QueryManager {
 
     /**
      * Get all Entities of a specific class
+     *
      * @param session Database session to work from
-     * @param eClass Entity subclass
+     * @param eClass  Entity subclass
      * @return
      */
     public static <E extends DatabaseEntry> List<E> getAllEntities(Session session, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName());
-        org.hibernate.query.Query<E> databaseQuery = session.createQuery("select "+ENTITY+" from " + eClass.getCanonicalName() + " " + ENTITY + " join "+ENTITY+".identification i where i.uuid != null", eClass);
+        org.hibernate.query.Query<E> databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " join " + ENTITY + ".identification i where i.uuid != null", eClass);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
         List<E> results = databaseQuery.getResultList();
-        log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
+        log.debug("Query time: " + (Instant.now().toEpochMilli() - start) + " ms");
         return results;
     }
 
@@ -191,7 +197,7 @@ public class QueryManager {
         StringJoiner stringJoiner = null;
         if (logQuery) {
             stringJoiner = new StringJoiner("\n");
-            stringJoiner.add(queryString.toString());
+            stringJoiner.add(queryString);
         }
 
         // Build query
@@ -203,7 +209,7 @@ public class QueryManager {
         for (String key : extraParameters.keySet()) {
             Object value = extraParameters.get(key);
             if (logQuery) {
-                stringJoiner.add(key+" = "+value);
+                stringJoiner.add(key + " = " + value);
             }
             if (value instanceof Collection) {
                 databaseQuery.setParameterList(key, (Collection) value);
@@ -229,8 +235,9 @@ public class QueryManager {
     /**
      * Get all Entities of a specific class, that match the given parameters
      * This method does not support parameters that is or'ed like supplying a list of parameters and fetching all that matches one of them
+     *
      * @param session Database session to work from
-     * @param query Query object defining search parameters
+     * @param query   Query object defining search parameters
      * @return
      */
     public static <E extends IdentifiedEntity> List<ResultSet<E>> getAllEntitySets(Session session, BaseQuery query, Class<E> eClass) {
@@ -240,9 +247,9 @@ public class QueryManager {
     }
 
     /**
-     *
      * Get all Entities of a specific class, that match the given parameters
      * This method does not support parameters that is or'ed like supplying a list of parameters and fetching all that matches one of them
+     *
      * @param session
      * @param query
      * @param eClass
@@ -281,13 +288,14 @@ public class QueryManager {
         }
         List<ResultSet<E>> results = new ArrayList<>(identitySetList.values());
         cache.put(query, new ArrayList<>(results));
-        log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
+        log.debug("Query time: " + (Instant.now().toEpochMilli() - start) + " ms");
         return results;
     }
 
     /**
      * Get all Entities of a specific class, that match the given parameters
      * This method does not support parameters that is or'ed like supplying a list of parameters and fetching all that matches one of them
+     *
      * @param session
      * @param query
      * @param eClass
@@ -301,9 +309,10 @@ public class QueryManager {
     /**
      * Get all Entities of a specific class, that match the given parameters
      * This method DOES support parameters that is or'ed like suppliing a list of parameters and fetching all that matches one of them
+     *
      * @param session Database session to work from
-     * @param query Query object defining search parameters
-     * @param eClass Entity subclass
+     * @param query   Query object defining search parameters
+     * @param eClass  Entity subclass
      * @return
      */
     public static <E extends IdentifiedEntity> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
@@ -316,7 +325,7 @@ public class QueryManager {
             try {
                 return new ResultSet<E>(object, classNames).getPrimaryEntity();
             } catch (ClassNotFoundException e) {
-                log.error("Failed casting for query classes "+classNames, e);
+                log.error("Failed casting for query classes " + classNames, e);
             }
             return null;
         });
@@ -325,9 +334,10 @@ public class QueryManager {
 
     /**
      * Get one Entity of a specific class, by uuid
+     *
      * @param session Database session to work from
-     * @param uuid UUID to search for
-     * @param eClass Entity subclass
+     * @param uuid    UUID to search for
+     * @param eClass  Entity subclass
      * @return
      */
     public static <E extends IdentifiedEntity> E getEntity(Session session, UUID uuid, Class<E> eClass) {
@@ -340,6 +350,7 @@ public class QueryManager {
 
     /**
      * Get an entity from an identification
+     *
      * @param session
      * @param identification
      * @param eClass
@@ -347,15 +358,15 @@ public class QueryManager {
      * @return
      */
     public static <E extends IdentifiedEntity> E getEntity(Session session, Identification identification, Class<E> eClass) {
-        log.debug("Get Entity of class " + eClass.getCanonicalName() + " by identification "+identification.getUuid());
-        org.hibernate.query.Query<E> databaseQuery = session.createQuery("select "+ENTITY+" from " + eClass.getCanonicalName() + " " + ENTITY + " where " + ENTITY + ".identification = :identification", eClass);
+        log.debug("Get Entity of class " + eClass.getCanonicalName() + " by identification " + identification.getUuid());
+        org.hibernate.query.Query<E> databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " where " + ENTITY + ".identification = :identification", eClass);
         databaseQuery.setParameter("identification", identification);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setCacheable(true);
         try {
             long start = Instant.now().toEpochMilli();
             E entity = databaseQuery.getSingleResult();
-            log.debug("Query time: "+(Instant.now().toEpochMilli() - start)+" ms");
+            log.debug("Query time: " + (Instant.now().toEpochMilli() - start) + " ms");
             return entity;
         } catch (NoResultException e) {
             return null;
@@ -366,23 +377,23 @@ public class QueryManager {
     }
 
     public static <T extends DatabaseEntry> List<T> getAllItems(
-        Session session, Class<T> tClass
+            Session session, Class<T> tClass
     ) {
         org.hibernate.query.Query<T> databaseQuery = session
-            .createQuery(
-                String.format("SELECT t FROM %s t", tClass.getCanonicalName()),
-                tClass);
+                .createQuery(
+                        String.format("SELECT t FROM %s t", tClass.getCanonicalName()),
+                        tClass);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         return databaseQuery.getResultList();
     }
 
     public static <T extends DatabaseEntry> Stream<T> getAllItemsAsStream(
-        Session session, Class<T> tClass
+            Session session, Class<T> tClass
     ) {
         org.hibernate.query.Query<T> databaseQuery = session
-            .createQuery(
-                String.format("SELECT t FROM %s t", tClass.getCanonicalName()),
-                tClass);
+                .createQuery(
+                        String.format("SELECT t FROM %s t", tClass.getCanonicalName()),
+                        tClass);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         return databaseQuery.stream();
     }
@@ -390,9 +401,9 @@ public class QueryManager {
     public static <T extends DatabaseEntry> List<T> getItems(Session session, Class<T> tClass, Map<String, Object> filter) {
         StringJoiner whereJoiner = new StringJoiner(" and ");
         for (String key : filter.keySet()) {
-            whereJoiner.add("t."+key+" = :"+key);
+            whereJoiner.add("t." + key + " = :" + key);
         }
-        org.hibernate.query.Query<T> databaseQuery = session.createQuery("select t from " + tClass.getCanonicalName() + " t where " + whereJoiner.toString(), tClass);
+        org.hibernate.query.Query<T> databaseQuery = session.createQuery("select t from " + tClass.getCanonicalName() + " t where " + whereJoiner, tClass);
         for (String key : filter.keySet()) {
             databaseQuery.setParameter(key, filter.get(key));
         }
@@ -416,7 +427,7 @@ public class QueryManager {
             for (String key : filter.keySet()) {
                 whereJoiner.add("t." + key + " = :" + key);
             }
-            where = " where " + whereJoiner.toString();
+            where = " where " + whereJoiner;
         }
         org.hibernate.query.Query databaseQuery = session.createQuery("select count(t) from " + tClass.getCanonicalName() + " t " + where);
         if (filter != null && !filter.isEmpty()) {

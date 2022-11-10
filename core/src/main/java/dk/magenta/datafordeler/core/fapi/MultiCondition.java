@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
  * Traversing the tree with toHql() or getParameters() should yield the sum of leaf nodes, structured appropriately
  */
 public class MultiCondition extends Condition {
-    private HashSet<Condition> conditions = new HashSet<>();
-    private String operator;
-    private HashMap<String, Integer> placeholderCounters = null;
+    private final HashSet<Condition> conditions = new HashSet<>();
+    private final String operator;
+    private final HashMap<String, Integer> placeholderCounters = null;
 
     public MultiCondition() {
         this("AND");
@@ -52,7 +52,7 @@ public class MultiCondition extends Condition {
 
     public String toHql() {
         // Join leaf nodes' hql together with our operator ("AND" or "OR")
-        return this.conditions.stream().filter(c -> !c.isEmpty()).map(c -> (c.size() == 1) ? c.toHql() : ("("+c.toHql()+")")).collect(Collectors.joining(" " + this.operator + " "));
+        return this.conditions.stream().filter(c -> !c.isEmpty()).map(c -> (c.size() == 1) ? c.toHql() : ("(" + c.toHql() + ")")).collect(Collectors.joining(" " + this.operator + " "));
     }
 
     public boolean isEmpty() {

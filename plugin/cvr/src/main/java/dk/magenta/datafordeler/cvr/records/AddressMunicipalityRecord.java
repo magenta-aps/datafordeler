@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
@@ -82,7 +81,6 @@ public class AddressMunicipalityRecord extends CvrBitemporalRecord {
             this.municipality = Municipality.getMunicipality(this.municipalityCode, this.municipalityName, session);
         }
     }
-
 
 
 }

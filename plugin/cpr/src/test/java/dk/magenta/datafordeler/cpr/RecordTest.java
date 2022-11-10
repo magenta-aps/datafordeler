@@ -18,7 +18,6 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import org.hamcrest.Matchers;
 import org.hibernate.Session;
@@ -45,7 +44,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 import static org.mockito.Mockito.when;
 
@@ -76,7 +74,8 @@ public class RecordTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("person", PersonEntity.schema);
     }
@@ -98,12 +97,13 @@ public class RecordTest {
      * This test reconstructs a situation where a person gets a new address and a new historic address.
      * After that the person gets the same old address again.
      * This test tests that when a new active address is assigned, it closes old historic address
+     *
      * @throws DataFordelerException
      * @throws IOException
      */
     @Test
     public void testPersonWithReverts() throws DataFordelerException, IOException {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personwithReverts.txt", importMetadata);
@@ -164,7 +164,6 @@ public class RecordTest {
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
 
-
         } finally {
             session.close();
         }
@@ -222,20 +221,18 @@ public class RecordTest {
      * -0101161234
      * The child with cpr=0101141234 gets custody handed over to person with cpr=0101991234
      * Another child with cpr=0101131234 gets custody handed over to person with cpr=0101011234
-     *
+     * <p>
      * The person with cpr=0101011234 now has lost custody of one child, but gains custody of another child
-     *
-     *
+     * <p>
+     * <p>
      * After calculations the person with cpr=0101011234 has custody over
      * -0101981234 (Should not be returned since the child is more then 18 years old)
      * -0101121234
      * -0101131234
      * -0101161234
-     *
+     * <p>
      * The person with cpr=0101991234 now has custody over
      * -0101141234
-     *
-     *
      *
      * @throws DataFordelerException
      * @throws IOException
@@ -243,7 +240,7 @@ public class RecordTest {
     @Test
     public void testImportPersonWithChildren() throws DataFordelerException, IOException {
         //This test will start failing in year 2030 when the children in this test is no longer children
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
@@ -320,11 +317,10 @@ public class RecordTest {
     }
 
 
-
     @Test
     public void testFindSiblings() throws Exception {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personsWithEvents.txt", importMetadata);
@@ -338,38 +334,32 @@ public class RecordTest {
             String motherPnr = personEntity.getMother().current().get(0).getCprNumber();
 
             String hql = "SELECT personEntity " +
-                    "FROM "+ PersonEntity.class.getCanonicalName()+" personEntity "+
-                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " mother ON mother."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+PersonEntity.DB_FIELD_IDENTIFICATION+" "+
-                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " father ON father."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+PersonEntity.DB_FIELD_IDENTIFICATION+" "+
-                    " WHERE mother."+ParentDataRecord.DB_FIELD_CPR_NUMBER+"="+motherPnr+
-                    " AND father."+ParentDataRecord.DB_FIELD_CPR_NUMBER+"="+fatherPnr;
-
+                    "FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + PersonEntity.DB_FIELD_IDENTIFICATION + " " +
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + PersonEntity.DB_FIELD_IDENTIFICATION + " " +
+                    " WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + motherPnr +
+                    " AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + fatherPnr;
 
 
             Query query2 = session.createQuery(hql);
 
             List<PersonEntity> resultList = query2.getResultList();
-
-            System.out.println(resultList);
-
-            for(PersonEntity p : resultList) {
-                System.out.println(p.getPersonnummer());
+            Assert.assertEquals(17, resultList.size());
+            Set<String> personnumre = resultList.stream().map(PersonEntity::getPersonnummer).collect(Collectors.toSet());
+            Set<String> expected = new HashSet<>();
+            for (int i=101011234; i<=101011250; i++) {
+                expected.add("0" + i);
             }
-
-
-
-
+            Assert.assertEquals(expected, personnumre);
         }
 
     }
 
 
-
-
     @Test
     public void testCallCustodyService() throws Exception {
         //This test will start failing in year 2030 when the children in this test is no longer children
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
@@ -400,8 +390,7 @@ public class RecordTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(3, objectMapper.readTree(response.getBody()).get("children").size());
-        JSONAssert.assertEquals("{\"parent\":\"0101011234\",\"children\":[{\"pnr\":\"0101161234\",\"status\":1},{\"pnr\":\"0101121234\",\"status\":1},{\"pnr\":\"0101131234\",\"status\":1}]}",response.getBody(),false);
-
+        JSONAssert.assertEquals("{\"parent\":\"0101011234\",\"children\":[{\"pnr\":\"0101161234\",\"status\":1},{\"pnr\":\"0101121234\",\"status\":1},{\"pnr\":\"0101131234\",\"status\":1}]}", response.getBody(), false);
 
 
         //Try fetching other persons custody
@@ -415,17 +404,18 @@ public class RecordTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("children").size());
-        JSONAssert.assertEquals("{\"parent\":\"0101991234\",\"children\":[{\"pnr\":\"0101141234\",\"status\":1}]}",response.getBody(),false);
+        JSONAssert.assertEquals("{\"parent\":\"0101991234\",\"children\":[{\"pnr\":\"0101141234\",\"status\":1}]}", response.getBody(), false);
     }
 
 
     /**
      * Vi tester en special case hvor en person med et undone navn, får tildelt dette navn igen
-     *
+     * <p>
      * Ret / fortryd markering (ANNKOR) kan være:
      * K = Ret
      * A = Fortryd
      * Æ = Teknisk ændring
+     *
      * @throws DataFordelerException
      * @throws IOException
      */
@@ -499,25 +489,12 @@ public class RecordTest {
 
             List<AddressDataRecord> list = personEntity.getAddress().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
 
-            for(AddressDataRecord add : list) {
-                System.out.println(add.cnt);
-                System.out.println(add.line);
-            }
-
             Assert.assertTrue("Validate that the person has an active address ",
                     personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
-
 
             query.setPersonnummer("1111111113");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
-
-            list = personEntity.getAddress().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
-
-            for(AddressDataRecord add : list) {
-                System.out.println(add.cnt);
-                System.out.println(add.line);
-            }
 
             Assert.assertFalse("Validate that the person does not have an active address",
                     personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
@@ -526,7 +503,6 @@ public class RecordTest {
             session.close();
         }
     }
-
 
 
     @Test
@@ -583,8 +559,6 @@ public class RecordTest {
     }
 
 
-
-
     @Test
     public void testUpdatePerson() throws IOException, DataFordelerException {
         Session session = sessionManager.getSessionFactory().openSession();
@@ -627,6 +601,7 @@ public class RecordTest {
 
     /**
      * Test that when new addresses is added to a person the former added adresses is bitemporally closed
+     *
      * @throws IOException
      * @throws DataFordelerException
      */
@@ -654,6 +629,7 @@ public class RecordTest {
 
     /**
      * Test that when new addresses is added to a person the former added adresses is bitemporally closed
+     *
      * @throws IOException
      * @throws DataFordelerException
      */
@@ -685,6 +661,7 @@ public class RecordTest {
 
     /**
      * Test that when new addresses is added to a person the former added adresses is bitemporally closed
+     *
      * @throws IOException
      * @throws DataFordelerException
      */
@@ -717,11 +694,9 @@ public class RecordTest {
     }
 
 
-
-
-
     /**
      * This unittest validates that it is possible to filter out addresschanges that do not happen based on the eventtype A01
+     *
      * @throws DataFordelerException
      * @throws IOException
      */
@@ -805,6 +780,7 @@ public class RecordTest {
 
     /**
      * This unittest validates that it is possible to filter out addresschanges that do not happen based on the eventtype A01
+     *
      * @throws DataFordelerException
      * @throws IOException
      */
@@ -830,18 +806,19 @@ public class RecordTest {
 
     /**
      * Confirm that new children does not generate events
+     *
      * @throws Exception
      */
     @Test
     public void testPersonWithChildrenAndConfirmNoChildrenEvents() throws Exception {
         //This test will start failing in year 2030 when the children in this test is no longer children
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
             query.setPersonnummer("0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
@@ -906,6 +883,7 @@ public class RecordTest {
 
     /**
      * Checks that all items in n1 are also present in n2
+     *
      * @param n1
      * @param n2
      * @param path
@@ -913,9 +891,9 @@ public class RecordTest {
      */
     private void compareJson(JsonNode n1, JsonNode n2, List<String> path) throws JsonProcessingException {
         if (n1 == null && n2 != null) {
-            System.out.println("Mismatch: "+n1+" != "+n2+" at "+path);
+            System.out.println("Mismatch: " + n1 + " != " + n2 + " at " + path);
         } else if (n1 != null && n2 == null) {
-            System.out.println("Mismatch: "+n1+" != "+n2+" at "+path);
+            System.out.println("Mismatch: " + n1 + " != " + n2 + " at " + path);
         } else if (n1.isObject() && n2.isObject()) {
             ObjectNode o1 = (ObjectNode) n1;
             ObjectNode o2 = (ObjectNode) n2;
@@ -929,7 +907,7 @@ public class RecordTest {
             while (o1Fields.hasNext()) {
                 String field = o1Fields.next();
                 if (!f2.contains(field)) {
-                    System.out.println("Mismatch: missing field "+field+" at "+path);
+                    System.out.println("Mismatch: missing field " + field + " at " + path);
                 } else {
                     ArrayList<String> subpath = new ArrayList<>(path);
                     subpath.add(field);
@@ -942,31 +920,32 @@ public class RecordTest {
             ArrayNode a2 = (ArrayNode) n2;
 
             if (a1.size() != a2.size()) {
-                System.out.println("Mismatch: Array["+a1.size()+"] != Array["+a2.size()+"] at "+path);
+                System.out.println("Mismatch: Array[" + a1.size() + "] != Array[" + a2.size() + "] at " + path);
                 System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(a2));
             } else {
 
                 for (int i = 0; i < a1.size(); i++) {
                     boolean found = false;
-                    for (int j=0; j<a2.size(); j++) {
+                    for (int j = 0; j < a2.size(); j++) {
                         if (a1.get(i).asText().equals(a2.get(j).asText())) {
                             found = true;
                         }
                     }
                     if (!found) {
-                        System.out.println("Mismatch: Didn't find item "+a1.get(i)+" in "+objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(a2)+" at "+path);
+                        System.out.println("Mismatch: Didn't find item " + a1.get(i) + " in " + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(a2) + " at " + path);
                     }
                 }
             }
 
 
-        } else if (!n1.asText().equals(n2.asText())){
+        } else if (!n1.asText().equals(n2.asText())) {
             boolean skip = false;
             try {
                 if (OffsetDateTime.parse(n1.asText()).isEqual(OffsetDateTime.parse(n2.asText()))) {
                     skip = true;
                 }
-            } catch (DateTimeParseException e) {}
+            } catch (DateTimeParseException e) {
+            }
             if (!skip) {
                 System.out.println("Mismatch: " + n1.asText() + " (" + n1.getNodeType().name() + ") != " + n2.asText() + " (" + n2.getNodeType().name() + ") at " + path);
             }

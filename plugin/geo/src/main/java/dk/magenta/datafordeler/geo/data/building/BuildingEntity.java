@@ -41,7 +41,7 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
 
     public static final String TABLE_NAME = "geo_building";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "Building";
 
     public BuildingEntity() {
@@ -54,10 +54,9 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
     }
 
     public static UUID generateUUID(int localityCode) {
-        String uuidInput = "bygning:"+localityCode;
+        String uuidInput = "bygning:" + localityCode;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
-
 
 
     public static final String DB_FIELD_ANR = "anr";
@@ -76,7 +75,6 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
     }
 
 
-
     public static final String DB_FIELD_BNR = "bnr";
     public static final String IO_FIELD_BNR = "bnr";
     @Column(name = DB_FIELD_BNR)
@@ -91,7 +89,6 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
     public void setBnr(String bnr) {
         this.bnr = bnr;
     }
-
 
 
     public static final String DB_FIELD_LOCALITY = "locality";
@@ -111,9 +108,6 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
     }
 
 
-
-
-
     public static final String DB_FIELD_SHAPE = "shape";
     public static final String IO_FIELD_SHAPE = "form";
     @OneToMany(mappedBy = BuildingShapeRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -131,7 +125,6 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
     }
 
 
-
     @Override
     public void update(RawData rawData, OffsetDateTime timestamp) {
         super.update(rawData, timestamp);
@@ -141,7 +134,6 @@ public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity 
             this.bnr = buildingRawData.properties.bnr;
         }
     }
-
 
 
     @Override

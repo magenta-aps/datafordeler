@@ -22,44 +22,42 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public static final String BNR = AccessAddressEntity.IO_FIELD_BNR;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = BNR)
-    private List<String> bnr = new ArrayList<>();
+    private final List<String> bnr = new ArrayList<>();
 
 
     public static final String ROAD = AccessAddressRoadRecord.IO_FIELD_ROAD_CODE;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = ROAD)
-    private List<String> roadCode = new ArrayList<>();
+    private final List<String> roadCode = new ArrayList<>();
 
 
     public static final String MUNICIPALITY = AccessAddressRoadRecord.IO_FIELD_MUNICIPALITY_CODE;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = MUNICIPALITY)
-    private List<String> municipalityCode = new ArrayList<>();
+    private final List<String> municipalityCode = new ArrayList<>();
 
 
     public static final String ROAD_UUID = AccessAddressEntity.IO_FIELD_ROAD + "_uuid";
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = ROAD_UUID)
-    private List<UUID> roadUUID = new ArrayList<>();
+    private final List<UUID> roadUUID = new ArrayList<>();
 
 
     public static final String LOCALITY_UUID = AccessAddressEntity.IO_FIELD_LOCALITY + "_uuid";
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = LOCALITY_UUID)
-    private List<UUID> localityUUID = new ArrayList<>();
+    private final List<UUID> localityUUID = new ArrayList<>();
 
     public static final String LOCALITY = AccessAddressEntity.IO_FIELD_LOCALITY;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = LOCALITY)
-    private List<String> locality = new ArrayList<>();
-
+    private final List<String> locality = new ArrayList<>();
 
 
     public static final String HOUSE_NUMBER = AccessAddressEntity.IO_FIELD_HOUSE_NUMBER;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = HOUSE_NUMBER)
-    private List<String> houseNumber = new ArrayList<>();
-
+    private final List<String> houseNumber = new ArrayList<>();
 
 
     public List<String> getBnr() {
@@ -91,8 +89,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     }
 
 
-
-
     public List<String> getRoadCode() {
         return roadCode;
     }
@@ -117,10 +113,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     public void addRoadCode(int roadCode) {
         this.addRoadCode(Integer.toString(roadCode));
     }
-
-
-
-
 
 
     public List<String> getMunicipalityCode() {
@@ -149,7 +141,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     }
 
 
-
     public List<UUID> getRoadUUID() {
         return roadUUID;
     }
@@ -165,6 +156,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
             this.updatedParameters();
         }
     }
+
     public void clearRoadUUID() {
         this.roadUUID.clear();
         this.updatedParameters();
@@ -213,11 +205,11 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
 
     private UUID uuid;
+
     public void setUUID(UUID uuid) {
         this.uuid = uuid;
         this.updatedParameters();
     }
-
 
 
     @Override
@@ -232,7 +224,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     @Override
     protected boolean isEmpty() {
-        return super.isEmpty() && this.bnr.isEmpty () && this.houseNumber.isEmpty() && this.roadCode.isEmpty() && this.roadUUID.isEmpty() && this.localityUUID.isEmpty() && this.municipalityCode.isEmpty();
+        return super.isEmpty() && this.bnr.isEmpty() && this.houseNumber.isEmpty() && this.roadCode.isEmpty() && this.roadUUID.isEmpty() && this.localityUUID.isEmpty() && this.municipalityCode.isEmpty();
     }
 
     @Override
@@ -272,13 +264,13 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         return "geo_accessaddress";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("bnr", AccessAddressEntity.DB_FIELD_BNR);
         joinHandles.put("housenumber", AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseQuery.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
         // Comma-separation in value means that the handle should fit together with a counterpart with an equal number of commas. The separated paths with be ORed together with their counterparts
-        joinHandles.put("bnr_or_housenumber", AccessAddressEntity.DB_FIELD_BNR+","+AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseQuery.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
+        joinHandles.put("bnr_or_housenumber", AccessAddressEntity.DB_FIELD_BNR + "," + AccessAddressEntity.DB_FIELD_HOUSE_NUMBER + BaseQuery.separator + AccessAddressHouseNumberRecord.DB_FIELD_NUMBER);
         joinHandles.put("roadcode", AccessAddressEntity.DB_FIELD_ROAD + BaseQuery.separator + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE);
         joinHandles.put("municipalitycode", AccessAddressEntity.DB_FIELD_ROAD + BaseQuery.separator + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE);
         joinHandles.put("localitycode", AccessAddressEntity.DB_FIELD_LOCALITY + BaseQuery.separator + AccessAddressLocalityRecord.DB_FIELD_CODE);

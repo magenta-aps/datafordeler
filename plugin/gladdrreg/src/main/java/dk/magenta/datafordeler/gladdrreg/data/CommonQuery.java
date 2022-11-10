@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by lars on 19-05-17.
  */
-public abstract class CommonQuery <E extends Entity> extends Query<E> {
+public abstract class CommonQuery<E extends Entity> extends Query<E> {
 
     public static final String ACTIVE = "active";
     public static final String NOTE = "note";

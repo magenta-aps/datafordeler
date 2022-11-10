@@ -44,7 +44,6 @@ public class CompanyMonthlyNumbersRecord extends CompanyNumbersRecord {
     private int year;
 
 
-
     public static final String DB_FIELD_MONTH = "month";
     public static final String IO_FIELD_MONTH = "maaned";
 

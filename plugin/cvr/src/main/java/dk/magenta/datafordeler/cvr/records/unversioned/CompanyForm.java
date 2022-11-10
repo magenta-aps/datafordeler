@@ -130,6 +130,7 @@ public class CompanyForm extends DatabaseEntry {
 
     /**
      * Obtain a CompanyForm object, either from cache or from database, if it exists, or creates one if it doesn't.
+     *
      * @param code
      * @param shortDescription
      * @param longDescription
@@ -146,11 +147,11 @@ public class CompanyForm extends DatabaseEntry {
                 form = session.get(CompanyForm.class, id);
             }
             if (form == null) {
-                log.debug("CompanyForm code "+code+" not found in cache, querying database");
+                log.debug("CompanyForm code " + code + " not found in cache, querying database");
                 form = QueryManager.getItem(session, CompanyForm.class, Collections.singletonMap(DB_FIELD_CODE, code));
             }
             if (form == null) {
-                log.debug("CompanyForm "+code+" not found; creating new");
+                log.debug("CompanyForm " + code + " not found; creating new");
                 form = new CompanyForm();
                 form.setCompanyFormCode(code);
                 form.setShortDescription(shortDescription);
@@ -158,7 +159,7 @@ public class CompanyForm extends DatabaseEntry {
                 form.setResponsibleDataSource(responsibleDataSource);
                 session.save(form);
             } else {
-                log.debug("CompanyForm "+code+" found in cache ("+form.getId()+")");
+                log.debug("CompanyForm " + code + " found in cache (" + form.getId() + ")");
             }
             formCache.put(code, form.getId());
             return form;

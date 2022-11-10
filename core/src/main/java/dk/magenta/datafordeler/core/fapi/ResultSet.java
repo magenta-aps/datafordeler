@@ -6,8 +6,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ResultSet<E extends IdentifiedEntity> {
-    private E primaryEntity;
-    private HashMap<Class, HashSet<IdentifiedEntity>> associatedEntities = new HashMap<>();
+    private final E primaryEntity;
+    private final HashMap<Class, HashSet<IdentifiedEntity>> associatedEntities = new HashMap<>();
 
     public ResultSet(E primaryEntity) {
         this.primaryEntity = primaryEntity;
@@ -24,7 +24,7 @@ public class ResultSet<E extends IdentifiedEntity> {
         } else {
             Object[] databaseRowItems = (Object[]) databaseRow;
             this.primaryEntity = (E) cast(databaseRowItems[0], classNames.get(0));
-            for (int i=1; i<databaseRowItems.length; i++) {
+            for (int i = 1; i < databaseRowItems.length; i++) {
                 this.addAssociatedEntity(cast(databaseRowItems[i], classNames.get(i)));
             }
         }
@@ -32,7 +32,7 @@ public class ResultSet<E extends IdentifiedEntity> {
 
     public ResultSet(Object[] databaseRow, List<String> classNames) throws ClassNotFoundException {
         this.primaryEntity = (E) cast(databaseRow[0], classNames.get(0));
-        for (int i=1; i<databaseRow.length; i++) {
+        for (int i = 1; i < databaseRow.length; i++) {
             this.addAssociatedEntity(cast(databaseRow[i], classNames.get(i)));
         }
     }
@@ -96,7 +96,7 @@ public class ResultSet<E extends IdentifiedEntity> {
     }
 
     public List<IdentifiedEntity> all() {
-        ArrayList<IdentifiedEntity> all = new ArrayList<>(this.associatedEntities.size()+1);
+        ArrayList<IdentifiedEntity> all = new ArrayList<>(this.associatedEntities.size() + 1);
         all.add(this.primaryEntity);
         for (Class key : this.associatedEntities.keySet()) {
             all.addAll(this.associatedEntities.get(key));

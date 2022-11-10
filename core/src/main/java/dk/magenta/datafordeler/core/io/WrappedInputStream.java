@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 public class WrappedInputStream extends InputStream {
 
-    private InputStream inner;
+    private final InputStream inner;
 
     public WrappedInputStream(InputStream inner) {
         this.inner = inner;

@@ -1,7 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
@@ -9,7 +8,6 @@ import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +32,6 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
         this.loadAll();
         this.loadCprAddress();
     }
-
 
 
     @Test
@@ -66,7 +63,6 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
         Assert.assertEquals("Kommuneqarfik Sermersooq", geoLookupDTO.getMunicipalityName());
         Assert.assertTrue("Qarsaalik".equals(geoLookupDTO.getRoadName()) || "Qarsaalik_previous".equals(geoLookupDTO.getRoadName()));
     }
-
 
 
     @Test

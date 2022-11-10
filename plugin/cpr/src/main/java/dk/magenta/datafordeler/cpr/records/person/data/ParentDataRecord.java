@@ -82,7 +82,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     }
 
 
-
     public static final String DB_FIELD_BIRTHDATE = "birthDate";
     public static final String IO_FIELD_BIRTHDATE = "foedselsdato";
     @Column(name = DB_FIELD_BIRTHDATE)
@@ -97,7 +96,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
-
 
 
     public static final String DB_FIELD_BIRTHDATE_UNCERTAIN = "birthDateUncertain";
@@ -116,7 +114,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     }
 
 
-
     public static final String DB_FIELD_NAME = "name";
     public static final String IO_FIELD_NAME = "navn";
     @Column(name = DB_FIELD_NAME)
@@ -131,7 +128,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     public void setName(String name) {
         this.name = name;
     }
-
 
 
     public static final String DB_FIELD_NAME_MARKING = "nameMarking";
@@ -150,10 +146,8 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     }
 
 
-
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<ParentDataRecord> correctors = new HashSet<>();
+    private final Set<ParentDataRecord> correctors = new HashSet<>();
 
     public Set<ParentDataRecord> getCorrectors() {
         return this.correctors;

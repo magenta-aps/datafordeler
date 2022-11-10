@@ -48,7 +48,7 @@ import static org.mockito.Mockito.when;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CvrCombinedTest extends TestBase {
 
-    private Logger log = LogManager.getLogger(CvrCombinedTest.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CvrCombinedTest.class.getCanonicalName());
 
     @Autowired
     private SessionManager sessionManager;
@@ -79,7 +79,6 @@ public class CvrCombinedTest extends TestBase {
     }
 
 
-
     @Test
     public void testCompanyPrisme() throws IOException, DataFordelerException {
         this.loadGerCompany(gerPlugin, sessionManager);
@@ -88,73 +87,72 @@ public class CvrCombinedTest extends TestBase {
         this.loadCompany(cvrPlugin, sessionManager, objectMapper);
 
 
-            TestUserDetails testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
 
 
-            HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "/prisme/cvr/3/" + 25052943,
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cvr/3/" + 25052943,
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
 
-            testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-            this.applyAccess(testUserDetails);
-            response = restTemplate.exchange(
-                    "/prisme/cvr/3/" + 25052943,
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/prisme/cvr/3/" + 25052943,
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
 
-            testUserDetails.giveAccess(
-                    cvrPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
-                            CvrAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER
-                    ).getRestriction(
-                            CvrAreaRestrictionDefinition.RESTRICTION_KOMMUNE_SERMERSOOQ
-                    )
-            );
-            this.applyAccess(testUserDetails);
-            response = restTemplate.exchange(
-                    "/prisme/cvr/3/" + 25052943,
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        testUserDetails.giveAccess(
+                cvrPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
+                        CvrAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER
+                ).getRestriction(
+                        CvrAreaRestrictionDefinition.RESTRICTION_KOMMUNE_SERMERSOOQ
+                )
+        );
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/prisme/cvr/3/" + 25052943,
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
 
-            testUserDetails.giveAccess(
-                    cvrPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
-                            CvrAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER
-                    ).getRestriction(
-                            CvrAreaRestrictionDefinition.RESTRICTION_KOMMUNE_KUJALLEQ
-                    )
-            );
-            testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-            this.applyAccess(testUserDetails);
-            response = restTemplate.exchange(
-                    "/prisme/cvr/3/" + 25052943 + "?returnParticipantDetails=1",
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        testUserDetails.giveAccess(
+                cvrPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
+                        CvrAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER
+                ).getRestriction(
+                        CvrAreaRestrictionDefinition.RESTRICTION_KOMMUNE_KUJALLEQ
+                )
+        );
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+        response = restTemplate.exchange(
+                "/prisme/cvr/3/" + 25052943 + "?returnParticipantDetails=1",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-            response = restTemplate.exchange(
-                    "/prisme/cvr/3/" + 1234,
-                    HttpMethod.GET,
-                    httpEntity,
-                    String.class
-            );
-            Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        response = restTemplate.exchange(
+                "/prisme/cvr/3/" + 1234,
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
-
 
 
     @Test
@@ -223,8 +221,8 @@ public class CvrCombinedTest extends TestBase {
         cvrList.add("10000002");
         cvrList.add("10000005");
         body.set("cvrNumber", cvrList);
-         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
-         response = restTemplate.exchange(
+        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        response = restTemplate.exchange(
                 "/prisme/cvr/3/",
                 HttpMethod.POST,
                 httpEntity,
@@ -233,7 +231,6 @@ public class CvrCombinedTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(response.getBody())));
         Assert.assertEquals(2, objectMapper.readTree(response.getBody()).size());
-
 
 
         body = objectMapper.createObjectNode();
@@ -259,7 +256,6 @@ public class CvrCombinedTest extends TestBase {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
-
 
 
         body = objectMapper.createObjectNode();

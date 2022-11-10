@@ -54,10 +54,11 @@ public class CivilStatusDataService extends PersonStatisticsService {
 
     private String civilStatus;
 
-    private Logger log = LogManager.getLogger(CivilStatusDataService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CivilStatusDataService.class.getCanonicalName());
 
     /**
      * Calls handlerequest in super with the ID of the report as a parameter
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -77,6 +78,7 @@ public class CivilStatusDataService extends PersonStatisticsService {
 
     /**
      * Post is used for starting the generation of a report
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -96,11 +98,8 @@ public class CivilStatusDataService extends PersonStatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{
-                CIVIL_STATUS, CIVIL_STATUS_DATE, CITIZENSHIP_CODE, PROD_DATE, PNR, SPOUSE_PNR, AUTHORITY_CODE_TEXT, MUNICIPALITY_CODE, BIRTH_AUTHORITY, BIRTH_AUTHORITY_TEXT, BIRTH_AUTHORITY_CODE_TEXT,
-                LOCALITY_NAME, LOCALITY_ABBREVIATION, LOCALITY_CODE, ROAD_CODE, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER, BNR
-
-        });
+        return Arrays.asList(CIVIL_STATUS, CIVIL_STATUS_DATE, CITIZENSHIP_CODE, PROD_DATE, PNR, SPOUSE_PNR, AUTHORITY_CODE_TEXT, MUNICIPALITY_CODE, BIRTH_AUTHORITY, BIRTH_AUTHORITY_TEXT, BIRTH_AUTHORITY_CODE_TEXT,
+                LOCALITY_NAME, LOCALITY_ABBREVIATION, LOCALITY_CODE, ROAD_CODE, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER, BNR);
     }
 
     @Override
@@ -161,15 +160,15 @@ public class CivilStatusDataService extends PersonStatisticsService {
 
         Set<CivilStatusDataRecord> civilStatusCollection = null;
         if (filter.getCivilStatus() != null || searchTime != null) {
-            civilStatusCollection = person.getCivilstatus().stream().filter(r -> (filter.getCivilStatus()== null || filter.getCivilStatus().equals(r.getCivilStatus())) &&
-                    !r.isHistoric() && r.getBitemporality().registrationFrom!=null && r.getBitemporality().registrationFrom.isAfter(searchTime)
+            civilStatusCollection = person.getCivilstatus().stream().filter(r -> (filter.getCivilStatus() == null || filter.getCivilStatus().equals(r.getCivilStatus())) &&
+                    !r.isHistoric() && r.getBitemporality().registrationFrom != null && r.getBitemporality().registrationFrom.isAfter(searchTime)
             ).collect(toSet());
         } else {
             civilStatusCollection = person.getCivilstatus();
         }
 
         List<PersonEventDataRecord> eventListCivilState;
-        if(filter.getEventName()==null) {
+        if (filter.getEventName() == null) {
             //Make a list of all civil-state-changes
             eventListCivilState = person.getEvent().stream().filter(event -> "A19".equals(event.getEventId()) ||
                     "A20".equals(event.getEventId()) || "A21".equals(event.getEventId()) ||
@@ -179,8 +178,6 @@ public class CivilStatusDataService extends PersonStatisticsService {
         }
 
 
-
-
         // A19 - vielse
         // A20 - skilsmisse
         // A21 doed
@@ -188,7 +185,7 @@ public class CivilStatusDataService extends PersonStatisticsService {
         //Filter based on events
         List<CivilStatusDataRecord> filteredList = civilStatusCollection.stream().filter(empl -> eventListCivilState.stream().anyMatch(dept -> empl.getRegistrationFrom().equals(dept.getTimestamp()))).collect(Collectors.toList());
 
-        for (CivilStatusDataRecord civilStatusDataRecord : sortRecords(FilterOnRegistrationFrom(filteredList,filter.registrationAfter,filter.registrationBefore))) {
+        for (CivilStatusDataRecord civilStatusDataRecord : sortRecords(FilterOnRegistrationFrom(filteredList, filter.registrationAfter, filter.registrationBefore))) {
             mariageEffectTime = civilStatusDataRecord.getEffectFrom();
 
             // Undone entries don't count
@@ -284,7 +281,7 @@ public class CivilStatusDataService extends PersonStatisticsService {
             if (citizenshipDataRecord != null) {
                 item.put(CITIZENSHIP_CODE, Integer.toString(citizenshipDataRecord.getCountryCode()));
             }
-            if(municipalityCode > 950) {
+            if (municipalityCode > 950) {
                 replaceMapValues(item, null, "");
                 itemMap.add(item);
             }

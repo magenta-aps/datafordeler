@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 public class TestUserDetails extends DafoUserDetails {
 
-    private HashMap<String, UserProfile> userProfiles = new HashMap<>();
-    private HashMap<String, Set<UserProfile>> systemRoles = new HashMap<>();
+    private final HashMap<String, UserProfile> userProfiles = new HashMap<>();
+    private final HashMap<String, Set<UserProfile>> systemRoles = new HashMap<>();
     private static final String profileName = "TestProfile";
 
     public void addUserProfile(UserProfile userprofile) {
@@ -71,15 +71,13 @@ public class TestUserDetails extends DafoUserDetails {
 
     @Override
     public boolean hasSystemRole(String role) {
-        System.out.println("hasSystemRole "+role);
-        System.out.println(systemRoles.keySet());
         return systemRoles.containsKey(role);
     }
 
     public void checkHasSystemRole(String role) throws AccessDeniedException {
         if (!hasSystemRole(role)) {
             throw new AccessDeniedException(
-                    "User " + this.toString() + " does not have access to " + role
+                    "User " + this + " does not have access to " + role
             );
         }
     }

@@ -49,7 +49,8 @@ public class cprMatchLogicTest {
     private PersonEntityManager personEntityManager;
 
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("person", PersonEntity.schema);
     }
@@ -83,7 +84,7 @@ public class cprMatchLogicTest {
 
         TimeZone.setDefault(TimeZone.getTimeZone("America/Godthab"));
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPersonWithOrigin(importMetadata);
@@ -91,7 +92,7 @@ public class cprMatchLogicTest {
         }
 
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
             query.setPersonnummer("1111111111");
             OffsetDateTime now = Query.parseDateTime("2018-08-08");

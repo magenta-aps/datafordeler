@@ -12,11 +12,7 @@ import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
-import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import dk.magenta.datafordeler.cvr.records.CompanySubscription;
-import dk.magenta.datafordeler.cvr.records.CompanyUnitMetadataRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -64,7 +60,8 @@ public class ParseTest {
 
     private CvrEntityManager entityManager;
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("_doc", CompanyRecord.schema);
         schemaMap.put("produktionsenhed", CompanyUnitRecord.schema);
@@ -106,7 +103,7 @@ public class ParseTest {
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
         entityManager.parseData(stream, importMetadata);
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
@@ -148,6 +145,7 @@ public class ParseTest {
 
     /**
      * Validate that when parsing and creating data for companies and units. Then a subscription for missing companies is created
+     *
      * @throws IOException
      * @throws DataFordelerException
      * @throws URISyntaxException
@@ -157,7 +155,7 @@ public class ParseTest {
         ImportMetadata importMetadata = new ImportMetadata();
         Transaction transaction = null;
         //Load units from unit.json
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             importMetadata.setSession(session);
             InputStream input = ParseTest.class.getResourceAsStream("/unit.json");
@@ -182,7 +180,7 @@ public class ParseTest {
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
         entityManager.parseData(stream, importMetadataCompany);
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
@@ -200,7 +198,7 @@ public class ParseTest {
         stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
         entityManager.parseData(stream, importMetadataCompany);
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
             query.setRegistrationFromBefore(time);
@@ -213,7 +211,7 @@ public class ParseTest {
         }
 
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             CriteriaBuilder subscriptionBuilder = session.getCriteriaBuilder();
 
             // Read subscription to validate that missing companies gets subscribed

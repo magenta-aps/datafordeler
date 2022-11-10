@@ -96,6 +96,7 @@ public class CvrPostCode extends DatabaseEntry {
 
     /**
      * Obtain a CvrPostCode object, either from cache or from database, if it exists, or creates one if it doesn't.
+     *
      * @param code
      * @param postDistrict
      * @param session
@@ -110,7 +111,7 @@ public class CvrPostCode extends DatabaseEntry {
                 post = session.get(CvrPostCode.class, id);
             }
             if (post == null) {
-                log.debug("CvrPostCode code "+code+" not found in cache, querying database");
+                log.debug("CvrPostCode code " + code + " not found in cache, querying database");
                 post = QueryManager.getItem(session, CvrPostCode.class, Collections.singletonMap(DB_FIELD_CODE, code));
             }
             if (post == null) {

@@ -39,7 +39,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_UNITTYPE = "unitType";
     public static final String IO_FIELD_UNITTYPE = "enhedstype";
 
@@ -50,9 +49,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     public String getUnitType() {
         return this.unitType;
     }
-
-
-
 
 
     public static final String DB_FIELD_BUSINESS_KEY = "businessKey";
@@ -67,7 +63,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
 
-
     //This field is null for every single input
     public static final String IO_FIELD_ORGANIZATION_TYPE = "organisationstype";
 
@@ -78,7 +73,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     public Integer getOrganizationType() {
         return this.organizationType;
     }
-
 
 
     public static final String DB_FIELD_NAME = "names";
@@ -107,7 +101,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_LOCATION_ADDRESS = "locationAddress";
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
 
@@ -134,8 +127,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
 
-
-
     @OneToOne(targetEntity = CompanyParticipantRelationRecord.class, mappedBy = CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION)
     @JsonIgnore
     private CompanyParticipantRelationRecord companyParticipantRelationRecord;
@@ -145,9 +136,8 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
 
-
     public UUID generateUUID() {
-        String uuidInput = "participant:"+this.unitType+"/"+this.unitNumber;
+        String uuidInput = "participant:" + this.unitType + "/" + this.unitNumber;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
 

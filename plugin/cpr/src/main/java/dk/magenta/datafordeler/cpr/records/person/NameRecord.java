@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class NameRecord extends PersonDataRecord {
 
-    private CprBitemporality nameTemporality;
-    private CprBitemporality addressNameTemporality;
-    private CprBitemporality documentNameTemporality;
-    private CprBitemporality officiaryTemporality;
+    private final CprBitemporality nameTemporality;
+    private final CprBitemporality addressNameTemporality;
+    private final CprBitemporality documentNameTemporality;
+    private final CprBitemporality officiaryTemporality;
 
     public NameRecord(String line) throws ParseException {
         this(line, traditionalMapping);
@@ -40,6 +40,7 @@ public class NameRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("start_mynkod-navne", 14, 4);
         traditionalMapping.add("nvn_ts", 18, 12);

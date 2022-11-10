@@ -3,11 +3,13 @@ package dk.magenta.datafordeler.cpr;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.plugin.FtpCommunicator;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
@@ -107,7 +109,8 @@ public abstract class TestBase {
         return this.restTemplate;
     }
 
-    private static HashSet<String> ignoreKeys = new HashSet<String>();
+    private static final HashSet<String> ignoreKeys = new HashSet<String>();
+
     static {
         ignoreKeys.add("sidstImporteret");
     }
@@ -119,6 +122,7 @@ public abstract class TestBase {
     protected void applyAccess(TestUserDetails testUserDetails) {
         when(this.dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
+
     protected void whitelistLocalhost() {
         when(this.dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
     }
@@ -127,14 +131,14 @@ public abstract class TestBase {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange("/cpr/"+type+"/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
+        return this.restTemplate.exchange("/cpr/" + type + "/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
     }
 
     protected ResponseEntity<String> uuidSearch(String id, String type) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange("/cpr/"+type+"/1/rest/" + id, HttpMethod.GET, httpEntity, String.class);
+        return this.restTemplate.exchange("/cpr/" + type + "/1/rest/" + id, HttpMethod.GET, httpEntity, String.class);
     }
 
     protected void assertJsonEquality(JsonNode node1, JsonNode node2, boolean ignoreArrayOrdering, boolean printDifference) {
@@ -194,17 +198,18 @@ public abstract class TestBase {
     }
 
 
-
     private static SSLSocketFactory getTrustAllSSLSocketFactory() {
-        TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
+        TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
+
             public void checkClientTrusted(X509Certificate[] certs, String authType) {
             }
+
             public void checkServerTrusted(X509Certificate[] certs, String authType) {
             }
-        } };
+        }};
         SSLContext sslContext = null;
         try {
             sslContext = SSLContext.getInstance("SSL");
@@ -237,5 +242,70 @@ public abstract class TestBase {
     protected void stopFtp() {
         this.ftpService.stopServer();
         this.ftpService = null;
+    }
+
+    protected void assertJsonEquals(String jsonExpected, String jsonActual) throws JsonProcessingException {
+        Assert.assertTrue(
+                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual),
+                new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)) == 0
+        );
+    }
+
+    protected void assertJsonContains(String message, String jsonExpected, String jsonActual) throws JsonProcessingException {
+        this.assertJsonContains(null, objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual));
+    }
+    protected void assertJsonContains(String jsonExpected, String jsonActual) throws JsonProcessingException {
+        this.assertJsonContains(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual));
+    }
+
+    protected void assertJsonContains(JsonNode jsonExpected, JsonNode jsonActual) throws JsonProcessingException {
+        this.assertJsonContains(null, jsonExpected, jsonActual);
+    }
+    protected void assertJsonContains(String message, JsonNode jsonExpected, JsonNode jsonActual) throws JsonProcessingException {
+        Assert.assertTrue(message, jsonContains(jsonExpected, jsonActual));
+    }
+    protected boolean jsonContains(JsonNode jsonExpected, JsonNode jsonActual) throws JsonProcessingException {
+        if (!jsonExpected.getNodeType().equals(jsonActual.getNodeType())) {
+            return false;
+        } else if (jsonExpected.isArray()) {
+            for (int i=0; i<jsonExpected.size(); i++) {
+                boolean found = false;
+                for (int j=0; j<jsonActual.size() && !found; j++) {
+                    if (jsonContains(jsonExpected.get(i), jsonActual.get(j))) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (jsonExpected.isObject()) {
+            ObjectNode expectedObject = (ObjectNode) jsonExpected;
+            ObjectNode actualObject = (ObjectNode) jsonActual;
+            for (Iterator<String> it = expectedObject.fieldNames(); it.hasNext(); ) {
+                String key = it.next();
+                if (!actualObject.has(key)) {
+                    return false;
+                }
+                if (!jsonContains(expectedObject.get(key), actualObject.get(key))) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (jsonExpected.isNull()) {
+            return jsonActual.isNull();
+        } else if (jsonExpected.isTextual()) {
+            return jsonExpected.asText().equals(jsonActual.asText());
+        } else if (jsonExpected.isInt()) {
+            return jsonExpected.asInt() == jsonActual.asInt();
+        } else if (jsonExpected.isDouble()) {
+            return jsonExpected.asDouble() == jsonActual.asDouble();
+        } else if (jsonExpected.isLong()) {
+            return jsonExpected.asLong() == jsonActual.asLong();
+        } else if (jsonExpected.isBoolean()) {
+            return jsonExpected.asBoolean() == jsonActual.asBoolean();
+        }
+        return true;
     }
 }

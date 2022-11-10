@@ -28,7 +28,6 @@ public abstract class CvrBitemporalDataRecord extends CvrBitemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_COMPANYUNIT = "companyUnitRecord";
 
     @JsonIgnore
@@ -39,7 +38,6 @@ public abstract class CvrBitemporalDataRecord extends CvrBitemporalRecord {
     public void setCompanyUnitRecord(CompanyUnitRecord companyUnitRecord) {
         this.companyUnitRecord = companyUnitRecord;
     }
-
 
 
     public static final String DB_FIELD_PARTICIPANT = "participantRecord";

@@ -20,10 +20,10 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
     public static final String BNR = BuildingEntity.IO_FIELD_BNR;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = ANR)
-    private List<String> anr = new ArrayList<>();
+    private final List<String> anr = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = BNR)
-    private List<String> bnr = new ArrayList<>();
+    private final List<String> bnr = new ArrayList<>();
 
     public List<String> getAnr() {
         return anr;
@@ -43,7 +43,6 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
     }
 
 
-
     public List<String> getBnr() {
         return bnr;
     }
@@ -60,8 +59,6 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
             this.updatedParameters();
         }
     }
-
-
 
 
     @Override
@@ -95,7 +92,7 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
     }
 
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("anr", BuildingEntity.DB_FIELD_ANR);

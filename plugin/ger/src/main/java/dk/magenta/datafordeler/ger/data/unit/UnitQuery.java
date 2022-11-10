@@ -5,7 +5,6 @@ import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.ger.data.GerQuery;
-import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,7 +14,7 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     public static final String NAME = UnitEntity.IO_FIELD_NAME;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAME)
-    private List<String> name = new ArrayList<>();
+    private final List<String> name = new ArrayList<>();
 
     public List<String> getName() {
         return name;
@@ -40,7 +39,7 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     public static final String DEID = UnitEntity.IO_FIELD_DEID;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = DEID)
-    private List<UUID> deid = new ArrayList<>();
+    private final List<UUID> deid = new ArrayList<>();
 
     public List<String> getDeid() {
         return name;
@@ -96,7 +95,7 @@ public class UnitQuery extends GerQuery<UnitEntity> {
         return "ger_unit";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("deid", UnitEntity.DB_FIELD_DEID);

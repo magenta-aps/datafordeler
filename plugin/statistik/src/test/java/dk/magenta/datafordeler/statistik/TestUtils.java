@@ -69,12 +69,13 @@ public class TestUtils {
     HashSet<Entity> createdEntities = new HashSet<>();
 
     public TestUtils(SessionManager sessionManager,
-                     PersonEntityManager personEntityManager){
+                     PersonEntityManager personEntityManager) {
         this.sessionManager = sessionManager;
         this.personEntityManager = personEntityManager;
     }
 
     private String oldPath;
+
     public void setPath() throws IOException {
         //Use this code block when temp directories need to be created
         Path path = Files.createTempDirectory("statistik");
@@ -122,7 +123,6 @@ public class TestUtils {
                 )
         );
     }
-
 
 
     public void loadRoadData(InputStream testData) throws Exception {
@@ -245,7 +245,6 @@ public class TestUtils {
     }
 
 
-
     public void loadPersonData(InputStream testData) throws Exception {
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
@@ -276,7 +275,7 @@ public class TestUtils {
         this.deleteAll(PersonEntity.class);
     }
 
-    public void deleteFiles(String path_file){
+    public void deleteFiles(String path_file) {
         //This code can be places in @After
         File tempDir = null;
         try {

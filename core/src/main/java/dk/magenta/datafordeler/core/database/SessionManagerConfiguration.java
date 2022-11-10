@@ -10,26 +10,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionManagerConfiguration {
 
-  @Value("${dafo.hibernate.configuration-file:/hibernate.cfg.xml}")
-  private String primaryHibernateConfigurationFile;
+    @Value("${dafo.hibernate.configuration-file:/hibernate.cfg.xml}")
+    private String primaryHibernateConfigurationFile;
 
-  @Value("${dafo.hibernate.secondary-configuration-file:/hibernate_config.cfg.xml}")
-  private String secondaryHibernateConfigurationFile;
+    @Value("${dafo.hibernate.secondary-configuration-file:/hibernate_config.cfg.xml}")
+    private String secondaryHibernateConfigurationFile;
 
-  public String getPrimaryHibernateConfigurationFile() {
-    return primaryHibernateConfigurationFile;
-  }
-  public String getSecondaryHibernateConfigurationFile() {
-    return secondaryHibernateConfigurationFile;
-  }
+    public String getPrimaryHibernateConfigurationFile() {
+        return primaryHibernateConfigurationFile;
+    }
 
-  @Bean
-  public SessionManager sessionManager(SessionManagerConfiguration configuration) {
-    return new SessionManager(configuration);
-  }
+    public String getSecondaryHibernateConfigurationFile() {
+        return secondaryHibernateConfigurationFile;
+    }
 
-  @Bean
-  public ConfigurationSessionManager configurationSessionManager(SessionManagerConfiguration configuration) {
-    return new ConfigurationSessionManager(configuration);
-  }
+    @Bean
+    public SessionManager sessionManager(SessionManagerConfiguration configuration) {
+        return new SessionManager(configuration);
+    }
+
+    @Bean
+    public ConfigurationSessionManager configurationSessionManager(SessionManagerConfiguration configuration) {
+        return new ConfigurationSessionManager(configuration);
+    }
 }

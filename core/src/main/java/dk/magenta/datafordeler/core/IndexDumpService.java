@@ -48,14 +48,14 @@ public class IndexDumpService {
     @Autowired
     private DafoUserManager dafoUserManager;
 
-    private Logger log = LogManager.getLogger(IndexDumpService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(IndexDumpService.class.getCanonicalName());
 
     @PostConstruct
     public void init() {
     }
 
     protected void checkAccess(DafoUserDetails dafoUserDetails, Plugin plugin)
-        throws AccessDeniedException {
+            throws AccessDeniedException {
         ReadServiceRole pluginDefaultReadRole = plugin.getRolesDefinition().getDefaultReadRole();
         dafoUserDetails.checkHasSystemRole(pluginDefaultReadRole);
     }
@@ -70,19 +70,18 @@ public class IndexDumpService {
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper,
-        String requestPath)
-        throws AccessDeniedException, AccessRequiredException {
+                                     String requestPath)
+            throws AccessDeniedException, AccessRequiredException {
         try {
             Plugin plugin = pluginManager.getPluginForServicePath(requestPath);
             this.checkAccess(loggerHelper.getUser(), plugin);
-        }
-        catch(AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 
-    @RequestMapping(path="list", produces="text/html")
+    @RequestMapping(path = "list", produces = "text/html")
     public ModelAndView html(HttpServletRequest request)
             throws InvalidTokenException, AccessRequiredException, AccessDeniedException, InvalidCertificateException {
 
@@ -91,37 +90,37 @@ public class IndexDumpService {
 
         Map<String, Object> filter = new HashMap<>();
         for (Plugin plugin : pluginManager.getPlugins()) {
-            if(hasAccess(user, plugin))
+            if (hasAccess(user, plugin))
                 filter.put("plugin", plugin.getName());
         }
 
-        loggerHelper.info("Requesting dump list with following filter: " + filter.toString());
+        loggerHelper.info("Requesting dump list with following filter: " + filter);
 
-        if(filter.isEmpty())
+        if (filter.isEmpty())
             throw new AccessRequiredException(
-                "You need to have access to read from at least one plugin"
+                    "You need to have access to read from at least one plugin"
             );
 
         HashMap<String, Object> model = new HashMap<>();
         Session session = sessionManager.getSessionFactory().openSession();
         List<DumpInfo> dumpInfos =
-            QueryManager.getAllItemsAsStream(session, DumpInfo.class)
-                .filter(
-                    d -> hasAccess(user,
-                        engine.pluginManager.getPluginForServicePath(
-                            d.getRequestPath()
+                QueryManager.getAllItemsAsStream(session, DumpInfo.class)
+                        .filter(
+                                d -> hasAccess(user,
+                                        engine.pluginManager.getPluginForServicePath(
+                                                d.getRequestPath()
+                                        )
+                                )
                         )
-                    )
-                )
-                .collect(Collectors.toList());
+                        .collect(Collectors.toList());
         model.put("dumpList", dumpInfos);
         return new ModelAndView("dumpList", model);
     }
 
-    @RequestMapping(path="by-id/{id}")
+    @RequestMapping(path = "by-id/{id}")
     public void get(@PathVariable Long id,
-        HttpServletRequest request,
-        HttpServletResponse response)
+                    HttpServletRequest request,
+                    HttpServletResponse response)
             throws InvalidTokenException, AccessDeniedException, AccessRequiredException, IOException, InvalidCertificateException {
         Map<String, Object> filter = new HashMap<>();
         filter.put("id", id);
@@ -129,10 +128,10 @@ public class IndexDumpService {
         getDump(request, response, filter);
     }
 
-    @RequestMapping(path="by-name/{name}")
+    @RequestMapping(path = "by-name/{name}")
     public void get(@PathVariable String name,
-        HttpServletRequest request,
-        HttpServletResponse response)
+                    HttpServletRequest request,
+                    HttpServletResponse response)
             throws InvalidTokenException, AccessDeniedException, AccessRequiredException, IOException, InvalidCertificateException {
         Map<String, Object> filter = new HashMap<>();
         filter.put("name", name);
@@ -141,7 +140,7 @@ public class IndexDumpService {
     }
 
     private void getDump(HttpServletRequest request,
-        HttpServletResponse response, Map<String, Object> filter)
+                         HttpServletResponse response, Map<String, Object> filter)
             throws InvalidTokenException, AccessDeniedException, AccessRequiredException, IOException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         Session session = sessionManager.getSessionFactory().openSession();
@@ -149,7 +148,7 @@ public class IndexDumpService {
         DumpInfo info = QueryManager.getItem(session, DumpInfo.class, filter);
 
         loggerHelper.info("Requesting dump {} from \"{}\"",
-            info.getName(), info.getRequestPath());
+                info.getName(), info.getRequestPath());
 
         this.checkAndLogAccess(loggerHelper, info.getRequestPath());
 

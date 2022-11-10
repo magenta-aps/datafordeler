@@ -34,20 +34,34 @@ TRUNCATE TABLE [Datafordeler_Test].[dbo].[cpr_person_position_record];
 TRUNCATE TABLE [Datafordeler_Test].[dbo].[cpr_person_protection_record];
 TRUNCATE TABLE [Datafordeler_Test].[dbo].[cpr_person_status_record];
 TRUNCATE TABLE [Datafordeler_Test].[dbo].[cpr_person_subscription_list];
-DELETE [Datafordeler_Test].[dbo].[cpr_person_entity];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_person_entity];
 
 --ROAD DATA IS ONLY UPDATED INITIALLY BY I FILE BEING COPIED FROM THE SOURCE
-DELETE [Datafordeler_Test].[dbo].[cpr_postcode];
-DELETE [Datafordeler_Test].[dbo].[cpr_residence_data];
-DELETE [Datafordeler_Test].[dbo].[cpr_residence_effect];
-DELETE [Datafordeler_Test].[dbo].[cpr_residence_effect_cpr_residence_data];
-DELETE [Datafordeler_Test].[dbo].[cpr_residence_entity];
-DELETE [Datafordeler_Test].[dbo].[cpr_residence_registration];
-DELETE [Datafordeler_Test].[dbo].[cpr_road_city_record];
-DELETE [Datafordeler_Test].[dbo].[cpr_road_entity];
-DELETE [Datafordeler_Test].[dbo].[cpr_road_memo_record];
-DELETE [Datafordeler_Test].[dbo].[cpr_road_name_record];
-DELETE [Datafordeler_Test].[dbo].[cpr_road_postalcode_record];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_postcode];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_residence_data];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_residence_effect];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_residence_effect_cpr_residence_data];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_residence_entity];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_residence_registration];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_road_city_record];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_road_entity];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_road_memo_record];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_road_name_record];
+DELETE
+[Datafordeler_Test].[dbo].[cpr_road_postalcode_record];
 
-DELETE FROM [Datafordeler_Test].[dbo].[last_updated] WHERE plugin='cpr'
+DELETE
+FROM [Datafordeler_Test].[dbo].[last_updated]
+WHERE plugin='cpr'
 

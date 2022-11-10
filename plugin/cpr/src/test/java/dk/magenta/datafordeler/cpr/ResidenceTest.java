@@ -100,9 +100,6 @@ public class ResidenceTest extends TestBase {
             ResidenceEntity entity = entities.get(0);
             Assert.assertEquals(ResidenceEntity.generateUUID(360, 206, "44E", "", ""), entity.getUUID());
 
-            System.out.println(new ResidenceOutputWrapper().wrapResult(entities.get(0), query));
-
-
             List<ResidenceRegistration> registrations = entities.get(0).getRegistrations();
             Assert.assertEquals(1, registrations.size());
             ResidenceRegistration registration = registrations.get(0);

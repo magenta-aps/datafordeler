@@ -74,7 +74,6 @@ public abstract class GeoTest {
     }
 
 
-
     @Autowired
     protected SessionManager sessionManager;
 

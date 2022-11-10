@@ -110,7 +110,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     }
 
 
-
     public static final String DB_FIELD_SPOUSE_BIRTHDATE = "spouseBirthdate";
     public static final String IO_FIELD_SPOUSE_BIRTHDATE = "ægtefælleFødselsdato";
     @Column(name = DB_FIELD_SPOUSE_BIRTHDATE)
@@ -125,7 +124,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     public void setSpouseBirthdate(LocalDate spouseBirthdate) {
         this.spouseBirthdate = spouseBirthdate;
     }
-
 
 
     public static final String DB_FIELD_SPOUSE_BIRTHDATE_UNCERTAIN = "spouseBirthdateUncertain";
@@ -144,7 +142,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     }
 
 
-
     public static final String DB_FIELD_SPOUSE_NAME = "spouseName";
     public static final String IO_FIELD_SPOUSE_NAME = "ægtefælleNavn";
     @Column(name = DB_FIELD_SPOUSE_NAME)
@@ -161,7 +158,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     }
 
 
-
     public static final String DB_FIELD_SPOUSE_NAME_MARKING = "spouseNameMarking";
     public static final String IO_FIELD_SPOUSE_NAME_MARKING = "ægtefælleNavnMarkering";
     @Column(name = DB_FIELD_SPOUSE_NAME_MARKING)
@@ -176,7 +172,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     public void setSpouseNameMarking(boolean spouseNameMarking) {
         this.spouseNameMarking = spouseNameMarking;
     }
-
 
 
     @Override

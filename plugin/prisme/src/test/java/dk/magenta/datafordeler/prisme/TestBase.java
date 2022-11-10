@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public abstract class TestBase {
@@ -59,14 +60,13 @@ public abstract class TestBase {
 
     protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
         this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
-        this.loadGeoData(sessionManager, roadEntityManager,"/road.json");
+        this.loadGeoData(sessionManager, roadEntityManager, "/road.json");
         this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
         this.loadGeoData(sessionManager, municipalityEntityManager, "/municipality.json");
         this.loadGeoData(sessionManager, postcodeEntityManager, "/post.json");
         this.loadGeoData(sessionManager, buildingEntityManager, "/building.json");
         this.loadGeoData(sessionManager, accessAddressEntityManager, "/access.json");
     }
-
 
 
     protected void cleanup(SessionManager sessionManager, Class[] classes) {
@@ -122,7 +122,7 @@ public abstract class TestBase {
 
             for (JsonNode item : itemList) {
                 String source = objectMapper.writeValueAsString(item.get("_source").get("Vrvirksomhed"));
-                ByteArrayInputStream bais = new ByteArrayInputStream(source.getBytes("UTF-8"));
+                ByteArrayInputStream bais = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
                 companyEntityManager.parseData(bais, importMetadata);
                 bais.close();
             }
@@ -144,7 +144,7 @@ public abstract class TestBase {
             String testData = InputStreamReader.readInputStream(CvrCombinedTest.class.getResourceAsStream("/company_in.json"));
             for (int i = start; i < count + start; i++) {
                 String altered = testData.replaceAll("25052943", "1" + String.format("%07d", i)).replaceAll("\n", "");
-                ByteArrayInputStream bais = new ByteArrayInputStream(altered.getBytes("UTF-8"));
+                ByteArrayInputStream bais = new ByteArrayInputStream(altered.getBytes(StandardCharsets.UTF_8));
                 companyEntityManager.parseData(bais, importMetadata);
                 bais.close();
             }
@@ -187,13 +187,14 @@ public abstract class TestBase {
     }
 
     protected void cleanupPersonData(SessionManager sessionManager) {
-        this.cleanup(sessionManager, new Class[] {
+        this.cleanup(sessionManager, new Class[]{
                 PersonEntity.class,
         });
         QueryManager.clearCaches();
     }
+
     protected void cleanupCompanyData(SessionManager sessionManager) {
-        this.cleanup(sessionManager, new Class[] {
+        this.cleanup(sessionManager, new Class[]{
                 dk.magenta.datafordeler.cvr.records.CompanyRecord.class,
                 dk.magenta.datafordeler.cvr.records.CompanyUnitRecord.class,
                 dk.magenta.datafordeler.cvr.records.ParticipantRecord.class,

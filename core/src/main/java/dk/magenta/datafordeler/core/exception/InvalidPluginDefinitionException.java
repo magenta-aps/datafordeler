@@ -4,7 +4,7 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 
 public class InvalidPluginDefinitionException extends DataFordelerException {
 
-    private Plugin plugin;
+    private final Plugin plugin;
 
     public InvalidPluginDefinitionException(Plugin plugin, String message) {
         super("Plugin " + plugin.getClass().getCanonicalName() + " is incorrectly defined: " + message);

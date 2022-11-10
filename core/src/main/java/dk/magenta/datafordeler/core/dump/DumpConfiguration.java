@@ -10,28 +10,28 @@ import java.util.logging.Logger;
 
 @Entity
 @Table(
-    name = "dump_config",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-            "request_path", "format", "charset", "destination_uri",
-        }),
-    })
+        name = "dump_config",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {
+                        "request_path", "format", "charset", "destination_uri",
+                }),
+        })
 public class DumpConfiguration extends DatabaseEntry implements Configuration {
 
     public static final MediaType TEXT_CSV = new MediaType("text", "csv");
     public static final MediaType TEXT_TSV = new MediaType("text", "tsv");
 
-    private static Logger log =
-        Logger.getLogger(DumpConfiguration.class.getCanonicalName());
+    private static final Logger log =
+            Logger.getLogger(DumpConfiguration.class.getCanonicalName());
 
-    public static enum Format {
+    public enum Format {
         xml(MediaType.APPLICATION_XML),
         json(MediaType.APPLICATION_JSON),
         csv(TEXT_CSV);
 
         private final MediaType mediaType;
 
-        private Format(MediaType mediaType) {
+        Format(MediaType mediaType) {
             this.mediaType = mediaType;
         }
 
@@ -80,8 +80,8 @@ public class DumpConfiguration extends DatabaseEntry implements Configuration {
     }
 
     public DumpConfiguration(
-        String name, String requestPath, Format format, Charset charset,
-        String schedule, String notes, String destinationURI
+            String name, String requestPath, Format format, Charset charset,
+            String schedule, String notes, String destinationURI
     ) {
         this.name = name;
         this.requestPath = requestPath;

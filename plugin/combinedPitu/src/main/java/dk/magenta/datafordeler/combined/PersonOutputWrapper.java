@@ -57,7 +57,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         if (latest.size() > 1) {
             latest.sort(Comparator.comparing(CprBitemporalPersonRecord::getId));
         }
-        return latest.isEmpty() ? null : latest.get(latest.size()-1);
+        return latest.isEmpty() ? null : latest.get(latest.size() - 1);
     }
 
     public Object wrapRecordResult(PersonEntity input, BaseQuery query) {
@@ -125,7 +125,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         PersonStatusDataRecord personStatusData = this.getLatest(input.getStatus());
         if (personStatusData != null) {
             root.put("statuskode", personStatusData.getStatus());
-            root.put("statuskodedato", this.formatDate(
+            root.put("statuskodedato", formatDate(
                     personStatusData.getEffectFrom() != null ? personStatusData.getEffectFrom() : personStatusData.getRegistrationFrom()
             ));
         }
@@ -160,7 +160,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                     String roadName = lookup.getRoadName();
 
                     if (roadName != null) {
-                        root.put("adresse", this.getAddressFormatted(
+                        root.put("adresse", getAddressFormatted(
                                 roadName,
                                 personAddressData.getHouseNumber(),
                                 null,
@@ -197,7 +197,8 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                     try {
                         int postbox = Integer.parseInt(m.group(1), 10);
                         root.put("postboks", postbox);
-                    } catch (NumberFormatException e) {}
+                    } catch (NumberFormatException e) {
+                    }
                 }
             }
         }
@@ -212,7 +213,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
 
 
         ArrayNode node = objectMapper.createArrayNode();
-        for(PersonEntity sibling : siblingList) {
+        for (PersonEntity sibling : siblingList) {
             ObjectNode siblingObject = objectMapper.createObjectNode();
             siblingObject.put("cprNummer", sibling.getPersonnummer());
             NameDataRecord nameData = this.getLatest(sibling.getName());
@@ -239,7 +240,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
 
     public Object wrapRecordResultFilteredInfo(PersonEntity input, Boolean hasAuthority) {
         NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
-        if(input==null) {
+        if (input == null) {
             return root.getNode();
         }
         root.put("cprNummer", input.getPersonnummer());
@@ -293,7 +294,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                     String roadName = lookup.getRoadName();
 
                     if (roadName != null) {
-                        addressNode.put("adresse", this.getAddressFormatted(
+                        addressNode.put("adresse", getAddressFormatted(
                                 roadName,
                                 personAddressData.getHouseNumber(),
                                 null,
@@ -330,12 +331,13 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                     try {
                         int postbox = Integer.parseInt(m.group(1), 10);
                         addressNode.put("postboks", postbox);
-                    } catch (NumberFormatException e) {}
+                    } catch (NumberFormatException e) {
+                    }
                 }
             }
         }
         root.putPOJO("adresse", addressNode);
-        if(hasAuthority!=null) {
+        if (hasAuthority != null) {
             root.putPOJO("myndighedshaver", hasAuthority);
         }
 
@@ -414,6 +416,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
     }
 
     public static HashMap<Integer, String> countryCodeMap = new HashMap<>();
+
     static {
         countryCodeMap.put(5404, "AF");
         countryCodeMap.put(5299, "XX");

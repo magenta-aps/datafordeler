@@ -19,18 +19,18 @@ import java.util.Set;
  */
 public class SessionManager {
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
-    private static Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
     public SessionManager(SessionManagerConfiguration smConfig) {
         try {
-            this.log.info("Initialize SessionManager");
+            log.info("Initialize SessionManager");
 
             // Create empty configuration object
             Configuration configuration = new Configuration();
 
-            this.log.info("Loading configuration from " + smConfig.getPrimaryHibernateConfigurationFile());
+            log.info("Loading configuration from " + smConfig.getPrimaryHibernateConfigurationFile());
             configuration.configure(smConfig.getPrimaryHibernateConfigurationFile());
 
             Set<Class> managedClasses = new HashSet<>();
@@ -44,7 +44,7 @@ public class SessionManager {
             managedClasses.add(dk.magenta.datafordeler.core.database.LastUpdated.class);
 
             for (Class cls : managedClasses) {
-                this.log.info("Located hardcoded data class "+cls.getCanonicalName());
+                log.info("Located hardcoded data class " + cls.getCanonicalName());
             }
 
             ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
@@ -59,21 +59,20 @@ public class SessionManager {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             for (BeanDefinition component : components) {
                 Class cls = Class.forName(component.getBeanClassName(), true, cl);
-                this.log.info("Located autodetected data class "+cls.getCanonicalName());
+                log.info("Located autodetected data class " + cls.getCanonicalName());
                 managedClasses.add(cls);
             }
             for (Class cls : managedClasses) {
-                this.log.info("Adding managed data class "+cls.getCanonicalName());
+                log.info("Adding managed data class " + cls.getCanonicalName());
                 configuration.addAnnotatedClass(cls);
             }
 
             // Create our session factory
-            this.log.info("Creating SessionFactory");
+            log.info("Creating SessionFactory");
             this.sessionFactory = configuration.buildSessionFactory();
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
-            this.log.error("Initial SessionFactory creation failed.", ex);
+            log.error("Initial SessionFactory creation failed.", ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
@@ -87,7 +86,7 @@ public class SessionManager {
 
     @PreDestroy
     public void shutdown() {
-        this.log.info("Shutting down SessionManager. Closing SessionFactory.");
+        log.info("Shutting down SessionManager. Closing SessionFactory.");
         // Close caches and connection pools
         this.sessionFactory.close();
     }

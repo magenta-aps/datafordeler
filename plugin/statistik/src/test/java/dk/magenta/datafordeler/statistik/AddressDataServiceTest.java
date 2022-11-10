@@ -47,6 +47,7 @@ public class AddressDataServiceTest extends TestBase {
     private TestUtil testUtil;
 
     TestUserDetails testUserDetails;
+
     @Before
     public void initialize() throws Exception {
         testsUtils.setPath();
@@ -66,7 +67,7 @@ public class AddressDataServiceTest extends TestBase {
         ResponseEntity<String> response = restTemplate.exchange("/statistik/address_data/?registrationAfter=2000-01-01", HttpMethod.GET, new HttpEntity("", new HttpHeaders()), String.class);
         Assert.assertEquals(InputStreamReader.readInputStream(AddressDataService.class.getResourceAsStream("/addressServiceForm.html")), response.getBody());
 
-        MultiValueMap<String,Object> form = new LinkedMultiValueMap<String,Object>();
+        MultiValueMap<String, Object> form = new LinkedMultiValueMap<String, Object>();
         form.add("file", new InputStreamResource(AddressDataServiceTest.class.getResourceAsStream("/addressInput.csv")));
 
         response = restTemplate.exchange("/statistik/address_data/?registrationAfter=2000-01-01", HttpMethod.POST, new HttpEntity(form, new HttpHeaders()), String.class);

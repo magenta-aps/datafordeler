@@ -31,7 +31,7 @@ public class PluginNotFoundException extends DataFordelerException {
         } else if (this.schema != null) {
             return "Plugin that handles schema " + this.schema + " was not found";
         } else if (this.uri != null) {
-            return "Plugin that handles URI " + this.uri.toString() + " was not found";
+            return "Plugin that handles URI " + this.uri + " was not found";
         } else {
             return "Plugin lookup on null";
         }

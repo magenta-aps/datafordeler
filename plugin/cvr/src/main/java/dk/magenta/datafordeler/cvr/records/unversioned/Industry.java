@@ -93,6 +93,7 @@ public class Industry extends DatabaseEntry {
 
     /**
      * Obtain an Industry object, either from cache or from database, if it exists, or creates one if it doesn't.
+     *
      * @param industryCode
      * @param industryText
      * @param session
@@ -107,17 +108,17 @@ public class Industry extends DatabaseEntry {
                 industry = session.get(Industry.class, id);
             }
             if (industry == null) {
-                log.debug("Industry code "+industryCode+" not found in cache, querying database");
+                log.debug("Industry code " + industryCode + " not found in cache, querying database");
                 industry = QueryManager.getItem(session, Industry.class, Collections.singletonMap(DB_FIELD_CODE, industryCode));
             }
             if (industry == null) {
-                log.debug("Industry "+industryCode+" not found; creating new");
+                log.debug("Industry " + industryCode + " not found; creating new");
                 industry = new Industry();
                 industry.setIndustryCode(industryCode);
                 industry.setIndustryText(industryText);
                 session.save(industry);
             } else {
-                log.debug("Industry "+industryCode+" found in cache ("+industry.getId()+")");
+                log.debug("Industry " + industryCode + " found in cache (" + industry.getId() + ")");
             }
             industryCache.put(industryCode, industry.getId());
             return industry;

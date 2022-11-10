@@ -16,7 +16,7 @@ public class PersonParser extends CprSubParser<PersonDataRecord> {
     public PersonParser() {
     }
 
-    private Logger log = LogManager.getLogger(PersonParser.class);
+    private final Logger log = LogManager.getLogger(PersonParser.class.getCanonicalName());
 
     @Override
     public Logger getLog() {

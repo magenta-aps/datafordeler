@@ -8,7 +8,7 @@ import org.apache.http.StatusLine;
  */
 public class FailedReferenceException extends HttpStatusException {
 
-    private RegistrationReference reference;
+    private final RegistrationReference reference;
 
     public FailedReferenceException(RegistrationReference reference, StatusLine statusLine) {
         super(statusLine);

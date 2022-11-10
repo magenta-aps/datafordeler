@@ -4,9 +4,9 @@ import dk.magenta.datafordeler.core.io.PluginSourceData;
 
 public class CprSourceData implements PluginSourceData {
 
-    private String schema;
-    private String data;
-    private String id;
+    private final String schema;
+    private final String data;
+    private final String id;
 
     public CprSourceData(String schema, String data, String id) {
         this.schema = schema;

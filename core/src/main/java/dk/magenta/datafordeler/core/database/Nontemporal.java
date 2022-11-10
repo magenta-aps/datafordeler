@@ -13,7 +13,9 @@ public interface Nontemporal {
 
     String DB_FIELD_UPDATED = "dafoUpdated";
     String IO_FIELD_UPDATED = "sidstOpdateret";
+
     OffsetDateTime getDafoUpdated();
+
     void setDafoUpdated(OffsetDateTime dafoUpdated);
     //boolean equalData(Object o);
 

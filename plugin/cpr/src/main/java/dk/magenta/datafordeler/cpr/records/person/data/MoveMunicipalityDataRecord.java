@@ -65,7 +65,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     }
 
 
-
     public static final String DB_FIELD_OUT_DATETIME_UNCERTAIN = "outDatetimeUncertain";
     public static final String IO_FIELD_OUT_DATETIME_UNCERTAIN = "fraflytningsdatoKommuneUsikkerhedsmarkering";
     @Column(name = DB_FIELD_OUT_DATETIME_UNCERTAIN)
@@ -80,7 +79,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     public void setOutDatetimeUncertain(boolean outDatetimeUncertain) {
         this.outDatetimeUncertain = outDatetimeUncertain;
     }
-
 
 
     public static final String DB_FIELD_OUT_MUNICIPALITY = "outMunicipality";
@@ -115,7 +113,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     }
 
 
-
     public static final String DB_FIELD_IN_DATETIME_UNCERTAIN = "inDatetimeUncertain";
     public static final String IO_FIELD_IN_DATETIME_UNCERTAIN = "tilflytningsdatoKommuneUsikkerhedsmarkering";
     @Column(name = DB_FIELD_IN_DATETIME_UNCERTAIN)
@@ -130,7 +127,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     public void setInDatetimeUncertain(boolean inDatetimeUncertain) {
         this.inDatetimeUncertain = inDatetimeUncertain;
     }
-
 
 
     @Override

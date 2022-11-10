@@ -41,7 +41,6 @@ public class OrganizationRecord extends CvrRecord {
     }
 
 
-
     public static final String DB_FIELD_UNIT_NUMBER = "unitNumber";
     public static final String IO_FIELD_UNIT_NUMBER = "enhedsNummerOrganisation";
 
@@ -55,7 +54,6 @@ public class OrganizationRecord extends CvrRecord {
     }
 
 
-
     public static final String DB_FIELD_MAIN_TYPE = "mainType";
     public static final String IO_FIELD_MAIN_TYPE = "hovedtype";
 
@@ -66,7 +64,6 @@ public class OrganizationRecord extends CvrRecord {
     public String getMainType() {
         return this.mainType;
     }
-
 
 
     public static final String DB_FIELD_NAME = "names";
@@ -93,7 +90,6 @@ public class OrganizationRecord extends CvrRecord {
             this.names.add(name);
         }
     }
-
 
 
     public static final String DB_FIELD_ATTRIBUTES = "attributes";
@@ -137,7 +133,6 @@ public class OrganizationRecord extends CvrRecord {
     }
 
 
-
     public static final String DB_FIELD_MEMBERDATA = "memberData";
     public static final String IO_FIELD_MEMBERDATA = "medlemsData";
 
@@ -167,7 +162,6 @@ public class OrganizationRecord extends CvrRecord {
     public Set<OrganizationMemberdataRecord> getMemberData() {
         return this.memberData;
     }
-
 
 
     public void save(Session session) {

@@ -24,16 +24,16 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     public static final String STATUS = GeoLocalityEntity.IO_FIELD_STATUS;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CODE)
-    private List<String> code = new ArrayList<>();
+    private final List<String> code = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAME)
-    private List<String> name = new ArrayList<>();
+    private final List<String> name = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = MUNICIPALITY)
-    private List<String> municipality = new ArrayList<>();
+    private final List<String> municipality = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = STATUS)
-    private List<String> status = new ArrayList<>();
+    private final List<String> status = new ArrayList<>();
 
     public List<String> getCode() {
         return code;
@@ -95,6 +95,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         this.updatedParameters();
         this.addStatus(status);
     }
+
     public void setStatus(int status) {
         this.setStatus(Integer.toString(status));
     }
@@ -139,7 +140,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         return "geo_locality";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("code", GeoLocalityEntity.DB_FIELD_CODE);

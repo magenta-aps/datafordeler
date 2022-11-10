@@ -20,21 +20,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 @Component
 public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord> {
 
     public static final OffsetDateTime MIN_SQL_SERVER_DATETIME = OffsetDateTime.of(
-        1, 1, 1, 0, 0, 0, 0,
-        ZoneOffset.UTC
+            1, 1, 1, 0, 0, 0, 0,
+            ZoneOffset.UTC
     );
 
     @Qualifier("participantRecordService")
@@ -47,7 +43,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
     @Autowired
     private DirectLookup directLookup;
 
-    private Logger log = LogManager.getLogger(ParticipantEntityManager.class);
+    private final Logger log = LogManager.getLogger(ParticipantEntityManager.class);
 
     public ParticipantEntityManager() {
     }
@@ -139,7 +135,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
         );
         Long rowCount = countQuery.getSingleResult();
 
-        for (int i=0; i<=rowCount/1000; i++) {
+        for (int i = 0; i <= rowCount / 1000; i++) {
             Transaction transaction = session.beginTransaction();
             Query<ParticipantRecord> query = session.createQuery(
                     "from " + ParticipantRecord.class.getCanonicalName(),
@@ -154,7 +150,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
                     if (updated) {
                         session.save(participantRecord);
                     }
-                };
+                }
                 session.flush();
                 transaction.commit();
                 session.clear();
@@ -163,7 +159,6 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
             }
         }
     }
-
 
 
 }

@@ -10,8 +10,8 @@ import java.util.*;
 public class TestUserDetails extends DafoUserDetails {
 
     private static final String profileName = "TestProfile";
-    private HashMap<String, UserProfile> userProfiles = new HashMap<>();
-    private HashMap<String, Set<UserProfile>> systemRoles = new HashMap<>();
+    private final HashMap<String, UserProfile> userProfiles = new HashMap<>();
+    private final HashMap<String, Set<UserProfile>> systemRoles = new HashMap<>();
 
     public void addUserProfile(UserProfile userprofile) {
         this.userProfiles.put(userprofile.getName(), userprofile);

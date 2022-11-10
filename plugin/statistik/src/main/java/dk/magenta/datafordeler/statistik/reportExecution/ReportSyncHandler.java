@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class ReportSyncHandler {
 
-    private Logger log = LogManager.getLogger(ReportSyncHandler.class);
-    private Session session;
+    private final Logger log = LogManager.getLogger(ReportSyncHandler.class.getCanonicalName());
+    private final Session session;
 
     public ReportSyncHandler(Session session) {
         this.session = session;
@@ -30,6 +30,7 @@ public class ReportSyncHandler {
 
     /**
      * Create a reportstatus object, reject if there is any which is not done
+     *
      * @param reportStatusObject
      * @return
      * @throws Exception
@@ -64,7 +65,7 @@ public class ReportSyncHandler {
         TypedQuery<ReportAssignment> query = session.createQuery(criteria);
         query.setHint(QueryHints.HINT_CACHEABLE, true);
 
-        return query.getResultList().size()>0;
+        return query.getResultList().size() > 0;
     }
 
     public boolean hasReportsOfStatus(ReportProgressStatus status) {
@@ -77,12 +78,13 @@ public class ReportSyncHandler {
         TypedQuery<ReportAssignment> query = session.createQuery(criteria);
         query.setHint(QueryHints.HINT_CACHEABLE, true);
 
-        return query.getResultList().size()>0;
+        return query.getResultList().size() > 0;
     }
 
 
     /**
      * Set a new status to a report, it is invalid to change status on a failed report
+     *
      * @param reportUuid
      * @param status
      */
@@ -102,7 +104,7 @@ public class ReportSyncHandler {
         TypedQuery<ReportAssignment> query = session.createQuery(criteria);
         query.setHint(QueryHints.HINT_CACHEABLE, true);
 
-        if(query.getResultList().size() > 0) {
+        if (query.getResultList().size() > 0) {
             query.getResultList().get(0).setReportStatus(status);
             session.save(query.getResultList().get(0));
         }
@@ -111,6 +113,7 @@ public class ReportSyncHandler {
 
     /**
      * Get a list of reports attached to a specified collectionUuid
+     *
      * @param collectionUuid
      * @param reportProgressStatus
      * @return
@@ -129,8 +132,8 @@ public class ReportSyncHandler {
 
         TypedQuery<ReportAssignment> query = session.createQuery(criteria);
 
-        for(ReportAssignment report : query.getResultList()) {
-            reports.add(report.getTemplateName()+"_"+report.getReportUuid());
+        for (ReportAssignment report : query.getResultList()) {
+            reports.add(report.getTemplateName() + "_" + report.getReportUuid());
         }
         return reports;
     }

@@ -50,6 +50,7 @@ public class FtpService {
             public String encrypt(String password) {
                 return password;
             }
+
             @Override
             public boolean matches(String passwordToCheck, String storedPassword) {
                 return passwordToCheck.equals(storedPassword);

@@ -41,9 +41,7 @@ public class Monotemporality {
 
         if (((compare & COMPARE_REGISTRATION_FROM) != 0) && (registrationFrom != null ? !registrationFrom.equals(that.registrationFrom) : that.registrationFrom != null))
             return false;
-        if (((compare & COMPARE_REGISTRATION_TO) != 0) && (registrationTo != null ? !registrationTo.equals(that.registrationTo) : that.registrationTo != null))
-            return false;
-        return true;
+        return ((compare & COMPARE_REGISTRATION_TO) == 0) || (registrationTo != null ? registrationTo.equals(that.registrationTo) : that.registrationTo == null);
     }
 
     public boolean equalRegistration(Monotemporality o) {

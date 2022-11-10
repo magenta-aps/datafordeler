@@ -2,7 +2,7 @@ package dk.magenta.datafordeler.core.exception;
 
 public class InvalidReferenceException extends DataFordelerException {
 
-    private String reference;
+    private final String reference;
 
     public InvalidReferenceException(String reference) {
         this.reference = reference;

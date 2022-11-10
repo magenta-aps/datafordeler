@@ -13,10 +13,10 @@ public abstract class CprRegistration<E extends Entity<E, R>, R extends CprRegis
         for (V effect : this.effects) {
             if (
                     Equality.equal(effect.getEffectFrom(), effectFrom) &&
-                    Equality.equal(effect.getEffectTo(), effectTo) &&
+                            Equality.equal(effect.getEffectTo(), effectTo) &&
                             (effect.getEffectFromUncertain() == effectFromUncertain) &&
                             (effect.getEffectToUncertain() == effectToUncertain)
-                    ) {
+            ) {
                 return effect;
             }
         }

@@ -13,49 +13,49 @@ import java.util.Set;
  */
 public class NoDBUserQueryManager extends UserQueryManager {
 
-  @Override
-  public int getUserProfileIdByName(String name) {
-    return UserQueryManager.INVALID_USERPROFILE_ID;
-  }
+    @Override
+    public int getUserProfileIdByName(String name) {
+        return UserQueryManager.INVALID_USERPROFILE_ID;
+    }
 
-  @Override
-  public List<String> getSystemRoleNamesByUserProfileId(int databaseId) {
-    return Collections.EMPTY_LIST;
-  }
+    @Override
+    public List<String> getSystemRoleNamesByUserProfileId(int databaseId) {
+        return Collections.EMPTY_LIST;
+    }
 
-  @Override
-  public List<AreaRestriction> getAreaRestrictionsByUserProfileId(int databaseId) {
-    return Collections.EMPTY_LIST;
-  }
+    @Override
+    public List<AreaRestriction> getAreaRestrictionsByUserProfileId(int databaseId) {
+        return Collections.EMPTY_LIST;
+    }
 
-  @Override
-  public Set<String> getAllStoredSystemRoleNames() {
-    return Collections.EMPTY_SET;
-  }
+    @Override
+    public Set<String> getAllStoredSystemRoleNames() {
+        return Collections.EMPTY_SET;
+    }
 
-  @Override
-  public void insertSystemRole(SystemRole systemRole) {
-  }
+    @Override
+    public void insertSystemRole(SystemRole systemRole) {
+    }
 
-  @Override
-  public Set<String> getAllAreaRestrictionTypeLookupNames() {
-    return Collections.EMPTY_SET;
-  }
+    @Override
+    public Set<String> getAllAreaRestrictionTypeLookupNames() {
+        return Collections.EMPTY_SET;
+    }
 
-  @Override
-  public Set<String> getAllAreaRestrictionLookupNames() {
-    return Collections.EMPTY_SET;
-  }
+    @Override
+    public Set<String> getAllAreaRestrictionLookupNames() {
+        return Collections.EMPTY_SET;
+    }
 
-  @Override
-  public void insertAreaRestrictionType(AreaRestrictionType areaRestrictionType) {
-  }
+    @Override
+    public void insertAreaRestrictionType(AreaRestrictionType areaRestrictionType) {
+    }
 
-  @Override
-  public void insertAreaRestriction(AreaRestriction areaRestriction) {
-  }
+    @Override
+    public void insertAreaRestriction(AreaRestriction areaRestriction) {
+    }
 
-  @Override
-  public void checkConnection() {
-  }
+    @Override
+    public void checkConnection() {
+    }
 }

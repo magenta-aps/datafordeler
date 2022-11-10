@@ -21,58 +21,63 @@ import java.net.URISyntaxException;
 @EnableConfigurationProperties(TokenConfigProperties.class)
 public class SamlMetadataConfiguration {
 
-  @Bean
-  public MetadataProvider samlMetadataProvider(TokenConfigProperties config)
-      throws ResourceException, MetadataProviderException, URISyntaxException, IOException {
-    String path = config.getIssuerMetadataPath();
-    File metadataFile;
-    if (path == null) {
-      // Copy the classpath resource sts metadata to a temporary file
-      Resource resource = new ClasspathResource(
-          "/dk/magenta/datafordeler/core/user/sts_metadata.xml"
-      );
-      metadataFile = File.createTempFile("sts_metadata","xml");
-      InputStream inputStream = null;
-      OutputStream outputStream = null;
-      try {
-        inputStream = resource.getInputStream();
-        outputStream = new FileOutputStream(metadataFile);
+    @Bean
+    public MetadataProvider samlMetadataProvider(TokenConfigProperties config)
+            throws ResourceException, MetadataProviderException, URISyntaxException, IOException {
+        String path = config.getIssuerMetadataPath();
+        File metadataFile;
+        if (path == null) {
+            // Copy the classpath resource sts metadata to a temporary file
+            Resource resource = new ClasspathResource(
+                    "/dk/magenta/datafordeler/core/user/sts_metadata.xml"
+            );
+            metadataFile = File.createTempFile("sts_metadata", "xml");
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            try {
+                inputStream = resource.getInputStream();
+                outputStream = new FileOutputStream(metadataFile);
 
-        int read = 0;
-        byte[] bytes = new byte[1024];
+                int read = 0;
+                byte[] bytes = new byte[1024];
 
-        while ((read = inputStream.read(bytes)) != -1) {
-          outputStream.write(bytes, 0, read);
+                while ((read = inputStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (outputStream != null) {
+                    try {
+                        outputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            metadataFile = new File(path);
         }
-      }
-      finally {
-        if (inputStream != null) {
-          try { inputStream.close(); }
-          catch (IOException e) { e.printStackTrace(); }
-        }
-        if (outputStream != null) {
-          try { outputStream.close(); }
-          catch (IOException e) { e.printStackTrace(); }
-        }
-      }
-    } else {
-      metadataFile = new File(path);
+        FilesystemMetadataProvider provider = new FilesystemMetadataProvider(metadataFile);
+        provider.setRequireValidMetadata(false);
+        provider.setParserPool(new BasicParserPool());
+        provider.initialize();
+        return provider;
     }
-    FilesystemMetadataProvider provider = new FilesystemMetadataProvider(metadataFile);
-    provider.setRequireValidMetadata(false);
-    provider.setParserPool(new BasicParserPool());
-    provider.initialize();
-    return provider;
-  }
 
-  @Bean
-  public ExplicitKeySignatureTrustEngine trustEngine(MetadataProvider metadataProvider) {
-    MetadataProvider mdProvider = metadataProvider;
-    MetadataCredentialResolver mdCredResolver = new MetadataCredentialResolver(mdProvider);
-    KeyInfoCredentialResolver keyInfoCredResolver =
-        Configuration.getGlobalSecurityConfiguration().getDefaultKeyInfoCredentialResolver();
-    return new ExplicitKeySignatureTrustEngine(mdCredResolver, keyInfoCredResolver);
-  }
+    @Bean
+    public ExplicitKeySignatureTrustEngine trustEngine(MetadataProvider metadataProvider) {
+        MetadataProvider mdProvider = metadataProvider;
+        MetadataCredentialResolver mdCredResolver = new MetadataCredentialResolver(mdProvider);
+        KeyInfoCredentialResolver keyInfoCredResolver =
+                Configuration.getGlobalSecurityConfiguration().getDefaultKeyInfoCredentialResolver();
+        return new ExplicitKeySignatureTrustEngine(mdCredResolver, keyInfoCredResolver);
+    }
 
 
 }

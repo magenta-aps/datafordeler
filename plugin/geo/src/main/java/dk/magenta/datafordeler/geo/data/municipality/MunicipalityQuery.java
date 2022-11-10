@@ -18,10 +18,10 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     public static final String NAME = GeoMunicipalityEntity.IO_FIELD_NAME;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = CODE)
-    private List<String> code = new ArrayList<>();
+    private final List<String> code = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAME)
-    private List<String> name = new ArrayList<>();
+    private final List<String> name = new ArrayList<>();
 
     public List<String> getCode() {
         return code;
@@ -97,7 +97,7 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
         return "geo_municipality";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("code", GeoMunicipalityEntity.DB_FIELD_CODE);

@@ -33,7 +33,6 @@ public abstract class CvrBitemporalDataMetaRecord extends CvrBitemporalDataRecor
     }
 
 
-
     public static final String DB_FIELD_UNIT_METADATA = "unitMetadataRecord";
 
     @ManyToOne(targetEntity = CompanyUnitMetadataRecord.class, fetch = FetchType.LAZY)
@@ -44,7 +43,6 @@ public abstract class CvrBitemporalDataMetaRecord extends CvrBitemporalDataRecor
     public void setUnitMetadataRecord(CompanyUnitMetadataRecord unitMetadataRecord) {
         this.unitMetadataRecord = unitMetadataRecord;
     }
-
 
 
     public static final String DB_FIELD_PARTICIPANT_METADATA = "participantMetadataRecord";

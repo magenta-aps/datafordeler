@@ -44,7 +44,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_UNITTYPE = "unitType";
     public static final String IO_FIELD_UNITTYPE = "enhedstype";
 
@@ -55,7 +54,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public String getUnitType() {
         return this.unitType;
     }
-
 
 
     public static final String DB_FIELD_CVRNUMBER = "cvrNumber";
@@ -70,7 +68,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_REGISTER_ERROR = "registerError";
     public static final String IO_FIELD_REGISTER_ERROR = "fejlRegistreret";
 
@@ -81,7 +78,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public boolean getRegisterError() {
         return this.registerError;
     }
-
 
 
     public static final String DB_FIELD_REG_NUMBER = "regNumber";
@@ -110,7 +106,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_NAMES = "names";
     public static final String IO_FIELD_NAMES = "navne";
 
@@ -135,7 +130,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public BitemporalSet<BaseNameRecord> getNames() {
         return new BitemporalSet<>(this.names);
     }
-
 
 
     public static final String DB_FIELD_LIFECYCLE = "lifecycle";
@@ -164,8 +158,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
 
-
-
     public static final String DB_FIELD_STATUS = "status";
     public static final String IO_FIELD_STATUS = "status";
 
@@ -190,7 +182,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public BitemporalSet<StatusRecord> getStatus() {
         return new BitemporalSet<>(this.status);
     }
-
 
 
     public static final String DB_FIELD_COMPANYSTATUS = "companyStatus";
@@ -220,8 +211,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
 
-
-
     public static final String DB_FIELD_FORM = "form";
     public static final String IO_FIELD_FORM = "virksomhedsform";
 
@@ -248,9 +237,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
 
-
-
-
     @OneToOne(targetEntity = CompanyParticipantRelationRecord.class, mappedBy = CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION)
     @JsonIgnore
     private CompanyParticipantRelationRecord companyParticipantRelationRecord;
@@ -260,9 +246,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
 
-
     public UUID generateUUID() {
-        String uuidInput = "participant:"+this.unitType+"/"+this.unitNumber;
+        String uuidInput = "participant:" + this.unitType + "/" + this.unitNumber;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
 

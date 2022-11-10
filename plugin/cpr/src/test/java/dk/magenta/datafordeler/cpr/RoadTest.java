@@ -18,7 +18,6 @@ import dk.magenta.datafordeler.cpr.records.road.data.RoadNameBitemporalRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.json.JSONException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -126,7 +125,7 @@ public class RoadTest extends TestBase {
 
             //Validate jsonresponse
             String jsonResponse = this.getObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(entity);
-            JSONAssert.assertEquals("{\"navn\":[{\"vejnavn\":\"Aalborggade\"}]}", jsonResponse, JSONCompareMode.LENIENT);
+            assertJsonContains("{\"navn\":[{\"vejnavn\":\"Aalborggade\"}]}", jsonResponse);
 
 
             //Search for road-name
@@ -146,8 +145,6 @@ public class RoadTest extends TestBase {
             Assert.assertEquals(3, entities.size());
 
 
-        } catch (JSONException e) {
-            e.printStackTrace();
         } finally {
             transaction.rollback();
             session.close();
@@ -181,9 +178,8 @@ public class RoadTest extends TestBase {
         JsonNode results = jsonBody.get("results");
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(9, results.size());
-        System.out.println(this.getObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(results));
 
-        for (int i=0; i<results.size(); i++) {
+        for (int i = 0; i < results.size(); i++) {
             ObjectNode roadNode = (ObjectNode) results.get(i);
             Assert.assertEquals(0, roadNode.get("navn").size());
             Assert.assertEquals(0, roadNode.get("by").size());
@@ -198,13 +194,12 @@ public class RoadTest extends TestBase {
         response = restSearch(searchParameters, "road");
         Assert.assertEquals(200, response.getStatusCode().value());
         jsonBody = this.getObjectMapper().readTree(response.getBody());
-        System.out.println(getObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(jsonBody));
         results = jsonBody.get("results");
         Assert.assertTrue(results.isArray());
         Assert.assertEquals(9, results.size());
 
 
-        for (int i=0; i<results.size(); i++) {
+        for (int i = 0; i < results.size(); i++) {
             ObjectNode roadNode = (ObjectNode) results.get(i);
             Assert.assertTrue(roadNode.get("navn").size() > 0);
         }
@@ -239,7 +234,6 @@ public class RoadTest extends TestBase {
             Assert.assertEquals("Randers SV", lookupDTO.getPostalDistrict());
         }
     }
-
 
 
     @Test

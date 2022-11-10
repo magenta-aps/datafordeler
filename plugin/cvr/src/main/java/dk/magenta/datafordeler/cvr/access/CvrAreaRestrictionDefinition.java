@@ -7,7 +7,7 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 
 public class CvrAreaRestrictionDefinition extends AreaRestrictionDefinition {
 
-    private CvrPlugin plugin;
+    private final CvrPlugin plugin;
 
     public static final String RESTRICTIONTYPE_KOMMUNEKODER = "kommunekoder";
     public static final String RESTRICTION_KOMMUNE_KUJALLEQ = "Kujalleq";

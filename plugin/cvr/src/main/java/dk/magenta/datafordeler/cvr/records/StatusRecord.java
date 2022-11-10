@@ -48,7 +48,6 @@ public class StatusRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_STATUSCODE = "statusCode";
     public static final String IO_FIELD_STATUSCODE = "statuskode";
 
@@ -65,7 +64,6 @@ public class StatusRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_CREDITDATATEXT = "creditDataText";
     public static final String IO_FIELD_CREDITDATATEXT = "kreditoplysningtekst";
 
@@ -80,7 +78,6 @@ public class StatusRecord extends CvrBitemporalDataRecord {
     public void setCreditDataText(String creditDataText) {
         this.creditDataText = creditDataText;
     }
-
 
 
     public static final String DB_FIELD_CREDITDATACODE = "creditDataCode";

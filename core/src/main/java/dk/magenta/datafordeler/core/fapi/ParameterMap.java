@@ -39,7 +39,7 @@ public class ParameterMap extends ListHashMap<String, String> {
 
     public void urldecode() {
         for (String key : this.keySet()) {
-            List<String> list =  this.get(key);
+            List<String> list = this.get(key);
             this.put(key, new ArrayList<>(list.stream().map(v -> URLDecoder.decode(v, StandardCharsets.UTF_8)).collect(Collectors.toList())));
         }
     }

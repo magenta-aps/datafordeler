@@ -28,22 +28,22 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     }
 
     @QueryField(type = QueryField.FieldType.INT, queryName = CODE)
-    private List<String> code = new ArrayList<>();
+    private final List<String> code = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAME)
-    private List<String> name = new ArrayList<>();
+    private final List<String> name = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = ADDRESSING_NAME)
-    private List<String> addressingName = new ArrayList<>();
+    private final List<String> addressingName = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = LOCALITY)
-    private List<String> locality = new ArrayList<>();
+    private final List<String> locality = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = LOCALITY)
-    private List<UUID> localityUUID = new ArrayList<>();
+    private final List<UUID> localityUUID = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = MUNICIPALITY)
-    private List<String> municipalityCode = new ArrayList<>();
+    private final List<String> municipalityCode = new ArrayList<>();
 
 
     public List<String> getCode() {
@@ -114,7 +114,6 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
             this.updatedParameters();
         }
     }
-
 
 
     public List<UUID> getLocalityUUID() {
@@ -196,15 +195,13 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     }
 
 
-
-
     @Override
     public Set<String> getJoinHandles() {
         return super.getJoinHandles();
     }
 
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("code", GeoRoadEntity.DB_FIELD_CODE);

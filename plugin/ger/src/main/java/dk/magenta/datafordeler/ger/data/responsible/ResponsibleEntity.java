@@ -28,7 +28,7 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
 
     public static final String TABLE_NAME = "ger_participant";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "Participant";
 
 
@@ -40,10 +40,9 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
     public static UUID generateUUID(int gerNr, UUID cvrParticipantGuid) {
-        String uuidInput = "responsible:"+gerNr+"|"+cvrParticipantGuid.toString();
+        String uuidInput = "responsible:" + gerNr + "|" + cvrParticipantGuid.toString();
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
-
 
 
     public static final String DB_FIELD_GERNR = "gerNumber";
@@ -61,7 +60,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_OPERATION_FORM_CODE = "operationFormCode";
     public static final String IO_FIELD_OPERATION_FORM_CODE = "driftsformKode";
     @Column(name = DB_FIELD_OPERATION_FORM_CODE)
@@ -77,7 +75,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_OPERATION_FORM_TEXT = "operationFormText";
     public static final String IO_FIELD_OPERATION_FORM_TEXT = "driftsformTekst";
     @Column(name = DB_FIELD_OPERATION_FORM_TEXT)
@@ -91,7 +88,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     public void setOperationFormText(String operationFormText) {
         this.operationFormText = operationFormText;
     }
-
 
 
     public static final String DB_FIELD_JE_END_DATE = "jeEndDate";
@@ -124,8 +120,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
-
     public static final String DB_FIELD_RELATION_START_DATE = "relationStartDate";
     public static final String IO_FIELD_RELATION_START_DATE = "relationStartDato";
     @Column(name = DB_FIELD_RELATION_START_DATE)
@@ -155,9 +149,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
-
-
     public static final String DB_FIELD_RELATION_CREATE_DATE = "relationCreateDate";
     public static final String IO_FIELD_RELATION_CREATE_DATE = "relationOpretDato";
     @Column(name = DB_FIELD_RELATION_CREATE_DATE)
@@ -172,7 +163,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     public void setRelationCreateDate(LocalDate relationCreateDate) {
         this.relationCreateDate = relationCreateDate;
     }
-
 
 
     public static final String DB_FIELD_RELATION_UPDATE_DATE = "relationUpdateDate";
@@ -190,8 +180,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
-
     public static final String DB_FIELD_CVR_PARTICIPANT_GUID = "cvrParticipantGuid";
     public static final String IO_FIELD_CVR_PARTICIPANT_GUID = "cvrDeltagerGuid";
     @Column(name = DB_FIELD_CVR_PARTICIPANT_GUID)
@@ -205,7 +193,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     public void setCvrParticipantGuid(UUID cvrParticipantGuid) {
         this.cvrParticipantGuid = cvrParticipantGuid;
     }
-
 
 
     public static final String DB_FIELD_UNIT_NUMBER = "unitNumber";
@@ -223,7 +210,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_UNIT_TYPE = "unitType";
     public static final String IO_FIELD_UNIT_TYPE = "enhedsType";
     @Column(name = DB_FIELD_UNIT_TYPE)
@@ -239,7 +225,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_NAME = "name";
     public static final String IO_FIELD_NAME = "navn";
     @Column(name = DB_FIELD_NAME)
@@ -253,7 +238,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     public void setName(String name) {
         this.name = name;
     }
-
 
 
     public static final String DB_FIELD_CPR = "cprNumber";
@@ -275,8 +259,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
-
     public static final String DB_FIELD_CVR = "cvrNumber";
     public static final String IO_FIELD_CVR = "cvrNumber";
     @Column(name = DB_FIELD_CVR)
@@ -290,7 +272,6 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     public void setCvrNumber(Integer cvrNumber) {
         this.cvrNumber = cvrNumber;
     }
-
 
 
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";

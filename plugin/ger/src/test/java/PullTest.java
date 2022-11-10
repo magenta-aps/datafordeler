@@ -27,7 +27,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;
@@ -97,7 +96,7 @@ public class PullTest {
                 Map<String, Object> backConverted = convertToRawData(companyMap, CompanyEntityManager.getKeyMappingEntityToRaw());
 
                 for (String key : rawData.keySet()) {
-                    Assert.assertTrue(key+" expected", backConverted.containsKey(key));
+                    Assert.assertTrue(key + " expected", backConverted.containsKey(key));
                     Object rawValue = rawData.get(key);
                     Object backConvertedValue = backConverted.get(key);
                     if (rawValue instanceof Date) {
@@ -111,10 +110,10 @@ public class PullTest {
                     if (!Objects.equals(String.valueOf(rawValue), String.valueOf(backConvertedValue))) {
                         Object c = companyMap.get(CompanyEntityManager.getKeyMappingRawToEntity().get(key));
                         System.out.println(
-                                rawData.get("GERNR")+" "+key+" = "+
-                                rawValue+(rawValue != null ? (" ("+(rawValue.getClass().getSimpleName())+")") : "")+
-                                " | "+
-                                c +(c!=null ? (" ("+c.getClass().getSimpleName()+")") : "")
+                                rawData.get("GERNR") + " " + key + " = " +
+                                        rawValue + (rawValue != null ? (" (" + (rawValue.getClass().getSimpleName()) + ")") : "") +
+                                        " | " +
+                                        c + (c != null ? (" (" + c.getClass().getSimpleName() + ")") : "")
                         );
                     }
                 }
@@ -136,7 +135,7 @@ public class PullTest {
                 Map<String, Object> backConverted = convertToRawData(unitMap, UnitEntityManager.getKeyMappingEntityToRaw());
 
                 for (String key : rawData.keySet()) {
-                    Assert.assertTrue(key+" expected", backConverted.containsKey(key));
+                    Assert.assertTrue(key + " expected", backConverted.containsKey(key));
                     Object rawValue = rawData.get(key);
                     Object backConvertedValue = backConverted.get(key);
                     if (rawValue instanceof Date) {
@@ -150,10 +149,10 @@ public class PullTest {
                     if (!Objects.equals(String.valueOf(rawValue), String.valueOf(backConvertedValue))) {
                         Object c = unitMap.get(UnitEntityManager.getKeyMappingRawToEntity().get(key));
                         System.out.println(
-                                rawData.get("GERNR")+" "+key+" = "+
-                                        rawValue+(rawValue != null ? (" ("+(rawValue.getClass().getSimpleName())+")") : "")+
-                                        " | "+
-                                        c +(c!=null ? (" ("+c.getClass().getSimpleName()+")") : "")
+                                rawData.get("GERNR") + " " + key + " = " +
+                                        rawValue + (rawValue != null ? (" (" + (rawValue.getClass().getSimpleName()) + ")") : "") +
+                                        " | " +
+                                        c + (c != null ? (" (" + c.getClass().getSimpleName() + ")") : "")
                         );
                     }
                 }
@@ -177,7 +176,7 @@ public class PullTest {
                 Map<String, Object> backConverted = convertToRawData(respMap, ResponsibleEntityManager.getKeyMappingEntityToRaw());
 
                 for (String key : rawData.keySet()) {
-                    Assert.assertTrue(key+" expected", backConverted.containsKey(key));
+                    Assert.assertTrue(key + " expected", backConverted.containsKey(key));
                     Object rawValue = rawData.get(key);
                     Object backConvertedValue = backConverted.get(key);
                     if (rawValue instanceof Date) {
@@ -192,10 +191,10 @@ public class PullTest {
                         //Object c = respMap.get(ResponsibleEntityManager.getKeyMappingRawToEntity().get(key));
                         Object c = backConvertedValue;
                         System.out.println(
-                                rawData.get("GERNR")+" "+key+" = "+
-                                        rawValue+(rawValue != null ? (" ("+(rawValue.getClass().getSimpleName())+")") : "")+
-                                        " | "+
-                                        c +(c!=null ? (" ("+c.getClass().getSimpleName()+")") : "")
+                                rawData.get("GERNR") + " " + key + " = " +
+                                        rawValue + (rawValue != null ? (" (" + (rawValue.getClass().getSimpleName()) + ")") : "") +
+                                        " | " +
+                                        c + (c != null ? (" (" + c.getClass().getSimpleName() + ")") : "")
                         );
                     }
                 }
@@ -215,11 +214,11 @@ public class PullTest {
                 LocalDate localDate = (LocalDate) value;
                 value = new Date(localDate.getYear() - 1900, localDate.getMonthValue() - 1, localDate.getDayOfMonth());
             } else if (value instanceof Boolean) {
-                value = (Boolean) value ? "J":"N";
+                value = (Boolean) value ? "J" : "N";
             } else if (value instanceof Integer) {
                 value = ((Integer) value).longValue();
             } else if (value instanceof UUID) {
-                value = ((UUID) value).toString().toUpperCase();
+                value = value.toString().toUpperCase();
             }
             map.put(keyMapping.get(key), value);
         }

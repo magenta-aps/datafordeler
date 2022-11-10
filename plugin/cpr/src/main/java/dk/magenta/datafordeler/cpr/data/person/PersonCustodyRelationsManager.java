@@ -28,7 +28,7 @@ import static java.util.Comparator.naturalOrder;
 @Component
 public class PersonCustodyRelationsManager {
 
-    private static Comparator bitemporalComparator = Comparator.comparing(PersonCustodyRelationsManager::getBitemporality, BitemporalityComparator.ALL)
+    private static final Comparator bitemporalComparator = Comparator.comparing(PersonCustodyRelationsManager::getBitemporality, BitemporalityComparator.ALL)
             .thenComparing(CprNontemporalRecord::getOriginDate, Comparator.nullsLast(naturalOrder()))
             .thenComparing(CprNontemporalRecord::getDafoUpdated)
             .thenComparing(DatabaseEntry::getId);
@@ -44,38 +44,37 @@ public class PersonCustodyRelationsManager {
         List<PersonEntity> requestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
         List<ChildInfo> collectiveCustodyArrayList = new ArrayList<ChildInfo>();
         //Empty list is the person is not found in datafordeler
-        if(requestedInstancesOfPerson.isEmpty()) {
+        if (requestedInstancesOfPerson.isEmpty()) {
             throw new HttpNotFoundException("No entity with CPR number " + pnr + " was found");
         }
-
 
 
         //there can not be more then one person with that cpr-number
         //Find all children of the person
         List<String> childCprArrayList = new ArrayList<String>();
 
-        Set<ChildrenDataRecord>  childrenList = requestedInstancesOfPerson.get(0).getChildren();
+        Set<ChildrenDataRecord> childrenList = requestedInstancesOfPerson.get(0).getChildren();
 
-        for(ChildrenDataRecord child : childrenList) {
+        for (ChildrenDataRecord child : childrenList) {
             childCprArrayList.add(child.getChildCprNumber());
         }
 
         //Lookup all the found children
         query = new PersonRecordQuery();
         query.setPageSize(40);
-        for(String item : childCprArrayList) {
+        for (String item : childCprArrayList) {
             query.addPersonnummer(item);
         }
-        if(!childCprArrayList.isEmpty()) {
+        if (!childCprArrayList.isEmpty()) {
             List<PersonEntity> childrenOfTheRequestedPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
             for (PersonEntity child : childrenOfTheRequestedPerson) {
                 BirthTimeDataRecord birthTime = findNewestUnclosed(child.getBirthTime());
                 String childsFather = "";
-                if(child.getFather().size()>0) {
-                       childsFather = findNewestUnclosed(child.getFather()).getCprNumber();
+                if (child.getFather().size() > 0) {
+                    childsFather = findNewestUnclosed(child.getFather()).getCprNumber();
                 }
                 String childsMother = "";
-                if(child.getMother().size()>0) {
+                if (child.getMother().size() > 0) {
                     childsMother = findNewestUnclosed(child.getMother()).getCprNumber();
                 }
 
@@ -89,10 +88,10 @@ public class PersonCustodyRelationsManager {
                     collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), QueryManager.getAllEntities(session, query, PersonEntity.class).get(0).getStatus().current().get(0).getStatus()));
                 } else {
                     List<CustodyDataRecord> currentCustodyList = child.getCustody().current();
-                    boolean motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3);
-                    boolean fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4);
+                    boolean motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType() == 3);
+                    boolean fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType() == 4);
 
-                    if(motherhasCustody && childsMother.equals(pnr) || fatherhasCustody && childsFather.equals(pnr)) {
+                    if (motherhasCustody && childsMother.equals(pnr) || fatherhasCustody && childsFather.equals(pnr)) {
                         query = new PersonRecordQuery();
                         query.setPersonnummer(child.getPersonnummer());
                         collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), QueryManager.getAllEntities(session, query, PersonEntity.class).get(0).getStatus().current().get(0).getStatus()));
@@ -105,12 +104,11 @@ public class PersonCustodyRelationsManager {
         query = new PersonRecordQuery();
         query.addCustodyPnr(pnr);
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
-        for(PersonEntity personEntityItem : entities) {
+        for (PersonEntity personEntityItem : entities) {
             collectiveCustodyArrayList.add(new ChildInfo(personEntityItem.getPersonnummer(), personEntityItem.getStatus().current().get(0).getStatus()));
         }
         return collectiveCustodyArrayList;
     }
-
 
 
     public class ChildInfo {
@@ -119,7 +117,7 @@ public class PersonCustodyRelationsManager {
 
 
         public ChildInfo(String pnr, int status) {
-            this.pnr =pnr;
+            this.pnr = pnr;
             this.status = status;
         }
 
@@ -142,10 +140,10 @@ public class PersonCustodyRelationsManager {
     }
 
 
-
     /**
      * Find the newest unclosed record from the list of records
      * Records with a missing OriginDate is also removed since they are considered invalid
+     *
      * @param records
      * @param <R>
      * @return

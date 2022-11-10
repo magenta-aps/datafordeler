@@ -166,24 +166,24 @@
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.1</version>
-            <configuration>
-                <source>${java.version}</source>
-                <target>${java.version}</target>
-                <forceJavacCompilerUse>true</forceJavacCompilerUse>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-                <outputDirectory>../jar</outputDirectory>
-            </configuration>
-            <version>3.1.2</version>
-        </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>../jar</outputDirectory>
+                </configuration>
+                <version>3.1.2</version>
+            </plugin>
         </plugins>
     </build>
 </project>

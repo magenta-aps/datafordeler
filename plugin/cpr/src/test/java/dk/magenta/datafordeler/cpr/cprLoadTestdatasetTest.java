@@ -53,7 +53,8 @@ public class cprLoadTestdatasetTest {
     private PersonEntityManager personEntityManager;
 
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("person", PersonEntity.schema);
     }
@@ -89,115 +90,10 @@ public class cprLoadTestdatasetTest {
         session.close();
     }
 
-    /**
-     * This test is parly used for the generation of information about persons in testdata
-     * @throws DataFordelerException
-     * @throws IOException
-     * @throws URISyntaxException
-     */
-    // This is disabled since it is just for writing testdata to console
-    public void test_A_LoadingOfDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
-            ImportMetadata importMetadata = new ImportMetadata();
-            importMetadata.setTransactionInProgress(true);
-            importMetadata.setSession(session);
-            this.loadPersonWithOrigin(importMetadata);
-            tx.commit();
-            session.close();
-        }
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            PersonRecordQuery query = new PersonRecordQuery();
-            query.setEffectToAfter(OffsetDateTime.now());
-            query.setEffectFromBefore(OffsetDateTime.now());
-            query.setRegistrationToAfter(OffsetDateTime.now());
-            query.setRegistrationFromBefore(OffsetDateTime.now());
-            /*query.addKommunekode(956);
-            query.addKommunekode(960);*/
-            query.applyFilters(session);
-            query.setPageSize(100);
-            List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(87, persons.size());
-
-            for(PersonEntity person : persons) {
-                System.out.print(person.getPersonnummer());
-                if(person.getName().size()>0) {
-                    NameDataRecord name = person.getName().current().iterator().next();
-                    System.out.println(" - "+name.getFirstNames()+" "+name.getMiddleName()+" "+name.getLastName());
-                }
-                if(person.getAddress().size()>0) {
-                    AddressDataRecord add = person.getAddress().current().iterator().next();
-                    System.out.print("Kommunekode: "+add.getMunicipalityCode());
-                    System.out.print(" Vejkode: "+add.getRoadCode());
-                    System.out.println(" Husnummer: "+add.getHouseNumber());
-
-                }
-                if(person.getForeignAddress().size()>0) {
-                    ForeignAddressDataRecord add = person.getForeignAddress().current().iterator().next();
-                    System.out.print("Udenlandskadresse: "+add.getAddressLine1());
-                    System.out.print(" "+add.getAddressLine2());
-                    System.out.print(" "+add.getAddressLine3());
-                    System.out.println(" "+ add.getAddressLine5());
-                }
-                System.out.println(person.getPersonnummer());
-                Assert.assertEquals(1, person.getCivilstatus().size());//ALWAYS 1
-                if(person.getCivilstatus().size()>0) {
-                    CivilStatusDataRecord civil = person.getCivilstatus().current().iterator().next();
-                    System.out.println("Civilstand: "+civil.getCivilStatus());
-                }
-                if(person.getMother().size()>0) {
-                    ParentDataRecord parent = person.getMother().current().iterator().next();
-                    System.out.println("Mor: "+parent.getCprNumber());
-                }
-                if(person.getFather().size()>0) {
-                    ParentDataRecord parent = person.getFather().current().iterator().next();
-                    System.out.println("Far: "+parent.getCprNumber());
-                }
-
-                Assert.assertEquals(1, person.getBirthTime().size());
-                if(person.getBirthTime().size()>0) {//ALWAYS 1
-                    BirthTimeDataRecord birth = person.getBirthTime().iterator().next();
-                    System.out.println("Fødselstidspunkt: "+birth.getBirthDatetime());
-                }
-                System.out.println("---------------------------------------------");
-            }
-        }
-    }
-
-
-
-    // This is disabled since it is just for writing testdata to console
-    public void test_B_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
-
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            PersonRecordQuery query = new PersonRecordQuery();
-            query.applyFilters(session);
-            query.setPageSize(100);
-            List<PersonEntity> persons = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(51, persons.size());
-
-            query = new PersonRecordQuery();
-            query.setPersonnummer("1111111111");
-            query.addPersonnummer("1111111112");
-            query.addPersonnummer("1111111113");
-            persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(3, persons.size());
-            Assert.assertEquals(2, persons.get(0).getAddress().size());
-            Assert.assertEquals(2, persons.get(1).getAddress().size());
-            Assert.assertEquals(2, persons.get(2).getAddress().size());
-        }
-    }
-
-
-    // This is disabled since it is just for writing testdata to console
-    public void test_C_ClearingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
-        personEntityManager.cleanDemoData();
-    }
 
     /**
      * Confirm that all the loaded persons is cleared again
+     *
      * @throws DataFordelerException
      * @throws IOException
      * @throws URISyntaxException

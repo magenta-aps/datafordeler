@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.data.util.Pair;
 
 import java.nio.charset.StandardCharsets;
 import java.time.*;
@@ -22,20 +23,21 @@ import java.util.stream.Collectors;
 public abstract class BaseQuery {
 
     public static final String separator = ".";
-    public static final String[] PARAM_PAGE = new String[] {"side", "page"};
-    public static final String[] PARAM_PAGESIZE = new String[] {"sidestoerrelse", "pageSize"};
-    public static final String[] PARAM_REGISTRATION_FROM_BEFORE = new String[] {"registreringFraFør", "registrationFromBefore"};
-    public static final String[] PARAM_REGISTRATION_FROM_AFTER = new String[] {"registreringFraEfter", "registrationFromAfter", "registreringFra", "registrationFrom"};
-    public static final String[] PARAM_REGISTRATION_TO_BEFORE = new String[] {"registreringTilFør", "registrationToBefore", "registreringTil", "registrationTo"};
-    public static final String[] PARAM_REGISTRATION_TO_AFTER = new String[] {"registreringTilEfter", "registrationToAfter"};
-    public static final String[] PARAM_EFFECT_FROM_BEFORE = new String[] {"virkningFraFør", "effectFromBefore"};
-    public static final String[] PARAM_EFFECT_FROM_AFTER = new String[] {"virkningFraEfter", "effectFromAfter"};
-    public static final String[] PARAM_EFFECT_TO_BEFORE = new String[] {"virkningTilFør", "effectToBefore"};
-    public static final String[] PARAM_EFFECT_TO_AFTER = new String[] {"virkningTilEfter", "effectToAfter"};
-    public static final String[] PARAM_RECORD_AFTER = new String[] { "opdateretEfter", "recordAfter" };
+    public static final String[] PARAM_PAGE = new String[]{"side", "page"};
+    public static final String[] PARAM_PAGESIZE = new String[]{"sidestoerrelse", "pageSize"};
+    public static final String[] PARAM_REGISTRATION_FROM_BEFORE = new String[]{"registreringFraFør", "registrationFromBefore"};
+    public static final String[] PARAM_REGISTRATION_FROM_AFTER = new String[]{"registreringFraEfter", "registrationFromAfter", "registreringFra", "registrationFrom"};
+    public static final String[] PARAM_REGISTRATION_TO_BEFORE = new String[]{"registreringTilFør", "registrationToBefore", "registreringTil", "registrationTo"};
+    public static final String[] PARAM_REGISTRATION_TO_AFTER = new String[]{"registreringTilEfter", "registrationToAfter"};
+    public static final String[] PARAM_EFFECT_FROM_BEFORE = new String[]{"virkningFraFør", "effectFromBefore"};
+    public static final String[] PARAM_EFFECT_FROM_AFTER = new String[]{"virkningFraEfter", "effectFromAfter"};
+    public static final String[] PARAM_EFFECT_TO_BEFORE = new String[]{"virkningTilFør", "effectToBefore"};
+    public static final String[] PARAM_EFFECT_TO_AFTER = new String[]{"virkningTilEfter", "effectToAfter"};
+    public static final String[] PARAM_RECORD_AFTER = new String[]{"opdateretEfter", "recordAfter"};
 
-    public static final String[] PARAM_OUTPUT_WRAPPING = new String[] {"format", "fmt"};
+    public static final String[] PARAM_OUTPUT_WRAPPING = new String[]{"format", "fmt"};
     public static final Map<String, OutputWrapper.Mode> PARAM_OUTPUT_WRAPPING_VALUEMAP = new HashMap<>();
+
     static {
         PARAM_OUTPUT_WRAPPING_VALUEMAP.put("rvd", OutputWrapper.Mode.RVD);
         PARAM_OUTPUT_WRAPPING_VALUEMAP.put("rdv", OutputWrapper.Mode.RDV);
@@ -46,7 +48,7 @@ public abstract class BaseQuery {
 
     public static final String ALWAYSTIMEINTERVAL = "ALWAYS";
 
-    private static Logger log = LogManager.getLogger(BaseQuery.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(BaseQuery.class.getCanonicalName());
 
     @QueryField(queryNames = {"side", "page"}, type = QueryField.FieldType.INT)
     protected int page = 1;
@@ -73,22 +75,24 @@ public abstract class BaseQuery {
     protected OffsetDateTime effectFromAfter = null;
 
     @QueryField(queryNames = {"virkningTilFør", "effectToBefore"}, type = QueryField.FieldType.STRING)
-    protected OffsetDateTime effectToBefore  = null;
+    protected OffsetDateTime effectToBefore = null;
 
     @QueryField(queryNames = {"virkningTilEfter", "effectToAfter"}, type = QueryField.FieldType.STRING)
     protected OffsetDateTime effectToAfter = null;
 
-    @QueryField(queryNames = { "opdateretEfter", "recordAfter" }, type = QueryField.FieldType.STRING)
+    @QueryField(queryNames = {"opdateretEfter", "recordAfter"}, type = QueryField.FieldType.STRING)
     protected OffsetDateTime recordAfter = null;
 
     @QueryField(queryName = "UUID", type = QueryField.FieldType.STRING)
     protected List<UUID> uuid = new ArrayList<>();
 
-    private List<String> kommunekodeRestriction = new ArrayList<>();
+    protected List<Pair<String, String>> order = new ArrayList<>();
+
+    private final List<String> kommunekodeRestriction = new ArrayList<>();
 
     private OutputWrapper.Mode mode = null;
 
-    private LinkedHashSet<Join> joins = new LinkedHashSet<>();
+    private final LinkedHashSet<Join> joins = new LinkedHashSet<>();
     private MultiCondition condition = new MultiCondition();
 
     private int conditionCounter = 0;
@@ -98,6 +102,7 @@ public abstract class BaseQuery {
 
     /**
      * Create a basic Query, filtering on page and pageSize (akin to offset & limit)
+     *
      * @param page
      * @param pageSize
      */
@@ -110,6 +115,7 @@ public abstract class BaseQuery {
     /**
      * Create a basic Query, filtering on page and pageSize (akin to offset & limit), as well as output filtering
      * (Found entities will only include registrations that fall within the registrationTime limits)
+     *
      * @param page
      * @param pageSize
      */
@@ -120,12 +126,14 @@ public abstract class BaseQuery {
         this.registrationToAfter = registrationToAfter;
         this.registrationToBefore = registrationToBefore;
     }
+
     public BaseQuery(int page, int pageSize, OffsetDateTime registrationFromAfter, OffsetDateTime registrationToBefore) {
         this(page, pageSize, registrationFromAfter, null, null, registrationToBefore);
     }
 
     /**
      * Create a basic Query, filtering on page and pageSize (akin to offset & limit). This is the String parameter version; the parameters will be parsed as integers.
+     *
      * @param page
      * @param pageSize
      */
@@ -137,12 +145,14 @@ public abstract class BaseQuery {
      * Create a basic Query, filtering on page and pageSize (akin to offset & limit), as well as output filtering
      * (Found entities will only include registrations that fall within the registrationTime limits)
      * This is the String parameter version; the parameters will be parsed as integers and OffsetDateTimes
+     *
      * @param page
      * @param pageSize
      */
     public BaseQuery(String page, String pageSize, String registrationFromAfter, String registrationToBefore) {
         this(page, pageSize, registrationFromAfter, null, null, registrationToBefore);
     }
+
     public BaseQuery(String page, String pageSize, String registrationFromAfter, String registrationFromBefore, String registrationToAfter, String registrationToBefore) {
         this(
                 intFromString(page, 0),
@@ -155,9 +165,7 @@ public abstract class BaseQuery {
     }
 
 
-
-
-    private HashMap<String, QueryParameter> urlParameters = new HashMap<>();
+    private final HashMap<String, QueryParameter> urlParameters = new HashMap<>();
 
     public void setParameter(String name, Collection<String> values) {
         QueryParameter parameter = this.urlParameters.get(name);
@@ -177,7 +185,7 @@ public abstract class BaseQuery {
     }
 
     public boolean parameterEmpty(String name) {
-        if (!this.urlParameters.keySet().contains(name)) {
+        if (!this.urlParameters.containsKey(name)) {
             return true;
         }
         return this.urlParameters.get(name).isEmpty();
@@ -255,7 +263,7 @@ public abstract class BaseQuery {
     }
 
     public void setRegistrationFromBefore(String registrationFromBefore) {
-        if(ALWAYSTIMEINTERVAL.equals(registrationFromBefore)) {
+        if (ALWAYSTIMEINTERVAL.equals(registrationFromBefore)) {
             this.registrationFromBefore = null;
         } else {
             this.setRegistrationFromBefore(registrationFromBefore, OffsetDateTime.now());
@@ -265,9 +273,6 @@ public abstract class BaseQuery {
     public void setRegistrationFromBefore(String registrationFromBefore, OffsetDateTime fallback) throws DateTimeParseException {
         this.setRegistrationFromBefore(parseDateTime(registrationFromBefore), fallback);
     }
-
-
-
 
 
     public OffsetDateTime getRegistrationFrom() {
@@ -314,8 +319,6 @@ public abstract class BaseQuery {
     }
 
 
-
-
     public OffsetDateTime getRegistrationToAfter() {
         return this.registrationToAfter;
     }
@@ -332,7 +335,7 @@ public abstract class BaseQuery {
     }
 
     public void setRegistrationToAfter(String registrationToAfter) {
-        if(ALWAYSTIMEINTERVAL.equals(registrationToAfter)) {
+        if (ALWAYSTIMEINTERVAL.equals(registrationToAfter)) {
             this.registrationToAfter = null;
         } else {
             this.setRegistrationToAfter(registrationToAfter, OffsetDateTime.now());
@@ -368,7 +371,6 @@ public abstract class BaseQuery {
     }
 
 
-
     public OffsetDateTime getRegistrationTo() {
         return this.getRegistrationToBefore();
     }
@@ -396,7 +398,6 @@ public abstract class BaseQuery {
     }
 
 
-
     public OffsetDateTime getEffectFrom() {
         return this.effectFromBefore;
     }
@@ -417,7 +418,7 @@ public abstract class BaseQuery {
     }
 
     public void setEffectFromBefore(String effectFromBefore) {
-        if(ALWAYSTIMEINTERVAL.equals(effectFromBefore)) {
+        if (ALWAYSTIMEINTERVAL.equals(effectFromBefore)) {
             this.effectFromBefore = null;
         } else {
             this.setEffectFromBefore(effectFromBefore, OffsetDateTime.now());
@@ -453,8 +454,6 @@ public abstract class BaseQuery {
     }
 
 
-
-
     public OffsetDateTime getEffectToBefore() {
         return this.effectToBefore;
     }
@@ -479,7 +478,6 @@ public abstract class BaseQuery {
     }
 
 
-
     public OffsetDateTime getEffectToAfter() {
         return this.effectToAfter;
     }
@@ -496,7 +494,7 @@ public abstract class BaseQuery {
     }
 
     public void setEffectToAfter(String effectToAfter) {
-        if(ALWAYSTIMEINTERVAL.equals(effectToAfter)) {
+        if (ALWAYSTIMEINTERVAL.equals(effectToAfter)) {
             this.effectToAfter = null;
         } else {
             this.setEffectToAfter(effectToAfter, OffsetDateTime.now());
@@ -506,12 +504,6 @@ public abstract class BaseQuery {
     public void setEffectToAfter(String effectToAfter, OffsetDateTime fallback) {
         this.setEffectToAfter(parseDateTime(effectToAfter), fallback);
     }
-
-
-
-
-
-
 
 
     public void setEffectFrom(OffsetDateTime EffectFrom) {
@@ -551,7 +543,6 @@ public abstract class BaseQuery {
     }
 
 
-
     public void setEffectAt(OffsetDateTime at) {
         this.setEffectFromBefore(at);
         this.setEffectToAfter(at);
@@ -579,11 +570,11 @@ public abstract class BaseQuery {
     }
 
     public void addUUID(String uuid) throws InvalidClientInputException {
-        if (uuid != null){
+        if (uuid != null) {
             try {
                 this.uuid.add(UUID.fromString(uuid));
             } catch (IllegalArgumentException e) {
-                throw new InvalidClientInputException("Invalid uuid "+uuid, e);
+                throw new InvalidClientInputException("Invalid uuid " + uuid, e);
             }
         }
     }
@@ -592,6 +583,7 @@ public abstract class BaseQuery {
     public void addKommunekodeRestriction(String kommunekode) {
         this.kommunekodeRestriction.add(kommunekode);
     }
+
     public List<String> getKommunekodeRestriction() {
         return this.kommunekodeRestriction;
     }
@@ -607,8 +599,13 @@ public abstract class BaseQuery {
         return this.mode != null ? this.mode : fallback;
     }
 
+    public void addOrderField(String entityIdentifier, String field) {
+        this.order.add(Pair.of(entityIdentifier, field));
+    }
+
     /**
      * Parse a ParameterMap from a http request and insert values in this Query object
+     *
      * @param parameterMap
      */
     public void fillFromParameters(ParameterMap parameterMap, boolean limitsOnly) throws InvalidClientInputException {
@@ -648,6 +645,7 @@ public abstract class BaseQuery {
 
     /**
      * Convenience method for parsing a String as an integer, without throwing a parseexception
+     *
      * @param s String holding integer to be parsed
      * @return Parse result, or null if unparseable
      */
@@ -657,7 +655,8 @@ public abstract class BaseQuery {
 
     /**
      * Convenience method for parsing a String as an integer, without throwing a parseexception
-     * @param s String holding integer to be parsed
+     *
+     * @param s   String holding integer to be parsed
      * @param def Fallback value if string is unparseable
      * @return Parse result, or def if unparseable
      */
@@ -674,6 +673,7 @@ public abstract class BaseQuery {
 
     /**
      * Convenience method for parsing a String as a boolean
+     *
      * @param s String holding boolean to be parsed ("1", "true", "yes", "0", "false", "no")
      * @return Parse result, or null if neither of the above are found
      */
@@ -683,7 +683,8 @@ public abstract class BaseQuery {
 
     /**
      * Convenience method for parsing a String as a boolean
-     * @param s String holding boolean to be parsed ("1", "true", "yes", "0", "false", "no")
+     *
+     * @param s   String holding boolean to be parsed ("1", "true", "yes", "0", "false", "no")
      * @param def Fallback value if string doesn't match
      * @return Parse result, or def if neither of the above are found
      */
@@ -701,56 +702,57 @@ public abstract class BaseQuery {
     }
 
 
-    private static DateTimeFormatter[] zonedDateTimeFormatters = new DateTimeFormatter[]{
+    private static final DateTimeFormatter[] zonedDateTimeFormatters = new DateTimeFormatter[]{
             DateTimeFormatter.ISO_OFFSET_DATE_TIME,
             DateTimeFormatter.ISO_ZONED_DATE_TIME,
             DateTimeFormatter.ISO_INSTANT,
             DateTimeFormatter.RFC_1123_DATE_TIME,
     };
 
-    private static DateTimeFormatter[] zonedDateFormatters = new DateTimeFormatter[]{
+    private static final DateTimeFormatter[] zonedDateFormatters = new DateTimeFormatter[]{
             DateTimeFormatter.ISO_OFFSET_DATE,
     };
 
-    private static DateTimeFormatter[] unzonedDateTimeFormatters = new DateTimeFormatter[]{
+    private static final DateTimeFormatter[] unzonedDateTimeFormatters = new DateTimeFormatter[]{
             DateTimeFormatter.ISO_DATE_TIME,
             DateTimeFormatter.ISO_LOCAL_DATE_TIME,
     };
 
 
-    private static DateTimeFormatter[] unzonedDateFormatters = new DateTimeFormatter[]{
+    private static final DateTimeFormatter[] unzonedDateFormatters = new DateTimeFormatter[]{
             DateTimeFormatter.ISO_DATE,
             DateTimeFormatter.BASIC_ISO_DATE
     };
 
-    private static int formatterCount = zonedDateTimeFormatters.length + zonedDateFormatters.length + unzonedDateTimeFormatters.length + unzonedDateFormatters.length;
+    private static final int formatterCount = zonedDateTimeFormatters.length + zonedDateFormatters.length + unzonedDateTimeFormatters.length + unzonedDateFormatters.length;
 
     public static OffsetDateTime parseDateTime(String dateTime) throws DateTimeParseException {
         return parseDateTime(dateTime, false);
     }
 
 
-   /**
-    * Convenience method for parsing a String as an OffsetDateTime
-    * A series of parsers will attempt to parse the input string, returning on the first success.
-    * The Parsers, in order, are:
-    *   DateTimeFormatter.ISO_OFFSET_DATE_TIME
-    *   DateTimeFormatter.ISO_ZONED_DATE_TIME
-    *   DateTimeFormatter.ISO_INSTANT
-    *   DateTimeFormatter.RFC_1123_DATE_TIME
-    *   DateTimeFormatter.ISO_OFFSET_DATE
-    *   DateTimeFormatter.ISO_DATE_TIME
-    *   DateTimeFormatter.ISO_LOCAL_DATE_TIME
-    *   DateTimeFormatter.ISO_DATE
-    *   DateTimeFormatter.BASIC_ISO_DATE
-    * @param dateTime
-    * @return Parsed OffsetDateTime, or null if input was null
-    * @throws DateTimeParseException if no parser succeeded on a non-null input string
-    */
+    /**
+     * Convenience method for parsing a String as an OffsetDateTime
+     * A series of parsers will attempt to parse the input string, returning on the first success.
+     * The Parsers, in order, are:
+     * DateTimeFormatter.ISO_OFFSET_DATE_TIME
+     * DateTimeFormatter.ISO_ZONED_DATE_TIME
+     * DateTimeFormatter.ISO_INSTANT
+     * DateTimeFormatter.RFC_1123_DATE_TIME
+     * DateTimeFormatter.ISO_OFFSET_DATE
+     * DateTimeFormatter.ISO_DATE_TIME
+     * DateTimeFormatter.ISO_LOCAL_DATE_TIME
+     * DateTimeFormatter.ISO_DATE
+     * DateTimeFormatter.BASIC_ISO_DATE
+     *
+     * @param dateTime
+     * @return Parsed OffsetDateTime, or null if input was null
+     * @throws DateTimeParseException if no parser succeeded on a non-null input string
+     */
     public static OffsetDateTime parseDateTime(String dateTime, boolean urlDecode) throws DateTimeParseException {
         if (dateTime != null) {
             String decodedDateTime;
-            if(urlDecode) {
+            if (urlDecode) {
                 decodedDateTime = java.net.URLDecoder.decode(dateTime, StandardCharsets.UTF_8);
             } else {
                 decodedDateTime = dateTime;
@@ -784,7 +786,7 @@ public abstract class BaseQuery {
                 }
             }
             // If none of the parsers could parse the string, _then_ we may throw an exception
-            throw new DateTimeParseException("Unable to parse date string \""+decodedDateTime+"\", tried "+ formatterCount + " parsers of "+DateTimeFormatter.class.getCanonicalName(), decodedDateTime, 0);
+            throw new DateTimeParseException("Unable to parse date string \"" + decodedDateTime + "\", tried " + formatterCount + " parsers of " + DateTimeFormatter.class.getCanonicalName(), decodedDateTime, 0);
         }
         return null;
     }
@@ -793,48 +795,49 @@ public abstract class BaseQuery {
     /**
      * Put Query parameters into the Hibernate session. Subclasses should override this and call this method, then
      * put their own Query-subclass-specific parameters in as well
+     *
      * @param session Hibernate session in use
      */
     public void applyFilters(Session session) {
         /*if (this.getRegistrationFromBefore() != null) {
             //this.applyFilter(session, Registration.FILTER_REGISTRATION_FROM, Registration.FILTERPARAM_REGISTRATION_FROM, this.getRegistrationFromBefore());
-            System.out.println("Activating filter "+Monotemporal.FILTER_REGISTRATIONFROM_BEFORE+"  "+this.getRegistrationFromBefore());
+            log.debug("Activating filter "+Monotemporal.FILTER_REGISTRATIONFROM_BEFORE+"  "+this.getRegistrationFromBefore());
             this.applyFilter(session, Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE, this.getRegistrationFromBefore());
         }*/
         if (this.getRegistrationFromAfter() != null) {
             //this.applyFilter(session, Registration.FILTER_REGISTRATION_FROM, Registration.FILTERPARAM_REGISTRATION_FROM, this.getRegistrationFromBefore());
-            log.debug("Activating filter "+Monotemporal.FILTER_REGISTRATIONFROM_AFTER+"  "+this.getRegistrationFromAfter());
+            log.debug("Activating filter " + Monotemporal.FILTER_REGISTRATIONFROM_AFTER + "  " + this.getRegistrationFromAfter());
             this.applyFilter(session, Monotemporal.FILTER_REGISTRATIONFROM_AFTER, Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER, this.getRegistrationFromAfter());
         }
         if (this.getRegistrationToBefore() != null) {
             //this.applyFilter(session, Registration.FILTER_REGISTRATION_TO, Registration.FILTERPARAM_REGISTRATION_TO, this.getRegistrationToBefore());
-            log.debug("Activating filter "+Monotemporal.FILTER_REGISTRATIONTO_BEFORE+"  "+this.getRegistrationToBefore());
+            log.debug("Activating filter " + Monotemporal.FILTER_REGISTRATIONTO_BEFORE + "  " + this.getRegistrationToBefore());
             this.applyFilter(session, Monotemporal.FILTER_REGISTRATIONTO_BEFORE, Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE, this.getRegistrationToBefore());
         }
         if (this.getRegistrationToAfter() != null) {
             //this.applyFilter(session, Registration.FILTER_REGISTRATION_TO, Registration.FILTERPARAM_REGISTRATION_TO, this.getRegistrationToBefore());
-            log.debug("Activating filter "+Monotemporal.FILTER_REGISTRATIONTO_AFTER+"  "+this.getRegistrationToAfter());
+            log.debug("Activating filter " + Monotemporal.FILTER_REGISTRATIONTO_AFTER + "  " + this.getRegistrationToAfter());
             this.applyFilter(session, Monotemporal.FILTER_REGISTRATIONTO_AFTER, Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER, this.getRegistrationToAfter());
         }
 
         if (this.getEffectFromBefore() != null) {
             //this.applyFilter(session, Effect.FILTER_EFFECT_FROM, Effect.FILTERPARAM_EFFECT_FROM, this.getEffectFrom());
-            log.debug("Activating filter "+Bitemporal.FILTER_EFFECTFROM_BEFORE+"  "+this.getEffectFromBefore());
+            log.debug("Activating filter " + Bitemporal.FILTER_EFFECTFROM_BEFORE + "  " + this.getEffectFromBefore());
             this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, this.getEffectFromBefore());
         }
         if (this.getEffectFromAfter() != null) {
             //this.applyFilter(session, Effect.FILTER_EFFECT_FROM, Effect.FILTERPARAM_EFFECT_FROM, this.getEffectFrom());
-            log.debug("Activating filter "+Bitemporal.FILTER_EFFECTFROM_AFTER+"  "+this.getEffectFromAfter());
+            log.debug("Activating filter " + Bitemporal.FILTER_EFFECTFROM_AFTER + "  " + this.getEffectFromAfter());
             this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_AFTER, Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, this.getEffectFromAfter());
         }
         if (this.getEffectToBefore() != null) {
             //this.applyFilter(session, Effect.FILTER_EFFECT_TO, Effect.FILTERPARAM_EFFECT_TO, this.getEffectTo());
-            log.debug("Activating filter "+Bitemporal.FILTER_EFFECTTO_BEFORE+"  "+this.getEffectToBefore());
+            log.debug("Activating filter " + Bitemporal.FILTER_EFFECTTO_BEFORE + "  " + this.getEffectToBefore());
             this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_BEFORE, Bitemporal.FILTERPARAM_EFFECTTO_BEFORE, this.getEffectToBefore());
         }
         if (this.getEffectToAfter() != null) {
             //this.applyFilter(session, Effect.FILTER_EFFECT_TO, Effect.FILTERPARAM_EFFECT_TO, this.getEffectTo());
-            log.debug("Activating filter "+Bitemporal.FILTER_EFFECTTO_AFTER+"  "+this.getEffectToAfter());
+            log.debug("Activating filter " + Bitemporal.FILTER_EFFECTTO_AFTER + "  " + this.getEffectToAfter());
             this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_AFTER, Bitemporal.FILTERPARAM_EFFECTTO_AFTER, this.getEffectToAfter());
         }
     }
@@ -859,6 +862,7 @@ public abstract class BaseQuery {
     public MultiCondition getCondition() {
         return this.condition;
     }
+
     private Map<String, String> allJoinHandles() {
         HashMap<String, String> map = new HashMap<>(this.joinHandles());
         map.put("dafoUpdated", Nontemporal.DB_FIELD_UPDATED);
@@ -879,6 +883,7 @@ public abstract class BaseQuery {
     public SingleCondition addCondition(String handle, List values) throws QueryBuildException {
         return this.addCondition(handle, values, String.class);
     }
+
     public SingleCondition addCondition(String handle, List values, Class type) throws QueryBuildException {
         if (values != null && !values.isEmpty()) {
             return this.addCondition(handle, Condition.Operator.EQ, values, type);
@@ -909,7 +914,7 @@ public abstract class BaseQuery {
 
     public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List values, Class type, boolean orNull) throws QueryBuildException {
         String member = this.useJoinHandle(handle);
-        if (member != null && values != null && !values.isEmpty() && values.stream().anyMatch( f -> f!=null)) {
+        if (member != null && values != null && !values.isEmpty() && values.stream().anyMatch(f -> f != null)) {
             String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
             try {
                 if (orNull) {
@@ -941,7 +946,7 @@ public abstract class BaseQuery {
         // Internally joins handle path
         String path = this.allJoinHandles().get(handle);
         if (path == null) {
-            throw new QueryBuildException("Invalid join handle "+handle+" for "+this.getEntityClassname());
+            throw new QueryBuildException("Invalid join handle " + handle + " for " + this.getEntityClassname());
         }
         StringJoiner resolved = new StringJoiner(",");
         for (String p : path.split(",")) {
@@ -976,6 +981,13 @@ public abstract class BaseQuery {
         if (!this.condition.isEmpty()) {
             s.add("WHERE " + this.condition.toHql());
         }
+        if (!this.order.isEmpty()) {
+            StringJoiner order = new StringJoiner(", ");
+            for (Pair<String, String> orderfield : this.order) {
+                order.add(orderfield.getFirst()+"."+orderfield.getSecond());
+            }
+            s.add("ORDER BY " + order.toString());
+        }
         return s.toString();
     }
 
@@ -986,6 +998,7 @@ public abstract class BaseQuery {
     }
 
     private boolean finalizedConditions = false;
+
     private void finalizeConditions() {
         if (!this.finalizedConditions) {
             this.condition = new MultiCondition();
@@ -1023,7 +1036,7 @@ public abstract class BaseQuery {
 
     protected abstract void setupConditions() throws QueryBuildException;
 
-    private Set<JoinedQuery> related = new HashSet<>();
+    private final Set<JoinedQuery> related = new HashSet<>();
 
     public Set<JoinedQuery> getRelated() {
         return this.related;
@@ -1049,6 +1062,7 @@ public abstract class BaseQuery {
         identifiers.addAll(this.extraTables.keySet());
         return identifiers;
     }
+
     protected List<String> getEntityClassnameStrings() {
         ArrayList<String> classnames = new ArrayList<>();
         classnames.add(this.getEntityClassname() + " " + this.getEntityIdentifier());
@@ -1057,6 +1071,7 @@ public abstract class BaseQuery {
         }
         return classnames;
     }
+
     public List<String> getEntityClassnames() {
         ArrayList<String> classnames = new ArrayList<>();
         classnames.add(this.getEntityClassname());
@@ -1066,6 +1081,7 @@ public abstract class BaseQuery {
         classnames.addAll(this.extraTables.values().stream().map(Class::getCanonicalName).collect(Collectors.toList()));
         return classnames;
     }
+
     protected List<Join> getAllJoins() {
         ArrayList<Join> joins = new ArrayList<>();
         joins.addAll(this.joins);
@@ -1076,16 +1092,15 @@ public abstract class BaseQuery {
     }
 
 
-
-
     // Quasi-temporary solution to join in associated data.
     // Eventually we want a more elegant solution, but for now this works
-    private List<String> extraJoins = new ArrayList<>();
-    private LinkedHashMap<String, Class> extraTables = new LinkedHashMap<>();
+    private final List<String> extraJoins = new ArrayList<>();
+    private final LinkedHashMap<String, Class> extraTables = new LinkedHashMap<>();
 
     public void addExtraJoin(String hql) {
         this.extraJoins.add(hql);
     }
+
     public void addExtraTables(LinkedHashMap<String, Class> tables) {
         this.extraTables.putAll(tables);
     }

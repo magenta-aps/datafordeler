@@ -11,8 +11,8 @@ import java.net.URI;
 
 public interface Communicator {
 
-  InputStream fetch(URI uri) throws HttpStatusException, DataStreamException;
+    InputStream fetch(URI uri) throws HttpStatusException, DataStreamException;
 
-  StatusLine send(URI endpoint, String payload) throws IOException, DataFordelerException;
+    StatusLine send(URI endpoint, String payload) throws IOException, DataFordelerException;
 
 }

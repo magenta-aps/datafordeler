@@ -15,7 +15,7 @@ import java.util.Set;
 
 /**
  * Storage for data on a Person's historic cpr number,
- * referenced by {@link dk.magenta.datafordeler.cpr.data.person.data.PersonBaseData}
+ * referenced by {@link dk.magenta.datafordeler.cpr.data.person.PersonEntity}
  */
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonNumberDataRecord.TABLE_NAME, indexes = {
@@ -58,10 +58,8 @@ public class PersonNumberDataRecord extends CprBitemporalPersonRecord<PersonNumb
     }
 
 
-
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<PersonNumberDataRecord> correctors = new HashSet<>();
+    private final Set<PersonNumberDataRecord> correctors = new HashSet<>();
 
     public Set<PersonNumberDataRecord> getCorrectors() {
         return this.correctors;

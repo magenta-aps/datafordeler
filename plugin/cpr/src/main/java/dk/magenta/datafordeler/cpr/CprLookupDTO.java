@@ -31,10 +31,11 @@ public class CprLookupDTO {
 
     /**
      * Get the locality formatted as a int, if the localityCorde is null return 0;
+     *
      * @return
      */
     public int getLocalityCodeNumber() {
-        return localityCode!=null && !localityCode.equals("") ? Integer.parseInt(localityCode) : 0;
+        return localityCode != null && !localityCode.equals("") ? Integer.parseInt(localityCode) : 0;
     }
 
     public void setLocalityCode(String localityCode) {

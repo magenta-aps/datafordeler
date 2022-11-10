@@ -21,7 +21,6 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.PersonStatusDataRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -61,7 +60,7 @@ public class CprResidentService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CprResidentService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprResidentService.class.getCanonicalName());
 
     @PostConstruct
     public void init() {
@@ -79,7 +78,7 @@ public class CprResidentService {
         this.checkAndLogAccess(loggerHelper);
         loggerHelper.urlInvokePersistablelogs("residentinformation");
 
-        try(final Session session = sessionManager.getSessionFactory().openSession();) {
+        try (final Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setPersonnummer(cprNummer);
             OffsetDateTime now = OffsetDateTime.now();
@@ -97,16 +96,16 @@ public class CprResidentService {
                 OffsetDateTime lastEffectFrom = null;
 
                 //Iterate backward through municipality of the person, store when the first danish address is found
-                for(AddressDataRecord add : addList) {
+                for (AddressDataRecord add : addList) {
 
                     // If newest adressrecord is not active, this citizen lives outside DK and GL, return false
-                    if(lastEffectFrom == null && add.getEffectTo()!=null) {
+                    if (lastEffectFrom == null && add.getEffectTo() != null) {
                         loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "residentinformation done");
                         return residentInfo;
                     }
 
                     // Municipalitycode=900 to support adresses from before the merging of municipalitynumbers
-                    if(add.getMunicipalityCode()>900 && (lastEffectFrom == null || Equality.cprDomainEqualDate(lastEffectFrom, add.getEffectTo()))) {
+                    if (add.getMunicipalityCode() > 900 && (lastEffectFrom == null || Equality.cprDomainEqualDate(lastEffectFrom, add.getEffectTo()))) {
                         lastEffectFrom = add.getEffectFrom();
                         residentInfo.setDato(add.getEffectFrom().toLocalDate());
                         residentInfo.setBorIGL(true);
@@ -128,10 +127,9 @@ public class CprResidentService {
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 

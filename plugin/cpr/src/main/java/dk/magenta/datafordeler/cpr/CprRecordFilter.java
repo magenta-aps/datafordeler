@@ -22,9 +22,8 @@ public class CprRecordFilter {
 
     /**
      * Helpercomparator for finding the newest record if there is more than one matching.
-     *
      */
-    private static Comparator bitemporalComparator = Comparator.comparing(CprRecordFilter::getBitemporality, BitemporalityComparator.ALL)
+    private static final Comparator bitemporalComparator = Comparator.comparing(CprRecordFilter::getBitemporality, BitemporalityComparator.ALL)
             .thenComparing(CprNontemporalRecord::getOriginDate, Comparator.nullsLast(naturalOrder()))
             .thenComparing(CprNontemporalRecord::getDafoUpdated)
             .thenComparing(DatabaseEntry::getId);
@@ -32,21 +31,20 @@ public class CprRecordFilter {
     /**
      * Find the record that matches as inside the interval of both registration and effect
      * Just select the newest record if more than one matches
+     *
      * @param records
      * @param registrationAt
      * @param <R>
      * @return
      */
     public static <R extends CprBitemporalRecord> R filterRecordsByRegistrationAndEffectReturnNewest(Collection<R> records, OffsetDateTime registrationAt) {
-        return (R) records.stream().filter( record -> record.getBitemporality().containsRegistration(registrationAt, registrationAt) &&
+        return (R) records.stream().filter(record -> record.getBitemporality().containsRegistration(registrationAt, registrationAt) &&
                 record.getBitemporality().containsEffect(registrationAt, registrationAt)).max(bitemporalComparator).orElse(null);
     }
 
 
-
-
     public static <R extends CprBitemporalRecord> List<R> filterRecordsByRegistrationAndEffect(Collection<R> records, OffsetDateTime registrationAt) {
-        return records.stream().filter( record -> record.getBitemporality().containsRegistration(registrationAt, registrationAt) &&
+        return records.stream().filter(record -> record.getBitemporality().containsRegistration(registrationAt, registrationAt) &&
                 record.getBitemporality().containsEffect(registrationAt, registrationAt)).collect(Collectors.toList());
     }
 }

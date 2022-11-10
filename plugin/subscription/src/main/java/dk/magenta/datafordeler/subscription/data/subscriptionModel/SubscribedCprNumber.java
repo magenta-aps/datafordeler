@@ -6,7 +6,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 
 @Entity
-@Table(name = SubscribedCprNumber.TABLE_NAME, uniqueConstraints=@UniqueConstraint(columnNames={"cprNumber", "cprlistId"}), indexes = {
+@Table(name = SubscribedCprNumber.TABLE_NAME, uniqueConstraints = @UniqueConstraint(columnNames = {"cprNumber", "cprlistId"}), indexes = {
 
 
 })
@@ -19,7 +19,7 @@ public class SubscribedCprNumber extends DatabaseEntry {
     public static final String DB_FIELD_ENTITY = "entity";
 
 
-    @Column(name="cprNumber", nullable=false)
+    @Column(name = "cprNumber", nullable = false)
     private String cprNumber;
 
     public String getCprNumber() {
@@ -41,7 +41,7 @@ public class SubscribedCprNumber extends DatabaseEntry {
     }
 
     @ManyToOne
-    @JoinColumn(name="cprlistId")
+    @JoinColumn(name = "cprlistId")
     private CprList cprList;
 
 }

@@ -1,14 +1,16 @@
 package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.*;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import java.util.*;
 
 @Entity

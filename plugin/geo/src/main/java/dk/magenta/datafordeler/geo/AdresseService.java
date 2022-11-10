@@ -21,8 +21,8 @@ import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.road.*;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressUsageRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressNumberRecord;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressUsageRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -53,7 +53,7 @@ public class AdresseService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Logger log = LogManager.getLogger(AdresseService.class);
+    private final Logger log = LogManager.getLogger(AdresseService.class.getCanonicalName());
 
     public static final String PARAM_DEBUG = "debug";
 
@@ -85,7 +85,6 @@ public class AdresseService {
     public static final String OUTPUT_USAGE = "anvendelse";
 
 
-
     HashMap<Integer, UUID> municipalities = new HashMap<>();
 
     /**
@@ -107,6 +106,7 @@ public class AdresseService {
 
     /**
      * Finds all localities in a municipality. Only current data is included.
+     *
      * @param request HTTP request containing a municipality parameter
      * @return Json-formatted string containing a list of found objects
      */
@@ -166,6 +166,7 @@ public class AdresseService {
 
     /**
      * Finds all roads in a locality. Only current data is included.
+     *
      * @param request HTTP request containing a locality parameter
      * @return Json-formatted string containing a list of found objects
      */
@@ -197,20 +198,20 @@ public class AdresseService {
 
             org.hibernate.query.Query databaseQuery = session.createQuery(
                     "SELECT DISTINCT road FROM " + GeoRoadEntity.class.getCanonicalName() + " road " +
-                        "JOIN road.locality locality " +
-                        "JOIN locality.reference locality_reference " +
+                            "JOIN road.locality locality " +
+                            "JOIN locality.reference locality_reference " +
 
-                        //"JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " access_road ON access_road.reference = road.identification " +
-                        "LEFT JOIN road.municipality road_municipality "+
-                        "LEFT JOIN "+AccessAddressRoadRecord.class.getCanonicalName()+" access_road ON access_road.roadCode = road.code AND access_road.municipalityCode = road_municipality.code "+
+                            //"JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " access_road ON access_road.reference = road.identification " +
+                            "LEFT JOIN road.municipality road_municipality " +
+                            "LEFT JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " access_road ON access_road.roadCode = road.code AND access_road.municipalityCode = road_municipality.code " +
 
-                        "JOIN " + AccessAddressEntity.class.getCanonicalName() + " access ON access_road.entity = access " +
-                        "JOIN " + UnitAddressEntity.class.getCanonicalName() + " unit ON unit.accessAddress = access.identification " +
-                        "JOIN unit.usage unit_usage " +
-                        "WHERE locality_reference.uuid = :uuid "+
-                        "AND road.code != null " +
-                        "AND road.code != 0 "
-                        //"AND unit_usage.usage = 1 "
+                            "JOIN " + AccessAddressEntity.class.getCanonicalName() + " access ON access_road.entity = access " +
+                            "JOIN " + UnitAddressEntity.class.getCanonicalName() + " unit ON unit.accessAddress = access.identification " +
+                            "JOIN unit.usage unit_usage " +
+                            "WHERE locality_reference.uuid = :uuid " +
+                            "AND road.code != null " +
+                            "AND road.code != 0 "
+                    //"AND unit_usage.usage = 1 "
             );
             databaseQuery.setParameter("uuid", locality);
 
@@ -226,7 +227,7 @@ public class AdresseService {
                 }
             }
 
-            if (roadMap.size() == 0 || (roadMap.size() == 1 && roadMap.keySet().contains(null))) {
+            if (roadMap.size() == 0 || (roadMap.size() == 1 && roadMap.containsKey(null))) {
                 GeoLocalityEntity geoLocalityEntity = QueryManager.getEntity(session, locality, GeoLocalityEntity.class);
                 if (geoLocalityEntity != null) {
                     ObjectNode roadNode = objectMapper.createObjectNode();
@@ -325,9 +326,9 @@ public class AdresseService {
     }
 
 
-
     /**
      * Finds all buildings on a road. Only current data is included.
+     *
      * @param request HTTP request containing a road parameter
      * @return Json-formatted string containing a list of found objects
      */
@@ -373,10 +374,9 @@ public class AdresseService {
 
                         "LEFT JOIN access.locality access_locality " +
                         "LEFT JOIN access_locality.reference locality_identification " +
-                        "WHERE " + where.toString() + " " +
+                        "WHERE " + where + " " +
                         "order by access.bnr"
         );
-
 
 
         databaseQuery.setParameterList("road", segments);
@@ -393,29 +393,29 @@ public class AdresseService {
                 AccessAddressEntity addressEntity = (AccessAddressEntity) result;
                 String bnr = stripBnr(addressEntity.getBnr(), true);
                 //if (!bnrs.contains(bnr)) {
-                    AccessAddressHouseNumberRecord houseNumber = current(addressEntity.getHouseNumber());
-                    String houseNumberValue = null;
-                    if (houseNumber != null) {
-                        houseNumberValue = houseNumber.getNumber();
+                AccessAddressHouseNumberRecord houseNumber = current(addressEntity.getHouseNumber());
+                String houseNumberValue = null;
+                if (houseNumber != null) {
+                    houseNumberValue = houseNumber.getNumber();
+                }
+                if ((!"0".equals(houseNumberValue) && bnr != null) || debug) {
+                    ObjectNode addressNode = objectMapper.createObjectNode();
+                    addressNode.put(OUTPUT_BNUMBER, bnr);
+                    addressNode.put(OUTPUT_HOUSENUMBER, houseNumberValue);
+                    AccessAddressBlockNameRecord blockName = current(addressEntity.getBlockName());
+                    addressNode.set(OUTPUT_BCALLNAME, null);
+                    if (blockName != null) {
+                        addressNode.put(OUTPUT_BCALLNAME, blockName.getName());
                     }
-                    if ((!"0".equals(houseNumberValue) && bnr != null) || debug) {
-                        ObjectNode addressNode = objectMapper.createObjectNode();
-                        addressNode.put(OUTPUT_BNUMBER, bnr);
-                        addressNode.put(OUTPUT_HOUSENUMBER, houseNumberValue);
-                        AccessAddressBlockNameRecord blockName = current(addressEntity.getBlockName());
-                        addressNode.set(OUTPUT_BCALLNAME, null);
-                        if (blockName != null) {
-                            addressNode.put(OUTPUT_BCALLNAME, blockName.getName());
-                        }
-                        bnrs.add(bnr);
-                        houseNumberMap.add(houseNumberValue, bnr, addressNode);
-                        if (debug && !(!"0".equals(houseNumberValue) && bnr != null)) {
-                            addressNode.put("comment1", "Excluded due to missing housenumber and bnr");
-                        }
-                        if (debug) {
-                            addressNode.put("accessAddress_objectId", addressEntity.getObjectId());
-                        }
+                    bnrs.add(bnr);
+                    houseNumberMap.add(houseNumberValue, bnr, addressNode);
+                    if (debug && !(!"0".equals(houseNumberValue) && bnr != null)) {
+                        addressNode.put("comment1", "Excluded due to missing housenumber and bnr");
                     }
+                    if (debug) {
+                        addressNode.put("accessAddress_objectId", addressEntity.getObjectId());
+                    }
+                }
                 //}
             }
 
@@ -426,7 +426,7 @@ public class AdresseService {
                     for (String bnr : housesByBnr.keySet()) {
                         for (ObjectNode node : housesByBnr.get(bnr)) {
                             if (debug && housesByBnr.size() > 1) {
-                                node.put("comment2", "Excluded due to collision on housenumber "+houseNumber+", colliding: ["+housesByBnr.keySet()+"]");
+                                node.put("comment2", "Excluded due to collision on housenumber " + houseNumber + ", colliding: [" + housesByBnr.keySet() + "]");
                             }
                             results.add(node);
                         }
@@ -443,6 +443,7 @@ public class AdresseService {
     /**
      * Finds all addreses on a road, filtered by housenumber or bnumber.
      * Only current data is included.
+     *
      * @param request HTTP request containing a road parameter,
      *                and optionally a house parameter or bnr parameter
      * @return Json-formatted string containing a list of found objects
@@ -534,12 +535,12 @@ public class AdresseService {
 
             org.hibernate.query.Query databaseQuery = session.createQuery(
                     "SELECT DISTINCT unit, access FROM " + UnitAddressEntity.class.getCanonicalName() + " unit " +
-                       "JOIN unit.usage unit_usage " +
-                       "LEFT JOIN " + AccessAddressEntity.class.getCanonicalName() + " access ON unit.accessAddress = access.identification " +
-                       roadQueryPart +
-                       houseNumberQueryPart +
-                       "WHERE " + where.toString() + " " +
-                       "order by access.bnr"
+                            "JOIN unit.usage unit_usage " +
+                            "LEFT JOIN " + AccessAddressEntity.class.getCanonicalName() + " access ON unit.accessAddress = access.identification " +
+                            roadQueryPart +
+                            houseNumberQueryPart +
+                            "WHERE " + where + " " +
+                            "order by access.bnr"
             );
 
             if (roadUUID != null) {
@@ -627,7 +628,7 @@ public class AdresseService {
                         ArrayList<ObjectNode> houses = housesByBnr.get(bnr);
                         houses.sort(
                                 Comparator.nullsFirst(
-                                        Comparator.<ObjectNode, String>comparing(
+                                        Comparator.comparing(
                                                 jsonNode -> jsonNode.get(OUTPUT_FLOOR) != null ? jsonNode.get(OUTPUT_FLOOR).textValue() : null,
                                                 Comparator.nullsFirst(fuzzyNumberComparator)
                                         )
@@ -648,16 +649,19 @@ public class AdresseService {
         return results.toString();
     }
 
-    private static Pattern numberPattern = Pattern.compile("^(\\d+).*$");
+    private static final Pattern numberPattern = Pattern.compile("^(\\d+).*$");
+
     private static final Integer extractNumber(String str) {
         Matcher m = numberPattern.matcher(str);
         if (m.find()) {
             try {
                 return Integer.parseInt(m.group(1), 10);
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
         }
         return null;
     }
+
     public static final Comparator<String> fuzzyNumberComparator = (o1, o2) -> {
         if (o1 == null && o2 == null) return 0;
         Integer i1 = extractNumber(o1);
@@ -699,22 +703,22 @@ public class AdresseService {
             ObjectNode addressNode = objectMapper.createObjectNode();
 
             org.hibernate.query.Query databaseQuery = session.createQuery(
-                    "SELECT DISTINCT unit, access, road, locality "+
-                    "FROM "+UnitAddressEntity.class.getCanonicalName()+" unit "+
-                    "JOIN unit.identification unit_identification "+
+                    "SELECT DISTINCT unit, access, road, locality " +
+                            "FROM " + UnitAddressEntity.class.getCanonicalName() + " unit " +
+                            "JOIN unit.identification unit_identification " +
 
-                    "LEFT JOIN "+AccessAddressEntity.class.getCanonicalName()+" access ON unit.accessAddress = access.identification "+
+                            "LEFT JOIN " + AccessAddressEntity.class.getCanonicalName() + " access ON unit.accessAddress = access.identification " +
 
-                    "LEFT JOIN access.road access_road "+
-                    "LEFT JOIN "+ GeoRoadEntity.class.getCanonicalName()+" road ON access_road.reference = road.identification "+
-                    //"LEFT JOIN "+RoadMunicipalityRecord.class.getCanonicalName()+" road_municipality ON road_municipality.code = access_road.municipalityCode "+
-                    //"LEFT JOIN "+GeoRoadEntity.class.getCanonicalName()+" road ON access_road.roadCode = road.code AND road_municipality.entity = road "+
+                            "LEFT JOIN access.road access_road " +
+                            "LEFT JOIN " + GeoRoadEntity.class.getCanonicalName() + " road ON access_road.reference = road.identification " +
+                            //"LEFT JOIN "+RoadMunicipalityRecord.class.getCanonicalName()+" road_municipality ON road_municipality.code = access_road.municipalityCode "+
+                            //"LEFT JOIN "+GeoRoadEntity.class.getCanonicalName()+" road ON access_road.roadCode = road.code AND road_municipality.entity = road "+
 
-                    "LEFT JOIN access.locality access_locality "+
-                    "LEFT JOIN "+ GeoLocalityEntity.class.getCanonicalName()+" locality ON access_locality.reference = locality.identification "+
+                            "LEFT JOIN access.locality access_locality " +
+                            "LEFT JOIN " + GeoLocalityEntity.class.getCanonicalName() + " locality ON access_locality.reference = locality.identification " +
 
-                    "WHERE unit_identification.uuid = :uuid " +
-                    "ORDER BY access.bnr"
+                            "WHERE unit_identification.uuid = :uuid " +
+                            "ORDER BY access.bnr"
             );
             databaseQuery.setParameter("uuid", unitAddressUUID);
             databaseQuery.setFlushMode(FlushModeType.COMMIT);
@@ -816,7 +820,6 @@ public class AdresseService {
     }
 
 
-
     private static void checkParameterExistence(String name, String value) throws MissingParameterException {
         if (value == null || value.trim().isEmpty()) {
             throw new MissingParameterException(name);
@@ -827,7 +830,7 @@ public class AdresseService {
         try {
             return Integer.parseInt(value, 10);
         } catch (NumberFormatException e) {
-            throw new InvalidClientInputException("Parameter "+name+" must be a number", e);
+            throw new InvalidClientInputException("Parameter " + name + " must be a number", e);
         }
     }
 
@@ -835,7 +838,7 @@ public class AdresseService {
         try {
             return UUID.fromString(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidClientInputException("Parameter "+name+" must be a uuid", e);
+            throw new InvalidClientInputException("Parameter " + name + " must be a uuid", e);
         }
     }
 
@@ -846,10 +849,12 @@ public class AdresseService {
         query.setEffectFromBefore(now);
         query.setEffectToAfter(now);
     }
+
     private static void setQueryNoLimit(BaseQuery query) {
         query.setPage(1);
         query.setPageSize(Integer.MAX_VALUE);
     }
+
     private static void setHeaders(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -865,13 +870,15 @@ public class AdresseService {
         if (candidates.size() > 1) {
             candidates.sort(Comparator.comparing(GeoMonotemporalRecord::getRegistrationFrom));
         }
-        return candidates.isEmpty() ? null : candidates.get(candidates.size()-1);
+        return candidates.isEmpty() ? null : candidates.get(candidates.size() - 1);
     }
 
-    private static Pattern bnrPattern = Pattern.compile("(B-)?(0+)?(\\d+)([a-z])?", Pattern.CASE_INSENSITIVE);
+    private static final Pattern bnrPattern = Pattern.compile("(B-)?(0+)?(\\d+)([a-z])?", Pattern.CASE_INSENSITIVE);
+
     private static String stripBnr(String bnr) {
         return stripBnr(bnr, false);
     }
+
     private static String stripBnr(String bnr, boolean removeSuffixOnlyIfLong) {
         if (bnr != null) {
             Matcher m = bnrPattern.matcher(bnr);

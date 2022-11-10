@@ -19,7 +19,7 @@ public class PersonAdoptionQuery extends PersonStatisticsQuery {
         super(filter);
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.putAll(getBitemporalHandles("father", PersonEntity.DB_FIELD_FATHER));

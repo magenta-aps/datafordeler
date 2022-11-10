@@ -9,7 +9,9 @@ import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
-import dk.magenta.datafordeler.cpr.records.person.data.*;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.CivilStatusDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import static java.util.Comparator.naturalOrder;
 
@@ -30,7 +31,7 @@ import static java.util.Comparator.naturalOrder;
 @Component
 public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
 
-    private Logger log = LogManager.getLogger(PersonAdressHistoryOutputWrapperPrisme.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(PersonAdressHistoryOutputWrapperPrisme.class.getCanonicalName());
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -46,7 +47,7 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
     }
 
 
-    private static Comparator bitemporalComparator2 = Comparator.comparing(PersonAdressHistoryOutputWrapperPrisme::getBitemporality, BitemporalityComparator.ALL)
+    private static final Comparator bitemporalComparator2 = Comparator.comparing(PersonAdressHistoryOutputWrapperPrisme::getBitemporality, BitemporalityComparator.ALL)
             .thenComparing(CprBitemporalRecord::getEffectFrom, Comparator.nullsLast(naturalOrder()));
 
 
@@ -92,20 +93,20 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
 
         personAddressDataList.stream().filter(r -> r.getBitemporality().registrationTo == null &&
                 !r.isUndone() && r.getCorrectors().size() == 0 &&
-                (r.getEffectTo()==null || r.getEffectFrom().isBefore(r.getEffectTo()))).sorted(bitemporalComparator2).forEach(
+                (r.getEffectTo() == null || r.getEffectFrom().isBefore(r.getEffectTo()))).sorted(bitemporalComparator2).forEach(
                 personAddressData -> {
                     AddressDataRecord adressRecord = (AddressDataRecord) personAddressData;
                     PersonAdressItem personAdress = new PersonAdressItem();
                     if (progress.get().equals(adressSequenceProgress.INITIAL) && org.get() == null) {
                         progress.set(adressSequenceProgress.FIRSTFOUND);
                     } else if ((progress.get().equals(adressSequenceProgress.FIRSTFOUND) || progress.get().equals(adressSequenceProgress.NEWFOUND)) && Equality.cprDomainEqualDate(org.get(), adressRecord.getEffectFrom())) {
-                        if(org.get().equals(adressRecord.getEffectFrom())) {
+                        if (org.get().equals(adressRecord.getEffectFrom())) {
                             progress.set(adressSequenceProgress.NEWFOUND);
-                        } else if(adressRecord.getEffectTo() == null) {
+                        } else if (adressRecord.getEffectTo() == null) {
                             progress.set(adressSequenceProgress.LASTFOUND);
                         }
                     }
-                    if(adressRecord.getEffectTo() != null) {
+                    if (adressRecord.getEffectTo() != null) {
                         org.set(adressRecord.getEffectTo());
                     }
 

@@ -1,7 +1,10 @@
 package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.*;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
@@ -9,7 +12,6 @@ import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -77,9 +79,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
 
-
-
-
     public static final String DB_FIELD_NEWEST_NAME = "newestName";
     public static final String IO_FIELD_NEWEST_NAME = "nyesteNavn";
 
@@ -129,9 +128,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
         }
         return latest;
     }
-
-
-
 
 
     public static final String DB_FIELD_NEWEST_LOCATION = "newestLocation";
@@ -185,12 +181,11 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
 
-
     public static final String DB_FIELD_NEWEST_PRIMARY_INDUSTRY = "newestPrimaryIndustry";
     public static final String IO_FIELD_NEWEST_PRIMARY_INDUSTRY = "nyesteHovedbranche";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX+"=0")
+    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=0")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -239,15 +234,11 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
 
-
-
-
-
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY1 = "newestSecondaryIndustry1";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY1 = "nyesteBibranche1";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX+"=1")
+    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=1")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -297,16 +288,11 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
 
-
-
-
-
-
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY2 = "newestSecondaryIndustry2";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY2 = "nyesteBibranche2";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX+"=2")
+    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=2")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -356,15 +342,11 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
 
-
-
-
-
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY3 = "newestSecondaryIndustry3";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY3 = "nyesteBibranche3";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX+"=3")
+    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=3")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -414,7 +396,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
 
-
     // Apparently a recent addition to metadata, but it's an empty array in all entries
     public static final String DB_FIELD_NEWEST_FAD_CPR = "newestFadCpr";
     public static final String IO_FIELD_NEWEST_FAD_CPR = "nyesteFadCprnumre";
@@ -426,7 +407,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public Set<String> getNewestFadCpr() {
         return this.newestFadCpr;
     }
-
 
 
     public static final String DB_FIELD_NEWEST_STATUS = "newestStatus";
@@ -442,7 +422,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
 
-
     public static final String DB_FIELD_UNIT_COUNT = "unitCount";
     public static final String IO_FIELD_UNIT_COUNT = "antalPenheder";
 
@@ -454,7 +433,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public int getUnitCount() {
         return this.unitCount;
     }
-
 
 
     public static final String DB_FIELD_FOUNDING_DATE = "foundingDate";
@@ -470,7 +448,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
 
-
     public static final String DB_FIELD_EFFECT_DATE = "effectDate";
     public static final String IO_FIELD_EFFECT_DATE = "virkningsDato";
 
@@ -482,7 +459,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public LocalDate getEffectDate() {
         return this.effectDate;
     }
-
 
 
     @OneToMany(targetEntity = MetadataContactRecord.class, mappedBy = MetadataContactRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -505,9 +481,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
             this.metadataContactRecords.add(metadataContactRecord);
         }
     }
-
-
-
 
 
     @Override

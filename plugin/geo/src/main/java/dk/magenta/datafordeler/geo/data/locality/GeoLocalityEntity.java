@@ -41,7 +41,7 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
 
     public static final String TABLE_NAME = "geo_locality";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "Locality";
 
     public GeoLocalityEntity() {
@@ -53,7 +53,7 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
     public static UUID generateUUID(int localityCode) {
-        String uuidInput = "lokalitet:"+localityCode;
+        String uuidInput = "lokalitet:" + localityCode;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
 
@@ -74,8 +74,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
-
-
     public static final String DB_FIELD_NAME = "name";
     public static final String IO_FIELD_NAME = "navn";
     @OneToMany(mappedBy = LocalityNameRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -93,7 +91,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
-
     public static final String DB_FIELD_ABBREVIATION = "abbreviation";
     public static final String IO_FIELD_ABBREVIATION = "forkortelse";
     @OneToMany(mappedBy = LocalityAbbreviationRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -109,7 +106,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public MonotemporalSet<LocalityAbbreviationRecord> getAbbreviation() {
         return new MonotemporalSet<>(this.abbreviation);
     }
-
 
 
     public static final String DB_FIELD_TYPE = "type";
@@ -146,7 +142,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
-
     public static final String DB_FIELD_BETEGN = "betegnelse";
     public static final String IO_FIELD_BETEGN = "betegnelse";
     @OneToMany(mappedBy = LocalityBetegnRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -162,7 +157,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public MonotemporalSet<LocalityBetegnRecord> getBetegnelse() {
         return new MonotemporalSet<>(this.betegnelse);
     }
-
 
 
     public static final String DB_FIELD_MUNICIPALITY = "municipality";
@@ -182,7 +176,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
-
     public static final String DB_FIELD_LOCALITY_ROADCODE = "localityRoadcode";
     public static final String IO_FIELD_LOCALITY_ROADCODE = "lokalitetVejkode";
     @OneToMany(mappedBy = LocalityMunicipalityRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -198,7 +191,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public MonotemporalSet<LocalityRoadcodeRecord> getLocalityRoadcode() {
         return new MonotemporalSet<>(this.localityRoadcode);
     }
-
 
 
     public static final String DB_FIELD_SHAPE = "shape";
@@ -218,7 +210,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     }
 
 
-
     @Override
     public void update(RawData rawData, OffsetDateTime timestamp) {
         super.update(rawData, timestamp);
@@ -227,7 +218,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
             this.code = localityRawData.properties.code;
         }
     }
-
 
 
     @Override

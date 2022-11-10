@@ -1,14 +1,17 @@
 package dk.magenta.datafordeler.eskat.query;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
-import dk.magenta.datafordeler.core.fapi.*;
+import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.Condition;
+import dk.magenta.datafordeler.core.fapi.ParameterMap;
+import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
-import dk.magenta.datafordeler.cvr.records.*;
-import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
-import org.springframework.web.bind.annotation.RequestParam;
+import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Map;
 
 /**
  * Container for a query for Participants, defining fields and database lookup

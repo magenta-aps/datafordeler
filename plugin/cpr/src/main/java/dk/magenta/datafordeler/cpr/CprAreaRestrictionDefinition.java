@@ -6,7 +6,7 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 
 public class CprAreaRestrictionDefinition extends AreaRestrictionDefinition {
 
-    private CprPlugin plugin;
+    private final CprPlugin plugin;
 
     public static final String RESTRICTIONTYPE_KOMMUNEKODER = "kommunekoder";
     public static final String RESTRICTION_KOMMUNE_KUJALLEQ = "Kujalleq";

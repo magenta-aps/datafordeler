@@ -20,7 +20,7 @@ import java.util.List;
  * processing this chunk from the beginning.
  */
 @Entity
-@Table(name="interrupted_pull")
+@Table(name = "interrupted_pull")
 public class InterruptedPull extends DatabaseEntry {
 
 
@@ -52,7 +52,6 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
 
-
     @Column
     private OffsetDateTime startTime;
 
@@ -65,7 +64,6 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
 
-
     @Column
     private OffsetDateTime interruptTime;
 
@@ -76,7 +74,6 @@ public class InterruptedPull extends DatabaseEntry {
     public void setInterruptTime(OffsetDateTime interruptTime) {
         this.interruptTime = interruptTime;
     }
-
 
 
     @OneToMany(targetEntity = InterruptedPullFile.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "interruptedPull")
@@ -106,7 +103,6 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
 
-
     @Column
     private long chunk;
 
@@ -117,7 +113,6 @@ public class InterruptedPull extends DatabaseEntry {
     public void setChunk(long chunk) {
         this.chunk = chunk;
     }
-
 
 
     @Column

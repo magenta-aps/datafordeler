@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @javax.persistence.Entity
-@Table(name=CprPlugin.DEBUG_TABLE_PREFIX + RoadCityBitemporalRecord.TABLE_NAME, indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadCityBitemporalRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadCityBitemporalRecord.TABLE_NAME + RoadCityBitemporalRecord.DB_FIELD_ENTITY, columnList = CprBitemporalRoadRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadCityBitemporalRecord.TABLE_NAME + RoadCityBitemporalRecord.DB_FIELD_REPLACED_BY, columnList = CprBitemporalRoadRecord.DB_FIELD_REPLACED_BY + DatabaseEntry.REF),
 })
@@ -37,6 +37,7 @@ public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBite
     @JsonProperty(value = IO_FIELD_TO_HOUSENUMBER)
     @XmlElement(name = IO_FIELD_TO_HOUSENUMBER)
     private String toHousenumber;
+
     public String getToHousenumber() {
         return toHousenumber;
     }
@@ -52,6 +53,7 @@ public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBite
     @JsonProperty(value = IO_FIELD_FROM_HOUSENUMBER)
     @XmlElement(name = IO_FIELD_FROM_HOUSENUMBER)
     private String fromHousenumber;
+
     public String getFromHousenumber() {
         return fromHousenumber;
     }
@@ -67,6 +69,7 @@ public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBite
     @JsonProperty(value = IO_FIELD_EQUAL_UNEQUAL)
     @XmlElement(name = IO_FIELD_EQUAL_UNEQUAL)
     private boolean even;
+
     public boolean getEven() {
         return even;
     }
@@ -82,6 +85,7 @@ public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBite
     @JsonProperty(value = IO_FIELD_CITY_NAME)
     @XmlElement(name = IO_FIELD_CITY_NAME)
     private String cityName;
+
     public String getCityName() {
         return cityName;
     }
