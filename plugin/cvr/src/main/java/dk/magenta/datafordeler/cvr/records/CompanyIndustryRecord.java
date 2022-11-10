@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 
@@ -49,7 +48,6 @@ public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord {
     }
 
 
-
     public static final String DB_FIELD_CODE = "industryCode";
     public static final String IO_FIELD_CODE = "branchekode";
 
@@ -60,7 +58,6 @@ public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord {
     public String getIndustryCode() {
         return this.industryCode;
     }
-
 
 
     public static final String DB_FIELD_TEXT = "industryText";

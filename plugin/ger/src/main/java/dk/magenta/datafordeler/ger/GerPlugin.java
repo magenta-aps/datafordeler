@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
  * Datafordeler Plugin to fetch, parse and serve Ger dk.magenta.datafordeler.ger.data (dk.magenta.datafordeler.ger.data on regions, localities, roads, addresses etc.)
  * As with all plugins, it follows the model laid out in the Datafordeler Core
  * project, so it takes care of where to fetch dk.magenta.datafordeler.ger.data, how to parse it, how to
- * store it (leveraging the Datafordeler bitemporality model), under what path 
+ * store it (leveraging the Datafordeler bitemporality model), under what path
  * to serve it, and which roles should exist for dk.magenta.datafordeler.ger.data access.
  * The Core and Engine take care of the generic updateRegistrationTo around these, fetching and
  * serving based on the specifics laid out in the plugin.
@@ -44,9 +44,9 @@ public class GerPlugin extends Plugin {
     @Autowired
     private ResponsibleEntityManager responsibleEntityManager;
 
-    private GerRolesDefinition rolesDefinition = new GerRolesDefinition();
+    private final GerRolesDefinition rolesDefinition = new GerRolesDefinition();
 
-    private GerAreaRestrictionDefinition areaRestrictionDefinition;
+    private final GerAreaRestrictionDefinition areaRestrictionDefinition;
 
     public GerPlugin() {
         this.areaRestrictionDefinition = new GerAreaRestrictionDefinition(this);

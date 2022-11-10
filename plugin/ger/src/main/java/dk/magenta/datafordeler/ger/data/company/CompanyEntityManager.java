@@ -114,6 +114,7 @@ public class CompanyEntityManager extends GerEntityManager<CompanyEntity> {
 
     private static final HashMap<String, String> keyMappingEntityToRaw = new HashMap<>();
     private static final HashMap<String, String> keyMappingRawToEntity = new HashMap<>();
+
     static {
         keyMappingEntityToRaw.put(CompanyEntity.IO_FIELD_GERNR, "GERNR");
         keyMappingEntityToRaw.put(CompanyEntity.IO_FIELD_VALIDATED, "VALIDERET");

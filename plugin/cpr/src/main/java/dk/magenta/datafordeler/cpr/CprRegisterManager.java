@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class CprRegisterManager extends RegisterManager {
     @Autowired
     private SessionManager sessionManager;
 
-    private Logger log = LogManager.getLogger("CprRegisterManager");
+    private final Logger log = LogManager.getLogger(CprRegisterManager.class.getCanonicalName());
 
     @Value("${dafo.cpr.proxy-url:}")
     private String proxyString;
@@ -58,13 +59,13 @@ public class CprRegisterManager extends RegisterManager {
     }
 
     /**
-    * RegisterManager initialization; set up configuration and source fetcher.
-    * We store fetched data in a local cache, so create a random folder for that.
-    */
+     * RegisterManager initialization; set up configuration and source fetcher.
+     * We store fetched data in a local cache, so create a random folder for that.
+     */
     @PostConstruct
     public void init() throws IOException {
         if (this.localCopyFolder == null || this.localCopyFolder.isEmpty()) {
-            File temp = File.createTempFile("datafordeler-cache","");
+            File temp = File.createTempFile("datafordeler-cache", "");
             temp.delete();
             temp.mkdir();
             this.localCopyFolder = temp.getAbsolutePath();
@@ -142,27 +143,27 @@ public class CprRegisterManager extends RegisterManager {
     }
 
     /**
-    * Pull data from the data source denoted by eventInterface, using the 
-    * mechanism appropriate for the source.
-    * For CPR, this is done using a LocalCopyFtpCommunicator, where we fetch all 
-    * files in a remote folder (known to be text files).
-    * We then package chunks of lines into Events, and feed them into a stream for 
-    * returning.
-    */
+     * Pull data from the data source denoted by eventInterface, using the
+     * mechanism appropriate for the source.
+     * For CPR, this is done using a LocalCopyFtpCommunicator, where we fetch all
+     * files in a remote folder (known to be text files).
+     * We then package chunks of lines into Events, and feed them into a stream for
+     * returning.
+     */
     @Override
     public ImportInputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
         if (!(entityManager instanceof CprRecordEntityManager) && !(entityManager instanceof CprGeoEntityManager)) {
             throw new WrongSubclassException(CprRecordEntityManager.class, entityManager);
         }
         if (eventInterface == null) {
-            this.log.info("Not pulling for "+entityManager.toString());
+            this.log.info("Not pulling for " + entityManager);
             return null;
         }
-        this.log.info("Pulling from "+eventInterface.toString() + " for entitymanager "+entityManager);
+        this.log.info("Pulling from " + eventInterface + " for entitymanager " + entityManager);
         ImportInputStream responseBody = null;
         String scheme = eventInterface.getScheme();
-        this.log.info("scheme: "+scheme);
-        this.log.info("eventInterface: "+eventInterface);
+        this.log.info("scheme: " + scheme);
+        this.log.info("eventInterface: " + eventInterface);
         switch (scheme) {
             case "file":
                 try {
@@ -184,7 +185,7 @@ public class CprRegisterManager extends RegisterManager {
                                     importMetadata.getImportConfiguration() != null &&
                                     importMetadata.getImportConfiguration().size() > 0 &&
                                     (!importMetadata.getImportConfiguration().has("remote") || !importMetadata.getImportConfiguration().get("remote").booleanValue())
-                            ) {
+                    ) {
                         responseBody = ftpFetcher.fetchLocal();
                     } else {
                         responseBody = ftpFetcher.fetch(eventInterface);
@@ -196,7 +197,7 @@ public class CprRegisterManager extends RegisterManager {
                 break;
         }
         if (responseBody == null) {
-            throw new DataStreamException("No data received from source " + eventInterface.toString());
+            throw new DataStreamException("No data received from source " + eventInterface);
         }
 
         return responseBody;
@@ -220,7 +221,7 @@ public class CprRegisterManager extends RegisterManager {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    BufferedReader responseReader = new BufferedReader(new InputStreamReader(rawData, Charset.forName("iso-8859-1")));
+                    BufferedReader responseReader = new BufferedReader(new InputStreamReader(rawData, StandardCharsets.ISO_8859_1));
                     int eventCount = 0;
                     long totalLines = 0;
                     try {
@@ -242,7 +243,7 @@ public class CprRegisterManager extends RegisterManager {
                             objectOutputStream.writeObject(CprRegisterManager.this.wrap(lines, schema, dataIdBase, eventCount));
                             eventCount++;
                         }
-                        CprRegisterManager.this.log.info("Packed "+eventCount+" data objects with " + totalLines + " lines");
+                        CprRegisterManager.this.log.info("Packed " + eventCount + " data objects with " + totalLines + " lines");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

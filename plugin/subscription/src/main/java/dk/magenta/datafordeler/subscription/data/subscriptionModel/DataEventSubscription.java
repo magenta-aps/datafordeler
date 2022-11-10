@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+
 import javax.persistence.*;
 
 @Entity
@@ -20,14 +21,14 @@ public class DataEventSubscription extends DatabaseEntry {
     }
 
 
-
     public DataEventSubscription(String dataEventId, String kodeId) {
         this.dataEventId = dataEventId;
         this.kodeId = kodeId;
     }
 
 
-    @Column(name="dataEventId", unique = true, nullable=false)
+    public static final String DB_FIELD_DATAEVENT_ID = "dataEventId";
+    @Column(name = DB_FIELD_DATAEVENT_ID, unique = true, nullable = false)
     private String dataEventId;
 
     public String getDataEventId() {
@@ -38,7 +39,8 @@ public class DataEventSubscription extends DatabaseEntry {
         this.dataEventId = dataEventId;
     }
 
-    @Column(name="kodeId", nullable=false)
+    public static final String DB_FIELD_KODE_ID = "kodeId";
+    @Column(name = DB_FIELD_KODE_ID, nullable = false)
     private String kodeId;
 
     public String getKodeId() {
@@ -49,8 +51,10 @@ public class DataEventSubscription extends DatabaseEntry {
         this.kodeId = kodeId;
     }
 
+    public static final String DB_FIELD_SUBSCRIBER_ID = "subscriberId";
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = DB_FIELD_SUBSCRIBER_ID)
     private Subscriber subscriber;
 
     public Subscriber getSubscriber() {
@@ -74,6 +78,7 @@ public class DataEventSubscription extends DatabaseEntry {
 
     @ManyToOne
     private CvrList cvrList;
+
     public CvrList getCvrList() {
         return cvrList;
     }

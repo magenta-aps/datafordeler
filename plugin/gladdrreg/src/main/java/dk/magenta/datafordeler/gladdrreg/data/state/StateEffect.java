@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
  * Created by lars on 16-05-17.
  */
 @javax.persistence.Entity
-@Table(name="gladdrreg_state_effect")
+@Table(name = "gladdrreg_state_effect")
 public class StateEffect extends Effect<StateRegistration, StateEffect, StateData> {
     public StateEffect() {
     }

@@ -43,6 +43,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -50,6 +51,7 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -83,7 +85,8 @@ public class RecordTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("_doc", CompanyRecord.schema);
         schemaMap.put("produktionsenhed", CompanyUnitRecord.schema);
@@ -108,7 +111,7 @@ public class RecordTest {
     private HashMap<Integer, JsonNode> loadCompany(String resource) throws IOException, DataFordelerException {
         InputStream input = RecordTest.class.getResourceAsStream(resource);
         if (input == null) {
-            throw new MissingResourceException("Missing resource \""+resource+"\"", resource, "key");
+            throw new MissingResourceException("Missing resource \"" + resource + "\"", resource, "key");
         }
         return loadCompany(input, false);
     }
@@ -125,7 +128,7 @@ public class RecordTest {
 
             if (linedFile) {
                 int lineNumber = 0;
-                Scanner lineScanner = new Scanner(input, "UTF-8").useDelimiter("\n");
+                Scanner lineScanner = new Scanner(input, StandardCharsets.UTF_8).useDelimiter("\n");
                 while (lineScanner.hasNext()) {
                     String data = lineScanner.next();
 
@@ -138,10 +141,6 @@ public class RecordTest {
                         JsonNode companyInputNode = item.get("_source").get("Vrvirksomhed");
                         entityManager.parseData(companyInputNode, importMetadata, session);
                         companies.put(companyInputNode.get("cvrNummer").asInt(), companyInputNode);
-                    }
-                    lineNumber++;
-                    if (lineNumber % 100 == 0) {
-                        System.out.println("loaded line " + lineNumber);
                     }
                 }
             } else {
@@ -177,11 +176,8 @@ public class RecordTest {
                 HashMap<String, Object> filter = new HashMap<>();
                 filter.put("cvrNumber", cvrNumber);
                 CompanyRecord companyRecord = QueryManager.getItem(session, CompanyRecord.class, filter);
-                if (companyRecord == null) {
-                    System.out.println("Didn't find cvr number "+cvrNumber);
-                } else {
-                    compareJson(companies.get(cvrNumber), objectMapper.valueToTree(companyRecord), Collections.singletonList("root"));
-                }
+                Assert.assertNotNull("Didn't find cvr number " + cvrNumber, companyRecord);
+                compareJson(companies.get(cvrNumber), objectMapper.valueToTree(companyRecord), Collections.singletonList("root"));
             }
 
             CompanyRecordQuery query = new CompanyRecordQuery();
@@ -209,9 +205,7 @@ public class RecordTest {
             query.setParameter(CompanyRecordQuery.NAVN, "MAGENTA ApS");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
 
-            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.companyRecordOutputWrapper.wrapResult(QueryManager.getAllEntities(session, query, CompanyRecord.class).get(0), query)));
             query.clearParameter(CompanyRecordQuery.KOMMUNEKODE);
-
 
             time = OffsetDateTime.parse("1998-01-01T00:00:00Z");
             query.setRegistrationToAfter(time);
@@ -249,13 +243,11 @@ public class RecordTest {
         loadCompany("/company_in.json");
         loadCompany("/company_in2.json");
         ObjectMapper objectMapper = this.getObjectMapper();
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setParameter(CompanyRecordQuery.CVRNUMMER, "25052943");
             List<CompanyRecord> records = QueryManager.getAllEntities(session, query, CompanyRecord.class);
             CompanyRecord companyRecord = records.get(0);
-
-            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(companyRecord));
 
             Assert.assertEquals(3, companyRecord.getNames().size());
             Assert.assertEquals(1, companyRecord.getSecondaryNames().size());
@@ -284,10 +276,6 @@ public class RecordTest {
             Assert.assertEquals(6, adressEvents);
 
             CompanyDataEventRecord record = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).findFirst().get();
-            System.out.println(record.getOldItem());
-
-
-
 
             long nameEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_company_status")).count();
             Assert.assertEquals(1, nameEvents);
@@ -354,7 +342,7 @@ public class RecordTest {
         }
 
         loadCompany("/company_in3.json");
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setParameter(CompanyRecordQuery.CVRNUMMER, "25052943");
@@ -386,8 +374,10 @@ public class RecordTest {
 
         resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrnummer=25052943&virkningFra=2000-01-01&virkningTil=2000-01-01&fmt=legacy", HttpMethod.GET, httpEntity, String.class);
         String body = resp.getBody();
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(body)));
+        JsonNode data = objectMapper.readTree(body);
         Assert.assertEquals(200, resp.getStatusCodeValue());
+        Assert.assertEquals(1, data.get("results").size());
+        Assert.assertEquals("25052943", data.get("results").get(0).get("cvrNumberString").asText());
     }
 
     @Test
@@ -406,7 +396,7 @@ public class RecordTest {
         JsonNode results = jsonBody.get("results");
 
         JsonNode firstElement = results.get(0);
-        JsonNode registreringer = firstElement.get("registreringer");;
+        JsonNode registreringer = firstElement.get("registreringer");
         Assert.assertNotNull(registreringer);
 
         resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
@@ -416,7 +406,7 @@ public class RecordTest {
         results = jsonBody.get("results");
 
         firstElement = results.get(0);
-        registreringer = firstElement.get("registreringer");;
+        registreringer = firstElement.get("registreringer");
         Assert.assertNull(registreringer);
     }
 
@@ -427,7 +417,7 @@ public class RecordTest {
         Transaction transaction = session.beginTransaction();
         InputStream input = RecordTest.class.getResourceAsStream(resource);
         if (input == null) {
-            throw new MissingResourceException("Missing resource \""+resource+"\"", resource, "key");
+            throw new MissingResourceException("Missing resource \"" + resource + "\"", resource, "key");
         }
         boolean linedFile = false;
         HashMap<Integer, JsonNode> units = new HashMap<>();
@@ -436,7 +426,7 @@ public class RecordTest {
 
             if (linedFile) {
                 int lineNumber = 0;
-                Scanner lineScanner = new Scanner(input, "UTF-8").useDelimiter("\n");
+                Scanner lineScanner = new Scanner(input, StandardCharsets.UTF_8).useDelimiter("\n");
                 while (lineScanner.hasNext()) {
                     String data = lineScanner.next();
 
@@ -490,7 +480,7 @@ public class RecordTest {
                 filter.put("pNumber", pNumber);
                 CompanyUnitRecord companyUnitRecord = QueryManager.getItem(session, CompanyUnitRecord.class, filter);
                 if (companyUnitRecord == null) {
-                    System.out.println("Didn't find p number "+pNumber);
+                    System.out.println("Didn't find p number " + pNumber);
                 } else {
                     compareJson(units.get(pNumber), objectMapper.valueToTree(companyUnitRecord), Collections.singletonList("root"));
                 }
@@ -629,7 +619,6 @@ public class RecordTest {
                         persons.put(participantInputNode.get("enhedsNummer").asLong(), participantInputNode);
                     }
                     lineNumber++;
-                    System.out.println("loaded line " + lineNumber);
                     if (lineNumber >= 10) {
                         break;
                     }
@@ -668,7 +657,7 @@ public class RecordTest {
                 filter.put("unitNumber", participantNumber);
                 ParticipantRecord participantRecord = QueryManager.getItem(session, ParticipantRecord.class, filter);
                 if (participantRecord == null) {
-                    System.out.println("Didn't find participant number "+participantNumber);
+                    System.out.println("Didn't find participant number " + participantNumber);
                 } else {
                     compareJson(persons.get(participantNumber), objectMapper.valueToTree(participantRecord), Collections.singletonList("root"));
                 }
@@ -825,6 +814,7 @@ public class RecordTest {
 
     /**
      * Test the use of different searchparameters for cvr-lookup
+     *
      * @throws IOException
      * @throws DataFordelerException
      */
@@ -889,9 +879,9 @@ public class RecordTest {
     }
 
 
-
     /**
      * Checks that all items in n1 are also present in n2
+     *
      * @param n1
      * @param n2
      * @param path
@@ -900,9 +890,9 @@ public class RecordTest {
     private void compareJson(JsonNode n1, JsonNode n2, List<String> path) throws JsonProcessingException {
         ObjectMapper objectMapper = this.getObjectMapper();
         if (n1 == null && n2 != null) {
-            System.out.println("Mismatch: "+n1+" != "+n2+" at "+path);
+            System.out.println("Mismatch: " + n1 + " != " + n2 + " at " + path);
         } else if (n1 != null && n2 == null) {
-            System.out.println("Mismatch: "+n1+" != "+n2+" at "+path);
+            System.out.println("Mismatch: " + n1 + " != " + n2 + " at " + path);
         } else if (n1.isObject() && n2.isObject()) {
             ObjectNode o1 = (ObjectNode) n1;
             ObjectNode o2 = (ObjectNode) n2;
@@ -916,7 +906,7 @@ public class RecordTest {
             while (o1Fields.hasNext()) {
                 String field = o1Fields.next();
                 if (!f2.contains(field)) {
-                    System.out.println("Mismatch: missing field "+field+" at "+path);
+                    System.out.println("Mismatch: missing field " + field + " at " + path);
                 } else {
                     ArrayList<String> subpath = new ArrayList<>(path);
                     subpath.add(field);
@@ -929,31 +919,32 @@ public class RecordTest {
             ArrayNode a2 = (ArrayNode) n2;
 
             if (a1.size() != a2.size()) {
-                System.out.println("Mismatch: Array["+a1.size()+"] != Array["+a2.size()+"] at "+path);
+                System.out.println("Mismatch: Array[" + a1.size() + "] != Array[" + a2.size() + "] at " + path);
                 System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(a2));
             } else {
 
                 for (int i = 0; i < a1.size(); i++) {
                     boolean found = false;
-                    for (int j=0; j<a2.size(); j++) {
+                    for (int j = 0; j < a2.size(); j++) {
                         if (a1.get(i).asText().equals(a2.get(j).asText())) {
                             found = true;
                         }
                     }
                     if (!found) {
-                        System.out.println("Mismatch: Didn't find item "+a1.get(i)+" in "+objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(a2)+" at "+path);
+                        System.out.println("Mismatch: Didn't find item " + a1.get(i) + " in " + objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(a2) + " at " + path);
                     }
                 }
             }
 
 
-        } else if (!n1.asText().equals(n2.asText())){
+        } else if (!n1.asText().equals(n2.asText())) {
             boolean skip = false;
             try {
                 if (OffsetDateTime.parse(n1.asText()).isEqual(OffsetDateTime.parse(n2.asText()))) {
                     skip = true;
                 }
-            } catch (DateTimeParseException e) {}
+            } catch (DateTimeParseException e) {
+            }
             if (!skip) {
                 System.out.println("Mismatch: " + n1.asText() + " (" + n1.getNodeType().name() + ") != " + n2.asText() + " (" + n2.getNodeType().name() + ") at " + path);
             }
@@ -1016,7 +1007,6 @@ public class RecordTest {
         Assert.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
         session.close();
     }
-
 
 
 }

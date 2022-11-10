@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.geo.data.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.util.Monotemporality;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
@@ -57,8 +56,6 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     }
 
 
-
-
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
@@ -82,7 +79,6 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     }
 
 
-
     public static final String DB_FIELD_EDITOR = "editor";
     public static final String IO_FIELD_EDITOR = "ændretAf";
     @Column(name = DB_FIELD_EDITOR)
@@ -98,7 +94,6 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
         this.editor = editor;
         return this;
     }
-
 
 
     public static <T extends GeoMonotemporalRecord> T newestRecord(Collection<T> set) {

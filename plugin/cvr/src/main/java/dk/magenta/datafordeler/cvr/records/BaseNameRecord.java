@@ -47,14 +47,13 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
     public String getName() {
         return this.name;
     }
-    
+
     public void setName(String name) {
         if (name != null && name.length() > 900) {
             name = name.substring(0, 900);
         }
         this.name = name;
     }
-
 
 
     public static final String DB_FIELD_ORGANIZATION = "organizationRecord";
@@ -69,7 +68,6 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
     }
 
 
-
     public static final String DB_FIELD_OFFICE_UNIT = "officeUnitRecord";
 
     @JsonIgnore
@@ -80,7 +78,6 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
     public void setOfficeUnitRecord(OfficeRelationUnitRecord officeUnitRecord) {
         this.officeUnitRecord = officeUnitRecord;
     }
-
 
 
     public static final String DB_FIELD_FUSION = "fusionSplitRecord";
@@ -95,7 +92,6 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
     }
 
 
-
     public static final String DB_FIELD_PARTICIPANT_RELATION = "relationParticipantRecord";
 
     @ManyToOne(targetEntity = RelationParticipantRecord.class, fetch = FetchType.LAZY)
@@ -106,7 +102,6 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
     public void setRelationParticipantRecord(RelationParticipantRecord relationParticipantRecord) {
         this.relationParticipantRecord = relationParticipantRecord;
     }
-
 
 
     public static final String DB_FIELD_COMPANY_RELATION = "relationCompanyRecord";

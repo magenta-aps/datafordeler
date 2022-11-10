@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.CvrList;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -57,6 +59,7 @@ public class CvrListTest {
     /**
      * Initiate lists
      * Test that it is possible to find a specific CPR-list and add new items
+     *
      * @throws Exception
      */
     @Before
@@ -69,7 +72,7 @@ public class CvrListTest {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", ""));
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", ""));
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", ""));
@@ -87,8 +90,6 @@ public class CvrListTest {
     }
 
 
-
-
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
@@ -100,61 +101,61 @@ public class CvrListTest {
     @Test
     public void testModifications() {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+            Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
-            cvrList.addCvrStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
+            cvrList.addCvrStrings(Arrays.asList("1111111111", "1111111112"));
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+            Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
-            cvrList.addCvrStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
+            cvrList.addCvrStrings(Arrays.asList("1111111113", "1111111114"));
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+            Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
             Assert.assertEquals(4, cvrList.getCvr().size());
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+            Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList subscriber = (CvrList) query.getResultList().get(0);
             subscriber.getCvr().removeIf(f -> "1111111113".equals(f.getCvrNumber()));
-            transaction.commit();;
+            transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+            Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList subscriber = (CvrList) query.getResultList().get(0);
             Assert.assertEquals(3, subscriber.getCvr().size());
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+            Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
             session.delete(cvrList);
-            transaction.commit();;
+            transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+            Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             Assert.assertEquals(0, query.getResultList().size());
         }
@@ -162,10 +163,9 @@ public class CvrListTest {
     }
 
 
-
-
     /**
      * Test that it is possible to find a specific CPR-list and add new items
+     *
      * @throws Exception
      */
     @Test

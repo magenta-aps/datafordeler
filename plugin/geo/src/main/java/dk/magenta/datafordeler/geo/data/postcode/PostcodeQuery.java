@@ -21,10 +21,10 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
     public static final String NAME = PostcodeEntity.IO_FIELD_NAME;
 
     @QueryField(type = QueryField.FieldType.INT, queryName = CODE)
-    private List<String> code = new ArrayList<>();
+    private final List<String> code = new ArrayList<>();
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAME)
-    private List<String> name = new ArrayList<>();
+    private final List<String> name = new ArrayList<>();
 
     public List<String> getCode() {
         return code;
@@ -44,7 +44,6 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
     }
 
 
-
     public List<String> getName() {
         return name;
     }
@@ -61,8 +60,6 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
             this.updatedParameters();
         }
     }
-
-
 
 
     @Override
@@ -95,7 +92,7 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
         return "geo_postcode";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("code", PostcodeEntity.DB_FIELD_CODE);

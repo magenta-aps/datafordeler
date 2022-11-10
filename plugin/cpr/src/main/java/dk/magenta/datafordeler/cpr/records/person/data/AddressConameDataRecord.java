@@ -56,7 +56,6 @@ public class AddressConameDataRecord extends CprBitemporalPersonRecord<AddressCo
     }
 
 
-
     @Override
     public boolean equalData(Object o) {
         if (this == o) return true;

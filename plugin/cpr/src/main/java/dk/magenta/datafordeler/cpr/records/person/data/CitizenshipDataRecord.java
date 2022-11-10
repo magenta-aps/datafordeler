@@ -56,7 +56,6 @@ public class CitizenshipDataRecord extends CprBitemporalPersonRecord<Citizenship
     }
 
 
-
     @Override
     public boolean equalData(Object o) {
         if (this == o) return true;

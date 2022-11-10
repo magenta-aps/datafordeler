@@ -59,10 +59,8 @@ public class ParentVerificationDataRecord extends VerificationDataRecord<ParentV
     }
 
 
-
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<ParentVerificationDataRecord> correctors = new HashSet<>();
+    private final Set<ParentVerificationDataRecord> correctors = new HashSet<>();
 
     public Set<ParentVerificationDataRecord> getCorrectors() {
         return this.correctors;

@@ -24,7 +24,7 @@ public class MembershipDescription {
         return template == null || template.equals("*") || Objects.equals(template, subject);
     }
 
-    private static HashSet<MembershipDescription> templates = new HashSet<>();
+    private static final HashSet<MembershipDescription> templates = new HashSet<>();
 
     static {
         templates.add(new MembershipDescription("LEDELSESORGAN", "Direktion", "adm. dir"));

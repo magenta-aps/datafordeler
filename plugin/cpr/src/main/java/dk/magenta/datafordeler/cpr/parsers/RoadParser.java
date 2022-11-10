@@ -16,7 +16,7 @@ public class RoadParser extends CprSubParser<RoadDataRecord> {
     public RoadParser() {
     }
 
-    private Logger log = LogManager.getLogger(RoadParser.class);
+    private final Logger log = LogManager.getLogger(RoadParser.class.getCanonicalName());
 
     @Override
     public Logger getLog() {

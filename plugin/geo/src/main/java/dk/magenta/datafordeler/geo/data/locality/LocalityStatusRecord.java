@@ -34,7 +34,6 @@ public class LocalityStatusRecord extends GeoMonotemporalRecord<GeoLocalityEntit
     }
 
 
-
     public static final String DB_FIELD_TYPE = "status";
     public static final String IO_FIELD_TYPE = "status";
     @Column(name = DB_FIELD_TYPE)

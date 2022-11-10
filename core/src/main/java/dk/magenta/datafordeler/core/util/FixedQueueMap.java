@@ -3,9 +3,9 @@ package dk.magenta.datafordeler.core.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FixedQueueMap<K,V> extends HashMap<K,V> {
-    private ArrayList<K> order;
-    private int capacity;
+public class FixedQueueMap<K, V> extends HashMap<K, V> {
+    private final ArrayList<K> order;
+    private final int capacity;
 
     public FixedQueueMap(int capacity) {
         super(capacity);

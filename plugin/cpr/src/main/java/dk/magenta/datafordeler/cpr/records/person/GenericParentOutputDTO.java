@@ -27,7 +27,7 @@ public class GenericParentOutputDTO implements Nontemporal {
     }
 
     public String getParentSearchAddress() {
-        return pituBaseUrl+"/cpr/person/1/rest/search?pnr="+getPnr();
+        return pituBaseUrl + "/cpr/person/1/rest/search?pnr=" + getPnr();
     }
 
     @Override

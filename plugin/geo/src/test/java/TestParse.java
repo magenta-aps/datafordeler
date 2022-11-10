@@ -4,20 +4,12 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
-import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
 import dk.magenta.datafordeler.geo.data.building.BuildingEntity;
-import dk.magenta.datafordeler.geo.data.building.BuildingEntityManager;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
-import dk.magenta.datafordeler.geo.data.locality.LocalityEntityManager;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
-import dk.magenta.datafordeler.geo.data.municipality.MunicipalityEntityManager;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
-import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
-import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
-import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,7 +23,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.Iterator;
 import java.util.UUID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,11 +38,11 @@ public class TestParse extends GeoTest {
 
 
     private ResponseEntity<String> restSearch(ParameterMap parameters, String type) {
-        return this.lookup("/geo/"+type+"/1/rest/search?" + parameters.asUrlParams());
+        return this.lookup("/geo/" + type + "/1/rest/search?" + parameters.asUrlParams());
     }
 
     private ResponseEntity<String> uuidSearch(String id, String type) {
-        return this.lookup("/geo/"+type+"/1/rest/" + id);
+        return this.lookup("/geo/" + type + "/1/rest/" + id);
     }
 
     @Before

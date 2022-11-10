@@ -21,8 +21,8 @@ import java.util.UUID;
 public class CompanyUnitEntityManager extends CvrEntityManager<CompanyUnitRecord> {
 
     public static final OffsetDateTime MIN_SQL_SERVER_DATETIME = OffsetDateTime.of(
-        1, 1, 1, 0, 0, 0, 0,
-        ZoneOffset.UTC
+            1, 1, 1, 0, 0, 0, 0,
+            ZoneOffset.UTC
     );
 
     @Autowired
@@ -31,7 +31,7 @@ public class CompanyUnitEntityManager extends CvrEntityManager<CompanyUnitRecord
     @Autowired
     private SessionManager sessionManager;
 
-    private Logger log = LogManager.getLogger(CompanyUnitEntityManager.class);
+    private final Logger log = LogManager.getLogger(CompanyUnitEntityManager.class.getCanonicalName());
 
     public CompanyUnitEntityManager() {
     }

@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @javax.persistence.Entity
-@Table(name=CprPlugin.DEBUG_TABLE_PREFIX + RoadNameBitemporalRecord.TABLE_NAME, indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadNameBitemporalRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadNameBitemporalRecord.TABLE_NAME + RoadNameBitemporalRecord.DB_FIELD_ENTITY, columnList = CprBitemporalRoadRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadNameBitemporalRecord.TABLE_NAME + RoadNameBitemporalRecord.DB_FIELD_ROADNAME, columnList = RoadNameBitemporalRecord.DB_FIELD_ROADNAME),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadNameBitemporalRecord.TABLE_NAME + RoadNameBitemporalRecord.DB_FIELD_REPLACED_BY, columnList = CprBitemporalRoadRecord.DB_FIELD_REPLACED_BY + DatabaseEntry.REF),
@@ -73,6 +73,7 @@ public class RoadNameBitemporalRecord extends CprBitemporalRoadRecord<RoadNameBi
     @JsonProperty(value = IO_FIELD_FROM_MUNIPALITY_CODE)
     @XmlElement(name = IO_FIELD_FROM_MUNIPALITY_CODE)
     private int fromMunicipalityCode;
+
     public int getFromMunicipalityCode() {
         return fromMunicipalityCode;
     }
@@ -147,8 +148,8 @@ public class RoadNameBitemporalRecord extends CprBitemporalRoadRecord<RoadNameBi
 
     @Override
     public boolean hasData() {
-        return this.toMunicipalityCode!=0 || this.toRoadCode!=0 ||
-                this.fromMunicipalityCode!=0 || this.fromRoadCode!=0 ||
+        return this.toMunicipalityCode != 0 || this.toRoadCode != 0 ||
+                this.fromMunicipalityCode != 0 || this.fromRoadCode != 0 ||
                 stringNonEmpty(this.roadAdddressName) || stringNonEmpty(this.roadName);
     }
 

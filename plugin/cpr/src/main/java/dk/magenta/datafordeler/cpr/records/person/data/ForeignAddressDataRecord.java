@@ -65,7 +65,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     }
 
 
-
     public static final String DB_FIELD_ADDRESS_LINE2 = "addressLine2";
     public static final String IO_FIELD_ADDRESS_LINE2 = "adresselinie2";
     @Column(name = DB_FIELD_ADDRESS_LINE2)
@@ -80,7 +79,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     public void setAddressLine2(String addressLine2) {
         this.addressLine2 = addressLine2;
     }
-
 
 
     public static final String DB_FIELD_ADDRESS_LINE3 = "addressLine3";
@@ -99,7 +97,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     }
 
 
-
     public static final String DB_FIELD_ADDRESS_LINE4 = "addressLine4";
     public static final String IO_FIELD_ADDRESS_LINE4 = "adresselinie4";
     @Column(name = DB_FIELD_ADDRESS_LINE4)
@@ -116,7 +113,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     }
 
 
-
     public static final String DB_FIELD_ADDRESS_LINE5 = "addressLine5";
     public static final String IO_FIELD_ADDRESS_LINE5 = "adresselinie5";
     @Column(name = DB_FIELD_ADDRESS_LINE5)
@@ -131,7 +127,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     public void setAddressLine5(String addressLine5) {
         this.addressLine5 = addressLine5;
     }
-
 
 
     public String join(String separator) {

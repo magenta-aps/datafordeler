@@ -29,7 +29,7 @@ import java.util.Objects;
         ),
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressRoadRecord.TABLE_NAME + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE,
-                columnList = AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE+","+AccessAddressRoadRecord.DB_FIELD_ROAD_CODE
+                columnList = AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE + "," + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE
         )
 })
 public class AccessAddressRoadRecord extends GeoMonotemporalRecord<AccessAddressEntity> {
@@ -58,7 +58,6 @@ public class AccessAddressRoadRecord extends GeoMonotemporalRecord<AccessAddress
     public void setMunicipalityCode(Integer municipalityCode) {
         this.municipalityCode = municipalityCode;
     }
-
 
 
     public static final String DB_FIELD_ROAD_CODE = "roadCode";

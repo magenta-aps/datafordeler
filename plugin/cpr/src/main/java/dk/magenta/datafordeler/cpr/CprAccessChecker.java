@@ -11,6 +11,7 @@ public abstract class CprAccessChecker {
 
     /**
      * Checks that the user has the READ_CPR_ROLE system role.
+     *
      * @param dafoUserDetails the user to check access for
      * @throws AccessDeniedException
      * @throws AccessRequiredException

@@ -73,9 +73,7 @@ public class Bitemporality implements Comparable<Bitemporality> {
             return false;
         if (((compare & COMPARE_EFFECT_FROM) != 0) && (effectFrom != null ? !Equality.equal(effectFrom, that.effectFrom) : that.effectFrom != null))
             return false;
-        if (((compare & COMPARE_EFFECT_TO) != 0) && (effectTo != null ? !Equality.equal(effectTo ,that.effectTo) : that.effectTo != null))
-            return false;
-        return true;
+        return ((compare & COMPARE_EFFECT_TO) == 0) || (effectTo != null ? Equality.equal(effectTo, that.effectTo) : that.effectTo == null);
     }
 
     public boolean equalRegistration(Bitemporality o) {

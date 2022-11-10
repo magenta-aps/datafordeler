@@ -45,7 +45,7 @@ public class GladdrregRegisterManager extends RegisterManager {
     @Autowired
     private SessionManager sessionManager;
 
-    private Logger log = LogManager.getLogger("GladdregRegisterManager");
+    private Logger log = LogManager.getLogger(GladdregRegisterManager.class.getCanonicalName());
 
     public GladdrregRegisterManager() {
         this.commonFetcher = new HttpCommunicator();

@@ -16,7 +16,7 @@ import java.util.UUID;
  * in {@link dk.magenta.datafordeler.core.database.Entity}
  */
 @javax.persistence.Entity
-@Table(name= CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_entity",  indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_entity", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_identification", columnList = "identification_id", unique = true)
 })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -38,12 +38,12 @@ public class ResidenceEntity extends CprEntity<ResidenceEntity, ResidenceRegistr
         return new ResidenceRegistration();
     }
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "Bolig";
 
 
     public static UUID generateUUID(int komkod, int vejkod, String husnr, String etage, String sidedoer) {
-        String uuidInput = "residence:"+komkod+":"+vejkod+":"+husnr+":"+etage+":"+sidedoer;
+        String uuidInput = "residence:" + komkod + ":" + vejkod + ":" + husnr + ":" + etage + ":" + sidedoer;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
 

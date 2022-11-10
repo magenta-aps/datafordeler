@@ -36,24 +36,28 @@ public abstract class ConfigurationManager<C extends Configuration> {
 
     /**
      * Get the specific class object, a subclass of Configuration
+     *
      * @return
      */
     protected abstract Class<C> getConfigurationClass();
 
     /**
      * Create a new Configuration object, empty or with default values, because one does not already exist
+     *
      * @return
      */
     protected abstract C createConfiguration();
 
     /**
      * Return a session manager
+     *
      * @return
      */
     protected abstract ConfigurationSessionManager getSessionManager();
 
     /**
      * Retrieve the configuration object from the database
+     *
      * @return
      */
     public C getConfiguration() {
@@ -64,8 +68,8 @@ public abstract class ConfigurationManager<C extends Configuration> {
         try {
             Class<C> configurationClass = this.getConfigurationClass();
             configuration = session.createQuery(
-                "select c from " +configurationClass.getSimpleName() + " c",
-                configurationClass
+                    "select c from " + configurationClass.getSimpleName() + " c",
+                    configurationClass
             ).getSingleResult();
             session.refresh(configuration);
             return configuration;

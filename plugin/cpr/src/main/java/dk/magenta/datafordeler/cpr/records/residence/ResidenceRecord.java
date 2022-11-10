@@ -21,7 +21,7 @@ public class ResidenceRecord extends CprGeoRecord<ResidenceEffect, ResidenceBase
 
     public static final String RECORDTYPE_RESIDENCE = "002";
 
-    private CprBitemporality residenceTemporality;
+    private final CprBitemporality residenceTemporality;
 
     public ResidenceRecord(String line) throws ParseException {
         super(line);
@@ -36,9 +36,6 @@ public class ResidenceRecord extends CprGeoRecord<ResidenceEffect, ResidenceBase
 
         this.residenceTemporality = new CprBitemporality(this.getOffsetDateTime("timestamp"), null, this.getOffsetDateTime("haenstart"), false, null, false);
     }
-
-
-
 
 
     protected ResidenceBaseData getBaseDataItem(HashMap<ResidenceEffect, ResidenceBaseData> data) {
@@ -94,8 +91,6 @@ public class ResidenceRecord extends CprGeoRecord<ResidenceEffect, ResidenceBase
         }
         return output;
     }
-
-
 
 
     @Override
@@ -168,7 +163,7 @@ public class ResidenceRecord extends CprGeoRecord<ResidenceEffect, ResidenceBase
     }
 
     public String getDoor() {
-        return this.getString("sidedoer",true);
+        return this.getString("sidedoer", true);
     }
 
 }

@@ -16,6 +16,7 @@ import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -47,14 +48,13 @@ public abstract class TestBase {
 
     protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
         this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
-        this.loadGeoData(sessionManager, roadEntityManager,"/road.json");
+        this.loadGeoData(sessionManager, roadEntityManager, "/road.json");
         this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
         this.loadGeoData(sessionManager, municipalityEntityManager, "/municipality.json");
         this.loadGeoData(sessionManager, postcodeEntityManager, "/post.json");
         this.loadGeoData(sessionManager, buildingEntityManager, "/building.json");
         this.loadGeoData(sessionManager, accessAddressEntityManager, "/access.json");
     }
-
 
 
     protected void cleanup(SessionManager sessionManager, Class[] classes) {
@@ -102,7 +102,7 @@ public abstract class TestBase {
     }
 
     protected void cleanupPersonData(SessionManager sessionManager) {
-        this.cleanup(sessionManager, new Class[] {
+        this.cleanup(sessionManager, new Class[]{
                 PersonEntity.class,
         });
         QueryManager.clearCaches();

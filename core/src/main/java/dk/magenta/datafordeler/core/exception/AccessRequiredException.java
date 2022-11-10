@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class AccessRequiredException extends DataFordelerException {
 
-  public AccessRequiredException(String message) {
-    super(message);
-  }
+    public AccessRequiredException(String message) {
+        super(message);
+    }
 
-  @Override
-  public String getCode() {
-    return "datafordeler.accessrequired";
-  }
+    @Override
+    public String getCode() {
+        return "datafordeler.accessrequired";
+    }
 
 }

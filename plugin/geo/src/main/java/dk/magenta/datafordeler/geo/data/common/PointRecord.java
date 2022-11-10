@@ -43,7 +43,6 @@ public abstract class PointRecord<E extends GeoEntity> extends GeoMonotemporalRe
     }
 
 
-
     public static final String DB_FIELD_SHAPE = "shape";
     public static final String IO_FIELD_SHAPE = "form";
     @Column(name = DB_FIELD_SHAPE, columnDefinition = "varbinary(max)")
@@ -64,7 +63,7 @@ public abstract class PointRecord<E extends GeoEntity> extends GeoMonotemporalRe
     }
 
 
-    private static GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), GeoPlugin.SRID);
+    private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), GeoPlugin.SRID);
 
 
     public static Point convert(org.geojson.Point original) {
@@ -73,7 +72,7 @@ public abstract class PointRecord<E extends GeoEntity> extends GeoMonotemporalRe
                         new Coordinate[]{
                                 PointRecord.convert(original.getCoordinates())
                         }
-                        ),
+                ),
                 geometryFactory
         );
     }

@@ -1,18 +1,18 @@
 {
-  "type" : "FeatureCollection",
-  "crs" : {
-    "type" : "name",
-    "properties" : {
-      "name" : "EPSG:4326"
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
     }
   },
-  "features" : [
+  "features": [
     {
-      "type" : "Feature",
-      "id" : 3694,
-      "geometry" : {
-        "type" : "LineString",
-        "coordinates" : [
+      "type": "Feature",
+      "id": 3694,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
           [
             -56.13876941999996,
             72.78483718800004
@@ -51,30 +51,30 @@
           ]
         ]
       },
-      "properties" : {
-        "OBJECTID" : 3694,
-        "Vejnavn" : "Telebakken",
-        "Vejkode" : "0329",
-        "Creator" : "COREDATA",
-        "CreationDate" : 1538477325000,
-        "Editor" : "COREDATA",
-        "EditDate" : 1539672913000,
-        "Kommunekode" : 960,
-        "Lokalitetskode" : "1600",
-        "Vejadresseringsnavn" : "Telebakken",
-        "VejmidteSumiffik" : "{76C386F8-C312-4361-937E-57D5597D1004}",
-        "GlobalID" : "{F61CA581-7BC9-4216-B716-21AA7BFC440B}",
-        "Vejkategori" : "Lokalvej",
-        "Info" : null,
-        "SHAPE.STLength()" : 0.0017763525362047901
+      "properties": {
+        "OBJECTID": 3694,
+        "Vejnavn": "Telebakken",
+        "Vejkode": "0329",
+        "Creator": "COREDATA",
+        "CreationDate": 1538477325000,
+        "Editor": "COREDATA",
+        "EditDate": 1539672913000,
+        "Kommunekode": 960,
+        "Lokalitetskode": "1600",
+        "Vejadresseringsnavn": "Telebakken",
+        "VejmidteSumiffik": "{76C386F8-C312-4361-937E-57D5597D1004}",
+        "GlobalID": "{F61CA581-7BC9-4216-B716-21AA7BFC440B}",
+        "Vejkategori": "Lokalvej",
+        "Info": null,
+        "SHAPE.STLength()": 0.0017763525362047901
       }
     },
     {
-      "type" : "Feature",
-      "id" : 4790,
-      "geometry" : {
-        "type" : "LineString",
-        "coordinates" : [
+      "type": "Feature",
+      "id": 4790,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
           [
             -69.343092127999967,
             77.487418153000078
@@ -229,30 +229,30 @@
           ]
         ]
       },
-      "properties" : {
-        "OBJECTID" : 4790,
-        "Vejnavn" : "Qaanaaq",
-        "Vejkode" : "0257",
-        "Creator" : "COREDATA",
-        "CreationDate" : 1538477325000,
-        "Editor" : "COREDATA",
-        "EditDate" : 1539672919000,
-        "Kommunekode" : 960,
-        "Lokalitetskode" : "1700",
-        "Vejadresseringsnavn" : "Qaanaaq",
-        "VejmidteSumiffik" : "{9B51D882-0D22-4C44-9741-1D027DEF3A13}",
-        "GlobalID" : "{6EB3082D-555D-4C57-BA69-9DD653D3CFA0}",
-        "Vejkategori" : "Lokalvej",
-        "Info" : "Settlement",
-        "SHAPE.STLength()" : 0.0036004873747494969
+      "properties": {
+        "OBJECTID": 4790,
+        "Vejnavn": "Qaanaaq",
+        "Vejkode": "0257",
+        "Creator": "COREDATA",
+        "CreationDate": 1538477325000,
+        "Editor": "COREDATA",
+        "EditDate": 1539672919000,
+        "Kommunekode": 960,
+        "Lokalitetskode": "1700",
+        "Vejadresseringsnavn": "Qaanaaq",
+        "VejmidteSumiffik": "{9B51D882-0D22-4C44-9741-1D027DEF3A13}",
+        "GlobalID": "{6EB3082D-555D-4C57-BA69-9DD653D3CFA0}",
+        "Vejkategori": "Lokalvej",
+        "Info": "Settlement",
+        "SHAPE.STLength()": 0.0036004873747494969
       }
     },
     {
-      "type" : "Feature",
-      "id" : 3695,
-      "geometry" : {
-        "type" : "LineString",
-        "coordinates" : [
+      "type": "Feature",
+      "id": 3695,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
           [
             -56.138142208999966,
             72.78713781700003
@@ -347,22 +347,22 @@
           ]
         ]
       },
-      "properties" : {
-        "OBJECTID" : 3695,
-        "Vejnavn" : "Telebakken",
-        "Vejkode" : "0329",
-        "Creator" : "COREDATA",
-        "CreationDate" : 1538477325000,
-        "Editor" : "COREDATA",
-        "EditDate" : 1539672913000,
-        "Kommunekode" : 960,
-        "Lokalitetskode" : "1600",
-        "Vejadresseringsnavn" : "Telebakken",
-        "VejmidteSumiffik" : "{68AC4BFD-68B3-4F5C-8DC4-3EB73F27E7E6}",
-        "GlobalID" : "{C1253376-43A0-4767-96F4-D2AACE6C93A9}",
-        "Vejkategori" : "Lokalvej",
-        "Info" : null,
-        "SHAPE.STLength()" : 0.0026838021545663002
+      "properties": {
+        "OBJECTID": 3695,
+        "Vejnavn": "Telebakken",
+        "Vejkode": "0329",
+        "Creator": "COREDATA",
+        "CreationDate": 1538477325000,
+        "Editor": "COREDATA",
+        "EditDate": 1539672913000,
+        "Kommunekode": 960,
+        "Lokalitetskode": "1600",
+        "Vejadresseringsnavn": "Telebakken",
+        "VejmidteSumiffik": "{68AC4BFD-68B3-4F5C-8DC4-3EB73F27E7E6}",
+        "GlobalID": "{C1253376-43A0-4767-96F4-D2AACE6C93A9}",
+        "Vejkategori": "Lokalvej",
+        "Info": null,
+        "SHAPE.STLength()": 0.0026838021545663002
       }
     }
   ]

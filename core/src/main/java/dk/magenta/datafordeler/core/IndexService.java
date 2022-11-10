@@ -9,7 +9,6 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +28,6 @@ public class IndexService {
 
     @Autowired
     private PluginManager pluginManager;
-
-
-
 
     // No need to recreate the response every time we are asked, since it's the same for every call on a given server execution
     private String preparedJsonResponse;
@@ -62,10 +58,6 @@ public class IndexService {
                     }
                 }
 
-
-
-
-
                 ObjectMapper objectMapper = new ObjectMapper();
                 ObjectNode root = objectMapper.createObjectNode();
 
@@ -91,12 +83,12 @@ public class IndexService {
 
     }
 
-    @RequestMapping(path="", produces="application/json")
+    @RequestMapping(path = "", produces = "application/json")
     public String json() {
         return this.preparedJsonResponse;
     }
 
-    @RequestMapping(path="", produces="text/html")
+    @RequestMapping(path = "", produces = "text/html")
     public ModelAndView html() {
         HashMap<String, Object> model = new HashMap<>();
         model.put("serviceDescriptors", this.serviceDescriptors);

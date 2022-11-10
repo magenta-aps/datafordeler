@@ -29,6 +29,7 @@ public class BaseAttributeValueRecord extends CvrBitemporalRecord {
     public String getValue() {
         return this.value;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

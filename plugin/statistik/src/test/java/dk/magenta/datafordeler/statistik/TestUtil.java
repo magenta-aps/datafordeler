@@ -17,10 +17,10 @@ public class TestUtil {
         ArrayNode arrayNode = objectMapper.createArrayNode();
         String[] lines = csv.split("\n");
         String[] headers = lines[0].split(";");
-        for (int i=1; i<lines.length; i++) {
+        for (int i = 1; i < lines.length; i++) {
             ObjectNode objectNode = objectMapper.createObjectNode();
             String[] values = lines[i].split(";");
-            for (int j=0; j<values.length; j++) {
+            for (int j = 0; j < values.length; j++) {
                 objectNode.put(strip(headers[j]), strip(values[j]));
             }
             arrayNode.add(objectNode);

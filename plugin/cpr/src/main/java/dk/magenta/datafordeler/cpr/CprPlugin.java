@@ -22,8 +22,8 @@ import java.util.*;
  * Datafordeler Plugin to fetch, parse and serve CPR data (data on people, roads and
  * administrative regions).
  * As with all plugins, it follows the model laid out in the Datafordeler Core
- * project, so it takes care of where to fetch data, how to parse it, how to 
- * store it (leveraging the Datafordeler bitemporality model), under what path 
+ * project, so it takes care of where to fetch data, how to parse it, how to
+ * store it (leveraging the Datafordeler bitemporality model), under what path
  * to serve it, and which roles should exist for data access.
  * The Core and Engine take care of the generic updateRegistrationTo around these, fetching and
  * serving based on the specifics laid out in the plugin.
@@ -50,9 +50,9 @@ public class CprPlugin extends Plugin {
     @Autowired
     private RoadEntityManager roadEntityManager;
 
-    private CprRolesDefinition rolesDefinition = new CprRolesDefinition();
+    private final CprRolesDefinition rolesDefinition = new CprRolesDefinition();
 
-    private CprAreaRestrictionDefinition areaRestrictionDefinition;
+    private final CprAreaRestrictionDefinition areaRestrictionDefinition;
 
     public CprPlugin() {
         this.areaRestrictionDefinition = new CprAreaRestrictionDefinition(this);
@@ -113,9 +113,9 @@ public class CprPlugin extends Plugin {
 
     public String getJoinString(Map<String, String> handles) {
         StringJoiner s = new StringJoiner(" ");
-        s.add("LEFT JOIN "+ RoadEntity.class.getCanonicalName()+" cpr_road");
-        s.add("ON cpr_road.roadcode = "+handles.get("roadcode"));
-        s.add("AND cpr_road.municipalityCode = "+handles.get("municipalitycode"));
+        s.add("LEFT JOIN " + RoadEntity.class.getCanonicalName() + " cpr_road");
+        s.add("ON cpr_road.roadcode = " + handles.get("roadcode"));
+        s.add("AND cpr_road.municipalityCode = " + handles.get("municipalitycode"));
         return s.toString();
     }
 

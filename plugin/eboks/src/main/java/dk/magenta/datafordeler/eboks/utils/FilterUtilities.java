@@ -14,10 +14,10 @@ import static java.util.Comparator.naturalOrder;
 
 public class FilterUtilities {
 
-    private static Comparator bitemporalCprComparator = Comparator.comparing(FilterUtilities::getCprBitemporality, BitemporalityComparator.ALL)
+    private static final Comparator bitemporalCprComparator = Comparator.comparing(FilterUtilities::getCprBitemporality, BitemporalityComparator.ALL)
             .thenComparing(CprBitemporalRecord::getId, Comparator.nullsLast(naturalOrder()));
 
-    private static Comparator bitemporalCvrComparator = Comparator.comparing(FilterUtilities::getCvrBitemporality, BitemporalityComparator.ALL)
+    private static final Comparator bitemporalCvrComparator = Comparator.comparing(FilterUtilities::getCvrBitemporality, BitemporalityComparator.ALL)
             .thenComparing(CvrBitemporalRecord::getId, Comparator.nullsLast(naturalOrder()));
 
 

@@ -61,7 +61,6 @@ public class CivilStatusVerificationDataRecord extends VerificationDataRecord<Ci
     }
 
 
-
     @Override
     public boolean equalData(Object o) {
         if (this == o) return true;

@@ -11,14 +11,14 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.CvrList;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCvrNumber;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,7 +54,7 @@ public class ManageCvrList {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(ManageCvrList.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(ManageCvrList.class.getCanonicalName());
 
 
     @PostConstruct
@@ -64,6 +64,7 @@ public class ManageCvrList {
 
     /**
      * Create a cprList
+     *
      * @param request
      * @param cvrList
      * @return
@@ -72,13 +73,13 @@ public class ManageCvrList {
      * @throws InvalidTokenException
      * @throws InvalidCertificateException
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/", headers="Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList", required=false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/", headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList", required = false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query<Subscriber> query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
+            Query<Subscriber> query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"));
             List<Subscriber> subscribers = query.getResultList();
             if (subscribers.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -91,13 +92,13 @@ public class ManageCvrList {
                 transaction.commit();
                 return ResponseEntity.ok(cvrCreateList);
             }
-        }  catch(PersistenceException e) {
+        } catch (PersistenceException e) {
             String errorMessage = "cvrList already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.warn(errorMessage, e);
             return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
-        }  catch(Exception e) {
+        } catch (Exception e) {
             String errorMessage = "Failed creating list";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
@@ -108,15 +109,16 @@ public class ManageCvrList {
 
     /**
      * Get a list of all cprList
+     *
      * @return
      */
     @GetMapping("/subscriber/cvrList")
     public ResponseEntity<List<CvrList>> cvrListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
-            Query<Subscriber> query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
+            Query<Subscriber> query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
+            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"));
             List<Subscriber> subscribers = query.getResultList();
             if (subscribers.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -129,18 +131,18 @@ public class ManageCvrList {
 
 
     @DeleteMapping("/subscriber/cvrList/cvr/{listId}")
-    public ResponseEntity cvrListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr",required=false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cvrListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query<CvrList> query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
+            Query<CvrList> query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId ", CvrList.class);
             query.setParameter("listId", listId);
             List<CvrList> lists = query.getResultList();
             if (lists.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             CvrList foundList = lists.get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+            if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
@@ -148,15 +150,15 @@ public class ManageCvrList {
                 return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
             List<SubscribedCvrNumber> subscribedList = foundList.getCvr().stream().filter(item -> cvrs.contains(item.getCvrNumber())).collect(Collectors.toList());
-            for(SubscribedCvrNumber subscribed : subscribedList) {
+            for (SubscribedCvrNumber subscribed : subscribedList) {
                 session.delete(subscribed);
                 foundList.getCvr().remove(subscribed);
             }
             transaction.commit();
             String errorMessage = "Elements were removed";
-            JSONObject obj = new JSONObject();
+            ObjectNode obj = objectMapper.createObjectNode();
             obj.put("message", errorMessage);
-            return new ResponseEntity(obj.toString(), HttpStatus.OK);
+            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
@@ -167,16 +169,16 @@ public class ManageCvrList {
     @PostMapping("/subscriber/cvrList/cvr/{listId}")
     public ResponseEntity cvrListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query<CvrList> query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId ", CvrList.class);
+            Query<CvrList> query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId ", CvrList.class);
             query.setParameter("listId", listId);
             List<CvrList> lists = query.getResultList();
             if (lists.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             CvrList foundList = lists.get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+            if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
@@ -185,7 +187,7 @@ public class ManageCvrList {
             }
             JsonNode requestBody = objectMapper.readTree(request.getInputStream());
             Iterator<JsonNode> cprBodyIterator = requestBody.get("cvr").iterator();
-            while(cprBodyIterator.hasNext()) {
+            while (cprBodyIterator.hasNext()) {
                 JsonNode node = cprBodyIterator.next();
                 foundList.addCvrString(node.textValue());
             }
@@ -193,13 +195,13 @@ public class ManageCvrList {
             String errorMessage = "Elements were added";
             ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("message", errorMessage);
-            return new ResponseEntity(obj.toString(), HttpStatus.OK);
-        } catch(PersistenceException e) {
+            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.OK);
+        } catch (PersistenceException e) {
             String errorMessage = "Elements allready exists";
             ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.warn(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
@@ -208,6 +210,7 @@ public class ManageCvrList {
 
     /**
      * Get a list of all CPR-numbers in a list
+     *
      * @return
      */
     @GetMapping("/subscriber/cvrList/cvr")
@@ -217,8 +220,8 @@ public class ManageCvrList {
         String page = requestParams.getFirst("page");
         String listId = requestParams.getFirst("listId");
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query<CvrList> query = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Query<CvrList> query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             try {
                 if (pageSize != null) {
                     query.setMaxResults(Integer.parseInt(pageSize));
@@ -242,7 +245,7 @@ public class ManageCvrList {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             CvrList foundList = lists.get(0);
-            if(!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+            if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
@@ -252,7 +255,7 @@ public class ManageCvrList {
 
             Envelope envelope = new Envelope();
             envelope.setPageSize(query.getMaxResults());
-            envelope.setPage(query.getFirstResult()+1);
+            envelope.setPage(query.getFirstResult() + 1);
             envelope.setPath(request.getServletPath());
             envelope.setResponseTimestamp(OffsetDateTime.now());
             envelope.setResults(foundList.getCvr());

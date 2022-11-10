@@ -1,12 +1,9 @@
 package dk.magenta.datafordeler.geo.data.accessaddress;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
-import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
-import dk.magenta.datafordeler.geo.data.municipality.MunicipalityOutputJsonModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +30,7 @@ public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEn
     protected JsonModifier getModifier(ResultSet resultSet) {
         return new AccessAddressOutputJsonModifier(this, resultSet);
     }
+
     @Override
     protected void fillContainer(OutputContainer container, AccessAddressEntity item, Mode mode) {
         container.addMonotemporal("husNummer", item.getHouseNumber());

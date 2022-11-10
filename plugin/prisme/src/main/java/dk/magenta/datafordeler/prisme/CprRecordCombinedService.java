@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.prisme;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
@@ -64,7 +63,7 @@ public class CprRecordCombinedService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CprRecordCombinedService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprRecordCombinedService.class.getCanonicalName());
 
     @Autowired
     private PersonOutputWrapperPrisme personOutputWrapper;
@@ -80,7 +79,7 @@ public class CprRecordCombinedService {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String getSingle(@PathVariable("cprNummer") String cprNummer, @RequestParam(value="forceDirect",required=false) String forceDirect, HttpServletRequest request)
+    public String getSingle(@PathVariable("cprNummer") String cprNummer, @RequestParam(value = "forceDirect", required = false) String forceDirect, HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
@@ -115,7 +114,7 @@ public class CprRecordCombinedService {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             if (personEntities.isEmpty()) {
                 PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
-                if(personEntity==null) {
+                if (personEntity == null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
                 entityManager.createSubscription(Collections.singleton(cprNummer));
@@ -134,9 +133,9 @@ public class CprRecordCombinedService {
                     personEntity = cprDirectLookup.getPerson(cprNummer);
                     obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
                     return streamPersonOut(user, obj);
-                case needSubscribtionAndDirectLookup:
+                case needSubscriptionAndDirectLookup:
                     personEntity = cprDirectLookup.getPerson(cprNummer);
-                    if(personEntity==null) {
+                    if (personEntity == null) {
                         throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                     }
                     entityManager.createSubscription(Collections.singleton(cprNummer));
@@ -145,7 +144,7 @@ public class CprRecordCombinedService {
                 default:
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
-        } catch(DataStreamException e) {
+        } catch (DataStreamException e) {
             log.error(e);
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
         }
@@ -199,7 +198,7 @@ public class CprRecordCombinedService {
 
         if (cprNumbers == null || cprNumbers.isEmpty()) {
             throw new InvalidClientInputException("Please specify at least one CPR number");
-        } else if(cprNumbers.size()>400) {
+        } else if (cprNumbers.size() > 400) {
             throw new InvalidParameterException("Maximum 400 numbers is allowed");
         }
         for (String cprNumber : cprNumbers) {
@@ -228,7 +227,7 @@ public class CprRecordCombinedService {
 
                 final FinalWrapper<Boolean> first = new FinalWrapper<>(true);
                 Consumer<PersonEntity> entityWriter = personEntity -> {
-                    if(personEntity!=null && personEntity.getPersonnummer()!=null) {
+                    if (personEntity != null && personEntity.getPersonnummer() != null) {
                         try {
                             cprNumbers.remove(personEntity.getPersonnummer());
                             if (!first.getInner()) {
@@ -310,12 +309,12 @@ public class CprRecordCombinedService {
         return !user.getAreaRestrictionsForRole(CprRolesDefinition.READ_CPR_ROLE).isEmpty();
     }
 
-    private static Pattern nonDigits = Pattern.compile("[^\\d]");
+    private static final Pattern nonDigits = Pattern.compile("[^\\d]");
 
     private List<String> getCprNumber(JsonNode node) {
         ArrayList<String> cprNumbers = new ArrayList<>();
         if (node.isArray()) {
-            for (JsonNode item : (ArrayNode) node) {
+            for (JsonNode item : node) {
                 cprNumbers.addAll(this.getCprNumber(item));
             }
         } else if (node.isTextual()) {
@@ -330,16 +329,16 @@ public class CprRecordCombinedService {
     private PersonAttributeQuality acceptPersonEntity(PersonEntity entity) {
 
         if (entity.getStatus() == null || entity.getStatus().isEmpty()) {
-            //If the person has no status attached they need subscribtion, and direct lookup
-            return needSubscribtionAndDirectLookup;
+            //If the person has no status attached they need subscription, and direct lookup
+            return needSubscriptionAndDirectLookup;
         } else if (entity.getAddress().isEmpty()) {
 
-            if(entity.getStatus().iterator().next().getStatus() == 90) {
-                //If the person is not dead, but has no address we need a subscribtion
+            if (entity.getStatus().iterator().next().getStatus() == 90) {
+                //If the person is not dead, but has no address we need a subscription
                 return needDirectLookup;
             } else {
-                //If the person is not dead, but has no address we need a subscribtion
-                return needSubscribtionAndDirectLookup;
+                //If the person is not dead, but has no address we need a subscription
+                return needSubscriptionAndDirectLookup;
             }
         } else {
             return PersonInformationIsOk;
@@ -347,7 +346,7 @@ public class CprRecordCombinedService {
     }
 
     public enum PersonAttributeQuality {
-        needSubscribtionAndDirectLookup,
+        needSubscriptionAndDirectLookup,
         PersonInformationIsOk,
         needDirectLookup
     }

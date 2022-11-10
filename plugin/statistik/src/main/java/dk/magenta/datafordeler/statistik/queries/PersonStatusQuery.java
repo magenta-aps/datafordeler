@@ -22,7 +22,7 @@ public class PersonStatusQuery extends PersonStatisticsQuery {
         super(filter);
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("municipalitycode", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE);

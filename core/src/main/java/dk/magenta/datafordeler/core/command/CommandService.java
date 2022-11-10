@@ -41,7 +41,7 @@ import java.util.*;
 @Controller
 public class CommandService {
 
-    private Logger log = LogManager.getLogger(CommandService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CommandService.class.getCanonicalName());
 
     @Autowired
     private ConfigurationSessionManager sessionManager;
@@ -60,6 +60,7 @@ public class CommandService {
 
     /**
      * Check that the user in the loggerHelper has access to the required role, and if not, log the attempt and throw an exception
+     *
      * @param loggerHelper LoggerHelper object containing user data
      * @param requiredRole SystemRole to check for
      * @throws AccessDeniedException
@@ -69,20 +70,18 @@ public class CommandService {
             throws AccessDeniedException, AccessRequiredException {
         try {
             this.checkAccess(loggerHelper.getUser(), requiredRole);
-        }
-        catch (AccessDeniedException|AccessRequiredException e) {
+        } catch (AccessDeniedException | AccessRequiredException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 
 
     /**
      * Checks that the user has access to the service
-     * @param dafoUserDetails DafoUserDetails object representing the user provided from a SAML token.
-     * @throws AccessDeniedException
      *
-     * Implementing this method as a noop will make the service publicly accessible.
+     * @param dafoUserDetails DafoUserDetails object representing the user provided from a SAML token.
+     * @throws AccessDeniedException Implementing this method as a noop will make the service publicly accessible.
      */
     protected void checkAccess(DafoUserDetails dafoUserDetails, SystemRole requiredRole)
             throws AccessDeniedException, AccessRequiredException {
@@ -91,9 +90,10 @@ public class CommandService {
 
     /**
      * Look through available CommandRoles, locating one that matches the queries access type, command name, and command data
+     *
      * @param requiredAccess SystemRoleType to match, e.g. SystemRoleType.ExecuteCommandRole for command execution
-     * @param commandName Command name. Look for roles with this command name
-     * @param commandData The matched CommandRole must not contain any key-value pair that is not in the CommandData, ie. sent with the command body,
+     * @param commandName    Command name. Look for roles with this command name
+     * @param commandData    The matched CommandRole must not contain any key-value pair that is not in the CommandData, ie. sent with the command body,
      * @return
      */
     private CommandRole findMatchingRole(SystemRoleType requiredAccess, String commandName, CommandData commandData) {
@@ -113,7 +113,7 @@ public class CommandService {
                                         // * has a details map that validates the command body
                                         (commandData == null && (commandRole.getDetails() == null || commandRole.getDetails().isEmpty())) ||
                                         (commandData != null && commandData.containsAll(commandRole.getDetails()))
-                                ) {
+                        ) {
                             return commandRole;
                         }
                     }
@@ -129,8 +129,8 @@ public class CommandService {
         CommandData commandData = handler.getCommandData(command.getCommandBody());
         SystemRole requiredRole = this.findMatchingRole(roleType, command.getCommandName(), commandData);
         if (requiredRole == null) {
-            loggerHelper.info("No Command Role exists for [SystemRoleType:"+roleType.name()+", Command: "+command.getCommandName()+", CommandData: "+commandData+"]");
-            throw new AccessDeniedException("No Command Role exists for command '"+command.getCommandName()+"' with data '"+commandData+"'");
+            loggerHelper.info("No Command Role exists for [SystemRoleType:" + roleType.name() + ", Command: " + command.getCommandName() + ", CommandData: " + commandData + "]");
+            throw new AccessDeniedException("No Command Role exists for command '" + command.getCommandName() + "' with data '" + commandData + "'");
         }
         // Check that the user has this SystemRole
         this.checkAndLogAccess(loggerHelper, requiredRole);
@@ -140,6 +140,7 @@ public class CommandService {
     /**
      * GET listener, invoked as GET /command/[id], where [id] is a numeric identifier previously returned from a POST request
      * Return the data pertaining to a job, including received time, issuer, status (queued, running, successful, failed, cancelled)
+     *
      * @param request
      * @param response
      * @param commandId Command identifier; this is returned for a POST request, and can be used here
@@ -151,7 +152,7 @@ public class CommandService {
      * @throws AccessDeniedException
      * @throws DataStreamException
      */
-    @RequestMapping(method = RequestMethod.GET, path="{id}")
+    @RequestMapping(method = RequestMethod.GET, path = "{id}")
     public void doGet(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long commandId)
             throws IOException, HttpNotFoundException, InvalidClientInputException, InvalidTokenException, AccessRequiredException, AccessDeniedException, DataStreamException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
@@ -159,28 +160,28 @@ public class CommandService {
         loggerHelper.info("GET request received on address " + request.getServletPath());
 
         if (commandId >= 0) {
-            loggerHelper.info("Request for status on job id "+commandId);
+            loggerHelper.info("Request for status on job id " + commandId);
             Command command = this.getCommand(commandId);
             if (command == null) {
-                throw new HttpNotFoundException("Job id "+commandId+" not found");
+                throw new HttpNotFoundException("Job id " + commandId + " not found");
             }
             CommandHandler handler = commandWatcher.getHandler(command.getCommandName());
             if (handler == null) {
-                loggerHelper.info("No handler found for command "+command.getCommandName()+" (job id "+commandId+")");
+                loggerHelper.info("No handler found for command " + command.getCommandName() + " (job id " + commandId + ")");
                 throw new InvalidClientInputException("No handler found for command");
             } else {
                 this.checkRole(command, handler, SystemRoleType.ReadCommandRole, loggerHelper);
                 String output = objectMapper.writeValueAsString(handler.getCommandStatus(command));
-                loggerHelper.info("Status on job id "+commandId+" is "+output);
+                loggerHelper.info("Status on job id " + commandId + " is " + output);
                 response.getWriter().write(output);
             }
         } else {
-            loggerHelper.info("Request for status on job id "+commandId+", but no such job exists");
-            throw new HttpNotFoundException("Job id "+commandId+" not found");
+            loggerHelper.info("Request for status on job id " + commandId + ", but no such job exists");
+            throw new HttpNotFoundException("Job id " + commandId + " not found");
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path="pull/summary/{plugin}/{state}")
+    @RequestMapping(method = RequestMethod.GET, path = "pull/summary/{plugin}/{state}")
     public void doGetSummary(HttpServletRequest request, HttpServletResponse response, @PathVariable("plugin") String pluginName, @PathVariable("state") String state)
             throws IOException, HttpNotFoundException, InvalidClientInputException, InvalidTokenException, AccessRequiredException, AccessDeniedException, DataStreamException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
@@ -191,13 +192,13 @@ public class CommandService {
         if (!pluginName.equals("all")) {
             Plugin plugin = pluginManager.getPluginByName(pluginName);
             if (plugin == null) {
-                throw new InvalidClientInputException("Plugin "+pluginName+" not found");
+                throw new InvalidClientInputException("Plugin " + pluginName + " not found");
             }
         }
         state = state.toLowerCase();
-        List<String> validStates = Arrays.asList(new String[] {"latest", "running"});
+        List<String> validStates = Arrays.asList("latest", "running");
         if (!validStates.contains(state)) {
-            throw new InvalidClientInputException("Invalid state '"+state+"', valid choices are: "+validStates.toString());
+            throw new InvalidClientInputException("Invalid state '" + state + "', valid choices are: " + validStates);
         }
 
         List<Command> commands = this.getPullCommandSummary(pluginName, state);
@@ -224,6 +225,7 @@ public class CommandService {
      * The POST body contains parameters to the command handler, which is free to interpret it how it wants
      * The PullCommandHandler, currently the only one present, reads the body as JSON
      * On a successfully parsed request, the resulting Command object is put in the database, from where it will be picked up by the CommandWatcher
+     *
      * @param request
      * @param response
      * @param commandName A string denoting the name of a command, e.g. "pull"
@@ -240,7 +242,7 @@ public class CommandService {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("POST request received on address " + request.getServletPath());
-        loggerHelper.info("Request for command '"+commandName+"'");
+        loggerHelper.info("Request for command '" + commandName + "'");
         Command command;
         try {
             // Extract Command object from request
@@ -252,14 +254,14 @@ public class CommandService {
         // Ensure that a CommandHandler exists for this command
         CommandHandler handler = commandWatcher.getHandler(command.getCommandName());
         if (handler == null) {
-            throw new InvalidClientInputException("No handler found for command '"+commandName+"'");
+            throw new InvalidClientInputException("No handler found for command '" + commandName + "'");
         } else {
             this.checkRole(command, handler, SystemRoleType.ExecuteCommandRole, loggerHelper);
             // Put the command in the Database with the "queued" status. The CommandWatcher will pick it up
             command.setStatus(Command.Status.QUEUED);
             this.saveCommand(command);
             String output = this.objectMapper.writeValueAsString(command);
-            loggerHelper.info("Command queued: "+output);
+            loggerHelper.info("Command queued: " + output);
             response.getWriter().write(output);
         }
         loggerHelper.info("Request complete");
@@ -269,6 +271,7 @@ public class CommandService {
     /**
      * DELETE listener, invoked as DELETE /command/[id], where [id] is a numeric identifier previously returned from a POST request
      * If a command is found by the given id, a cancel will be attempted and the job status returned (same output as with GET)
+     *
      * @param request
      * @param response
      * @param commandId Command identifier; this is returned for a POST request, and can be used here
@@ -280,39 +283,40 @@ public class CommandService {
      * @throws AccessDeniedException
      * @throws AccessRequiredException
      */
-    @RequestMapping(method = RequestMethod.DELETE, path="{id}")
+    @RequestMapping(method = RequestMethod.DELETE, path = "{id}")
     public void doDelete(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long commandId)
             throws IOException, InvalidClientInputException, HttpNotFoundException, InvalidTokenException, DataStreamException, AccessDeniedException, AccessRequiredException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("DELETE request received on address " + request.getServletPath());
         if (commandId >= 0) {
-            loggerHelper.info("Request for cancelling of job id '"+commandId+"'");
+            loggerHelper.info("Request for cancelling of job id '" + commandId + "'");
             Command command = this.getCommand(commandId);
             if (command == null) {
-                throw new HttpNotFoundException("Command id "+commandId+" not found");
+                throw new HttpNotFoundException("Command id " + commandId + " not found");
             }
             CommandHandler handler = commandWatcher.getHandler(command.getCommandName());
             if (handler == null) {
                 throw new InvalidClientInputException(
-                    "No handler found for command '"+command.getCommandName()+"'"
+                        "No handler found for command '" + command.getCommandName() + "'"
                 );
             } else {
                 this.checkRole(command, handler, SystemRoleType.StopCommandRole, loggerHelper);
                 // Cancel the command
                 commandWatcher.cancelCommand(command);
                 String output = this.objectMapper.writeValueAsString(command);
-                loggerHelper.info("Status on job id "+commandId+" is "+output);
+                loggerHelper.info("Status on job id " + commandId + " is " + output);
                 response.getWriter().write(output);
             }
         } else {
-            loggerHelper.info("Request for cancelling job id "+commandId+", but no such job exists");
+            loggerHelper.info("Request for cancelling job id " + commandId + ", but no such job exists");
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
     /**
      * Finds a command object in the database, based on an id
+     *
      * @param commandId
      * @return
      */
@@ -364,12 +368,12 @@ public class CommandService {
             HashMap<String, Object> thisParameters = new HashMap<>(parameters);
 
             thisWhere.add(entityKey + ".commandBody LIKE :pluginName");
-            thisParameters.put("pluginName", "%\"plugin\"!:\""+p+"\"%");
+            thisParameters.put("pluginName", "%\"plugin\"!:\"" + p + "\"%");
 
             try {
                 Query<Command> query = session.createQuery(
                         "select c from dk.magenta.datafordeler.core.command.Command " + entityKey + " " +
-                                "where " + thisWhere.toString() + " " +
+                                "where " + thisWhere + " " +
                                 "escape '!' " +
                                 "order by " + entityKey + ".handled desc ",
                         Command.class
@@ -394,6 +398,7 @@ public class CommandService {
 
     /**
      * Saves a Command object to the database
+     *
      * @param command
      */
     public synchronized void saveCommand(Command command) {

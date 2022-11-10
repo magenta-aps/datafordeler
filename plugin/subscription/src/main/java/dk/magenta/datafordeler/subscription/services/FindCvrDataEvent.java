@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.util.Value;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.AccessRequiredException;
+import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
+import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -14,7 +17,9 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.records.*;
-import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.CvrList;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCvrNumber;
 import dk.magenta.datafordeler.subscription.queries.GeneralQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,12 +33,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,7 +69,7 @@ public class FindCvrDataEvent {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(FindCvrDataEvent.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(FindCvrDataEvent.class.getCanonicalName());
 
 
     @PostConstruct
@@ -70,7 +79,8 @@ public class FindCvrDataEvent {
 
 
     /**
-     * Get a list of all subscribtions
+     * Get a list of all subscriptions
+     *
      * @return
      */
     @GetMapping("/fetchEvents")
@@ -87,49 +97,49 @@ public class FindCvrDataEvent {
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.urlInvokePersistablelogs("fetchEvents");
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             this.checkAndLogAccess(loggerHelper);
 
-            String hql = "SELECT max(event.timestamp) FROM "+ CompanyDataEventRecord.class.getCanonicalName()+" event ";
+            String hql = "SELECT max(event.timestamp) FROM " + CompanyDataEventRecord.class.getCanonicalName() + " event ";
             Query timestampQuery = session.createQuery(hql);
-            OffsetDateTime newestEventTimestamp = (OffsetDateTime)timestampQuery.getResultList().get(0);
+            OffsetDateTime newestEventTimestamp = (OffsetDateTime) timestampQuery.getResultList().get(0);
 
-            Query eventQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
+            Query eventQuery = session.createQuery(" from " + DataEventSubscription.class.getName() + " where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
-            if(eventQuery.getResultList().size()==0) {
+            if (eventQuery.getResultList().size() == 0) {
                 return this.getErrorMessage("Subscription not found", HttpStatus.NOT_FOUND);
             } else {
-                DataEventSubscription subscribtion = (DataEventSubscription) eventQuery.getResultList().get(0);
-                if(!allowCallingOtherConsumersSubscriptions && !subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
+                DataEventSubscription subscription = (DataEventSubscription) eventQuery.getResultList().get(0);
+                if (!allowCallingOtherConsumersSubscriptions && !subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
                 OffsetDateTime offsetTimestampGTE;
-                if(timestampGTE==null) {
-                    offsetTimestampGTE = OffsetDateTime.of(0,1,1,1,1,1,1, ZoneOffset.ofHours(0));
+                if (timestampGTE == null) {
+                    offsetTimestampGTE = OffsetDateTime.of(0, 1, 1, 1, 1, 1, 1, ZoneOffset.ofHours(0));
                 } else {
                     try {
                         offsetTimestampGTE = BaseQuery.parseDateTime(timestampGTE);
                     } catch (DateTimeParseException e) {
-                        return this.getErrorMessage("Cannot parse date "+timestampGTE, HttpStatus.BAD_REQUEST);
+                        return this.getErrorMessage("Cannot parse date " + timestampGTE, HttpStatus.BAD_REQUEST);
                     }
                 }
 
-                OffsetDateTime offsetTimestampLTE=null;
-                if(timestampLTE!=null) {
+                OffsetDateTime offsetTimestampLTE = null;
+                if (timestampLTE != null) {
                     try {
                         offsetTimestampLTE = BaseQuery.parseDateTime(timestampLTE);
                     } catch (DateTimeParseException e) {
-                        return this.getErrorMessage("Cannot parse date "+timestampLTE, HttpStatus.BAD_REQUEST);
+                        return this.getErrorMessage("Cannot parse date " + timestampLTE, HttpStatus.BAD_REQUEST);
                     }
                 }
 
-                String[] subscribtionKodeId = subscribtion.getKodeId().split("[.]");
-                if(!"cvr".equals(subscribtionKodeId[0]) && !"dataevent".equals(subscribtionKodeId[1])) {
+                String[] subscriptionKodeId = subscription.getKodeId().split("[.]");
+                if (!"cvr".equals(subscriptionKodeId[0]) && !"dataevent".equals(subscriptionKodeId[1])) {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
 
-                String listId = subscribtion.getCvrList().getListId();
+                String listId = subscription.getCvrList().getListId();
 
                 // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT company FROM " + CvrList.class.getCanonicalName() + " list " +
@@ -141,8 +151,7 @@ public class FindCvrDataEvent {
                         " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
                         " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
                         " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)"
-                        ;
+                        " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
                 Query query = session.createQuery(queryString);
                 if (pageSize != null) {
@@ -160,8 +169,8 @@ public class FindCvrDataEvent {
                     return this.getErrorMessage("Pagesize is too large", HttpStatus.FORBIDDEN);
                 }
                 String fieldType = null;
-                if(!"anything".equals(subscribtionKodeId[2])) {
-                    fieldType = subscribtionKodeId[2];
+                if (!"anything".equals(subscriptionKodeId[2])) {
+                    fieldType = subscriptionKodeId[2];
                 }
 
                 Stream<CompanyRecord> personStream = query
@@ -174,41 +183,41 @@ public class FindCvrDataEvent {
                 Envelope envelope = new Envelope();
                 List<Object> returnValues = null;
 
-                if(!includeMeta) {
+                if (!includeMeta) {
                     returnValues = personStream.map(f -> f.getCvrNumber()).collect(Collectors.toList());
                     envelope.setResults(returnValues);
                 } else {
                     List otherList = new ArrayList<ObjectNode>();
                     List<CompanyRecord> entities = personStream.collect(Collectors.toList());
 
-                    for(CompanyRecord entity : entities) {
+                    for (CompanyRecord entity : entities) {
                         CvrBitemporalDataRecord oldValues = null;
-                        CvrBitemporalDataRecord newValues = getActualValueRecord(subscribtionKodeId[2], entity);
+                        CvrBitemporalDataRecord newValues = getActualValueRecord(subscriptionKodeId[2], entity);
                         Set<CompanyDataEventRecord> events = entity.getDataevent();
-                        if(events.size()>0) {
+                        if (events.size() > 0) {
                             CompanyDataEventRecord eventRecord = events.iterator().next();
-                            if(eventRecord.getOldItem() != null) {
-                                String queryPreviousItem = GeneralQuery.getQueryCompanyValueObjectFromIdInEvent(subscribtionKodeId[2]);
-                                if(eventRecord.getOldItem()!=null) {
-                                    oldValues = (CvrBitemporalDataMetaRecord)session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
+                            if (eventRecord.getOldItem() != null) {
+                                String queryPreviousItem = GeneralQuery.getQueryCompanyValueObjectFromIdInEvent(subscriptionKodeId[2]);
+                                if (eventRecord.getOldItem() != null) {
+                                    oldValues = (CvrBitemporalDataMetaRecord) session.createQuery(queryPreviousItem).setParameter("id", eventRecord.getOldItem()).getResultList().get(0);
                                 }
                             }
                         }
 
-                        if(subscribtionKodeId.length>=5) {
-                            if(subscribtionKodeId[3].equals("before")) {
-                                if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], oldValues)) {
-                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getCvrNumberString(), subscribtionKodeId[2], oldValues, newValues);
+                        if (subscriptionKodeId.length >= 5) {
+                            if (subscriptionKodeId[3].equals("before")) {
+                                if (this.validateIt(subscriptionKodeId[2], subscriptionKodeId[4], oldValues)) {
+                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getCvrNumberString(), subscriptionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
-                            } else if(subscribtionKodeId[3].equals("after")) {
-                                if(this.validateIt(subscribtionKodeId[2], subscribtionKodeId[4], newValues)) {
-                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getCvrNumberString(), subscribtionKodeId[2], oldValues, newValues);
+                            } else if (subscriptionKodeId[3].equals("after")) {
+                                if (this.validateIt(subscriptionKodeId[2], subscriptionKodeId[4], newValues)) {
+                                    ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getCvrNumberString(), subscriptionKodeId[2], oldValues, newValues);
                                     otherList.add(node);
                                 }
                             }
                         } else {
-                            ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getCvrNumberString(),subscribtionKodeId[2], oldValues, newValues);
+                            ObjectNode node = personRecordOutputWrapperStuff.fillContainer(entity.getCvrNumberString(), subscriptionKodeId[2], oldValues, newValues);
                             otherList.add(node);
                         }
                     }
@@ -226,8 +235,8 @@ public class FindCvrDataEvent {
             obj.put("errorMessage", errorMessage);
             log.warn(errorMessage);
             return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-        } catch(Exception e) {
-            log.error("Failed pulling events from subscribtion", e);
+        } catch (Exception e) {
+            log.error("Failed pulling events from subscription", e);
         }
         return ResponseEntity.status(500).build();
     }
@@ -243,10 +252,10 @@ public class FindCvrDataEvent {
 
     private boolean validateIt(String fieldname, String logic, CvrBitemporalDataRecord companyEntity) {
 
-        if(AddressRecord.TABLE_NAME.equals(fieldname)) {
+        if (AddressRecord.TABLE_NAME.equals(fieldname)) {
             String[] splitLogic = logic.split("=");
-            if("kommunekode".equals(splitLogic[0])) {
-                return ((AddressRecord)companyEntity).getMunicipality().getMunicipalityCode() == Integer.parseInt(splitLogic[1]);
+            if ("kommunekode".equals(splitLogic[0])) {
+                return ((AddressRecord) companyEntity).getMunicipality().getMunicipalityCode() == Integer.parseInt(splitLogic[1]);
             }
         }
         return false;
@@ -255,7 +264,7 @@ public class FindCvrDataEvent {
 
     private CvrBitemporalDataRecord getActualValueRecord(String fieldname, CompanyRecord companyEntity) {
 
-        switch(fieldname) {
+        switch (fieldname) {
             case BaseNameRecord.TABLE_NAME:
                 return companyEntity.getNames().stream().reduce((first, second) -> second).orElse(null);
             case AddressRecord.TABLE_NAME:
@@ -271,10 +280,9 @@ public class FindCvrDataEvent {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 }

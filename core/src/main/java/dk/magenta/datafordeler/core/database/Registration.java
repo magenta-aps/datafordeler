@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * A Registration defines the time range in which a piece of data is "registered",
- * that is, when did it enter into the records of our data source, and when was it 
+ * that is, when did it enter into the records of our data source, and when was it
  * supplanted by more recent data.
  * A Registration points to exactly one Entity, and may have any number of Effects
  * associated. Generally, there should not be stored other data in the object.
@@ -72,8 +72,8 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     /**
      * @param registrationFrom A date string, parseable by DateTimeFormatter.ISO_OFFSET_DATE_TIME (in the format 2007-12-03T10:15:30+01:00)
-     * @param registrationTo A date string, parseable by DateTimeFormatter.ISO_OFFSET_DATE_TIME (in the format 2007-12-03T10:15:30+01:00)
-     * If you want other date formats, consider using java.time.OffsetDateTime.parse() to generate an OffsetDateTime object and pass it
+     * @param registrationTo   A date string, parseable by DateTimeFormatter.ISO_OFFSET_DATE_TIME (in the format 2007-12-03T10:15:30+01:00)
+     *                         If you want other date formats, consider using java.time.OffsetDateTime.parse() to generate an OffsetDateTime object and pass it
      */
     public Registration(String registrationFrom, String registrationTo, int sequenceNumber) {
         this(
@@ -82,8 +82,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
                 sequenceNumber
         );
     }
-
-
 
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -102,13 +100,10 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     }
 
 
-
-
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "registration")
     @Filters({
             //@Filter(name = Effect.FILTER_EFFECT_FROM, condition="(effectTo >= :"+Effect.FILTERPARAM_EFFECT_FROM+" OR effectTo is null)"),
-            @Filter(name = Effect.FILTER_EFFECT_TO, condition="(effectFrom < :"+Effect.FILTERPARAM_EFFECT_TO+" or effectFrom is null)")
+            @Filter(name = Effect.FILTER_EFFECT_TO, condition = "(effectFrom < :" + Effect.FILTERPARAM_EFFECT_TO + " or effectFrom is null)")
     })
     protected List<V> effects;
 
@@ -133,7 +128,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     }
 
     /**
-     * Looks for an effect on this Registration, that matches the given range 
+     * Looks for an effect on this Registration, that matches the given range
      * exactly.
      */
     public V getEffect(OffsetDateTime effectFrom, OffsetDateTime effectTo) {
@@ -203,9 +198,11 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
         effect.setRegistration(this);
         return effect;
     }
+
     public final V createEffect(TemporalAccessor effectFrom, TemporalAccessor effectTo) {
         return this.createEffect(Effect.convertTime(effectFrom), Effect.convertTime(effectTo));
     }
+
     public final V createEffect(LocalDate effectFrom, LocalDate effectTo) {
         return this.createEffect(Effect.convertTime(effectFrom), Effect.convertTime(effectTo));
     }
@@ -237,8 +234,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     }
 
 
-
-
     public static final String DB_FIELD_REGISTRATION_TO = "registrationTo";
     public static final String IO_FIELD_REGISTRATION_TO = "registreringTil";
 
@@ -247,7 +242,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     @XmlElement
-    @XmlJavaTypeAdapter(type=OffsetDateTime.class, value= OffsetDateTimeAdapter.class)
+    @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     public OffsetDateTime getRegistrationTo() {
         return this.registrationTo;
     }
@@ -310,6 +305,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     /**
      * Pretty-print contained data
+     *
      * @return Compiled string output
      */
     public String toString() {
@@ -318,6 +314,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     /**
      * Pretty-print contained data
+     *
      * @param indent Number of spaces to indent the output with
      * @return Compiled string output
      */
@@ -325,21 +322,21 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
         String indentString = new String(new char[4 * (indent)]).replace("\0", " ");
         String subIndentString = new String(new char[4 * (indent + 1)]).replace("\0", " ");
         StringJoiner s = new StringJoiner("\n");
-        s.add(indentString + this.getClass().getSimpleName()+"["+this.hashCode()+"] {");
+        s.add(indentString + this.getClass().getSimpleName() + "[" + this.hashCode() + "] {");
         if (this.entity != null) {
-            s.add(subIndentString + "entity: " + entity.getUUID()+" @ "+entity.getDomain());
+            s.add(subIndentString + "entity: " + entity.getUUID() + " @ " + entity.getDomain());
         } else {
             s.add(subIndentString + "entity: NULL");
         }
-        s.add(subIndentString + "checksum: "+this.registerChecksum);
-        s.add(subIndentString + "from: "+this.registrationFrom);
-        s.add(subIndentString + "to: "+this.registrationTo);
+        s.add(subIndentString + "checksum: " + this.registerChecksum);
+        s.add(subIndentString + "from: " + this.registrationFrom);
+        s.add(subIndentString + "to: " + this.registrationTo);
         s.add(subIndentString + "effects: [");
         for (V effect : this.effects) {
             s.add(effect.toString(indent + 2));
         }
         s.add(subIndentString + "]");
-        s.add(indentString+"}");
+        s.add(indentString + "}");
         return s.toString();
     }
 

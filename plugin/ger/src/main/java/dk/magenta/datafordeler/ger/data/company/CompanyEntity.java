@@ -29,7 +29,7 @@ public class CompanyEntity extends GerEntity implements IdentifiedEntity {
 
     public static final String TABLE_NAME = "ger_company";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "Company";
 
 
@@ -41,10 +41,9 @@ public class CompanyEntity extends GerEntity implements IdentifiedEntity {
     }
 
     public static UUID generateUUID(int gerNr) {
-        String uuidInput = "company:"+gerNr;
+        String uuidInput = "company:" + gerNr;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
-
 
 
     public static final String DB_FIELD_GERNR = "gerNr";
@@ -60,7 +59,6 @@ public class CompanyEntity extends GerEntity implements IdentifiedEntity {
     public void setGerNr(int gerNr) {
         this.gerNr = gerNr;
     }
-
 
 
     public static final String DB_FIELD_VALIDATED = "validated";

@@ -41,7 +41,6 @@ public class AccessAddressBuildingReferenceRecord extends GeoMonotemporalRecord<
     }
 
 
-
     public static final String DB_FIELD_REFERENCE = "reference";
     @ManyToOne
     @JsonIgnore

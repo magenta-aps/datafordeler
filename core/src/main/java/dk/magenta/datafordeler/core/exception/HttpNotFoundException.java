@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.exception;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -10,12 +11,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class HttpNotFoundException extends DataFordelerException {
 
-  public HttpNotFoundException(String message) {
-    super(message);
-  }
+    public HttpNotFoundException(String message) {
+        super(message);
+    }
 
-  @Override
-  public String getCode() {
-    return "datafordeler.http.not-found";
-  }
+    @Override
+    public String getCode() {
+        return "datafordeler.http.not-found";
+    }
+
+    public String reason() {
+        return "{\"errorMessage\":\""+super.getMessage()+"\"}";
+    }
+
 }

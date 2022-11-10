@@ -58,7 +58,7 @@ public class BirthDataService extends PersonStatisticsService {
     @Autowired
     private CprPlugin cprPlugin;
 
-    private Logger log = LogManager.getLogger(BirthDataService.class);
+    private final Logger log = LogManager.getLogger(BirthDataService.class.getCanonicalName());
 
     @PostConstruct
     public void setUseTimeintervallimit() {
@@ -67,6 +67,7 @@ public class BirthDataService extends PersonStatisticsService {
 
     /**
      * Calls handleRequest in super with the ID of the report as a parameter
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -86,6 +87,7 @@ public class BirthDataService extends PersonStatisticsService {
 
     /**
      * Post is used for starting the generation of a report
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -107,11 +109,9 @@ public class BirthDataService extends PersonStatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{
-                OWN_PREFIX + PNR, OWN_PREFIX + BIRTHDAY_YEAR, OWN_PREFIX + EFFECTIVE_PNR, OWN_PREFIX + BIRTH_AUTHORITY, OWN_PREFIX + BIRTH_AUTHORITY_TEXT, OWN_PREFIX + BIRTH_AUTHORITY_CODE_TEXT, OWN_PREFIX + CITIZENSHIP_CODE, OWN_PREFIX + PROD_DATE, OWN_PREFIX + FILE_DATE,
+        return Arrays.asList(OWN_PREFIX + PNR, OWN_PREFIX + BIRTHDAY_YEAR, OWN_PREFIX + EFFECTIVE_PNR, OWN_PREFIX + BIRTH_AUTHORITY, OWN_PREFIX + BIRTH_AUTHORITY_TEXT, OWN_PREFIX + BIRTH_AUTHORITY_CODE_TEXT, OWN_PREFIX + CITIZENSHIP_CODE, OWN_PREFIX + PROD_DATE, OWN_PREFIX + FILE_DATE,
                 MOTHER_PREFIX + PNR, MOTHER_PREFIX + BIRTH_AUTHORITY, MOTHER_PREFIX + BIRTH_AUTHORITY_TEXT, MOTHER_PREFIX + BIRTH_AUTHORITY_CODE_TEXT, MOTHER_PREFIX + CITIZENSHIP_CODE, MOTHER_PREFIX + MUNICIPALITY_CODE, MOTHER_PREFIX + LOCALITY_NAME, MOTHER_PREFIX + LOCALITY_CODE, MOTHER_PREFIX + ROAD_CODE, MOTHER_PREFIX + HOUSE_NUMBER, MOTHER_PREFIX + FLOOR_NUMBER, MOTHER_PREFIX + DOOR_NUMBER, MOTHER_PREFIX + BNR,
-                FATHER_PREFIX + PNR, FATHER_PREFIX + BIRTH_AUTHORITY, FATHER_PREFIX + BIRTH_AUTHORITY_TEXT, FATHER_PREFIX + BIRTH_AUTHORITY_CODE_TEXT, FATHER_PREFIX + CITIZENSHIP_CODE, FATHER_PREFIX + MUNICIPALITY_CODE, FATHER_PREFIX + LOCALITY_NAME, FATHER_PREFIX + LOCALITY_CODE, FATHER_PREFIX + ROAD_CODE, FATHER_PREFIX + HOUSE_NUMBER, FATHER_PREFIX + FLOOR_NUMBER, FATHER_PREFIX + DOOR_NUMBER, FATHER_PREFIX + BNR, "EXTRA"
-        });
+                FATHER_PREFIX + PNR, FATHER_PREFIX + BIRTH_AUTHORITY, FATHER_PREFIX + BIRTH_AUTHORITY_TEXT, FATHER_PREFIX + BIRTH_AUTHORITY_CODE_TEXT, FATHER_PREFIX + CITIZENSHIP_CODE, FATHER_PREFIX + MUNICIPALITY_CODE, FATHER_PREFIX + LOCALITY_NAME, FATHER_PREFIX + LOCALITY_CODE, FATHER_PREFIX + ROAD_CODE, FATHER_PREFIX + HOUSE_NUMBER, FATHER_PREFIX + FLOOR_NUMBER, FATHER_PREFIX + DOOR_NUMBER, FATHER_PREFIX + BNR, "EXTRA");
     }
 
     @Override

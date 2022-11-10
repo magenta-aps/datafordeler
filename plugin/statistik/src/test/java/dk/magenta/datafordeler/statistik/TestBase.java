@@ -1,10 +1,14 @@
 package dk.magenta.datafordeler.statistik;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
@@ -16,11 +20,7 @@ import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.junit.Assert;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -51,17 +51,19 @@ public abstract class TestBase {
     @Autowired
     private UnitAddressEntityManager unitAddressEntityManager;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
         this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
-        this.loadGeoData(sessionManager, roadEntityManager,"/road.json");
+        this.loadGeoData(sessionManager, roadEntityManager, "/road.json");
         this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
         this.loadGeoData(sessionManager, municipalityEntityManager, "/municipality.json");
         this.loadGeoData(sessionManager, postcodeEntityManager, "/post.json");
         this.loadGeoData(sessionManager, buildingEntityManager, "/building.json");
         this.loadGeoData(sessionManager, accessAddressEntityManager, "/access.json");
     }
-
 
 
     protected void cleanup(SessionManager sessionManager, Class[] classes) {
@@ -104,7 +106,7 @@ public abstract class TestBase {
     }
 
     protected void cleanupPersonData(SessionManager sessionManager) {
-        this.cleanup(sessionManager, new Class[] {
+        this.cleanup(sessionManager, new Class[]{
                 PersonEntity.class,
         });
         QueryManager.clearCaches();
@@ -113,25 +115,23 @@ public abstract class TestBase {
     /**
      * Compare two different JSON-arrays where the value of one field is ignored
      * This functionality can be used for validation of reports where the timezone during passing of input results in different dayswhen decoding a timestamp
+     *
      * @param expected
      * @param actual
      * @param ignoreValue
-     * @throws JSONException
      * @throws JsonProcessingException
      */
-    public void compareJSONARRAYWithIgnoredValues(String expected, String actual, String ignoreValue) throws JSONException, JsonProcessingException {
-        JSONArray expectedJsonArray = new JSONArray(expected);
-        JSONArray actualJsonArray = new JSONArray(actual);
-        Assert.assertEquals(expectedJsonArray.length(), actualJsonArray.length());
-        for(int index=0; index<expectedJsonArray.length();index++) {
-            expectedJsonArray.getJSONObject(index).put(ignoreValue, "*");
-            actualJsonArray.getJSONObject(index).put(ignoreValue, "*");
+    public void compareJSONARRAYWithIgnoredValues(String expected, String actual, String ignoreValue) throws JsonProcessingException {
+        ArrayNode expectedJsonArray = (ArrayNode) objectMapper.readTree(expected);
+        ArrayNode actualJsonArray = (ArrayNode) objectMapper.readTree(actual);
+        Assert.assertEquals(expectedJsonArray.size(), actualJsonArray.size());
+        for (int index = 0; index < expectedJsonArray.size(); index++) {
+            ((ObjectNode) expectedJsonArray.get(index)).put(ignoreValue, "*");
+            ((ObjectNode) actualJsonArray.get(index)).put(ignoreValue, "*");
         }
-        JSONAssert.assertEquals(
-                expectedJsonArray,
-                actualJsonArray,
-                JSONCompareMode.LENIENT
-);
-
+        Assert.assertTrue(
+                objectMapper.writeValueAsString(expectedJsonArray) + " != " + objectMapper.writeValueAsString(actualJsonArray),
+                new UnorderedJsonListComparator().compare(expectedJsonArray, actualJsonArray) == 0
+        );
     }
 }

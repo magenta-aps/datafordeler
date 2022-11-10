@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DefaultUserSetup {
-  @Bean
-  @ConditionalOnMissingBean
-  public DafoUserManager defaultDafoUserManager() {
-    return new DafoUserManager();
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    public DafoUserManager defaultDafoUserManager() {
+        return new DafoUserManager();
+    }
 }

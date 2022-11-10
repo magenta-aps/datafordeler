@@ -9,10 +9,11 @@ import java.time.OffsetDateTime;
 
 /**
  * Representation of registrations in the bitemporal model for residences.
+ *
  * @see dk.magenta.datafordeler.core.database.Entity
  */
 @javax.persistence.Entity
-@Table(name= CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_registration", indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_registration", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_entity", columnList = "entity_id"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_registration_from", columnList = ResidenceRegistration.DB_FIELD_REGISTRATION_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_registration_to", columnList = ResidenceRegistration.DB_FIELD_REGISTRATION_TO)

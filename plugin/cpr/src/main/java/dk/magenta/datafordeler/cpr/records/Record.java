@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public abstract class Record extends HashMap<String, String> {
 
-    private static Pattern leadingZero = Pattern.compile("^0+");
+    private static final Pattern leadingZero = Pattern.compile("^0+");
 
     private String origin;
 
@@ -74,7 +74,8 @@ public abstract class Record extends HashMap<String, String> {
             if (Integer.parseInt(date) == 0) {
                 return null;
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return date;
     }
 
@@ -94,11 +95,11 @@ public abstract class Record extends HashMap<String, String> {
 
     public abstract String getRecordType();
 
-    private static ZoneId timezone = ZoneId.of("Europe/Copenhagen");
+    private static final ZoneId timezone = ZoneId.of("Europe/Copenhagen");
 
     public String getRecordClass() {
         String[] classParts = this.getClass().getCanonicalName().split("\\.");
-        return classParts[classParts.length-1];
+        return classParts[classParts.length - 1];
     }
 
     public String getString(String key, boolean stripLeadingZeroes) {
@@ -116,7 +117,8 @@ public abstract class Record extends HashMap<String, String> {
     public int getInt(String key, Integer fallback) {
         return this.getInt(key, false, fallback);
     }
-    public int getInt(String key,  boolean lenient) {
+
+    public int getInt(String key, boolean lenient) {
         return this.getInt(key, lenient, null);
     }
 
@@ -134,6 +136,7 @@ public abstract class Record extends HashMap<String, String> {
             return 0;
         }
     }
+
     public long getLong(String key) {
         return this.getLong(key, false);
     }
@@ -149,6 +152,7 @@ public abstract class Record extends HashMap<String, String> {
             return 0;
         }
     }
+
     public boolean getBoolean(String key) {
         return this.getBoolean(key, null);
     }
@@ -170,7 +174,8 @@ public abstract class Record extends HashMap<String, String> {
     }
 
 
-    private static DateTimeFormatter yearParser = DateTimeFormatter.ofPattern("uuuu");
+    private static final DateTimeFormatter yearParser = DateTimeFormatter.ofPattern("uuuu");
+
     public Year getYear(String key) {
         String value = this.get(key);
         if (value != null && !value.isEmpty() && value.length() >= 4) {
@@ -183,7 +188,8 @@ public abstract class Record extends HashMap<String, String> {
         return null;
     }
 
-    private static DateTimeFormatter monthParser = DateTimeFormatter.ofPattern("uuuuMM");
+    private static final DateTimeFormatter monthParser = DateTimeFormatter.ofPattern("uuuuMM");
+
     public YearMonth getMonth(String key) {
         String value = this.get(key);
         if (value != null && !value.isEmpty() && value.length() >= 6) {
@@ -200,10 +206,11 @@ public abstract class Record extends HashMap<String, String> {
         return null;
     }
 
-    private static DateTimeFormatter[] dateParsers = {
+    private static final DateTimeFormatter[] dateParsers = {
             DateTimeFormatter.BASIC_ISO_DATE,
             DateTimeFormatter.ISO_LOCAL_DATE
     };
+
     public LocalDate getDate(String key) {
         String value = this.get(key);
         if (value != null && !value.isEmpty()) {
@@ -221,11 +228,12 @@ public abstract class Record extends HashMap<String, String> {
         return null;
     }
 
-    private static DateTimeFormatter[] timeParsers = {
+    private static final DateTimeFormatter[] timeParsers = {
             DateTimeFormatter.ISO_LOCAL_TIME,
             DateTimeFormatter.ofPattern("HH.mm.ss"),
             DateTimeFormatter.ofPattern("HH-mm-ss")
     };
+
     public LocalTime getTime(String key) {
         String value = this.get(key);
         if (value != null && !value.isEmpty()) {
@@ -239,11 +247,12 @@ public abstract class Record extends HashMap<String, String> {
         return null;
     }
 
-    private static DateTimeFormatter[] datetimeParsers = {
+    private static final DateTimeFormatter[] datetimeParsers = {
             DateTimeFormatter.ISO_LOCAL_DATE_TIME,
             DateTimeFormatter.ofPattern("uuuuMMddHHmmss"),
             DateTimeFormatter.ofPattern("uuuuMMddHHmm")
     };
+
     public LocalDateTime getDateTime(String key) {
         String value = this.get(key);
         if (value != null && !value.isEmpty()) {
@@ -297,19 +306,19 @@ public abstract class Record extends HashMap<String, String> {
 
     public boolean hasAll(String... keys) {
         for (String key : keys) {
-                if (!this.has(key)) {
-                        return false;
-                    }
+            if (!this.has(key)) {
+                return false;
             }
+        }
         return true;
     }
 
     public boolean hasAny(String... keys) {
         for (String key : keys) {
-                if (this.has(key)) {
-                        return true;
-                    }
+            if (this.has(key)) {
+                return true;
             }
+        }
         return false;
     }
 

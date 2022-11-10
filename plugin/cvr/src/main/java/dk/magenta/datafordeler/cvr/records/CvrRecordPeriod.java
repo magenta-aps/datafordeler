@@ -50,7 +50,7 @@ public class CvrRecordPeriod {
         if (o == null || getClass() != o.getClass()) return false;
         CvrRecordPeriod that = (CvrRecordPeriod) o;
         return Equality.equal(validFrom, that.validFrom) &&
-               Equality.equal(validTo, that.validTo);
+                Equality.equal(validTo, that.validTo);
     }
 
     @Override

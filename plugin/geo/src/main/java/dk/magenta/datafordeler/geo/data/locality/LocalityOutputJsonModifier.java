@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
-import dk.magenta.datafordeler.core.util.DoubleHashMap;
 
 import java.util.HashMap;
 import java.util.Set;
 
 public class LocalityOutputJsonModifier extends JsonModifier {
 
-    private LocalityOutputWrapper outputWrapper;
+    private final LocalityOutputWrapper outputWrapper;
     protected HashMap<String, GeoLocalityEntity> localityEntities = new HashMap<>();
 
     public LocalityOutputJsonModifier(LocalityOutputWrapper outputWrapper, ResultSet resultSet) {
@@ -26,6 +25,7 @@ public class LocalityOutputJsonModifier extends JsonModifier {
 
     /**
      * Modifies a JsonNode by adding data from this.entities
+     *
      * @param node
      */
     @Override

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class ProtectionRecord extends PersonDataRecord {
 
-    private CprBitemporality protectionTemporality;
+    private final CprBitemporality protectionTemporality;
 
     public ProtectionRecord(String line) throws ParseException {
         this(line, traditionalMapping);
@@ -28,13 +28,14 @@ public class ProtectionRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
-        traditionalMapping.add("beskyttype",14,4);
-        traditionalMapping.add("start_mynkod-beskyttelse",18,4);
-        traditionalMapping.add("start_ts-beskyttelse",22,12);
-        traditionalMapping.add("start_dt-beskyttelse",34,10);
-        traditionalMapping.add("indrap-beskyttelse",44,3);
-        traditionalMapping.add("slet_dt-beskyttelse",47,10);
+        traditionalMapping.add("beskyttype", 14, 4);
+        traditionalMapping.add("start_mynkod-beskyttelse", 18, 4);
+        traditionalMapping.add("start_ts-beskyttelse", 22, 12);
+        traditionalMapping.add("start_dt-beskyttelse", 34, 10);
+        traditionalMapping.add("indrap-beskyttelse", 44, 3);
+        traditionalMapping.add("slet_dt-beskyttelse", 47, 10);
     }
 
     @Override

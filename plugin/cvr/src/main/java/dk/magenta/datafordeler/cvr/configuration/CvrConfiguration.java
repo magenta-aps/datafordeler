@@ -16,7 +16,7 @@ import java.security.GeneralSecurityException;
  * Configuration instance class, holding configuration values in fields
  */
 @javax.persistence.Entity
-@Table(name="cvr_config")
+@Table(name = "cvr_config")
 public class CvrConfiguration implements Configuration {
 
     public enum RegisterType {
@@ -24,7 +24,8 @@ public class CvrConfiguration implements Configuration {
         LOCAL_FILE(1),
         REMOTE_HTTP(2);
 
-        private int value;
+        private final int value;
+
         RegisterType(int value) {
             this.value = value;
         }
@@ -237,8 +238,6 @@ public class CvrConfiguration implements Configuration {
     }
 
 
-
-
     @Column
     @Enumerated(EnumType.ORDINAL)
     private RegisterType participantRegisterType = RegisterType.LOCAL_FILE;
@@ -341,8 +340,6 @@ public class CvrConfiguration implements Configuration {
     }
 
 
-
-
     public String getQuery(String schema) {
         switch (schema) {
             case CompanyRecord.schema:
@@ -416,14 +413,12 @@ public class CvrConfiguration implements Configuration {
     }
 
 
-
-
     public boolean encryptCompanyRegisterPassword() {
         if (
                 this.companyRegisterPasswordEncryptionFile != null &&
-                !(this.companyRegisterPassword == null || this.companyRegisterPassword.isEmpty()) &&
-                (this.companyRegisterPasswordEncrypted == null || this.companyRegisterPasswordEncrypted.length == 0)
-                ) {
+                        !(this.companyRegisterPassword == null || this.companyRegisterPassword.isEmpty()) &&
+                        (this.companyRegisterPasswordEncrypted == null || this.companyRegisterPasswordEncrypted.length == 0)
+        ) {
             try {
                 this.companyRegisterPasswordEncrypted = Encryption.encrypt(this.companyRegisterPasswordEncryptionFile, this.companyRegisterPassword);
                 return true;
@@ -437,9 +432,9 @@ public class CvrConfiguration implements Configuration {
     public boolean encryptCompanyUnitRegisterPassword() {
         if (
                 this.companyUnitRegisterPasswordEncryptionFile != null &&
-                !(this.companyUnitRegisterPassword == null || this.companyUnitRegisterPassword.isEmpty()) &&
-                (this.companyUnitRegisterPasswordEncrypted == null || this.companyUnitRegisterPasswordEncrypted.length == 0)
-                ) {
+                        !(this.companyUnitRegisterPassword == null || this.companyUnitRegisterPassword.isEmpty()) &&
+                        (this.companyUnitRegisterPasswordEncrypted == null || this.companyUnitRegisterPasswordEncrypted.length == 0)
+        ) {
             try {
                 this.companyUnitRegisterPasswordEncrypted = Encryption.encrypt(this.companyUnitRegisterPasswordEncryptionFile, this.companyUnitRegisterPassword);
                 return true;
@@ -453,9 +448,9 @@ public class CvrConfiguration implements Configuration {
     public boolean encryptParticipantRegisterPassword() {
         if (
                 this.participantRegisterPasswordEncryptionFile != null &&
-                !(this.participantRegisterPassword == null || this.participantRegisterPassword.isEmpty()) &&
-                (this.participantRegisterPasswordEncrypted == null || this.participantRegisterPasswordEncrypted.length == 0)
-                ) {
+                        !(this.participantRegisterPassword == null || this.participantRegisterPassword.isEmpty()) &&
+                        (this.participantRegisterPasswordEncrypted == null || this.participantRegisterPasswordEncrypted.length == 0)
+        ) {
             try {
                 this.participantRegisterPasswordEncrypted = Encryption.encrypt(this.participantRegisterPasswordEncryptionFile, this.participantRegisterPassword);
                 return true;
@@ -467,17 +462,13 @@ public class CvrConfiguration implements Configuration {
     }
 
 
-
-
-
-
     public boolean encryptCompanyDirectRegisterPassword() {
 
         if (
                 this.companyRegisterPasswordEncryptionFile != null &&
                         !(this.companyRegisterDirectLookupPassword == null || this.companyRegisterDirectLookupPassword.isEmpty()) &&
                         (this.companyRegisterDirectLookupPasswordEncrypted == null || this.companyRegisterDirectLookupPasswordEncrypted.length == 0)
-                ) {
+        ) {
             try {
                 this.companyRegisterDirectLookupPasswordEncrypted = Encryption.encrypt(this.companyRegisterPasswordEncryptionFile, this.companyRegisterDirectLookupPassword);
                 return true;
@@ -494,7 +485,7 @@ public class CvrConfiguration implements Configuration {
                 this.participantRegisterPasswordEncryptionFile != null &&
                         !(this.participantRegisterDirectLookupPassword == null || this.participantRegisterDirectLookupPassword.isEmpty()) &&
                         (this.participantRegisterDirectLookupPasswordEncrypted == null || this.participantRegisterDirectLookupPasswordEncrypted.length == 0)
-                ) {
+        ) {
             try {
                 this.participantRegisterDirectLookupPasswordEncrypted = Encryption.encrypt(this.participantRegisterPasswordEncryptionFile, this.participantRegisterDirectLookupPassword);
                 return true;

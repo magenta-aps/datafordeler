@@ -7,7 +7,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.BusinessEventSubscription;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -57,6 +60,7 @@ public class CprListTest {
     /**
      * Initiate lists
      * Test that it is possible to find a specific CPR-list and add new items
+     *
      * @throws Exception
      */
     @Before
@@ -68,7 +72,7 @@ public class CprListTest {
 
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
             Transaction transaction = session.beginTransaction();
 
             subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription1", "A01"));
@@ -91,8 +95,6 @@ public class CprListTest {
     }
 
 
-
-
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
@@ -104,75 +106,75 @@ public class CprListTest {
     @Test
     public void testModifications() {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
-            cprList.addCprStrings(Arrays.asList(new String[]{"1111111111", "1111111112"}));
+            cprList.addCprStrings(Arrays.asList("1111111111", "1111111112"));
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
-            cprList.addCprStrings(Arrays.asList(new String[]{"1111111113", "1111111114"}));
+            cprList.addCprStrings(Arrays.asList("1111111113", "1111111114"));
             transaction.commit();
         }
 
         boolean exception = false;
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
-            cprList.addCprStrings(Arrays.asList(new String[]{"1111111113"}));
+            cprList.addCprStrings(Arrays.asList("1111111113"));
             transaction.commit();
-        } catch(Exception e) {
+        } catch (Exception e) {
             exception = true;
         }
         Assert.assertTrue(exception);
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
             Assert.assertEquals(4, cprList.getCpr().size());
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
             cprList.getCpr().removeIf(f -> "1111111113".equals(f.getCprNumber()));
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
             Assert.assertEquals(3, cprList.getCpr().size());
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList2");
             CprList cprList = (CprList) query.getResultList().get(0);
             session.delete(cprList);
-            transaction.commit();;
+            transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList2");
             Assert.assertEquals(0, query.getResultList().size());
             transaction.commit();
@@ -181,10 +183,9 @@ public class CprListTest {
     }
 
 
-
-
     /**
      * Test that it is possible to find a specific CPR-list and add new items
+     *
      * @throws Exception
      */
     @Test

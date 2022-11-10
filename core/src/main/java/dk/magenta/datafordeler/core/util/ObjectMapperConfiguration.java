@@ -31,6 +31,7 @@ public class ObjectMapperConfiguration {
 
     /**
      * Creates a module to serialize and deserialize objects of type "java.time.OffsetDateTime"
+     *
      * @return The created module
      */
     private SimpleModule getOffsetDateTimeModule() {
@@ -61,6 +62,7 @@ public class ObjectMapperConfiguration {
 
     /**
      * Creates a module to serialize and deserialize objects of type "java.time.LocalDate"
+     *
      * @return The created module
      */
     private SimpleModule getLocalDateModule() {
@@ -91,6 +93,7 @@ public class ObjectMapperConfiguration {
 
     /**
      * Creates a module to serialize and deserialize objects of type "java.time.LocalDateTime"
+     *
      * @return The created module
      */
     private SimpleModule getLocalDateTimeModule() {
@@ -137,15 +140,16 @@ public class ObjectMapperConfiguration {
 
     /**
      * Creates a module to serialize and deserialize objects of type "java.time.OffsetDateTime"
+     *
      * @return The created module
      */
     private SimpleModule getIdentificationModule() {
         SimpleModule module = new SimpleModule();
         module.addSerializer(Identification.class, new JsonSerializer<Identification>
-            () {
+                () {
             @Override
             public void serialize(Identification id, JsonGenerator gen,
-                SerializerProvider prov) throws IOException {
+                                  SerializerProvider prov) throws IOException {
                 gen.writeString(id.getDomain() + id.getUuid());
             }
         });

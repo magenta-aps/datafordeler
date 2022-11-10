@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class MissingParameterException extends DataFordelerException {
 
     public MissingParameterException(String parameterName) {
-        super("Missing required parameter '"+parameterName+"'");
+        super("Missing required parameter '" + parameterName + "'");
     }
 
     @Override

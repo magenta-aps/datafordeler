@@ -61,8 +61,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     }
 
 
-
-
     public static final String DB_FIELD_COMPANY_RELATION = "relationCompanyRecord";
     public static final String IO_FIELD_COMPANY_RELATION = "virksomhed";
 
@@ -104,7 +102,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_ORGANIZATIONS = "organizations";
     public static final String IO_FIELD_ORGANIZATIONS = "organisationer";
 
@@ -129,7 +126,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public Set<OrganizationRecord> getOrganizations() {
         return this.organizations;
     }
-
 
 
     // Our source omits temporality on this object, so we must gather it elsewhere

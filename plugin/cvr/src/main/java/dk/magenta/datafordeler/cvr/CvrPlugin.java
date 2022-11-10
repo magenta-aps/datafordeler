@@ -19,10 +19,10 @@ import javax.annotation.PostConstruct;
 /**
  * Datafordeler Plugin to fetch, parse and serve CVR data (data on companies).
  * As with all plugins, it follows the model laid out in the Datafordeler Core
- * project, so it takes care of where to fetch data, how to parse it, how to 
- * store it (leveraging the Datafordeler bitemporality model), under what path 
+ * project, so it takes care of where to fetch data, how to parse it, how to
+ * store it (leveraging the Datafordeler bitemporality model), under what path
  * to serve it, and which roles should exist for data access.
- * The Core and Engine take care of the generic glue around these, fetching and 
+ * The Core and Engine take care of the generic glue around these, fetching and
  * serving based on the specifics laid out in the plugin.
  */
 @Component
@@ -45,9 +45,9 @@ public class CvrPlugin extends Plugin {
     @Autowired
     private ParticipantEntityManager participantEntityManager;
 
-    private CvrRolesDefinition rolesDefinition;
+    private final CvrRolesDefinition rolesDefinition;
 
-    private CvrAreaRestrictionDefinition areaRestrictionDefinition;
+    private final CvrAreaRestrictionDefinition areaRestrictionDefinition;
 
     public CvrPlugin() {
         this.rolesDefinition = new CvrRolesDefinition();

@@ -3,22 +3,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.geo.AdresseService;
-import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
-import dk.magenta.datafordeler.geo.data.building.BuildingEntityManager;
-import dk.magenta.datafordeler.geo.data.locality.LocalityEntityManager;
-import dk.magenta.datafordeler.geo.data.municipality.MunicipalityEntityManager;
-import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
-import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -134,7 +125,7 @@ public class TestService extends GeoTest {
         ArrayList<String> subjects = new ArrayList<>(Arrays.asList("101", "1A", "2", "1000", "V002", "1B", "1", "V001"));
         subjects.sort(c);
         Assert.assertEquals(
-                new ArrayList<>(Arrays.asList( "1", "1A", "1B", "2", "101", "1000", "V001", "V002")),
+                new ArrayList<>(Arrays.asList("1", "1A", "1B", "2", "101", "1000", "V001", "V002")),
                 subjects
         );
     }

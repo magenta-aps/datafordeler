@@ -36,7 +36,6 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     }
 
 
-
     public static final String DB_FIELD_INDEX = "recordIndex";
 
     @Column(name = DB_FIELD_INDEX)
@@ -50,7 +49,6 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     public void setIndex(int index) {
         this.index = index;
     }
-
 
 
     public static final String DB_FIELD_ATTRIBUTES = "attributes";
@@ -92,7 +90,6 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     public Set<AttributeRecord> getAttributes() {
         return this.attributes;
     }
-
 
 
     @Override

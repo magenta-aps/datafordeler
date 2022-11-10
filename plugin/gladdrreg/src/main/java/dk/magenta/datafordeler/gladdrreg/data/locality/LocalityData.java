@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by lars on 16-05-17.
  */
 @javax.persistence.Entity
-@Table(name="gladdrreg_locality_data", indexes = {
+@Table(name = "gladdrreg_locality_data", indexes = {
         @Index(name = "gladdrreg_locality_code", columnList = LocalityData.DB_FIELD_CODE),
         @Index(name = "gladdrreg_locality_abbrev", columnList = LocalityData.DB_FIELD_ABBREV),
         @Index(name = "gladdrreg_locality_name", columnList = LocalityData.DB_FIELD_NAME),
@@ -123,7 +123,7 @@ public class LocalityData extends SumiffiikData<LocalityEffect, LocalityData> {
     public static final String DB_FIELD_POSTALCODE = "postalCode";
     public static final String IO_FIELD_POSTALCODE = "postnummer";
 
-    @JsonProperty(value="postal_code", required = false)
+    @JsonProperty(value = "postal_code", required = false)
     @XmlElement
     @ManyToOne
     @JoinColumn(name = DB_FIELD_POSTALCODE + DatabaseEntry.REF)

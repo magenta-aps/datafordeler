@@ -9,14 +9,15 @@ import dk.magenta.datafordeler.ger.data.unit.UnitEntity;
 import javax.persistence.*;
 
 @Entity
-@Table(name="ger_config")
+@Table(name = "ger_config")
 public class GerConfiguration implements Configuration {
 
     public enum RegisterType {
         DISABLED(0),
         LOCAL_FILE(1);
 
-        private int value;
+        private final int value;
+
         RegisterType(int value) {
             this.value = value;
         }
@@ -37,7 +38,6 @@ public class GerConfiguration implements Configuration {
     public String getPullCronSchedule() {
         return this.pullCronSchedule;
     }
-
 
 
     @Column
@@ -120,14 +120,14 @@ public class GerConfiguration implements Configuration {
         this.responsibleRegisterType = responsibleRegisterType;
     }
 
-/*
-    @Column(length = 64)
-    private String responsibleSheetName = "";
+    /*
+        @Column(length = 64)
+        private String responsibleSheetName = "";
 
-    public String getResponsibleSheetName() {
-        return this.responsibleSheetName;
-    }
-*/
+        public String getResponsibleSheetName() {
+            return this.responsibleSheetName;
+        }
+    */
     @Column(length = 1024)
     private String responsibleRegisterURL = "";
 
@@ -138,7 +138,6 @@ public class GerConfiguration implements Configuration {
     public void setResponsibleRegisterURL(String responsibleRegisterURL) {
         this.responsibleRegisterURL = responsibleRegisterURL;
     }
-
 
 
     public RegisterType getRegisterType(String schema) {

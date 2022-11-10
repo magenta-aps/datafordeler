@@ -9,10 +9,10 @@ import java.time.format.DateTimeFormatter;
  */
 public class DateConverter {
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static String dateConvert(OffsetDateTime datetime) {
-        if(datetime==null) {
+        if (datetime == null) {
             return null;
         } else {
             return datetime.format(formatter);
@@ -20,7 +20,7 @@ public class DateConverter {
     }
 
     public static String dateConvert(LocalDate date) {
-        if(date==null) {
+        if (date == null) {
             return null;
         } else {
             return date.format(formatter);
@@ -28,8 +28,8 @@ public class DateConverter {
     }
 
     public static LocalDate parseDate(String date) {
-        if(date!=null) {
-            return LocalDate.parse(date,formatter);
+        if (date != null) {
+            return LocalDate.parse(date, formatter);
         } else {
             return null;
         }

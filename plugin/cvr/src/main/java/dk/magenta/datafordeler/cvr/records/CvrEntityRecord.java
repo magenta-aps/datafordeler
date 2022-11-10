@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.cvr.CvrPlugin;
 import org.hibernate.Session;
 
 import javax.persistence.*;
@@ -81,7 +80,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     }
 
 
-
     public static final String DB_FIELD_REGISTER_ERROR = "registerError";
     public static final String IO_FIELD_REGISTER_ERROR = "fejlRegistreret";
 
@@ -92,7 +90,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     public boolean getRegisterError() {
         return this.registerError;
     }
-
 
 
     public static final String DB_FIELD_DATA_ACCESS = "dataAccess";
@@ -107,7 +104,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     }
 
 
-
     public static final String DB_FIELD_LOADING_ERROR = "loadingError";
     public static final String IO_FIELD_LOADING_ERROR = "fejlVedIndlaesning";
 
@@ -118,7 +114,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     public boolean getLoadingError() {
         return this.loadingError;
     }
-
 
 
     public static final String DB_FIELD_NEAREST_FUTURE_DATE = "nearestFutureDate";
@@ -137,7 +132,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     }
 
 
-
     public static final String DB_FIELD_ERRORDESCRIPTION = "errorDescription";
     public static final String IO_FIELD_ERRORDESCRIPTION = "fejlBeskrivelse";
 
@@ -150,7 +144,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     }
 
 
-
     public static final String DB_FIELD_EFFECT_AGENT = "effectAgent";
     public static final String IO_FIELD_EFFECT_AGENT = "virkningsAktoer";
 
@@ -161,7 +154,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     public String getEffectAgent() {
         return this.effectAgent;
     }
-
 
 
     @Override

@@ -20,6 +20,7 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
 
     /**
      * Get the record that is current
+     *
      * @return
      */
     public List<R> current() {
@@ -28,6 +29,7 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
 
     /**
      * Get the stream but with all records removed that is closed in either registrationtime or effecttime
+     *
      * @return
      */
     public Stream<R> currentStream() {
@@ -36,15 +38,16 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
 
     /**
      * Get the last registered record
+     *
      * @param removeClosedRegistration
      * @param removeClosedRegistrationAndEffect
      * @return
      */
     public R getLast(boolean removeClosedRegistration, boolean removeClosedRegistrationAndEffect) {
         Stream<R> stream;
-        if(removeClosedRegistrationAndEffect) {
+        if (removeClosedRegistrationAndEffect) {
             stream = this.currentStream();
-        } else if(removeClosedRegistration) {
+        } else if (removeClosedRegistration) {
             stream = this.currentRegistrationStream();
         } else {
             stream = this.stream();
@@ -54,14 +57,15 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
 
     /**
      * Get the last registered record
+     *
      * @param removeClosedRegistration
      * @param removeClosedRegistrationAndEffect
      * @return
      */
     public R getFirst(boolean removeClosedRegistration, boolean removeClosedRegistrationAndEffect) {
-        if(removeClosedRegistrationAndEffect) {
+        if (removeClosedRegistrationAndEffect) {
             return this.currentStream().findFirst().orElse(null);
-        } else if(removeClosedRegistration) {
+        } else if (removeClosedRegistration) {
             return this.currentRegistrationStream().findFirst().orElse(null);
         } else {
             return this.stream().findFirst().orElse(null);
@@ -70,6 +74,7 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
 
     /**
      * Get the records that is current on registartiontime
+     *
      * @return
      */
     public List<R> currentRegistration() {
@@ -78,6 +83,7 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
 
     /**
      * Get the stream but with only records that are closed in registration-to
+     *
      * @return
      */
     public Stream<R> currentRegistrationStream() {
@@ -100,7 +106,6 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
                         && (r.getEffectTo() == null || r.getEffectTo().isAfter(dateTime) || r.getEffectTo().isEqual(dateTime))
         ).findFirst().orElse(null);
     }
-
 
 
     //--------------------------------------------------------------------------

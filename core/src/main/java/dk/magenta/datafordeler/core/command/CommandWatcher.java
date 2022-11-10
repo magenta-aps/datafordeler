@@ -25,7 +25,7 @@ import java.util.List;
 @Component
 public class CommandWatcher {
 
-    private static Logger log = LogManager.getLogger(CommandWatcher.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(CommandWatcher.class.getCanonicalName());
 
     @Autowired
     private ConfigurationSessionManager sessionManager;
@@ -35,7 +35,7 @@ public class CommandWatcher {
 
     private HashMap<String, CommandHandler> mappedHandlers;
 
-    private HashMap<Long, Worker> workers = new HashMap<>();
+    private final HashMap<Long, Worker> workers = new HashMap<>();
 
     /**
      * Run bean initialization
@@ -59,6 +59,7 @@ public class CommandWatcher {
 
     /**
      * Looks for new Commands in the table. New commands that have not yet been picked up have the status Command.Status.QUEUED
+     *
      * @return A list of found commands.
      */
     private synchronized List<Command> getCommands() {
@@ -85,7 +86,7 @@ public class CommandWatcher {
     public void run() {
         List<Command> commands = this.getCommands();
         if (commands != null && !commands.isEmpty()) {
-            this.log.info("Found " + commands.size() + " commands");
+            log.info("Found " + commands.size() + " commands");
             for (Command command : commands) {
                 switch (command.getStatus()) {
                     case QUEUED:
@@ -131,7 +132,7 @@ public class CommandWatcher {
                         CommandWatcher.this.commandComplete(command);
                     }
                 });
-                this.log.info("Worker " + worker.getId() + " obtained, executing");
+                log.info("Worker " + worker.getId() + " obtained, executing");
                 worker.start();
 
             } catch (DataFordelerException e) {
@@ -148,22 +149,23 @@ public class CommandWatcher {
 
     /**
      * Attempts to cancel the Worker associated with the Command, blocking until it completes
+     *
      * @param command
      */
     public void cancelCommand(Command command) {
         if (!command.done()) {
             Worker worker = workers.get(command.getId());
-            this.log.info("Cancelling worker for command " + command.getId() + " on " + OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            log.info("Cancelling worker for command " + command.getId() + " on " + OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
             if (worker == null) {
-                this.log.info("Didn't find worker");
+                log.info("Didn't find worker");
 
             } else {
                 worker.end();
-                this.log.info("Waiting for command " + command.getId() + " to end");
+                log.info("Waiting for command " + command.getId() + " to end");
                 try {
                     worker.join();
                 } catch (InterruptedException e) {
-                    this.log.error(e);
+                    log.error(e);
                 }
             }
             command.setHandled();
@@ -174,19 +176,20 @@ public class CommandWatcher {
 
     /**
      * Obtain the CommandHandler associated with a command name
+     *
      * @param commandName
      * @return
      */
     public CommandHandler getHandler(String commandName) {
         CommandHandler handler = this.mappedHandlers.get(commandName);
         if (handler == null) {
-            this.log.info("No handler found for command.");
+            log.info("No handler found for command.");
             if (this.mappedHandlers.isEmpty()) {
-                this.log.info("No handlers registered");
+                log.info("No handlers registered");
             } else {
-                this.log.info("Handlers: ");
+                log.info("Handlers: ");
                 for (String name : this.mappedHandlers.keySet()) {
-                    this.log.info("    " + name + " [" + this.mappedHandlers.get(name).getClass().getCanonicalName() + "]");
+                    log.info("    " + name + " [" + this.mappedHandlers.get(name).getClass().getCanonicalName() + "]");
                 }
             }
         }
@@ -195,6 +198,7 @@ public class CommandWatcher {
 
     /**
      * Saves a Command object to the database
+     *
      * @param command
      */
     public synchronized void saveCommand(Command command) {

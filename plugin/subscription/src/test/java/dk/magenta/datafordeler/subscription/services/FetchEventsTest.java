@@ -37,12 +37,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
-
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -70,9 +70,10 @@ public class FetchEventsTest {
     @Autowired
     private PersonEntityManager personEntityManager;
 
-    private OffsetDateTime timestampInitial = OffsetDateTime.now(ZoneOffset.UTC);
+    private final OffsetDateTime timestampInitial = OffsetDateTime.now(ZoneOffset.UTC);
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("_doc", CompanyRecord.schema);
         schemaMap.put("produktionsenhed", CompanyUnitRecord.schema);
@@ -81,7 +82,7 @@ public class FetchEventsTest {
 
     @Before
     public void setUp() throws Exception {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
 
             ImportMetadata importMetadata = new ImportMetadata();
@@ -104,7 +105,7 @@ public class FetchEventsTest {
 
             Transaction tx = session.beginTransaction();
 
-            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
 
             BusinessEventSubscription subscriptionT1 = new BusinessEventSubscription("BE1", "cpr.businessevent.A01");
             subscriptionT1.setSubscriber(subscriber);
@@ -185,8 +186,6 @@ public class FetchEventsTest {
             e.printStackTrace();
         }
     }
-
-
 
 
     private void applyAccess(TestUserDetails testUserDetails) {
@@ -491,7 +490,7 @@ public class FetchEventsTest {
         Assert.assertEquals(9, results.size());
 
         response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE="+timestamp.toString()+"&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=" + timestamp + "&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -501,7 +500,7 @@ public class FetchEventsTest {
         results = responseContent.get("results");
         Assert.assertEquals(0, results.size());
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
@@ -572,8 +571,7 @@ public class FetchEventsTest {
         this.applyAccess(testUserDetails);
 
 
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
             query.addPersonnummer("0101011235");
             query.addPersonnummer("0101011236");
@@ -776,7 +774,7 @@ public class FetchEventsTest {
     private HashMap<Integer, JsonNode> loadCompany(String resource) throws IOException, DataFordelerException {
         InputStream input = FetchEventsTest.class.getResourceAsStream(resource);
         if (input == null) {
-            throw new MissingResourceException("Missing resource \""+resource+"\"", resource, "key");
+            throw new MissingResourceException("Missing resource \"" + resource + "\"", resource, "key");
         }
         return loadCompany(input, false);
     }
@@ -792,7 +790,7 @@ public class FetchEventsTest {
 
             if (linedFile) {
                 int lineNumber = 0;
-                Scanner lineScanner = new Scanner(input, "UTF-8").useDelimiter("\n");
+                Scanner lineScanner = new Scanner(input, StandardCharsets.UTF_8).useDelimiter("\n");
                 while (lineScanner.hasNext()) {
                     String data = lineScanner.next();
 

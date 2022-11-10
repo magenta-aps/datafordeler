@@ -30,12 +30,16 @@ public interface Bitemporal extends Monotemporal {
 
     String DB_FIELD_EFFECT_FROM = "effectFrom";
     String IO_FIELD_EFFECT_FROM = "virkningFra";
+
     OffsetDateTime getEffectFrom();
+
     void setEffectFrom(OffsetDateTime effectFrom);
 
     String DB_FIELD_EFFECT_TO = "effectTo";
     String IO_FIELD_EFFECT_TO = "virkningTil";
+
     OffsetDateTime getEffectTo();
+
     void setEffectTo(OffsetDateTime effectTo);
 
     default Bitemporal setBitemporality(String registrationFrom, String registrationTo, String effectFrom, String effectTo) {
@@ -67,9 +71,9 @@ public interface Bitemporal extends Monotemporal {
         this.setBitemporality(bitemporality.registrationFrom, bitemporality.registrationTo, bitemporality.effectFrom, bitemporality.effectTo);
         return this;
     }
-    
+
     Bitemporality getBitemporality();
-    
+
     static void copy(Bitemporal from, Bitemporal to) {
         Monotemporal.copy(from, to);
         to.setEffectFrom(from.getEffectFrom());

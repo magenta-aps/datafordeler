@@ -49,7 +49,6 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
     }
 
 
-
     public static final String DB_FIELD_CIRCUMFERENCE = "circumference";
     public static final String IO_FIELD_CIRCUMFERENCE = "omkreds";
     @Column(name = DB_FIELD_CIRCUMFERENCE)
@@ -109,8 +108,7 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
     }
 
 
-
-    private static GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), GeoPlugin.SRID);
+    private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), GeoPlugin.SRID);
 
 
     public static MultiPolygon convert(org.geojson.MultiPolygon original) {
@@ -123,7 +121,7 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
 
     public static org.geojson.MultiPolygon convert(MultiPolygon original) {
         org.geojson.MultiPolygon multiPolygon = new org.geojson.MultiPolygon();
-        for (int i=0; i<original.getNumGeometries(); i++) {
+        for (int i = 0; i < original.getNumGeometries(); i++) {
             multiPolygon.add(AreaRecord.convert((Polygon) original.getGeometryN(i)));
         }
         return multiPolygon;
@@ -141,12 +139,11 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
 
     public static org.geojson.Polygon convert(Polygon original) {
         org.geojson.Polygon polygon = new org.geojson.Polygon(AreaRecord.convert((LinearRing) original.getExteriorRing()));
-        for (int i=0; i<original.getNumInteriorRing(); i++) {
+        for (int i = 0; i < original.getNumInteriorRing(); i++) {
             polygon.addInteriorRing(AreaRecord.convert((LinearRing) original.getInteriorRingN(i)));
         }
         return polygon;
     }
-
 
 
     public static Polygon convertList(List<List<LngLatAlt>> original) {
@@ -162,12 +159,11 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
     public static List<List<LngLatAlt>> convertList(Polygon original) {
         ArrayList<List<LngLatAlt>> list = new ArrayList<>();
         list.add(AreaRecord.convert((LinearRing) original.getExteriorRing()));
-        for (int i=0; i<original.getNumInteriorRing(); i++) {
+        for (int i = 0; i < original.getNumInteriorRing(); i++) {
             list.add(AreaRecord.convert((LinearRing) original.getInteriorRingN(i)));
         }
         return list;
     }
-
 
 
     public static LinearRing convert(List<LngLatAlt> original) {
@@ -184,7 +180,6 @@ public abstract class AreaRecord<E extends GeoEntity> extends GeoMonotemporalRec
     public static List<LngLatAlt> convert(LinearRing original) {
         return Arrays.stream(original.getCoordinates()).map(AreaRecord::convert).collect(Collectors.toList());
     }
-
 
 
     public static Coordinate convert(LngLatAlt original) {

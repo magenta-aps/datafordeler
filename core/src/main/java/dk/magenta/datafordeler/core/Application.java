@@ -48,14 +48,14 @@ public class Application {
     @Autowired
     SessionManager sessionManager;
 
-    private static Logger log = LogManager.getLogger(Application.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(Application.class.getCanonicalName());
 
     public static final int servicePort = 8445;
 
     public static void main(final String[] args) throws Exception {
 
         //Used for finding the password for direct lookup in cpr
-        if(args.length==3 && args[0].equals("DECRYPT")) {
+        if (args.length == 3 && args[0].equals("DECRYPT")) {
             File encryptionFile = new File(args[1]);
             byte[] lastBytes = Files.readAllBytes(new File(args[2]).toPath());
             String pass = Encryption.decrypt(encryptionFile, lastBytes);
@@ -83,7 +83,7 @@ public class Application {
         }
 
         String jarFolderPath = properties.getProperty("dafo.plugins.folder");
-        log.info("Plugin folder path: "+jarFolderPath);
+        log.info("Plugin folder path: " + jarFolderPath);
 
         // Jam the jar files on the given path into the classloader
         if (jarFolderPath != null) {
@@ -125,10 +125,10 @@ public class Application {
             } else {
                 String pathDescription = jarFolderPath;
                 try {
-                     pathDescription += " => " + pluginFolder.getCanonicalPath();
+                    pathDescription += " => " + pluginFolder.getCanonicalPath();
                 } catch (IOException e) {
                 }
-                throw new ConfigurationException("Configured plugin folder path "+pathDescription+" is not a folder");
+                throw new ConfigurationException("Configured plugin folder path " + pathDescription + " is not a folder");
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             log.error(e);
@@ -146,7 +146,7 @@ public class Application {
                     try {
                         return new FileInputStream(value);
                     } catch (FileNotFoundException e) {
-                        log.warn("Config file not found: "+value);
+                        log.warn("Config file not found: " + value);
                     }
             }
         }

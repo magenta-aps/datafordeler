@@ -1,21 +1,20 @@
 package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
+
 import javax.persistence.*;
-import javax.persistence.Entity;
 
 @Entity
 @Table(name = BusinessEventSubscription.TABLE_NAME, indexes = {
 
 })
-public class BusinessEventSubscription extends DatabaseEntry  {
+public class BusinessEventSubscription extends DatabaseEntry {
 
     public static final String TABLE_NAME = "subscription_businessevent";
 
     public BusinessEventSubscription() {
     }
-
 
 
     public BusinessEventSubscription(String businessEventId) {
@@ -28,7 +27,9 @@ public class BusinessEventSubscription extends DatabaseEntry  {
     }
 
 
-    @Column(name="businessEventId", unique = true, nullable=false)
+    public static final String DB_FIELD_BUSINESS_EVENT_ID = "businessEventId";
+
+    @Column(name = DB_FIELD_BUSINESS_EVENT_ID, unique = true, nullable = false)
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String businessEventId;
 
@@ -40,7 +41,8 @@ public class BusinessEventSubscription extends DatabaseEntry  {
         this.businessEventId = businessEventId;
     }
 
-    @Column(name="kodeId", nullable=false)
+    public static final String DB_FIELD_KODE_ID = "kodeId";
+    @Column(name = DB_FIELD_KODE_ID, nullable = false)
     private String kodeId;
 
     public String getKodeId() {
@@ -52,9 +54,10 @@ public class BusinessEventSubscription extends DatabaseEntry  {
     }
 
 
+    public static final String DB_FIELD_SUBSCRIBER_ID = "subscriber_id";
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="subscriber_id")
+    @JoinColumn(name = DB_FIELD_SUBSCRIBER_ID)
     private Subscriber subscriber;
 
     public Subscriber getSubscriber() {

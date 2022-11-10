@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class AccessDeniedException extends DataFordelerException {
 
-  public AccessDeniedException(String message) {
-    super(message);
-  }
+    public AccessDeniedException(String message) {
+        super(message);
+    }
 
-  public AccessDeniedException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public AccessDeniedException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public String getCode() {
-    return "datafordeler.accessdenied";
-  }
+    public String getCode() {
+        return "datafordeler.accessdenied";
+    }
 }

@@ -36,10 +36,10 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,7 +67,7 @@ public class CprService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CprService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprService.class.getCanonicalName());
 
     @Autowired
     private PersonOutputWrapperPrisme personOutputWrapper;
@@ -90,7 +90,7 @@ public class CprService {
         this.checkAndLogAccess(loggerHelper);
         loggerHelper.urlInvokePersistablelogs("CprService");
 
-        try(final Session session = sessionManager.getSessionFactory().openSession();) {
+        try (final Session session = sessionManager.getSessionFactory().openSession()) {
             GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
 
@@ -160,7 +160,7 @@ public class CprService {
 
         if (cprNumbers == null || cprNumbers.isEmpty()) {
             throw new InvalidClientInputException("Please specify at least one CPR number");
-        } else if(cprNumbers.size()>400) {
+        } else if (cprNumbers.size() > 400) {
             throw new InvalidParameterException("Maximum 400 numbers is allowed");
         }
 
@@ -211,7 +211,7 @@ public class CprService {
                                 outputStream.write(
                                         objectMapper.writeValueAsString(
                                                 personOutputWrapper.wrapRecordResult(personEntity, personQuery)
-                                        ).getBytes(Charset.forName("UTF-8"))
+                                        ).getBytes(StandardCharsets.UTF_8)
                                 );
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -235,10 +235,9 @@ public class CprService {
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 
@@ -253,11 +252,12 @@ public class CprService {
         }
     }
 
-    private static Pattern nonDigits = Pattern.compile("[^\\d]");
+    private static final Pattern nonDigits = Pattern.compile("[^\\d]");
+
     private List<String> getCprNumber(JsonNode node) {
         ArrayList<String> cprNumbers = new ArrayList<>();
         if (node.isArray()) {
-            for (JsonNode item : (ArrayNode) node) {
+            for (JsonNode item : node) {
                 cprNumbers.addAll(this.getCprNumber(item));
             }
         } else if (node.isTextual()) {

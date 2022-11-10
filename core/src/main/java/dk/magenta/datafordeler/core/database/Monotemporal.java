@@ -34,13 +34,17 @@ public interface Monotemporal extends Nontemporal {
 
     String DB_FIELD_REGISTRATION_FROM = "registrationFrom";
     String IO_FIELD_REGISTRATION_FROM = "registreringFra";
+
     OffsetDateTime getRegistrationFrom();
+
     void setRegistrationFrom(OffsetDateTime registrationFrom);
 
-    
+
     String DB_FIELD_REGISTRATION_TO = "registrationTo";
     String IO_FIELD_REGISTRATION_TO = "registreringTil";
+
     OffsetDateTime getRegistrationTo();
+
     void setRegistrationTo(OffsetDateTime registrationTo);
 
 
@@ -77,7 +81,7 @@ public interface Monotemporal extends Nontemporal {
         if (this.getRegistrationFrom() == null) return -1;
         return this.getRegistrationFrom().compareTo(oUpdated);
     }
-    
+
     static void copy(Monotemporal from, Monotemporal to) {
         Nontemporal.copy(from, to);
         to.setRegistrationFrom(from.getRegistrationFrom());

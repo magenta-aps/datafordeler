@@ -40,16 +40,16 @@ public class DownloadService extends StatisticsService {
     @Autowired
     private DafoUserManager dafoUserManager;
 
-    private Logger log = LogManager.getLogger(DownloadService.class);
+    private final Logger log = LogManager.getLogger(DownloadService.class.getCanonicalName());
 
     @RequestMapping(method = RequestMethod.GET, path = "/")
     protected void doGet(HttpServletRequest request,
-                          HttpServletResponse response) throws IOException {
+                         HttpServletResponse response) throws IOException {
 
         String formToken = request.getParameter("token");
         String collectionUuid = request.getParameter("collectionUuid");
 
-        if(formToken!=null && collectionUuid!=null) {
+        if (formToken != null && collectionUuid != null) {
             IOUtils.copy(
                     StatisticsService.class.getResourceAsStream("/downloadSimpleServiceForm.html"),
                     response.getWriter(), StandardCharsets.UTF_8
@@ -66,7 +66,7 @@ public class DownloadService extends StatisticsService {
 
     @RequestMapping(method = RequestMethod.POST, path = "/")
     protected void doPost(HttpServletRequest request,
-                         HttpServletResponse response) throws IOException, AccessDeniedException, AccessRequiredException, InvalidTokenException {
+                          HttpServletResponse response) throws IOException, AccessDeniedException, AccessRequiredException, InvalidTokenException {
 
         String password = request.getParameter("password");
 
@@ -92,7 +92,7 @@ public class DownloadService extends StatisticsService {
         // obtains response's output stream
         OutputStream outStream = response.getOutputStream();
 
-        if(password.length()<8) {
+        if (password.length() < 8) {
             outStream.write("Password must be at least 8 characters".getBytes(StandardCharsets.UTF_8));
             outStream.close();
             return;
@@ -102,24 +102,24 @@ public class DownloadService extends StatisticsService {
         ArrayList<File> filesToAdd = new ArrayList<File>();
 
         try {
-            try(Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
+            try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
 
                 ReportSyncHandler repSync = new ReportSyncHandler(reportProgressSession);
                 List<String> reportList = repSync.getReportList(reportId, ReportProgressStatus.done);
-                if (reportList.size()==0) {
+                if (reportList.size() == 0) {
                     outStream.write("Report does not exist".getBytes(StandardCharsets.UTF_8));
                     outStream.close();
                     return;
                 }
-                for(String report : reportList) {
+                for (String report : reportList) {
                     if (!ReportValidationAndConversion.validateReportName(report)) {
                         outStream.write("Illegal reportname".getBytes(StandardCharsets.UTF_8));
                         outStream.close();
                         return;
                     }
-                    filesToAdd.add(new File(PATH_FILE,report + ".csv"));
+                    filesToAdd.add(new File(PATH_FILE, report + ".csv"));
                 }
-                ReportValidationAndConversion.convertFileToEncryptedZip(new File(PATH_FILE,reportId+".zip"), filesToAdd, password);
+                ReportValidationAndConversion.convertFileToEncryptedZip(new File(PATH_FILE, reportId + ".zip"), filesToAdd, password);
             }
 
         } catch (ZipException e) {
@@ -127,7 +127,7 @@ public class DownloadService extends StatisticsService {
         }
 
         // reads input file from an absolute path
-        String filePath = reportId+".zip";
+        String filePath = reportId + ".zip";
         File downloadFile = new File(StatisticsService.PATH_FILE, filePath);
         if (!downloadFile.exists()) {
             outStream.write("Report does not exist".getBytes(StandardCharsets.UTF_8));

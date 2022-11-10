@@ -97,6 +97,7 @@ public class Municipality extends DatabaseEntry {
 
     /**
      * Obtain a Municipality object, either from cache or from database, if it exists, or creates one if it doesn't.
+     *
      * @param code
      * @param name
      * @param session
@@ -111,7 +112,7 @@ public class Municipality extends DatabaseEntry {
                 municipality = session.get(Municipality.class, id);
             }
             if (municipality == null) {
-                log.debug("Municipality code "+code+" not found in cache, querying database");
+                log.debug("Municipality code " + code + " not found in cache, querying database");
                 municipality = QueryManager.getItem(session, Municipality.class, Collections.singletonMap(DB_FIELD_CODE, code));
                 if (municipality != null && municipality.name.equals("") && name != null) {
                     municipality.setName(name);
@@ -119,7 +120,7 @@ public class Municipality extends DatabaseEntry {
                 }
             }
             if (municipality == null) {
-                log.debug("Municipality "+code+" not found; creating new, with name "+name);
+                log.debug("Municipality " + code + " not found; creating new, with name " + name);
                 municipality = new Municipality();
                 municipality.setCode(code);
                 if (name == null) {
@@ -128,7 +129,7 @@ public class Municipality extends DatabaseEntry {
                 municipality.setName(name);
                 session.save(municipality);
             } else {
-                log.debug("Municipality "+code+" found ("+municipality.getId()+")");
+                log.debug("Municipality " + code + " found (" + municipality.getId() + ")");
             }
             municipalityCache.put(code, municipality.getId());
             return municipality;

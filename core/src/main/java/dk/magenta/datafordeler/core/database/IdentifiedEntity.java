@@ -17,7 +17,9 @@ public interface IdentifiedEntity {
 
     IdentifiedEntity getNewest(Collection<IdentifiedEntity> set);
 
-    static Iterator<Map<String, Object>> itemIterator(Stream<IdentifiedEntity> entities) {return null;}
+    static Iterator<Map<String, Object>> itemIterator(Stream<IdentifiedEntity> entities) {
+        return null;
+    }
 
     List<BaseQuery> getAssoc();
 

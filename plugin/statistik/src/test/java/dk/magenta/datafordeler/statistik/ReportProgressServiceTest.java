@@ -58,7 +58,7 @@ public class ReportProgressServiceTest extends TestBase {
         String reportUuid = null;
         String reportCollectionUuid = null;
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             reportUuid = report.getReportUuid();
@@ -67,7 +67,7 @@ public class ReportProgressServiceTest extends TestBase {
             Assert.assertTrue(repSync.createReportStatusObject(report));
         }
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
 
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
 
@@ -88,32 +88,31 @@ public class ReportProgressServiceTest extends TestBase {
         }
 
 
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<ReportAssignment> existingSubscriptions = QueryManager.getAllItems(session, ReportAssignment.class);
             Assert.assertEquals(1, existingSubscriptions.size());
         }
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName("REPORT2");
             Assert.assertFalse(repSync.createReportStatusObject(report));
         }
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             repSync.setReportStatus(reportUuid, ReportProgressStatus.done);
         }
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName("REPORT2");
             Assert.assertTrue(repSync.createReportStatusObject(report));
         }
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName("REPORT1");
@@ -127,7 +126,7 @@ public class ReportProgressServiceTest extends TestBase {
         birthDataService.setWriteToLocalFile(false);
         birthDataService.setUseTimeintervallimit(false);
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName(StatisticsService.ServiceName.BIRTH.getIdentifier());
@@ -148,7 +147,7 @@ public class ReportProgressServiceTest extends TestBase {
         birthDataService.setWriteToLocalFile(true);
         birthDataService.setUseTimeintervallimit(false);
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName(StatisticsService.ServiceName.BIRTH.getIdentifier());
@@ -175,13 +174,13 @@ public class ReportProgressServiceTest extends TestBase {
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
 
-        try(Session sessionSync = sessionManager.getSessionFactory().openSession()) {
+        try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName(StatisticsService.ServiceName.BIRTH.getIdentifier());
             Assert.assertTrue(repSync.createReportStatusObject(report));
 
-            ResponseEntity<String> response = restTemplate.exchange("/statistik/collective_report/reportstatus/?collectionUuid="+report.getCollectionUuid(), HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+            ResponseEntity<String> response = restTemplate.exchange("/statistik/collective_report/reportstatus/?collectionUuid=" + report.getCollectionUuid(), HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
             Assert.assertEquals("started,\n", response.getBody());
         }
     }

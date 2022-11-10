@@ -21,7 +21,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = KOMMUNEKODE)
-    private List<String> kommunekoder = new ArrayList<>();
+    private final List<String> kommunekoder = new ArrayList<>();
 
     public Collection<String> getKommunekoder() {
         return this.kommunekoder;

@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.UUID;
 
 @Component("GeoRoadEntityManager")
 public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawData> {

@@ -50,7 +50,6 @@ public class MetadataContactRecord extends CvrNontemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_UNIT_METADATA = "unitMetadataRecord";
 
     @ManyToOne(targetEntity = CompanyUnitMetadataRecord.class, fetch = FetchType.LAZY)
@@ -61,7 +60,6 @@ public class MetadataContactRecord extends CvrNontemporalRecord {
     public void setUnitMetadataRecord(CompanyUnitMetadataRecord unitMetadataRecord) {
         this.unitMetadataRecord = unitMetadataRecord;
     }
-
 
 
     public static final String DB_FIELD_PARTICIPANT_METADATA = "participantMetadataRecord";

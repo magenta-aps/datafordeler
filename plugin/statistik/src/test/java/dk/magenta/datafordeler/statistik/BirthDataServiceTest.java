@@ -81,13 +81,13 @@ public class BirthDataServiceTest extends TestBase {
 
         Assert.assertNotNull("Response contains a body", response);
         String expected = "\"B_Pnr\";\"B_FoedAar\";\"B_PnrGaeld\";\"B_FoedMynKod\";\"B_FoedMynTxt\";\"B_FoedMynKodTxt\";\"B_StatKod\";\"B_ProdDto\";\"B_ProdFilDto\";\"M_Pnr\";\"M_FoedMynKod\";\"M_FoedMynTxt\";\"M_FoedMynKodTxt\";\"M_StatKod\";\"M_KomKod\";\"M_LokNavn\";\"M_LokKode\";\"M_VejKod\";\"M_HusNr\";\"M_Etage\";\"M_SideDoer\";\"M_Bnr\";\"F_Pnr\";\"F_FoedMynKod\";\"F_FoedMynTxt\";\"F_FoedMynKodTxt\";\"F_StatKod\";\"F_KomKod\";\"F_LokNavn\";\"F_LokKode\";\"F_VejKod\";\"F_HusNr\";\"F_Etage\";\"F_SideDoer\";\"F_Bnr\"\n" +
-                        "\"0101001234\";\"2000\";;\"9516\";\"\";\"0\";;\"13-01-2000\";\"\";\"2903641234\";\"6666\";\"\";;\"5100\";\"956\";\"Nuuk\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\";\"0101641234\";\"8888\";\"\";;\"5100\";\"956\";\"Nuuk\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\"";
+                "\"0101001234\";\"2000\";;\"9516\";\"\";\"0\";;\"13-01-2000\";\"\";\"2903641234\";\"6666\";\"\";;\"5100\";\"956\";\"Nuuk\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\";\"0101641234\";\"8888\";\"\";;\"5100\";\"956\";\"Nuuk\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\"";
         Assert.assertEquals(
                 testUtil.csvToJsonString(expected),
                 testUtil.csvToJsonString(response.getBody().trim())
         );
-        System.out.println("Body response: "+response.getBody());
-        
+        System.out.println("Body response: " + response.getBody());
+
         response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-15", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(204, response.getStatusCodeValue());
     }
@@ -112,7 +112,7 @@ public class BirthDataServiceTest extends TestBase {
 
         FileInputStream fileInputStream = new FileInputStream(StatisticsService.PATH_FILE + File.separator + birthFiles[0]);
         String contents = InputStreamReader.readInputStream(
-                fileInputStream,"UTF-8"
+                fileInputStream, "UTF-8"
         );
         fileInputStream.close();
 

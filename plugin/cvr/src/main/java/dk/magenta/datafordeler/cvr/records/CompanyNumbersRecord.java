@@ -74,7 +74,6 @@ public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     @JsonProperty(value = "antalAarsvaerk")
     private Integer fulltimeEquivalent;
 
@@ -108,7 +107,6 @@ public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
     public Integer getFulltimeEquivalentHigh() {
         return this.fulltimeEquivalentHigh;
     }
-
 
 
     @JsonProperty(value = "antalInklusivEjere")
@@ -146,6 +144,7 @@ public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
     }
 
     private static Pattern rangePattern = Pattern.compile("^ANTAL_(\\d+)_(\\d+)$");
+
     private static Range parseRange(String range) {
         if (range != null) {
             Matcher m = rangePattern.matcher(range);

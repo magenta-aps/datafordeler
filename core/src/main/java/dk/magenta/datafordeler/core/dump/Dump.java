@@ -38,23 +38,23 @@ public class Dump extends Worker {
         @Override
         protected Dump createWorker(JobDataMap dataMap) {
             return new Dump(
-                (Engine) dataMap.get(DATA_ENGINE),
-                (SessionManager) dataMap.get(DATA_SESSIONMANAGER),
-                (DumpConfiguration) dataMap.get(DATA_CONFIG)
+                    (Engine) dataMap.get(DATA_ENGINE),
+                    (SessionManager) dataMap.get(DATA_SESSIONMANAGER),
+                    (DumpConfiguration) dataMap.get(DATA_CONFIG)
             );
         }
     }
 
-    private static Logger log = LogManager.getLogger(Dump.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(Dump.class.getCanonicalName());
 
     private final Engine engine;
     private final DumpConfiguration config;
     private final OffsetDateTime timestamp;
 
     public Dump(
-        Engine engine,
-        SessionManager sessionManager,
-        DumpConfiguration config
+            Engine engine,
+            SessionManager sessionManager,
+            DumpConfiguration config
     ) {
         this.engine = engine;
         this.sessionManager = sessionManager;
@@ -63,10 +63,10 @@ public class Dump extends Worker {
     }
 
     public Dump(
-        Engine engine,
-        SessionManager sessionManager,
-        DumpConfiguration config,
-        OffsetDateTime timestamp
+            Engine engine,
+            SessionManager sessionManager,
+            DumpConfiguration config,
+            OffsetDateTime timestamp
     ) {
         this.engine = engine;
         this.sessionManager = sessionManager;
@@ -82,17 +82,17 @@ public class Dump extends Worker {
         Session session = sessionManager.getSessionFactory().openSession();
 
         try {
-            this.log.info("Worker {} is executing dump {} of {} for {}",
-                this.getId(), config.getId(), config.getFormat(),
-                config.getRequestPath());
+            log.info("Worker {} is executing dump {} of {} for {}",
+                    this.getId(), config.getId(), config.getFormat(),
+                    config.getRequestPath());
 
             Transaction transaction = session.beginTransaction();
 
             // TODO: is executing the dump within a transaction excessive?
             byte[] dumpData = dump(
-                config.getRequestPath(),
-                config.getFormat().getMediaType(),
-                config.getCharset()
+                    config.getRequestPath(),
+                    config.getFormat().getMediaType(),
+                    config.getCharset()
             );
 
             DumpInfo dump = new DumpInfo(config, timestamp, dumpData);
@@ -101,7 +101,7 @@ public class Dump extends Worker {
             filter.put("name", config.getName());
 
             for (DumpInfo older : QueryManager.getItems(
-                session, DumpInfo.class, filter)) {
+                    session, DumpInfo.class, filter)) {
                 if (older.getTimestamp().isBefore(timestamp)) {
                     session.delete(older);
                 }
@@ -112,11 +112,11 @@ public class Dump extends Worker {
 
             transaction.commit();
 
-            this.log.info("Worker {}: Dump complete", this.getId());
+            log.info("Worker {}: Dump complete", this.getId());
 
             this.onComplete();
         } catch (Throwable e) {
-            this.log.error("Worker {}: Dump failed", e);
+            log.error("Worker {}: Dump failed", e);
         } finally {
             session.close();
         }
@@ -124,8 +124,8 @@ public class Dump extends Worker {
     }
 
     private byte[] dump(String requestPath,
-        MediaType mediaType, Charset charset)
-        throws Exception {
+                        MediaType mediaType, Charset charset)
+            throws Exception {
 
         ParameterMap parameters = ParameterMap.fromPath(requestPath);
         String basePath = requestPath;
@@ -134,9 +134,9 @@ public class Dump extends Worker {
         }
 
         MockInternalServletRequest request =
-            new MockInternalServletRequest("DUMP", basePath);
+                new MockInternalServletRequest("DUMP", basePath);
         MockHttpServletResponse response =
-            new MockHttpServletResponse();
+                new MockHttpServletResponse();
 
         for (String key : parameters.keySet()) {
             request.setParameter(key, parameters.getAsArray(key));

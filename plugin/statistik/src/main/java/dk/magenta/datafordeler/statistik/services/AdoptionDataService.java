@@ -59,7 +59,7 @@ public class AdoptionDataService extends PersonStatisticsService {
     @Autowired
     private CprPlugin cprPlugin;
 
-    private Logger log = LogManager.getLogger(AdoptionDataService.class);
+    private final Logger log = LogManager.getLogger(AdoptionDataService.class.getCanonicalName());
 
     @PostConstruct
     public void setUseTimeintervallimit() {
@@ -68,6 +68,7 @@ public class AdoptionDataService extends PersonStatisticsService {
 
     /**
      * Calls handleRequest in super with the ID of the report as a parameter
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -87,6 +88,7 @@ public class AdoptionDataService extends PersonStatisticsService {
 
     /**
      * Post is used for starting the generation of a report
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -106,7 +108,7 @@ public class AdoptionDataService extends PersonStatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{"CODE",
+        return Arrays.asList("CODE",
                 PNR, BIRTHDAY_YEAR, MOTHER_PREFIX + PNR, FATHER_PREFIX + PNR, AM_mynkod, AF_mynkod,
                 BIRTH_AUTHORITY, CITIZENSHIP_CODE, PROD_DATE, FILE_DATE, ADOPTIONDTO, MUNICIPALITY_CODE, LOCALITY_NAME, LOCALITY_ABBREVIATION,
                 LOCALITY_CODE, ROAD_CODE, HOUSE_NUMBER, FLOOR_NUMBER, BNR,
@@ -117,10 +119,8 @@ public class AdoptionDataService extends PersonStatisticsService {
                 FATHER_PREFIX + MUNICIPALITY_CODE, FATHER_PREFIX + ROAD_CODE, FATHER_PREFIX + HOUSE_NUMBER,
                 FATHER_PREFIX + FLOOR_NUMBER, FATHER_PREFIX + DOOR_NUMBER, FATHER_PREFIX + BNR, FATHER_PREFIX + LOCALITY_NAME,
                 FATHER_PREFIX + LOCALITY_ABBREVIATION, FATHER_PREFIX + LOCALITY_CODE, FATHER_PREFIX + CITIZENSHIP_CODE,
-                FATHER_PREFIX + BIRTH_AUTHORITY, FATHER_PREFIX + BIRTH_AUTHORITY_TEXT
-        });
+                FATHER_PREFIX + BIRTH_AUTHORITY, FATHER_PREFIX + BIRTH_AUTHORITY_TEXT);
     }
-
 
 
     @Override
@@ -160,6 +160,7 @@ public class AdoptionDataService extends PersonStatisticsService {
 
     /**
      * Create formatted adoptioninfo for one adopted child
+     *
      * @param person
      * @param session
      * @param lookupService
@@ -190,6 +191,7 @@ public class AdoptionDataService extends PersonStatisticsService {
 
     /**
      * Create one formatted row of data for one adopted child
+     *
      * @param before
      * @param person
      * @param session
@@ -210,18 +212,18 @@ public class AdoptionDataService extends PersonStatisticsService {
         Set<ParentDataRecord> fatherList = person.getFather();
         Set<ParentDataRecord> motherList = person.getMother();
 
-        if((fatherList.size()<=1 && motherList.size()<=1) || eventListAdoption.size()==0) {
+        if ((fatherList.size() <= 1 && motherList.size() <= 1) || eventListAdoption.size() == 0) {
             return item;
         }
 
         item.put(PNR, person.getPersonnummer());
         OffsetDateTime eventtimestamp = eventListAdoption.get(0).getTimestamp();
 
-        if(before) {
+        if (before) {
             item.put("CODE", PRE);
             ParentDataRecord prefather = findRegistrationAtMatchingChangedtimePre(fatherList, eventtimestamp);
             ParentDataRecord premother = findRegistrationAtMatchingChangedtimePre(motherList, eventtimestamp);
-            if(prefather!=null) {
+            if (prefather != null) {
                 item.put(FATHER_PREFIX + PNR, prefather.getCprNumber());
                 item.put(AF_mynkod, Integer.toString(prefather.getAuthority()));
                 PersonEntity parent = QueryManager.getEntity(session, PersonEntity.generateUUID(prefather.getCprNumber()), PersonEntity.class);
@@ -229,7 +231,7 @@ public class AdoptionDataService extends PersonStatisticsService {
                     item.putAll(this.formatParentPersonByRecord(parent, FATHER_PREFIX, lookupService, eventtimestamp, true));
                 }
             }
-            if(premother!=null) {
+            if (premother != null) {
                 item.put(MOTHER_PREFIX + PNR, premother.getCprNumber());
                 item.put(AM_mynkod, Integer.toString(premother.getAuthority()));
                 PersonEntity parent = QueryManager.getEntity(session, PersonEntity.generateUUID(premother.getCprNumber()), PersonEntity.class);
@@ -241,7 +243,7 @@ public class AdoptionDataService extends PersonStatisticsService {
             item.put("CODE", POST);
             ParentDataRecord postfather = findRegistrationAtMatchingChangedtimePost(fatherList, eventtimestamp);
             ParentDataRecord postmother = findRegistrationAtMatchingChangedtimePost(motherList, eventtimestamp);
-            if(postfather!=null) {
+            if (postfather != null) {
                 item.put(FATHER_PREFIX + PNR, postfather.getCprNumber());
                 item.put(AF_mynkod, Integer.toString(postfather.getAuthority()));
                 item.put(FILE_DATE, formatTime(postfather.getOriginDate()));//This is the same for mother and father record
@@ -250,7 +252,7 @@ public class AdoptionDataService extends PersonStatisticsService {
                     item.putAll(this.formatParentPersonByRecord(parent, FATHER_PREFIX, lookupService, eventtimestamp, true));
                 }
             }
-            if(postmother!=null) {
+            if (postmother != null) {
                 item.put(MOTHER_PREFIX + PNR, postmother.getCprNumber());
                 item.put(AM_mynkod, Integer.toString(postmother.getAuthority()));
                 item.put(FILE_DATE, formatTime(postmother.getOriginDate()));//This is the same for mother and father record

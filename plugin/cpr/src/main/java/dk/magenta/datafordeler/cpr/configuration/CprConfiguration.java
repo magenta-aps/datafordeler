@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 
 @javax.persistence.Entity
-@Table(name="cpr_config")
+@Table(name = "cpr_config")
 public class CprConfiguration implements Configuration {
 
     //private Logger log = LogManager.getLogger(PersonParser.class);
@@ -30,7 +30,8 @@ public class CprConfiguration implements Configuration {
         UTF_16LE(4),
         UTF_16(5);
 
-        private int value;
+        private final int value;
+
         Charset(int value) {
             this.value = value;
         }
@@ -46,7 +47,8 @@ public class CprConfiguration implements Configuration {
         REMOTE_FTP(2),
         TEST_LOCAL_FILE(3);
 
-        private int value;
+        private final int value;
+
         RegisterType(int value) {
             this.value = value;
         }
@@ -57,12 +59,9 @@ public class CprConfiguration implements Configuration {
     }
 
 
-
     @Id
     @Column(name = "id")
     private final String plugin = CprPlugin.class.getName();
-
-
 
 
     // Midnight every january 1st
@@ -187,8 +186,6 @@ public class CprConfiguration implements Configuration {
     }
 
 
-
-
     @Column
     private String directTransactionCode = "OFF4";
 
@@ -213,11 +210,6 @@ public class CprConfiguration implements Configuration {
 
     @Column
     private short directPort = 5000;
-
-
-
-
-
 
 
     public String getPersonRegisterPullCronSchedule() {
@@ -275,12 +267,6 @@ public class CprConfiguration implements Configuration {
     }
 
 
-
-
-
-
-
-
     public String getRoadRegisterPullCronSchedule() {
         return this.roadRegisterPullCronSchedule;
     }
@@ -328,9 +314,6 @@ public class CprConfiguration implements Configuration {
     }
 
 
-
-
-
     public String getResidenceRegisterPullCronSchedule() {
         return this.residenceRegisterPullCronSchedule;
     }
@@ -376,9 +359,6 @@ public class CprConfiguration implements Configuration {
                         (this.residenceRegisterFtpAddress + this.residenceRegisterFtpUploadFolder) : null
         );
     }
-
-
-
 
 
     public String getRegisterPullCronSchedule(EntityManager entityManager) {
@@ -528,7 +508,6 @@ public class CprConfiguration implements Configuration {
     }
 
 
-
     private String formatCharset(Charset charset) {
         if (charset != null) {
             return charset.name().replaceAll("_", "-");
@@ -545,14 +524,15 @@ public class CprConfiguration implements Configuration {
                 String full = "";
                 try {
                     full = " (" + file.getAbsolutePath() + ")";
-                } catch (SecurityException e) {}
+                } catch (SecurityException e) {
+                }
                 throw new ConfigurationException("Configured file not found: " + localFile + full);
             }
             return file.toURI();
         } else if (registerType == RegisterType.REMOTE_FTP) {
             try {
                 return new URI(ftpAddress);
-            } catch (URISyntaxException|NullPointerException e) {
+            } catch (URISyntaxException | NullPointerException e) {
                 throw new ConfigurationException("Invalid FTP address configured: " + ftpAddress);
             }
         } else if (registerType == RegisterType.TEST_LOCAL_FILE) {
@@ -679,13 +659,12 @@ public class CprConfiguration implements Configuration {
     }
 
 
-
     public boolean encryptPersonRegisterPassword() {
         if (
                 this.personRegisterPasswordEncryptionFile != null &&
-                !(this.personRegisterFtpPassword == null || this.personRegisterFtpPassword.isEmpty()) &&
-                (this.personRegisterPasswordEncrypted == null || this.personRegisterPasswordEncrypted.length == 0)
-                ) {
+                        !(this.personRegisterFtpPassword == null || this.personRegisterFtpPassword.isEmpty()) &&
+                        (this.personRegisterPasswordEncrypted == null || this.personRegisterPasswordEncrypted.length == 0)
+        ) {
             try {
                 this.personRegisterPasswordEncrypted = Encryption.encrypt(this.personRegisterPasswordEncryptionFile, this.personRegisterFtpPassword);
                 return true;
@@ -700,9 +679,9 @@ public class CprConfiguration implements Configuration {
     public boolean encryptRoadRegisterPassword() {
         if (
                 this.roadRegisterPasswordEncryptionFile != null &&
-                !(this.roadRegisterFtpPassword == null || this.roadRegisterFtpPassword.isEmpty()) &&
-                (this.roadRegisterPasswordEncrypted == null || this.roadRegisterPasswordEncrypted.length == 0)
-                ) {
+                        !(this.roadRegisterFtpPassword == null || this.roadRegisterFtpPassword.isEmpty()) &&
+                        (this.roadRegisterPasswordEncrypted == null || this.roadRegisterPasswordEncrypted.length == 0)
+        ) {
             try {
                 this.roadRegisterPasswordEncrypted = Encryption.encrypt(this.roadRegisterPasswordEncryptionFile, this.roadRegisterFtpPassword);
                 return true;
@@ -717,9 +696,9 @@ public class CprConfiguration implements Configuration {
     public boolean encryptResidenceRegisterPassword() {
         if (
                 this.residenceRegisterPasswordEncryptionFile != null &&
-                !(this.residenceRegisterFtpPassword == null || this.residenceRegisterFtpPassword.isEmpty()) &&
-                (this.residenceRegisterPasswordEncrypted == null || this.residenceRegisterPasswordEncrypted.length == 0)
-                ) {
+                        !(this.residenceRegisterFtpPassword == null || this.residenceRegisterFtpPassword.isEmpty()) &&
+                        (this.residenceRegisterPasswordEncrypted == null || this.residenceRegisterPasswordEncrypted.length == 0)
+        ) {
             try {
                 this.residenceRegisterPasswordEncrypted = Encryption.encrypt(this.residenceRegisterPasswordEncryptionFile, this.residenceRegisterFtpPassword);
                 return true;

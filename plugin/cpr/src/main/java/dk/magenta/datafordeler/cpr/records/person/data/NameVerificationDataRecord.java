@@ -61,7 +61,6 @@ public class NameVerificationDataRecord extends VerificationDataRecord<NameVerif
     }
 
 
-
     @Override
     public boolean equalData(Object o) {
         if (this == o) return true;

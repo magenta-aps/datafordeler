@@ -32,7 +32,7 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
 
     public static final String TABLE_NAME = "ger_unit";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "CompanyUnit";
 
 
@@ -44,10 +44,9 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
     public static UUID generateUUID(int gerNr) {
-        String uuidInput = "company:"+gerNr;
+        String uuidInput = "company:" + gerNr;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
-
 
 
     public static final String DB_FIELD_DNR = "dnr";
@@ -65,7 +64,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_GERNR = "gerNumber";
     public static final String IO_FIELD_GERNR = "gerNr";
     @Column(name = DB_FIELD_GERNR)
@@ -79,7 +77,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setGerNumber(Integer gerNumber) {
         this.gerNumber = gerNumber;
     }
-
 
 
     public static final String DB_FIELD_OPERATION_FORM_CODE = "operationFormCode";
@@ -97,7 +94,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_OPERATION_FORM_TEXT = "operationFormText";
     public static final String IO_FIELD_OPERATION_FORM_TEXT = "driftsformTekst";
     @Column(name = DB_FIELD_OPERATION_FORM_TEXT)
@@ -111,7 +107,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setOperationFormText(String operationFormText) {
         this.operationFormText = operationFormText;
     }
-
 
 
     public static final String DB_FIELD_JE_END_DATE = "jeEndDate";
@@ -129,7 +124,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_DEID = "deid";
     public static final String IO_FIELD_DEID = "deid";
     @Column(name = DB_FIELD_DEID)
@@ -143,7 +137,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setDeid(UUID deid) {
         this.deid = deid;
     }
-
 
 
     public static final String DB_FIELD_JEID = "jeid";
@@ -161,7 +154,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_VALIDATED = "validated";
     public static final String IO_FIELD_VALIDATED = "valideret";
     @Column(name = DB_FIELD_VALIDATED)
@@ -175,7 +167,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setValidated(boolean validated) {
         this.validated = validated;
     }
-
 
 
     public static final String DB_FIELD_COPY = "copy";
@@ -193,7 +184,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_NAME = "name";
     public static final String IO_FIELD_NAME = "navn";
     @Column(name = DB_FIELD_NAME)
@@ -207,7 +197,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setName(String name) {
         this.name = name;
     }
-
 
 
     public static final String DB_FIELD_DANISH_NAME = "danishName";
@@ -225,7 +214,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_SHORT_NAME = "shortName";
     public static final String IO_FIELD_SHORT_NAME = "kortNavn";
     @Column(name = DB_FIELD_SHORT_NAME)
@@ -239,7 +227,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
-
 
 
     public static final String DB_FIELD_SHORT_DANISH_NAME = "shortDanishName";
@@ -257,7 +244,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_CO_NAME = "coName";
     public static final String IO_FIELD_CO_NAME = "coNavn";
     @Column(name = DB_FIELD_CO_NAME)
@@ -271,7 +257,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setCoName(String coName) {
         this.coName = coName;
     }
-
 
 
     public static final String DB_FIELD_ADDRESS1 = "address1";
@@ -289,7 +274,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_ADDRESS2 = "address2";
     public static final String IO_FIELD_ADDRESS2 = "adresse2";
     @Column(name = DB_FIELD_ADDRESS2)
@@ -305,7 +289,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_ADDRESS3 = "address3";
     public static final String IO_FIELD_ADDRESS3 = "adresse3";
     @Column(name = DB_FIELD_ADDRESS3)
@@ -319,7 +302,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setAddress3(String address3) {
         this.address3 = address3;
     }
-
 
 
     public static final String DB_FIELD_BNR = "bnr";
@@ -341,7 +323,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_BOXNR = "boxNr";
     public static final String IO_FIELD_BOXNR = "boxNr";
     @Column(name = DB_FIELD_BOXNR)
@@ -355,7 +336,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setBoxNr(String boxNr) {
         this.boxNr = boxNr;
     }
-
 
 
     public static final String DB_FIELD_POSTNR = "postNr";
@@ -373,7 +353,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_OLD_TAX = "oldTaxKom";
     public static final String IO_FIELD_OLD_TAX = "gammelSkatKom";
     @Column(name = DB_FIELD_OLD_TAX)
@@ -387,7 +366,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setOldTaxKom(Integer oldTaxKom) {
         this.oldTaxKom = oldTaxKom;
     }
-
 
 
     public static final String DB_FIELD_MUNICIPALITY_CODE = "municipalityCode";
@@ -405,7 +383,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_LOCALITY_CODE = "localityCode";
     public static final String IO_FIELD_LOCALITY_CODE = "stedKode";
     @Column(name = DB_FIELD_LOCALITY_CODE)
@@ -419,7 +396,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setLocalityCode(Integer localityCode) {
         this.localityCode = localityCode;
     }
-
 
 
     public static final String DB_FIELD_COUNTRY_CODE = "countryCode";
@@ -437,7 +413,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_PHONE = "phone";
     public static final String IO_FIELD_PHONE = "telefonNummer";
     @Column(name = DB_FIELD_PHONE)
@@ -451,7 +426,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 
 
     public static final String DB_FIELD_FAX = "fax";
@@ -469,7 +443,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_MOBILEPHONE = "mobilePhone";
     public static final String IO_FIELD_MOBILEPHONE = "mobilNummer";
     @Column(name = DB_FIELD_MOBILEPHONE)
@@ -483,7 +456,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setMobilePhone(String mobilePhone) {
         this.mobilePhone = mobilePhone;
     }
-
 
 
     public static final String DB_FIELD_EMAIL = "email";
@@ -501,7 +473,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_BUSINESS_TEXT = "businessText";
     public static final String IO_FIELD_BUSINESS_TEXT = "brancheTekst";
     @Column(name = DB_FIELD_BUSINESS_TEXT)
@@ -515,7 +486,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setBusinessText(String businessText) {
         this.businessText = businessText;
     }
-
 
 
     public static final String DB_FIELD_BUSINESS_CODE = "businessCode";
@@ -533,7 +503,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_START_DATE = "startDate";
     public static final String IO_FIELD_START_DATE = "startDato";
     @Column(name = DB_FIELD_START_DATE)
@@ -547,7 +516,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
-
 
 
     public static final String DB_FIELD_END_DATE = "endDate";
@@ -565,7 +533,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_ADVERTFREE = "advertFree";
     public static final String IO_FIELD_ADVERTFREE = "reklamefri";
     @Column(name = DB_FIELD_ADVERTFREE)
@@ -579,7 +546,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setAdvertFree(boolean advertFree) {
         this.advertFree = advertFree;
     }
-
 
 
     public static final String DB_FIELD_MEMO = "memo";
@@ -597,7 +563,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_FOUND_DATE = "foundDate";
     public static final String IO_FIELD_FOUND_DATE = "opretDato";
     @Column(name = DB_FIELD_FOUND_DATE)
@@ -611,7 +576,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setFoundDate(LocalDate foundDate) {
         this.foundDate = foundDate;
     }
-
 
 
     public static final String DB_FIELD_AJOUR_DATE = "ajourDate";
@@ -629,7 +593,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_AJOUR_INIT = "ajourInit";
     public static final String IO_FIELD_AJOUR_INIT = "ajourInit";
     @Column(name = DB_FIELD_AJOUR_INIT)
@@ -645,7 +608,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-
     public static final String DB_FIELD_LULI = "luliNumber";
     public static final String IO_FIELD_LULI = "luliNummer";
     @Column(name = DB_FIELD_LULI)
@@ -659,8 +621,6 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public void setLuliNumber(String luliNumber) {
         this.luliNumber = luliNumber;
     }
-
-
 
 
     public Map<String, Object> asMap() {

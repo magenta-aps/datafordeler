@@ -4,13 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
-import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
-import dk.magenta.datafordeler.geo.data.road.RoadOutputJsonModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
 
 @Component
 public class MunicipalityOutputWrapper extends GeoOutputWrapper<GeoMunicipalityEntity> {

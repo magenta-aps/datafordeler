@@ -41,7 +41,7 @@ public class GeoMunicipalityEntity extends SumiffiikEntity implements Identified
 
     public static final String TABLE_NAME = "geo_municipality";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "Municipality";
 
     public GeoMunicipalityEntity() {
@@ -53,7 +53,7 @@ public class GeoMunicipalityEntity extends SumiffiikEntity implements Identified
     }
 
     public static UUID generateUUID(int municipalityCode) {
-        String uuidInput = "kommune:"+municipalityCode;
+        String uuidInput = "kommune:" + municipalityCode;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
 
@@ -93,7 +93,6 @@ public class GeoMunicipalityEntity extends SumiffiikEntity implements Identified
     }
 
 
-
     @Override
     public void update(RawData rawData, OffsetDateTime timestamp) {
         super.update(rawData, timestamp);
@@ -121,7 +120,6 @@ public class GeoMunicipalityEntity extends SumiffiikEntity implements Identified
     public MonotemporalSet<MunicipalityShapeRecord> getShape() {
         return new MonotemporalSet<>(this.shape);
     }
-
 
 
     @Override

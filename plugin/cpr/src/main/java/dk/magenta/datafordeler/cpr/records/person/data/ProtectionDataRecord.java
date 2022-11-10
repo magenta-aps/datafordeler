@@ -64,7 +64,6 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
     }
 
 
-
     public static final String DB_FIELD_REPORTMARKING = "reportMarking";
     public static final String IO_FIELD_REPORTMARKING = "rapportMarkering";
     @Column(name = DB_FIELD_REPORTMARKING)
@@ -79,7 +78,6 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
     public void setReportMarking(boolean reportMarking) {
         this.reportMarking = reportMarking;
     }
-
 
 
     public static final String DB_FIELD_DELETION_DATE = "deletionDate";
@@ -122,14 +120,12 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
     }
 
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<ProtectionDataRecord> correctors = new HashSet<>();
+    private final Set<ProtectionDataRecord> correctors = new HashSet<>();
 
     public Set<ProtectionDataRecord> getCorrectors() {
         return this.correctors;
     }
-
 
 
     @Override

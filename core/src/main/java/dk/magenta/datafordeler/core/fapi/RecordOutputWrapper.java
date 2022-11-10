@@ -29,9 +29,11 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
     public abstract ObjectMapper getObjectMapper();
 
-    protected JsonModifier getModifier(ResultSet resultSet) { return null; }
+    protected JsonModifier getModifier(ResultSet resultSet) {
+        return null;
+    }
 
-    private HashMap<String, JsonModifier> modifiers = new HashMap<>();
+    private final HashMap<String, JsonModifier> modifiers = new HashMap<>();
 
     // RVD
     private final Set<String> rvdNodeRemoveFields = new HashSet<>(Arrays.asList(
@@ -46,7 +48,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     ));
     private final Set<String> rdvNodeRemoveFields = rvdNodeRemoveFields;
 
-    private Set<String> dataonlyNodeRemoveFields = rvdNodeRemoveFields;
+    private final Set<String> dataonlyNodeRemoveFields = rvdNodeRemoveFields;
 
     public Set<String> getRemoveFieldNames(Mode mode) {
         switch (mode) {
@@ -84,6 +86,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     protected Map<Class, List<String>> getEligibleModifierNames() {
         return Collections.emptyMap();
     }
+
     protected List<JsonModifier> getEligibleModifiers(Class cls) {
         List<String> modifierNames = this.getEligibleModifierNames().get(cls);
         if (modifierNames == null) {
@@ -257,7 +260,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
             HashSet<Bitemporality> presentBitemporalities = new HashSet<>();
 
-            for (int i=0; i<terminators.size(); i++) {
+            for (int i = 0; i < terminators.size(); i++) {
                 OffsetDateTime t = terminators.get(i);
                 List<Bitemporality> startingHere = startTerminators.get(t);
                 List<Bitemporality> endingHere = endTerminators.get(t);
@@ -327,6 +330,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         public ObjectNode getRDV(Bitemporality mustOverlap) {
             return this.getRDV(mustOverlap, null, null);
         }
+
         public ObjectNode getRDV(Bitemporality mustOverlap, Map<String, String> keyConversion, Function<Pair<String, ObjectNode>, ObjectNode> dataConversion) {
 
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
@@ -347,7 +351,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             terminators.sort(Comparator.nullsFirst(OffsetDateTime::compareTo));
             terminators.add(null);
             HashSet<Bitemporality> presentBitemporalities = new HashSet<>();
-            for (int i=0; i<terminators.size(); i++) {
+            for (int i = 0; i < terminators.size(); i++) {
                 OffsetDateTime t = terminators.get(i);
                 List<Bitemporality> startingHere = startTerminators.get(t);
                 List<Bitemporality> endingHere = endTerminators.get(t);

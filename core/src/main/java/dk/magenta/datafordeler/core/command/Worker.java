@@ -7,8 +7,11 @@ package dk.magenta.datafordeler.core.command;
 public abstract class Worker extends Thread implements Runnable {
 
     public static class WorkerCallback {
-        public void onComplete(boolean cancelled){}
-        public void onError(Throwable e) {}
+        public void onComplete(boolean cancelled) {
+        }
+
+        public void onError(Throwable e) {
+        }
     }
 
     protected boolean doCancel = false;
@@ -27,7 +30,8 @@ public abstract class Worker extends Thread implements Runnable {
         if (this.callback != null) {
             try {
                 this.callback.onComplete(this.doCancel);
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
     }
 
@@ -35,7 +39,8 @@ public abstract class Worker extends Thread implements Runnable {
         if (this.callback != null) {
             try {
                 this.callback.onError(e);
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
     }
 

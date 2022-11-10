@@ -24,7 +24,7 @@ public abstract class CprBitemporalPersonRecord<S extends CprBitemporalPersonRec
 
     @JsonIgnore
     public boolean isActiveRecord() {
-        return this.getEffectTo()==null && this.getRegistrationTo()==null && !this.isUndone();
+        return this.getEffectTo() == null && this.getRegistrationTo() == null && !this.isUndone();
     }
 
 }

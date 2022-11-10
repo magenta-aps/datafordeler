@@ -70,7 +70,6 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     }
 
 
-
     public static final String DB_FIELD_OUT_COUNTRY_CODE = "emigrationCountryCode";
     public static final String IO_FIELD_OUT_COUNTRY_CODE = "udrejseLandekode";
     @Column(name = DB_FIELD_OUT_COUNTRY_CODE)
@@ -110,7 +109,6 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     public void setImmigrationRegistration(OffsetDateTime immigrationRegistration) {
         this.immigrationRegistration = immigrationRegistration;
     }
-
 
 
     @Override

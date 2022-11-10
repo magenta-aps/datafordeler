@@ -27,7 +27,7 @@ public class PunitRecordOutputWrapper {
         container.put(CompanyUnitRecord.IO_FIELD_P_NUMBER, record.getpNumber());
         AddressRecord addressList = record.getLocationAddress().currentStream().findFirst().orElse(null);
         container.put(CompanyUnitRecord.IO_FIELD_NAMES, record.getNames().currentStream().findFirst().get().getName());
-        if(addressList!=null) {
+        if (addressList != null) {
             container.put(AddressRecord.IO_FIELD_CONAME, addressList.getCoName());
             container.put(AddressRecord.IO_FIELD_POSTBOX, addressList.getPostBox());
             container.put(AddressRecord.IO_FIELD_POSTCODE, addressList.getPostnummer());
@@ -39,10 +39,10 @@ public class PunitRecordOutputWrapper {
         }
 
         ContactRecord emailContact = record.getEmailAddress().currentStream().findFirst().orElse(null);
-        container.put(CompanyUnitRecord.IO_FIELD_FAX, emailContact==null ? "":emailContact.getContactInformation());
+        container.put(CompanyUnitRecord.IO_FIELD_FAX, emailContact == null ? "" : emailContact.getContactInformation());
 
         ContactRecord faxContact = record.getFaxNumber().currentStream().findFirst().orElse(null);
-        container.put(CompanyUnitRecord.IO_FIELD_EMAIL, faxContact==null ? "":faxContact.getContactInformation());
+        container.put(CompanyUnitRecord.IO_FIELD_EMAIL, faxContact == null ? "" : faxContact.getContactInformation());
 
         container.put("startdato", DateConverter.dateConvert(record.getMetadata().getValidFrom()));
         container.put("slutdato", DateConverter.dateConvert(record.getMetadata().getValidTo()));

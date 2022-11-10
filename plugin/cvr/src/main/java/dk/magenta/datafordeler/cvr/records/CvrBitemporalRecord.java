@@ -3,9 +3,7 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
-import dk.magenta.datafordeler.core.database.Effect;
 import dk.magenta.datafordeler.core.database.Monotemporal;
-import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
@@ -44,6 +42,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     /**
      * We do not want to use any timestamps of type LocalDate
+     *
      * @param input
      * @param filter
      * @return
@@ -76,7 +75,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public void setLastUpdated(OffsetDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-
 
 
     public static final String DB_FIELD_LAST_LOADED = "lastLoaded";
@@ -116,7 +114,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
 
-
     @JsonIgnore
     public LocalDate getValidFrom() {
         if (this.validity != null) {
@@ -128,7 +125,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     @JsonIgnore
     public LocalDate getValidTo() {
-        if (this.validity != null){
+        if (this.validity != null) {
             return this.validity.getValidTo();
         } else {
             return null;

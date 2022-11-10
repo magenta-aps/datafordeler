@@ -10,7 +10,7 @@ import java.util.Objects;
  * Single file entry for InterruptedPull
  */
 @Entity
-@Table(name="interrupted_pull_file")
+@Table(name = "interrupted_pull_file")
 public class InterruptedPullFile extends DatabaseEntry {
 
     public InterruptedPullFile() {

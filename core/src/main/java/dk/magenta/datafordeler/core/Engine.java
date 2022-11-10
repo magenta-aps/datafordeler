@@ -60,7 +60,7 @@ public class Engine {
     @Value("${dafo.cron.enabled:true}")
     private boolean cronEnabled;
 
-    private static Logger log = LogManager.getLogger(Engine.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(Engine.class.getCanonicalName());
 
     @Autowired(required = false)
     private RequestMappingHandlerMapping handlerMapping;
@@ -85,7 +85,9 @@ public class Engine {
         return this.pullEnabled;
     }
 
-    public boolean isDumpEnabled() { return this.dumpEnabled; }
+    public boolean isDumpEnabled() {
+        return this.dumpEnabled;
+    }
 
     public boolean isCronEnabled() {
         return this.cronEnabled;
@@ -94,7 +96,7 @@ public class Engine {
     /**
      * Pull
      */
-    private HashMap<String, TriggerKey> pullTriggerKeys = new HashMap<>();
+    private final HashMap<String, TriggerKey> pullTriggerKeys = new HashMap<>();
 
     /**
      * Sets the schedule for the registerManager, based on the schedule defined in same
@@ -125,14 +127,15 @@ public class Engine {
 
     /**
      * Sets the schedule for the registerManager, given a cron string
+     *
      * @param registerManager Registermanager to run pull jobs on
-     * @param cronSchedule A valid cron schedule, six items, space-separated
-     * @param dummyRun For test purposes. If false, no pull will actually be run.
+     * @param cronSchedule    A valid cron schedule, six items, space-separated
+     * @param dummyRun        For test purposes. If false, no pull will actually be run.
      */
     public void setupPullSchedule(RegisterManager registerManager, String cronSchedule, boolean dummyRun) {
         if (this.pullEnabled && this.cronEnabled) {
             ScheduleBuilder scheduleBuilder;
-            log.info("Scheduling pull with "+registerManager.getClass().getCanonicalName()+" with schedule "+cronSchedule);
+            log.info("Scheduling pull with " + registerManager.getClass().getCanonicalName() + " with schedule " + cronSchedule);
             try {
                 scheduleBuilder = makeSchedule(cronSchedule);
             } catch (Exception e) {
@@ -145,13 +148,14 @@ public class Engine {
 
     /**
      * Sets the schedule for the registerManager, given a schedule
+     *
      * @param registerManager Registermanager to run pull jobs on
      * @param scheduleBuilder The schedule to use
-     * @param dummyRun For test purposes. If false, no pull will actually be run.
+     * @param dummyRun        For test purposes. If false, no pull will actually be run.
      */
     public void setupPullSchedule(RegisterManager registerManager,
-        ScheduleBuilder scheduleBuilder,
-        boolean dummyRun) {
+                                  ScheduleBuilder scheduleBuilder,
+                                  boolean dummyRun) {
         if (this.pullEnabled && this.cronEnabled) {
             String registerManagerId = registerManager.getClass().getName() + registerManager.hashCode();
 
@@ -179,14 +183,14 @@ public class Engine {
                     scheduler.start();
                 } else {
                     // Remove old schedule
-                    this.log.info("Removing cron schedule to pull from " + registerManager.getClass().getCanonicalName());
+                    log.info("Removing cron schedule to pull from " + registerManager.getClass().getCanonicalName());
                     if (this.pullTriggerKeys.containsKey(registerManagerId)) {
                         scheduler.unscheduleJob(this.pullTriggerKeys.get(registerManagerId));
                     }
                 }
 
             } catch (SchedulerException e) {
-                this.log.error("Failed to schedule pull!", e);
+                log.error("Failed to schedule pull!", e);
             }
         }
     }
@@ -198,14 +202,14 @@ public class Engine {
         }
 
         Session session =
-            configurationSessionManager.getSessionFactory().openSession();
+                configurationSessionManager.getSessionFactory().openSession();
 
         try {
             return QueryManager.getAllItemsAsStream(session,
-                DumpConfiguration.class)
-                .allMatch(
-                    c -> setupDumpSchedule(c, false)
-                );
+                            DumpConfiguration.class)
+                    .allMatch(
+                            c -> setupDumpSchedule(c, false)
+                    );
         } finally {
             session.close();
         }
@@ -213,11 +217,12 @@ public class Engine {
 
     /**
      * Sets the schedule for dumps
-     * @param config The dump configuration
+     *
+     * @param config   The dump configuration
      * @param dummyRun For test purposes. If false, no pull will actually be run.
      */
     boolean setupDumpSchedule(DumpConfiguration config, boolean
-        dummyRun) {
+            dummyRun) {
         try {
             if (scheduler == null) {
                 this.scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -227,28 +232,28 @@ public class Engine {
 
             // Remove old schedule
             if (this.pullTriggerKeys.containsKey(triggerID)) {
-                this.log.info("Removing schedule for dump");
+                log.info("Removing schedule for dump");
                 scheduler.unscheduleJob(this.pullTriggerKeys.get(triggerID));
             }
 
             CronScheduleBuilder scheduleBuilder = makeSchedule(
-                config.getSchedule()
+                    config.getSchedule()
             );
 
             if (scheduleBuilder != null) {
-                this.log.info("Setting up dump with schedule {}",
-                    scheduleBuilder);
+                log.info("Setting up dump with schedule {}",
+                        scheduleBuilder);
                 this.pullTriggerKeys.put(triggerID,
-                    TriggerKey.triggerKey("dumpTrigger", triggerID));
+                        TriggerKey.triggerKey("dumpTrigger", triggerID));
 
                 // Set up new schedule, or replace existing
                 Trigger dumpTrigger = TriggerBuilder.newTrigger()
-                    .withIdentity(this.pullTriggerKeys.get(triggerID))
-                    .withSchedule(
-                        scheduleBuilder
-                    ).build();
-                this.log.info("The trigger is {}",
-                    dumpTrigger);
+                        .withIdentity(this.pullTriggerKeys.get(triggerID))
+                        .withSchedule(
+                                scheduleBuilder
+                        ).build();
+                log.info("The trigger is {}",
+                        dumpTrigger);
 
                 JobDataMap jobData = new JobDataMap();
                 jobData.put(Dump.Task.DATA_ENGINE, this);
@@ -256,9 +261,9 @@ public class Engine {
                 jobData.put(Dump.Task.DATA_CONFIG, config);
                 jobData.put(Dump.Task.DATA_DUMMYRUN, dummyRun);
                 JobDetail job = JobBuilder.newJob(Dump.Task.class)
-                    .withIdentity(triggerID)
-                    .setJobData(jobData)
-                    .build();
+                        .withIdentity(triggerID)
+                        .setJobData(jobData)
+                        .build();
 
                 scheduler.scheduleJob(job, Collections.singleton(dumpTrigger), true);
                 scheduler.start();
@@ -266,7 +271,7 @@ public class Engine {
 
             return true;
         } catch (Exception e) {
-            this.log.error("failed to schedule dump!", e);
+            log.error("failed to schedule dump!", e);
             return false;
         }
     }
@@ -295,10 +300,10 @@ public class Engine {
     }
 
     public void handleRequest(HttpServletRequest request,
-        HttpServletResponse response) throws Exception {
+                              HttpServletResponse response) throws Exception {
 
         HandlerExecutionChain chain =
-            handlerMapping.getHandler(request);
+                handlerMapping.getHandler(request);
 
         log.info("HANDLER for {} is {}", request.getRequestURI(), chain);
         if (chain != null) {
@@ -309,7 +314,7 @@ public class Engine {
 
         if (chain == null || chain.getHandler() == null) {
             throw new HttpNotFoundException("No handler found for " +
-                request.getRequestURI());
+                    request.getRequestURI());
         }
 
         // we merely propagate any exception thrown here

@@ -28,9 +28,11 @@ import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
 
 import static org.mockito.Mockito.when;
@@ -97,7 +99,7 @@ public class CprLookupTest extends TestBase {
                 line = line.substring(0, 3) + newCpr + line.substring(13);
                 sb.add(line);
             }
-            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8));
             personEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
@@ -199,7 +201,7 @@ public class CprLookupTest extends TestBase {
         );
 
         JsonNode jsonNode = objectMapper.readTree(response.getBody());
-        ArrayNode resultList = (ArrayNode)jsonNode.get("results");
+        ArrayNode resultList = (ArrayNode) jsonNode.get("results");
         Assert.assertEquals(3, resultList.size());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -211,7 +213,7 @@ public class CprLookupTest extends TestBase {
         );
 
         jsonNode = objectMapper.readTree(response.getBody());
-        resultList = (ArrayNode)jsonNode.get("results");
+        resultList = (ArrayNode) jsonNode.get("results");
         Assert.assertEquals(51, resultList.size());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -223,7 +225,7 @@ public class CprLookupTest extends TestBase {
         );
 
         jsonNode = objectMapper.readTree(response.getBody());
-        resultList = (ArrayNode)jsonNode.get("results");
+        resultList = (ArrayNode) jsonNode.get("results");
         Assert.assertEquals(0, resultList.size());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -235,7 +237,7 @@ public class CprLookupTest extends TestBase {
         );
 
         jsonNode = objectMapper.readTree(response.getBody());
-        resultList = (ArrayNode)jsonNode.get("results");
+        resultList = (ArrayNode) jsonNode.get("results");
         Assert.assertEquals(54, resultList.size());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -247,7 +249,7 @@ public class CprLookupTest extends TestBase {
         );
 
         jsonNode = objectMapper.readTree(response.getBody());
-        resultList = (ArrayNode)jsonNode.get("results");
+        resultList = (ArrayNode) jsonNode.get("results");
         Assert.assertEquals(3, resultList.size());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -259,11 +261,10 @@ public class CprLookupTest extends TestBase {
         );
 
         jsonNode = objectMapper.readTree(response.getBody());
-        resultList = (ArrayNode)jsonNode.get("results");
+        resultList = (ArrayNode) jsonNode.get("results");
         Assert.assertEquals(0, resultList.size());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
-
 
 
     @Test

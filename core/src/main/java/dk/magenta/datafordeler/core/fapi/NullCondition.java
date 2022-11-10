@@ -10,8 +10,8 @@ import java.util.StringJoiner;
  * A single field somewhere in the query structure, being compared to null
  */
 public class NullCondition extends Condition {
-    private String left;
-    private Operator operator;
+    private final String left;
+    private final Operator operator;
 
     public NullCondition(MultiCondition parent, String left, Operator operator) throws QueryBuildException {
         super(parent);
@@ -19,7 +19,7 @@ public class NullCondition extends Condition {
         if (operator == Operator.EQ || operator == Operator.NE) {
             this.operator = operator;
         } else {
-            throw new QueryBuildException("Cannot use operator "+operator+" for null comparison");
+            throw new QueryBuildException("Cannot use operator " + operator + " for null comparison");
         }
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class HistoricCprNumberRecord extends HistoricPersonDataRecord {
 
-    private CprBitemporality cprTemporality;
+    private final CprBitemporality cprTemporality;
 
     public HistoricCprNumberRecord(String line) throws ParseException {
         super(line);

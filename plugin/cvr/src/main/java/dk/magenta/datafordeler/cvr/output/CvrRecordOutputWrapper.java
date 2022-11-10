@@ -22,33 +22,26 @@ import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.LEGACY;
 
 public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends RecordOutputWrapper<E> {
 
-    private final Set<String> removeFieldNames = new HashSet<>(Arrays.asList(new String[]{
-            CvrBitemporalRecord.IO_FIELD_PERIOD,
+    private final Set<String> removeFieldNames = new HashSet<>(Arrays.asList(CvrBitemporalRecord.IO_FIELD_PERIOD,
             CvrBitemporalRecord.IO_FIELD_LAST_UPDATED,
             CvrBitemporalRecord.IO_FIELD_LAST_LOADED,
-            CvrBitemporalRecord.IO_FIELD_DAFO_UPDATED
-    }));
+            CvrBitemporalRecord.IO_FIELD_DAFO_UPDATED));
 
-    private final Set<String> removeDataOnlyFields = new HashSet<>(Arrays.asList(new String[]{
-            "antalAarsvaerk",
+    private final Set<String> removeDataOnlyFields = new HashSet<>(Arrays.asList("antalAarsvaerk",
             "antalAnsatte",
             "antalAnsatteMin",
             "antalAnsatteMax",
             "registreringFra",
             "registreringTil",
             "virkningFra",
-            "virkningTil",
-    }));
+            "virkningTil"));
 
     @Override
     public Set<String> getRemoveFieldNames(Mode mode) {
-        switch(mode) {
+        switch (mode) {
             case DATAONLY:
                 removeFieldNames.addAll(removeDataOnlyFields);
         }
-
-
-
         return this.removeFieldNames;
     }
 
@@ -79,7 +72,7 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
 
         CvrOutputContainer metadataRecordOutput = new CvrOutputContainer();
         boolean metadata = this.fillMetadataContainer(metadataRecordOutput, record, mode);
-        if(metadata) {
+        if (metadata) {
             ObjectNode metaNode = this.getObjectMapper().createObjectNode();
             root.set("metadata", metaNode);
             metaNode.setAll(metadataRecordOutput.getBase());

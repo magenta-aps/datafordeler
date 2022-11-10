@@ -25,6 +25,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
 
     /**
      * Add an Effect to this dataItem
+     *
      * @param effect
      */
     public void addEffect(V effect) {
@@ -34,6 +35,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
 
     /**
      * Remove a previously added Effect
+     *
      * @param effect
      */
     public void removeEffect(V effect) {
@@ -47,6 +49,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
 
     /**
      * Get all Effects for this item
+     *
      * @return
      */
     public Set<V> getEffects() {
@@ -55,6 +58,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
 
     /**
      * Compares this object with another DataItem
+     *
      * @param other
      * @return
      */
@@ -103,6 +107,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     /**
      * Obtain contained data as a Map
      * Used for serializing DataItems merged into one wrapper
+     *
      * @return Map of all relevant attributes
      */
     public abstract Map<String, Object> asMap();
@@ -110,6 +115,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     /**
      * Obtain contained data as a Map
      * Internally used for comparing DataItems
+     *
      * @return Map of all relevant attributes
      */
     public Map<String, Object> databaseFields() {
@@ -118,6 +124,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
 
     /**
      * Pretty-print contained data
+     *
      * @return Compiled string output
      */
     public String toString() {
@@ -126,6 +133,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
 
     /**
      * Pretty-print contained data
+     *
      * @param indent Number of spaces to indent the output with
      * @return Compiled string output
      */
@@ -133,7 +141,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
         String indentString = new String(new char[4 * (indent)]).replace("\0", " ");
         String subIndentString = new String(new char[4 * (indent + 1)]).replace("\0", " ");
         StringJoiner s = new StringJoiner("\n");
-        s.add(indentString + this.getClass().getSimpleName() + "["+this.hashCode()+"] {");
+        s.add(indentString + this.getClass().getSimpleName() + "[" + this.hashCode() + "] {");
 
         Map<String, Object> map = this.asMap();
         for (String key : new TreeSet<>(map.keySet())) {

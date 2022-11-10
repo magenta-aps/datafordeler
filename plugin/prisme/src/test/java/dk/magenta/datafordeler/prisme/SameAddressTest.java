@@ -34,6 +34,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.StringJoiner;
 
@@ -115,7 +116,7 @@ public class SameAddressTest extends TestBase {
                 line = line.substring(0, 3) + newCpr + line.substring(13);
                 sb.add(line);
             }
-            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+            ByteArrayInputStream bais = new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8));
             personEntityManager.parseData(bais, importMetadata);
             bais.close();
         }
@@ -125,6 +126,7 @@ public class SameAddressTest extends TestBase {
 
     /**
      * Validate that the sameadress service finds the cpr-number of all persons that does have an address which is the same as the cpr-number that is used when calling the service
+     *
      * @throws Exception
      */
     @Test
@@ -200,14 +202,12 @@ public class SameAddressTest extends TestBase {
             Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
 
-
         } finally {
             cleanup();
         }
     }
 
     /**
-     *
      * @throws Exception
      */
     @Test

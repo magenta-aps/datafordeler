@@ -14,6 +14,7 @@ public class XmlMapperConfiguration {
 
     /**
      * Creates a module to serialize and deserialize objects of type "java.time.OffsetDateTime"
+     *
      * @return The created module
      */
     private SimpleModule getOffsetDateTimeModule() {

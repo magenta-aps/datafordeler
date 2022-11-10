@@ -3,18 +3,21 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.CompanyUnitRecordService;
 import org.hibernate.Session;
 import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.*;
 
 /**
@@ -878,7 +881,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     }
 
     public static UUID generateUUID(int pNumber) {
-        String uuidInput = "companyunit:"+pNumber;
+        String uuidInput = "companyunit:" + pNumber;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
 

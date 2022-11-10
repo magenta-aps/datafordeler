@@ -22,7 +22,7 @@ import java.util.Map;
 @Component
 public class ScheduleChangedCommandHandler extends CommandHandler {
 
-    private static enum ScheduleType {
+    private enum ScheduleType {
         DUMP,
         PULL;
 
@@ -59,7 +59,7 @@ public class ScheduleChangedCommandHandler extends CommandHandler {
         @Override
         public boolean containsAll(Map<String, Object> data) {
             return data.keySet().containsAll(Arrays.asList(
-                "table", "id", "fields"
+                    "table", "id", "fields"
             ));
         }
 
@@ -106,19 +106,19 @@ public class ScheduleChangedCommandHandler extends CommandHandler {
 
     @Override
     public Worker doHandleCommand(Command command)
-        throws DataFordelerException {
+            throws DataFordelerException {
         this.getLog()
-            .info("Handling command '" + command.getCommandName() + "'");
+                .info("Handling command '" + command.getCommandName() + "'");
 
         final ScheduleChangedCommandData data =
-            this.getCommandData(command.getCommandBody());
+                this.getCommandData(command.getCommandBody());
 
         Worker worker = new Worker() {
             @Override
             public void run() {
                 // TODO: be more granular rather than reloading everything
                 switch (ScheduleType.forData(data)) {
-                case DUMP:
+                    case DUMP:
                         engine.setupDumpSchedules();
                         return;
 
@@ -129,23 +129,23 @@ public class ScheduleChangedCommandHandler extends CommandHandler {
             }
         };
         worker.setUncaughtExceptionHandler(
-            (th, exc) -> this.getLog().error("Reschedule failed", exc)
+                (th, exc) -> this.getLog().error("Reschedule failed", exc)
         );
 
         return worker;
     }
 
     public ScheduleChangedCommandData getCommandData(String commandBody)
-        throws InvalidClientInputException {
+            throws InvalidClientInputException {
         try {
             return this.objectMapper.readValue(
-                commandBody, ScheduleChangedCommandData.class
+                    commandBody, ScheduleChangedCommandData.class
             );
         } catch (IOException e) {
             InvalidClientInputException wrapped =
-                new InvalidClientInputException(
-                    "Unable to parse command data '" + commandBody + "'", e
-                );
+                    new InvalidClientInputException(
+                            "Unable to parse command data '" + commandBody + "'", e
+                    );
             this.getLog().error(e);
             throw wrapped;
         }

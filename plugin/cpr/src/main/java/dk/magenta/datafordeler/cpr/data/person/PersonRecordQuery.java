@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
+
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +34,7 @@ public class PersonRecordQuery extends BaseQuery {
     public static final String PERSONBIRTHDATE = BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
-    private List<String> personnumre = new ArrayList<>();
+    private final List<String> personnumre = new ArrayList<>();
 
     public Collection<String> getPersonnumre() {
         return this.personnumre;
@@ -66,7 +67,7 @@ public class PersonRecordQuery extends BaseQuery {
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = FORNAVNE)
-    private List<String> fornavn = new ArrayList<>();
+    private final List<String> fornavn = new ArrayList<>();
 
     public List<String> getFornavn() {
         return fornavn;
@@ -76,6 +77,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.fornavn.clear();
         this.updatedParameters();
     }
+
     public void addFornavn(String fornavn) {
         this.fornavn.add(fornavn);
         if (fornavn != null) {
@@ -92,11 +94,12 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = EFTERNAVN)
-    private List<String> efternavn = new ArrayList<>();
+    private final List<String> efternavn = new ArrayList<>();
 
     public List<String> getEfternavn() {
         return efternavn;
     }
+
     public void clearEfternavn() {
         this.efternavn.clear();
         this.updatedParameters();
@@ -109,6 +112,7 @@ public class PersonRecordQuery extends BaseQuery {
             this.updatedParameters();
         }
     }
+
     public void setEfternavne(Collection<String> efternavne) {
         this.clearEfternavn();
         if (efternavne != null) {
@@ -119,7 +123,7 @@ public class PersonRecordQuery extends BaseQuery {
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = KOMMUNEKODE)
-    private List<String> kommunekoder = new ArrayList<>();
+    private final List<String> kommunekoder = new ArrayList<>();
 
     public Collection<String> getKommunekoder() {
         return this.kommunekoder;
@@ -140,6 +144,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.kommunekoder.clear();
         this.updatedParameters();
     }
+
     public void setKommunekoder(Collection<String> kommunekoder) {
         this.clearKommunekode();
         if (kommunekoder != null) {
@@ -150,7 +155,7 @@ public class PersonRecordQuery extends BaseQuery {
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
-    private List<String> vejkoder = new ArrayList<>();
+    private final List<String> vejkoder = new ArrayList<>();
 
     public Collection<String> getVejkoder() {
         return this.vejkoder;
@@ -171,6 +176,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.vejkoder.clear();
         this.updatedParameters();
     }
+
     public void setVejkoder(Collection<String> vejkoder) {
         this.clearVejkode();
         if (vejkoder != null) {
@@ -181,7 +187,7 @@ public class PersonRecordQuery extends BaseQuery {
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = DOOR)
-    private List<String> doors = new ArrayList<>();
+    private final List<String> doors = new ArrayList<>();
 
     public Collection<String> getDoors() {
         return this.doors;
@@ -196,6 +202,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.doors.clear();
         this.updatedParameters();
     }
+
     public void setDoors(Collection<String> doors) {
         this.clearDoor();
         if (doors != null) {
@@ -221,7 +228,7 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = CUSTODYPNR)
-    private List<String> custodyPnr = new ArrayList<>();
+    private final List<String> custodyPnr = new ArrayList<>();
 
     public Collection<String> getCustodyPnr() {
         return this.custodyPnr;
@@ -236,6 +243,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.custodyPnr.clear();
         this.updatedParameters();
     }
+
     public void setCustodyPnr(Collection<String> custodyPnr) {
         this.clearCustodyPnr();
         if (custodyPnr != null) {
@@ -245,7 +253,7 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = FLOOR)
-    private List<String> floors = new ArrayList<>();
+    private final List<String> floors = new ArrayList<>();
 
     public Collection<String> getFloors() {
         return this.floors;
@@ -260,6 +268,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.floors.clear();
         this.updatedParameters();
     }
+
     public void setFloors(Collection<String> floors) {
         this.floors.clear();
         if (floors != null) {
@@ -270,7 +279,7 @@ public class PersonRecordQuery extends BaseQuery {
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = HOUSENO)
-    private List<String> houseNos = new ArrayList<>();
+    private final List<String> houseNos = new ArrayList<>();
 
     public Collection<String> getHouseNos() {
         return this.houseNos;
@@ -285,6 +294,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.houseNos.clear();
         this.updatedParameters();
     }
+
     public void setHouseNos(Collection<String> houseNos) {
         this.houseNos.clear();
         if (houseNos != null) {
@@ -295,7 +305,7 @@ public class PersonRecordQuery extends BaseQuery {
 
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = BUILDINGNO)
-    private List<String> buildingNos = new ArrayList<>();
+    private final List<String> buildingNos = new ArrayList<>();
 
     public Collection<String> getBuildingNos() {
         return this.buildingNos;
@@ -310,6 +320,7 @@ public class PersonRecordQuery extends BaseQuery {
         this.buildingNos.clear();
         this.updatedParameters();
     }
+
     public void setBuildingNos(Collection<String> buildingNos) {
         this.buildingNos.clear();
         if (buildingNos != null) {
@@ -319,7 +330,7 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONEVENT)
-    private List<String> personevents = new ArrayList<>();
+    private final List<String> personevents = new ArrayList<>();
 
     public Collection<String> getEvents() {
         return this.personevents;
@@ -365,7 +376,7 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONDATAEVENT)
-    private List<String> persondataevents = new ArrayList<>();
+    private final List<String> persondataevents = new ArrayList<>();
 
     public Collection<String> getDataEvents() {
         return this.persondataevents;
@@ -452,7 +463,7 @@ public class PersonRecordQuery extends BaseQuery {
         return PersonEntity.class.getCanonicalName();
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("pnr", PersonEntity.DB_FIELD_CPR_NUMBER);

@@ -36,13 +36,13 @@ public class CollectiveCvrLookup {
         CompanyRecordQuery query = new CompanyRecordQuery();
         query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
 
-        Collection<CompanyRecord> companyRecords = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class).collect(Collectors.toList());;
+        Collection<CompanyRecord> companyRecords = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class).collect(Collectors.toList());
 
-        for(CompanyRecord record : companyRecords) {
+        for (CompanyRecord record : companyRecords) {
             cvrNumbers.remove(Integer.toString(record.getCvrNumber()));
         }
 
-        if(!cvrNumbers.isEmpty()) {
+        if (!cvrNumbers.isEmpty()) {
             companyRecords.addAll(companyEntityManager.directLookup(new HashSet<String>(cvrNumbers), null, null));
         }
 
@@ -55,11 +55,11 @@ public class CollectiveCvrLookup {
         query.setParameter(ParticipantRecordQuery.UNITNUMBER, unitNumbers);
         Collection<ParticipantRecord> participantRecords = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
 
-        for(ParticipantRecord record : participantRecords) {
+        for (ParticipantRecord record : participantRecords) {
             unitNumbers.remove(Long.toString(record.getUnitNumber()));
         }
 
-        if(!unitNumbers.isEmpty()) {
+        if (!unitNumbers.isEmpty()) {
             participantRecords.addAll(directLookup.participantLookup(unitNumbers));
         }
 

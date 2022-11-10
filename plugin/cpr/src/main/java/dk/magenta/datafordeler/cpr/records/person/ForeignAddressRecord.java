@@ -16,11 +16,13 @@ import java.util.List;
  */
 public class ForeignAddressRecord extends PersonDataRecord {
 
-    private CprBitemporality emigrationTemporality;
-    private CprBitemporality foreignAddressTemporality;
+    private final CprBitemporality emigrationTemporality;
+    private final CprBitemporality foreignAddressTemporality;
+
     public ForeignAddressRecord(String line) throws ParseException {
         this(line, traditionalMapping);
     }
+
     public ForeignAddressRecord(String line, Mapping mapping) throws ParseException {
         super(line);
         this.obtain(mapping);
@@ -32,6 +34,7 @@ public class ForeignAddressRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("start_mynkod-udrindrejse", 14, 4);
         traditionalMapping.add("udr_ts", 18, 12);

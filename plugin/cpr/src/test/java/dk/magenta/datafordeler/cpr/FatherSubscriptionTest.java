@@ -49,8 +49,8 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode= DirtiesContext.ClassMode.BEFORE_CLASS)
-public class FatherSubscribtionTest {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+public class FatherSubscriptionTest {
 
     @Autowired
     private CprPlugin plugin;
@@ -79,15 +79,17 @@ public class FatherSubscribtionTest {
     }
 
     private static SSLSocketFactory getTrustAllSSLSocketFactory() throws NoSuchAlgorithmException, KeyManagementException {
-        TrustManager[] trustManager = new TrustManager[] { new X509TrustManager() {
+        TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
+
             public void checkClientTrusted(X509Certificate[] certs, String authType) {
             }
+
             public void checkServerTrusted(X509Certificate[] certs, String authType) {
             }
-        } };
+        }};
         SSLContext sslContext = null;
 
         sslContext = SSLContext.getInstance("SSL");
@@ -125,7 +127,7 @@ public class FatherSubscribtionTest {
             @Override
             public FtpCommunicator answer(InvocationOnMock invocation) throws Throwable {
                 FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
-                ftpCommunicator.setSslSocketFactory(FatherSubscribtionTest.getTrustAllSSLSocketFactory());
+                ftpCommunicator.setSslSocketFactory(FatherSubscriptionTest.getTrustAllSSLSocketFactory());
                 return ftpCommunicator;
             }
         }).when(cprRegisterManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
@@ -180,7 +182,7 @@ public class FatherSubscribtionTest {
         try {
             List<PersonSubscription> subscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
             //There is 5 fathers in the test-file
-            //One should not be added to subscribtion becrause the child is more than 18 years old.
+            //One should not be added to subscription becrause the child is more than 18 years old.
             //One person should not be added becrause the father allready exists as a person.
             Assert.assertEquals(3, subscriptions.size());
         } finally {
@@ -190,11 +192,12 @@ public class FatherSubscribtionTest {
     }
 
     /**
-     * Validate that subscribtion can handle collections that is unmodifiable
+     * Validate that subscription can handle collections that is unmodifiable
+     *
      * @throws Exception
      */
     @Test
-    public void testSubscriptionCreatin() throws Exception {
+    public void testSubscriptionCreation() throws Exception {
         personEntityManager.createSubscription(Collections.singleton("1111111111"), Collections.singleton("1111111111"));
     }
 

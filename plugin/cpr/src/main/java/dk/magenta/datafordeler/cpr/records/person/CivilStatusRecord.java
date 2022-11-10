@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class CivilStatusRecord extends PersonDataRecord {
 
-    private CprBitemporality civilTemporality;
-    private CprBitemporality documentTemporality;
-    private CprBitemporality officiaryTemporality;
+    private final CprBitemporality civilTemporality;
+    private final CprBitemporality documentTemporality;
+    private final CprBitemporality officiaryTemporality;
 
     public CivilStatusRecord(String line) throws ParseException {
         this(line, traditionalMapping);
@@ -34,6 +34,7 @@ public class CivilStatusRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("start_mynkod-civilstand", 14, 4);
         traditionalMapping.add("civ_ts", 18, 12);

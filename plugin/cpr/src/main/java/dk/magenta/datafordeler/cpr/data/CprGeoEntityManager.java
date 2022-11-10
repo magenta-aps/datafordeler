@@ -46,16 +46,16 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
     @Autowired
     Stopwatch timer;
 
-    private static boolean SAVE_RECORD_DATA = false;
+    private static final boolean SAVE_RECORD_DATA = false;
 
     public static final String IMPORTCONFIG_RECORDTYPE = "recordtype";
     public static final String IMPORTCONFIG_PNR = "personnummer";
 
-    private HttpCommunicator commonFetcher;
+    private final HttpCommunicator commonFetcher;
 
     protected Logger log = LogManager.getLogger(this.getClass().getSimpleName());
 
-    private Collection<String> handledURISubstrings;
+    private final Collection<String> handledURISubstrings;
 
     protected abstract String getBaseName();
 
@@ -113,10 +113,15 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
 
 
     protected abstract SessionManager getSessionManager();
+
     protected abstract CprSubParser<T> getParser();
+
     protected abstract Class<E> getEntityClass();
+
     protected abstract UUID generateUUID(T record);
+
     protected abstract E createBasicEntity(T record);
+
     protected abstract D createDataItem();
 
     private static final String TASK_PARSE = "CprParse";
@@ -133,7 +138,7 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
         CprSubParser<T> parser = this.getParser();
         Session session = importMetadata.getSession();
         boolean wrappedInTransaction = importMetadata.isTransactionInProgress();
-        log.info("Parsing in thread "+Thread.currentThread().getId());
+        log.info("Parsing in thread " + Thread.currentThread().getId());
 
         int maxChunkSize = 1000;
         List<File> cacheFiles = null;
@@ -413,7 +418,8 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
         }
     }
 
-    protected void handleRecord(T record, ImportMetadata importMetadata) {}
+    protected void handleRecord(T record, ImportMetadata importMetadata) {
+    }
 
 
     public int getJobId() {

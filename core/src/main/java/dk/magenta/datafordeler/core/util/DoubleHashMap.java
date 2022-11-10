@@ -10,24 +10,24 @@ public class DoubleHashMap<K, S, V> extends HashMap<K, HashMap<S, V>> {
 
     /**
      * Sees if there is a value at the specified keyset
-     * @param key Primary key
+     *
+     * @param key    Primary key
      * @param subKey Secondary key
      * @return true if a value is found, false otherwise
      */
     public boolean containsKey(K key, S subKey) {
         if (super.containsKey(key)) {
-            if (this.get(key).containsKey(subKey)) {
-                return true;
-            }
+            return this.get(key).containsKey(subKey);
         }
         return false;
     }
 
     /**
      * Inserts a value in the table, by the specified keys
-     * @param key Primary key
+     *
+     * @param key    Primary key
      * @param subKey Secondary key
-     * @param value Value to insert
+     * @param value  Value to insert
      */
     public void put(K key, S subKey, V value) {
         HashMap<S, V> subMap = super.get(key);
@@ -40,6 +40,7 @@ public class DoubleHashMap<K, S, V> extends HashMap<K, HashMap<S, V>> {
 
     /**
      * Inserts a value in the table, by the specified keys
+     *
      * @param key Primary key
      * @param map map of values to insert
      */
@@ -54,7 +55,8 @@ public class DoubleHashMap<K, S, V> extends HashMap<K, HashMap<S, V>> {
 
     /**
      * Obtains a value by the specified keys
-     * @param key Primary key
+     *
+     * @param key    Primary key
      * @param subKey Secondary key
      * @return The stored value, or null if none was found
      */

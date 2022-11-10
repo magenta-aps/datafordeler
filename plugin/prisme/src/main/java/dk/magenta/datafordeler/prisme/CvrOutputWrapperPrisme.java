@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 @Component
 public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
 
-    private Logger log = LogManager.getLogger(CvrOutputWrapperPrisme.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CvrOutputWrapperPrisme.class.getCanonicalName());
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -81,12 +81,13 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
         if (latest.size() > 1) {
             latest.sort(Comparator.comparing(CprBitemporalPersonRecord::getId));
         }
-        return latest.isEmpty() ? null : latest.get(latest.size()-1);
+        return latest.isEmpty() ? null : latest.get(latest.size() - 1);
     }
 
     Pattern postcodePattern = Pattern.compile("(\\d{4}) (.*)");
 
-    private static HashMap<Integer, String> municipalityMap = new HashMap<>();
+    private static final HashMap<Integer, String> municipalityMap = new HashMap<>();
+
     static {
         municipalityMap.put(955, "Kommune Kujalleq");
         municipalityMap.put(956, "Kommuneqarfik Sermersooq");
@@ -96,13 +97,13 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
         municipalityMap.put(960, "Avannaata Kommunia");
     }
 
-    private static Pattern nonDigits = Pattern.compile("[^\\d]");
+    private static final Pattern nonDigits = Pattern.compile("[^\\d]");
 
 
     protected static List<String> getCvrNumber(JsonNode node) {
         ArrayList<String> cvrNumbers = new ArrayList<>();
         if (node.isArray()) {
-            for (JsonNode item : (ArrayNode) node) {
+            for (JsonNode item : node) {
                 cvrNumbers.addAll(getCvrNumber(item));
             }
         } else if (node.isTextual()) {
@@ -114,14 +115,13 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
     }
 
 
-
     protected ObjectNode wrapGerCompany(CompanyEntity entity, GeoLookupService lookupService, boolean returnParticipantDetails) {
         ObjectNode root = objectMapper.createObjectNode();
         root.put("source", "GER");
         root.put("cvrNummer", entity.getGerNr());
         root.put(
                 "navn",
-                (entity.getEndDate() != null ? "historisk ":"") +
+                (entity.getEndDate() != null ? "historisk " : "") +
                         entity.getName()
         );
         root.put("forretningsområde", entity.getBusinessText());
@@ -218,7 +218,7 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
         if (returnParticipantDetails) {
             ResponsibleQuery responsibleQuery = new ResponsibleQuery();
             responsibleQuery.setGerNr(entity.getGerNr());
-            try(Session session = lookupService.getSessionManager().getSessionFactory().openSession()) {
+            try (Session session = lookupService.getSessionManager().getSessionFactory().openSession()) {
                 List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(session, responsibleQuery, ResponsibleEntity.class);
                 if (!responsibleEntities.isEmpty()) {
                     ArrayNode participantsNode = objectMapper.createArrayNode();
@@ -242,7 +242,6 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
 
         return root;
     }
-
 
 
     protected ObjectNode wrapRecord(CompanyRecord record, GeoLookupService lookupService, boolean returnParticipantDetails) {
@@ -308,7 +307,7 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
                 addressFormatted.append(" " + addressRecord.getHouseNumberFrom() + emptyIfNull(addressRecord.getLetterFrom()));
                 if (addressRecord.getHouseNumberTo() != 0) {
                     addressFormatted.append("-");
-                    if (addressRecord.getHouseNumberTo()==addressRecord.getHouseNumberFrom()) {
+                    if (addressRecord.getHouseNumberTo() == addressRecord.getHouseNumberFrom()) {
                         addressFormatted.append(emptyIfNull(addressRecord.getLetterTo()));
                     } else {
                         addressFormatted.append(addressRecord.getHouseNumberTo() + emptyIfNull(addressRecord.getLetterTo()));
@@ -416,7 +415,7 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
                     participantOutput.put("enhedsNummer", unitNumber);
                     try {
                         //It is expected to find only one participant
-                        try(Session session = lookupService.getSessionManager().getSessionFactory().openSession()) {
+                        try (Session session = lookupService.getSessionManager().getSessionFactory().openSession()) {
                             ParticipantRecord participantRecord = directLookup.participantLookup(session, Arrays.asList(Long.toString(unitNumber, 10))).iterator().next();
                             if (participantRecord != null) {
                                 Long businessKey = participantRecord.getBusinessKey();
@@ -461,7 +460,7 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
                     )
             );
         }
-        return list.isEmpty() ? null : list.get(list.size()-1);
+        return list.isEmpty() ? null : list.get(list.size() - 1);
     }
 
     private String emptyIfNull(String text) {

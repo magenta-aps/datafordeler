@@ -20,7 +20,7 @@ import java.time.OffsetDateTime;
  * Command descriptor, holding data about an issued command
  */
 @Entity
-@Table(name = "command", indexes = {@Index(name="status", columnList = "status")})
+@Table(name = "command", indexes = {@Index(name = "status", columnList = "status")})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class Command extends DatabaseEntry implements Configuration {
 
@@ -32,7 +32,8 @@ public final class Command extends DatabaseEntry implements Configuration {
         CANCEL(4),
         CANCELLED(5);
 
-        private int value;
+        private final int value;
+
         Status(int value) {
             this.value = value;
         }
@@ -65,7 +66,8 @@ public final class Command extends DatabaseEntry implements Configuration {
     @Column(nullable = true)
     private String commandBody;
 
-    public Command() {}
+    public Command() {
+    }
 
     public Command(String commandName) {
         this.setCommandName(commandName);
@@ -76,6 +78,7 @@ public final class Command extends DatabaseEntry implements Configuration {
      * The request is used to obtain the command body (ie. the request body), to be parsed by a CommandHandler
      * The user object is used to set the command issuer
      * Also sets the received time
+     *
      * @param request
      * @param userDetails
      * @param commandName

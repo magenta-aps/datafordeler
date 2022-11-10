@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * described in {@link dk.magenta.datafordeler.core.database.Entity}
  */
 @javax.persistence.Entity
-@Table(name= CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_entity", indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_entity", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_identification", columnList = PersonEntity.DB_FIELD_IDENTIFICATION, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED, columnList = PersonEntity.DB_FIELD_DAFO_UPDATED)
@@ -72,8 +72,7 @@ public class PersonEntity extends CprRecordEntity {
     }
 
 
-
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "Person";
 
     public static final String DB_FIELD_CPR_NUMBER = "personnummer";
@@ -81,7 +80,7 @@ public class PersonEntity extends CprRecordEntity {
 
     @Column(name = DB_FIELD_CPR_NUMBER)
     @JsonProperty(IO_FIELD_CPR_NUMBER)
-    @XmlElement(name=(IO_FIELD_CPR_NUMBER))
+    @XmlElement(name = (IO_FIELD_CPR_NUMBER))
     private String personnummer;
 
     public String getPersonnummer() {
@@ -93,12 +92,9 @@ public class PersonEntity extends CprRecordEntity {
     }
 
     public static UUID generateUUID(String cprNumber) {
-        String uuidInput = "person:"+cprNumber;
+        String uuidInput = "person:" + cprNumber;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
-
-
-
 
 
     public static final String DB_FIELD_ADDRESS_CONAME = "coname";
@@ -815,7 +811,6 @@ public class PersonEntity extends CprRecordEntity {
     }
 
     /**
-     *
      * @param fieldName
      * @return
      */
@@ -828,8 +823,6 @@ public class PersonEntity extends CprRecordEntity {
         this.dataevent.add(record);
         record.setEntity(this);
     }
-
-
 
 
     public void addBitemporalRecord(CprBitemporalPersonRecord record, Session session) {
@@ -944,9 +937,10 @@ public class PersonEntity extends CprRecordEntity {
 
     }
 
-    private static FixedQueueMap<PersonEntity, ListHashMap<OffsetDateTime, CprBitemporalPersonRecord>> recentTechnicalCorrections = new FixedQueueMap<>(10);
+    private static final FixedQueueMap<PersonEntity, ListHashMap<OffsetDateTime, CprBitemporalPersonRecord>> recentTechnicalCorrections = new FixedQueueMap<>(10);
 
-    private static Logger log = LogManager.getLogger(PersonEntity.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(PersonEntity.class.getCanonicalName());
+
     private static <E extends CprBitemporalPersonRecord> boolean addItem(PersonEntity entity, Set<E> set, CprBitemporalPersonRecord newItem, Session session, boolean compareExisting) {
 
         /*
@@ -981,11 +975,11 @@ public class PersonEntity extends CprRecordEntity {
 
             for (E oldItem : items) {
                 /*
-                * Items with correction marking specify that an older record should be corrected with new data and/or effect time
-                * The incoming item itself is not the corrected data, but another record with the same origin will hold it
-                * It is not a replacement, but a correction. We keep both the corrected and corrector records, with a link between them,
-                * and set registrationTo on the corrected record
-                * */
+                 * Items with correction marking specify that an older record should be corrected with new data and/or effect time
+                 * The incoming item itself is not the corrected data, but another record with the same origin will hold it
+                 * It is not a replacement, but a correction. We keep both the corrected and corrector records, with a link between them,
+                 * and set registrationTo on the corrected record
+                 * */
                 if (oldItem.isHistoric() && newItem.isCorrection() && newItem.hasData()) {
                     // Annkor: K
                     // Acording to responses from CPR-office in denmark corrections can not be made to records that is not historic
@@ -1011,9 +1005,9 @@ public class PersonEntity extends CprRecordEntity {
                     // Acording to responses from CPR-office in denmark corrections can not be made to records that is not historic
                     oldItem.setUndone(true);
                     session.saveOrUpdate(oldItem);
-                    if(oldItem.getClosesRecordId()!=null) {
+                    if (oldItem.getClosesRecordId() != null) {
                         CprBitemporalRecord previousClosedRecord = items.stream().filter(item -> oldItem.getClosesRecordId().equals(item.getId())).findFirst().orElse(null);
-                        if(previousClosedRecord!=null) {
+                        if (previousClosedRecord != null) {
                             previousClosedRecord.setRegistrationTo(null);
                             session.saveOrUpdate(previousClosedRecord);
                         }
@@ -1043,10 +1037,10 @@ public class PersonEntity extends CprRecordEntity {
                         boolean success = set.add((E) newItem);
                         return success;
                     } else if (
-                                newItem.getBitemporality().equals(oldItem.getBitemporality()) &&
-                                                (newItem instanceof AddressDataRecord) &&
-                                                !((AddressDataRecord) newItem).equalDataWithMunicipalityChange(oldItem, false)
-                                        ) {
+                            newItem.getBitemporality().equals(oldItem.getBitemporality()) &&
+                                    (newItem instanceof AddressDataRecord) &&
+                                    !((AddressDataRecord) newItem).equalDataWithMunicipalityChange(oldItem, false)
+                    ) {
                         // Special case for addresses: Municipality codes may have changed without us getting a change record (AnnKor: Æ)
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
@@ -1054,19 +1048,19 @@ public class PersonEntity extends CprRecordEntity {
                         return success;
 
                     } else if (Equality.cprDomainEqualDate(newItem.getRegistrationFrom(), oldItem.getRegistrationFrom()) &&
-                                    (Equality.cprDomainEqualDate(newItem.getRegistrationTo(), oldItem.getRegistrationTo()) || newItem.getRegistrationTo() == null) &&
-                                    Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom())
+                            (Equality.cprDomainEqualDate(newItem.getRegistrationTo(), oldItem.getRegistrationTo()) || newItem.getRegistrationTo() == null) &&
+                            Equality.cprDomainEqualDate(newItem.getEffectFrom(), oldItem.getEffectFrom())
                     ) {
                         /*
                          * We see a record that is a near-repeat of a prior record. No need to add it
                          * */
-                        if(newItem.isHistoric() || oldItem.isActiveRecord()) {
+                        if (newItem.isHistoric() || oldItem.isActiveRecord()) {
                             //If the repeated record is historic it should not be added, since this record is allready added.
                             //If the repeated record is not closed by either undone or closed timestamp, it should not be added.
                             return false;
                         }
                     } else if (!newItem.isHistoric() && oldItem.isHistoric() &&
-                            oldItem.getRegistrationTo()==null &&
+                            oldItem.getRegistrationTo() == null &&
                             oldItem.getEffectTo() != null &&
                             !oldItem.isUndone() &&
                             Equality.cprDomainBafterA(newItem.getEffectFrom(), oldItem.getEffectTo())) {
@@ -1078,25 +1072,25 @@ public class PersonEntity extends CprRecordEntity {
             }
 
             /*
-            * Items with only registrationFrom, with no historical record, come in and replace older items of the same type
-            * The new item is added, but there must be a third item to represent the older item with a limited effect
-            * Consider:
-            *   ItemA   reg: 2000 -> inf.  eff: 2000 -> inf
-            *   ItemB   reg: 2005 -> inf.  eff: 2005 -> inf
-            *
-            * Result:
-            *   Item1   reg: 2000 -> 2005  eff: 2000 -> inf
-            *   Item2   reg: 2005 -> inf   eff: 2000 -> 2005
-            *   Item3   reg: 2005 -> inf   eff: 2005 -> inf
-            * */
+             * Items with only registrationFrom, with no historical record, come in and replace older items of the same type
+             * The new item is added, but there must be a third item to represent the older item with a limited effect
+             * Consider:
+             *   ItemA   reg: 2000 -> inf.  eff: 2000 -> inf
+             *   ItemB   reg: 2005 -> inf.  eff: 2005 -> inf
+             *
+             * Result:
+             *   Item1   reg: 2000 -> 2005  eff: 2000 -> inf
+             *   Item2   reg: 2005 -> inf   eff: 2000 -> 2005
+             *   Item3   reg: 2005 -> inf   eff: 2005 -> inf
+             * */
             if (newItem.updateBitemporalityByCloning()) {
                 E newestOlderItem = null;
                 E oldestNewerItem = null;
                 for (E oldItem : items) {
-                    if ( (newestOlderItem == null || oldItem.getRegistrationFrom().isAfter(newestOlderItem.getRegistrationFrom())) && oldItem.getRegistrationFrom().isBefore(newItem.getRegistrationFrom())) {
+                    if ((newestOlderItem == null || oldItem.getRegistrationFrom().isAfter(newestOlderItem.getRegistrationFrom())) && oldItem.getRegistrationFrom().isBefore(newItem.getRegistrationFrom())) {
                         newestOlderItem = oldItem;
                     }
-                    if ( (oldestNewerItem == null || oldItem.getRegistrationFrom().isBefore(oldestNewerItem.getRegistrationFrom())) && oldItem.getRegistrationFrom().isAfter(newItem.getRegistrationFrom()) ) {
+                    if ((oldestNewerItem == null || oldItem.getRegistrationFrom().isBefore(oldestNewerItem.getRegistrationFrom())) && oldItem.getRegistrationFrom().isAfter(newItem.getRegistrationFrom())) {
                         oldestNewerItem = oldItem;
                     }
                 }
@@ -1144,13 +1138,12 @@ public class PersonEntity extends CprRecordEntity {
             }
 
 
-
             if (newItem.isCorrection()) {
                 if (correctedRecord != null && correctingRecord != null && correctedRecord != correctingRecord) {
                     //if (correctedRecord.getCorrector() == null) {
-                        correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
-                        correctingRecord.setCorrectionof(correctedRecord);
-                        session.saveOrUpdate(correctingRecord);
+                    correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
+                    correctingRecord.setCorrectionof(correctedRecord);
+                    session.saveOrUpdate(correctingRecord);
                     //}
                 }
             } else {
@@ -1158,7 +1151,7 @@ public class PersonEntity extends CprRecordEntity {
                 boolean hasAnyUnclosed = items.stream().anyMatch(item -> item.getRegistrationTo() == null && item.getEffectTo() == null);
 
                 //Does this person allready have a recordtype which is of same type, and which is unclosed, then close the old one
-                if(hasAnyUnclosed && newItem.getRegistrationTo()==null && newItem.getEffectTo()==null &&
+                if (hasAnyUnclosed && newItem.getRegistrationTo() == null && newItem.getEffectTo() == null &&
                         //Specifically for custodyRecord there can be more than one at the same time
                         //This might be correct to do for all recordtypes but is has not been tested good yet
                         !(newItem instanceof CustodyDataRecord) &&
@@ -1166,11 +1159,11 @@ public class PersonEntity extends CprRecordEntity {
                         !(newItem instanceof ChildrenDataRecord)) {
                     correctedRecord = items.stream().filter(i -> i.getRegistrationTo() == null && i.getEffectTo() == null).findAny().get();
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
-                    if(correctedRecord.getId()!=null) {
+                    if (correctedRecord.getId() != null) {
                         newItem.setClosesRecordId(correctedRecord.getId());
                     }
                     boolean success = set.add((E) newItem);
-                    if(newItem.getRegistrationFrom()!=null && correctedRecord.getId()!=null) {
+                    if (newItem.getRegistrationFrom() != null && correctedRecord.getId() != null) {
                         entity.addDataEvent(new PersonDataEventDataRecord(newItem.getRegistrationFrom(), newItem.getFieldName(), correctedRecord.getId(), "sametype_closed"));
                     }
                     return success;

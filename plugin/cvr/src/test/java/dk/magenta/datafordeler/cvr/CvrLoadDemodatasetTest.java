@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
+import dk.magenta.datafordeler.core.util.DoubleHashMap;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -35,8 +36,6 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
-
 /**
  * Test that it is possible to load and clear data which is dedicated for demopurpose
  */
@@ -56,7 +55,8 @@ public class CvrLoadDemodatasetTest {
 
     private CvrEntityManager entityManager;
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("_doc", CompanyRecord.schema);
         schemaMap.put("produktionsenhed", CompanyUnitRecord.schema);
@@ -65,6 +65,7 @@ public class CvrLoadDemodatasetTest {
 
     /**
      * This test is parly used for the generation of information about persons in testdata
+     *
      * @throws DataFordelerException
      * @throws IOException
      * @throws URISyntaxException
@@ -81,7 +82,7 @@ public class CvrLoadDemodatasetTest {
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
         entityManager.parseData(stream, importMetadata);
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
             query.setRegistrationFromBefore(time);
@@ -94,23 +95,41 @@ public class CvrLoadDemodatasetTest {
 
             Assert.assertEquals(4, companyList.size());
 
-            for(CompanyRecord company : companyList) {
-
-                System.out.println("CVR "+company.getCvrNumber());
-                System.out.println("METANAME "+company.getMetadata().getNewestName().iterator().next().getName());
-                System.out.println("NAME "+company.getNames().iterator().next().getName());
-
-                if(company.getCompanyStatus().size()>0) {
-                    System.out.println(company.getCompanyStatus().iterator().next().getStatus());
+            DoubleHashMap<String, String, String> map = new DoubleHashMap<>();
+            for (CompanyRecord company : companyList) {
+                String cvr = company.getCvrNumberString();
+                map.put(cvr, "METANAME", company.getMetadata().getNewestName().iterator().next().getName());
+                map.put(cvr, "NAME", company.getNames().iterator().next().getName());
+                if (company.getCompanyStatus().size() > 0) {
+                    map.put(cvr, "STATUS", company.getCompanyStatus().iterator().next().getStatus());
                 }
-                if(company.getPostalAddress().size()>0) {
-                    System.out.println(company.getPostalAddress().iterator().next().getMunicipality().getMunicipalityCode());
+                if (company.getPostalAddress().size() > 0) {
+                    map.put(cvr, "MUNICIPALITYCODE", Integer.toString(company.getPostalAddress().iterator().next().getMunicipality().getMunicipalityCode()));
                 }
-                System.out.println();
             }
+
+            Assert.assertEquals("A. And Møntpudser", map.get("88888881", "METANAME"));
+            Assert.assertEquals("A. And Moentpudser", map.get("88888881", "NAME"));
+            Assert.assertEquals("NORMAL", map.get("88888881", "STATUS"));
+            Assert.assertEquals("956", map.get("88888881", "MUNICIPALITYCODE"));
+
+            Assert.assertEquals("Faetter Hoejben spilleservice", map.get("88888882", "METANAME"));
+            Assert.assertEquals("Faetter Hoejben spilleservice", map.get("88888882", "NAME"));
+            Assert.assertEquals("NORMAL", map.get("88888882", "STATUS"));
+            Assert.assertEquals("751", map.get("88888882", "MUNICIPALITYCODE"));
+
+            Assert.assertEquals("Georg Gearloes opfindelser", map.get("88888883", "METANAME"));
+            Assert.assertEquals("Georg Gearloes opfindelser", map.get("88888883", "NAME"));
+            Assert.assertEquals("NORMAL", map.get("88888883", "STATUS"));
+            Assert.assertEquals("956", map.get("88888883", "MUNICIPALITYCODE"));
+
+            Assert.assertEquals("Anderssines catering service", map.get("88888884", "METANAME"));
+            Assert.assertEquals("Anderssines catering service", map.get("88888884", "NAME"));
+            Assert.assertEquals("NORMAL", map.get("88888884", "STATUS"));
+            Assert.assertEquals("751", map.get("88888884", "MUNICIPALITYCODE"));
+
         }
     }
-
 
 
     @Test
@@ -169,6 +188,7 @@ public class CvrLoadDemodatasetTest {
 
     /**
      * Verify that testdata can be cleaned through calling pull with flag "cleantestdatafirst":true
+     *
      * @throws Exception
      */
     @Test
@@ -185,7 +205,7 @@ public class CvrLoadDemodatasetTest {
         Pull pull = new Pull(engine, plugin, config);
         pull.run();
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> personEntities = QueryManager.getAllEntities(session, CompanyRecord.class);
             Assert.assertEquals(0, personEntities.size());//Validate that 0 company from the file persondata is initiated
         }
@@ -196,7 +216,7 @@ public class CvrLoadDemodatasetTest {
         pull = new Pull(engine, plugin, config);
         pull.run();
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> personEntities = QueryManager.getAllEntities(session, CompanyRecord.class);
             Assert.assertEquals(4, personEntities.size());//Validate that 4 company from the file persondata is initiated
         }
@@ -207,7 +227,7 @@ public class CvrLoadDemodatasetTest {
         pull = new Pull(engine, plugin, config);
         pull.run();
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> personEntities = QueryManager.getAllEntities(session, CompanyRecord.class);
             Assert.assertEquals(0, personEntities.size());//Validate that 0 company from the file persondata is initiated
         }

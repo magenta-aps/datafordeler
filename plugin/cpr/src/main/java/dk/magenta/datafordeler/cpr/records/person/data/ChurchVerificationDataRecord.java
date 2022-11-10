@@ -40,7 +40,7 @@ public class ChurchVerificationDataRecord extends VerificationDataRecord<ChurchV
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<ChurchVerificationDataRecord> correctors = new HashSet<>();
+    private final Set<ChurchVerificationDataRecord> correctors = new HashSet<>();
 
     public Set<ChurchVerificationDataRecord> getCorrectors() {
         return this.correctors;

@@ -45,7 +45,6 @@ public abstract class LineRecord<E extends GeoEntity> extends GeoMonotemporalRec
     }
 
 
-
     public static final String DB_FIELD_SHAPE = "shape";
     public static final String IO_FIELD_SHAPE = "form";
     @Column(name = DB_FIELD_SHAPE, columnDefinition = "varbinary(max)")
@@ -72,7 +71,7 @@ public abstract class LineRecord<E extends GeoEntity> extends GeoMonotemporalRec
     }
 
 
-    private static GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), GeoPlugin.SRID);
+    private static final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), GeoPlugin.SRID);
 
 
     public static MultiLineString convert(org.geojson.MultiLineString original) {
@@ -85,7 +84,7 @@ public abstract class LineRecord<E extends GeoEntity> extends GeoMonotemporalRec
 
     public static org.geojson.MultiLineString convert(MultiLineString original) {
         org.geojson.MultiLineString multiLineString = new org.geojson.MultiLineString();
-        for (int i=0; i<original.getNumGeometries(); i++) {
+        for (int i = 0; i < original.getNumGeometries(); i++) {
             multiLineString.add(LineRecord.convert((LineString) original.getGeometryN(i)));
         }
         return multiLineString;
@@ -104,7 +103,6 @@ public abstract class LineRecord<E extends GeoEntity> extends GeoMonotemporalRec
     public static List<LngLatAlt> convert(LineString original) {
         return Arrays.asList(original.getCoordinates()).stream().map(AreaRecord::convert).collect(Collectors.toList());
     }
-
 
 
     public static Coordinate convert(LngLatAlt original) {

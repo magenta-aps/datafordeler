@@ -1,14 +1,14 @@
 package dk.magenta.datafordeler.ger.data;
 
-import dk.magenta.datafordeler.core.database.DataItem;
-import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 
-import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lars on 19-05-17.
@@ -18,7 +18,7 @@ public abstract class GerQuery<E extends GerEntity> extends BaseQuery {
     public static final String GERNR = "gernr";
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = GERNR)
-    private List<String> gerNr = new ArrayList<>();
+    private final List<String> gerNr = new ArrayList<>();
 
     public List<String> getGerNr() {
         return gerNr;

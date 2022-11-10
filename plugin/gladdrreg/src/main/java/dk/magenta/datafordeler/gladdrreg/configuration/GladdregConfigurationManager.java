@@ -18,7 +18,7 @@ public class GladdregConfigurationManager extends ConfigurationManager<GladdregC
     @Autowired
     private ConfigurationSessionManager sessionManager;
 
-    private Logger log = LogManager.getLogger("GladdregConfigurationManager");
+    private Logger log = LogManager.getLogger(GladdregConfigurationManager.class.getCanonicalName());
 
     @PostConstruct
     public void init() {

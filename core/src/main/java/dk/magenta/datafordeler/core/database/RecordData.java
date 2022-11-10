@@ -55,7 +55,7 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
 
-    @Column(length=1024)
+    @Column(length = 1024)
     private String sourceReference;
 
     public String getSourceReference() {

@@ -55,6 +55,7 @@ public abstract class Equality {
 
     /**
      * Add feature for comparing of timestamps recieved from CPR (We do not trust the precission very much)
+     *
      * @param a
      * @param b
      * @return
@@ -69,6 +70,7 @@ public abstract class Equality {
     /**
      * Add feature for comparing of timestamps recieved from CPR (We do not trust the precission very much)
      * This method returns true if B is more than 48 hours after A
+     *
      * @param a
      * @param b
      * @return

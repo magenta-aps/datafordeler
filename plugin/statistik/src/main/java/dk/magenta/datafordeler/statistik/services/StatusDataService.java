@@ -51,7 +51,7 @@ public class StatusDataService extends PersonStatisticsService {
     @Autowired
     private CprPlugin cprPlugin;
 
-    private Logger log = LogManager.getLogger(BirthDataService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(BirthDataService.class.getCanonicalName());
 
     @Override
     protected String[] requiredParameters() {
@@ -65,6 +65,7 @@ public class StatusDataService extends PersonStatisticsService {
 
     /**
      * Calls handlerequest in super with the ID of the report as a parameter
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -84,6 +85,7 @@ public class StatusDataService extends PersonStatisticsService {
 
     /**
      * Post is used for starting the generation of a report
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -103,12 +105,10 @@ public class StatusDataService extends PersonStatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{
-                PNR, BIRTHDAY_YEAR, FIRST_NAME, LAST_NAME, STATUS_CODE,
+        return Arrays.asList(PNR, BIRTHDAY_YEAR, FIRST_NAME, LAST_NAME, STATUS_CODE,
                 BIRTH_AUTHORITY, BIRTH_AUTHORITY_TEXT, CITIZENSHIP_CODE, MOTHER_PNR, FATHER_PNR, CIVIL_STATUS, SPOUSE_PNR,
                 MUNICIPALITY_CODE, LOCALITY_NAME, LOCALITY_CODE, LOCALITY_ABBREVIATION, ROAD_CODE, ROAD_NAME, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER,
-                BNR, MOVING_IN_DATE, MOVE_PROD_DATE, POST_CODE, CIVIL_STATUS_DATE, CIVIL_STATUS_PROD_DATE, CHURCH, PROTECTION_TYPE
-        });
+                BNR, MOVING_IN_DATE, MOVE_PROD_DATE, POST_CODE, CIVIL_STATUS_DATE, CIVIL_STATUS_PROD_DATE, CHURCH, PROTECTION_TYPE);
     }
 
     @Override
@@ -148,24 +148,24 @@ public class StatusDataService extends PersonStatisticsService {
 
         // Loop over the list of registrations (which is already sorted (by time, ascending))
         NameDataRecord nameDataRecord = filter(person.getName(), filter);
-        if(nameDataRecord!=null) {
+        if (nameDataRecord != null) {
             String firstname = nameDataRecord.getFirstNames();
-            if(!StringUtils.isEmpty(nameDataRecord.getMiddleName())) {
-                firstname += " "+nameDataRecord.getMiddleName();
+            if (!StringUtils.isEmpty(nameDataRecord.getMiddleName())) {
+                firstname += " " + nameDataRecord.getMiddleName();
             }
             item.put(FIRST_NAME, firstname);
             item.put(LAST_NAME, nameDataRecord.getLastName());
         }
 
         BirthPlaceDataRecord birthPlaceDataRecord = filter(person.getBirthPlace(), filter);
-        if(birthPlaceDataRecord!=null) {
+        if (birthPlaceDataRecord != null) {
             item.put(BIRTH_AUTHORITY, Integer.toString(birthPlaceDataRecord.getAuthority()));
             item.put(BIRTH_AUTHORITY_CODE_TEXT, birthPlaceDataRecord.getBirthPlaceName());
             item.put(BIRTH_AUTHORITY_TEXT, birthPlaceDataRecord.getBirthPlaceName());
         }
 
         BirthTimeDataRecord birthTimeDataRecord = filter(person.getBirthTime(), filter);
-        if(birthTimeDataRecord!=null) {
+        if (birthTimeDataRecord != null) {
             LocalDateTime birthTime = birthTimeDataRecord.getBirthDatetime();
             if (birthTime != null) {
                 item.put(BIRTHDAY_YEAR, Integer.toString(birthTime.getYear()));
@@ -173,49 +173,49 @@ public class StatusDataService extends PersonStatisticsService {
         }
 
         PersonStatusDataRecord statusDataRecord = filter(person.getStatus(), filter);
-        if(statusDataRecord!=null) {
+        if (statusDataRecord != null) {
             item.put(STATUS_CODE, formatStatusCode(statusDataRecord.getStatus()));
         }
 
         CitizenshipDataRecord citizenshipDataRecord = filter(person.getCitizenship(), filter);
-        if(citizenshipDataRecord!=null) {
+        if (citizenshipDataRecord != null) {
             item.put(CITIZENSHIP_CODE, Integer.toString(citizenshipDataRecord.getCountryCode()));
         }
 
         ParentDataRecord mparentDataRecord = filter(person.getMother(), filter);
-        if(mparentDataRecord!=null) {
+        if (mparentDataRecord != null) {
             item.put(MOTHER_PNR, formatPnr(mparentDataRecord.getCprNumber()));
         }
 
         ParentDataRecord fparentDataRecord = filter(person.getFather(), filter);
-        if(fparentDataRecord!=null) {
+        if (fparentDataRecord != null) {
             item.put(FATHER_PNR, formatPnr(fparentDataRecord.getCprNumber()));
         }
 
         CivilStatusDataRecord civilStatusDataRecord = filter(person.getCivilstatus(), filter);
-        if(civilStatusDataRecord!=null) {
+        if (civilStatusDataRecord != null) {
             item.put(SPOUSE_PNR, formatPnr(civilStatusDataRecord.getSpouseCpr()));
         }
 
         ChurchDataRecord churchDataRecord = filter(person.getChurchRelation(), filter);
-        if(churchDataRecord!=null) {
+        if (churchDataRecord != null) {
             item.put(CHURCH, churchDataRecord.getChurchRelation().toString());
         }
 
         ProtectionDataRecord protectionDataRecord = filter(person.getProtection(), filter);
-        if(protectionDataRecord!=null) {
+        if (protectionDataRecord != null) {
             item.put(PROTECTION_TYPE, Integer.toString(protectionDataRecord.getProtectionType()));
         }
 
         CivilStatusDataRecord civilStatusDataRecordr = filter(person.getCivilstatus(), filter);
-        if(civilStatusDataRecordr!=null) {
+        if (civilStatusDataRecordr != null) {
             item.put(CIVIL_STATUS, civilStatusDataRecordr.getCivilStatus());
             item.put(CIVIL_STATUS_DATE, formatTime(civilStatusDataRecordr.getEffectFrom()));
             item.put(CIVIL_STATUS_PROD_DATE, formatTime(civilStatusDataRecordr.getRegistrationFrom()));
         }
 
         AddressDataRecord addressDataRecord = filter(person.getAddress(), filter);
-        if(addressDataRecord!=null) {
+        if (addressDataRecord != null) {
             if (addressDataRecord.getMunicipalityCode() < 900) return null;
             item.put(MOVING_IN_DATE, formatTime(addressDataRecord.getEffectFrom()));
             item.put(MOVE_PROD_DATE, formatTime(addressDataRecord.getRegistrationFrom()));

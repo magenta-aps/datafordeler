@@ -46,6 +46,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -75,7 +76,7 @@ public class CvrRecordService {
     @Autowired
     private DirectLookup directLookup;
 
-    private Logger log = LogManager.getLogger(CvrRecordService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CvrRecordService.class.getCanonicalName());
 
     @Autowired
     private GerCompanyLookup gerCompanyLookup;
@@ -244,7 +245,7 @@ public class CvrRecordService {
                         outputStream.write(
                                 objectMapper.writeValueAsString(
                                         CvrRecordService.this.wrapRecord(record, lookupService, returnParticipantDetails)
-                                ).getBytes("UTF-8")
+                                ).getBytes(StandardCharsets.UTF_8)
                         );
                     }
                     outputStream.write(END_OBJECT);
@@ -262,18 +263,18 @@ public class CvrRecordService {
             if (includeCpr) {
                 loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
             }
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 
-    private static Pattern nonDigits = Pattern.compile("[^\\d]");
+    private static final Pattern nonDigits = Pattern.compile("[^\\d]");
+
     protected List<String> getCvrNumber(JsonNode node) {
         ArrayList<String> cvrNumbers = new ArrayList<>();
         if (node.isArray()) {
-            for (JsonNode item : (ArrayNode) node) {
+            for (JsonNode item : node) {
                 cvrNumbers.addAll(this.getCvrNumber(item));
             }
         } else if (node.isTextual()) {
@@ -347,7 +348,7 @@ public class CvrRecordService {
                 addressFormatted.append(" " + addressRecord.getHouseNumberFrom() + emptyIfNull(addressRecord.getLetterFrom()));
                 if (addressRecord.getHouseNumberTo() != 0) {
                     addressFormatted.append("-");
-                    if (addressRecord.getHouseNumberTo()==addressRecord.getHouseNumberFrom()) {
+                    if (addressRecord.getHouseNumberTo() == addressRecord.getHouseNumberFrom()) {
                         addressFormatted.append(emptyIfNull(addressRecord.getLetterTo()));
                     } else {
                         addressFormatted.append(addressRecord.getHouseNumberTo() + emptyIfNull(addressRecord.getLetterTo()));
@@ -497,12 +498,13 @@ public class CvrRecordService {
                     )
             );
         }
-        return list.isEmpty() ? null : list.get(list.size()-1);
+        return list.isEmpty() ? null : list.get(list.size() - 1);
     }
 
     Pattern postcodePattern = Pattern.compile("(\\d{4}) (.*)");
 
-    private static HashMap<Integer, String> municipalityMap = new HashMap<>();
+    private static final HashMap<Integer, String> municipalityMap = new HashMap<>();
+
     static {
         municipalityMap.put(955, "Kommune Kujalleq");
         municipalityMap.put(956, "Kommuneqarfik Sermersooq");
@@ -519,8 +521,8 @@ public class CvrRecordService {
         root.put("cvrNummer", entity.getGerNr());
         root.put(
                 "navn",
-                (entity.getEndDate() != null ? "historisk ":"") +
-                entity.getName()
+                (entity.getEndDate() != null ? "historisk " : "") +
+                        entity.getName()
         );
         root.put("forretningsområde", entity.getBusinessText());
 
@@ -581,7 +583,7 @@ public class CvrRecordService {
         } else {
             StringJoiner address = new StringJoiner("\n");
             String[] parts = new String[]{
-                entity.getAddress1(), entity.getAddress2(), entity.getAddress3()
+                    entity.getAddress1(), entity.getAddress2(), entity.getAddress3()
             };
             for (String part : parts) {
                 if (part != null && !part.isEmpty()) {
@@ -616,7 +618,7 @@ public class CvrRecordService {
         if (returnParticipantDetails) {
             ResponsibleQuery responsibleQuery = new ResponsibleQuery();
             responsibleQuery.setGerNr(entity.getGerNr());
-            try(Session session = sessionManager.getSessionFactory().openSession();) {
+            try (Session session = sessionManager.getSessionFactory().openSession()) {
                 List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(session, responsibleQuery, ResponsibleEntity.class);
                 if (!responsibleEntities.isEmpty()) {
                     ArrayNode participantsNode = objectMapper.createArrayNode();

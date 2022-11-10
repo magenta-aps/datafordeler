@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class SubscribtionSequenceTest {
+public class SubscriptionSequenceTest {
 
     @Autowired
     TestRestTemplate restTemplate;
@@ -42,26 +42,21 @@ public class SubscribtionSequenceTest {
     MockMvc mvc;
 
 
-
-
-
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
 
-
-
-
     /**
      * Test that it is possible to create a new subscription
+     *
      * @throws Exception
      */
     @Test
     public void testSequenceToBePerformedWithCustomer() throws Exception {
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
         TestUserDetails testUserDetails = new TestUserDetails();

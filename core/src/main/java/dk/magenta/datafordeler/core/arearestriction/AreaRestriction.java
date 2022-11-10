@@ -6,16 +6,16 @@ import java.util.HashMap;
  * Describes a specific area that can be used when limiting queries to data in DAFO.
  */
 public class AreaRestriction {
-    private String name;
-    private String description;
-    private String sumiffiik;
-    private AreaRestrictionType type;
-    private String value;
+    private final String name;
+    private final String description;
+    private final String sumiffiik;
+    private final AreaRestrictionType type;
+    private final String value;
 
-    private static HashMap<String, AreaRestriction> lookupMap = new HashMap<>();
+    private static final HashMap<String, AreaRestriction> lookupMap = new HashMap<>();
 
     public AreaRestriction(String name, String description, String sumiffiik,
-            AreaRestrictionType type, String value) {
+                           AreaRestrictionType type, String value) {
         this.name = name;
         this.description = description;
         this.sumiffiik = sumiffiik;

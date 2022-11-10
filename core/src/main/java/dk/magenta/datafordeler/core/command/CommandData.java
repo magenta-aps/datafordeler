@@ -12,6 +12,7 @@ public abstract class CommandData {
     /**
      * Should determine if an incoming request matches what is needed for a CommandRole
      * The data object specifies what the CommandRole requires, and we must return whether we adhere to that
+     *
      * @param data
      * @return
      */
@@ -19,6 +20,7 @@ public abstract class CommandData {
 
     /**
      * Should return the contents of this object, for printing purposes
+     *
      * @return
      */
     protected abstract Map<String, Object> contents();
@@ -30,6 +32,6 @@ public abstract class CommandData {
         for (String key : contents.keySet()) {
             contentJoiner.add(key + ": \"" + contents.get(key).toString() + "\"");
         }
-        return this.getClass().getSimpleName() + " [" + contentJoiner.toString() + "]";
+        return this.getClass().getSimpleName() + " [" + contentJoiner + "]";
     }
 }

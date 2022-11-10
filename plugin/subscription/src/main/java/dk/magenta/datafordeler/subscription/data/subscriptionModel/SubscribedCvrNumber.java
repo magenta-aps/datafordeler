@@ -2,10 +2,11 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = SubscribedCvrNumber.TABLE_NAME, uniqueConstraints=@UniqueConstraint(columnNames={"cvrNumber", "cvrlistId"}), indexes = {
+@Table(name = SubscribedCvrNumber.TABLE_NAME, uniqueConstraints = @UniqueConstraint(columnNames = {"cvrNumber", "cvrlistId"}), indexes = {
 
 
 })
@@ -17,7 +18,7 @@ public class SubscribedCvrNumber extends DatabaseEntry {
     public static final String DB_FIELD_ENTITY = "entity";
 
 
-    @Column(name="cvrNumber", nullable=false)
+    @Column(name = "cvrNumber", nullable = false)
     private String cvrNumber;
 
     public String getCvrNumber() {
@@ -39,7 +40,7 @@ public class SubscribedCvrNumber extends DatabaseEntry {
 
 
     @ManyToOne
-    @JoinColumn(name="cvrlistId")
+    @JoinColumn(name = "cvrlistId")
     private CvrList cvrList;
 
 }

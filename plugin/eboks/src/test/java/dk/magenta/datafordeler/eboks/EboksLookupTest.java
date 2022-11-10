@@ -16,7 +16,6 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.ger.GerPlugin;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
-import dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -166,7 +165,7 @@ public class EboksLookupTest {
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
 
         ArrayList cprList = new ArrayList();
         ArrayList cvrList = new ArrayList();

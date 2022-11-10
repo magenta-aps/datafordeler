@@ -18,7 +18,6 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
 import dk.magenta.datafordeler.geo.data.road.*;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
-import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +27,8 @@ import java.util.*;
 /**
  * Datafordeler Plugin to fetch, parse and serve Geo data (data on regions, localities, roads, addresses etc.)
  * As with all plugins, it follows the model laid out in the Datafordeler Core
- * project, so it takes care of where to fetch data, how to parse it, how to 
- * store it (leveraging the Datafordeler bitemporality model), under what path 
+ * project, so it takes care of where to fetch data, how to parse it, how to
+ * store it (leveraging the Datafordeler bitemporality model), under what path
  * to serve it, and which roles should exist for data access.
  * The Core and Engine take care of the generic updateRegistrationTo around these, fetching and
  * serving based on the specifics laid out in the plugin.
@@ -69,9 +68,9 @@ public class GeoPlugin extends Plugin {
     @Autowired
     private PostcodeEntityManager postcodeEntityManager;
 
-    private GeoRolesDefinition rolesDefinition = new GeoRolesDefinition();
+    private final GeoRolesDefinition rolesDefinition = new GeoRolesDefinition();
 
-    private GeoAreaRestrictionDefinition areaRestrictionDefinition;
+    private final GeoAreaRestrictionDefinition areaRestrictionDefinition;
 
     public GeoPlugin() {
         this.areaRestrictionDefinition = new GeoAreaRestrictionDefinition(this);
@@ -134,23 +133,17 @@ public class GeoPlugin extends Plugin {
     }
 
 
-
-
-
-
-
-
     public String getJoinString(Map<String, String> handles) {
         StringJoiner s = new StringJoiner(" ");
         // Join accessaddress
         if (handles.containsKey("municipalitycode") && handles.containsKey("roadcode") && (handles.containsKey("housenumber") || handles.containsKey("bnr"))) {
             s.add("LEFT JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " geo_accessaddress__road");
             s.add("ON geo_accessaddress__road.roadCode = " + handles.get("roadcode"));
-            s.add("AND geo_accessaddress__road.municipalityCode = " + handles.get("municipalitycode")+"\n");
+            s.add("AND geo_accessaddress__road.municipalityCode = " + handles.get("municipalitycode") + "\n");
 
             if (handles.containsKey("housenumber")) {
                 s.add("LEFT JOIN " + AccessAddressHouseNumberRecord.class.getCanonicalName() + " geo_accessaddress__housenumber");
-                s.add("ON geo_accessaddress__housenumber.number = " + handles.get("housenumber") +"\n");
+                s.add("ON geo_accessaddress__housenumber.number = " + handles.get("housenumber") + "\n");
             }
 
             s.add("LEFT JOIN " + AccessAddressEntity.class.getCanonicalName() + " geo_accessaddress");
@@ -162,33 +155,33 @@ public class GeoPlugin extends Plugin {
             } else if (handles.containsKey("housenumber")) {
                 s1.add("geo_accessaddress__housenumber.entity = geo_accessaddress");
             }
-            s.add("AND ("+s1.toString()+")"+"\n");
+            s.add("AND (" + s1 + ")" + "\n");
 
-            s.add("LEFT JOIN "+ AccessAddressPostcodeRecord.class.getCanonicalName()+" geo_accessaddress_postcode");
-            s.add("ON geo_accessaddress_postcode.entity = geo_accessaddress"+"\n");
-            s.add("LEFT JOIN "+ PostcodeEntity.class.getCanonicalName()+" geo_postcode");
-            s.add("ON geo_postcode.code = geo_accessaddress_postcode.postcode"+"\n");
+            s.add("LEFT JOIN " + AccessAddressPostcodeRecord.class.getCanonicalName() + " geo_accessaddress_postcode");
+            s.add("ON geo_accessaddress_postcode.entity = geo_accessaddress" + "\n");
+            s.add("LEFT JOIN " + PostcodeEntity.class.getCanonicalName() + " geo_postcode");
+            s.add("ON geo_postcode.code = geo_accessaddress_postcode.postcode" + "\n");
         }
 
         // Join road
         if (handles.containsKey("municipalitycode") && handles.containsKey("roadcode")) {
             s.add("LEFT JOIN " + RoadMunicipalityRecord.class.getCanonicalName() + " geo_road_municipality");
-            s.add("ON geo_road_municipality.code = " + handles.get("municipalitycode")+"\n");
+            s.add("ON geo_road_municipality.code = " + handles.get("municipalitycode") + "\n");
             s.add("LEFT JOIN " + GeoRoadEntity.class.getCanonicalName() + " geo_road");
             s.add("ON geo_road.code = " + handles.get("roadcode"));
-            s.add("AND geo_road_municipality.entity = geo_road"+"\n");
+            s.add("AND geo_road_municipality.entity = geo_road" + "\n");
 
             // Join locality
             s.add("LEFT JOIN " + RoadLocalityRecord.class.getCanonicalName() + " geo_road_locality");
-            s.add("ON geo_road_locality.entity = geo_road"+"\n");
+            s.add("ON geo_road_locality.entity = geo_road" + "\n");
             s.add("LEFT JOIN " + GeoLocalityEntity.class.getCanonicalName() + " geo_locality ON");
-            s.add("geo_locality.code = geo_road_locality.code"+"\n");
+            s.add("geo_locality.code = geo_road_locality.code" + "\n");
         }
 
         // Join municipality
         if (handles.containsKey("municipalitycode")) {
             s.add("LEFT JOIN " + GeoMunicipalityEntity.class.getCanonicalName() + " geo_municipality");
-            s.add("ON geo_municipality.code = " + handles.get("municipalitycode")+"\n");
+            s.add("ON geo_municipality.code = " + handles.get("municipalitycode") + "\n");
         }
 
         return s.toString();
@@ -209,7 +202,6 @@ public class GeoPlugin extends Plugin {
         }
         return aliases;
     }
-
 
 
     public List<BaseQuery> getQueries(Map<String, String> values) {
@@ -238,7 +230,6 @@ public class GeoPlugin extends Plugin {
 
         return queries;
     }
-
 
 
 }

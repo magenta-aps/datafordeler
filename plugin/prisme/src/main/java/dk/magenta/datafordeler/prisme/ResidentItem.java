@@ -4,7 +4,6 @@ package dk.magenta.datafordeler.prisme;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 
 /**
  * Class for resident information

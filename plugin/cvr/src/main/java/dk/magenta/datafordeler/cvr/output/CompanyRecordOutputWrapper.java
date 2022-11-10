@@ -5,7 +5,9 @@ import dk.magenta.datafordeler.cvr.records.CompanyMetadataRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.Collections;
+
 import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
 
 /**

@@ -9,5 +9,6 @@ import java.net.URI;
  */
 public interface RegistrationReference extends Serializable {
     String getChecksum();
+
     URI getURI();
 }

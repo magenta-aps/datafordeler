@@ -28,10 +28,11 @@ public abstract class CommandHandler {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static Logger log = LogManager.getLogger(CommandHandler.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(CommandHandler.class.getCanonicalName());
 
     /**
      * Return the command name that this handler answers to. Must be unique among CommandHandlers; no two CommandHandler classes may return the same string
+     *
      * @return
      */
     protected abstract String getHandledCommand();
@@ -39,6 +40,7 @@ public abstract class CommandHandler {
     /**
      * Returns the command names that this handler answers to. Default implementation is to return getHandledCommand() wrapped in a list.
      * Subclasses will only need to implement this if they really have more than one command name
+     *
      * @return
      */
     public List<String> getHandledCommands() {
@@ -70,14 +72,15 @@ public abstract class CommandHandler {
                     }
                 }
             }
-        } catch (IOException|NullPointerException e) {
+        } catch (IOException | NullPointerException e) {
             return false;
         }
         return true;
-    };
+    }
 
     /**
      * Return a Worker subclass object that will handle the given Command. This worker runs as a thread started by CommandWatcher
+     *
      * @param command
      * @return
      * @throws DataFordelerException
@@ -85,11 +88,12 @@ public abstract class CommandHandler {
     public abstract Worker doHandleCommand(Command command) throws DataFordelerException;
 
     protected Logger getLog() {
-        return this.log;
+        return log;
     }
 
     /**
      * Given a Command object, write the output for GET and POST requests
+     *
      * @param command
      * @return
      */
@@ -99,6 +103,7 @@ public abstract class CommandHandler {
     /**
      * Parses a command body (body of a POST request) into a CommandData subclass object.
      * Implementors must themselves define their CommandData subclass returned by this method
+     *
      * @param commandBody
      * @return
      * @throws DataStreamException

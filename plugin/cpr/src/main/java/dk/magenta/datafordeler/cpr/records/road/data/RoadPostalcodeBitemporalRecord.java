@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @javax.persistence.Entity
-@Table(name=CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME, indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME + RoadPostalcodeBitemporalRecord.DB_FIELD_ENTITY, columnList = CprBitemporalRoadRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME + RoadPostalcodeBitemporalRecord.DB_FIELD_POSTAL_CODE, columnList = RoadPostalcodeBitemporalRecord.DB_FIELD_POSTAL_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME + RoadPostalcodeBitemporalRecord.DB_FIELD_REPLACED_BY, columnList = CprBitemporalRoadRecord.DB_FIELD_REPLACED_BY + DatabaseEntry.REF),
@@ -39,6 +39,7 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     @JsonProperty(value = IO_FIELD_TO_HOUSENUMBER)
     @XmlElement(name = IO_FIELD_TO_HOUSENUMBER)
     private String toHousenumber;
+
     public String getToHousenumber() {
         return toHousenumber;
     }
@@ -54,6 +55,7 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     @JsonProperty(value = IO_FIELD_FROM_HOUSENUMBER)
     @XmlElement(name = IO_FIELD_FROM_HOUSENUMBER)
     private String fromHousenumber;
+
     public String getFromHousenumber() {
         return fromHousenumber;
     }
@@ -69,6 +71,7 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     @JsonProperty(value = IO_FIELD_EVEN)
     @XmlElement(name = IO_FIELD_EVEN)
     private boolean even;
+
     public boolean getEven() {
         return even;
     }
@@ -84,6 +87,7 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     @JsonProperty(value = IO_FIELD_POSTAL_CODE)
     @XmlElement(name = IO_FIELD_POSTAL_CODE)
     private int postalCode;
+
     public int getPostalCode() {
         return postalCode;
     }
@@ -94,11 +98,12 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
 
     // Postdistrikt
     public static final String DB_FIELD_POSTAL_DISTRICT = "postalDistrict";
-    public static final String IO_FIELD_POSTAL_DISTRICT= "postDistrikt";
+    public static final String IO_FIELD_POSTAL_DISTRICT = "postDistrikt";
     @Column(name = DB_FIELD_POSTAL_DISTRICT)
     @JsonProperty(value = IO_FIELD_POSTAL_DISTRICT)
     @XmlElement(name = IO_FIELD_POSTAL_DISTRICT)
     private String postalDistrict;
+
     public String getPostalDistrict() {
         return postalDistrict;
     }
@@ -123,7 +128,7 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     @Override
     public boolean hasData() {
         return stringNonEmpty(this.toHousenumber) || stringNonEmpty(this.fromHousenumber) ||
-                this.postalCode!=0 || stringNonEmpty(this.postalDistrict);
+                this.postalCode != 0 || stringNonEmpty(this.postalDistrict);
     }
 
     @Override

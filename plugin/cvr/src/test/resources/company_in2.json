@@ -1863,64 +1863,80 @@
                         ]
                       }
                     ],
-                    "medlemsData" : [ {
-                      "attributter" : [ {
-                        "sekvensnr" : 0,
-                        "type" : "FUNKTION",
-                        "vaerditype" : "string",
-                        "vaerdier" : [ {
-                          "sidstOpdateret" : "2005-03-18T07:28:01+01:00",
-                          "sidstIndlaest" : null,
-                          "periode" : {
-                            "gyldigFra" : "2005-03-18",
-                            "gyldigTil" : "2005-03-31"
+                    "medlemsData": [
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "sidstOpdateret": "2005-03-18T07:28:01+01:00",
+                                "sidstIndlaest": null,
+                                "periode": {
+                                  "gyldigFra": "2005-03-18",
+                                  "gyldigTil": "2005-03-31"
+                                },
+                                "vaerdi": "KOMPLEMENTARER"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "attributter": [
+                          {
+                            "sekvensnr": 0,
+                            "type": "KOMPLEMENTAR_INDSKUDSKAPITAL",
+                            "vaerditype": "decimal",
+                            "vaerdier": [
+                              {
+                                "sidstOpdateret": "2015-02-09T21:00:00+01:00",
+                                "sidstIndlaest": null,
+                                "periode": {
+                                  "gyldigFra": "2005-03-07",
+                                  "gyldigTil": "2005-04-01"
+                                },
+                                "vaerdi": "7000.00"
+                              }
+                            ]
                           },
-                          "vaerdi" : "KOMPLEMENTARER"
-                        } ]
-                      } ]
-                    }, {
-                      "attributter" : [ {
-                        "sekvensnr" : 0,
-                        "type" : "KOMPLEMENTAR_INDSKUDSKAPITAL",
-                        "vaerditype" : "decimal",
-                        "vaerdier" : [ {
-                          "sidstOpdateret" : "2015-02-09T21:00:00+01:00",
-                          "sidstIndlaest" : null,
-                          "periode" : {
-                            "gyldigFra" : "2005-03-07",
-                            "gyldigTil" : "2005-04-01"
+                          {
+                            "sekvensnr": 0,
+                            "type": "KOMPLEMENTAR_INDSKUDSVALUTA",
+                            "vaerditype": "integer",
+                            "vaerdier": [
+                              {
+                                "sidstOpdateret": "2015-02-09T21:00:00+01:00",
+                                "sidstIndlaest": null,
+                                "periode": {
+                                  "gyldigFra": "2005-03-07",
+                                  "gyldigTil": "2005-04-01"
+                                },
+                                "vaerdi": "DKK"
+                              }
+                            ]
                           },
-                          "vaerdi" : "7000.00"
-                        } ]
-                      }, {
-                        "sekvensnr" : 0,
-                        "type" : "KOMPLEMENTAR_INDSKUDSVALUTA",
-                        "vaerditype" : "integer",
-                        "vaerdier" : [ {
-                          "sidstOpdateret" : "2015-02-09T21:00:00+01:00",
-                          "sidstIndlaest" : null,
-                          "periode" : {
-                            "gyldigFra" : "2005-03-07",
-                            "gyldigTil" : "2005-04-01"
-                          },
-                          "vaerdi" : "DKK"
-                        } ]
-                      }, {
-                        "sekvensnr" : 0,
-                        "type" : "FUNKTION",
-                        "vaerditype" : "string",
-                        "vaerdier" : [ {
-                          "sidstOpdateret" : "2018-02-09T21:00:00+01:00",
-                          "sidstIndlaest" : null,
-                          "periode" : {
-                            "gyldigFra" : "2005-03-07",
-                            "gyldigTil" : null
-                          },
-                          "vaerdi" : "KOMPLEMENTARER"
-                        } ]
-                      } ]
-                    } ]
-
+                          {
+                            "sekvensnr": 0,
+                            "type": "FUNKTION",
+                            "vaerditype": "string",
+                            "vaerdier": [
+                              {
+                                "sidstOpdateret": "2018-02-09T21:00:00+01:00",
+                                "sidstIndlaest": null,
+                                "periode": {
+                                  "gyldigFra": "2005-03-07",
+                                  "gyldigTil": null
+                                },
+                                "vaerdi": "KOMPLEMENTARER"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ]
               },

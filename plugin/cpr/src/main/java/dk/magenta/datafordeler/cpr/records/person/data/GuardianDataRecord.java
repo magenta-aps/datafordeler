@@ -72,7 +72,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     }
 
 
-
     public static final String DB_FIELD_RELATION_TYPE1 = "relationType1";
     public static final String IO_FIELD_RELATION_TYPE1 = "relationsType1";
     @Column(name = DB_FIELD_RELATION_TYPE1)

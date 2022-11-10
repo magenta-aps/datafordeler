@@ -1,18 +1,14 @@
 package dk.magenta.datafordeler.geo.data;
 
-import dk.magenta.datafordeler.core.database.DataItem;
-import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 
-import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by lars on 19-05-17.
@@ -47,7 +43,7 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
         this.setSumiffiik(parameters.getFirst(SUMIFFIIK));
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("sumiffiik", SumiffiikEntity.DB_FIELD_SUMIFFIIK_ID);

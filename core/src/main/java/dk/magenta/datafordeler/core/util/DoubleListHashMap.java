@@ -25,7 +25,8 @@ public class DoubleListHashMap<K, S, V> extends DoubleHashMap<K, S, ArrayList<V>
 
     /**
      * Inserts a value in the list identified by the specified key. Creates a list if none exists.
-     * @param key Key to insert by
+     *
+     * @param key   Key to insert by
      * @param value Value to insert
      */
     public void add(K key, S subkey, V value) {
@@ -39,7 +40,8 @@ public class DoubleListHashMap<K, S, V> extends DoubleHashMap<K, S, ArrayList<V>
 
     /**
      * Obtains an item from the collection, by key and index
-     * @param key Key to look up by
+     *
+     * @param key   Key to look up by
      * @param index Index to look up by
      * @return
      */

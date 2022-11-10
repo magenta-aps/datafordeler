@@ -35,7 +35,7 @@ public class PullCommandHandler extends CommandHandler {
         @JsonProperty(required = true)
         public String plugin;
 
-        private ObjectNode data = new ObjectMapper().createObjectNode();
+        private final ObjectNode data = new ObjectMapper().createObjectNode();
 
         @JsonAnySetter
         public void setData(String key, JsonNode value) {
@@ -104,13 +104,13 @@ public class PullCommandHandler extends CommandHandler {
     }
 
     public PullCommandData getCommandData(String commandBody)
-        throws DataStreamException, InvalidClientInputException {
+            throws DataStreamException, InvalidClientInputException {
         try {
             PullCommandData commandData = this.objectMapper.readValue(commandBody, PullCommandData.class);
             this.getLog().info("Command data parsed");
             return commandData;
         } catch (IOException e) {
-            InvalidClientInputException ex = new InvalidClientInputException("Unable to parse command data '"+commandBody+"'");
+            InvalidClientInputException ex = new InvalidClientInputException("Unable to parse command data '" + commandBody + "'");
             this.getLog().error(ex);
             throw ex;
         }
@@ -119,7 +119,7 @@ public class PullCommandHandler extends CommandHandler {
     private Plugin getPlugin(PullCommandData commandData) throws PluginNotFoundException {
         Plugin plugin = pluginManager.getPluginByName(commandData.plugin);
         if (plugin == null) {
-            this.getLog().error("Couldn't find requested plugin '"+commandData.plugin+"'");
+            this.getLog().error("Couldn't find requested plugin '" + commandData.plugin + "'");
             throw new PluginNotFoundException(commandData.plugin, false);
         }
         return plugin;

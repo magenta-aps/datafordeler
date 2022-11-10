@@ -34,7 +34,6 @@ public class LocalityBetegnRecord extends GeoMonotemporalRecord<GeoLocalityEntit
     }
 
 
-
     public static final String DB_FIELD_TYPE = "betegn";
     public static final String IO_FIELD_TYPE = "betegn";
     @Column(name = DB_FIELD_TYPE)

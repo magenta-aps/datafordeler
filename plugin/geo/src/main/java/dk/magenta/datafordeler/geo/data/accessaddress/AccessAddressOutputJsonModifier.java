@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class AccessAddressOutputJsonModifier extends JsonModifier {
 
-    private AccessAddressOutputWrapper outputWrapper;
+    private final AccessAddressOutputWrapper outputWrapper;
     protected HashMap<String, AccessAddressEntity> accessAddressEntities = new HashMap<>();
     protected HashMap<Integer, PostcodeEntity> postcodeEntities = new HashMap<>();
     protected HashMap<String, GeoLocalityEntity> localityEntities = new HashMap<>();
@@ -24,7 +24,7 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
         this.outputWrapper = outputWrapper;
         for (AccessAddressEntity accessAddressEntity : (Set<AccessAddressEntity>) resultSet.get(AccessAddressEntity.class)) {
             for (AccessAddressRoadRecord r : accessAddressEntity.getRoad()) {
-                String ident = r.getMunicipalityCode()+"|"+r.getRoadCode()+"|"+ BuildingEntityManager.stripBnr(accessAddressEntity.getBnr()); // TODO: bør vi også bruge husnummer?
+                String ident = r.getMunicipalityCode() + "|" + r.getRoadCode() + "|" + BuildingEntityManager.stripBnr(accessAddressEntity.getBnr()); // TODO: bør vi også bruge husnummer?
                 this.accessAddressEntities.put(ident, accessAddressEntity);
                 this.accessAddressEntities.put(accessAddressEntity.getIdentification().getUuid().toString(), accessAddressEntity);
             }
@@ -45,6 +45,7 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
 
     /**
      * Modifies a JsonNode by adding data from this.entities
+     *
      * @param node
      */
     @Override

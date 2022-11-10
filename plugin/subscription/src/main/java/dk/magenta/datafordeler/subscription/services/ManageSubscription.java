@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.AccessDeniedException;
-import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
-import dk.magenta.datafordeler.core.exception.InvalidTokenException;
+import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
@@ -16,7 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,7 +44,7 @@ public class ManageSubscription {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(ManageSubscription.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(ManageSubscription.class.getCanonicalName());
 
 
     @PostConstruct
@@ -55,14 +52,73 @@ public class ManageSubscription {
     }
 
 
+    private CprList getCprList(Session session, String listId) throws HttpNotFoundException {
+        CprList cprListItem = null;
+        if (listId != null && !listId.isEmpty()) {
+            cprListItem = QueryManager.getItem(session, CprList.class, Collections.singletonMap(CprList.DB_FIELD_LIST_ID, listId));
+            if (cprListItem == null) {
+                throw new HttpNotFoundException("CprList could not be found");
+            }
+        }
+        return cprListItem;
+    }
+
+    private CvrList getCvrList(Session session, String listId) throws HttpNotFoundException {
+        CvrList cvrListItem = null;
+        if (listId != null && !listId.isEmpty()) {
+            cvrListItem = QueryManager.getItem(session, CvrList.class, Collections.singletonMap(CvrList.DB_FIELD_LIST_ID, listId));
+            if (cvrListItem == null) {
+                throw new HttpNotFoundException("CvrList could not be found");
+            }
+        }
+        return cvrListItem;
+    }
+
+    private Subscriber getSubscriber(Session session, String subscriberId) throws HttpNotFoundException {
+        Subscriber subscriber = QueryManager.getItem(session, Subscriber.class, Collections.singletonMap(Subscriber.DB_FIELD_SUBSCRIBER_ID, subscriberId));
+        if (subscriber == null) {
+            throw new HttpNotFoundException("Subscriber could not be found");
+        }
+        return subscriber;
+    }
+
+    private BusinessEventSubscription getBusinessEventSubscription(Session session, String subscriptionId) throws HttpNotFoundException {
+        BusinessEventSubscription subscription = QueryManager.getItem(
+                session,
+                BusinessEventSubscription.class,
+                Collections.singletonMap(BusinessEventSubscription.DB_FIELD_BUSINESS_EVENT_ID, subscriptionId)
+        );
+        if (subscription == null) {
+            throw new HttpNotFoundException("BusinessEventSubscription could not be found");
+        }
+        return subscription;
+    }
+
+    private DataEventSubscription getDataEventSubscription(Session session, String subscriptionId) throws HttpNotFoundException {
+        DataEventSubscription subscription = QueryManager.getItem(
+                session,
+                DataEventSubscription.class,
+                Collections.singletonMap(DataEventSubscription.DB_FIELD_DATAEVENT_ID, subscriptionId)
+        );
+        if (subscription == null) {
+            throw new HttpNotFoundException("DataEventSubscription could not be found");
+        }
+        return subscription;
+    }
+
+    private String getSubscriberId(HttpServletRequest request, DafoUserDetails user) {
+        return Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_");
+    }
+
+
     /**
      * Get a list of all subscriptions
+     *
      * @return
      */
     @GetMapping("/subscriber")
     public ResponseEntity<List<Subscriber>> findAll(HttpServletRequest request) {
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<Subscriber> subscriptionList = QueryManager.getAllItems(session, Subscriber.class);
             return ResponseEntity.ok(subscriptionList);
         }
@@ -70,129 +126,92 @@ public class ManageSubscription {
 
     /**
      * Special case for creation of other users
+     *
      * @param request
      * @param subscriberContent
      * @return
      * @throws IOException
      */
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/create/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity createSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException {
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+    public ResponseEntity<Subscriber> createSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException, ConflictException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber = objectMapper.readValue(subscriberContent, Subscriber.class);
             session.save(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
-        } catch(PersistenceException e) {
-            String errorMessage = "Elements already exists";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.warn(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
-        }  catch(Exception e) {
-            String errorMessage = "Failed creating subscriber";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (PersistenceException e) {
+            throw new ConflictException("Elements already exists");
         }
     }
 
 
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity createMySubscriber(HttpServletRequest request) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<Subscriber> createMySubscriber(HttpServletRequest request) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException, ConflictException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.urlInvokePersistablelogs("subscriber");
-        Transaction transaction = null;
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            Subscriber subscriber = new Subscriber(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-            session.save(subscriber);
-            transaction.commit();
-            loggerHelper.urlInvokePersistablelogs("subscriber done");
-            return ResponseEntity.ok(subscriber);
-        } catch(PersistenceException e) {
-            String errorMessage = "Failed creating subscriber";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.warn(errorMessage, e);
-            return new ResponseEntity<>(obj.toString(), HttpStatus.CONFLICT);
-        }  catch(Exception e) {
-            String errorMessage = "Failed creating subscriber";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        String subscriberId = this.getSubscriberId(request, user);
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            try {
+                Subscriber subscriber = new Subscriber(subscriberId);
+                session.save(subscriber);
+                transaction.commit();
+                loggerHelper.urlInvokePersistablelogs("subscriber done");
+                return ResponseEntity.ok(subscriber);
+            } catch (PersistenceException e) {
+                transaction.rollback();
+                throw new ConflictException("Failed creating subscriber");
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
         }
     }
 
     @GetMapping("/subscriber/{subscriberId}")
-    public ResponseEntity getBySubscriberId(@PathVariable("subscriberId") String subscriberId) {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", subscriberId);
-            List<Subscriber> subscribers = query.getResultList();
-            if(subscribers.size()==0) {
-                String errorMessage = "Could not find subscriber";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                return new ResponseEntity<>(obj.toString(), HttpStatus.NOT_FOUND);
-            } else {
-                Subscriber subscriber = subscribers.get(0);
-                return ResponseEntity.ok(subscriber);
-            }
+    public ResponseEntity<Subscriber> getBySubscriberId(@PathVariable("subscriberId") String subscriberId) throws HttpNotFoundException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Subscriber subscriber = this.getSubscriber(session, subscriberId);
+            return ResponseEntity.ok(subscriber);
         }
     }
 
     @DeleteMapping("/subscriber/")
-    public ResponseEntity<Subscriber> deleteBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<Subscriber> deleteBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.urlInvokePersistablelogs("subscriber");
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
-
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-            List<Subscriber> subscribers = query.getResultList();
-            if(subscribers.isEmpty()) {
-                String errorMessage = "Subscription could not be found";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.error(errorMessage, errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-            } else {
-                Transaction transaction = session.beginTransaction();
-                Subscriber subscriber = subscribers.get(0);
-                session.delete(subscriber);
-                transaction.commit();
-                loggerHelper.urlInvokePersistablelogs("subscriber done");
-                return ResponseEntity.ok(subscriber);
-            }
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            String subscriberId = this.getSubscriberId(request, user);
+            Subscriber subscriber = this.getSubscriber(session, subscriberId);
+            Transaction transaction = session.beginTransaction();
+            session.delete(subscriber);
+            transaction.commit();
+            loggerHelper.urlInvokePersistablelogs("subscriber done");
+            return ResponseEntity.ok(subscriber);
         }
     }
 
 
-
     /**
-     * Get a list of all businessEventSubscribtions
+     * Get a list of all businessEventSubscriptions
+     *
      * @return
      */
     @GetMapping("/subscriber/subscription/businesseventSubscription")
-    public ResponseEntity<List<BusinessEventSubscription>> businessEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+    public ResponseEntity<List<BusinessEventSubscription>> businessEventSubscriptionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
+            String subscriberId = this.getSubscriberId(request, user);
+            Subscriber subscriber = this.getSubscriber(session, subscriberId);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
-
-            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             Iterator<BusinessEventSubscription> subscriptions = subscriber.getBusinessEventSubscription().iterator();
-            List <BusinessEventSubscription> list = new ArrayList <BusinessEventSubscription>();
-            while(subscriptions.hasNext()) {
+            List<BusinessEventSubscription> list = new ArrayList<BusinessEventSubscription>();
+            while (subscriptions.hasNext()) {
                 list.add(subscriptions.next());
             }
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
@@ -200,37 +219,27 @@ public class ManageSubscription {
         }
     }
 
+
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/subscription/businesseventSubscription/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity businessEventSubscribtionCreate(HttpServletRequest request,
-                                                          @RequestParam(value = "businessEventId",required=false, defaultValue = "") String businessEventId,
-                                                          @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) {
+    public ResponseEntity businessEventSubscriptionCreate(HttpServletRequest request,
+                                                          @RequestParam(value = "businessEventId", required = false, defaultValue = "") String businessEventId,
+                                                          @RequestParam(value = "kodeId", required = false, defaultValue = "") String kodeId,
+                                                          @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws HttpNotFoundException, InvalidTokenException, AccessDeniedException, InvalidCertificateException, ConflictException {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             CprList cprListItem = null;
-            if(!"".equals(cprList)) {
-                Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-                cprListQuery.setParameter("listId", cprList);
-
-                if(cprListQuery.getResultList().isEmpty()) {
-                    String errorMessage = "Subscription could not be found";
-                    ObjectNode obj = objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.error(errorMessage, errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-                } else {
-                    cprListItem = (CprList) cprListQuery.getResultList().get(0);
-                }
+            if (!"".equals(cprList)) {
+                cprListItem = this.getCprList(session, cprList);
             }
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
 
-            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
+            String subscriberId = this.getSubscriberId(request, user);
+            Subscriber subscriber = this.getSubscriber(session, subscriberId);
+
             BusinessEventSubscription subscription = new BusinessEventSubscription(businessEventId, kodeId);
             subscription.setCprList(cprListItem);
             subscription.setSubscriber(subscriber);
@@ -240,363 +249,198 @@ public class ManageSubscription {
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
             return ResponseEntity.ok(subscription);
-        }  catch(PersistenceException e) {
-            String errorMessage = "Subscription already exists";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.warn(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
-        }  catch(Exception e) {
-            String errorMessage = "Failed adding element";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (PersistenceException e) {
+            throw new ConflictException("Subscription already exists", e);
         }
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/subscription/businesseventSubscription/{businessEventId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity businessEventSubscribtionUpdate(HttpServletRequest request, @PathVariable("businessEventId") String businessEventId,
-                                                          @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                          @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<BusinessEventSubscription> businessEventSubscriptionUpdate(HttpServletRequest request, @PathVariable("businessEventId") String businessEventId,
+                                                          @RequestParam(value = "kodeId", required = false, defaultValue = "") String kodeId,
+                                                          @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query subscriptionQuery = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
-            subscriptionQuery.setParameter("businessEventId", businessEventId);
-            if(subscriptionQuery.getResultList().isEmpty()) {
-                String errorMessage = "Subscription could not be found";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.error(errorMessage, errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-            } else {
-                DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-                LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
-                loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
-                Transaction transaction = session.beginTransaction();
-                BusinessEventSubscription subscription = (BusinessEventSubscription) subscriptionQuery.getResultList().get(0);
-
-                if(!subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    String errorMessage = "No access to this subscription";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                }
-                if(!"".equals(kodeId)) {
-                    subscription.setKodeId(kodeId);
-                }
-                CprList cprListItem = null;
-                if(!"".equals(cprList)) {
-                    Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-                    cprListQuery.setParameter("listId", cprList);
-
-                    if(cprListQuery.getResultList().isEmpty()) {
-                        String errorMessage = "CprList are unknown";
-                        ObjectNode obj = objectMapper.createObjectNode();
-                        obj.put("errorMessage", errorMessage);
-                        log.error(errorMessage, errorMessage);
-                        return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-                    } else {
-                        cprListItem = (CprList) cprListQuery.getResultList().get(0);
-                        subscription.setCprList(cprListItem);
-                    }
-                }
-                session.update(subscription);
-                transaction.commit();
-                loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
-                return ResponseEntity.ok(subscription);
-            }
-        }
-    }
-
-    @GetMapping("/subscriber/subscription/businesseventSubscription/{subscriptionId}")
-    public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriptionId = :subscriptionId", Subscriber.class);
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            BusinessEventSubscription subscription = this.getBusinessEventSubscription(session, businessEventId);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
-            query.setParameter("subscriptionId", subscriptionId);
-            if(query.getResultList().size()==0) {
-                String errorMessage = "Subscription could not be found";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.error(errorMessage, errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-            } else {
-                BusinessEventSubscription subscriber = (BusinessEventSubscription) query.getResultList().get(0);
-                loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
-                return ResponseEntity.ok(subscriber);
+            Transaction transaction = session.beginTransaction();
+            String subscriberId = this.getSubscriberId(request, user);
+            if (!subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {
+                throw new AccessDeniedException("No access to this subscription");
             }
+            if (!"".equals(kodeId)) {
+                subscription.setKodeId(kodeId);
+            }
+            CprList cprListItem = null;
+            if (!"".equals(cprList)) {
+                cprListItem = this.getCprList(session, cprList);
+                subscription.setCprList(cprListItem);
+            }
+            session.update(subscription);
+            transaction.commit();
+            loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
+            return ResponseEntity.ok(subscription);
+        }
+    }
+
+    @GetMapping("/subscriber/subscription/businesseventSubscription/{subscriptionId}")
+    public ResponseEntity<BusinessEventSubscription> businessEventSubscriptiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            BusinessEventSubscription subscription = this.getBusinessEventSubscription(session, subscriptionId);
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
+            loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
+            return ResponseEntity.ok(subscription);
         }
     }
 
     @DeleteMapping("/subscriber/subscription/businesseventSubscription/{subscriptionId}")
-    public ResponseEntity<BusinessEventSubscription> businessEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+    public ResponseEntity<BusinessEventSubscription> businessEventSubscriptiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) throws HttpNotFoundException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ BusinessEventSubscription.class.getName() +" where businessEventId = :businessEventId", BusinessEventSubscription.class);
-            query.setParameter("businessEventId", subscriptionId);
-            if(query.getResultList().isEmpty()) {
-                String errorMessage = "Subscription could not be found";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.error(errorMessage, errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
+            BusinessEventSubscription subscription = this.getBusinessEventSubscription(session, subscriptionId);
+
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
+            String subscriberId = this.getSubscriberId(request, user);
+            if (subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {
+                subscription.getSubscriber().removeBusinessEventSubscription(subscription);
+                session.delete(subscription);
+                transaction.commit();
+                loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
+                return ResponseEntity.ok(subscription);
             } else {
-                BusinessEventSubscription subscription = (BusinessEventSubscription) query.getResultList().get(0);
-                DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-                LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
-                loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
-                if(subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    subscription.getSubscriber().removeBusinessEventSubscription(subscription);
-                    session.delete(subscription);
-                    transaction.commit();
-                    loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-                    return ResponseEntity.ok(subscription);
-                } else {
-                    transaction.rollback();
-                    String errorMessage = "No access to this subscription";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                }
+                transaction.rollback();
+                throw new AccessDeniedException("No access to this subscription");
             }
-        } catch (Exception e) {
-            log.error("Failed acessing webservice: ", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Get a list of all dataEventSubscribtions
+     * Get a list of all dataEventSubscriptions
+     *
      * @return
      */
     @GetMapping("/subscriber/subscription/dataeventSubscription")
-    public ResponseEntity<List<DataEventSubscription>> dataEventSubscribtionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+    public ResponseEntity<List<DataEventSubscription>> dataEventSubscriptionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            List <DataEventSubscription> list = new ArrayList <DataEventSubscription>(subscriber.getDataEventSubscription());
+            String subscriberId = this.getSubscriberId(request, user);
+            Subscriber subscriber = this.getSubscriber(session, subscriberId);
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-            return ResponseEntity.ok(list);
+            return ResponseEntity.ok(new ArrayList<>(subscriber.getDataEventSubscription()));
         }
     }
 
 
-
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/subscription/dataeventSubscription/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity dataEventSubscribtionCreate(HttpServletRequest request,
-                                                      @RequestParam(value = "dataEventId",required=false, defaultValue = "") String dataEventId,
-                                                      @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                      @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
-                                                      @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) {
+    public ResponseEntity<DataEventSubscription> dataEventSubscriptionCreate(HttpServletRequest request,
+                                                      @RequestParam(value = "dataEventId", required = false, defaultValue = "") String dataEventId,
+                                                      @RequestParam(value = "kodeId", required = false, defaultValue = "") String kodeId,
+                                                      @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList,
+                                                      @RequestParam(value = "cvrList", required = false, defaultValue = "") String cvrList) throws HttpNotFoundException, InvalidTokenException, AccessDeniedException, InvalidCertificateException, ConflictException {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             CprList cprListItem = null;
-            if(!cprList.isEmpty()) {
-                Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-                cprListQuery.setParameter("listId", cprList);
-
-                if(cprListQuery.getResultList().isEmpty()) {
-                    String errorMessage = "Subscription could not be found";
-                    ObjectNode obj = objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.error(errorMessage, errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-                } else {
-                    cprListItem = (CprList) cprListQuery.getResultList().get(0);
-                }
+            if (!cprList.isEmpty()) {
+                cprListItem = this.getCprList(session, cprList);
             }
             CvrList cvrListItem = null;
-            if(!cvrList.isEmpty()) {
-                Query cvrListQuery = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
-                cvrListQuery.setParameter("listId", cvrList);
-
-                if(cvrListQuery.getResultList().isEmpty()) {
-                    String errorMessage = "CvrList are unknown";
-                    ObjectNode obj = objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.error(errorMessage, errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-                } else {
-                    cvrListItem = (CvrList) cvrListQuery.getResultList().get(0);
-                }
+            if (!cvrList.isEmpty()) {
+                cvrListItem = this.getCvrList(session, cvrList);
             }
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            String subscriberId = this.getSubscriberId(request, user);
+            Subscriber subscriber = this.getSubscriber(session, subscriberId);
 
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"));
-
-            Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             DataEventSubscription subscription = new DataEventSubscription(dataEventId, kodeId);
             subscription.setCprList(cprListItem);
             subscription.setCvrList(cvrListItem);
             subscription.setSubscriber(subscriber);
             subscriber.addDataEventSubscription(subscription);
-
             session.update(subscriber);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
             return ResponseEntity.ok(subscription);
-        }  catch(PersistenceException e) {
-            String errorMessage = "Subscription already exists";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.warn(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
-        }  catch(Exception e) {
-            String errorMessage = "Failed adding element";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        } catch (PersistenceException e) {
+            throw new ConflictException("Subscription already exists", e);
         }
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/subscriber/subscription/dataeventSubscription/{dataEventId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity dataEventSubscribtionUpdate(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId,
-                                                      @RequestParam(value = "kodeId",required=false, defaultValue = "") String kodeId,
-                                                      @RequestParam(value = "cprList",required=false, defaultValue = "") String cprList,
-                                                      @RequestParam(value = "cvrList",required=false, defaultValue = "") String cvrList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<DataEventSubscription> dataEventSubscriptionUpdate(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId,
+                                                      @RequestParam(value = "kodeId", required = false, defaultValue = "") String kodeId,
+                                                      @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList,
+                                                      @RequestParam(value = "cvrList", required = false, defaultValue = "") String cvrList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-
-            Query subscribtionQuery = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
-            subscribtionQuery.setParameter("dataEventId", dataEventId);
-            if(subscribtionQuery.getResultList().isEmpty()) {
-                String errorMessage = "Subscription could not be found";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.error(errorMessage, errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-            } else {
-                DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-                LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
-                loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
-                DataEventSubscription subscribtion = (DataEventSubscription) subscribtionQuery.getResultList().get(0);
-                if(!subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    String errorMessage = "No access to this subscription";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                }
-                if(!"".equals(kodeId)) {
-                    subscribtion.setKodeId(kodeId);
-                }
-                CprList cprListItem = null;
-                if(!"".equals(cprList)) {
-                    Query cprListQuery = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
-                    cprListQuery.setParameter("listId", cprList);
-
-                    if(cprListQuery.getResultList().isEmpty()) {
-                        String errorMessage = "CprList are unknown";
-                        ObjectNode obj = objectMapper.createObjectNode();
-                        obj.put("errorMessage", errorMessage);
-                        log.error(errorMessage, errorMessage);
-                        return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-                    } else {
-                        cprListItem = (CprList) cprListQuery.getResultList().get(0);
-                        subscribtion.setCprList(cprListItem);
-                    }
-                }
-                CvrList cvrListItem = null;
-                if(!"".equals(cvrList)) {
-                    Query cvrListQuery = session.createQuery(" from "+ CvrList.class.getName() +" where listId = :listId", CvrList.class);
-                    cvrListQuery.setParameter("listId", cvrList);
-
-                    if(cvrListQuery.getResultList().isEmpty()) {
-                        String errorMessage = "CvrList are unknown";
-                        ObjectNode obj = objectMapper.createObjectNode();
-                        obj.put("errorMessage", errorMessage);
-                        log.error(errorMessage, errorMessage);
-                        return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-                    } else {
-                        cvrListItem = (CvrList) cvrListQuery.getResultList().get(0);
-                        subscribtion.setCvrList(cvrListItem);
-                    }
-                }
-                session.update(subscribtion);
-                transaction.commit();
-                loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-                return ResponseEntity.ok(subscribtion);
-            }
-        }
-    }
-
-    @GetMapping("/subscriber/subscription/dataeventSubscription/{subscribtionId}")
-    public ResponseEntity<DataEventSubscription> dataEventSubscribtiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscribtionId") String subscribtionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-            Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where subscribtionId = :subscribtionId", Subscriber.class);
-
+            DataEventSubscription subscription = this.getDataEventSubscription(session, dataEventId);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
-            query.setParameter("subscribtionId", subscribtionId);
-            if(query.getResultList().size()==0) {
-                String errorMessage = "Subscription could not be found";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.error(errorMessage, errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
-            } else {
-                DataEventSubscription subscriber = (DataEventSubscription) query.getResultList().get(0);
-                loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-                return ResponseEntity.ok(subscriber);
+            String subscriberId = this.getSubscriberId(request, user);
+            if (!subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {
+                throw new AccessDeniedException("No access to this subscription");
             }
+            if (!"".equals(kodeId)) {
+                subscription.setKodeId(kodeId);
+            }
+            if (!"".equals(cprList)) {
+                CprList cprListItem = this.getCprList(session, cprList);
+                subscription.setCprList(cprListItem);
+            }
+            if (!"".equals(cvrList)) {
+                CvrList cvrListItem = this.getCvrList(session, cvrList);
+                subscription.setCvrList(cvrListItem);
+            }
+            session.update(subscription);
+            transaction.commit();
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
+            return ResponseEntity.ok(subscription);
+        }
+    }
+
+    @GetMapping("/subscriber/subscription/dataeventSubscription/{subscriptionId}")
+    public ResponseEntity<DataEventSubscription> dataEventSubscriptiongetBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            DataEventSubscription subscription = this.getDataEventSubscription(session, dataEventId);
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
+            return ResponseEntity.ok(subscription);
         }
     }
 
     @DeleteMapping("/subscriber/subscription/dataeventSubscription/{dataEventId}")
-    public ResponseEntity<DataEventSubscription> dataEventSubscribtiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) {
-
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-
-            Query query = session.createQuery(" from "+ DataEventSubscription.class.getName() +" where dataEventId = :dataEventId", DataEventSubscription.class);
-            query.setParameter("dataEventId", dataEventId);
-            if(query.getResultList().size()==0) {
-                String errorMessage = "Subscription could not be found";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.error(errorMessage, errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<DataEventSubscription> dataEventSubscriptionDeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws HttpNotFoundException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            DataEventSubscription subscription = this.getDataEventSubscription(session, dataEventId);
+            Transaction transaction = session.beginTransaction();
+            DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
+            String subscriberId = this.getSubscriberId(request, user);
+            if (subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {
+                subscription.getSubscriber().removeDataEventSubscription(subscription);
+                session.delete(subscription);
+                transaction.commit();
+                loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
+                return ResponseEntity.ok(subscription);
             } else {
-
-                DataEventSubscription subscribtion = (DataEventSubscription) query.getResultList().get(0);
-                Transaction transaction = session.beginTransaction();
-                DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-                LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
-                loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
-                if(subscribtion.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/","_"))) {
-                    subscribtion.getSubscriber().removeDataEventSubscription(subscribtion);
-                    session.delete(subscribtion);
-                    transaction.commit();
-                    loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-                    return ResponseEntity.ok(subscribtion);
-                } else {
-                    transaction.rollback();
-                    String errorMessage = "No access to this subscription";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                }
+                transaction.rollback();
+                throw new AccessDeniedException("No access to this subscription");
             }
-        } catch (Exception e) {
-            log.error("Failed acessing webservice: ", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

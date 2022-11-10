@@ -42,7 +42,7 @@ public class CompanyOwnerService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Logger log = LogManager.getLogger(CompanyOwnerService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CompanyOwnerService.class.getCanonicalName());
 
 
     @RequestMapping(
@@ -88,10 +88,9 @@ public class CompanyOwnerService {
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 

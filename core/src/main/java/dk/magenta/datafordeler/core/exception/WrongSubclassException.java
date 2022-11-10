@@ -6,8 +6,8 @@ package dk.magenta.datafordeler.core.exception;
  */
 public class WrongSubclassException extends DataFordelerException {
 
-    private Class[] expectedClasses;
-    private Object receivedObject;
+    private final Class[] expectedClasses;
+    private final Object receivedObject;
 
     public WrongSubclassException(Class expectedClass, Object receivedObject) {
         this(new Class[]{expectedClass}, receivedObject);

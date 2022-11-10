@@ -7,35 +7,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+
 import static dk.magenta.datafordeler.core.fapi.OutputWrapper.Mode.DATAONLY;
 
 /**
  * A class for formatting a CompanyEntity to JSON, for FAPI output. The data hierarchy
  * under a Company is sorted into this format:
  * {
- *     "UUID": <company uuid>
- *     "cvrnummer": <company cvr number>
- *     "id": {
- *         "domaene": <company domain>
- *     },
- *     registreringer: [
- *          {
- *              "registreringFra": <registrationFrom>,
- *              "registreringTil": <registrationTo>,
- *              "navn": [
- *              {
- *                  "navn": <companyName1>
- *                  "virkningFra": <effectFrom1>
- *                  "virkningTil": <effectTo1>
- *              },
- *              {
- *                  "navn": <companyName2>
- *                  "virkningFra": <effectFrom2>
- *                  "virkningTil": <effectTo2>
- *              }
- *              ]
- *          }
- *     ]
+ * "UUID": <company uuid>
+ * "cvrnummer": <company cvr number>
+ * "id": {
+ * "domaene": <company domain>
+ * },
+ * registreringer: [
+ * {
+ * "registreringFra": <registrationFrom>,
+ * "registreringTil": <registrationTo>,
+ * "navn": [
+ * {
+ * "navn": <companyName1>
+ * "virkningFra": <effectFrom1>
+ * "virkningTil": <effectTo1>
+ * },
+ * {
+ * "navn": <companyName2>
+ * "virkningFra": <effectFrom2>
+ * "virkningTil": <effectTo2>
+ * }
+ * ]
+ * }
+ * ]
  * }
  */
 @Component

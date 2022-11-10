@@ -26,32 +26,31 @@ import java.util.zip.InflaterInputStream;
  */
 @Component
 public class TokenParser {
-  public Assertion parseAssertion(String fromString) throws InvalidTokenException {
-    try {
-      byte[] decodedBytes = Base64.decode(fromString);
-      if (decodedBytes == null){
-        throw new MessageDecodingException("Unable to Base64 decode incoming message");
-      }
+    public Assertion parseAssertion(String fromString) throws InvalidTokenException {
+        try {
+            byte[] decodedBytes = Base64.decode(fromString);
+            if (decodedBytes == null) {
+                throw new MessageDecodingException("Unable to Base64 decode incoming message");
+            }
 
-      Inflater inflater = new Inflater(true);
-      ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
-      InflaterInputStream in = new InflaterInputStream(bytesIn, new Inflater(true));
+            Inflater inflater = new Inflater(true);
+            ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
+            InflaterInputStream in = new InflaterInputStream(bytesIn, new Inflater(true));
 
-      DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-      documentBuilderFactory.setNamespaceAware(true);
-      DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(true);
+            DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
 
-      Document document = docBuilder.parse(in);
-      Element element = document.getDocumentElement();
+            Document document = docBuilder.parse(in);
+            Element element = document.getDocumentElement();
 
-      UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
-      Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
+            UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
+            Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
 
-      return (Assertion) unmarshaller.unmarshall(element);
+            return (Assertion) unmarshaller.unmarshall(element);
+        } catch (IOException | ParserConfigurationException | SAXException | UnmarshallingException |
+                MessageDecodingException e) {
+            throw new InvalidTokenException("Could not parse authorization token", e);
+        }
     }
-    catch (IOException |ParserConfigurationException |SAXException |UnmarshallingException |
-        MessageDecodingException e) {
-      throw new InvalidTokenException("Could not parse authorization token", e);
-    }
-  }
 }

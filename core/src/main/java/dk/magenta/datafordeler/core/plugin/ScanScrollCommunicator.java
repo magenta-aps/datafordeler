@@ -17,14 +17,15 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * A special Communicator that fetches data over a HTTP connection by the
- * scan-scroll pattern: We specify the query in a POST, then get a handle back 
- * that we can use in a series of subsequent GET requests to get all the data 
+ * scan-scroll pattern: We specify the query in a POST, then get a handle back
+ * that we can use in a series of subsequent GET requests to get all the data
  * (which tends to be a lot).
  */
 public class ScanScrollCommunicator extends HttpCommunicator {
@@ -42,7 +43,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
         super(keystoreFile, keystorePassword);
     }
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private String scrollIdJsonKey = "scroll_id";
 
@@ -54,7 +55,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
     private Pattern scrollIdPattern;
 
     private void recompilePattern() {
-        this.scrollIdPattern = Pattern.compile("\""+this.scrollIdJsonKey+"\":\\s*\"([^\"]+)\"");
+        this.scrollIdPattern = Pattern.compile("\"" + this.scrollIdJsonKey + "\":\\s*\"([^\"]+)\"");
     }
 
     public static char delimiter = '\n';
@@ -72,12 +73,12 @@ public class ScanScrollCommunicator extends HttpCommunicator {
         this.uncaughtExceptionHandler = uncaughtExceptionHandler;
     }
 
-    private static Logger log = LogManager.getLogger(ScanScrollCommunicator.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(ScanScrollCommunicator.class.getCanonicalName());
 
 
-    private Pattern emptyResultsPattern = Pattern.compile("\"hits\":\\s*\\[\\s*\\]");
+    private final Pattern emptyResultsPattern = Pattern.compile("\"hits\":\\s*\\[\\s*\\]");
 
-    private HashMap<InputStream, Thread> fetches = new HashMap();
+    private final HashMap<InputStream, Thread> fetches = new HashMap();
 
     /**
      * Fetch data from the external source; sends a POST to the initialUri,
@@ -97,7 +98,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
 
         PipedInputStream inputStream = new PipedInputStream(); // Return this one
         BufferedOutputStream outputStream = new BufferedOutputStream(new PipedOutputStream(inputStream));
-        final OutputStreamWriter writer = new OutputStreamWriter(outputStream, "utf-8");
+        final OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
 
         log.info("Streams created");
         Thread fetcher = new Thread(new Runnable() {
@@ -131,7 +132,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                     writer.flush();
 
                     String scrollId = responseNode.get(ScanScrollCommunicator.this.scrollIdJsonKey).asText();
-                    if(scrollId != null) {
+                    if (scrollId != null) {
                         writer.append(delimiter);
                     }
                     while (scrollId != null) {
@@ -180,7 +181,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                             writer.flush();
                             if (throttle > 0) {
                                 try {
-                                    log.info("Waiting "+throttle+" milliseconds before next request");
+                                    log.info("Waiting " + throttle + " milliseconds before next request");
                                     Thread.sleep(throttle);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
@@ -193,7 +194,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         writer.flush();
                     }
                 } catch (DataStreamException | IOException | URISyntaxException | HttpStatusException e) {
-                    ScanScrollCommunicator.this.log.error(e);
+                    log.error(e);
                     throw new RuntimeException(e);
                 } finally {
                     try {

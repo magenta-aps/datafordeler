@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CivilStatusFilter extends Filter {
 
     private String civilStatus;
-    private String eventName;
+    private final String eventName;
 
 
     public CivilStatusFilter(HttpServletRequest request, boolean timeintervallimit) throws Exception {

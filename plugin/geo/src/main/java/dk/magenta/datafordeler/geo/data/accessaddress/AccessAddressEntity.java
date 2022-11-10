@@ -34,7 +34,7 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
 
     public static final String TABLE_NAME = "geo_access_address";
 
-    @JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="type")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
     public static final String schema = "AccessAddress";
 
     public AccessAddressEntity() {
@@ -46,10 +46,9 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     }
 
     public static UUID generateUUID(String bnr) {
-        String uuidInput = "adgangsadresse:"+bnr;
+        String uuidInput = "adgangsadresse:" + bnr;
         return UUID.nameUUIDFromBytes(uuidInput.getBytes());
     }
-
 
 
     public static final String DB_FIELD_BNR = "bnr";
@@ -85,7 +84,7 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     }
 
 
-    public static final String DB_FIELD_BLOCK_NAME= "blockName";
+    public static final String DB_FIELD_BLOCK_NAME = "blockName";
     public static final String IO_FIELD_BLOCK_NAME = "blokNavn";
     @OneToMany(mappedBy = AccessAddressBlockNameRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
     @Filters({
@@ -100,7 +99,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     public MonotemporalSet<AccessAddressBlockNameRecord> getBlockName() {
         return new MonotemporalSet<>(this.blockName);
     }
-
 
 
     public static final String DB_FIELD_ROAD = "road";
@@ -120,7 +118,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     }
 
 
-
     public static final String DB_FIELD_LOCALITY = "locality";
     public static final String IO_FIELD_LOCALITY = "lokalitet";
     @OneToMany(mappedBy = AccessAddressLocalityRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -136,7 +133,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     public MonotemporalSet<AccessAddressLocalityRecord> getLocality() {
         return new MonotemporalSet<>(this.locality);
     }
-
 
 
     public static final String DB_FIELD_POSTCODE = "postcode";
@@ -156,7 +152,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     }
 
 
-
     public static final String DB_FIELD_BUILDING = "building";
     public static final String IO_FIELD_BUILDING = "building";
     @OneToMany(mappedBy = AccessAddressBuildingReferenceRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -172,7 +167,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     public MonotemporalSet<AccessAddressBuildingReferenceRecord> getBuilding() {
         return new MonotemporalSet<>(this.building);
     }
-
 
 
     public static final String DB_FIELD_STATUS = "status";
@@ -192,7 +186,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     }
 
 
-
     public static final String DB_FIELD_SOURCE = "source";
     public static final String IO_FIELD_SOURCE = "source";
     @OneToMany(mappedBy = AccessAddressSourceRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
@@ -209,7 +202,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
         return new MonotemporalSet<>(this.source);
     }
 
-    
 
     public static final String DB_FIELD_SHAPE = "shape";
     public static final String IO_FIELD_SHAPE = "form";
@@ -226,7 +218,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     public MonotemporalSet<AccessAddressShapeRecord> getShape() {
         return new MonotemporalSet<>(this.shape);
     }
-
 
 
     @Override

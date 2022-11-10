@@ -28,18 +28,21 @@ public abstract class Plugin {
 
     /**
      * Get the unique name for the plugin
+     *
      * @return
      */
     public abstract String getName();
 
     /**
      * Get the plugin's RegisterManager implementation
+     *
      * @return
      */
     public abstract RegisterManager getRegisterManager();
 
     /**
      * Returns whether this plugin can handle input of the given schema
+     *
      * @param schema
      * @return
      */
@@ -50,6 +53,7 @@ public abstract class Plugin {
 
     /**
      * Get the plugin's EntityManager implementation for the given schema
+     *
      * @return
      */
     public final EntityManager getEntityManager(String schema) {
@@ -59,6 +63,7 @@ public abstract class Plugin {
 
     /**
      * Get the plugin's EntityManager implementation for the given URI
+     *
      * @return
      */
     public final EntityManager getEntityManager(URI uri) {
@@ -68,6 +73,7 @@ public abstract class Plugin {
 
     /**
      * Get the plugin's ConfigurationManager implementation
+     *
      * @return
      */
     public abstract ConfigurationManager getConfigurationManager();
@@ -98,7 +104,9 @@ public abstract class Plugin {
         return this.pluginManager;
     }
 
-    public String getJoinString(Map<String, String> handles) { return ""; }
+    public String getJoinString(Map<String, String> handles) {
+        return "";
+    }
 
     public LinkedHashMap<String, Class> getJoinClassAliases(Collection<String> handles) {
         return new LinkedHashMap<>();

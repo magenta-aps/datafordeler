@@ -42,7 +42,8 @@ public class AccessAddressRawData extends SumiffiikRawData {
         public void setRoadcode(String roadCode) {
             try {
                 this.roadcode = Integer.parseInt(roadCode, 10);
-            } catch (NumberFormatException|NullPointerException e) {}
+            } catch (NumberFormatException | NullPointerException e) {
+            }
         }
 
         @JsonProperty("DataKilde")

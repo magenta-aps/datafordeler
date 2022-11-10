@@ -33,12 +33,13 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.time.LocalDate;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @RestController
@@ -63,7 +64,7 @@ public class CvrServiceDirect extends CvrRecordService {
     @Autowired
     private GerCompanyLookup gerCompanyLookup;
 
-    private Logger log = LogManager.getLogger(CvrServiceDirect.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CvrServiceDirect.class.getCanonicalName());
 
 
     @PostConstruct
@@ -167,7 +168,6 @@ public class CvrServiceDirect extends CvrRecordService {
                 Stream<ObjectNode> formattedOutput = Stream.concat(cvrFormattedOutput, gerFormattedOutput);
 
 
-
                 try {
                     final BooleanWrapper first = new BooleanWrapper();
                     first.value = true;
@@ -185,13 +185,13 @@ public class CvrServiceDirect extends CvrRecordService {
                             try {
                                 sb.append("\"" + jsonNode.get("cvrNummer").textValue() + "\":");
                                 sb.append(objectMapper.writeValueAsString(jsonNode));
-                                outputStream.write(sb.toString().getBytes("UTF-8"));
+                                outputStream.write(sb.toString().getBytes(StandardCharsets.UTF_8));
                                 outputStream.flush();
                             } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                                e.printStackTrace();
+                            }
 
-                    }
+                        }
                     });
                     outputStream.write(END_OBJECT);
                     outputStream.flush();

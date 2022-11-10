@@ -20,9 +20,9 @@ public class GerCompanyLookup {
         List<CompanyEntity> companyEntities = QueryManager.getAllEntities(session, query, CompanyEntity.class);
         return new HashSet<>(companyEntities);
     }
-    
-    private HashMap<UUID, String> statusMap = new HashMap<>();
-    
+
+    private final HashMap<UUID, String> statusMap = new HashMap<>();
+
     @PostConstruct
     public void init() {
         this.statusMap.put(UUID.fromString("c088142e-af1b-4762-9253-ea630e555c97"), "fremtid: fremtid");
@@ -53,5 +53,5 @@ public class GerCompanyLookup {
     public String getStatus(UUID uuid) {
         return this.statusMap.get(uuid);
     }
-    
+
 }

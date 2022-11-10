@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,7 +49,7 @@ public class GeoRegisterManager extends RegisterManager {
     @Autowired
     private SessionManager sessionManager;
 
-    private Logger log = LogManager.getLogger("dk.magenta.datafordeler.geo.GeoRegisterManager");
+    private final Logger log = LogManager.getLogger(GeoRegisterManager.class.getCanonicalName());
 
     @Value("${dafo.geo.proxy-url:}")
     private String proxyString;
@@ -67,7 +68,7 @@ public class GeoRegisterManager extends RegisterManager {
     @PostConstruct
     public void init() throws IOException {
         if (this.localCopyFolder == null || this.localCopyFolder.isEmpty()) {
-            File temp = File.createTempFile("datafordeler-cache","");
+            File temp = File.createTempFile("datafordeler-cache", "");
             temp.delete();
             temp.mkdir();
             this.localCopyFolder = temp.getAbsolutePath();
@@ -118,12 +119,12 @@ public class GeoRegisterManager extends RegisterManager {
             lastUpdateTime = OffsetDateTime.parse("1900-01-01T00:00:00Z");
             log.info("Last update time not found");
         } else {
-            log.info("Last update time: "+lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
         }
 
         String address = this.configurationManager.getConfiguration().getURL(entityManager.getSchema());
         if (address == null || address.isEmpty()) {
-            throw new ConfigurationException("Invalid URL for schema "+entityManager.getSchema()+": "+address);
+            throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address);
         }
         address = address.replace("%{editDate}", lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
@@ -131,7 +132,7 @@ public class GeoRegisterManager extends RegisterManager {
             URL url = new URL(address);
             return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
         } catch (URISyntaxException | MalformedURLException e) {
-            throw new ConfigurationException("Invalid URL for schema "+entityManager.getSchema()+": "+address, e);
+            throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address, e);
         }
     }
 
@@ -144,12 +145,12 @@ public class GeoRegisterManager extends RegisterManager {
             lastUpdateTime = OffsetDateTime.parse("1900-01-01T00:00:00Z");
             log.info("Last update time not found");
         } else {
-            log.info("Last update time: "+lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
         }
 
         String address = this.configurationManager.getConfiguration().getDeletionURL(entityManager.getSchema());
         if (address == null || address.isEmpty()) {
-            throw new ConfigurationException("Invalid URL for schema "+entityManager.getSchema()+": "+address);
+            throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address);
         }
         address = address.replace("%{editDate}", lastUpdateTime.minusDays(30).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
@@ -157,7 +158,7 @@ public class GeoRegisterManager extends RegisterManager {
             URL url = new URL(address);
             return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
         } catch (URISyntaxException | MalformedURLException e) {
-            throw new ConfigurationException("Invalid URL for schema "+entityManager.getSchema()+": "+address, e);
+            throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address, e);
         }
     }
 
@@ -174,7 +175,7 @@ public class GeoRegisterManager extends RegisterManager {
     @Override
     public ImportInputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
 
-        this.log.info("eventInterface: "+eventInterface);
+        this.log.info("eventInterface: " + eventInterface);
         GeoConfiguration configuration = this.configurationManager.getConfiguration();
         GeoConfiguration.RegisterType registerType = configuration.getRegisterType(entityManager.getSchema());
         if (registerType == null) {
@@ -222,7 +223,7 @@ public class GeoRegisterManager extends RegisterManager {
                             String token = this.getToken(tokenUrl, configuration.getUsername(), configuration.getPassword());
                             Map<String, String> headers = Collections.singletonMap("Authorization", "Bearer " + token);
                             for (int offset = 0; offset < 1000000000; offset += count) {
-                                String offsetQuery = URLDecoder.decode(query.replace("%{offset}", Integer.toString(offset)), "utf-8");
+                                String offsetQuery = URLDecoder.decode(query.replace("%{offset}", Integer.toString(offset)), StandardCharsets.UTF_8);
                                 eventInterface = new URI(eventInterface.getScheme(), eventInterface.getUserInfo(), eventInterface.getHost(), eventInterface.getPort(), eventInterface.getPath(), offsetQuery, eventInterface.getFragment());
 
                                 responseBody = communicator.get(eventInterface, headers);
@@ -252,14 +253,14 @@ public class GeoRegisterManager extends RegisterManager {
                             throw e;
                         }
                     } else {
-                        log.info("Cache file "+cacheFile.getAbsolutePath()+" exists.");
+                        log.info("Cache file " + cacheFile.getAbsolutePath() + " exists.");
                     }
                 } catch (URISyntaxException | IOException e) {
                     throw new DataStreamException(e);
                 }
 
                 if (!errors.isEmpty()) {
-                    throw new ParseException("Error while loading data for "+entityManager.getSchema(), errors.get(0));
+                    throw new ParseException("Error while loading data for " + entityManager.getSchema(), errors.get(0));
                 }
 
                 try {
@@ -287,7 +288,7 @@ public class GeoRegisterManager extends RegisterManager {
                 }
             }
         } catch (ConfigurationException e) {
-            System.out.println("Incorrect configuration for deletion at entity manager "+entityManager.getClass().getSimpleName());
+            log.error("Incorrect configuration for deletion at entity manager " + entityManager.getClass().getSimpleName());
         }
     }
 

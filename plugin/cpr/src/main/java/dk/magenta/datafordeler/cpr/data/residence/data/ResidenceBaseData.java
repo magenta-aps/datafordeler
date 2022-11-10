@@ -20,7 +20,7 @@ import java.util.Map;
  * Base class for Residence data, linking to Effects and delegating storage to referred classes
  */
 @Entity
-@Table(name= CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_data", indexes = {
+@Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_data", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_lastUpdated", columnList = DataItem.DB_FIELD_LAST_UPDATED),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_municipality_code", columnList = ResidenceBaseData.DB_FIELD_MUNICIPALITY_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_road_code", columnList = ResidenceBaseData.DB_FIELD_ROAD_CODE),

@@ -14,7 +14,7 @@ public class BitemporalityComparator<B extends Bitemporality> implements Compara
         ALL
     }
 
-    private Type type;
+    private final Type type;
 
     public BitemporalityComparator(Type type) {
         this.type = type;
@@ -23,7 +23,7 @@ public class BitemporalityComparator<B extends Bitemporality> implements Compara
     private static final Comparator<OffsetDateTime> nullsFirst = Comparator.nullsFirst(OffsetDateTime.timeLineOrder());
     private static final Comparator<OffsetDateTime> nullsLast = Comparator.nullsLast(OffsetDateTime.timeLineOrder());
 
-    private static final Type[] comparisonOrder = new Type[] {Type.REGISTRATION_FROM, Type.REGISTRATION_TO, Type.EFFECT_FROM, Type.EFFECT_TO};
+    private static final Type[] comparisonOrder = new Type[]{Type.REGISTRATION_FROM, Type.REGISTRATION_TO, Type.EFFECT_FROM, Type.EFFECT_TO};
 
     @Override
     public int compare(Bitemporality o1, Bitemporality o2) {
@@ -76,27 +76,28 @@ public class BitemporalityComparator<B extends Bitemporality> implements Compara
     public static final BitemporalityComparator<Bitemporality> EFFECT = EFFECT_FROM.thenComparing(EFFECT_TO);
 
 
-
     public static <T extends Bitemporality> BitemporalityComparator<T> registrationFrom(Class<T> bitemporalityClass) {
         return new BitemporalityComparator<T>(Type.REGISTRATION_FROM);
     }
+
     public static <B extends Bitemporality> BitemporalityComparator<B> registrationTo(Class<B> bitemporalityClass) {
         return new BitemporalityComparator<B>(Type.REGISTRATION_TO);
     }
 
     public static <B extends Bitemporality> BitemporalityComparator<B> registration(Class<B> bitemporalityClass) {
-        return (BitemporalityComparator<B>) registrationFrom(bitemporalityClass).thenComparing(registrationTo(bitemporalityClass));
+        return registrationFrom(bitemporalityClass).thenComparing(registrationTo(bitemporalityClass));
     }
 
     public static <B extends Bitemporality> BitemporalityComparator<B> effectFrom(Class<B> bitemporalityClass) {
         return new BitemporalityComparator<B>(Type.EFFECT_FROM);
     }
+
     public static <B extends Bitemporality> BitemporalityComparator<B> effectTo(Class<B> bitemporalityClass) {
         return new BitemporalityComparator<B>(Type.EFFECT_FROM);
     }
 
     public static <B extends Bitemporality> BitemporalityComparator<B> effect(Class<B> bitemporalityClass) {
-        return (BitemporalityComparator<B>) effectFrom(bitemporalityClass).thenComparing(effectTo(bitemporalityClass));
+        return effectFrom(bitemporalityClass).thenComparing(effectTo(bitemporalityClass));
     }
 
     public static <B extends Bitemporality> BitemporalityComparator<B> all(Class<B> bitemporalityClass) {

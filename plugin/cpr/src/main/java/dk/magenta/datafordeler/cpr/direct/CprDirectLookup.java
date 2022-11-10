@@ -45,7 +45,7 @@ public class CprDirectLookup {
 
     private static final int ERR_TOKEN_EXPIRED = 7;
 
-    private Logger log = LogManager.getLogger(CprDirectLookup.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprDirectLookup.class.getCanonicalName());
 
     @PostConstruct
     public void init() {
@@ -63,6 +63,7 @@ public class CprDirectLookup {
             log.error(e); // This can't happen
         }
     }
+
     public void login(String newPassword) throws DataStreamException, ConfigurationException {
         CprConfiguration configuration = this.getConfiguration();
 
@@ -108,7 +109,7 @@ public class CprDirectLookup {
         int errorCode = Integer.parseInt(response.substring(22, 24));
 
         if (errorCode != 0) {
-            throw new DataStreamException("Login failed with error code: " + errorCode + ", errorText: "+response);
+            throw new DataStreamException("Login failed with error code: " + errorCode + ", errorText: " + response);
         }
 
         // parse out token, used for authentication on subsequent requests
@@ -118,7 +119,7 @@ public class CprDirectLookup {
     public PersonEntity getPerson(String pnr) throws DataStreamException {
         String rawData = null;
         rawData = this.lookup(pnr);
-        if(rawData!=null) {
+        if (rawData != null) {
             return this.parseResponse(rawData);
         } else {
             return null;
@@ -126,7 +127,7 @@ public class CprDirectLookup {
     }
 
     public String lookup(String pnr) throws DataStreamException {
-        if(!allowDirectPersonLookup) {
+        if (!allowDirectPersonLookup) {
             return null;
         }
 
@@ -136,7 +137,7 @@ public class CprDirectLookup {
 
         CprConfiguration configuration = this.getConfiguration(); // TODO: Cache configuration?
 
-        for (int attempt = 0; attempt<3; attempt++) {
+        for (int attempt = 0; attempt < 3; attempt++) {
             String dataType = "06";
             String request = String.format("%-39.39s",
                     configuration.getDirectTransactionCode() +
@@ -160,7 +161,8 @@ public class CprDirectLookup {
             if (errorCode == 0) {
                 // All ok, return response
                 return response;
-            } if (errorCode == 5) {
+            }
+            if (errorCode == 5) {
                 // Unknown cpr
                 log.warn("cpr not found " + pnr);
                 return null;
@@ -169,7 +171,7 @@ public class CprDirectLookup {
                 this.login();
             } else {
                 // Some other error, bail
-                throw new DataStreamException("Got statuscode "+errorCode+" from CPR Direct");
+                throw new DataStreamException("Got statuscode " + errorCode + " from CPR Direct");
             }
         }
         throw new DataStreamException("Failed lookup for CPR Direct: 3 attempts unsuccessful");
@@ -219,7 +221,7 @@ public class CprDirectLookup {
             // extended reason code available after standard error code
             int reasonCode = Integer.parseInt(response.substring(startErrorResponse + 2, startErrorResponse + 6));
             String reasonText = response.substring(startDataSection).trim();
-            log.info("Error reasonCode: "+reasonCode+", reasonText: "+reasonText);
+            log.info("Error reasonCode: " + reasonCode + ", reasonText: " + reasonText);
         }
 
         return errorCode;
@@ -301,7 +303,7 @@ public class CprDirectLookup {
                                     break;
                             }
                         } catch (ParseException e) {
-                            throw new DataStreamException("Failed parsing record of type "+recordType, e);
+                            throw new DataStreamException("Failed parsing record of type " + recordType, e);
                         }
                         if (parsedRecord != null) {
                             if (pnr == null) {
@@ -328,7 +330,8 @@ public class CprDirectLookup {
         }
     }
 
-    private static Mapping personRecordMapping = new Mapping();
+    private static final Mapping personRecordMapping = new Mapping();
+
     static {
         personRecordMapping.add("pnrgaeld", 14, 10);
         personRecordMapping.add("status", 24, 2);
@@ -344,7 +347,8 @@ public class CprDirectLookup {
         personRecordMapping.add("stilling", 73, 34);
     }
 
-    private static Mapping addressRecordMapping = new Mapping();
+    private static final Mapping addressRecordMapping = new Mapping();
+
     static {
         addressRecordMapping.add("komkod", 14, 4);
         addressRecordMapping.add("vejkod", 18, 4);
@@ -370,14 +374,16 @@ public class CprDirectLookup {
         addressRecordMapping.add("slet_dt-adtxt", 297, 10);
     }
 
-    private static Mapping protectionRecordMapping = new Mapping();
+    private static final Mapping protectionRecordMapping = new Mapping();
+
     static {
         protectionRecordMapping.add("beskyttype", 14, 4);
         protectionRecordMapping.add("start_dt-beskyttelse", 18, 10);
         protectionRecordMapping.add("slet_dt-beskyttelse", 28, 10);
     }
 
-    private static Mapping foreignAddressRecordMapping = new Mapping();
+    private static final Mapping foreignAddressRecordMapping = new Mapping();
+
     static {
         foreignAddressRecordMapping.add("udr_landekod", 14, 4);
         foreignAddressRecordMapping.add("udrdto", 18, 12);
@@ -389,7 +395,8 @@ public class CprDirectLookup {
         foreignAddressRecordMapping.add("udlandadr5", 167, 34);
     }
 
-    private static Mapping nameRecordMapping = new Mapping();
+    private static final Mapping nameRecordMapping = new Mapping();
+
     static {
         nameRecordMapping.add("fornvn", 14, 50);
         nameRecordMapping.add("fornvn_mrk", 64, 1);
@@ -402,13 +409,15 @@ public class CprDirectLookup {
         nameRecordMapping.add("adrnvn", 160, 34);
     }
 
-    private static Mapping birthRecordMapping = new Mapping();
+    private static final Mapping birthRecordMapping = new Mapping();
+
     static {
         birthRecordMapping.add("start_mynkod-fødested", 14, 4);
         birthRecordMapping.add("myntxt-fødested", 18, 20);
     }
 
     public static final Mapping citizenshipRecordMapping = new Mapping();
+
     static {
         citizenshipRecordMapping.add("landekod", 14, 4);
         citizenshipRecordMapping.add("haenstart-statsborgerskab", 18, 12);
@@ -416,6 +425,7 @@ public class CprDirectLookup {
     }
 
     public static final Mapping churchRecordMapping = new Mapping();
+
     static {
         churchRecordMapping.add("fkirk", 14, 1);
         churchRecordMapping.add("start_dt-folkekirke", 15, 10);
@@ -423,6 +433,7 @@ public class CprDirectLookup {
     }
 
     public static final Mapping civilstatusRecordMapping = new Mapping();
+
     static {
         civilstatusRecordMapping.add("civst", 14, 1);
         civilstatusRecordMapping.add("aegtepnr", 15, 10);
@@ -436,6 +447,7 @@ public class CprDirectLookup {
     }
 
     public static final Mapping parentRecordMapping = new Mapping();
+
     static {
         parentRecordMapping.add("mor_dt", 14, 10);
         parentRecordMapping.add("mor_dt_umrk", 24, 1);
@@ -455,6 +467,7 @@ public class CprDirectLookup {
 
 
     public static final Mapping guardianRecordMapping = new Mapping();
+
     static {
         guardianRecordMapping.add("start_dt-umyndig", 14, 10);
         guardianRecordMapping.add("start_dt_umrk-umyndig", 24, 1);
@@ -470,7 +483,6 @@ public class CprDirectLookup {
         guardianRecordMapping.add("reltxt4", 205, 34);
         guardianRecordMapping.add("reltxt5", 239, 34);
     }
-
 
 
     private ListHashMap<RecordType, String> getAvailableRecords(String response) {
@@ -511,10 +523,10 @@ public class CprDirectLookup {
 
         DISAPPEARANCE("007", 26),
         NAME("008", 193),
-        BIRTHPLACE("009",37),
+        BIRTHPLACE("009", 37),
         CITIZENSHIP("010", 30),
         CHURCH("011", 25),
-        CIVILSTATUS("012",95),
+        CIVILSTATUS("012", 95),
         SEPARATION("013", 36),
         CHILDREN("014", 23),
         PARENTS("015", 147),
@@ -525,8 +537,8 @@ public class CprDirectLookup {
         UNMANAGE_EXTRA("052", 287),
         END("999", 21);
 
-        private String value;
-        private int recordLength;
+        private final String value;
+        private final int recordLength;
 
         /**
          * Constructor for RecordType enums.

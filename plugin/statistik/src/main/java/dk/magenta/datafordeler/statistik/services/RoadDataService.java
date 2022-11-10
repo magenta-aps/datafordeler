@@ -33,8 +33,8 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- *  This might be a naive implementation, but so far it does not look like it
- *  It does not take bitemporality or noe to many relations on roadentity into account
+ * This might be a naive implementation, but so far it does not look like it
+ * It does not take bitemporality or noe to many relations on roadentity into account
  */
 @RestController
 @RequestMapping("/statistik/road_data")
@@ -55,7 +55,7 @@ public class RoadDataService extends StatisticsService {
     }
 
 
-    private Logger log = LogManager.getLogger(RoadDataService.class);
+    private final Logger log = LogManager.getLogger(RoadDataService.class.getCanonicalName());
 
     @RequestMapping(method = RequestMethod.POST, path = "/")
     public void handlePost(HttpServletRequest request, HttpServletResponse response)
@@ -74,9 +74,7 @@ public class RoadDataService extends StatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{
-                MUNICIPALITY_CODE, LOCALITY_CODE, ROAD_CODE, ROAD_NAME, BYGDE, POST_CODE, "Void"
-        });
+        return Arrays.asList(MUNICIPALITY_CODE, LOCALITY_CODE, ROAD_CODE, ROAD_NAME, BYGDE, POST_CODE, "Void");
     }
 
     @Override
@@ -112,17 +110,17 @@ public class RoadDataService extends StatisticsService {
             List<Map<String, String>> concatenation = new ArrayList<>();
 
             String hql = "SELECT DISTINCT roadEntity,roadMunicipality.code,accessAddressPostcode.postcode ,roadName.name, locality " +
-                    "FROM "+GeoRoadEntity.class.getCanonicalName()+" roadEntity "+
-                    "JOIN roadEntity."+GeoRoadEntity.DB_FIELD_IDENTIFICATION+" roadIdentification "+
-                    "LEFT JOIN "+ AccessAddressRoadRecord.class.getCanonicalName()+" accessAddressRoad ON accessAddressRoad.reference = roadIdentification " +
-                    "JOIN accessAddressRoad."+AccessAddressRoadRecord.DB_FIELD_ENTITY+" accessAddress "+
-                    "LEFT JOIN accessAddress."+AccessAddressEntity.DB_FIELD_POSTCODE+" accessAddressPostcode "+
-                    "JOIN roadEntity."+GeoRoadEntity.DB_FIELD_MUNICIPALITY+" roadMunicipality " +
-                    "JOIN roadEntity."+GeoRoadEntity.DB_FIELD_NAME+" roadName " +
-                    "LEFT JOIN accessAddress."+AccessAddressEntity.DB_FIELD_POSTCODE+" accessAddressPostcode "+
-                    "JOIN roadEntity."+GeoRoadEntity.DB_FIELD_LOCALITY+" roadLocality " +
-                    "JOIN " + GeoLocalityEntity.class.getCanonicalName()+" locality ON roadLocality.reference = locality."+GeoLocalityEntity.DB_FIELD_IDENTIFICATION+" "+
-                    "JOIN locality."+GeoLocalityEntity.DB_FIELD_NAME+" localityName" +
+                    "FROM " + GeoRoadEntity.class.getCanonicalName() + " roadEntity " +
+                    "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_IDENTIFICATION + " roadIdentification " +
+                    "LEFT JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoad ON accessAddressRoad.reference = roadIdentification " +
+                    "JOIN accessAddressRoad." + AccessAddressRoadRecord.DB_FIELD_ENTITY + " accessAddress " +
+                    "LEFT JOIN accessAddress." + AccessAddressEntity.DB_FIELD_POSTCODE + " accessAddressPostcode " +
+                    "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_MUNICIPALITY + " roadMunicipality " +
+                    "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_NAME + " roadName " +
+                    "LEFT JOIN accessAddress." + AccessAddressEntity.DB_FIELD_POSTCODE + " accessAddressPostcode " +
+                    "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_LOCALITY + " roadLocality " +
+                    "JOIN " + GeoLocalityEntity.class.getCanonicalName() + " locality ON roadLocality.reference = locality." + GeoLocalityEntity.DB_FIELD_IDENTIFICATION + " " +
+                    "JOIN locality." + GeoLocalityEntity.DB_FIELD_NAME + " localityName" +
                     "";
 
             Query query = secondarySession.createQuery(hql);
@@ -134,13 +132,13 @@ public class RoadDataService extends StatisticsService {
                 String roadName = (String) items[3];
                 GeoLocalityEntity locality = (GeoLocalityEntity) items[4];
                 HashMap<String, String> csvRow = new HashMap<>();
-                csvRow.put(MUNICIPALITY_CODE, municipalityCode+"");
-                csvRow.put(LOCALITY_CODE, locality.getCode()+"");
-                csvRow.put(ROAD_CODE, roadEntity.getCode()+"");
+                csvRow.put(MUNICIPALITY_CODE, municipalityCode + "");
+                csvRow.put(LOCALITY_CODE, locality.getCode() + "");
+                csvRow.put(ROAD_CODE, roadEntity.getCode() + "");
                 csvRow.put(ROAD_NAME, roadName);
                 //It is expected that there is only one name on a roadentity
                 csvRow.put(BYGDE, locality.getName().iterator().next().getName());
-                csvRow.put(POST_CODE, postcode+"");
+                csvRow.put(POST_CODE, postcode + "");
                 concatenation.add(csvRow);
             }
 
@@ -159,8 +157,6 @@ public class RoadDataService extends StatisticsService {
         }
         return 0;
     }
-
-
 
 
     protected int writeItems(Iterator<Map<String, String>> items, OutputStream outputStream, Consumer<Object> afterEach) throws IOException {

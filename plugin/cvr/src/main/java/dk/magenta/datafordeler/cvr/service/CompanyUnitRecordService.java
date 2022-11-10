@@ -3,7 +3,10 @@ package dk.magenta.datafordeler.cvr.service;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.AccessRequiredException;
+import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
@@ -41,7 +44,7 @@ public class CompanyUnitRecordService extends FapiBaseService<CompanyUnitRecord,
     @Autowired
     private CvrPlugin cvrPlugin;
 
-    private Logger log = LogManager.getLogger(CompanyRecordService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CompanyRecordService.class.getCanonicalName());
 
     @Autowired
     private UnitRecordOutputWrapper unitRecordOutputWrapper;
@@ -115,7 +118,7 @@ public class CompanyUnitRecordService extends FapiBaseService<CompanyUnitRecord,
 
         List<ResultSet<CompanyUnitRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {
-            log.info("There are "+localResults.size()+" local results");
+            log.info("There are " + localResults.size() + " local results");
             allRecords.addAll(localResults);
         }
 

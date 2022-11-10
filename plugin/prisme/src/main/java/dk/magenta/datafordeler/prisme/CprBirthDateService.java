@@ -6,7 +6,10 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
+import dk.magenta.datafordeler.core.exception.InvalidParameterException;
+import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -58,7 +61,7 @@ public class CprBirthDateService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CprBirthDateService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprBirthDateService.class.getCanonicalName());
 
     @PostConstruct
     public void init() {
@@ -70,11 +73,11 @@ public class CprBirthDateService {
         String updatedSince = requestParams.getFirst("updatedSince");
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
-        List<String>  municipalitycodes = Optional.ofNullable(requestParams.get("municipalitycode")).orElse(new ArrayList<>());
+        List<String> municipalitycodes = Optional.ofNullable(requestParams.get("municipalitycode")).orElse(new ArrayList<>());
         List<String> municipalitycodeNumbers = new ArrayList<String>();
 
         for (String municipalitycode : municipalitycodes) {
-            List<String> municipalitycodeList = Arrays.asList(municipalitycode.split(","));
+            String[] municipalitycodeList = municipalitycode.split(",");
             for (String municipality : municipalitycodeList) {
                 municipalitycodeNumbers.add(municipality);
             }
@@ -88,21 +91,21 @@ public class CprBirthDateService {
 
         OffsetDateTime now = OffsetDateTime.now();
 
-        OffsetDateTime offsetTimestampGTE=null;
-        if(updatedSince!=null) {
+        OffsetDateTime offsetTimestampGTE = null;
+        if (updatedSince != null) {
             offsetTimestampGTE = dk.magenta.datafordeler.core.fapi.Query.parseDateTime(updatedSince);
         }
 
         PersonRecordQuery personQuery = new PersonRecordQuery();
-        if(pageSize != null) {
+        if (pageSize != null) {
             int pageSizeInt = 10;
             pageSizeInt = Integer.valueOf(pageSize);
-            if(pageSizeInt>1000) {
+            if (pageSizeInt > 1000) {
                 throw new InvalidParameterException("pageSize");
             }
             personQuery.setPageSize(pageSize);
         }
-        if(page != null) {
+        if (page != null) {
             personQuery.setPage(page);
         }
 
@@ -118,7 +121,7 @@ public class CprBirthDateService {
             envelope.setUsername(user.toString());
             this.applyAreaRestrictionsToQuery(personQuery, user);
 
-            List<String> personEntities =QueryManager.getAllEntities(session, personQuery, PersonEntity.class).stream().map(item -> item.getPersonnummer()).collect(Collectors.toList());;
+            List<String> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class).stream().map(item -> item.getPersonnummer()).collect(Collectors.toList());
 
             envelope.setPageSize(personQuery.getPageSize());
             envelope.setPage(personQuery.getPage());
@@ -143,10 +146,9 @@ public class CprBirthDateService {
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 

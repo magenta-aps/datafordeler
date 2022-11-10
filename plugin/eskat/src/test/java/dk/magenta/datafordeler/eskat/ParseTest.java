@@ -53,13 +53,13 @@ public class ParseTest {
 
     private CvrEntityManager entityManager;
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("_doc", CompanyRecord.schema);
         schemaMap.put("produktionsenhed", CompanyUnitRecord.schema);
         schemaMap.put("deltager", ParticipantRecord.schema);
     }
-
 
 
     @Test

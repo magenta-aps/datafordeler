@@ -1,8 +1,10 @@
 package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+
 import javax.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = Subscriber.TABLE_NAME, indexes = {
@@ -14,7 +16,7 @@ public class Subscriber extends DatabaseEntry {
 
     public static final String JOIN_BUSINESS_COLUMN = "businesssubscription_id";
     public static final String JOIN_DATA_COLUMN = "dataevetsubscription_id";
-    public static final String SUBSCRIBER_COLUMN = "subscriberId";
+    public static final String DB_FIELD_SUBSCRIBER_ID = "subscriberId";
 
     public Subscriber() {
     }
@@ -23,7 +25,7 @@ public class Subscriber extends DatabaseEntry {
         this.subscriberId = subscriberId;
     }
 
-    @Column(name=SUBSCRIBER_COLUMN, unique = true, nullable=false)
+    @Column(name = DB_FIELD_SUBSCRIBER_ID, unique = true, nullable = false)
     private String subscriberId;
 
     public String getSubscriberId() {
@@ -35,8 +37,8 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="cprList_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cprList_id")
     Set<CprList> cprLists = new HashSet<>();
 
     public Set<CprList> getCprLists() {
@@ -51,8 +53,8 @@ public class Subscriber extends DatabaseEntry {
         this.cprLists.remove(cprList);
     }
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="cvrList_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cvrList_id")
     Set<CvrList> cvrLists = new HashSet<>();
 
     public Set<CvrList> getCvrLists() {
@@ -68,8 +70,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     Set<BusinessEventSubscription> businessEventSubscription = new HashSet<>();
 
     public Set<BusinessEventSubscription> getBusinessEventSubscription() {
@@ -85,7 +86,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     Set<DataEventSubscription> dataEventSubscription = new HashSet<>();
 
     public Set<DataEventSubscription> getDataEventSubscription() {

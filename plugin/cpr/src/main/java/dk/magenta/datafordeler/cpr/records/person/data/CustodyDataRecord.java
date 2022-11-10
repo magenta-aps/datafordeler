@@ -63,7 +63,6 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
     }
 
 
-
     public static final String DB_FIELD_AUTHORITY_CODE_START = "startAuthoritycodeCustody";
     public static final String IO_FIELD_AUTHORITY_CODE_START = "startMyndighedskodeVaerge";
     @Column(name = DB_FIELD_AUTHORITY_CODE_START)
@@ -124,7 +123,6 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
     public void setRelationPnrStart(LocalDate relationPnrStart) {
         this.relationPnrStart = relationPnrStart;
     }
-
 
 
     @Override

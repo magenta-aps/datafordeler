@@ -62,7 +62,7 @@ public class LocalityDataServiceTest {
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
 
-        MultiValueMap<String,Object> form = new LinkedMultiValueMap<String,Object>();
+        MultiValueMap<String, Object> form = new LinkedMultiValueMap<String, Object>();
         form.add("file", new InputStreamResource(LocalityDataServiceTest.class.getResourceAsStream("/addressInput.csv")));
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/locality_data/", HttpMethod.GET, new HttpEntity(form, new HttpHeaders()), String.class);
@@ -76,7 +76,6 @@ public class LocalityDataServiceTest {
                 testUtil.csvToJsonString(expected),
                 testUtil.csvToJsonString(response.getBody().trim())
         );*/
-
 
 
     }

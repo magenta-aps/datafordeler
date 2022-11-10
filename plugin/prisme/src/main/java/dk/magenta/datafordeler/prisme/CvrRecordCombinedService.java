@@ -21,7 +21,7 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import org.apache.logging.log4j.LogManager;
@@ -40,7 +40,10 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -72,7 +75,7 @@ public class CvrRecordCombinedService {
     @Autowired
     private CvrOutputWrapperPrisme cvrWrapper;
 
-    private Logger log = LogManager.getLogger(CvrRecordCombinedService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CvrRecordCombinedService.class.getCanonicalName());
 
     @Autowired
     private GerCompanyLookup gerCompanyLookup;
@@ -106,7 +109,7 @@ public class CvrRecordCombinedService {
         cvrNumbers.add(cvrNummer);
         ObjectNode formattedRecord = getJSONFromCvrList(cvrNumbers, returnParticipantDetails, false);
 
-        if (formattedRecord != null && formattedRecord.size()>0) {
+        if (formattedRecord != null && formattedRecord.size() > 0) {
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprService done");
             return objectMapper.writeValueAsString(formattedRecord);
         } else {
@@ -117,6 +120,7 @@ public class CvrRecordCombinedService {
 
     /**
      * Get companies which has been loaded from CVR
+     *
      * @param session
      * @param cvrNumbers
      * @param user
@@ -172,14 +176,14 @@ public class CvrRecordCombinedService {
 
             ObjectNode formattedRecord = objectMapper.createObjectNode();
 
-            if (cvrNumbers!=null && !cvrNumbers.isEmpty()) {
+            if (cvrNumbers != null && !cvrNumbers.isEmpty()) {
                 Collection<CompanyRecord> companyEntities = collectiveLookup.getCompanies(session, cvrNumbers);
                 if (!companyEntities.isEmpty()) {
                     Iterator<CompanyRecord> companyEntityIterator = companyEntities.iterator();
-                    while(companyEntityIterator.hasNext()) {
+                    while (companyEntityIterator.hasNext()) {
                         CompanyRecord companyRecord = companyEntityIterator.next();
                         String cvrNumber = Integer.toString(companyRecord.getCvrNumber());
-                        if(asList) {
+                        if (asList) {
                             formattedRecord.set(cvrNumber, cvrWrapper.wrapRecord(companyRecord, service, returnParticipantDetails));
                         } else {
                             formattedRecord = cvrWrapper.wrapRecord(companyRecord, service, returnParticipantDetails);
@@ -189,14 +193,14 @@ public class CvrRecordCombinedService {
                 }
             }
 
-            if (cvrNumbers!=null && !cvrNumbers.isEmpty()) {
+            if (cvrNumbers != null && !cvrNumbers.isEmpty()) {
                 Collection<CompanyEntity> companyEntities = gerCompanyLookup.lookup(session, cvrNumbers);
                 if (!companyEntities.isEmpty()) {
                     Iterator<CompanyEntity> companyEntityIterator = companyEntities.iterator();
-                    while(companyEntityIterator.hasNext()) {
+                    while (companyEntityIterator.hasNext()) {
                         CompanyEntity companyEntity = companyEntityIterator.next();
                         String gerNo = Integer.toString(companyEntity.getGerNr());
-                        if(asList) {
+                        if (asList) {
                             formattedRecord.set(Integer.toString(companyEntity.getGerNr()), cvrWrapper.wrapGerCompany(companyEntity, service, returnParticipantDetails));
                         } else {
                             formattedRecord = cvrWrapper.wrapGerCompany(companyEntity, service, returnParticipantDetails);
@@ -219,18 +223,18 @@ public class CvrRecordCombinedService {
             if (includeCpr) {
                 loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
             }
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 
-    private static Pattern nonDigits = Pattern.compile("[^\\d]");
+    private static final Pattern nonDigits = Pattern.compile("[^\\d]");
+
     protected List<String> getCvrNumber(JsonNode node) {
         ArrayList<String> cvrNumbers = new ArrayList<>();
         if (node.isArray()) {
-            for (JsonNode item : (ArrayNode) node) {
+            for (JsonNode item : node) {
                 cvrNumbers.addAll(this.getCvrNumber(item));
             }
         } else if (node.isTextual()) {

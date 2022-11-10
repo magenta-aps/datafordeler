@@ -43,6 +43,7 @@ public abstract class RoadSegmentDataRecord<S extends RoadSegmentDataRecord<S>> 
     private static int getNumberPart(String houseNumber) {
         return Integer.parseInt(houseNumber.replaceAll("[^0-9]", ""));
     }
+
     private static String getLetterPart(String houseNumber) {
         return houseNumber.replaceAll("[^a-zA-Z]", "");
     }

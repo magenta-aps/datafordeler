@@ -43,22 +43,24 @@ public abstract class EntityManager {
 
     /**
      * Plugins must return an autowired ObjectMapper instance from this method
+     *
      * @return
      */
     protected abstract ObjectMapper getObjectMapper();
 
     /**
      * Plugins must return a Fetcher instance from this method
+     *
      * @return
      */
     protected abstract Communicator getRegistrationFetcher();
 
     /**
      * Plugins must return an instance of a FapiService subclass from this method
+     *
      * @return
      */
     public abstract FapiBaseService getEntityService();
-
 
 
     public abstract URI getBaseEndpoint();
@@ -77,19 +79,25 @@ public abstract class EntityManager {
 
     /**
      * Parse incoming data into a Registration (data coming from within a request envelope)
+     *
      * @param registrationData
      * @return
      * @throws IOException
      */
-    public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {return null;}
+    public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+        return null;
+    }
 
     /**
      * Parse incoming data into a Registration (data coming from within a request envelope)
+     *
      * @param registrationData
      * @return
      * @throws IOException
      */
-    public List<? extends Registration> parseData(PluginSourceData registrationData, ImportMetadata importMetadata) throws DataFordelerException {return null;}
+    public List<? extends Registration> parseData(PluginSourceData registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+        return null;
+    }
 
 
     public boolean handlesOwnSaves() {
@@ -99,6 +107,7 @@ public abstract class EntityManager {
 
     /**
      * Utility method to be used by subclasses
+     *
      * @param base
      * @param path
      * @return Expanded URI, with scheme, host and port from the base, a custom path, and no query or fragment
@@ -107,8 +116,10 @@ public abstract class EntityManager {
     public static URI expandBaseURI(URI base, String path) {
         return RegisterManager.expandBaseURI(base, path);
     }
+
     /**
      * Utility method to be used by subclasses
+     *
      * @param base
      * @param path
      * @return Expanded URI, with scheme, host and port from the base, and a custom path query and fragment
@@ -119,7 +130,6 @@ public abstract class EntityManager {
     }
 
     protected abstract Logger getLog();
-
 
 
     private LastUpdated getLastUpdatedObject(Session session) {
@@ -154,10 +164,7 @@ public abstract class EntityManager {
         ObjectNode importConfiguration = importMetadata.getImportConfiguration();
         if (importConfiguration == null || importConfiguration.size() == 0) {
             return false;
-        } else if (importConfiguration.has("skipLastUpdate")) {
-            return true;
-        }
-        return false;
+        } else return importConfiguration.has("skipLastUpdate");
     }
 
     /**

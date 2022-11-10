@@ -59,10 +59,8 @@ public class PersonStatusDataRecord extends CprBitemporalPersonRecord<PersonStat
     }
 
 
-
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    private Set<PersonStatusDataRecord> correctors = new HashSet<>();
+    private final Set<PersonStatusDataRecord> correctors = new HashSet<>();
 
     public Set<PersonStatusDataRecord> getCorrectors() {
         return this.correctors;
@@ -92,7 +90,7 @@ public class PersonStatusDataRecord extends CprBitemporalPersonRecord<PersonStat
     public PersonStatusDataRecord clone() {
         PersonStatusDataRecord clone = new PersonStatusDataRecord();
         clone.status = this.status;
-        clone.line = "cloned from"+this.line;
+        clone.line = "cloned from" + this.line;
         CprBitemporalRecord.copy(this, clone);
         return clone;
     }

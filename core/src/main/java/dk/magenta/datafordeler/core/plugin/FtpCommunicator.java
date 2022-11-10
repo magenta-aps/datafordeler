@@ -34,13 +34,13 @@ public class FtpCommunicator implements Communicator {
 
     public static final String DONE_FILE_ENDING = ".done";
 
-    private static Logger log = LogManager.getLogger(FtpCommunicator.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(FtpCommunicator.class.getCanonicalName());
 
     protected String username;
     protected String password;
     protected boolean useFtps;
     protected String proxyString;
-    private Path localCopyFolder;
+    private final Path localCopyFolder;
     private SSLSocketFactory sslSocketFactory;
     private boolean keepFiles = false;
     private boolean markLocalFiles = true;
@@ -52,18 +52,19 @@ public class FtpCommunicator implements Communicator {
 
     /**
      * Construct an instance
-     * @param username Login username
-     * @param password Login password
-     * @param useFtps Connect with FTPS
-     * @param proxyString Optional proxy
+     *
+     * @param username        Login username
+     * @param password        Login password
+     * @param useFtps         Connect with FTPS
+     * @param proxyString     Optional proxy
      * @param localCopyFolder Optional folder to hold fetched files in. If unset, a temporary folder will be created
-     * @param keepFiles Flag to keep fetched files after stream close
-     * @param markLocalFiles Flag to mark local files with the ".done" extension after stream close
+     * @param keepFiles       Flag to keep fetched files after stream close
+     * @param markLocalFiles  Flag to mark local files with the ".done" extension after stream close
      * @param markRemoteFiles Flag to mark remote files with the ".done" extension after stream close
      * @throws DataStreamException
      */
     public FtpCommunicator(String username, String password, boolean useFtps,
-        String proxyString, String localCopyFolder, boolean keepFiles, boolean markLocalFiles, boolean markRemoteFiles) throws DataStreamException {
+                           String proxyString, String localCopyFolder, boolean keepFiles, boolean markLocalFiles, boolean markRemoteFiles) throws DataStreamException {
         this.username = username;
         this.password = password;
         this.useFtps = useFtps;
@@ -89,7 +90,7 @@ public class FtpCommunicator implements Communicator {
     }
 
     private static Path createTempFolder() throws IOException {
-        File temp = File.createTempFile("dafo-"+UUID.randomUUID().toString(),"");
+        File temp = File.createTempFile("dafo-" + UUID.randomUUID(), "");
         temp.delete();
         temp.mkdir();
         return Paths.get(temp.getAbsolutePath());
@@ -99,15 +100,14 @@ public class FtpCommunicator implements Communicator {
         if (Strings.isEmpty(this.proxyString)) {
             log.info("No proxy");
         } else {
-            log.info("Using proxy "+this.proxyString);
+            log.info("Using proxy " + this.proxyString);
             try {
                 URI proxyURI = new URI(this.proxyString);
                 HTTPTunnelConnector connector = new HTTPTunnelConnector(
-                    proxyURI.getHost(), proxyURI.getPort()
+                        proxyURI.getHost(), proxyURI.getPort()
                 );
                 ftpClient.setConnector(connector);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new DataStreamException("Could not add proxy to FTP connection", e);
             }
         }
@@ -118,7 +118,7 @@ public class FtpCommunicator implements Communicator {
         if (this.useFtps) {
             ftpClient.setSecurity(FTPClient.SECURITY_FTPS);
         }
-        log.info("Connecting to "+uri.toString());
+        log.info("Connecting to " + uri.toString());
         setupProxy(ftpClient);
         if (this.sslSocketFactory != null) {
             ftpClient.setSSLSocketFactory(this.sslSocketFactory);
@@ -172,11 +172,10 @@ public class FtpCommunicator implements Communicator {
             for (String path : downloadPaths) {
                 String fileName = path.substring(path.lastIndexOf('/') + 1);
                 File outputFile = Files.createFile(Paths.get(localCopyFolder.toString(), fileName)).toFile();
-                log.info("Downloading "+path+" to "+outputFile.getAbsolutePath());
+                log.info("Downloading " + path + " to " + outputFile.getAbsolutePath());
                 ftpClient.download(path, outputFile);
                 currentFiles.add(outputFile);
             }
-
 
 
             this.onBeforeBuildStream(ftpClient, currentFiles, uri, downloadPaths);
@@ -193,7 +192,7 @@ public class FtpCommunicator implements Communicator {
                             try {
                                 ftpClient.disconnect(true);
                             } catch (IOException | FTPIllegalReplyException | FTPException e) {
-                                FtpCommunicator.this.log.error(e);
+                                log.error(e);
                             }
                         }
                     }
@@ -227,7 +226,7 @@ public class FtpCommunicator implements Communicator {
     public void send(URI endpoint, File payload) throws IOException, DataStreamException {
         Objects.requireNonNull(payload);
         if (!payload.exists()) {
-            throw new DataStreamException("File "+payload.getAbsolutePath()+" does not exist");
+            throw new DataStreamException("File " + payload.getAbsolutePath() + " does not exist");
         }
         if (payload.isDirectory()) {
             for (File sub : payload.listFiles()) {
@@ -244,7 +243,7 @@ public class FtpCommunicator implements Communicator {
             try {
                 ftpClient.disconnect(true);
             } catch (FTPIllegalReplyException | FTPException e) {
-                this.log.error(e);
+                log.error(e);
             }
         }
     }
@@ -253,7 +252,7 @@ public class FtpCommunicator implements Communicator {
         Set<String> knownFiles = new HashSet<>();
         DirectoryStream<Path> directoryStream = Files.newDirectoryStream(this.localCopyFolder);
         for (Path path : directoryStream) {
-            if(Files.isRegularFile(path)) {
+            if (Files.isRegularFile(path)) {
                 knownFiles.add(path.getFileName().toString());
             }
         }

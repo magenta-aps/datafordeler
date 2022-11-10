@@ -3,7 +3,9 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.Nontemporal;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
@@ -38,8 +40,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     }
 
 
-
-
     public static final String DB_FIELD_NEWEST_STATUS = "newestStatus";
     public static final String IO_FIELD_NEWEST_STATUS = "nyesteStatus";
 
@@ -62,7 +62,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public StatusRecord getNewestStatus() {
         return this.newestStatus;
     }
-
 
 
     public static final String DB_FIELD_NEWEST_CONTACT_DATA = "newestContactData";
@@ -105,7 +104,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_UNIT_COUNT = "unitCount";
     public static final String IO_FIELD_UNIT_COUNT = "antalPenheder";
 
@@ -116,7 +114,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public int getUnitCount() {
         return this.unitCount;
     }
-
 
 
     public static final String DB_FIELD_NEWEST_YEARLY_NUMBERS = "newestYearlyNumbers";
@@ -143,7 +140,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_NEWEST_QUARTERLY_NUMBERS = "newestQuarterlyNumbers";
     public static final String IO_FIELD_NEWEST_QUARTERLY_NUMBERS = "nyesteKvartalsbeskaeftigelse";
 
@@ -166,7 +162,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public CompanyQuarterlyNumbersRecord getNewestQuarterlyNumbers() {
         return this.newestQuarterlyNumbers;
     }
-
 
 
     public static final String DB_FIELD_NEWEST_MONTHLY_NUMBERS = "newestMonthlyNumbers";
@@ -193,7 +188,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_FOUNDING_DATE = "foundingDate";
     public static final String IO_FIELD_FOUNDING_DATE = "stiftelsesDato";
 
@@ -204,7 +198,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public LocalDate getFoundingDate() {
         return this.foundingDate;
     }
-
 
 
     public static final String DB_FIELD_EFFECT_DATE = "effectDate";
@@ -219,7 +212,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public void wire(Session session) {
 
     }
@@ -228,9 +220,9 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
         /* A subset of data from CVR will store items like 'status' in the metadata object, so we need to retrieve it and reconstruct its assumed bitemporality */
         List<CvrRecord> records = new ArrayList<>();
         if (!noDuplicates || companyRecord.getCompanyStatus().isEmpty()) {
-        CompanyStatusRecord statusRecord = this.getCompanyStatusRecord(companyRecord);
+            CompanyStatusRecord statusRecord = this.getCompanyStatusRecord(companyRecord);
             if (statusRecord != null) {
-            records.add(statusRecord);
+                records.add(statusRecord);
             }
         }
         return records;
@@ -243,7 +235,7 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
         ArrayList<CvrBitemporalRecord> timeRecords = new ArrayList<>();
         if (companyRecord.getLifecycle() != null) {
             timeRecords.addAll(companyRecord.getLifecycle());
-                }
+        }
         if (timeRecords.isEmpty()) {
             if (companyRecord.getNames() != null) {
                 timeRecords.addAll(companyRecord.getNames());

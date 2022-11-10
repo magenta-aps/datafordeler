@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class InvalidCertificateException extends DataFordelerException {
 
-  public InvalidCertificateException(String message) {
-    super(message);
-  }
+    public InvalidCertificateException(String message) {
+        super(message);
+    }
 
-  public InvalidCertificateException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public InvalidCertificateException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public String getCode() {
-    return "datafordeler.authorization.invalid_certificate";
-  }
+    public String getCode() {
+        return "datafordeler.authorization.invalid_certificate";
+    }
 }

@@ -14,97 +14,97 @@ import java.util.Enumeration;
  */
 public class LoggerHelper {
 
-  final Level URLINVOKE = Level.forName("[URLINVOKE]", 250);
-  final Level URLRESPONSE = Level.forName("[URLRESPONSE]", 251);
+    final Level URLINVOKE = Level.forName("[URLINVOKE]", 250);
+    final Level URLRESPONSE = Level.forName("[URLRESPONSE]", 251);
 
-  private Logger logger;
-  private HttpServletRequest request;
-  private DafoUserDetails user;
-  private String prefix = "";
-  private String urlInvokePrefix = "";
+    private final Logger logger;
+    private final HttpServletRequest request;
+    private DafoUserDetails user;
+    private String prefix = "";
+    private String urlInvokePrefix = "";
 
-  public LoggerHelper(Logger logger, HttpServletRequest request, DafoUserDetails user) {
-    this.logger = logger;
-    this.request = request;
-    this.user = user;
-    updatePrefix();
-  }
-
-  public LoggerHelper(Logger logger, HttpServletRequest request) {
-    this(logger, request, null);
-  }
-
-  public DafoUserDetails getUser() {
-    return user;
-  }
-
-  public void setUser(DafoUserDetails user) {
-    this.user = user;
-    updatePrefix();
-  }
-
-  private void updatePrefix() {
-    String remoteAddr = request.getHeader("X-Forwarded-For");
-    if (remoteAddr == null) {
-      remoteAddr = request.getRemoteAddr();
+    public LoggerHelper(Logger logger, HttpServletRequest request, DafoUserDetails user) {
+        this.logger = logger;
+        this.request = request;
+        this.user = user;
+        updatePrefix();
     }
-    prefix = String.format(
-        "%s - %s: ",
-        remoteAddr,
-        user == null ? "<unknown>" : user.toString()
-    );
-    urlInvokePrefix = "["+request.getMethod()+"]";
-    urlInvokePrefix += "["+request.getRequestURI()+"]";
-    urlInvokePrefix += "[";
-    Enumeration<String> params = request.getParameterNames();
-    while(params.hasMoreElements()){
-      String paramName = params.nextElement();
-      urlInvokePrefix += paramName + "," + request.getParameter(paramName)+";";
+
+    public LoggerHelper(Logger logger, HttpServletRequest request) {
+        this(logger, request, null);
     }
-    urlInvokePrefix += "]";
-  }
 
-  public <E extends Entity> void logResult(Envelope result) {
-    info("Query result - " + result.toLogString());
-  }
+    public DafoUserDetails getUser() {
+        return user;
+    }
 
-  public <E extends Entity> void logResult(Envelope result, String queryString) {
-    info("Query result - " + result.toLogString(queryString));
-  }
+    public void setUser(DafoUserDetails user) {
+        this.user = user;
+        updatePrefix();
+    }
 
-  public void trace(String msg, Object... args) {
-    logger.trace(prefix + msg, args);
-  }
+    private void updatePrefix() {
+        String remoteAddr = request.getHeader("X-Forwarded-For");
+        if (remoteAddr == null) {
+            remoteAddr = request.getRemoteAddr();
+        }
+        prefix = String.format(
+                "%s - %s: ",
+                remoteAddr,
+                user == null ? "<unknown>" : user.toString()
+        );
+        urlInvokePrefix = "[" + request.getMethod() + "]";
+        urlInvokePrefix += "[" + request.getRequestURI() + "]";
+        urlInvokePrefix += "[";
+        Enumeration<String> params = request.getParameterNames();
+        while (params.hasMoreElements()) {
+            String paramName = params.nextElement();
+            urlInvokePrefix += paramName + "," + request.getParameter(paramName) + ";";
+        }
+        urlInvokePrefix += "]";
+    }
 
-  public void urlInvokePersistablelogs(String msg) {
-    logger.log(URLINVOKE, prefix + urlInvokePrefix + "["+msg+"]");
-  }
+    public <E extends Entity> void logResult(Envelope result) {
+        info("Query result - " + result.toLogString());
+    }
 
-  public void urlResponsePersistablelogs(int statusCode,String msg) {
-    logger.log(URLRESPONSE, prefix + urlInvokePrefix + "["+statusCode+"]" + "["+msg+"]");
-  }
+    public <E extends Entity> void logResult(Envelope result, String queryString) {
+        info("Query result - " + result.toLogString(queryString));
+    }
 
-  public void urlResponsePersistablelogs(String msg) {
-    logger.log(URLRESPONSE, prefix + urlInvokePrefix + "[]" + "["+msg+"]");
-  }
+    public void trace(String msg, Object... args) {
+        logger.trace(prefix + msg, args);
+    }
 
-  public void debug(String msg, Object... args) {
-    logger.debug(prefix + msg, args);
-  }
+    public void urlInvokePersistablelogs(String msg) {
+        logger.log(URLINVOKE, prefix + urlInvokePrefix + "[" + msg + "]");
+    }
 
-  public void info(String msg, Object... args) {
-    logger.info(prefix + msg, args);
-  }
+    public void urlResponsePersistablelogs(int statusCode, String msg) {
+        logger.log(URLRESPONSE, prefix + urlInvokePrefix + "[" + statusCode + "]" + "[" + msg + "]");
+    }
 
-  public void warn(String msg, Object... args) {
-    logger.warn(prefix + msg, args);
-  }
+    public void urlResponsePersistablelogs(String msg) {
+        logger.log(URLRESPONSE, prefix + urlInvokePrefix + "[]" + "[" + msg + "]");
+    }
 
-  public void error(String msg, Object... args) {
-    logger.error(prefix + msg, args);
-  }
+    public void debug(String msg, Object... args) {
+        logger.debug(prefix + msg, args);
+    }
 
-  public void error(String msg, Throwable exception) {
-    logger.error(prefix + msg, exception);
-  }
+    public void info(String msg, Object... args) {
+        logger.info(prefix + msg, args);
+    }
+
+    public void warn(String msg, Object... args) {
+        logger.warn(prefix + msg, args);
+    }
+
+    public void error(String msg, Object... args) {
+        logger.error(prefix + msg, args);
+    }
+
+    public void error(String msg, Throwable exception) {
+        logger.error(prefix + msg, exception);
+    }
 }

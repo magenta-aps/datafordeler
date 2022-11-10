@@ -17,9 +17,8 @@ import dk.magenta.datafordeler.cpr.records.person.*;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cpr.records.service.PersonEntityRecordService;
-import dk.magenta.datafordeler.cpr.synchronization.SubscribtionTimerTask;
+import dk.magenta.datafordeler.cpr.synchronization.SubscriptionTimerTask;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -32,13 +31,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.InputStream;
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
-import java.util.*;
 import java.util.Calendar;
 import java.util.*;
 
@@ -75,20 +72,20 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     @Autowired
     private CprDirectLookup directLookup;
 
-    private Timer subscribtionUploadTimer = new Timer();
+    private final Timer subscriptionUploadTimer = new Timer();
 
     /**
-     * Run bean initialization. Make the application upload subscribtions every morning at 6.
+     * Run bean initialization. Make the application upload subscriptions every morning at 6.
      */
     @PostConstruct
     public void init() {
-        if(setupSubscriptionEnabled) {
+        if (setupSubscriptionEnabled) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 5);
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
             Date time = calendar.getTime();
-            subscribtionUploadTimer.schedule(new SubscribtionTimerTask(this), time, 1000 * 60 * 60 * 24);
+            subscriptionUploadTimer.schedule(new SubscriptionTimerTask(this), time, 1000 * 60 * 60 * 24);
         }
     }
 
@@ -135,15 +132,16 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         return PersonEntity.schema;
     }
 
-    private HashSet<String> nonGreenlandicCprNumbers = new HashSet<>();
+    private final HashSet<String> nonGreenlandicCprNumbers = new HashSet<>();
 
-    private HashSet<String> nonGreenlandicFatherCprNumbers = new HashSet<>();
+    private final HashSet<String> nonGreenlandicFatherCprNumbers = new HashSet<>();
 
-    private HashSet<String> nonGreenlandicChildrenCprNumbers = new HashSet<>();
+    private final HashSet<String> nonGreenlandicChildrenCprNumbers = new HashSet<>();
 
     /**
      * Parse the file of persons.
      * If the file contains any fathers that is unknown to DAFO add it
+     *
      * @param registrationData
      * @param importMetadata
      * @return
@@ -153,7 +151,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         try {
             //With this flag true initiated testdata is cleared before initiation of new data is initiated
-            if(importMetadata.getImportConfiguration()!=null &&
+            if (importMetadata.getImportConfiguration() != null &&
                     importMetadata.getImportConfiguration().has("cleantestdatafirst") &&
                     importMetadata.getImportConfiguration().get("cleantestdatafirst").booleanValue()) {
                 cleanDemoData();
@@ -163,32 +161,32 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 this.createSubscription(this.nonGreenlandicCprNumbers);
             }
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicFatherCprNumbers.isEmpty() && importMetadata.getImportConfiguration().size() == 0) {
-                try(Session session = sessionManager.getSessionFactory().openSession()) {
+                try (Session session = sessionManager.getSessionFactory().openSession()) {
                     PersonRecordQuery personQuery = new PersonRecordQuery();
-                    for(String fatherCpr : nonGreenlandicFatherCprNumbers) {
+                    for (String fatherCpr : nonGreenlandicFatherCprNumbers) {
                         personQuery.addPersonnummer(fatherCpr);
                     }
 
                     personQuery.applyFilters(session);
                     List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
 
-                    for(PersonEntity person : personEntities) {
+                    for (PersonEntity person : personEntities) {
                         nonGreenlandicFatherCprNumbers.remove(person.getPersonnummer());
                     }
                 }
                 this.createSubscription(this.nonGreenlandicFatherCprNumbers);
             }
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicChildrenCprNumbers.isEmpty() && importMetadata.getImportConfiguration().size() == 0) {
-                try(Session session = sessionManager.getSessionFactory().openSession()) {
+                try (Session session = sessionManager.getSessionFactory().openSession()) {
                     PersonRecordQuery personQuery = new PersonRecordQuery();
-                    for(String fatherCpr : nonGreenlandicChildrenCprNumbers) {
+                    for (String fatherCpr : nonGreenlandicChildrenCprNumbers) {
                         personQuery.addPersonnummer(fatherCpr);
                     }
 
                     personQuery.applyFilters(session);
                     List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
 
-                    for(PersonEntity person : personEntities) {
+                    for (PersonEntity person : personEntities) {
                         nonGreenlandicChildrenCprNumbers.remove(person.getPersonnummer());
                     }
                 }
@@ -207,17 +205,17 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
      * Demopersons is used on the demoenvironment for demo and education purposes
      */
     public void cleanDemoData() {
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            List<String> testPersonList = Arrays.asList(testpersonList.split(","));
-            for(String testPerson : testPersonList) {
+            String[] testPersonList = testpersonList.split(",");
+            for (String testPerson : testPersonList) {
                 personQuery.addPersonnummer(testPerson);
             }
             session.beginTransaction();
             personQuery.setPageSize(1000);
             personQuery.applyFilters(session);
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            for(PersonEntity personForDeletion : personEntities) {
+            for (PersonEntity personForDeletion : personEntities) {
                 session.delete(personForDeletion);
             }
             session.getTransaction().commit();
@@ -227,11 +225,11 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     }
 
 
-
     /**
      * Handle parsing if records from cpr
      * If a person is leaving Greenland they should be added.
      * If a person is under 18 years old, and has a father with no connection to Greenland they should be added.
+     *
      * @param record
      * @param importMetadata
      */
@@ -259,8 +257,8 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 // The decision is that if both the effect from time of the birth-record and the cpr-number indicate that the child is not 18 years old yet we will make a subscription
                 ChildrenRecord childRecord = (ChildrenRecord) record;
 
-                //The effecttime of the child is the same time as the birthtime, if 18 years after the birthtime is after now, we need to create a subscribtion on the child
-                if(OffsetDateTime.now().minusYears(18).isBefore(Optional.ofNullable(childRecord.getEffectDateTime()).orElse(OffsetDateTime.MIN))) {
+                //The effecttime of the child is the same time as the birthtime, if 18 years after the birthtime is after now, we need to create a subscription on the child
+                if (OffsetDateTime.now().minusYears(18).isBefore(Optional.ofNullable(childRecord.getEffectDateTime()).orElse(OffsetDateTime.MIN))) {
                     String childPnr = childRecord.getPnrChild().substring(0, 2);
                     String childBirthDay = childPnr.substring(0, 2);
                     String childBirthMonth = childPnr.substring(2, 4);
@@ -269,18 +267,18 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                     int yearOfServerTime = now.get(ChronoField.YEAR);
                     String serverCurrentCentury = Integer.toString(yearOfServerTime).substring(0, 2);
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    LocalDate parsedBirthDateBasedOnCpr = LocalDate.parse(serverCurrentCentury+childBirthDYear+"-"+childBirthMonth+"-"+childBirthDay, formatter);
+                    LocalDate parsedBirthDateBasedOnCpr = LocalDate.parse(serverCurrentCentury + childBirthDYear + "-" + childBirthMonth + "-" + childBirthDay, formatter);
                     //The child that gets passed is born before the timestamp of the server, this means that if the child is born after the current timestamp it is in the last century.
-                    if(parsedBirthDateBasedOnCpr.isAfter(now)) {
+                    if (parsedBirthDateBasedOnCpr.isAfter(now)) {
                         //If we make a calculation that this child is born after current time
                         parsedBirthDateBasedOnCpr = parsedBirthDateBasedOnCpr.minusYears(100);
                     }
 
-                    if(parsedBirthDateBasedOnCpr.plusYears(18).isAfter(now)) {
+                    if (parsedBirthDateBasedOnCpr.plusYears(18).isAfter(now)) {
                         nonGreenlandicChildrenCprNumbers.add(childRecord.getPnrChild());
                     }
                 }
-            } else if(record instanceof PersonRecord) {
+            } else if (record instanceof PersonRecord) {
 
                 PersonRecord person = (PersonRecord) record;
                 List<CprBitemporalRecord> bitemporalRecords = person.getBitemporalRecords();
@@ -342,11 +340,12 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
     /**
      * Create subscriptions by adding them to the table of subscriptions
+     *
      * @param addCprNumbers
      * @param removeCprNumbers
      */
     public void createSubscription(Set<String> addCprNumbers, Set<String> removeCprNumbers) {
-        this.log.info("Collected these numbers for subscription: "+addCprNumbers);
+        this.log.info("Collected these numbers for subscription: " + addCprNumbers);
 
         HashSet<String> cprNumbersToBeAdded = new HashSet<String>(addCprNumbers);
         Session session = sessionManager.getSessionFactory().openSession();
@@ -391,13 +390,13 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         String charset = this.getConfiguration().getRegisterCharset(this);
 
         Transaction transaction = null;
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Criteria criteria = session.createCriteria(PersonSubscription.class);
             criteria.add(Restrictions.eq(PersonSubscription.DB_FIELD_CPR_ASSIGNMENT_STATUS, PersonSubscriptionAssignmentStatus.CreatedInTable));
             List<PersonSubscription> subscriptionList = criteria.list();
             // If there if no subscription to upload just log
-            if (subscriptionList.size()==0) {
+            if (subscriptionList.size() == 0) {
                 log.info("There is found nu subscriptions for upload");
                 return;
             }
@@ -409,18 +408,18 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             StringJoiner content = new StringJoiner("\r\n");
 
             for (PersonSubscription subscription : subscriptionList) {
-                    content.add(
-                            String.format(
-                                    "%02d%04d%02d%2s%10s%15s%45s",
-                                    6,
-                                    this.getCustomerId(),
-                                    0,
-                                    "OP",
-                                    subscription.getPersonNumber(),
-                                    "",
-                                    ""
-                            )
-                    );
+                content.add(
+                        String.format(
+                                "%02d%04d%02d%2s%10s%15s%45s",
+                                6,
+                                this.getCustomerId(),
+                                0,
+                                "OP",
+                                subscription.getPersonNumber(),
+                                "",
+                                ""
+                        )
+                );
             }
 
             for (PersonSubscription subscription : subscriptionList) {
@@ -438,25 +437,25 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             this.addSubscription(content.toString(), charset, this);
             transaction.commit();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error(e);
             transaction.rollback();
         }
     }
 
-    private HashMap<String, Integer> cnts = new HashMap<>();
+    private final HashMap<String, Integer> cnts = new HashMap<>();
 
     protected void parseAlternate(PersonEntity entity, Collection<PersonDataRecord> records, ImportMetadata importMetadata) {
         OffsetDateTime updateTime = importMetadata.getImportTime();
         int i = 1;
         Integer c = cnts.get(entity.getPersonnummer());
-        if (c!=null) {
-            i=c;
+        if (c != null) {
+            i = c;
         }
         for (PersonDataRecord record : records) {
 
             if (record instanceof PersonEventRecord) {
-                for(PersonEventDataRecord event : ((PersonEventRecord)record).getPersonEvents()) {
+                for (PersonEventDataRecord event : ((PersonEventRecord) record).getPersonEvents()) {
                     entity.addEvent(event, importMetadata.getSession());
                 }
             }

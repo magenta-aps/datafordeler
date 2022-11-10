@@ -12,7 +12,7 @@ import dk.magenta.datafordeler.core.fapi.Query;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
-public abstract class GladdrregOutputWrapper<E extends Entity<E, R>, R extends Registration<E, R, V>, V extends Effect<R, V, D>, D extends SumiffiikData<V, D>> extends OutputWrapper<E>  {
+public abstract class GladdrregOutputWrapper<E extends Entity<E, R>, R extends Registration<E, R, V>, V extends Effect<R, V, D>, D extends SumiffiikData<V, D>> extends OutputWrapper<E> {
 
     private ObjectMapper objectMapper;
 

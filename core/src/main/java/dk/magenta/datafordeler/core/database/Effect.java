@@ -50,14 +50,14 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     protected R registration;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Filter(name = DataItem.FILTER_RECORD_AFTER, condition="(lastUpdated > :"+DataItem.FILTERPARAM_RECORD_AFTER+")")
+    @Filter(name = DataItem.FILTER_RECORD_AFTER, condition = "(lastUpdated > :" + DataItem.FILTERPARAM_RECORD_AFTER + ")")
     @JoinTable(
-        joinColumns = @JoinColumn(name = "effects_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "dataitems_id", referencedColumnName = "id"),
-        indexes = {
-            @Index(columnList = "effects_id"),
-            @Index(columnList = "dataitems_id")
-        }
+            joinColumns = @JoinColumn(name = "effects_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "dataitems_id", referencedColumnName = "id"),
+            indexes = {
+                    @Index(columnList = "effects_id"),
+                    @Index(columnList = "dataitems_id")
+            }
     )
     protected Set<D> dataItems;
 
@@ -98,8 +98,8 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     /**
      * @param effectFrom A date string, parseable by DateTimeFormatter.ISO_OFFSET_DATE_TIME (in the format 2007-12-03T10:15:30+01:00)
-     * @param effectTo A date string, parseable by DateTimeFormatter.ISO_OFFSET_DATE_TIME (in the format 2007-12-03T10:15:30+01:00)
-     * If you want other date formats, consider using java.time.OffsetDateTime.parse() to generate an OffsetDateTime object and pass it
+     * @param effectTo   A date string, parseable by DateTimeFormatter.ISO_OFFSET_DATE_TIME (in the format 2007-12-03T10:15:30+01:00)
+     *                   If you want other date formats, consider using java.time.OffsetDateTime.parse() to generate an OffsetDateTime object and pass it
      */
     public Effect(R registration, String effectFrom, String effectTo) {
         this(
@@ -133,7 +133,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false)
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     @XmlElement(name = IO_FIELD_EFFECT_FROM)
-    @XmlJavaTypeAdapter(type=OffsetDateTime.class, value=OffsetDateTimeAdapter.class)
+    @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     private OffsetDateTime effectFrom;
 
     public OffsetDateTime getEffectFrom() {
@@ -150,7 +150,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
     @XmlElement(name = IO_FIELD_EFFECT_TO)
-    @XmlJavaTypeAdapter(type=OffsetDateTime.class, value=OffsetDateTimeAdapter.class)
+    @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false)
     private OffsetDateTime effectTo;
 
@@ -161,7 +161,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public void setEffectTo(OffsetDateTime effectTo) {
         this.effectTo = effectTo;
     }
-
 
 
     @JsonIgnore
@@ -189,7 +188,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
                         outList = new ArrayList<>();
                         outMap.put(key, outList);
                     }
-                    outList.addAll((Collection)value);
+                    outList.addAll((Collection) value);
                 } else {
                     outMap.put(key, value);
                 }
@@ -208,9 +207,9 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public boolean equalData(V other) {
         return (
                 (this.effectFrom == null ? other.getEffectFrom() == null : this.effectFrom
-                    .equals(other.getEffectFrom())) &&
-                (this.effectTo == null ? other.getEffectTo() == null : this.effectTo
-                    .equals(other.getEffectTo()))
+                        .equals(other.getEffectFrom())) &&
+                        (this.effectTo == null ? other.getEffectTo() == null : this.effectTo
+                                .equals(other.getEffectTo()))
         );
     }
 
@@ -220,6 +219,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     /**
      * Pretty-print contained data
+     *
      * @return Compiled string output
      */
     public String toString() {
@@ -228,6 +228,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     /**
      * Pretty-print contained data
+     *
      * @param indent Number of spaces to indent the output with
      * @return Compiled string output
      */
@@ -235,9 +236,9 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
         String indentString = new String(new char[4 * (indent)]).replace("\0", " ");
         String subIndentString = new String(new char[4 * (indent + 1)]).replace("\0", " ");
         StringJoiner s = new StringJoiner("\n");
-        s.add(indentString + this.getClass().getSimpleName() + "["+this.hashCode()+"] {");
-        s.add(subIndentString + "from: "+this.effectFrom);
-        s.add(subIndentString + "to: "+this.effectTo);
+        s.add(indentString + this.getClass().getSimpleName() + "[" + this.hashCode() + "] {");
+        s.add(subIndentString + "from: " + this.effectFrom);
+        s.add(subIndentString + "to: " + this.effectTo);
         s.add(subIndentString + "data: [");
         for (D dataItem : this.getDataItems()) {
             s.add(dataItem.toString(indent + 2));
@@ -288,7 +289,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public boolean compareRange(OffsetDateTime effectFrom, OffsetDateTime effectTo) {
         return (
                 Equality.equal(this.getEffectFrom(), effectFrom) &&
-                Equality.equal(this.getEffectTo(), effectTo)
+                        Equality.equal(this.getEffectTo(), effectTo)
         );
     }
 

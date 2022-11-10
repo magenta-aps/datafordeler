@@ -30,7 +30,8 @@ public abstract class CprRecordOutputWrapper<E extends CprRecordEntity> extends 
         if (mode == Mode.RVD || mode == Mode.RDV || mode == Mode.DATAONLY) {
             fieldNames.add(CprBitemporalRecord.IO_FIELD_EFFECT_FROM_UNCERTAIN);
             fieldNames.add(CprBitemporalRecord.IO_FIELD_EFFECT_TO_UNCERTAIN);
-        } if(mode == Mode.DATAONLY) {
+        }
+        if (mode == Mode.DATAONLY) {
             fieldNames.addAll(dataonlyNodeRemoveFields);
         }
         return fieldNames;

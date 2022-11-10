@@ -49,16 +49,16 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
     @Autowired
     Stopwatch timer;
 
-    private static boolean SAVE_RECORD_DATA = false;
+    private static final boolean SAVE_RECORD_DATA = false;
 
     public static final String IMPORTCONFIG_RECORDTYPE = "recordtype";
     public static final String IMPORTCONFIG_PNR = "personnummer";
 
-    private HttpCommunicator commonFetcher;
+    private final HttpCommunicator commonFetcher;
 
     protected Logger log = LogManager.getLogger(this.getClass().getSimpleName());
 
-    private Collection<String> handledURISubstrings;
+    private final Collection<String> handledURISubstrings;
 
     protected abstract String getBaseName();
 
@@ -99,48 +99,49 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
     public URI getBaseEndpoint() {
         return this.getRegisterManager().getBaseEndpoint();
     }
-/*
-    @Override
-    protected URI getReceiptEndpoint(Receipt receipt) {
-        return null;
-    }
 
-    @Override
-    public RegistrationReference parseReference(InputStream referenceData) throws IOException {
-        return this.getObjectMapper().readValue(referenceData, this.managedRegistrationReferenceClass);
-    }
-
-    @Override
-    public RegistrationReference parseReference(String referenceData, String charsetName) throws IOException {
-        return this.getObjectMapper().readValue(referenceData.getBytes(charsetName), this.managedRegistrationReferenceClass);
-    }
-
-    @Override
-    public RegistrationReference parseReference(URI uri) {
-        return this.createRegistrationReference(uri);
-    }
-
-    @Override
-    public URI getRegistrationInterface(RegistrationReference reference) throws WrongSubclassException {
-        if (!this.managedRegistrationReferenceClass.isInstance(reference)) {
-            throw new WrongSubclassException(this.managedRegistrationReferenceClass, reference);
+    /*
+        @Override
+        protected URI getReceiptEndpoint(Receipt receipt) {
+            return null;
         }
-        if (reference.getURI() != null) {
-            return reference.getURI();
+
+        @Override
+        public RegistrationReference parseReference(InputStream referenceData) throws IOException {
+            return this.getObjectMapper().readValue(referenceData, this.managedRegistrationReferenceClass);
         }
-        return EntityManager.expandBaseURI(this.getBaseEndpoint(), "/get/"+this.getBaseName()+"/"+reference.getChecksum());
-    }
 
-    @Override
-    protected URI getListChecksumInterface(OffsetDateTime fromDate) {
-        return this.getRegisterManager().getListChecksumInterface(this.getSchema(), fromDate);
-    }
+        @Override
+        public RegistrationReference parseReference(String referenceData, String charsetName) throws IOException {
+            return this.getObjectMapper().readValue(referenceData.getBytes(charsetName), this.managedRegistrationReferenceClass);
+        }
 
-    @Override
-    protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
-        return ItemInputStream.parseJsonStream(responseContent, this.managedEntityReferenceClass, "items", this.getObjectMapper());
-    }
-*/
+        @Override
+        public RegistrationReference parseReference(URI uri) {
+            return this.createRegistrationReference(uri);
+        }
+
+        @Override
+        public URI getRegistrationInterface(RegistrationReference reference) throws WrongSubclassException {
+            if (!this.managedRegistrationReferenceClass.isInstance(reference)) {
+                throw new WrongSubclassException(this.managedRegistrationReferenceClass, reference);
+            }
+            if (reference.getURI() != null) {
+                return reference.getURI();
+            }
+            return EntityManager.expandBaseURI(this.getBaseEndpoint(), "/get/"+this.getBaseName()+"/"+reference.getChecksum());
+        }
+
+        @Override
+        protected URI getListChecksumInterface(OffsetDateTime fromDate) {
+            return this.getRegisterManager().getListChecksumInterface(this.getSchema(), fromDate);
+        }
+
+        @Override
+        protected ItemInputStream<? extends EntityReference> parseChecksumResponse(InputStream responseContent) throws DataFordelerException {
+            return ItemInputStream.parseJsonStream(responseContent, this.managedEntityReferenceClass, "items", this.getObjectMapper());
+        }
+    */
     @Override
     protected Logger getLog() {
         return this.log;
@@ -158,9 +159,13 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
 
 
     protected abstract SessionManager getSessionManager();
+
     protected abstract CprSubParser<T> getParser();
+
     protected abstract Class<E> getEntityClass();
+
     protected abstract UUID generateUUID(T record);
+
     protected abstract E createBasicEntity(T record);
 
     private static final String TASK_PARSE = "CprParse";
@@ -178,7 +183,7 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
         CprSubParser<T> parser = this.getParser();
         Session session = importMetadata.getSession();
         boolean wrappedInTransaction = importMetadata.isTransactionInProgress();
-        log.info("Parsing in thread "+Thread.currentThread().getId());
+        log.info("Parsing in thread " + Thread.currentThread().getId());
 
         int maxChunkSize = 1000;
         List<File> cacheFiles = null;
@@ -350,7 +355,8 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
         }
     }
 
-    protected void handleRecord(T record, ImportMetadata importMetadata) {}
+    protected void handleRecord(T record, ImportMetadata importMetadata) {
+    }
 
 
     public int getJobId() {

@@ -1,8 +1,6 @@
 package dk.magenta.datafordeler.ger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.ger.configuration.GerConfiguration;
-import dk.magenta.datafordeler.ger.configuration.GerConfigurationManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
@@ -15,6 +13,8 @@ import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.util.ItemInputStream;
+import dk.magenta.datafordeler.ger.configuration.GerConfiguration;
+import dk.magenta.datafordeler.ger.configuration.GerConfigurationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -46,7 +46,7 @@ public class GerRegisterManager extends RegisterManager {
     @Autowired
     private SessionManager sessionManager;
 
-    private Logger log = LogManager.getLogger("dk.magenta.datafordeler.ger.GerRegisterManager");
+    private final Logger log = LogManager.getLogger(GerRegisterManager.class.getCanonicalName());
 
     @Value("${dafo.ger.proxy-url:}")
     private String proxyString;
@@ -59,13 +59,13 @@ public class GerRegisterManager extends RegisterManager {
     }
 
     /**
-    * RegisterManager initialization; set up dk.magenta.datafordeler.ger.dk.magenta.datafordeler.ger.configuration and source fetcher.
-    * We store fetched dk.magenta.datafordeler.ger.data in a local cache, so create a random folder for that.
-    */
+     * RegisterManager initialization; set up dk.magenta.datafordeler.ger.dk.magenta.datafordeler.ger.configuration and source fetcher.
+     * We store fetched dk.magenta.datafordeler.ger.data in a local cache, so create a random folder for that.
+     */
     @PostConstruct
     public void init() throws IOException {
         if (this.localCopyFolder == null || this.localCopyFolder.isEmpty()) {
-            File temp = File.createTempFile("datafordeler-cache","");
+            File temp = File.createTempFile("datafordeler-cache", "");
             temp.delete();
             temp.mkdir();
             this.localCopyFolder = temp.getAbsolutePath();
@@ -116,12 +116,12 @@ public class GerRegisterManager extends RegisterManager {
             lastUpdateTime = OffsetDateTime.parse("1900-01-01T00:00:00Z");
             log.info("Last update time not found");
         } else {
-            log.info("Last update time: "+lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
         }
 
         String address = this.configurationManager.getConfiguration().getURL(entityManager.getSchema());
         if (address == null || address.isEmpty()) {
-            throw new ConfigurationException("Invalid URL for schema "+entityManager.getSchema()+": "+address);
+            throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address);
         }
         address = address.replace("%{editDate}", lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
@@ -129,13 +129,13 @@ public class GerRegisterManager extends RegisterManager {
             URL url = new URL(address);
             return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
         } catch (URISyntaxException | MalformedURLException e) {
-            throw new ConfigurationException("Invalid URL for schema "+entityManager.getSchema()+": "+address, e);
+            throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address, e);
         }
     }
 
     @Override
     public ImportInputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
-        this.log.info("eventInterface: "+eventInterface);
+        this.log.info("eventInterface: " + eventInterface);
         GerConfiguration configuration = this.configurationManager.getConfiguration();
         GerConfiguration.RegisterType registerType = configuration.getRegisterType(entityManager.getSchema());
         if (registerType == null) {

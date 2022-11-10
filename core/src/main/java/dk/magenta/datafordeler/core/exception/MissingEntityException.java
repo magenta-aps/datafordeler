@@ -4,7 +4,7 @@ import dk.magenta.datafordeler.core.database.Registration;
 
 public class MissingEntityException extends DataFordelerException {
 
-    private Registration registration;
+    private final Registration registration;
 
     public MissingEntityException(Registration registration) {
         this.registration = registration;

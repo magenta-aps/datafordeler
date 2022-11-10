@@ -60,6 +60,7 @@ public class PersonRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("pnrgaeld", 14, 10);
         traditionalMapping.add("status_ts", 24, 12);

@@ -44,7 +44,6 @@ public class CompanyRegNumberRecord extends CvrBitemporalDataRecord {
     }
 
 
-
     public static final String DB_FIELD_PARTICIPANT_COMPANY_RELATION = "participantRelationCompanyRecord";
 
     @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY)
@@ -55,7 +54,6 @@ public class CompanyRegNumberRecord extends CvrBitemporalDataRecord {
     public void setParticipantRelationCompanyRecord(RelationCompanyRecord participantRelationCompanyRecord) {
         this.participantRelationCompanyRecord = participantRelationCompanyRecord;
     }
-
 
 
     @Override

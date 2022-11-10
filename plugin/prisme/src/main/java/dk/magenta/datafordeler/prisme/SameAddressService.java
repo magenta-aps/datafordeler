@@ -61,7 +61,7 @@ public class SameAddressService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(SameAddressService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(SameAddressService.class.getCanonicalName());
 
     @Autowired
     private PersonOutputWrapperPrisme personOutputWrapper;
@@ -82,7 +82,7 @@ public class SameAddressService {
         this.checkAndLogAccess(loggerHelper);
         loggerHelper.urlInvokePersistablelogs("SameAddressService");
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
@@ -105,7 +105,7 @@ public class SameAddressService {
 
                 AddressDataRecord address = FilterUtilities.findNewestUnclosed(person.getAddress());
                 root.put("cprNumber", cprNummer);
-                if(address != null) {
+                if (address != null) {
                     int municipalityCode = address.getMunicipalityCode();
                     root.put("municipalitycode", municipalityCode);
                     int roadCode = address.getRoadCode();
@@ -124,7 +124,7 @@ public class SameAddressService {
                         }
                     }
                     ArrayNode sameAddressCprs = objectMapper.createArrayNode();
-                    if(lookup != null && !lookup.isAdministrativ()) {
+                    if (lookup != null && !lookup.isAdministrativ()) {
                         PersonRecordQuery personSameAddressQuery = new PersonRecordQuery();
                         personSameAddressQuery.setPageSize("30");
                         personSameAddressQuery.addKommunekode(address.getMunicipalityCode());
@@ -155,10 +155,9 @@ public class SameAddressService {
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 

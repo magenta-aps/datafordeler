@@ -66,7 +66,7 @@ public class AddressDataService extends PersonStatisticsService {
     }
 
 
-    private Logger log = LogManager.getLogger(BirthDataService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(BirthDataService.class.getCanonicalName());
 
     @Override
     protected DafoUserDetails getUser(HttpServletRequest request) throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
@@ -109,9 +109,7 @@ public class AddressDataService extends PersonStatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{
-                PNR, FIRST_NAME, MIDDLE_NAME, LAST_NAME, BNR, ROAD_NAME, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER, POST_CODE, POST_DISTRICT
-        });
+        return Arrays.asList(PNR, FIRST_NAME, MIDDLE_NAME, LAST_NAME, BNR, ROAD_NAME, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER, POST_CODE, POST_DISTRICT);
     }
 
     @Override
@@ -134,8 +132,8 @@ public class AddressDataService extends PersonStatisticsService {
         return this.log;
     }
 
-    private static Pattern numeric = Pattern.compile("\\d+");
-    private static int limit = 1000;
+    private static final Pattern numeric = Pattern.compile("\\d+");
+    private static final int limit = 1000;
 
     @Override
     protected List<PersonRecordQuery> getQueryList(Filter filter) throws IOException {
@@ -144,8 +142,6 @@ public class AddressDataService extends PersonStatisticsService {
 
         if (filter.onlyPnr != null) {
             List<String> pnrs = filter.onlyPnr;
-
-            System.out.println("Got " + pnrs.size() + " lines");
 
             int count = 0;
             PersonRecordQuery personQuery = new PersonRecordQuery();

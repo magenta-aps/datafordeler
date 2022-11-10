@@ -52,11 +52,12 @@ public class MovementDataService extends PersonStatisticsService {
     @Autowired
     private CprPlugin cprPlugin;
 
-    private Logger log = LogManager.getLogger(MovementDataService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(MovementDataService.class.getCanonicalName());
 
 
     /**
      * Calls handlerequest in super with the ID of the report as a parameter
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -76,6 +77,7 @@ public class MovementDataService extends PersonStatisticsService {
 
     /**
      * Post is used for starting the generation of a report
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -95,12 +97,10 @@ public class MovementDataService extends PersonStatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{
-                PNR, BIRTHDAY_YEAR, EFFECTIVE_PNR, STATUS_CODE, BIRTH_AUTHORITY, CITIZENSHIP_CODE,
+        return Arrays.asList(PNR, BIRTHDAY_YEAR, EFFECTIVE_PNR, STATUS_CODE, BIRTH_AUTHORITY, CITIZENSHIP_CODE,
                 MOTHER_PNR, FATHER_PNR, SPOUSE_PNR, PROD_DATE, FILE_DATE, MOVE_DATE,
                 ORIGIN_COUNTRY_CODE, ORIGIN_MUNICIPALITY_CODE, ORIGIN_LOCALITY_NAME, ORIGIN_ROAD_CODE, ORIGIN_HOUSE_NUMBER, ORIGIN_FLOOR, ORIGIN_DOOR_NUMBER, ORIGIN_BNR,
-                DESTINATION_COUNTRY_CODE, DESTINATION_MUNICIPALITY_CODE, DESTINATION_LOCALITY_NAME, DESTINATION_ROAD_CODE, DESTINATION_HOUSE_NUMBER, DESTINATION_FLOOR, DESTINATION_DOOR_NUMBER, DESTINATION_BNR
-        });
+                DESTINATION_COUNTRY_CODE, DESTINATION_MUNICIPALITY_CODE, DESTINATION_LOCALITY_NAME, DESTINATION_ROAD_CODE, DESTINATION_HOUSE_NUMBER, DESTINATION_FLOOR, DESTINATION_DOOR_NUMBER, DESTINATION_BNR);
     }
 
     @Override
@@ -225,7 +225,7 @@ public class MovementDataService extends PersonStatisticsService {
                             (filter.registrationBefore == null || !firstRegFrom.isAfter(filter.registrationBefore)) &&
                             (filter.originAfter == null || !currentAddress.getOriginDate().isBefore(filter.originAfter)) &&
                             (filter.originBefore == null || !currentAddress.getOriginDate().isAfter(filter.originBefore))
-                    ) {
+            ) {
                 if (previousAddress == null || !isInGreenland(previousAddress) && !isInGreenland(currentAddress)) {
                     continue;
                 }
@@ -277,7 +277,7 @@ public class MovementDataService extends PersonStatisticsService {
                 }
 
                 //Make sure to only add the moving to the report if there is recieved a moving event at the same time
-                if(eventListMove.stream().anyMatch(event -> event.getTimestamp().equals(firstRegFrom))) {
+                if (eventListMove.stream().anyMatch(event -> event.getTimestamp().equals(firstRegFrom))) {
                     moves.put(current, item);
                 }
             }

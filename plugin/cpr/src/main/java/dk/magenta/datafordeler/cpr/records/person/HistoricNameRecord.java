@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class HistoricNameRecord extends HistoricPersonDataRecord {
 
-    private CprBitemporality nameTemporality;
-    private CprBitemporality documentNameTemporality;
-    private CprBitemporality officiaryTemporality;
+    private final CprBitemporality nameTemporality;
+    private final CprBitemporality documentNameTemporality;
+    private final CprBitemporality officiaryTemporality;
 
     public HistoricNameRecord(String line) throws ParseException {
         super(line);

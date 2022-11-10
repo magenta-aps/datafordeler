@@ -1,11 +1,12 @@
 package dk.magenta.datafordeler.ger.parser;
 
 import dk.magenta.datafordeler.ger.data.RawData;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-
+import org.apache.logging.log4j.Logger;
 import org.jopendocument.dom.ODValueType;
-import org.jopendocument.dom.spreadsheet.*;
+import org.jopendocument.dom.spreadsheet.Cell;
+import org.jopendocument.dom.spreadsheet.Sheet;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -16,13 +17,13 @@ import java.util.*;
  */
 public class OdfConverter extends SpreadsheetConverter {
 
-    private static Logger log = LogManager.getLogger(SpreadsheetConverter.class);
+    private static final Logger log = LogManager.getLogger(SpreadsheetConverter.class.getCanonicalName());
 
     protected String[] getApplicableContentTypes() {
         return new String[]{
                 "application/vnd.oasis.opendocument.spreadsheet"
         };
-    };
+    }
 
     protected String[] getApplicableFileExtensions() {
         return new String[]{

@@ -2,7 +2,9 @@ package dk.magenta.datafordeler.ger.parser;
 
 import dk.magenta.datafordeler.ger.data.RawData;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.InputStream;
@@ -32,6 +34,7 @@ public class XlsxConverter extends XlsConverter {
     public Map<String, List<RawData>> convert(InputStream data) throws Exception {
         return this.convert(new XSSFWorkbook(data));
     }
+
     public Map<String, List<RawData>> convert(File data) throws Exception {
         return this.convert((XSSFWorkbook) WorkbookFactory.create(data));
     }

@@ -100,7 +100,6 @@ public class IndexTest {
                 mappedFields.put(nameNode.textValue(), queryFieldObjectNode.get("type").textValue());
             }
         }
-        System.out.println("mappedFields: "+mappedFields);
         Assert.assertEquals("int", mappedFields.get("postnr"));
         Assert.assertEquals("string", mappedFields.get("bynavn"));
         Assert.assertEquals("string", mappedFields.get("registrationFromAfter"));
@@ -180,7 +179,6 @@ public class IndexTest {
         headers.set("Accept", "text/html");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
         ResponseEntity<String> resp = this.restTemplate.exchange("/", HttpMethod.GET, httpEntity, String.class);
-        System.out.println(resp.getBody());
         Assert.assertNotNull(resp.getBody());
     }
 

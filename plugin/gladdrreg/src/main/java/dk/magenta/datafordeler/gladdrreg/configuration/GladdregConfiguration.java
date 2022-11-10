@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * Created by lars on 16-05-17.
  */
 @javax.persistence.Entity
-@Table(name="gladdreg_config")
+@Table(name = "gladdreg_config")
 public class GladdregConfiguration implements Configuration {
 
     @Id

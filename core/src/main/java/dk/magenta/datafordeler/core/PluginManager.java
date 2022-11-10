@@ -23,13 +23,13 @@ public class PluginManager {
     @Autowired(required = false)
     private List<Plugin> plugins;
 
-    private HashMap<String, Plugin> pluginsByURISubstring = new HashMap<>();
+    private final HashMap<String, Plugin> pluginsByURISubstring = new HashMap<>();
 
-    private HashMap<String, Plugin> pluginsByName= new HashMap<>();
+    private final HashMap<String, Plugin> pluginsByName = new HashMap<>();
 
-    private static Logger log = LogManager.getLogger(PluginManager.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(PluginManager.class.getCanonicalName());
 
-    private List<PluginManagerCallbackHandler> postConstructCallbackHandlers = new ArrayList<>();
+    private final List<PluginManagerCallbackHandler> postConstructCallbackHandlers = new ArrayList<>();
 
     private boolean afterPostContruct = false;
 
@@ -47,7 +47,7 @@ public class PluginManager {
             this.plugins = new ArrayList<>();
         }
         for (Plugin plugin : this.plugins) {
-            this.log.info("Found plugin " + plugin.getName());
+            log.info("Found plugin " + plugin.getName());
             this.pluginsByName.put(plugin.getName(), plugin);
             for (String domain : plugin.getHandledURISubstrings()) {
                 this.pluginsByURISubstring.put(domain, plugin);
@@ -72,6 +72,7 @@ public class PluginManager {
 
     /**
      * Get all detected plugins (Subclasses of Plugin that are Beans and present in the classpath)
+     *
      * @return List of Plugins
      */
     public List<Plugin> getPlugins() {
@@ -80,6 +81,7 @@ public class PluginManager {
 
     /**
      * Find the plugin that handles the defined schema
+     *
      * @param schema Schema name to search by
      * @return Found Plugin, or null if none found
      */
@@ -94,6 +96,7 @@ public class PluginManager {
 
     /**
      * Find the plugin that handles the defined URI
+     *
      * @param uri URI to search by. A plugin handles this URI if the uri begins with one of the plugin's handledUriSubstrings
      * @return Found Plugin, or null if none found
      */
@@ -126,6 +129,7 @@ public class PluginManager {
 
     /**
      * Find a plugin by name
+     *
      * @param name Plugin name to search for. Must be an exact match
      * @return Found Plugin, or null if none found
      */
@@ -136,6 +140,7 @@ public class PluginManager {
     public void addPluginURISubstring(Plugin plugin, String substring) {
         this.pluginsByURISubstring.put(substring, plugin);
     }
+
     public void removePluginURISubstring(Plugin plugin, String substring) {
         this.pluginsByURISubstring.remove(substring, plugin);
     }

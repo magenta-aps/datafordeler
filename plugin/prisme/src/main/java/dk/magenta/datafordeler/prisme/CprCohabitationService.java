@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.exception.*;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -18,21 +19,22 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
-import dk.magenta.datafordeler.geo.GeoLookupDTO;
-import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import dk.magenta.datafordeler.core.util.Equality;
 
 /**
  * Get the history of cohabitation
@@ -56,7 +58,7 @@ public class CprCohabitationService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CprCohabitationService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprCohabitationService.class.getCanonicalName());
 
     @PostConstruct
     public void init() {
@@ -78,7 +80,7 @@ public class CprCohabitationService {
         List<String> cprNumbers = new ArrayList<String>();
 
         for (String cpr : cprs) {
-            List<String> subCprList = Arrays.asList(cpr.split(","));
+            String[] subCprList = cpr.split(",");
             for (String subCpr : subCprList) {
                 cprNumbers.add(subCpr);
             }
@@ -103,13 +105,13 @@ public class CprCohabitationService {
             }
 
             List<AddressDataRecord> firstAddList = FilterUtilities.sortRecordsOnEffect(personEntities.get(0).getAddress()
-                    .stream().filter( adress -> !adress.isUndone()).collect(Collectors.toList()));
+                    .stream().filter(adress -> !adress.isUndone()).collect(Collectors.toList()));
             List<AddressDataRecord> secondAddList = FilterUtilities.sortRecordsOnEffect(personEntities.get(1).getAddress()
-                    .stream().filter( adress -> !adress.isUndone()).collect(Collectors.toList()));
+                    .stream().filter(adress -> !adress.isUndone()).collect(Collectors.toList()));
 
             if (!this.compareAdresses(firstAddList.get(0), secondAddList.get(0)) ||
-                    firstAddList.get(0).getEffectTo()!=null ||
-                    secondAddList.get(0).getEffectTo()!=null) {
+                    firstAddList.get(0).getEffectTo() != null ||
+                    secondAddList.get(0).getEffectTo() != null) {
                 return constructResponse(cprNumbers, false, null);
             }
 
@@ -126,7 +128,7 @@ public class CprCohabitationService {
         obj.put("Cohabitation", cohabitation);
         obj.put("ResidentDate", residentDate);
         int counter = 1;
-        for(String cpr : cprNumbers) {
+        for (String cpr : cprNumbers) {
             obj.put("cpr" + counter, cpr);
             counter++;
         }
@@ -140,12 +142,12 @@ public class CprCohabitationService {
             AddressDataRecord adress1 = adressList1.get(i);
             AddressDataRecord adress2 = adressList2.get(i);
             if (this.compareAdresses(adress1, adress2)) {
-                if(Equality.cprDomainEqualDate(adress1.getEffectFrom(), adress2.getEffectFrom())) {
+                if (Equality.cprDomainEqualDate(adress1.getEffectFrom(), adress2.getEffectFrom())) {
                     // Save the timestamp an iterate to find out if there is earlier common adresses
                     commonAdressTime = adress1.getEffectFrom();
                 } else {
                     // find the time when the last of the two persons moved in
-                    if(adress1.getEffectFrom().isBefore(adress2.getEffectFrom())) {
+                    if (adress1.getEffectFrom().isBefore(adress2.getEffectFrom())) {
                         return adress2.getEffectFrom();
                     } else {
                         return adress1.getEffectFrom();
@@ -160,8 +162,8 @@ public class CprCohabitationService {
 
 
     private boolean compareAdresses(AddressDataRecord adress1, AddressDataRecord adress2) {
-        return adress1.getMunicipalityCode()==adress2.getMunicipalityCode() &&
-                adress1.getRoadCode()==adress2.getRoadCode() &&
+        return adress1.getMunicipalityCode() == adress2.getMunicipalityCode() &&
+                adress1.getRoadCode() == adress2.getRoadCode() &&
                 Objects.equals(adress1.getHouseNumber(), adress2.getHouseNumber()) &&
                 Objects.equals(adress1.getDoor(), adress2.getDoor()) &&
                 Objects.equals(adress1.getFloor(), adress2.getFloor()) &&
@@ -172,10 +174,9 @@ public class CprCohabitationService {
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
-        }
-        catch (AccessDeniedException e) {
+        } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw(e);
+            throw (e);
         }
     }
 

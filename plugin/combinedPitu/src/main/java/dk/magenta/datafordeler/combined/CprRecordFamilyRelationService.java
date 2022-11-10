@@ -25,14 +25,17 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Lookup the family-relation of a person.
@@ -55,7 +58,7 @@ public class CprRecordFamilyRelationService {
     @Autowired
     protected MonitorService monitorService;
 
-    private Logger log = LogManager.getLogger(CprRecordFamilyRelationService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CprRecordFamilyRelationService.class.getCanonicalName());
 
     @Autowired
     private PersonOutputWrapper personOutputWrapper;
@@ -99,7 +102,7 @@ public class CprRecordFamilyRelationService {
             ParentDataRecord fatherRec = personEntity.getFather().current().stream().findFirst().orElse(null);
             String fatherPnr = null;
             PersonEntity fatherEntity = null;
-            if(fatherRec!=null) {
+            if (fatherRec != null) {
                 fatherPnr = fatherRec.getCprNumber();
                 personQuery.setPersonnummer(fatherPnr);
                 fatherEntity = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
@@ -107,7 +110,7 @@ public class CprRecordFamilyRelationService {
             ParentDataRecord motherRec = personEntity.getMother().current().stream().findFirst().orElse(null);
             String motherPnr = null;
             PersonEntity motherEntity = null;
-            if(motherRec!=null) {
+            if (motherRec != null) {
                 motherPnr = motherRec.getCprNumber();
                 personQuery.setPersonnummer(motherPnr);
                 motherEntity = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
@@ -119,17 +122,17 @@ public class CprRecordFamilyRelationService {
             if (LocalDateTime.now().minusYears(18).isAfter(PersonCustodyRelationsManager.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime())) {
                 motherhasCustody = false;
                 fatherhasCustody = false;
-            } else if(currentCustodyList.size() != 0) {
-                motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==3);
-                fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType()==4);
+            } else if (currentCustodyList.size() != 0) {
+                motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType() == 3);
+                fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType() == 4);
             }
 
             String hql = "SELECT personEntity " +
-                    "FROM "+ PersonEntity.class.getCanonicalName()+" personEntity "+
-                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " mother ON mother."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
-                    "JOIN "+ ParentDataRecord.class.getCanonicalName() + " father ON father."+ParentDataRecord.DB_FIELD_ENTITY+"=personEntity."+"id"+" "+
-                    " WHERE mother."+ParentDataRecord.DB_FIELD_CPR_NUMBER+"=:motherPnr"+
-                    " AND father."+ParentDataRecord.DB_FIELD_CPR_NUMBER+"=:fatherPnr";
+                    "FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" + " " +
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" + " " +
+                    " WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=:motherPnr" +
+                    " AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=:fatherPnr";
 
             Query siblingQuery = session.createQuery(hql);
             siblingQuery.setParameter("motherPnr", motherPnr);
@@ -137,7 +140,7 @@ public class CprRecordFamilyRelationService {
             List<PersonEntity> siblingList = siblingQuery.getResultList();
             Object obj = personOutputWrapper.wrapRecordResultFilteredInfo(personEntity, fatherEntity, fatherhasCustody, motherEntity, motherhasCustody, siblingList);
             return obj.toString();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
         }
     }

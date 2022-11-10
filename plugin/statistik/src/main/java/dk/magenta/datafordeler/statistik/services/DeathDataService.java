@@ -50,7 +50,7 @@ public class DeathDataService extends PersonStatisticsService {
     @Autowired
     private CprPlugin cprPlugin;
 
-    private Logger log = LogManager.getLogger(DeathDataService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(DeathDataService.class.getCanonicalName());
 
     @PostConstruct
     public void setUseTimeintervallimit() {
@@ -60,6 +60,7 @@ public class DeathDataService extends PersonStatisticsService {
 
     /**
      * Calls handlerequest in super with the ID of the report as a parameter
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -79,6 +80,7 @@ public class DeathDataService extends PersonStatisticsService {
 
     /**
      * Post is used for starting the generation of a report
+     *
      * @param request
      * @param response
      * @throws AccessDeniedException
@@ -98,12 +100,10 @@ public class DeathDataService extends PersonStatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(new String[]{
-                STATUS_CODE, DEATH_DATE, PROD_DATE, FILE_DATE, PNR, CIVIL_STATUS, BIRTHDAY_YEAR,
+        return Arrays.asList(STATUS_CODE, DEATH_DATE, PROD_DATE, FILE_DATE, PNR, CIVIL_STATUS, BIRTHDAY_YEAR,
                 MOTHER_PNR, FATHER_PNR, SPOUSE_PNR,
                 EFFECTIVE_PNR, CITIZENSHIP_CODE, BIRTH_AUTHORITY, BIRTH_AUTHORITY_TEXT, MUNICIPALITY_CODE,
-                LOCALITY_NAME, LOCALITY_ABBREVIATION, LOCALITY_CODE, ROAD_CODE, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER, BNR
-        });
+                LOCALITY_NAME, LOCALITY_ABBREVIATION, LOCALITY_CODE, ROAD_CODE, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER, BNR);
     }
 
     @Override

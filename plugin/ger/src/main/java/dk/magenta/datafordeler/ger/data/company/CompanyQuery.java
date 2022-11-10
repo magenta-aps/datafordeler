@@ -1,14 +1,11 @@
 package dk.magenta.datafordeler.ger.data.company;
 
-import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
-import dk.magenta.datafordeler.ger.data.GerEntity;
 import dk.magenta.datafordeler.ger.data.GerQuery;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +16,7 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
     public static final String NAME = CompanyEntity.IO_FIELD_NAME;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = NAME)
-    private List<String> name = new ArrayList<>();
+    private final List<String> name = new ArrayList<>();
 
     public List<String> getName() {
         return name;
@@ -70,7 +67,7 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
         return "ger_company";
     }
 
-    private static HashMap<String, String> joinHandles = new HashMap<>();
+    private static final HashMap<String, String> joinHandles = new HashMap<>();
 
     static {
         joinHandles.put("gernr", CompanyEntity.DB_FIELD_GERNR);

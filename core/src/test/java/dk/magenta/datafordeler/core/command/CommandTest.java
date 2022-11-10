@@ -101,7 +101,6 @@ public class CommandTest extends GapiTestBase {
         Assert.assertNotNull(postResponse);
         Assert.assertEquals(200, postResponse.getStatusCodeValue());
         JsonNode postResponseNode = objectMapper.readTree(postResponse.getBody());
-        System.out.println("POST Response received: "+postResponseNode);
 
         Assert.assertEquals("queued", postResponseNode.get("status").asText());
         Assert.assertEquals("pull", postResponseNode.get("commandName").asText());
@@ -112,7 +111,6 @@ public class CommandTest extends GapiTestBase {
         for (int i=0; i<60 && (status == null || "queued".equals(status)); i++) {
             HttpEntity<String> httpGetEntity = new HttpEntity<String>("", headers);
             ResponseEntity<String> getResponse = this.restTemplate.exchange("/command/" + id, HttpMethod.GET, httpGetEntity, String.class);
-            System.out.println("GET Response received: " + getResponse.getBody());
             Assert.assertNotNull(getResponse);
             Assert.assertEquals(200, getResponse.getStatusCodeValue());
             JsonNode getResponseNode = objectMapper.readTree(getResponse.getBody());
@@ -123,12 +121,10 @@ public class CommandTest extends GapiTestBase {
             Assert.assertEquals("bar", objectMapper.readTree(commandBody).get("foo").asText());
             Thread.sleep(1000);
         }
-        System.out.println("status: "+status);
         Assert.assertTrue("running".equals(status) || "successful".equals(status));
 
         HttpEntity<String> httpDeleteEntity = new HttpEntity<String>("", headers);
         ResponseEntity<String> deleteResponse = this.restTemplate.exchange("/command/"+id, HttpMethod.DELETE, httpDeleteEntity, String.class);
-        System.out.println("DELETE Response received: "+deleteResponse.getBody());
         Assert.assertNotNull(deleteResponse);
         Assert.assertEquals(200, deleteResponse.getStatusCodeValue());
         JsonNode deleteResponseNode = objectMapper.readTree(deleteResponse.getBody());
@@ -176,14 +172,12 @@ public class CommandTest extends GapiTestBase {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> httpPostEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> postResponse = this.restTemplate.exchange("/command/pull", HttpMethod.POST, httpPostEntity, String.class);
-        System.out.println("POST Response received: "+postResponse);
         Assert.assertNotNull(postResponse);
         Assert.assertEquals(200, postResponse.getStatusCodeValue());
         JsonNode postResponseNode = objectMapper.readTree(postResponse.getBody());
         Assert.assertEquals("queued", postResponseNode.get("status").asText());
         Assert.assertEquals("pull", postResponseNode.get("commandName").asText());
         Assert.assertNotNull(postResponseNode.get("received").asText());
-        System.out.println(postResponseNode);
         long id = postResponseNode.get("id").asLong();
 
         HttpEntity<String> httpGetEntity = new HttpEntity<String>("", headers);
@@ -193,7 +187,6 @@ public class CommandTest extends GapiTestBase {
 
         HttpEntity<String> httpDeleteEntity = new HttpEntity<String>("", headers);
         ResponseEntity<String> deleteResponse = this.restTemplate.exchange("/command/"+id, HttpMethod.DELETE, httpDeleteEntity, String.class);
-        System.out.println("DELETE Response received: "+deleteResponse.getBody());
         Assert.assertNotNull(deleteResponse);
         Assert.assertEquals(200, deleteResponse.getStatusCodeValue());
     }
@@ -212,7 +205,6 @@ public class CommandTest extends GapiTestBase {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> httpPostEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> postResponse = this.restTemplate.exchange("/command/pull", HttpMethod.POST, httpPostEntity, String.class);
-        System.out.println("postResponse: " + postResponse);
         Assert.assertNotNull(postResponse);
         Assert.assertEquals(403, postResponse.getStatusCodeValue());
     }
@@ -224,7 +216,6 @@ public class CommandTest extends GapiTestBase {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> httpPostEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> postResponse = this.restTemplate.exchange("/command/pull", HttpMethod.POST, httpPostEntity, String.class);
-        System.out.println("postResponse: " + postResponse);
         Assert.assertNotNull(postResponse);
         Assert.assertEquals(403, postResponse.getStatusCodeValue());
     }

@@ -23,7 +23,7 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
     @Value("${dafo.cpr.demoCompanyList:bob}")
     private String cvrDemoList;
 
-    private Logger log = LogManager.getLogger("CvrConfigurationManager");
+    private final Logger log = LogManager.getLogger("CvrConfigurationManager");
 
     @PostConstruct
     public void init() {

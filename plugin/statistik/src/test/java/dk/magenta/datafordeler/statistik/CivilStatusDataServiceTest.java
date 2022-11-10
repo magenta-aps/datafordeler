@@ -5,13 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.statistik.services.CivilStatusDataService;
 import org.hibernate.Session;
-import org.json.JSONException;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -73,8 +76,16 @@ public class CivilStatusDataServiceTest extends TestBase {
         testsUtils.deleteAll();
     }
 
+    private void assertJsonEquals(String jsonExpected, String jsonActual) throws JsonProcessingException {
+        Assert.assertTrue(
+                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual),
+                new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)) == 0
+        );
+    }
+
     /**
      * This is just a test of what has been initiated by the cpr module
+     *
      * @throws JsonProcessingException
      */
     @Test
@@ -83,13 +94,13 @@ public class CivilStatusDataServiceTest extends TestBase {
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
         query.setPersonnummer("0101011234");
-        List<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, query,PersonEntity.class).collect(Collectors.toList());
+        List<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, query, PersonEntity.class).collect(Collectors.toList());
         Assert.assertEquals(1, personEntities.size());
         PersonEntity personEntity = personEntities.get(0);
         Assert.assertEquals(5, personEntity.getCivilstatus().size());
 
         query.setPersonnummer("0101011235");
-        personEntities = QueryManager.getAllEntitiesAsStream(session, query,PersonEntity.class).collect(Collectors.toList());
+        personEntities = QueryManager.getAllEntitiesAsStream(session, query, PersonEntity.class).collect(Collectors.toList());
         Assert.assertEquals(1, personEntities.size());
         personEntity = personEntities.get(0);
         Assert.assertEquals(4, personEntity.getCivilstatus().size());
@@ -97,7 +108,7 @@ public class CivilStatusDataServiceTest extends TestBase {
 
 
     @Test
-    public void testServiceMarried() throws JsonProcessingException, JSONException {
+    public void testServiceMarried() throws JsonProcessingException {
         civilStatusDataService.setWriteToLocalFile(false);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/civilstate_data/?CivSt=G&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
@@ -132,7 +143,7 @@ public class CivilStatusDataServiceTest extends TestBase {
                 testUtil.csvToJsonString(expected),
                 testUtil.csvToJsonString(response.getBody().trim()),
                 "CivDto"
-);
+        );
 
         response = restTemplate.exchange("/statistik/civilstate_data/?registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(200, response.getStatusCodeValue());
@@ -148,12 +159,12 @@ public class CivilStatusDataServiceTest extends TestBase {
                 testUtil.csvToJsonString(expected),
                 testUtil.csvToJsonString(response.getBody().trim()),
                 "CivDto"
-);
+        );
     }
 
 
     @Test
-    public void testCivilStateChangeWithPnr0101011234() throws JsonProcessingException, JSONException {
+    public void testCivilStateChangeWithPnr0101011234() throws JsonProcessingException {
 
         civilStatusDataService.setWriteToLocalFile(false);
         testUserDetails = new TestUserDetails();
@@ -173,11 +184,11 @@ public class CivilStatusDataServiceTest extends TestBase {
                 testUtil.csvToJsonString(expected),
                 testUtil.csvToJsonString(response.getBody().trim()),
                 "CivDto"
-);
+        );
     }
 
     @Test
-    public void testCivilStateChangeWithPnr0101011235() throws JsonProcessingException, JSONException {
+    public void testCivilStateChangeWithPnr0101011235() throws JsonProcessingException {
 
         civilStatusDataService.setWriteToLocalFile(false);
         testUserDetails = new TestUserDetails();
@@ -192,9 +203,11 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"15-03-2018\";;\"15-03-2018\";\"0101011235\";\"1111111111\";\"340\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"\n" +
                 "\"F\";\"16-12-2018\";;\"16-12-2018\";\"0101011235\";\"1111111111\";\"1350\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"";
 
-        JSONAssert.assertEquals(
+        assertJsonEquals(
                 testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), JSONCompareMode.LENIENT
+                testUtil.csvToJsonString(response.getBody().trim())
         );
     }
+
+
 }

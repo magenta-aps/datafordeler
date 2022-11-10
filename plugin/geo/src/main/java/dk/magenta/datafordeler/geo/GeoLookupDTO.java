@@ -13,7 +13,6 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 
-
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,7 +45,6 @@ public class GeoLookupDTO extends CprLookupDTO {
         }
         Set<GeoRoadEntity> roadEntities = resultSet.get(GeoRoadEntity.class);
         if (roadEntities != null) {
-            System.out.println("roadEntities: "+roadEntities.stream().map(r -> r.getName().current().getName()).collect(Collectors.toList()));
             for (GeoRoadEntity roadEntity : roadEntities) {
                 if (this.setRoad(roadEntity)) {
                     break;
@@ -109,9 +107,8 @@ public class GeoLookupDTO extends CprLookupDTO {
 
     private boolean setRoad(GeoRoadEntity entity) {
         for (RoadNameRecord roadNameRecord : entity.getName()) {
-            System.out.println(roadNameRecord.getName());
             this.roadName = roadNameRecord.getName();
-            //return true;
+            return true;
         }
         return false;
     }

@@ -164,5 +164,5 @@ public class ResidenceOutputWrapper extends OutputWrapper<ResidenceEntity> {
         );
         return output;
     }
-    
+
 }

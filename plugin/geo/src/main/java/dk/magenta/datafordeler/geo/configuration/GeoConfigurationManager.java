@@ -15,7 +15,7 @@ public class GeoConfigurationManager extends ConfigurationManager<GeoConfigurati
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
 
-    private Logger log = LogManager.getLogger("GeoConfigurationManager");
+    private final Logger log = LogManager.getLogger(GeoConfigurationManager.class.getCanonicalName());
 
     @PostConstruct
     public void init() {

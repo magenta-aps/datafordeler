@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @Component
 public class RoadEntityManager extends CprRecordEntityManager<RoadDataRecord, RoadEntity> {
-    
+
     @Autowired
     private RoadEntityRecordService roadEntityService;
 

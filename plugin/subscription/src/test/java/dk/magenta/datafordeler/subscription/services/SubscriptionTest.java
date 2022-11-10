@@ -1,11 +1,11 @@
 package dk.magenta.datafordeler.subscription.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -14,7 +14,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -26,18 +25,21 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class SubscribtionTest {
+public class SubscriptionTest {
 
     @Autowired
     TestRestTemplate restTemplate;
@@ -54,7 +56,6 @@ public class SubscribtionTest {
     MockMvc mvc;
 
 
-
     @Before
     public void setUp() throws Exception {
 
@@ -63,9 +64,8 @@ public class SubscribtionTest {
         mvc = MockMvcBuilders.standaloneSetup(controller).build();
 
 
-
         //Initiate a list of subscriptions
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             Transaction transaction = session.beginTransaction();
 
@@ -76,8 +76,7 @@ public class SubscribtionTest {
             subscriptions.add(new Subscriber("user3"));
             subscriptions.add(new Subscriber("user4"));
 
-
-            for(Subscriber subscriber : subscriptions) {
+            for (Subscriber subscriber : subscriptions) {
                 session.save(subscriber);
             }
 
@@ -85,7 +84,12 @@ public class SubscribtionTest {
         }
     }
 
-
+    private void assertJsonEquals(String jsonExpected, String jsonActual) throws JsonProcessingException {
+        Assert.assertTrue(
+                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual),
+                new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)) == 0
+        );
+    }
 
 
     private void applyAccess(dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails) {
@@ -99,9 +103,9 @@ public class SubscribtionTest {
     @Test
     public void testModifications() {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
@@ -109,9 +113,9 @@ public class SubscribtionTest {
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
@@ -122,9 +126,9 @@ public class SubscribtionTest {
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
@@ -133,9 +137,9 @@ public class SubscribtionTest {
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
@@ -146,9 +150,9 @@ public class SubscribtionTest {
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("select a from "+ Subscriber.class.getName() +" a where a.subscriberId = :subscriberId", Subscriber.class);
+            Query query = session.createQuery("select a from " + Subscriber.class.getName() + " a where a.subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             Assert.assertEquals(1, subscriber.getBusinessEventSubscription().size());
@@ -157,7 +161,7 @@ public class SubscribtionTest {
         }
 
         //Create cprList1
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             CprList pnrList = new CprList("cprList1");
             session.save(pnrList);
@@ -165,7 +169,7 @@ public class SubscribtionTest {
         }
 
         //Create cprList2
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             CprList pnrList = new CprList("cprList2");
             session.save(pnrList);
@@ -173,9 +177,9 @@ public class SubscribtionTest {
         }
 
         //Find cprList2
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "cprList2");
             Assert.assertEquals(1, query.getResultList().size());
             transaction.commit();
@@ -183,9 +187,9 @@ public class SubscribtionTest {
 
         //Add cprs to cprList2
         boolean requiredExeptionHit = false;
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "cprList2");
             CprList pnrList = (CprList) query.getResultList().get(0);
             Set<SubscribedCprNumber> list = new HashSet<SubscribedCprNumber>();
@@ -201,9 +205,9 @@ public class SubscribtionTest {
         }
 
         //Find added cprs in cprList2
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "cprList2");
 
             CprList pnrList = (CprList) query.getResultList().get(0);
@@ -213,14 +217,14 @@ public class SubscribtionTest {
         }
 
 
-        //Add pnrList into businessEventSubscribtion
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        //Add pnrList into businessEventSubscription
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from "+ CprList.class.getName() +" where listId = :listId", CprList.class);
+            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "cprList2");
 
             CprList pnrList = (CprList) query.getResultList().get(0);
-            Query query2 = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query query2 = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
 
             query2.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query2.getResultList().get(0);
@@ -231,10 +235,10 @@ public class SubscribtionTest {
             transaction.commit();
         }
 
-        //Confirm that the pnrList has been added to businessEventSubscribtion
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        //Confirm that the pnrList has been added to businessEventSubscription
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query2 = session.createQuery(" from "+ Subscriber.class.getName() +" where subscriberId = :subscriberId", Subscriber.class);
+            Query query2 = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
             query2.setParameter("subscriberId", "user2");
 
             Subscriber subscriber = (Subscriber) query2.getResultList().get(0);
@@ -242,18 +246,14 @@ public class SubscribtionTest {
             Assert.assertEquals(3, businessEventSubscription.getCprList().getCpr().size());
             transaction.commit();
         }
-
-
     }
-
-
 
 
     /**
      * Test that it is possible to call a service that deliveres a list of subscription that has been created in datafordeler
      */
     @Test
-    public void testGetSubscriberList() {
+    public void testGetSubscriberList() throws JsonProcessingException {
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
@@ -265,16 +265,20 @@ public class SubscribtionTest {
                 httpEntity,
                 String.class
         );
-        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]}]", response.getBody(), false);
-
+        assertJsonEquals(
+                "[" +
+                        "{\"subscriberId\":\"user1\",\"cprLists\":[],\"cvrLists\":[],\"businessEventSubscription\":[],\"dataEventSubscription\":[]}," +
+                        "{\"subscriberId\":\"user2\",\"cprLists\":[],\"cvrLists\":[],\"businessEventSubscription\":[],\"dataEventSubscription\":[]}," +
+                        "{\"subscriberId\":\"user3\",\"cprLists\":[],\"cvrLists\":[],\"businessEventSubscription\":[],\"dataEventSubscription\":[]}," +
+                        "{\"subscriberId\":\"user4\",\"cprLists\":[],\"cvrLists\":[],\"businessEventSubscription\":[],\"dataEventSubscription\":[]}" +
+                        "]",
+                response.getBody()
+        );
     }
 
     /**
      * Test that it is possible to find a specific subscription
+     *
      * @throws Exception
      */
     @Test
@@ -291,7 +295,10 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", response.getBody(), false);
+        assertJsonEquals(
+                "{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}",
+                response.getBody()
+        );
 
 
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -305,7 +312,10 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", response.getBody(), false);
+        assertJsonEquals(
+                "{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}",
+                response.getBody()
+        );
 
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
         testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
@@ -319,11 +329,11 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-
     }
 
     /**
      * Test that it is possible to create a new subscriber
+     *
      * @throws Exception
      */
     @Test
@@ -343,11 +353,15 @@ public class SubscribtionTest {
                 String.class
         );
 
-        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]}]", response.getBody(), false);
+        assertJsonEquals(
+                "[" +
+                        "{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user3\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user4\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}" +
+                        "]",
+                response.getBody()
+        );
 
         httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", httpHeaders);
         testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
@@ -371,7 +385,6 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
-
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber",
                 HttpMethod.GET,
@@ -379,13 +392,15 @@ public class SubscribtionTest {
                 String.class
         );
 
-        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]}]", response.getBody(), false);
-
+        assertJsonEquals("[" +
+                        "{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user3\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user4\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}" +
+                        "]",
+                response.getBody()
+        );
 
 
         //testUserDetails.setIdentity("myCreatedUser");
@@ -415,19 +430,23 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"PITU_GOV_DIA_magenta_services\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]}]", response.getBody(), false);
-
+        assertJsonEquals(
+                "[" +
+                        "{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user3\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user4\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"PITU_GOV_DIA_magenta_services\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}" +
+                        "]",
+                response.getBody()
+        );
     }
 
 
     /**
      * Test that it is possible to delete a new subscription
+     *
      * @throws Exception
      */
     @Test
@@ -446,11 +465,14 @@ public class SubscribtionTest {
                 String.class
         );
 
-        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user2\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]}]", response.getBody(), false);
+        assertJsonEquals(
+                "[{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                "{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                "{\"subscriberId\":\"user3\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                "{\"subscriberId\":\"user4\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}" +
+                "]",
+                response.getBody()
+        );
 
         httpEntity = new HttpEntity<String>("{\"subscriberId\":\"createdUser1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", httpHeaders);
         testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
@@ -464,7 +486,10 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", response.getBody(), false);
+        assertJsonEquals(
+                "{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}",
+                response.getBody()
+        );
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber",
@@ -472,26 +497,28 @@ public class SubscribtionTest {
                 httpEntity,
                 String.class
         );
-        JSONAssert.assertEquals("[{\"subscriberId\":\"user1\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user3\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]},{\"subscriberId\":\"user4\",\"businessEventSubscription\":[]," +
-                "\"dataEventSubscription\":[]}]", response.getBody(), false);
+        Assert.assertEquals(
+                objectMapper.readTree("[" +
+                        "{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user3\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
+                        "{\"subscriberId\":\"user4\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}" +
+                "]"),
+                objectMapper.readTree(response.getBody())
+        );
     }
-
-
-
 
 
     /**
      * Test that it is possible to find a specific subscription and add new subscriptions
+     *
      * @throws Exception
      */
     @Test
     public void testGetAddSubscriptions() throws Exception {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
             subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription1", "A01"));
             subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription2", "A02"));
             subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription3", "A03"));
@@ -518,9 +545,14 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscription3\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscription1\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscription2\"}]", response.getBody(), false);
+        assertJsonEquals(
+                "[" +
+                        "{\"cprList\":null,\"businessEventId\":\"subscription1\",\"kodeId\":\"A01\"}," +
+                        "{\"cprList\":null,\"businessEventId\":\"subscription2\",\"kodeId\":\"A02\"}," +
+                        "{\"cprList\":null,\"businessEventId\":\"subscription3\",\"kodeId\":\"A03\"}" +
+                        "]",
+                response.getBody()
+        );
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription/?businessEventId=newBusinessEventId&kodeId=A04",
@@ -538,10 +570,14 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A04\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscription3\",\"kodeId\":\"A03\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscription1\",\"kodeId\":\"A01\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscription2\",\"kodeId\":\"A02\"}]", response.getBody(), false);
+        assertJsonEquals("[" +
+                        "{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A04\"}," +
+                        "{\"cprList\":null,\"businessEventId\":\"subscription3\",\"kodeId\":\"A03\"}," +
+                        "{\"cprList\":null,\"businessEventId\":\"subscription1\",\"kodeId\":\"A01\"}," +
+                        "{\"cprList\":null,\"businessEventId\":\"subscription2\",\"kodeId\":\"A02\"}" +
+                        "]",
+                response.getBody()
+        );
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription/?dataEventId=newDataEventId",
@@ -559,25 +595,29 @@ public class SubscribtionTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"newDataEventId\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscription3\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscription1\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscription2\"}]", response.getBody(), false);
-
-
+        assertJsonEquals(
+                "[" +
+                    "{\"cprList\":null,\"cvrList\":null,\"dataEventId\":\"newDataEventId\",\"kodeId\":\"\"}," +
+                    "{\"cprList\":null,\"cvrList\":null,\"dataEventId\":\"subscription3\",\"kodeId\":\"\"}," +
+                    "{\"cprList\":null,\"cvrList\":null,\"dataEventId\":\"subscription1\",\"kodeId\":\"\"}," +
+                    "{\"cprList\":null,\"cvrList\":null,\"dataEventId\":\"subscription2\",\"kodeId\":\"\"}" +
+                "]",
+                response.getBody()
+        );
     }
 
 
     /**
-     * Test that it is possible to delete a new subscribtion
+     * Test that it is possible to delete a new subscription
+     *
      * @throws Exception
      */
     @Test
-    public void testDeleteSubscribtion() throws Exception {
+    public void testDeleteSubscription() throws Exception {
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Subscriber subscriber =  new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/","_"));
+            Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
             BusinessEventSubscription bs1 = new BusinessEventSubscription("subscription1", "A01");
             BusinessEventSubscription bs2 = new BusinessEventSubscription("subscription2", "A01");
             BusinessEventSubscription bs3 = new BusinessEventSubscription("subscription3", "A01");
@@ -602,13 +642,9 @@ public class SubscribtionTest {
             transaction.commit();
         }
 
-        try(Session session = sessionManager.getSessionFactory().openSession()) {
-
-            Transaction transaction = session.beginTransaction();
-
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<BusinessEventSubscription> subscriptions = QueryManager.getAllItems(session, BusinessEventSubscription.class);
             System.out.println(subscriptions);
-
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -627,9 +663,11 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscription3\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscription1\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscription2\"}]", response.getBody(), false);
+        assertJsonEquals("[" +
+                "{\"cprList\":null,\"businessEventId\":\"subscription1\",\"kodeId\":\"A01\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription2\",\"kodeId\":\"A01\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription3\",\"kodeId\":\"A01\"}" +
+                "]", response.getBody());
 
 
         //Try fetching with no cpr access rights
@@ -648,8 +686,13 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"businessEventId\":\"subscription3\"}," +
-                "{\"cprList\":null,\"businessEventId\":\"subscription2\"}]", response.getBody(), false);
+        assertJsonEquals(
+                "[" +
+                "{\"cprList\":null,\"businessEventId\":\"subscription3\",\"kodeId\":\"A01\"}," +
+                "{\"cprList\":null,\"businessEventId\":\"subscription2\",\"kodeId\":\"A01\"}" +
+                "]",
+                response.getBody()
+        );
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
@@ -658,10 +701,11 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"subscription3\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscription1\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscription2\"}]", response.getBody(), false);
-
+        assertJsonEquals("[" +
+                "{\"cprList\":null,\"dataEventId\":\"subscription3\",\"cprList\":null,\"cvrList\":null,\"kodeId\":\"\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscription1\",\"cprList\":null,\"cvrList\":null,\"kodeId\":\"\"}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscription2\",\"cprList\":null,\"cvrList\":null,\"kodeId\":\"\"}" +
+                "]", response.getBody());
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
@@ -680,23 +724,13 @@ public class SubscribtionTest {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("[{\"cprList\":null,\"dataEventId\":\"subscription3\"}," +
-                "{\"cprList\":null,\"dataEventId\":\"subscription2\"}]", response.getBody(), false);
-
+        assertJsonEquals(
+                "[" +
+                "{\"cprList\":null,\"dataEventId\":\"subscription3\",\"kodeId\":\"\",\"cprList\":null,\"cvrList\":null}," +
+                "{\"cprList\":null,\"dataEventId\":\"subscription2\",\"kodeId\":\"\",\"cprList\":null,\"cvrList\":null}" +
+                "]",
+                response.getBody()
+        );
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

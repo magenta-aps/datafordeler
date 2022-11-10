@@ -14,13 +14,13 @@ import java.util.List;
  */
 public class GuardianRecord extends PersonDataRecord {
 
-    private CprBitemporality temporality;
+    private final CprBitemporality temporality;
 
     public GuardianRecord(String line) throws ParseException {
         this(line, traditionalMapping);
     }
 
-     public GuardianRecord(String line, Mapping mapping) throws ParseException {
+    public GuardianRecord(String line, Mapping mapping) throws ParseException {
         super(line);
         this.obtain(mapping);
 
@@ -35,6 +35,7 @@ public class GuardianRecord extends PersonDataRecord {
     }
 
     public static final Mapping traditionalMapping = new Mapping();
+
     static {
         traditionalMapping.add("start_mynkod-umyndig", 14, 4);
         traditionalMapping.add("start_dt-umyndig", 18, 10);
@@ -67,24 +68,24 @@ public class GuardianRecord extends PersonDataRecord {
         ArrayList<CprBitemporalRecord> records = new ArrayList<>();
 
         records.add(new GuardianDataRecord(
-            this.getInt("umyn_reltyp"),
-            this.getInt("reltyp-relpnr_pnr"),
-            this.getInt("start_mynkod-relpnr_pnr"),
-            this.getString("relpnr", false),
-            this.getDate("start_dt-relpnr_pnr"),
-            this.getInt("reltyp-relpnr_txt"),
-            this.getInt("start_mynkod-relpnr_txt"),
-            this.getString("reladrsat_relpnr_txt", false),
-            this.getDate("start_dt-relpnr_txt"),
-            this.getString("reltxt1", false),
-            this.getString("reltxt2", false),
-            this.getString("reltxt3", false),
-            this.getString("reltxt4", false),
-            this.getString("reltxt5", false)
+                this.getInt("umyn_reltyp"),
+                this.getInt("reltyp-relpnr_pnr"),
+                this.getInt("start_mynkod-relpnr_pnr"),
+                this.getString("relpnr", false),
+                this.getDate("start_dt-relpnr_pnr"),
+                this.getInt("reltyp-relpnr_txt"),
+                this.getInt("start_mynkod-relpnr_txt"),
+                this.getString("reladrsat_relpnr_txt", false),
+                this.getDate("start_dt-relpnr_txt"),
+                this.getString("reltxt1", false),
+                this.getString("reltxt2", false),
+                this.getString("reltxt3", false),
+                this.getString("reltxt4", false),
+                this.getString("reltxt5", false)
         ).setAuthority(
-            this.getInt("start_mynkod-umyndig")
+                this.getInt("start_mynkod-umyndig")
         ).setBitemporality(
-            this.temporality
+                this.temporality
         ));
 
         return records;

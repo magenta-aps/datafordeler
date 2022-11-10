@@ -39,6 +39,7 @@ public class BNumberEntityService extends FapiService<BNumberEntity, BNumberQuer
     protected Class<BNumberEntity> getEntityClass() {
         return BNumberEntity.class;
     }
+
     @Override
     public Plugin getPlugin() {
         return this.gladdregPlugin;

@@ -38,7 +38,7 @@ public abstract class GladdrregEntityManager extends EntityManager {
 
     private HttpCommunicator commonFetcher;
 
-    protected Logger log = LogManager.getLogger(this.getClass().getSimpleName());
+    protected Logger log = LogManager.getLogger(GladdrregEntityManager.class.getCanonicalName());
 
     private Collection<String> handledURISubstrings;
 
@@ -143,7 +143,7 @@ public abstract class GladdrregEntityManager extends EntityManager {
                 registration.wireEffects();
                 return Collections.singletonList(registration);
             } catch (JsonProcessingException e) {
-                throw new ParseException("Error parsing registration "+registrationData, e);
+                throw new ParseException("Error parsing registration " + registrationData, e);
             }
         } else {
             // Wrapped case
@@ -172,7 +172,7 @@ public abstract class GladdrregEntityManager extends EntityManager {
         if (reference.getURI() != null) {
             return reference.getURI();
         }
-        return EntityManager.expandBaseURI(this.getBaseEndpoint(), "/get/"+this.getBaseName()+"/"+reference.getChecksum());
+        return EntityManager.expandBaseURI(this.getBaseEndpoint(), "/get/" + this.getBaseName() + "/" + reference.getChecksum());
     }
 
     @Override

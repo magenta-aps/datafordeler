@@ -69,7 +69,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     }
 
 
-
     public static final String DB_FIELD_PARTICIPANT_RELATION = "relationParticipantRecord";
 
     @ManyToOne(targetEntity = RelationParticipantRecord.class, fetch = FetchType.LAZY)
@@ -80,7 +79,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public void setRelationParticipantRecord(RelationParticipantRecord relationParticipantRecord) {
         this.relationParticipantRecord = relationParticipantRecord;
     }
-
 
 
     public static final String DB_FIELD_TYPE = "type";
@@ -582,7 +580,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         PluginManager pluginManager = PluginManager.getInstance();
         ArrayList<BaseQuery> queries = new ArrayList<>();
         HashMap<String, String> map = new HashMap<>();
-        if(this.municipality!=null) {
+        if (this.municipality != null) {
             map.put("municipalitycode", Integer.toString(this.municipality.getMunicipalityCode()));
             map.put("roadcode", Integer.toString(this.roadCode));
 

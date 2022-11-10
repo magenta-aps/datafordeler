@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
-import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import org.hibernate.Session;
 
@@ -41,7 +40,6 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_UNIT = "officeRelationUnitRecord";
     public static final String IO_FIELD_UNIT = "penhed";
 
@@ -64,7 +62,6 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
     }
 
 
-
     public static final String DB_FIELD_ATTRIBUTES = "attributes";
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
@@ -85,6 +82,7 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
             this.attributes.add(attribute);
         }
     }
+
     public void mergeAttribute(AttributeRecord otherRecord) {
         if (otherRecord != null) {
             String otherType = otherRecord.getType();

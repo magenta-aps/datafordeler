@@ -6,6 +6,8 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
@@ -20,6 +22,8 @@ import java.util.regex.Pattern;
 @MappedSuperclass
 public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends CprNontemporalRecord<E, S>> extends DatabaseEntry implements Nontemporal {
 
+    @Transient
+    private final Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
 
     public static final String FILTERPARAMTYPE_LASTUPDATED = "java.time.OffsetDateTime";
 
@@ -45,7 +49,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     }
 
 
-
     @JsonProperty(value = "id")
     public Long getId() {
         return super.getId();
@@ -64,7 +67,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public int getCnt() {
         return this.cnt;
     }
-
 
 
     public static final String DB_FIELD_CORRECTION_OF = "correctionof";
@@ -106,7 +108,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
 
     public void setReplaces(S replaces) {
         if (replaces != null && replaces.getReplacedby() != null && replaces.getReplacedby() != this) {
-            System.out.println("Tried to point "+this.cnt+" to "+replaces.cnt+", but "+replaces.cnt+" already has "+replaces.getReplacedby().cnt+" pointing to it");
+            log.error("Tried to point " + this.cnt + " to " + replaces.cnt + ", but " + replaces.cnt + " already has " + replaces.getReplacedby().cnt + " pointing to it");
         }
         this.replaces = replaces;
     }
@@ -115,7 +117,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public Long getReplacesId() {
         return (this.replaces != null) ? this.replaces.getId() : null;
     }
-
 
 
     public static final String DB_FIELD_REPLACED_BY = "replacedby";
@@ -130,7 +131,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
 
     public void setReplacedby(S replacedby) {
         if (replacedby != null && replacedby.getReplaces() != null && replacedby.getReplaces() != this) {
-            System.out.println("Tried to point "+this.cnt+" to "+ replacedby.cnt+", but "+ replacedby.cnt+" already has "+ replacedby.getReplaces().cnt+" pointing to it");
+            log.error("Tried to point " + this.cnt + " to " + replacedby.cnt + ", but " + replacedby.cnt + " already has " + replacedby.getReplaces().cnt + " pointing to it");
         }
         this.replacedby = replacedby;
         if (replacedby != null) {
@@ -142,7 +143,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public Long getReplacedById() {
         return (this.replacedby != null) ? this.replacedby.getId() : null;
     }
-
 
 
     public static final String DB_FIELD_UNDONE = "undone";
@@ -167,6 +167,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
      * Set information about the Id of the record that this record closes.
      * If for instance a person gets a new address then the timeinterval of the former address is closed.
      * If later the address is revoked, then it is necessary to reopen the record which has been closed
+     *
      * @param closesRecordId
      */
     public void setClosesRecordId(Long closesRecordId) {
@@ -177,7 +178,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public Long getClosesRecordId() {
         return closesRecordId;
     }
-
 
 
     public static final String DB_FIELD_AUTHORITY = "authority";
@@ -197,9 +197,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
         }
         return this;
     }
-
-
-
 
 
     public static final String DB_FIELD_UPDATED = Nontemporal.DB_FIELD_UPDATED;
@@ -224,7 +221,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     }
 
 
-
     public static final String DB_FIELD_ORIGIN = "origin";
     @Column(name = DB_FIELD_ORIGIN)
     private String origin;
@@ -239,6 +235,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     }
 
     private static final Pattern originPattern = Pattern.compile("d(\\d\\d)(\\d\\d)(\\d\\d)\\.l(\\d\\d\\d\\d\\d\\d)");
+
     public static LocalDate parseOrigin(String origin) {
         if (origin != null) {
             Matcher matcher = originPattern.matcher(origin);
@@ -265,11 +262,9 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     }
 
 
-
     public boolean equalData(Object o) {
-        if (o==null || (getClass() != o.getClass())) return false;
+        if (o == null || (getClass() != o.getClass())) return false;
         CprNontemporalRecord that = (CprNontemporalRecord) o;
-        //System.out.println(authority+(authority == that.authority ? " == ":" != ")+that.authority);
         return Objects.equals(this.authority, that.authority)/* && Objects.equals(this.origin, that.origin)*/;
     }
 

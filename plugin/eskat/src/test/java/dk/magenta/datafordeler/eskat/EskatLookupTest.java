@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
@@ -38,7 +37,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.MissingResourceException;
+import java.util.Scanner;
 
 import static org.mockito.Mockito.when;
 
@@ -63,7 +65,8 @@ public class EskatLookupTest {
     private CvrPlugin plugin;
 
 
-    private static HashMap<String, String> schemaMap = new HashMap<>();
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
     static {
         schemaMap.put("_doc", CompanyRecord.schema);
         schemaMap.put("produktionsenhed", CompanyUnitRecord.schema);
@@ -81,7 +84,7 @@ public class EskatLookupTest {
         this.loadUnit();
         this.loadParticipant("/person.json");
         Transaction tx = session.getTransaction();
-        if(tx.isActive()) {
+        if (tx.isActive()) {
             tx.commit();
         }
     }
@@ -108,7 +111,7 @@ public class EskatLookupTest {
         Transaction transaction = session.beginTransaction();
         InputStream input = ParseTest.class.getResourceAsStream(resource);
         if (input == null) {
-            throw new MissingResourceException("Missing resource \""+resource+"\"", resource, "key");
+            throw new MissingResourceException("Missing resource \"" + resource + "\"", resource, "key");
         }
         boolean linedFile = false;
         HashMap<Long, JsonNode> persons = new HashMap<>();
@@ -117,7 +120,7 @@ public class EskatLookupTest {
 
             if (linedFile) {
                 int lineNumber = 0;
-                Scanner lineScanner = new Scanner(input, "UTF-8").useDelimiter("\n");
+                Scanner lineScanner = new Scanner(input, StandardCharsets.UTF_8).useDelimiter("\n");
                 while (lineScanner.hasNext()) {
                     String data = lineScanner.next();
 
@@ -194,7 +197,7 @@ public class EskatLookupTest {
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
 
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
 
@@ -336,7 +339,7 @@ public class EskatLookupTest {
         this.loadAllCompany();
         TestUserDetails testUserDetails = new TestUserDetails();
         ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity;
+        HttpEntity<String> httpEntity;
         httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
 
         ResponseEntity<String> response;
@@ -647,7 +650,7 @@ public class EskatLookupTest {
         TestUserDetails testUserDetails = new TestUserDetails();
 
         ObjectNode body = objectMapper.createObjectNode();
-        HttpEntity<String>  httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
         ResponseEntity<String> response;
 
         response = restTemplate.exchange(
@@ -681,9 +684,6 @@ public class EskatLookupTest {
         Assert.assertEquals(false, response.getBody().contains("1020895337"));
         Assert.assertEquals(false, response.getBody().contains("1020895338"));
     }
-
-
-
 
 
     private void applyAccess(TestUserDetails testUserDetails) {

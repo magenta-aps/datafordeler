@@ -13,8 +13,8 @@ import java.util.List;
 public class GladdrregRolesDefinition extends RolesDefinition {
 
     public static ReadServiceRole READ_GLADDRREG_ROLE = new ReadServiceRole(
-        "Gladdrreg",
-        new ReadServiceRoleVersion(1.0f, "Initial version")
+            "Gladdrreg",
+            new ReadServiceRoleVersion(1.0f, "Initial version")
     );
 
     public static ExecuteCommandRole EXECUTE_GLADDRREG_PULL_ROLE = new ExecuteCommandRole(

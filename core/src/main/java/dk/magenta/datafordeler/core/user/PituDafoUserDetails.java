@@ -19,22 +19,22 @@ public class PituDafoUserDetails extends DafoUserDetails {
     public static String PARAMETER_SERVICECODE = "serviceCode";
     public static String PARAMETER_SERVICEVERSION = "serviceVersion";
 
-    private HashMap<String, UserProfile> userProfiles = new HashMap<>();
-    private HashMap<String, ArrayList<UserProfile>> systemRoles = new HashMap<>();
+    private final HashMap<String, UserProfile> userProfiles = new HashMap<>();
+    private final HashMap<String, ArrayList<UserProfile>> systemRoles = new HashMap<>();
 
     String serverSubject;
     String verify;
 
-    private String nameQualifier;
+    private final String nameQualifier;
     private String onBehalfOf;
-    private String clientSubject;
+    private final String clientSubject;
 
-    private String xRoadInstance;
-    private String memberClass;
-    private String memberCode;
-    private String subsystemCode;
-    private String serviceCode;
-    private String serviceVersion;
+    private final String xRoadInstance;
+    private final String memberClass;
+    private final String memberCode;
+    private final String subsystemCode;
+    private final String serviceCode;
+    private final String serviceVersion;
 
     public PituDafoUserDetails(HttpServletRequest request) throws InvalidCertificateException {
         this(extractHeaders(request), request.getParameterMap());
@@ -54,7 +54,7 @@ public class PituDafoUserDetails extends DafoUserDetails {
             throw new InvalidCertificateException("Missing certificate header for subject");
         }
         if (!"SUCCESS".equals(this.verify)) {
-            throw new InvalidCertificateException("Certificate validation failed. Client verification status was: "+this.verify);
+            throw new InvalidCertificateException("Certificate validation failed. Client verification status was: " + this.verify);
         }
 
         this.xRoadInstance = parameterMap.get(PARAMETER_XROAD_INSTANCE);

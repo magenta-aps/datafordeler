@@ -35,13 +35,13 @@ import java.util.Map;
 
 /**
  * Very basic Communicator that fetches a resource over HTTP,
- * and/or sends a payload on a POST request. Takes optional 
+ * and/or sends a payload on a POST request. Takes optional
  * username and password for authentication, and holds cookies
  * between requests.
  */
 public class HttpCommunicator implements Communicator {
 
-    private CookieStore cookieStore = new BasicCookieStore();
+    private final CookieStore cookieStore = new BasicCookieStore();
 
     private String username;
     private String password;
@@ -169,7 +169,7 @@ public class HttpCommunicator implements Communicator {
                 SSLContext sslContext = sslBuilder.build();
                 SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
                         sslContext,
-                        new String[] { "TLSv1.2" },
+                        new String[]{"TLSv1.2"},
                         null,
                         SSLConnectionSocketFactory.getDefaultHostnameVerifier()
                 );
@@ -199,7 +199,8 @@ public class HttpCommunicator implements Communicator {
         this.keystorePassword = keystorePassword;
     }
 
-    private static HashMap<String, String> keystoreMap = new HashMap<>();
+    private static final HashMap<String, String> keystoreMap = new HashMap<>();
+
     static {
         keystoreMap.put("jks", "jks");
         keystoreMap.put("p12", "pkcs12");

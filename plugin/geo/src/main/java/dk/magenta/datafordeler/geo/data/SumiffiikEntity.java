@@ -2,11 +2,9 @@ package dk.magenta.datafordeler.geo.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
-import dk.magenta.datafordeler.core.database.Nontemporal;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.time.OffsetDateTime;
 
 @MappedSuperclass
 public abstract class SumiffiikEntity extends GeoEntity implements IdentifiedEntity {
@@ -20,9 +18,6 @@ public abstract class SumiffiikEntity extends GeoEntity implements IdentifiedEnt
         this.setCreator(record.getProperties().creator);
         this.setCreationDate(record.getProperties().creationDate);
     }
-
-
-
 
 
     public static final String DB_FIELD_OBJECT_ID = "objectId";
