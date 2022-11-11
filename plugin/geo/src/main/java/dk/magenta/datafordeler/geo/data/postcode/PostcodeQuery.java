@@ -30,14 +30,15 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(String code) throws InvalidClientInputException {
         this.code.clear();
         this.updatedParameters();
         this.addAnr(code);
     }
 
-    public void addAnr(String anr) {
+    public void addAnr(String anr) throws InvalidClientInputException {
         if (anr != null) {
+            ensureNumeric(CODE, anr);
             this.code.add(anr);
             this.updatedParameters();
         }

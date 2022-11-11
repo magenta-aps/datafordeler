@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo;
 
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.cpr.CprLookupDTO;
 import dk.magenta.datafordeler.cpr.CprLookupService;
@@ -34,22 +35,22 @@ public class GeoLookupService extends CprLookupService {
         super(sessionManager);
     }
 
-    public GeoLookupDTO doLookup(int municipalityCode, int roadCode) {
+    public GeoLookupDTO doLookup(int municipalityCode, int roadCode) throws InvalidClientInputException {
         return this.doLookup(municipalityCode, roadCode, null);
     }
 
-    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber) {
+    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber) throws InvalidClientInputException {
         return this.doLookup(municipalityCode, roadCode, houseNumber, null);
     }
 
-    public GeoLookupDTO doLookupBestEffort(int municipalityCode, int roadCode) {
+    public GeoLookupDTO doLookupBestEffort(int municipalityCode, int roadCode) throws InvalidClientInputException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             GeoLookupDTO geoLookupDTO = new GeoLookupDTO();
             String municipalityEntity = municipalityCacheGR.get(municipalityCode);
             if (municipalityEntity == null) {
                 MunicipalityQuery query = new MunicipalityQuery();
-                query.addCode(Integer.toString(municipalityCode));
+                query.addCode(municipalityCode);
                 setQueryNow(query);
                 List<GeoMunicipalityEntity> municipalities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
                 for (GeoMunicipalityEntity municipality : municipalities) {
@@ -63,7 +64,7 @@ public class GeoLookupService extends CprLookupService {
 
             RoadQuery roadQuery = new RoadQuery();
             roadQuery.setMunicipalityCode(municipalityCode);
-            roadQuery.setCode(Integer.toString(roadCode));
+            roadQuery.setCode(roadCode);
             setQueryNow(roadQuery);
             List<GeoRoadEntity> roadEntities = QueryManager.getAllEntities(session, roadQuery, GeoRoadEntity.class);
 
@@ -120,7 +121,7 @@ public class GeoLookupService extends CprLookupService {
         }
     }
 
-    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber) {
+    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber) throws InvalidClientInputException {
         if (municipalityCode < 950) {
             return new GeoLookupDTO(super.doLookup(municipalityCode, roadCode, houseNumber));
         } else {
@@ -130,7 +131,7 @@ public class GeoLookupService extends CprLookupService {
                 String municipalityEntity = municipalityCacheGR.get(municipalityCode);
                 if (municipalityEntity == null) {
                     MunicipalityQuery query = new MunicipalityQuery();
-                    query.addCode(Integer.toString(municipalityCode));
+                    query.addCode(municipalityCode);
                     setQueryNow(query);
                     List<GeoMunicipalityEntity> municipalities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
                     for (GeoMunicipalityEntity municipality : municipalities) {
@@ -144,7 +145,7 @@ public class GeoLookupService extends CprLookupService {
 
                 RoadQuery roadQuery = new RoadQuery();
                 roadQuery.setMunicipalityCode(municipalityCode);
-                roadQuery.setCode(Integer.toString(roadCode));
+                roadQuery.setCode(roadCode);
                 setQueryNow(roadQuery);
                 List<GeoRoadEntity> roadEntities = QueryManager.getAllEntities(session, roadQuery, GeoRoadEntity.class);
 

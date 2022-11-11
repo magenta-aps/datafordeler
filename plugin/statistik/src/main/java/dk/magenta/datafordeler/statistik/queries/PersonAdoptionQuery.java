@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.statistik.queries;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.MultiCondition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
@@ -11,11 +12,11 @@ import java.util.Map;
 
 public class PersonAdoptionQuery extends PersonStatisticsQuery {
 
-    public PersonAdoptionQuery(HttpServletRequest request) {
+    public PersonAdoptionQuery(HttpServletRequest request) throws InvalidClientInputException {
         super(request);
     }
 
-    public PersonAdoptionQuery(Filter filter) {
+    public PersonAdoptionQuery(Filter filter) throws InvalidClientInputException {
         super(filter);
     }
 

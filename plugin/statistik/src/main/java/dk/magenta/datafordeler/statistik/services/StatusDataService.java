@@ -132,7 +132,7 @@ public class StatusDataService extends PersonStatisticsService {
     }
 
     @Override
-    protected PersonRecordQuery getQuery(Filter filter) {
+    protected PersonRecordQuery getQuery(Filter filter) throws InvalidClientInputException {
         return new PersonStatusQuery(filter);
     }
 
@@ -228,11 +228,16 @@ public class StatusDataService extends PersonStatisticsService {
             item.put(FLOOR_NUMBER, formatFloor(addressDataRecord.getFloor()));
 
             // Use the lookup service to extract locality & postcode data from a municipality code and road code
-            GeoLookupDTO lookup = lookupService.doLookup(
-                    addressDataRecord.getMunicipalityCode(),
-                    addressDataRecord.getRoadCode(),
-                    addressDataRecord.getHouseNumber()
-            );
+            GeoLookupDTO lookup = null;
+            try {
+                lookup = lookupService.doLookup(
+                        addressDataRecord.getMunicipalityCode(),
+                        addressDataRecord.getRoadCode(),
+                        addressDataRecord.getHouseNumber()
+                );
+            } catch (InvalidClientInputException e) {
+                throw new RuntimeException(e);
+            }
             if (lookup != null) {
                 item.put(LOCALITY_NAME, lookup.getLocalityName());
                 item.put(LOCALITY_CODE, lookup.getLocalityCode());

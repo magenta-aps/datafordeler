@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr;
 
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadNameBitemporalRecord;
@@ -138,7 +139,7 @@ public class CprLookupService {
         return this.sessionManager;
     }
 
-    public synchronized CprLookupDTO doLookup(int municipalityCode, int roadCode) {
+    public synchronized CprLookupDTO doLookup(int municipalityCode, int roadCode) throws InvalidClientInputException {
         return this.doLookup(municipalityCode, roadCode, null);
     }
 
@@ -148,7 +149,7 @@ public class CprLookupService {
      * @param houseNumber
      * @return
      */
-    public synchronized CprLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber) {
+    public synchronized CprLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber) throws InvalidClientInputException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CprLookupDTO cprLookupDTO = new CprLookupDTO();
             cprLookupDTO.setMunicipalityName(municipalityCacheDK.get(municipalityCode));

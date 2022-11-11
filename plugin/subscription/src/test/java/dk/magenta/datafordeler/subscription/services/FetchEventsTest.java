@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
@@ -558,7 +559,7 @@ public class FetchEventsTest {
      * Test that it is possible to call a service for fetching events
      */
     @Test
-    public void testGetCPRDataWithMetadataEvents() throws IOException {
+    public void testGetCPRDataWithMetadataEvents() throws IOException, InvalidClientInputException {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");

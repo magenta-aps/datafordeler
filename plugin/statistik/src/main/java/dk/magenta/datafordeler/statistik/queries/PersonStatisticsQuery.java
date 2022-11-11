@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.statistik.queries;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
@@ -24,7 +25,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
     private OffsetDateTime effectAt = null;
     private OffsetDateTime registrationAt = null;
 
-    public PersonStatisticsQuery(HttpServletRequest request) {
+    public PersonStatisticsQuery(HttpServletRequest request) throws InvalidClientInputException {
         this.setRegistrationTimeBefore(Query.parseDateTime(request.getParameter(StatisticsService.REGISTRATION_BEFORE)));
         this.setRegistrationTimeAfter(Query.parseDateTime(request.getParameter(StatisticsService.REGISTRATION_AFTER)));
         this.setEffectTimeBefore(Query.parseDateTime(request.getParameter(StatisticsService.BEFORE_DATE_PARAMETER)));
@@ -40,7 +41,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
     }
 
 
-    public PersonStatisticsQuery(Filter filter) {
+    public PersonStatisticsQuery(Filter filter) throws InvalidClientInputException {
         this.setRegistrationTimeBefore(filter.registrationBefore);
         this.setRegistrationTimeAfter(filter.registrationAfter);
         this.setRegistrationAt(filter.registrationAt);

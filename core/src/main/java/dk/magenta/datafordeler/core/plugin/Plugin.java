@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.plugin;
 
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 
 import java.net.URI;
@@ -112,7 +113,7 @@ public abstract class Plugin {
         return new LinkedHashMap<>();
     }
 
-    public List<BaseQuery> getQueries(Map<String, String> values) {
+    public List<BaseQuery> getQueries(Map<String, String> values) throws InvalidClientInputException {
         return Collections.emptyList();
     }
 

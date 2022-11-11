@@ -103,7 +103,7 @@ public class VoteListDataService extends PersonStatisticsService {
     @Autowired
     private CprPlugin cprPlugin;
 
-    private final Logger log = LogManager.getLogger(BirthDataService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(VoteListDataService.class.getCanonicalName());
 
     @Override
     protected String[] requiredParameters() {
@@ -183,7 +183,7 @@ public class VoteListDataService extends PersonStatisticsService {
     }
 
     @Override
-    protected PersonRecordQuery getQuery(Filter filter) {
+    protected PersonRecordQuery getQuery(Filter filter) throws InvalidClientInputException {
         return new PersonStatusQuery(filter);
     }
 
@@ -276,10 +276,15 @@ public class VoteListDataService extends PersonStatisticsService {
             item.put(FLOOR_NUMBER, formatFloor(addressDataRecord.getFloor()));
 
             // Use the lookup service to extract locality & postcode data from a municipality code and road code
-            GeoLookupDTO lookup = lookupService.doLookupBestEffort(
-                    addressDataRecord.getMunicipalityCode(),
-                    addressDataRecord.getRoadCode()
-            );
+            GeoLookupDTO lookup = null;
+            try {
+                lookup = lookupService.doLookupBestEffort(
+                        addressDataRecord.getMunicipalityCode(),
+                        addressDataRecord.getRoadCode()
+                );
+            } catch (InvalidClientInputException e) {
+                throw new RuntimeException(e);
+            }
             if (lookup != null) {
                 item.put(LOCALITY_NAME, lookup.getLocalityName());
                 item.put(LOCALITY_CODE, lookup.getLocalityCode());

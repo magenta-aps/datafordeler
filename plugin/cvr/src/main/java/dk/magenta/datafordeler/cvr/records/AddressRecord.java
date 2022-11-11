@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
@@ -586,7 +587,12 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
             Plugin geoPlugin = pluginManager.getPluginByName("geo");
             if (geoPlugin != null) {
-                queries.addAll(geoPlugin.getQueries(map));
+                try {
+                    queries.addAll(geoPlugin.getQueries(map));
+                } catch (InvalidClientInputException e) {
+                    // All inputs are stringified integers, and exception is only thrown when it's a string we can't parse as int
+                    throw new RuntimeException(e);
+                }
             }
         }
 

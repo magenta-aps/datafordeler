@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cvr.query;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.*;
 import dk.magenta.datafordeler.cvr.DirectLookup;
@@ -99,7 +100,10 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     @Override
-    public void setFromParameters(ParameterMap parameters) {
+    public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
+        for (String key : new String[]{CVRNUMMER, KOMMUNEKODE, VEJKODE}) {
+            ensureNumeric(key, parameters.getI(key));
+        }
         for (String key : new String[]{
                 CVRNUMMER, NAVN, TELEFONNUMMER, TELEFAXNUMMER,
                 EMAILADRESSE, VIRKSOMHEDSFORM, KOMMUNEKODE, VEJKODE, HUSNUMMER,

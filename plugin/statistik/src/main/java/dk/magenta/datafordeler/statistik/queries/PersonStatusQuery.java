@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.statistik.queries;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
@@ -14,11 +15,11 @@ import java.util.Map;
 
 public class PersonStatusQuery extends PersonStatisticsQuery {
 
-    public PersonStatusQuery(HttpServletRequest request) {
+    public PersonStatusQuery(HttpServletRequest request) throws InvalidClientInputException {
         super(request);
     }
 
-    public PersonStatusQuery(Filter filter) {
+    public PersonStatusQuery(Filter filter) throws InvalidClientInputException {
         super(filter);
     }
 

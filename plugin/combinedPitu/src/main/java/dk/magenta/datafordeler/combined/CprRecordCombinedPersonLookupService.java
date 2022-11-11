@@ -132,7 +132,7 @@ public class CprRecordCombinedPersonLookupService {
     }
 
     @GetMapping("/cpr")
-    public StreamingResponseBody findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidDataInputException, QueryBuildException {
+    public StreamingResponseBody findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidDataInputException, QueryBuildException, InvalidClientInputException {
 
         List<String> cprs = requestParams.get("cpr");
         String allowDirect = requestParams.getFirst("allowDirect");

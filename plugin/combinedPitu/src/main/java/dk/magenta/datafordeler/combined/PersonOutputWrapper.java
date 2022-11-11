@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.combined;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
@@ -152,7 +153,12 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                 if (roadCode > 0) {
                     root.put("vejkode", roadCode);
 
-                    GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                    GeoLookupDTO lookup = null;
+                    try {
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                    } catch (InvalidClientInputException e) {
+                        throw new RuntimeException(e);
+                    }
 
                     root.put("kommune", lookup.getMunicipalityName());
 
@@ -286,7 +292,12 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                 if (roadCode > 0) {
                     addressNode.put("vejkode", roadCode);
 
-                    GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                    GeoLookupDTO lookup = null;
+                    try {
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                    } catch (InvalidClientInputException e) {
+                        throw new RuntimeException(e);
+                    }
 
                     addressNode.put("kommune", lookup.getMunicipalityName());
 

@@ -4,6 +4,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.util.BitemporalityComparator;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
@@ -36,7 +37,7 @@ public class PersonCustodyRelationsManager {
     @Autowired
     private SessionManager sessionManager;
 
-    public List<ChildInfo> findRelations(String pnr) throws HttpNotFoundException {
+    public List<ChildInfo> findRelations(String pnr) throws HttpNotFoundException, InvalidClientInputException {
 
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();

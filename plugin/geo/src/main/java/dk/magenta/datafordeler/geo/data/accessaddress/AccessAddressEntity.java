@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.geo.GeoPlugin;
@@ -303,13 +304,17 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
         map.put("roadcode", Integer.toString(roadRecord.getRoadCode()));
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
-        if (geoPlugin != null) {
-            queries.addAll(geoPlugin.getQueries(map));
-        }
-
-        Plugin cprPlugin = pluginManager.getPluginByName("cpr");
-        if (cprPlugin != null) {
-            queries.addAll(cprPlugin.getQueries(map));
+        try {
+            if (geoPlugin != null) {
+                queries.addAll(geoPlugin.getQueries(map));
+            }
+            Plugin cprPlugin = pluginManager.getPluginByName("cpr");
+            if (cprPlugin != null) {
+                queries.addAll(cprPlugin.getQueries(map));
+            }
+        } catch (InvalidClientInputException e) {
+            // All inputs are stringified integers, and exception is only thrown when it's a string we can't parse as int
+            throw new RuntimeException(e);
         }
 
         return queries;

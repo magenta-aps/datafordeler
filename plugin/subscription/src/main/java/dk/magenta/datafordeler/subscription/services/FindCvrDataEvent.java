@@ -139,7 +139,12 @@ public class FindCvrDataEvent {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
 
-                String listId = subscription.getCvrList().getListId();
+                CvrList cvrList = subscription.getCvrList();
+                if (cvrList == null) {
+                    return this.getErrorMessage("No cvrlist for subscription", HttpStatus.NOT_FOUND);
+                }
+
+                String listId = cvrList.getListId();
 
                 // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT company FROM " + CvrList.class.getCanonicalName() + " list " +

@@ -50,17 +50,25 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(String code) throws InvalidClientInputException {
         this.code.clear();
         this.updatedParameters();
         this.addCode(code);
     }
 
-    public void addCode(String code) {
+    public void setCode(int code) throws InvalidClientInputException {
+        this.addCode(Integer.toString(code));
+    }
+
+    public void addCode(String code) throws InvalidClientInputException {
         if (code != null) {
+            ensureNumeric(CODE, code);
             this.code.add(code);
             this.updatedParameters();
         }
+    }
+    public void addCode(int code) throws InvalidClientInputException {
+        this.addCode(Integer.toString(code));
     }
 
     public List<String> getName() {
@@ -137,24 +145,25 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
         return municipalityCode;
     }
 
-    public void setMunicipalityCode(String municipalityCode) {
+    public void setMunicipalityCode(String municipalityCode) throws InvalidClientInputException {
         this.municipalityCode.clear();
         this.updatedParameters();
         this.addMunicipalityCode(municipalityCode);
     }
 
-    public void addMunicipalityCode(String municipalityCode) {
+    public void addMunicipalityCode(String municipalityCode) throws InvalidClientInputException {
         if (municipalityCode != null) {
+            ensureNumeric(MUNICIPALITY, municipalityCode);
             this.municipalityCode.add(municipalityCode);
             this.updatedParameters();
         }
     }
 
-    public void setMunicipalityCode(int municipalityCode) {
+    public void setMunicipalityCode(int municipalityCode) throws InvalidClientInputException {
         this.setMunicipalityCode(Integer.toString(municipalityCode));
     }
 
-    public void addMunicipalityCode(int municipalityCode) {
+    public void addMunicipalityCode(int municipalityCode) throws InvalidClientInputException {
         this.addMunicipalityCode(Integer.toString(municipalityCode));
     }
 

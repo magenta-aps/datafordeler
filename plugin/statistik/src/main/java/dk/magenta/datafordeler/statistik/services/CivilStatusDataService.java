@@ -137,7 +137,7 @@ public class CivilStatusDataService extends PersonStatisticsService {
     }
 
     @Override
-    protected PersonCivilStatusQuery getQuery(Filter filter) {
+    protected PersonCivilStatusQuery getQuery(Filter filter) throws InvalidClientInputException {
         return new PersonCivilStatusQuery((CivilStatusFilter) filter);
     }
 
@@ -259,11 +259,16 @@ public class CivilStatusDataService extends PersonStatisticsService {
                 item.put(FLOOR_NUMBER, addressDataRecord.getFloor());
                 item.put(DOOR_NUMBER, addressDataRecord.getDoor());
                 item.put(BNR, formatBnr(addressDataRecord.getBuildingNumber()));
-                GeoLookupDTO lookup = lookupService.doLookup(
-                        addressDataRecord.getMunicipalityCode(),
-                        addressDataRecord.getRoadCode(),
-                        addressDataRecord.getHouseNumber()
-                );
+                GeoLookupDTO lookup = null;
+                try {
+                    lookup = lookupService.doLookup(
+                            addressDataRecord.getMunicipalityCode(),
+                            addressDataRecord.getRoadCode(),
+                            addressDataRecord.getHouseNumber()
+                    );
+                } catch (InvalidClientInputException e) {
+                    throw new RuntimeException(e);
+                }
                 if (lookup != null) {
                     if (lookup.getLocalityName() != null) {
                         item.put(LOCALITY_NAME, lookup.getLocalityName());

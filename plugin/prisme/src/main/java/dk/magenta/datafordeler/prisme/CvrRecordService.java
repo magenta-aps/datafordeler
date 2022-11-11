@@ -333,7 +333,12 @@ public class CvrRecordService {
             if (roadCode > 0) {
                 root.put("vejkode", roadCode);
                 if (municipalityCode > 0 && lookupService != null) {
-                    GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode);
+                    GeoLookupDTO lookup = null;
+                    try {
+                        lookup = lookupService.doLookup(municipalityCode, roadCode);
+                    } catch (InvalidClientInputException e) {
+                        throw new RuntimeException(e);
+                    }
                     if (lookup.getLocalityCodeNumber() != 0) {
                         root.put("stedkode", lookup.getLocalityCodeNumber());
                     }

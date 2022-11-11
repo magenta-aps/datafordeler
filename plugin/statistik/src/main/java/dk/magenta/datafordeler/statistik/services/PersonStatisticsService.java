@@ -94,7 +94,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
 
     protected abstract List<Map<String, String>> formatPerson(PersonEntity person, Session session, GeoLookupService lookupService, Filter filter);
 
-    protected PersonRecordQuery getQuery(Filter filter) {
+    protected PersonRecordQuery getQuery(Filter filter) throws InvalidClientInputException {
         PersonRecordQuery personQuery = new PersonRecordQuery();
         if (filter.onlyPnr != null) {
             for (String pnr : filter.onlyPnr) {
@@ -104,7 +104,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
         return personQuery;
     }
 
-    protected List<PersonRecordQuery> getQueryList(Filter filter) throws IOException {
+    protected List<PersonRecordQuery> getQueryList(Filter filter) throws IOException, InvalidClientInputException {
         return Collections.singletonList(this.getQuery(filter));
     }
 

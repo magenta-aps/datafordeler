@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.statistik.queries;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.SingleCondition;
@@ -17,11 +18,11 @@ public class PersonCivilStatusQuery extends PersonStatisticsQuery {
 
     private String civilStatus;
 
-    public PersonCivilStatusQuery(HttpServletRequest request) {
+    public PersonCivilStatusQuery(HttpServletRequest request) throws InvalidClientInputException {
         super(request);
     }
 
-    public PersonCivilStatusQuery(CivilStatusFilter filter) {
+    public PersonCivilStatusQuery(CivilStatusFilter filter) throws InvalidClientInputException {
         super(filter);
         civilStatus = filter.getCivilStatus();
     }

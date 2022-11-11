@@ -65,7 +65,7 @@ public class CprCohabitationService {
     }
 
     @GetMapping("/search")
-    public ObjectNode findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException, HttpNotFoundException {
+    public ObjectNode findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, QueryBuildException, HttpNotFoundException, InvalidClientInputException {
 
         List<String> cprs = requestParams.get("cpr");
 

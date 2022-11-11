@@ -1,6 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
@@ -35,7 +36,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
 
     @Test
-    public void testLookupService() throws IOException {
+    public void testLookupService() throws IOException, InvalidClientInputException {
 
         GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
@@ -55,7 +56,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
     }
 
     @Test
-    public void testLookupInHardcodedList() throws IOException {
+    public void testLookupInHardcodedList() throws IOException, InvalidClientInputException {
 
         GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
@@ -66,7 +67,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
 
     @Test
-    public void testLookupServiceDk() throws IOException {
+    public void testLookupServiceDk() throws IOException, InvalidClientInputException {
 
         Session session = sessionManager.getSessionFactory().openSession();
 

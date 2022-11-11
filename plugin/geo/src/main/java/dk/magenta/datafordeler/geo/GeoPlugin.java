@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.geo;
 
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
@@ -204,7 +205,7 @@ public class GeoPlugin extends Plugin {
     }
 
 
-    public List<BaseQuery> getQueries(Map<String, String> values) {
+    public List<BaseQuery> getQueries(Map<String, String> values) throws InvalidClientInputException {
         ArrayList<BaseQuery> queries = new ArrayList<>();
         if (values.containsKey("municipalitycode")) {
             MunicipalityQuery municipalityQuery = new MunicipalityQuery();

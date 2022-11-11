@@ -25,6 +25,7 @@ import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
+import dk.magenta.datafordeler.subscription.data.subscriptionModel.CvrList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscription.queries.GeneralQuery;
@@ -145,7 +146,11 @@ public class FindCprDataEvent {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
 
-                String listId = subscription.getCprList().getListId();
+                CprList cprList = subscription.getCprList();
+                if (cprList == null) {
+                    return this.getErrorMessage("No cprlist for subscription", HttpStatus.NOT_FOUND);
+                }
+                String listId = cprList.getListId();
 
                 // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +

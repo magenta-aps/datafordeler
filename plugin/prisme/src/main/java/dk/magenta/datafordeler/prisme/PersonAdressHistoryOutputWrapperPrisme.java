@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.prisme;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.BitemporalityComparator;
@@ -112,7 +113,12 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
 
                     personAdress.setMyndighedskode(adressRecord.getMunicipalityCode());
                     personAdress.setVejkode(adressRecord.getRoadCode());
-                    GeoLookupDTO lookupDto = lookupService.doLookup(adressRecord.getMunicipalityCode(), adressRecord.getRoadCode(), adressRecord.getHouseNumber());
+                    GeoLookupDTO lookupDto = null;
+                    try {
+                        lookupDto = lookupService.doLookup(adressRecord.getMunicipalityCode(), adressRecord.getRoadCode(), adressRecord.getHouseNumber());
+                    } catch (InvalidClientInputException e) {
+                        throw new RuntimeException(e);
+                    }
                     personAdress.setKommune(lookupDto.getMunicipalityName());
                     personAdress.setKommune(lookupDto.getRoadName());
                     personAdress.setPostnummer(lookupDto.getPostalCode());

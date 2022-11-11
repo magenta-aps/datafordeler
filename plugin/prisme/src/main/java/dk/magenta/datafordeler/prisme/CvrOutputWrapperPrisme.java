@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
@@ -292,7 +293,12 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
             if (roadCode > 0) {
                 root.put("vejkode", roadCode);
                 if (municipalityCode > 0 && lookupService != null) {
-                    GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode);
+                    GeoLookupDTO lookup = null;
+                    try {
+                        lookup = lookupService.doLookup(municipalityCode, roadCode);
+                    } catch (InvalidClientInputException e) {
+                        throw new RuntimeException(e);
+                    }
                     if (lookup.getLocalityCodeNumber() != 0) {
                         root.put("stedkode", lookup.getLocalityCodeNumber());
                     }

@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.geo.GeoPlugin;
@@ -223,7 +224,11 @@ public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEnti
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {
-            queries.addAll(geoPlugin.getQueries(map));
+            try {
+                queries.addAll(geoPlugin.getQueries(map));
+            } catch (InvalidClientInputException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return queries;

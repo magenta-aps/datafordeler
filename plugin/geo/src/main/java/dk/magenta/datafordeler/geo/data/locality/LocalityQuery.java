@@ -39,14 +39,15 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(String code) throws InvalidClientInputException {
         this.code.clear();
         this.updatedParameters();
         this.addCode(code);
     }
 
-    public void addCode(String code) {
+    public void addCode(String code) throws InvalidClientInputException {
         if (code != null) {
+            ensureNumeric(CODE, code);
             this.code.add(code);
             this.updatedParameters();
         }
