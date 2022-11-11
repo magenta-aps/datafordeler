@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.query;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -33,7 +34,10 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     @Override
-    public void setFromParameters(ParameterMap parameters) {
+    public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
+        for (String key : new String[]{UNITNUMBER, ASSOCIATED_COMPANY_CVR, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE}) {
+            ensureNumeric(key, parameters.getI(key));
+        }
         for (String key : new String[]{
                 UNITNUMBER, ASSOCIATED_COMPANY_CVR, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
         }) {

@@ -27,17 +27,22 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(int code) throws InvalidClientInputException {
         this.setCode(Integer.toString(code));
     }
 
-    public void setCode(String code) {
+    public void addCode(int code) throws InvalidClientInputException {
+        this.addCode(Integer.toString(code));
+    }
+
+    public void setCode(String code) throws InvalidClientInputException {
         this.code.clear();
         this.addCode(code);
     }
 
-    public void addCode(String code) {
+    public void addCode(String code) throws InvalidClientInputException {
         if (code != null) {
+            ensureNumeric(CODE, code);
             this.code.add(code);
         }
     }

@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.geo.data;
 
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.geo.data.building.BuildingEntity;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
@@ -19,7 +20,7 @@ public class WireCache {
 
     public ListHashMap<String, GeoLocalityEntity> localityCacheByCode = new ListHashMap<>();
 
-    public List<GeoLocalityEntity> getLocality(Session session, String code) {
+    public List<GeoLocalityEntity> getLocality(Session session, String code) throws InvalidClientInputException {
         if (!this.localityCacheByCode.containsKey(code)) {
             LocalityQuery query = new LocalityQuery();
             query.setCode(code);
@@ -54,12 +55,12 @@ public class WireCache {
 
     public ListHashMap<Integer, GeoRoadEntity> roadCacheByCode = new ListHashMap<>();
 
-    public List<GeoRoadEntity> getRoad(Session session, int municipalityCode, int roadCode) {
+    public List<GeoRoadEntity> getRoad(Session session, int municipalityCode, int roadCode) throws InvalidClientInputException {
         Integer code = 10000 * municipalityCode + roadCode;
         if (!this.roadCacheByCode.containsKey(code)) {
             RoadQuery query = new RoadQuery();
-            query.setMunicipalityCode(Integer.toString(municipalityCode));
-            query.setCode(Integer.toString(roadCode));
+            query.setMunicipalityCode(municipalityCode);
+            query.setCode(roadCode);
             List<GeoRoadEntity> list = QueryManager.getAllEntities(session, query, GeoRoadEntity.class);
             this.roadCacheByCode.add(code, list);
         }
@@ -72,7 +73,11 @@ public class WireCache {
     public PostcodeEntity getPostcode(Session session, int code) {
         if (!this.postcodeCacheByCode.containsKey(code)) {
             PostcodeQuery query = new PostcodeQuery();
-            query.setCode(String.format("%4d", code));
+            try {
+                query.setCode(String.format("%4d", code));
+            } catch (InvalidClientInputException e) {
+                throw new RuntimeException(e);
+            }
             List<PostcodeEntity> list = QueryManager.getAllEntities(session, query, PostcodeEntity.class);
             if (list.size() > 0) {
                 this.postcodeCacheByCode.put(code, list.get(0));

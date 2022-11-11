@@ -163,6 +163,7 @@ public class PullTest {
         int personPort = 2101;
         personFtp.startServer(username, password, personPort, Collections.singletonList(personFile));
 
+        configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
         configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
         configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
         configuration.setPersonRegisterFtpUsername(username);

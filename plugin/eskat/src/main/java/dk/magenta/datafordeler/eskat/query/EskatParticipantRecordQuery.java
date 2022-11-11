@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.eskat.query;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
@@ -68,7 +69,7 @@ public class EskatParticipantRecordQuery extends ParticipantRecordQuery {
 
 
     @Override
-    public void setFromParameters(ParameterMap parameters) {
+    public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
         for (String key : new String[]{
                 ASSOCIATED_COMPANY_CVR, ASSOCIATED_COMPANY_NAME, ASSOCIATED_COMPANY_STATUS,

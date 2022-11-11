@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.prisme;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.Effect;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
@@ -39,6 +40,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         Bitemporality currentBitemp = new Bitemporality(now, now, now, now);
         OffsetDateTime latestUpdated = OffsetDateTime.MIN;
         for (T record : records) {
+            // TODO: Døde personer skal vise adresse selvom den er udløbet
             if (record.getBitemporality().contains(currentBitemp) && !record.getDafoUpdated().isBefore(latestUpdated) && !record.isUndone()/* && record.getCorrector() == null*/) {
                 OffsetDateTime registrationFrom = record.getRegistrationFrom();
                 if (registrationFrom == null) {
@@ -164,7 +166,12 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
                 if (roadCode > 0) {
                     root.put("vejkode", roadCode);
 
-                    GeoLookupDTO lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                    GeoLookupDTO lookup = null;
+                    try {
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                    } catch (InvalidClientInputException e) {
+                        throw new RuntimeException(e);
+                    }
                     //root.put("adminadresse", lookup.isAdministrativ());
                     root.put("kommune", lookup.getMunicipalityName());
 

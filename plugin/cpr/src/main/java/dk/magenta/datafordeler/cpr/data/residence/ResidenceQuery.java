@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.data.residence;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
@@ -27,14 +28,15 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
         return this.kommunekoder;
     }
 
-    public void addKommunekode(String kommunekode) {
+    public void addKommunekode(String kommunekode) throws InvalidClientInputException {
+        ensureNumeric(KOMMUNEKODE, kommunekode);
         this.kommunekoder.add(kommunekode);
         if (kommunekode != null) {
             this.updatedParameters();
         }
     }
 
-    public void addKommunekode(int kommunekode) {
+    public void addKommunekode(int kommunekode) throws InvalidClientInputException {
         this.addKommunekode(String.format("%03d", kommunekode));
     }
 
@@ -45,14 +47,15 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
         return this.vejkode;
     }
 
-    public void setVejkode(String vejkode) {
+    public void setVejkode(String vejkode) throws InvalidClientInputException {
+        ensureNumeric(VEJKODE, vejkode);
         this.vejkode = vejkode;
         if (vejkode != null) {
             this.updatedParameters();
         }
     }
 
-    public void setVejkode(int vejkode) {
+    public void setVejkode(int vejkode) throws InvalidClientInputException {
         this.setVejkode(String.format("%03d", vejkode));
     }
 
@@ -110,7 +113,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     }
 
     @Override
-    public void setFromParameters(ParameterMap parameters) {
+    public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         this.setVejkode(parameters.getFirst(VEJKODE));
         this.setHusnummer(parameters.getFirst(HUSNUMMER));
         this.setEtage(parameters.getFirst(ETAGE));

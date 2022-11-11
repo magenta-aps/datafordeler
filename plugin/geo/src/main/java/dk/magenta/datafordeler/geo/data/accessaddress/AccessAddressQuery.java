@@ -119,24 +119,25 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         return municipalityCode;
     }
 
-    public void setMunicipalityCode(String municipalityCode) {
+    public void setMunicipalityCode(String municipalityCode) throws InvalidClientInputException {
         this.municipalityCode.clear();
         this.addMunicipalityCode(municipalityCode);
         this.updatedParameters();
     }
 
-    public void addMunicipalityCode(String municipalityCode) {
+    public void addMunicipalityCode(String municipalityCode) throws InvalidClientInputException {
         if (municipalityCode != null) {
+            ensureNumeric(MUNICIPALITY, municipalityCode);
             this.municipalityCode.add(municipalityCode);
             this.updatedParameters();
         }
     }
 
-    public void setMunicipalityCode(int municipalityCode) {
+    public void setMunicipalityCode(int municipalityCode) throws InvalidClientInputException {
         this.setMunicipalityCode(Integer.toString(municipalityCode));
     }
 
-    public void addMunicipalityCode(int municipalityCode) {
+    public void addMunicipalityCode(int municipalityCode) throws InvalidClientInputException {
         this.addMunicipalityCode(Integer.toString(municipalityCode));
     }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
@@ -89,7 +90,7 @@ public class CivilStatusDataServiceTest extends TestBase {
      * @throws JsonProcessingException
      */
     @Test
-    public void testMarriageInitiated() throws JsonProcessingException {
+    public void testMarriageInitiated() throws JsonProcessingException, InvalidClientInputException {
 
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();

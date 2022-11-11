@@ -134,7 +134,7 @@ public class MovementDataService extends PersonStatisticsService {
     }
 
     @Override
-    protected PersonRecordQuery getQuery(Filter filter) {
+    protected PersonRecordQuery getQuery(Filter filter) throws InvalidClientInputException {
         return new PersonMoveQuery(filter);
     }
 
@@ -243,7 +243,12 @@ public class MovementDataService extends PersonStatisticsService {
                         item.put(ORIGIN_FLOOR, formatFloor(previousDomesticAddress.getFloor()));
                         item.put(ORIGIN_DOOR_NUMBER, formatDoor(previousDomesticAddress.getDoor()));
                         item.put(ORIGIN_BNR, formatBnr(previousDomesticAddress.getBuildingNumber()));
-                        GeoLookupDTO lookup = lookupService.doLookup(previousDomesticAddress.getMunicipalityCode(), previousDomesticAddress.getRoadCode());
+                        GeoLookupDTO lookup = null;
+                        try {
+                            lookup = lookupService.doLookup(previousDomesticAddress.getMunicipalityCode(), previousDomesticAddress.getRoadCode());
+                        } catch (InvalidClientInputException e) {
+                            throw new RuntimeException(e);
+                        }
                         item.put(ORIGIN_LOCALITY_NAME, lookup.getLocalityAbbrev());
                     }
                     if (previousAddress instanceof ForeignAddressEmigrationDataRecord) {
@@ -264,7 +269,12 @@ public class MovementDataService extends PersonStatisticsService {
                         item.put(PROD_DATE, formatTime(firstRegFrom));
                         item.put(FILE_DATE, formatTime(currentAddress.getOriginDate()));
 
-                        GeoLookupDTO lookup = lookupService.doLookup(currentDomesticAddress.getMunicipalityCode(), currentDomesticAddress.getRoadCode());
+                        GeoLookupDTO lookup = null;
+                        try {
+                            lookup = lookupService.doLookup(currentDomesticAddress.getMunicipalityCode(), currentDomesticAddress.getRoadCode());
+                        } catch (InvalidClientInputException e) {
+                            throw new RuntimeException(e);
+                        }
                         item.put(DESTINATION_LOCALITY_NAME, lookup.getLocalityAbbrev());
                     }
                     if (currentAddress instanceof ForeignAddressEmigrationDataRecord) {

@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.geo.data.common;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Identification;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
 import dk.magenta.datafordeler.geo.data.WireCache;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
@@ -65,7 +66,12 @@ public class LocalityReferenceRecord<E extends GeoEntity> extends GeoMonotempora
 
     public void wire(Session session, WireCache wireCache) {
         if (this.reference == null && this.code != null) {
-            List<GeoLocalityEntity> localityEntities = wireCache.getLocality(session, this.code);
+            List<GeoLocalityEntity> localityEntities = null;
+            try {
+                localityEntities = wireCache.getLocality(session, this.code);
+            } catch (InvalidClientInputException e) {
+                throw new RuntimeException(e);
+            }
             for (GeoLocalityEntity locality : localityEntities) {
                 this.reference = locality.getIdentification();
                 break;

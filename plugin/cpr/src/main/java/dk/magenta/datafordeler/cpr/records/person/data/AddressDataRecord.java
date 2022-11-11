@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -377,13 +378,17 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
         map.put("roadcode", Integer.toString(this.roadCode));
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
-        if (geoPlugin != null) {
-            queries.addAll(geoPlugin.getQueries(map));
-        }
-
-        Plugin cprPlugin = pluginManager.getPluginByName("cpr");
-        if (cprPlugin != null) {
-            queries.addAll(cprPlugin.getQueries(map));
+        try {
+            if (geoPlugin != null) {
+                queries.addAll(geoPlugin.getQueries(map));
+            }
+            Plugin cprPlugin = pluginManager.getPluginByName("cpr");
+            if (cprPlugin != null) {
+                queries.addAll(cprPlugin.getQueries(map));
+            }
+        } catch (InvalidClientInputException e) {
+            // All inputs are stringified integers, and exception is only thrown when it's a string we can't parse as int
+            throw new RuntimeException(e);
         }
 
         return queries;

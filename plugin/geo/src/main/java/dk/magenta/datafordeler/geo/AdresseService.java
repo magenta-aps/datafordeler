@@ -308,7 +308,11 @@ public class AdresseService {
                 query.setPageSize(500);
                 query.setLocality(localityCode);
                 if (code != 0) {
-                    query.setCode(Integer.toString(code));
+                    try {
+                        query.setCode(code);
+                    } catch (InvalidClientInputException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 if (name != null) {
                     query.setName(name);

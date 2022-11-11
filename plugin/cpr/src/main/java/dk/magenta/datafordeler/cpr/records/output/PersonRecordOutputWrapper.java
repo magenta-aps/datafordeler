@@ -104,6 +104,7 @@ public class PersonRecordOutputWrapper extends CprRecordOutputWrapper<PersonEnti
             container.addNontemporal(PersonEntity.IO_FIELD_MOTHER, getParentOutputDTO(record.getMother().iterator()));
             container.addNontemporal(PersonEntity.IO_FIELD_FATHER, getParentOutputDTO(record.getFather().iterator()));
         }
+        container.addBitemporal(PersonEntity.IO_FIELD_CHILDREN, record.getChildren());
         container.addBitemporal(PersonEntity.IO_FIELD_BIRTHTIME, record.getBirthTime());
         container.addBitemporal(PersonEntity.IO_FIELD_CHURCH, record.getChurchRelation(), true);
         container.addBitemporal(PersonEntity.IO_FIELD_CITIZENSHIP, record.getCitizenship(), true);

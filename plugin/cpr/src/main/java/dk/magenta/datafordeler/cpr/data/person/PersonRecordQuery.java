@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
@@ -40,14 +41,15 @@ public class PersonRecordQuery extends BaseQuery {
         return this.personnumre;
     }
 
-    public void addPersonnummer(String personnummer) {
+    public void addPersonnummer(String personnummer) throws InvalidClientInputException {
+        ensureNumeric(PERSONNUMMER, personnummer);
         this.personnumre.add(personnummer);
         if (personnummer != null) {
             this.updatedParameters();
         }
     }
 
-    public void setPersonnummer(String personnummer) {
+    public void setPersonnummer(String personnummer) throws InvalidClientInputException {
         this.clearPersonnumre();
         this.addPersonnummer(personnummer);
     }
@@ -57,9 +59,10 @@ public class PersonRecordQuery extends BaseQuery {
         this.updatedParameters();
     }
 
-    public void setPersonnumre(Collection<String> personnumre) {
+    public void setPersonnumre(Collection<String> personnumre) throws InvalidClientInputException {
         this.clearPersonnumre();
         if (personnumre != null) {
+            ensureNumeric(PERSONNUMMER, personnumre);
             this.personnumre.addAll(personnumre);
             this.updatedParameters();
         }
@@ -439,7 +442,10 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     @Override
-    public void setFromParameters(ParameterMap parameters) {
+    public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
+        for (String key : new String[]{PERSONNUMMER, KOMMUNEKODE, VEJKODE}) {
+            ensureNumeric(key, parameters.getI(key));
+        }
         this.setPersonnumre(parameters.get(PERSONNUMMER));
         this.setFornavne(parameters.get(FORNAVNE));
         this.setEfternavne(parameters.get(EFTERNAVN));

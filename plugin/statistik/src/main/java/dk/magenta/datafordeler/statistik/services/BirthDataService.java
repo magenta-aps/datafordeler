@@ -145,7 +145,7 @@ public class BirthDataService extends PersonStatisticsService {
     }
 
     @Override
-    protected PersonRecordQuery getQuery(Filter filter) {
+    protected PersonRecordQuery getQuery(Filter filter) throws InvalidClientInputException {
         return new PersonBirthQuery(filter);
     }
 
@@ -287,11 +287,16 @@ public class BirthDataService extends PersonStatisticsService {
             log.warn("NOT GL ADD " + addressDataRecord.getId());
             throw new Exclude();
         }
-        GeoLookupDTO lookup = lookupService.doLookup(
-                addressDataRecord.getMunicipalityCode(),
-                addressDataRecord.getRoadCode(),
-                addressDataRecord.getHouseNumber()
-        );
+        GeoLookupDTO lookup = null;
+        try {
+            lookup = lookupService.doLookup(
+                    addressDataRecord.getMunicipalityCode(),
+                    addressDataRecord.getRoadCode(),
+                    addressDataRecord.getHouseNumber()
+            );
+        } catch (InvalidClientInputException e) {
+            throw new RuntimeException(e);
+        }
         item.put(prefix + MUNICIPALITY_CODE, Integer.toString(addressDataRecord.getMunicipalityCode()));
         item.put(prefix + ROAD_CODE, formatRoadCode(addressDataRecord.getRoadCode()));
         item.put(prefix + HOUSE_NUMBER, formatHouseNnr(addressDataRecord.getHouseNumber()));

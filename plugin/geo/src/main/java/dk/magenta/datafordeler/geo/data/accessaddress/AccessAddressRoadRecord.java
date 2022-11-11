@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.WireCache;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
@@ -88,9 +89,13 @@ public class AccessAddressRoadRecord extends GeoMonotemporalRecord<AccessAddress
 
     public void wire(Session session, WireCache wireCache) {
         if (this.reference == null && this.municipalityCode != null && this.roadCode != null) {
-            for (GeoRoadEntity road : wireCache.getRoad(session, this.municipalityCode, this.roadCode)) {
-                this.reference = road.getIdentification();
-                return;
+            try {
+                for (GeoRoadEntity road : wireCache.getRoad(session, this.municipalityCode, this.roadCode)) {
+                    this.reference = road.getIdentification();
+                    return;
+                }
+            } catch (InvalidClientInputException e) {
+                throw new RuntimeException(e);
             }
         }
     }

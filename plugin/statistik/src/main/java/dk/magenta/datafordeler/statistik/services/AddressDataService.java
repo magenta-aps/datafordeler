@@ -136,7 +136,7 @@ public class AddressDataService extends PersonStatisticsService {
     private static final int limit = 1000;
 
     @Override
-    protected List<PersonRecordQuery> getQueryList(Filter filter) throws IOException {
+    protected List<PersonRecordQuery> getQueryList(Filter filter) throws IOException, InvalidClientInputException {
 
         ArrayList<PersonRecordQuery> queries = new ArrayList<>();
 
@@ -180,7 +180,12 @@ public class AddressDataService extends PersonStatisticsService {
         List<AddressDataRecord> records = sortRecords(person.getAddress());
         for (AddressDataRecord addressData : records) {
             if (addressData.getBitemporality().registrationTo == null && addressData.getBitemporality().containsEffect(effectTime, effectTime)) {
-                GeoLookupDTO lookup = lookupService.doLookup(addressData.getMunicipalityCode(), addressData.getRoadCode(), addressData.getHouseNumber());
+                GeoLookupDTO lookup = null;
+                try {
+                    lookup = lookupService.doLookup(addressData.getMunicipalityCode(), addressData.getRoadCode(), addressData.getHouseNumber());
+                } catch (InvalidClientInputException e) {
+                    throw new RuntimeException(e);
+                }
                 item.put(ROAD_NAME, lookup.getRoadName());
                 item.put(HOUSE_NUMBER, addressData.getHouseNumber());
                 item.put(FLOOR_NUMBER, addressData.getFloor());
