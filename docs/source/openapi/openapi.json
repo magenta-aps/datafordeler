@@ -132,6 +132,98 @@
                 "value": "12*"
               }
             }
+          },
+          {
+            "name": "registreringFraEfter",
+            "in": "query",
+            "description": "RegistreringFra skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "registreringFraFør",
+            "in": "query",
+            "description": "RegistreringFra skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "registreringTilEfter",
+            "in": "query",
+            "description": "RegistreringTil skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "registreringTilFør",
+            "in": "query",
+            "description": "RegistreringTil skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "virkningFraEfter",
+            "in": "query",
+            "description": "VirkningFra skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "virkningFraFør",
+            "in": "query",
+            "description": "VirkningFra skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "virkningTilEfter",
+            "in": "query",
+            "description": "VirkningTil skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "virkningTilFør",
+            "in": "query",
+            "description": "VirkningTil skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
           }
         ],
         "responses": {
@@ -693,6 +785,98 @@
                 "value": "*"
               }
             }
+          },
+          {
+            "name": "registreringFraEfter",
+            "in": "query",
+            "description": "RegistreringFra skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "registreringFraFør",
+            "in": "query",
+            "description": "RegistreringFra skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "registreringTilEfter",
+            "in": "query",
+            "description": "RegistreringTil skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "registreringTilFør",
+            "in": "query",
+            "description": "RegistreringTil skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "virkningFraEfter",
+            "in": "query",
+            "description": "VirkningFra skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "virkningFraFør",
+            "in": "query",
+            "description": "VirkningFra skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "virkningTilEfter",
+            "in": "query",
+            "description": "VirkningTil skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "virkningTilFør",
+            "in": "query",
+            "description": "VirkningTil skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
           }
         ],
         "responses": {
@@ -798,20 +982,7 @@
                             }
                           },
                           "hovedbranche": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "branchekode": {
-                                  "type": "string",
-                                  "example": "620100"
-                                },
-                                "branchetekst": {
-                                  "type": "string",
-                                  "example": "Computerprogrammering"
-                                }
-                              }
-                            }
+                            "$ref": "#/components/schemas/branche"
                           },
                           "virksomhedsform": {
                             "$ref": "#/components/schemas/virksomhedsform"
@@ -869,20 +1040,7 @@
                                 "$ref": "#/components/schemas/virksomhedsadresse"
                               },
                               "nyesteHovedbranche": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "branchekode": {
-                                      "type": "string",
-                                      "example": "620100"
-                                    },
-                                    "branchetekst": {
-                                      "type": "string",
-                                      "example": "Computerprogrammering"
-                                    }
-                                  }
-                                }
+                                "$ref": "#/components/schemas/branche"
                               },
                               "nyesteNavn": {
                                 "type": "array",
@@ -893,6 +1051,569 @@
                               },
                               "nyesteVirksomhedsform": {
                                 "$ref": "#/components/schemas/virksomhedsform"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cvr/unit/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for CVR produktionsenhedsdata.",
+        "description": "Ved søgning efter produktionsenheder skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-UNIT-GENERIC/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "parameters": [
+          {
+            "name": "pNummer",
+            "in": "query",
+            "description": "P-nummer",
+            "examples": {
+              "fuld": {
+                "value": "1023201115"
+              },
+              "wildcard": {
+                "value": "1023*"
+              }
+            }
+          },
+          {
+            "name": "cvrNummer",
+            "in": "query",
+            "description": "CVR-nummer for associeret virksomhed",
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+          {
+            "name": "hovedbranche",
+            "in": "query",
+            "description": "Primær branchekode for produktionsenheden",
+            "examples": {
+              "fuld": {
+                "value": "620100"
+              },
+              "wildcard": {
+                "value": "62*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode for beliggenhedsadressen",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "9*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode for beliggenhedsadressen",
+            "examples": {
+              "fuld": {
+                "value": "102"
+              },
+              "wildcard": {
+                "value": "1*"
+              }
+            }
+          },
+          {
+            "name": "sidstOpdateret",
+            "in": "query",
+            "description": "Produktionsenheden skal være opdateret efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2020-01-01T00:00:00-00:00"
+              }
+            }
+          },
+          {
+            "name": "registreringFraEfter",
+            "in": "query",
+            "description": "RegistreringFra skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "registreringFraFør",
+            "in": "query",
+            "description": "RegistreringFra skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "registreringTilEfter",
+            "in": "query",
+            "description": "RegistreringTil skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "registreringTilFør",
+            "in": "query",
+            "description": "RegistreringTil skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "virkningFraEfter",
+            "in": "query",
+            "description": "VirkningFra skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "virkningFraFør",
+            "in": "query",
+            "description": "VirkningFra skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "virkningTilEfter",
+            "in": "query",
+            "description": "VirkningTil skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "virkningTilFør",
+            "in": "query",
+            "description": "VirkningTil skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende produktionsenheder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "55ef29e6-2226-392a-9266-3775f977d346"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cvr/company/1/rest/"
+                          },
+                          "virksomhedsrelation": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "example": "12950160"
+                            }
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Magenta Grønland ApS"
+                            }
+                          },
+                          "enhedsNummer": {
+                            "type": "integer",
+                            "example": 1234567890
+                          },
+                          "enhedstype": {
+                            "type": "string",
+                            "example": "VIRKSOMHED"
+                          },
+                          "beliggenhedsadresse": {
+                            "$ref": "#/components/schemas/virksomhedsadresse"
+                          },
+                          "hovedbranche": {
+                            "$ref": "#/components/schemas/branche"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "nyesteCvrNummerRelation": {
+                                "type": "string",
+                                "example": "12950160"
+                              },
+                              "sammensatStatus": {
+                                "type": "string",
+                                "example": "Aktiv"
+                              },
+                              "nyesteBeliggenhedsadresse": {
+                                "$ref": "#/components/schemas/virksomhedsadresse"
+                              },
+                              "nyesteHovedbranche": {
+                                "$ref": "#/components/schemas/branche"
+                              },
+                              "nyesteNavn": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "example": "Magenta Grønland ApS"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cvr/participant/1/rest/search": {
+      "get": {
+        "summary": "Søgeinterface for CVR deltagere.",
+        "description": "Ved søgning efter deltagere skal mindst én søgeparameter angives. Alle søgeparametre kan indeholde wildcard. De indeholdte data er begrænset til virksomheder med tilknytning til Grønland.<br /><br />PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-CVR-PARTICIPANT-GENERIC/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/search/",
+        "parameters": [
+          {
+            "name": "enhedsNummer",
+            "in": "query",
+            "description": "Deltagerens enhedsnummer",
+            "examples": {
+              "fuld": {
+                "value": "4004260628"
+              },
+              "wildcard": {
+                "value": "4004*"
+              }
+            }
+          },
+          {
+            "name": "cvrNummer",
+            "in": "query",
+            "description": "CVR-nummer for associeret virksomhed",
+            "examples": {
+              "fuld": {
+                "value": "12950160"
+              },
+              "wildcard": {
+                "value": "1295*"
+              }
+            }
+          },
+
+          {
+            "name": "navne",
+            "in": "query",
+            "description": "Deltagerens navn",
+            "examples": {
+              "fuld": {
+                "value": "BK REVISION, REGISTRERET REVISIONSANPARTSSELSKAB"
+              },
+              "wildcard": {
+                "value": "*REVISION*"
+              }
+            }
+          },
+
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "Kommunekode for beliggenhedsadressen",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "9*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "Vejkode for beliggenhedsadressen",
+            "examples": {
+              "fuld": {
+                "value": "102"
+              },
+              "wildcard": {
+                "value": "1*"
+              }
+            }
+          },
+          {
+            "name": "registreringFraEfter",
+            "in": "query",
+            "description": "RegistreringFra skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "registreringFraFør",
+            "in": "query",
+            "description": "RegistreringFra skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "registreringTilEfter",
+            "in": "query",
+            "description": "RegistreringTil skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "registreringTilFør",
+            "in": "query",
+            "description": "RegistreringTil skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "virkningFraEfter",
+            "in": "query",
+            "description": "VirkningFra skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "virkningFraFør",
+            "in": "query",
+            "description": "VirkningFra skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          },
+          {
+            "name": "virkningTilEfter",
+            "in": "query",
+            "description": "VirkningTil skal være efter dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            },
+            "schema": {
+              "default": "Nuværende tidspunkt"
+            }
+          },
+          {
+            "name": "virkningTilFør",
+            "in": "query",
+            "description": "VirkningTil skal være før dette tidspunkt",
+            "examples": {
+              "fuld": {
+                "value": "2022-01-01"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende deltagere",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "terms": {
+                      "type": "string"
+                    },
+                    "requestTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "responseTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "55ef29e6-2226-392a-9266-3775f977d346"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/cvr/company/1/rest/"
+                          },
+                          "stilling":{
+                            "type": "string",
+                            "example": "Direktør"
+                          },
+                          "samtId": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "navn": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "Test Testersen"
+                            }
+                          },
+                          "enhedsNummer": {
+                            "type": "integer",
+                            "example": 1234567890
+                          },
+                          "enhedstype": {
+                            "type": "string",
+                            "example": "VIRKSOMHED"
+                          },
+                          "beliggenhedsadresse": {
+                            "$ref": "#/components/schemas/virksomhedsadresse"
+                          },
+                          "attributter": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "IDENTIFIKATION_LANDEKODE"
+                                },
+                                "sekvensnr": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "vaerditype": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "vaerdier": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "example": "DK"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "nyesteBeliggenhedsadresse": {
+                                "$ref": "#/components/schemas/virksomhedsadresse"
                               }
                             }
                           }
@@ -1045,7 +1766,7 @@
               "fuld": {
                 "value": "3951"
               }
-            },"Fremsøgning på den unikke kommunekode mindre end"
+            }
           },
           {
             "name": "post_kode.lt",
@@ -1313,6 +2034,22 @@
             "sidedør": {
               "type": "string",
               "example": null
+            }
+          }
+        }
+      },
+      "branche": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "branchekode": {
+              "type": "string",
+              "example": "620100"
+            },
+            "branchetekst": {
+              "type": "string",
+              "example": "Computerprogrammering"
             }
           }
         }
