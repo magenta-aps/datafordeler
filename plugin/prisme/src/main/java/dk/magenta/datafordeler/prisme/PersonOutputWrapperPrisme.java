@@ -39,6 +39,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         Bitemporality currentBitemp = new Bitemporality(now, now, now, now);
         OffsetDateTime latestUpdated = OffsetDateTime.MIN;
         for (T record : records) {
+            // TODO: Døde personer skal vise adresse selvom den er udløbet
             if (record.getBitemporality().contains(currentBitemp) && !record.getDafoUpdated().isBefore(latestUpdated) && !record.isUndone()/* && record.getCorrector() == null*/) {
                 OffsetDateTime registrationFrom = record.getRegistrationFrom();
                 if (registrationFrom == null) {
