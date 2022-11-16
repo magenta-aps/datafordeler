@@ -157,9 +157,11 @@ public class VoteListDataService extends PersonStatisticsService {
 
     @Override
     protected List<String> getColumnNames() {
-        return Arrays.asList(PNR, FIRST_NAME, LAST_NAME, "FoedDato", STATUS_CODE, CITIZENSHIP_CODE,
+        return Arrays.asList(new String[]{
+                PNR, FIRST_NAME, LAST_NAME, "FoedDato", STATUS_CODE, CITIZENSHIP_CODE,
                 MUNICIPALITY_CODE, LOCALITY_NAME, LOCALITY_CODE, LOCALITY_ABBREVIATION, ROAD_CODE, ROAD_NAME, HOUSE_NUMBER, FLOOR_NUMBER, DOOR_NUMBER,
-                BNR, POST_CODE, POST_DISTRICT, "GUARDIAN");
+                BNR, POST_CODE, POST_DISTRICT, "GUARDIAN"
+        });
     }
 
     @Override

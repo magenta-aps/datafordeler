@@ -287,7 +287,7 @@ public class FindCvrDataEvent {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
         } catch (AccessDeniedException e) {
             loggerHelper.info("Access denied: " + e.getMessage());
-            throw (e);
+            throw(e);
         }
     }
 }
