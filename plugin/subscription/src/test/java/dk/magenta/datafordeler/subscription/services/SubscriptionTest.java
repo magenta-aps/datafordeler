@@ -192,14 +192,12 @@ public class SubscriptionTest {
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "cprList2");
             CprList pnrList = (CprList) query.getResultList().get(0);
-            Set<SubscribedCprNumber> list = new HashSet<SubscribedCprNumber>();
             SubscribedCprNumber prn1 = new SubscribedCprNumber(pnrList, "1234");
             SubscribedCprNumber prn2 = new SubscribedCprNumber(pnrList, "1235");
             SubscribedCprNumber prn3 = new SubscribedCprNumber(pnrList, "1236");
-            list.add(prn1);
-            list.add(prn2);
-            list.add(prn3);
-            pnrList.addCprs(list);
+            session.save(prn1);
+            session.save(prn2);
+            session.save(prn3);
             Assert.assertEquals(1, query.getResultList().size());
             transaction.commit();
         }

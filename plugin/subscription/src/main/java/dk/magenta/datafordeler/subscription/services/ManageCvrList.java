@@ -63,7 +63,7 @@ public class ManageCvrList {
 
 
     /**
-     * Create a cprList
+     * Create a cvrList
      *
      * @param request
      * @param cvrList
@@ -108,7 +108,7 @@ public class ManageCvrList {
     }
 
     /**
-     * Get a list of all cprList
+     * Get a list of all cvrList
      *
      * @return
      */
@@ -131,7 +131,7 @@ public class ManageCvrList {
 
 
     @DeleteMapping("/subscriber/cvrList/cvr/{listId}")
-    public ResponseEntity cvrListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity cvrListCvrDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -167,7 +167,7 @@ public class ManageCvrList {
     }
 
     @PostMapping("/subscriber/cvrList/cvr/{listId}")
-    public ResponseEntity cvrListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<String> cvrListCvrPut(HttpServletRequest request, @PathVariable("listId") String listId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -183,25 +183,25 @@ public class ManageCvrList {
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
                 log.warn(errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(obj.toString(), HttpStatus.FORBIDDEN);
             }
             JsonNode requestBody = objectMapper.readTree(request.getInputStream());
-            Iterator<JsonNode> cprBodyIterator = requestBody.get("cvr").iterator();
-            while (cprBodyIterator.hasNext()) {
-                JsonNode node = cprBodyIterator.next();
+            Iterator<JsonNode> cvrBodyIterator = requestBody.get("cvr").iterator();
+            while (cvrBodyIterator.hasNext()) {
+                JsonNode node = cvrBodyIterator.next();
                 foundList.addCvrString(node.textValue());
             }
             transaction.commit();
             String errorMessage = "Elements were added";
             ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("message", errorMessage);
-            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.OK);
+            return new ResponseEntity<>(objectMapper.writeValueAsString(obj), HttpStatus.OK);
         } catch (PersistenceException e) {
             String errorMessage = "Elements allready exists";
             ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.warn(errorMessage, e);
-            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
@@ -209,12 +209,12 @@ public class ManageCvrList {
     }
 
     /**
-     * Get a list of all CPR-numbers in a list
+     * Get a list of all CVR-numbers in a list
      *
      * @return
      */
     @GetMapping("/subscriber/cvrList/cvr")
-    public ResponseEntity<Envelope> cvrListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<Envelope> cvrListCvrfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");

@@ -148,7 +148,7 @@ public class FindCvrDataEvent {
 
                 // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT company FROM " + CvrList.class.getCanonicalName() + " list " +
-                        " INNER JOIN " + SubscribedCvrNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.id) " +
+                        " INNER JOIN " + SubscribedCvrNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cvrList) " +
                         " INNER JOIN " + CompanyRecord.class.getCanonicalName() + " company ON (company.cvrNumber = numbers.cvrNumber) " +
                         " INNER JOIN " + CompanyDataEventRecord.class.getCanonicalName() + " dataeventDataRecord ON (company.id = dataeventDataRecord.companyRecord) " +
                         " where" +
@@ -158,14 +158,14 @@ public class FindCvrDataEvent {
                         " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
                         " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
-                Query query = session.createQuery(queryString);
+                Query<CompanyRecord> query = session.createQuery(queryString, CompanyRecord.class);
                 if (pageSize != null) {
-                    query.setMaxResults(Integer.valueOf(pageSize));
+                    query.setMaxResults(Integer.parseInt(pageSize));
                 } else {
                     query.setMaxResults(10);
                 }
                 if (page != null) {
-                    int pageIndex = (Integer.valueOf(page) - 1) * query.getMaxResults();
+                    int pageIndex = (Integer.parseInt(page) - 1) * query.getMaxResults();
                     query.setFirstResult(pageIndex);
                 } else {
                     query.setFirstResult(0);
@@ -186,13 +186,11 @@ public class FindCvrDataEvent {
                         .stream();
 
                 Envelope envelope = new Envelope();
-                List<Object> returnValues = null;
 
                 if (!includeMeta) {
-                    returnValues = personStream.map(f -> f.getCvrNumber()).collect(Collectors.toList());
-                    envelope.setResults(returnValues);
+                    envelope.setResults(personStream.map(CompanyRecord::getCvrNumber).collect(Collectors.toList()));
                 } else {
-                    List otherList = new ArrayList<ObjectNode>();
+                    List<ObjectNode> otherList = new ArrayList<>();
                     List<CompanyRecord> entities = personStream.collect(Collectors.toList());
 
                     for (CompanyRecord entity : entities) {
@@ -247,10 +245,9 @@ public class FindCvrDataEvent {
     }
 
     private ResponseEntity getErrorMessage(String message, HttpStatus status) {
-        String errorMessage = message;
         ObjectNode obj = this.objectMapper.createObjectNode();
         obj.put("errorMessage", message);
-        log.warn(errorMessage);
+        log.warn(message);
         return new ResponseEntity(obj.toString(), status);
     }
 
