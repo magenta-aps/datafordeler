@@ -86,8 +86,8 @@ public class CprListTest {
             session.save(cprList1);
             CprList cprList2 = new CprList("myList2");
             session.save(cprList2);
-            subscriber.addCvrList(cprList1);
-            subscriber.addCvrList(cprList2);
+            subscriber.addCprList(cprList1);
+            subscriber.addCprList(cprList2);
             session.save(subscriber);
             transaction.commit();
         }
@@ -150,7 +150,7 @@ public class CprListTest {
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
-            cprList.getCpr().removeIf(f -> "1111111113".equals(f.getCprNumber()));
+            cprList.removeCprString("1111111113", session);
             transaction.commit();
         }
 

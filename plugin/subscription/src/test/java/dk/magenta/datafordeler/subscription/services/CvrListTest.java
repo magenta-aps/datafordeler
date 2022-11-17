@@ -58,7 +58,7 @@ public class CvrListTest {
 
     /**
      * Initiate lists
-     * Test that it is possible to find a specific CPR-list and add new items
+     * Test that it is possible to find a specific CVR-list and add new items
      *
      * @throws Exception
      */
@@ -132,7 +132,7 @@ public class CvrListTest {
             Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList subscriber = (CvrList) query.getResultList().get(0);
-            subscriber.getCvr().removeIf(f -> "1111111113".equals(f.getCvrNumber()));
+            subscriber.removeCvrString("1111111113", session);
             transaction.commit();
         }
 
@@ -140,8 +140,8 @@ public class CvrListTest {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
-            CvrList subscriber = (CvrList) query.getResultList().get(0);
-            Assert.assertEquals(3, subscriber.getCvr().size());
+            CvrList list = (CvrList) query.getResultList().get(0);
+            Assert.assertEquals(3, list.getCvr().size());
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -164,7 +164,7 @@ public class CvrListTest {
 
 
     /**
-     * Test that it is possible to find a specific CPR-list and add new items
+     * Test that it is possible to find a specific CVR-list and add new items
      *
      * @throws Exception
      */
@@ -179,7 +179,7 @@ public class CvrListTest {
         testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
 
-        //Confirm that the CPR-list is empty
+        //Confirm that the CVR-list is empty
         ResponseEntity<String> response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList",
                 HttpMethod.GET,
@@ -190,7 +190,7 @@ public class CvrListTest {
         JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
                 "{\"listId\":\"myList2\"}]", response.getBody(), false);
 
-        //ADD an element to the CPR-list
+        //ADD an element to the CVR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/?cvrList=cvrTestList1",
@@ -200,7 +200,7 @@ public class CvrListTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        //Confirm that the CPR-list has one element
+        //Confirm that the CVR-list has one element
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList",
                 HttpMethod.GET,
@@ -222,7 +222,7 @@ public class CvrListTest {
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        //Confirm that the CPR-list has two elements
+        //Confirm that the CVR-list has two elements
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList",
                 HttpMethod.GET,
@@ -236,20 +236,20 @@ public class CvrListTest {
                 "{\"listId\":\"cvrTestList2\"}]", response.getBody(), false);
 
         ObjectNode body;
-        ArrayNode cprList;
+        ArrayNode cvrList;
 
         body = objectMapper.createObjectNode();
-        cprList = objectMapper.createArrayNode();
-        cprList.add("11111110");
-        cprList.add("11111111");
-        cprList.add("11111112");
-        cprList.add("11111113");
-        cprList.add("11111114");
-        cprList.add("11111115");
-        body.set("cvr", cprList);
+        cvrList = objectMapper.createArrayNode();
+        cvrList.add("11111110");
+        cvrList.add("11111111");
+        cvrList.add("11111112");
+        cvrList.add("11111113");
+        cvrList.add("11111114");
+        cvrList.add("11111115");
+        body.set("cvr", cvrList);
         httpEntity = new HttpEntity<String>(body.toString(), httpHeaders);
 
-        //Add CPR-numbers to the CPR-list
+        //Add CVR-numbers to the CVR-list
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1",
                 HttpMethod.POST,
@@ -259,14 +259,14 @@ public class CvrListTest {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         body = objectMapper.createObjectNode();
-        cprList = objectMapper.createArrayNode();
-        cprList.add("11111116");
-        cprList.add("11111117");
-        cprList.add("11111118");
-        body.set("cvr", cprList);
+        cvrList = objectMapper.createArrayNode();
+        cvrList.add("11111116");
+        cvrList.add("11111117");
+        cvrList.add("11111118");
+        body.set("cvr", cvrList);
         httpEntity = new HttpEntity<String>(body.toString(), httpHeaders);
 
-        //Add CPR-numbers to the CPR-list
+        //Add CVR-numbers to the CVR-list
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1",
                 HttpMethod.POST,
@@ -283,7 +283,7 @@ public class CvrListTest {
         );
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
-        //Confirm that the CPR-list has two elements
+        //Confirm that the CVR-list has two elements
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/?listId=cvrTestList1",
                 HttpMethod.GET,
@@ -295,7 +295,7 @@ public class CvrListTest {
         JsonNode results = responseContent.get("results");
         Assert.assertEquals(9, results.size());
 
-        //Try fetching with no cpr access rights
+        //Try fetching with no cvr access rights
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/cvrTestList1?cvr=11111115,11111117",
                 HttpMethod.DELETE,

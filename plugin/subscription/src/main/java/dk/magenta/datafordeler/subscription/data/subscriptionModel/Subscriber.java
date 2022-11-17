@@ -7,8 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = Subscriber.TABLE_NAME, indexes = {
-})
+@Table(
+        name = Subscriber.TABLE_NAME,
+        indexes = {}
+)
 public class Subscriber extends DatabaseEntry {
 
     public static final String TABLE_NAME = "subscription_subscriber";
@@ -45,7 +47,7 @@ public class Subscriber extends DatabaseEntry {
         return this.cprLists;
     }
 
-    public void addCvrList(CprList cprList) {
+    public void addCprList(CprList cprList) {
         this.cprLists.add(cprList);
     }
 
@@ -65,7 +67,7 @@ public class Subscriber extends DatabaseEntry {
         this.cvrLists.add(cvrList);
     }
 
-    public void removeCprList(CvrList cvrList) {
+    public void removeCvrList(CvrList cvrList) {
         this.cvrLists.remove(cvrList);
     }
 

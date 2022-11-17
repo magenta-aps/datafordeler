@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import org.hibernate.Session;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,10 +11,10 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = CprList.TABLE_NAME, indexes = {
-
-
-})
+@Table(
+        name = CprList.TABLE_NAME,
+        indexes = {}
+)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CprList extends DatabaseEntry {
 
@@ -61,32 +62,23 @@ public class CprList extends DatabaseEntry {
         this.listId = listId;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cprList")
     private final Set<BusinessEventSubscription> businessSubscription = new HashSet<>();
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cprList")
     private Set<DataEventSubscription> dataSubscription;
 
-
-    @ElementCollection
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<SubscribedCprNumber> cprs = new HashSet<SubscribedCprNumber>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cprList")
+    private final Set<SubscribedCprNumber> cprs = new HashSet<SubscribedCprNumber>();
 
     public static final String DB_FIELD_CPR = "cpr";
+
     @Column(name = DB_FIELD_CPR, nullable = false)
     @JsonIgnore
     public Set<SubscribedCprNumber> getCpr() {
         return cprs;
-    }
-
-    public void setCprs(Set<SubscribedCprNumber> cprs) {
-        this.cprs = cprs;
-    }
-
-    public void addCprs(Set<SubscribedCprNumber> cprs) {
-        this.cprs.addAll(cprs);
     }
 
     public void addCprStrings(List<String> cprs) {
@@ -99,11 +91,12 @@ public class CprList extends DatabaseEntry {
         this.cprs.add(new SubscribedCprNumber(this, cpr));
     }
 
-    public void removeCpr(String cpr) {
-        this.cprs.removeIf(f -> cpr.equals(f.getCprNumber()));
+    public void removeCprString(String cpr, Session session) {
+        SubscribedCprNumber number = this.cprs.stream().filter(f -> cpr.equals(f.getCprNumber())).findFirst().orElse(null);
+        if (number != null) {
+            this.cprs.remove(number);
+            session.delete(number);
+        }
     }
 
-    public void removeAllCpr() {
-        this.cprs = new HashSet<SubscribedCprNumber>();
-    }
 }

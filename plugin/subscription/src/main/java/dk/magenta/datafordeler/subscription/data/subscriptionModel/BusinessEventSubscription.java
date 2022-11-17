@@ -6,9 +6,10 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 
 @Entity
-@Table(name = BusinessEventSubscription.TABLE_NAME, indexes = {
-
-})
+@Table(
+        name = BusinessEventSubscription.TABLE_NAME,
+        indexes = {}
+)
 public class BusinessEventSubscription extends DatabaseEntry {
 
     public static final String TABLE_NAME = "subscription_businessevent";

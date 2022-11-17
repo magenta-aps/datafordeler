@@ -12,9 +12,12 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyDataEventRecord.TABLE_NAME, indexes = {
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyDataEventRecord.TABLE_NAME + CompanyDataEventRecord.DB_FIELD_ENTITY, columnList = CompanyDataEventRecord.DB_FIELD_ENTITY + DatabaseEntry.REF)
-})
+@Table(
+        name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyDataEventRecord.TABLE_NAME,
+        indexes = {
+            @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyDataEventRecord.TABLE_NAME + CompanyDataEventRecord.DB_FIELD_ENTITY, columnList = CompanyDataEventRecord.DB_FIELD_ENTITY + DatabaseEntry.REF)
+        }
+)
 public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
     public static final String TABLE_NAME = "cvr_record_company_data_event_record";

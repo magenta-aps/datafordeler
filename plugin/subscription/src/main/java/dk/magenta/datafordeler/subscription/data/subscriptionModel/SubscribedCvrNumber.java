@@ -6,10 +6,11 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import javax.persistence.*;
 
 @Entity
-@Table(name = SubscribedCvrNumber.TABLE_NAME, uniqueConstraints = @UniqueConstraint(columnNames = {"cvrNumber", "cvrlistId"}), indexes = {
-
-
-})
+@Table(
+        name = SubscribedCvrNumber.TABLE_NAME,
+        uniqueConstraints = @UniqueConstraint(columnNames = {"cvrNumber", "cvrlistId"}),
+        indexes = {}
+)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubscribedCvrNumber extends DatabaseEntry {
 
@@ -25,7 +26,7 @@ public class SubscribedCvrNumber extends DatabaseEntry {
         return cvrNumber;
     }
 
-    public void setCprNumber(String cvrNumber) {
+    public void setCvrNumber(String cvrNumber) {
         this.cvrNumber = cvrNumber;
     }
 
@@ -34,7 +35,8 @@ public class SubscribedCvrNumber extends DatabaseEntry {
     }
 
 
-    public SubscribedCvrNumber(String cvrNumber) {
+    public SubscribedCvrNumber(CvrList cvrList, String cvrNumber) {
+        this.cvrList = cvrList;
         this.cvrNumber = cvrNumber;
     }
 
@@ -43,4 +45,7 @@ public class SubscribedCvrNumber extends DatabaseEntry {
     @JoinColumn(name = "cvrlistId")
     private CvrList cvrList;
 
+    public CvrList getCvrList() {
+        return this.cvrList;
+    }
 }
