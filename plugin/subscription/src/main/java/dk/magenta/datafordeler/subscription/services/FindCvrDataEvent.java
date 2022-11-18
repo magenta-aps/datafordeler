@@ -39,10 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -111,7 +108,9 @@ public class FindCvrDataEvent {
                 return this.getErrorMessage("Subscription not found", HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscription = (DataEventSubscription) eventQuery.getResultList().get(0);
-                if (!allowCallingOtherConsumersSubscriptions && !subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
+                String subscriberId = subscription.getSubscriber().getSubscriberId();
+                String clientId = Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_");
+                if (!allowCallingOtherConsumersSubscriptions && !Objects.equals(subscriberId, clientId)) {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
                 OffsetDateTime offsetTimestampGTE;

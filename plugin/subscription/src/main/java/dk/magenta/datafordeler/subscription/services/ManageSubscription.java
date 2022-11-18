@@ -240,9 +240,8 @@ public class ManageSubscription {
             String subscriberId = this.getSubscriberId(request, user);
             Subscriber subscriber = this.getSubscriber(session, subscriberId);
 
-            BusinessEventSubscription subscription = new BusinessEventSubscription(businessEventId, kodeId);
+            BusinessEventSubscription subscription = new BusinessEventSubscription(businessEventId, kodeId, subscriber);
             subscription.setCprList(cprListItem);
-            subscription.setSubscriber(subscriber);
             subscriber.addBusinessEventSubscription(subscription);
 
             session.save(subscriber);
@@ -362,10 +361,9 @@ public class ManageSubscription {
             String subscriberId = this.getSubscriberId(request, user);
             Subscriber subscriber = this.getSubscriber(session, subscriberId);
 
-            DataEventSubscription subscription = new DataEventSubscription(dataEventId, kodeId);
+            DataEventSubscription subscription = new DataEventSubscription(dataEventId, kodeId, subscriber);
             subscription.setCprList(cprListItem);
             subscription.setCvrList(cvrListItem);
-            subscription.setSubscriber(subscriber);
             subscriber.addDataEventSubscription(subscription);
             session.update(subscriber);
             transaction.commit();

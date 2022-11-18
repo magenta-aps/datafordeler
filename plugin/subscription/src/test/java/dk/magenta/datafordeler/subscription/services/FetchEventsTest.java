@@ -108,29 +108,18 @@ public class FetchEventsTest {
 
             Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
 
-            BusinessEventSubscription subscriptionT1 = new BusinessEventSubscription("BE1", "cpr.businessevent.A01");
-            subscriptionT1.setSubscriber(subscriber);
-            BusinessEventSubscription subscriptionT2 = new BusinessEventSubscription("BE2", "cpr.businessevent.A02");
-            subscriptionT2.setSubscriber(subscriber);
-            BusinessEventSubscription subscriptionT3 = new BusinessEventSubscription("BE3", "cpr.businessevent.A03");
-            subscriptionT3.setSubscriber(subscriber);
+            BusinessEventSubscription subscriptionT1 = new BusinessEventSubscription("BE1", "cpr.businessevent.A01", subscriber);
+            BusinessEventSubscription subscriptionT2 = new BusinessEventSubscription("BE2", "cpr.businessevent.A02", subscriber);
+            BusinessEventSubscription subscriptionT3 = new BusinessEventSubscription("BE3", "cpr.businessevent.A03", subscriber);
 
-            DataEventSubscription subscriptionDE1 = new DataEventSubscription("DE1", "cpr.dataevent.cpr_person_address_record");
-            subscriptionDE1.setSubscriber(subscriber);
-            DataEventSubscription subscriptionDE2 = new DataEventSubscription("DE2", "cpr.dataevent.anything");
-            subscriptionDE2.setSubscriber(subscriber);
-            DataEventSubscription subscriptionDE3 = new DataEventSubscription("DE3", "cvr.dataevent.anything");
-            subscriptionDE3.setSubscriber(subscriber);
-            DataEventSubscription subscriptionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.after.kommunekode=957");
-            subscriptionDE4.setSubscriber(subscriber);
-            DataEventSubscription subscriptionDE5 = new DataEventSubscription("DE5", "cvr.dataevent.cpr_person_address_record.before.kommunekode=957");
-            subscriptionDE5.setSubscriber(subscriber);
-            DataEventSubscription subscriptionDE7 = new DataEventSubscription("DE6", "cvr.dataevent.cvr_record_address");
-            subscriptionDE7.setSubscriber(subscriber);
-            DataEventSubscription subscriptionDE6 = new DataEventSubscription("DE7", "cvr.dataevent.cvr_record_address.before.kommunekode=956");
-            subscriptionDE6.setSubscriber(subscriber);
-            DataEventSubscription subscriptionDE8 = new DataEventSubscription("DE8", "cvr.dataevent.cvr_record_address.after.kommunekode=956");
-            subscriptionDE8.setSubscriber(subscriber);
+            DataEventSubscription subscriptionDE1 = new DataEventSubscription("DE1", "cpr.dataevent.cpr_person_address_record", subscriber);
+            DataEventSubscription subscriptionDE2 = new DataEventSubscription("DE2", "cpr.dataevent.anything", subscriber);
+            DataEventSubscription subscriptionDE3 = new DataEventSubscription("DE3", "cvr.dataevent.anything", subscriber);
+            DataEventSubscription subscriptionDE4 = new DataEventSubscription("DE4", "cvr.dataevent.cpr_person_address_record.after.kommunekode=957", subscriber);
+            DataEventSubscription subscriptionDE5 = new DataEventSubscription("DE5", "cvr.dataevent.cpr_person_address_record.before.kommunekode=957", subscriber);
+            DataEventSubscription subscriptionDE7 = new DataEventSubscription("DE6", "cvr.dataevent.cvr_record_address", subscriber);
+            DataEventSubscription subscriptionDE6 = new DataEventSubscription("DE7", "cvr.dataevent.cvr_record_address.before.kommunekode=956", subscriber);
+            DataEventSubscription subscriptionDE8 = new DataEventSubscription("DE8", "cvr.dataevent.cvr_record_address.after.kommunekode=956", subscriber);
 
             CprList cprList = new CprList("L1");
             cprList.addCprString("0101011235");

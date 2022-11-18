@@ -22,9 +22,10 @@ public class BusinessEventSubscription extends DatabaseEntry {
         this.businessEventId = businessEventId;
     }
 
-    public BusinessEventSubscription(String businessEventId, String kodeId) {
+    public BusinessEventSubscription(String businessEventId, String kodeId, Subscriber subscriber) {
         this.businessEventId = businessEventId;
         this.kodeId = kodeId;
+        this.subscriber = subscriber;
     }
 
 

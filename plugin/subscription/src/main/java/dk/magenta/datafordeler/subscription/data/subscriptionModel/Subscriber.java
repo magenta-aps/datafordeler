@@ -72,7 +72,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "subscriber")
     Set<BusinessEventSubscription> businessEventSubscription = new HashSet<>();
 
     public Set<BusinessEventSubscription> getBusinessEventSubscription() {
@@ -81,6 +81,7 @@ public class Subscriber extends DatabaseEntry {
 
     public void addBusinessEventSubscription(BusinessEventSubscription record) {
         this.businessEventSubscription.add(record);
+        record.setSubscriber(this);
     }
 
     public void removeBusinessEventSubscription(BusinessEventSubscription record) {
@@ -88,7 +89,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "subscriber")
     Set<DataEventSubscription> dataEventSubscription = new HashSet<>();
 
     public Set<DataEventSubscription> getDataEventSubscription() {
@@ -97,6 +98,7 @@ public class Subscriber extends DatabaseEntry {
 
     public void addDataEventSubscription(DataEventSubscription record) {
         this.dataEventSubscription.add(record);
+        record.setSubscriber(this);
     }
 
     public void removeDataEventSubscription(DataEventSubscription record) {
