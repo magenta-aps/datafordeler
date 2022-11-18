@@ -109,7 +109,7 @@ public class SubscriptionTest {
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            subscriber.addDataEventSubscription(new DataEventSubscription("de1", ""));
+            subscriber.addDataEventSubscription(new DataEventSubscription("de1", "", subscriber));
             transaction.commit();
         }
 
@@ -132,7 +132,7 @@ public class SubscriptionTest {
 
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("be1", "A01"));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("be1", "A01", subscriber));
 
             transaction.commit();
         }
@@ -517,12 +517,12 @@ public class SubscriptionTest {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
-            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription1", "A01"));
-            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription2", "A02"));
-            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription3", "A03"));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", ""));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", ""));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", ""));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription1", "A01", subscriber));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription2", "A02", subscriber));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription3", "A03", subscriber));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", "", subscriber));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", "", subscriber));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", "", subscriber));
             session.save(subscriber);
             transaction.commit();
         }
@@ -616,22 +616,16 @@ public class SubscriptionTest {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
-            BusinessEventSubscription bs1 = new BusinessEventSubscription("subscription1", "A01");
-            BusinessEventSubscription bs2 = new BusinessEventSubscription("subscription2", "A01");
-            BusinessEventSubscription bs3 = new BusinessEventSubscription("subscription3", "A01");
-            bs1.setSubscriber(subscriber);
-            bs2.setSubscriber(subscriber);
-            bs3.setSubscriber(subscriber);
+            BusinessEventSubscription bs1 = new BusinessEventSubscription("subscription1", "A01", subscriber);
+            BusinessEventSubscription bs2 = new BusinessEventSubscription("subscription2", "A01", subscriber);
+            BusinessEventSubscription bs3 = new BusinessEventSubscription("subscription3", "A01", subscriber);
             subscriber.addBusinessEventSubscription(bs1);
             subscriber.addBusinessEventSubscription(bs2);
             subscriber.addBusinessEventSubscription(bs3);
 
-            DataEventSubscription ds1 = new DataEventSubscription("subscription1", "");
-            DataEventSubscription ds2 = new DataEventSubscription("subscription2", "");
-            DataEventSubscription ds3 = new DataEventSubscription("subscription3", "");
-            ds1.setSubscriber(subscriber);
-            ds2.setSubscriber(subscriber);
-            ds3.setSubscriber(subscriber);
+            DataEventSubscription ds1 = new DataEventSubscription("subscription1", "", subscriber);
+            DataEventSubscription ds2 = new DataEventSubscription("subscription2", "", subscriber);
+            DataEventSubscription ds3 = new DataEventSubscription("subscription3", "", subscriber);
 
             subscriber.addDataEventSubscription(ds1);
             subscriber.addDataEventSubscription(ds2);

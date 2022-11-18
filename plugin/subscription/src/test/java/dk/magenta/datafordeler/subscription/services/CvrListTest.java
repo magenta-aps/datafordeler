@@ -73,9 +73,9 @@ public class CvrListTest {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", ""));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", ""));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", ""));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", "", subscriber));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", "", subscriber));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", "", subscriber));
 
             CvrList cvrList1 = new CvrList("myList1");
             subscriber.addCvrList(cvrList1);

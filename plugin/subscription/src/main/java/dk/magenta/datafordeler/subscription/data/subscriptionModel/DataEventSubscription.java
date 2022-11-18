@@ -21,9 +21,10 @@ public class DataEventSubscription extends DatabaseEntry {
     }
 
 
-    public DataEventSubscription(String dataEventId, String kodeId) {
+    public DataEventSubscription(String dataEventId, String kodeId, Subscriber subscriber) {
         this.dataEventId = dataEventId;
         this.kodeId = kodeId;
+        this.subscriber = subscriber;
     }
 
 
@@ -51,7 +52,7 @@ public class DataEventSubscription extends DatabaseEntry {
         this.kodeId = kodeId;
     }
 
-    public static final String DB_FIELD_SUBSCRIBER_ID = "subscriberId";
+    public static final String DB_FIELD_SUBSCRIBER_ID = "subscriber_id";
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = DB_FIELD_SUBSCRIBER_ID)

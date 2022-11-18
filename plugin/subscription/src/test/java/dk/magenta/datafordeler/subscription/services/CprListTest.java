@@ -75,12 +75,12 @@ public class CprListTest {
             Subscriber subscriber = new Subscriber("PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
             Transaction transaction = session.beginTransaction();
 
-            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription1", "A01"));
-            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription2", "A02"));
-            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription3", "A03"));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", ""));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", ""));
-            subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", ""));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription1", "A01", subscriber));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription2", "A02", subscriber));
+            subscriber.addBusinessEventSubscription(new BusinessEventSubscription("subscription3", "A03", subscriber));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", "", subscriber));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", "", subscriber));
+            subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", "", subscriber));
 
             CprList cprList1 = new CprList("myList1");
             session.save(cprList1);
