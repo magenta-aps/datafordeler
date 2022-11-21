@@ -32,6 +32,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 
@@ -105,11 +107,11 @@ public class QueryTest {
         when(dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
     }
 
-    private ResponseEntity<String> restSearch(ParameterMap parameters, String type) {
+    private ResponseEntity<String> restSearch(ParameterMap parameters, String type) throws URISyntaxException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange("/cpr/" + type + "/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
+        return this.restTemplate.exchange(new URI("/cpr/" + type + "/1/rest/search?" + parameters.asUrlParams()), HttpMethod.GET, httpEntity, String.class);
     }
 
     private ResponseEntity<String> uuidSearch(String id, String type) {

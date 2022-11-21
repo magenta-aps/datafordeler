@@ -31,6 +31,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -127,11 +128,11 @@ public abstract class TestBase {
         when(this.dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
     }
 
-    protected ResponseEntity<String> restSearch(ParameterMap parameters, String type) {
+    protected ResponseEntity<String> restSearch(ParameterMap parameters, String type) throws URISyntaxException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange("/cpr/" + type + "/1/rest/search?" + parameters.asUrlParams(), HttpMethod.GET, httpEntity, String.class);
+        return this.restTemplate.exchange(new URI("/cpr/" + type + "/1/rest/search?" + parameters.asUrlParams()), HttpMethod.GET, httpEntity, String.class);
     }
 
     protected ResponseEntity<String> uuidSearch(String id, String type) {

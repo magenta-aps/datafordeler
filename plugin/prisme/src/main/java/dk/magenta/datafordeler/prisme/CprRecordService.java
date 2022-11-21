@@ -140,7 +140,7 @@ public class CprRecordService {
         }
         ObjectNode requestObject = (ObjectNode) requestBody;
 
-        final OffsetDateTime updatedSince = requestObject.has(PARAM_UPDATED_SINCE) ? Query.parseDateTime(requestObject.get(PARAM_UPDATED_SINCE).asText(), false) : null;
+        final OffsetDateTime updatedSince = requestObject.has(PARAM_UPDATED_SINCE) ? Query.parseDateTime(requestObject.get(PARAM_UPDATED_SINCE).asText()) : null;
 
         final List<String> cprNumbers = (requestObject.has(PARAM_CPR_NUMBER)) ? this.getCprNumber(requestObject.get(PARAM_CPR_NUMBER)) : null;
 

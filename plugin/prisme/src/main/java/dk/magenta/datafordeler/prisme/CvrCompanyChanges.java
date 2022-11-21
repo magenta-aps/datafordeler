@@ -66,7 +66,7 @@ public class CvrCompanyChanges {
         // Root
         OutputWrapper.NodeWrapper root = new OutputWrapper.NodeWrapper(objectMapper.createObjectNode());
 
-        final OffsetDateTime updatedSinceTimestamp = Query.parseDateTime(updatedSince, false);
+        final OffsetDateTime updatedSinceTimestamp = Query.parseDateTime(updatedSince);
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
