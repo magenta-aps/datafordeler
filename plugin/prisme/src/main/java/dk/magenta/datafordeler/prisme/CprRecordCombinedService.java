@@ -107,6 +107,9 @@ public class CprRecordCombinedService {
             this.applyAreaRestrictionsToQuery(personQuery, user);
             if ("true".equals(forceDirect)) {
                 PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
+                if (personEntity == null) {
+                    throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found in direct lookup");
+                }
                 Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
                 return streamPersonOut(user, obj);
             }
