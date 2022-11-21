@@ -154,7 +154,6 @@ public class RoadTest extends TestBase {
     @Test
     public void testRoadRecordTime() throws Exception {
         whitelistLocalhost();
-        OffsetDateTime now = OffsetDateTime.now();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = this.getSessionManager().getSessionFactory().openSession();
         importMetadata.setSession(session);

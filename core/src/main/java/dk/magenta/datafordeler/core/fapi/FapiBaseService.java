@@ -388,7 +388,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      */
     protected Q getQuery(MultiValueMap<String, String> parameters, boolean limitsOnly) throws InvalidClientInputException {
         Q query = this.getEmptyQuery();
-        ParameterMap parameterMap = new ParameterMap(parameters, true);
+        ParameterMap parameterMap = new ParameterMap(parameters, false);
         query.fillFromParameters(parameterMap, limitsOnly);
         return query;
     }

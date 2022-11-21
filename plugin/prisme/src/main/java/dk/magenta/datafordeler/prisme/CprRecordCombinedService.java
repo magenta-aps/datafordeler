@@ -178,7 +178,7 @@ public class CprRecordCombinedService {
         }
         ObjectNode requestObject = (ObjectNode) requestBody;
 
-        final OffsetDateTime updatedSince = requestObject.has(PARAM_UPDATED_SINCE) ? Query.parseDateTime(requestObject.get(PARAM_UPDATED_SINCE).asText(), false) : null;
+        final OffsetDateTime updatedSince = requestObject.has(PARAM_UPDATED_SINCE) ? Query.parseDateTime(requestObject.get(PARAM_UPDATED_SINCE).asText()) : null;
 
         final HashSet<String> cprNumbers = (requestObject.has(PARAM_CPR_NUMBER)) ? new HashSet<>(this.getCprNumber(requestObject.get(PARAM_CPR_NUMBER))) : null;
 

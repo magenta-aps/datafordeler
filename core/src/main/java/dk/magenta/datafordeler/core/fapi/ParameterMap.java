@@ -4,12 +4,11 @@ import dk.magenta.datafordeler.core.util.ListHashMap;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,10 +47,14 @@ public class ParameterMap extends ListHashMap<String, String> {
         StringJoiner sj = new StringJoiner("&");
         for (String key : this.keySet()) {
             for (String value : this.get(key)) {
-                sj.add(key + "=" + java.net.URLEncoder.encode(value, StandardCharsets.UTF_8));
+                sj.add(java.net.URLEncoder.encode(key, StandardCharsets.UTF_8) + "=" + java.net.URLEncoder.encode(value, StandardCharsets.UTF_8));
             }
         }
-        return sj.toString();
+        try {
+            return new URI("http", "localhost", "/", sj.toString(), "").getQuery();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ParameterMap fromPath(String path) {
@@ -93,6 +96,17 @@ public class ParameterMap extends ListHashMap<String, String> {
         LinkedMultiValueMap map = new LinkedMultiValueMap<String, String>();
         for (String key : this.keySet()) {
             map.put(key, this.get(key));
+        }
+        return map;
+    }
+
+    public Map<String, String> asSingleValueMap() {
+        HashMap<String, String> map = new HashMap<>();
+        for (String key : this.keySet()) {
+            List<String> values = this.get(key);
+            if (!values.isEmpty()) {
+                map.put(key, values.get(0));
+            }
         }
         return map;
     }

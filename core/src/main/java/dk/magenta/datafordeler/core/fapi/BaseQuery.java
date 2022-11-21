@@ -727,10 +727,6 @@ public abstract class BaseQuery {
 
     private static final int formatterCount = zonedDateTimeFormatters.length + zonedDateFormatters.length + unzonedDateTimeFormatters.length + unzonedDateFormatters.length;
 
-    public static OffsetDateTime parseDateTime(String dateTime) throws DateTimeParseException {
-        return parseDateTime(dateTime, false);
-    }
-
 
     /**
      * Convenience method for parsing a String as an OffsetDateTime
@@ -750,44 +746,50 @@ public abstract class BaseQuery {
      * @return Parsed OffsetDateTime, or null if input was null
      * @throws DateTimeParseException if no parser succeeded on a non-null input string
      */
-    public static OffsetDateTime parseDateTime(String dateTime, boolean urlDecode) throws DateTimeParseException {
+    public static OffsetDateTime parseDateTime(String dateTime) throws DateTimeParseException {
         if (dateTime != null) {
-            String decodedDateTime;
-            if (urlDecode) {
-                decodedDateTime = java.net.URLDecoder.decode(dateTime, StandardCharsets.UTF_8);
-            } else {
-                decodedDateTime = dateTime;
-            }
+            ArrayList<String> candidates = new ArrayList<>();
+            candidates.add(dateTime);
+            candidates.add(java.net.URLDecoder.decode(dateTime, StandardCharsets.UTF_8));
+            candidates.add(dateTime.replace(" ", "+"));
             for (DateTimeFormatter formatter : zonedDateTimeFormatters) {
-                try {
-                    return OffsetDateTime.parse(decodedDateTime, formatter);
-                } catch (DateTimeParseException e) {
-                    // Do nothing - we expect errors when the input is something we cannot parse with this set of parsers. Nothing wrong with that, just move on to the next set of parsers
+                for (String candidate : candidates) {
+                    try {
+                        return OffsetDateTime.parse(candidate, formatter);
+                    } catch (DateTimeParseException e) {
+                        // Do nothing - we expect errors when the input is something we cannot parse with this set of parsers. Nothing wrong with that, just move on to the next set of parsers
+                    }
                 }
             }
             for (DateTimeFormatter formatter : zonedDateFormatters) {
-                try {
-                    TemporalAccessor accessor = formatter.parse(decodedDateTime);
-                    return OffsetDateTime.of(LocalDate.from(accessor), LocalTime.MIDNIGHT, ZoneOffset.from(accessor));
-                } catch (DateTimeParseException e) {
+                for (String candidate : candidates) {
+                    try {
+                        TemporalAccessor accessor = formatter.parse(candidate);
+                        return OffsetDateTime.of(LocalDate.from(accessor), LocalTime.MIDNIGHT, ZoneOffset.from(accessor));
+                    } catch (DateTimeParseException e) {
+                    }
                 }
             }
             for (DateTimeFormatter formatter : unzonedDateTimeFormatters) {
-                try {
-                    TemporalAccessor accessor = formatter.parse(decodedDateTime);
-                    return OffsetDateTime.of(LocalDateTime.from(accessor), ZoneOffset.UTC);
-                } catch (DateTimeParseException e) {
+                for (String candidate : candidates) {
+                    try {
+                        TemporalAccessor accessor = formatter.parse(candidate);
+                        return OffsetDateTime.of(LocalDateTime.from(accessor), ZoneOffset.UTC);
+                    } catch (DateTimeParseException e) {
+                    }
                 }
             }
             for (DateTimeFormatter formatter : unzonedDateFormatters) {
-                try {
-                    TemporalAccessor accessor = formatter.parse(decodedDateTime);
-                    return OffsetDateTime.of(LocalDate.from(accessor), LocalTime.MIDNIGHT, ZoneOffset.UTC);
-                } catch (DateTimeParseException e) {
+                for (String candidate : candidates) {
+                    try {
+                        TemporalAccessor accessor = formatter.parse(candidate);
+                        return OffsetDateTime.of(LocalDate.from(accessor), LocalTime.MIDNIGHT, ZoneOffset.UTC);
+                    } catch (DateTimeParseException e) {
+                    }
                 }
             }
             // If none of the parsers could parse the string, _then_ we may throw an exception
-            throw new DateTimeParseException("Unable to parse date string \"" + decodedDateTime + "\", tried " + formatterCount + " parsers of " + DateTimeFormatter.class.getCanonicalName(), decodedDateTime, 0);
+            throw new DateTimeParseException("Unable to parse date string \"" + dateTime + "\", tried " + formatterCount + " parsers of " + DateTimeFormatter.class.getCanonicalName(), dateTime, 0);
         }
         return null;
     }

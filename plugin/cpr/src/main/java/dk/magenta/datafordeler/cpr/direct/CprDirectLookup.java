@@ -154,7 +154,7 @@ public class CprDirectLookup {
             try {
                 response = this.request(request);
             } catch (IOException e) {
-                throw new DataStreamException("Failed lookup at CPR Direct", e);
+                throw new DataStreamException("Failed lookup at CPR Direct for "+pnr+": "+e.getMessage(), e);
             }
 
             int errorCode = this.parseErrorCode(response);

@@ -32,16 +32,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.w3c.dom.Document;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.xml.namespace.QName;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -270,7 +266,7 @@ public class FapiTest {
 
     @Test
     @Order(order = 10)
-    public void restLookupJSONByParametersTest() throws IOException, DataFordelerException {
+    public void restLookupJSONByParametersTest() throws IOException, DataFordelerException, URISyntaxException {
         this.setupUser();
         UUID uuid1 = this.addTestObject();
         UUID uuid2 = this.addTestObject();
@@ -528,7 +524,7 @@ public class FapiTest {
         }
     }
 
-    private void testRegistrationFilter(String urlBase, int[][] expected, String registerOverlapStart, String registerOverlapEnd, String effectOverlapStart, String effectOverlapEnd) throws IOException {
+    private void testRegistrationFilter(String urlBase, int[][] expected, String registerOverlapStart, String registerOverlapEnd, String effectOverlapStart, String effectOverlapEnd) throws IOException, URISyntaxException {
         ResponseEntity<String> resp = getRegistrationFilterRequest(urlBase,
                 null, registerOverlapEnd, registerOverlapStart, null,
                 null,effectOverlapEnd, effectOverlapStart, null,
@@ -553,14 +549,12 @@ public class FapiTest {
             String registerFromAfter, String registerFromBefore, String registerToAfter, String registerToBefore,
             String effectFromAfter, String effectFromBefore, String effectToAfter, String effectToBefore,
             String mediaType, String mode
-    ) {
+    ) throws URISyntaxException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", mediaType);
         HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
         String now = OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(urlBase);
         ParameterMap parameters = new ParameterMap();
         if (registerFromAfter != null) {
             parameters.add(Query.PARAM_REGISTRATION_FROM_AFTER[0], registerFromAfter);
@@ -597,11 +591,10 @@ public class FapiTest {
         if (mode != null) {
             parameters.add(Query.PARAM_OUTPUT_WRAPPING[0], mode);
         }
-        if (parameters.size() > 0) {
-            sb.append(urlBase.contains("?") ? "&" : "?");
-            sb.append(parameters.asUrlParams());
-        }
-        ResponseEntity<String> resp = this.restTemplate.exchange(sb.toString(), HttpMethod.GET, httpEntity, String.class);
+
+        String sep = urlBase.contains("?") ? "&" : "?";
+
+        ResponseEntity<String> resp = this.restTemplate.exchange(new URI(urlBase + sep + parameters.asUrlParams()), HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(200, resp.getStatusCode().value());
         return resp;
     }
