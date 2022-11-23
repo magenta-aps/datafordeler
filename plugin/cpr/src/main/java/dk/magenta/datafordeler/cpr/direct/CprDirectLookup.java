@@ -74,7 +74,7 @@ public class CprDirectLookup {
         try {
             password = String.format("%-8.8s", configuration.getDirectPassword());
         } catch (GeneralSecurityException | IOException e) {
-            throw new DataStreamException("Failed decrypting stored password from database", e);
+            throw new DataStreamException("Failed decrypting stored password from database: "+e.getMessage(), e);
         }
 
         if (newPassword == null) {
@@ -102,7 +102,7 @@ public class CprDirectLookup {
         try {
             response = this.request(requestBody);
         } catch (IOException e) {
-            throw new DataStreamException("Failed connecting to CPR Direct", e);
+            throw new DataStreamException("Failed connecting to CPR Direct: "+e.getMessage(), e);
         }
 
         // error code in response starts at position 22 in response
