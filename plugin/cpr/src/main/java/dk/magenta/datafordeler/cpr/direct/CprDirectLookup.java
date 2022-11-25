@@ -22,6 +22,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.OffsetDateTime;
@@ -180,7 +181,7 @@ public class CprDirectLookup {
     private SSLSocket getSocket() throws IOException {
         CprConfiguration configuration = this.getConfiguration();
         return (SSLSocket) this.socketFactory.createSocket(
-                configuration.getDirectHost(),
+                InetAddress.getByName(configuration.getDirectHost()),
                 configuration.getDirectPort()
         );
     }
