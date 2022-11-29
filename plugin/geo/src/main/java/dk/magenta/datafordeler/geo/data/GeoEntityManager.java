@@ -125,7 +125,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     protected abstract E createBasicEntity(T record, Session session);
 
     @Override
-    public List<? extends Registration> parseData(InputStream jsonData, ImportMetadata importMetadata) throws DataFordelerException {
+    public void parseData(InputStream jsonData, ImportMetadata importMetadata) throws DataFordelerException {
         HashMap<UUID, E> entityCache = new HashMap<>();
         Session session = importMetadata.getSession();
         boolean wrappedInTransaction = importMetadata.isTransactionInProgress();
@@ -176,7 +176,6 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
             importMetadata.setTransactionInProgress(false);
         }
         log.info(timer.formatAllTotal());
-        return null;
     }
 
     public static long parseJsonStream(String jsonData, String searchKey, ObjectMapper objectMapper, Consumer<JsonNode> callback) throws DataStreamException {

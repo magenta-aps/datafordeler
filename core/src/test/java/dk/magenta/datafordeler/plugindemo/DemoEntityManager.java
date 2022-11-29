@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.plugindemo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.ParseException;
@@ -29,7 +28,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Component
 public class DemoEntityManager extends EntityManager {
@@ -132,25 +130,25 @@ public class DemoEntityManager extends EntityManager {
         this.baseEndpoint = baseEndpoint;
     }
 
-    /** Registration parsing **/
+    /**
+     * Registration parsing
+     **/
 
-    public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+    public void parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         try {
             this.parseData(objectMapper.readTree(registrationData), importMetadata);
         } catch (IOException e) {
             throw new DataStreamException(e);
         }
-        return null;
     }
 
     @Override
-    public List<? extends Registration> parseData(PluginSourceData registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+    public void parseData(PluginSourceData registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         try {
             this.parseData(objectMapper.readTree(registrationData.getData()), importMetadata);
         } catch (IOException e) {
             throw new DataStreamException(e);
         }
-        return null;
     }
 
     public void parseData(JsonNode jsonNode, ImportMetadata importMetadata) throws ParseException {
