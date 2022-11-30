@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.LastUpdated;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
@@ -22,7 +21,6 @@ import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Entity (and associates) specific manager. Subclass in plugins
@@ -81,22 +79,18 @@ public abstract class EntityManager {
      * Parse incoming data into a Registration (data coming from within a request envelope)
      *
      * @param registrationData
-     * @return
      * @throws IOException
      */
-    public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
-        return null;
+    public void parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
     }
 
     /**
      * Parse incoming data into a Registration (data coming from within a request envelope)
      *
      * @param registrationData
-     * @return
      * @throws IOException
      */
-    public List<? extends Registration> parseData(PluginSourceData registrationData, ImportMetadata importMetadata) throws DataFordelerException {
-        return null;
+    public void parseData(PluginSourceData registrationData, ImportMetadata importMetadata) throws DataFordelerException {
     }
 
 

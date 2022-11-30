@@ -40,6 +40,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Base EntityManager for CVR, implementing shared methods for the Company, CompanyUnit and Participant EntityManagers.
@@ -149,11 +150,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      *
      * @param registrationData
      * @param importMetadata
-     * @return
      * @throws DataFordelerException
      */
     @Override
-    public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+    public void parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         Session session = importMetadata.getSession();
         if (session != null) {
             //With this flag true initiated testdata is cleared before initiation of new data is initiated
@@ -265,7 +265,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             throw e;
         }
         log.info("Parse complete");
-        return null;
     }
 
     /**

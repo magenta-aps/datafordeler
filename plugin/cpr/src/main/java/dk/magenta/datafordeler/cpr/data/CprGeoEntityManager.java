@@ -133,7 +133,7 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
     private static final String TASK_CHUNK_HANDLE = "CprChunk";
 
     @Override
-    public List<R> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+    public void parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         String charset = this.getConfiguration().getRegisterCharset(this);
         CprSubParser<T> parser = this.getParser();
         Session session = importMetadata.getSession();
@@ -288,7 +288,6 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
                 throw e;
             }
         }
-        return null;
     }
 
 /*    private void parseRVD(E entity, List<T> records, ImportMetadata importMetadata) throws ImportInterruptedException {

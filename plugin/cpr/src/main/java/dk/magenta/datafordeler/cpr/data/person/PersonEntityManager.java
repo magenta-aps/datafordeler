@@ -144,11 +144,10 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
      *
      * @param registrationData
      * @param importMetadata
-     * @return
      * @throws DataFordelerException
      */
     @Override
-    public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+    public void parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         try {
             //With this flag true initiated testdata is cleared before initiation of new data is initiated
             if (importMetadata.getImportConfiguration() != null &&
@@ -156,7 +155,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                     importMetadata.getImportConfiguration().get("cleantestdatafirst").booleanValue()) {
                 cleanDemoData();
             }
-            List<? extends Registration> result = super.parseData(registrationData, importMetadata);
+            super.parseData(registrationData, importMetadata);
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicCprNumbers.isEmpty() && importMetadata.getImportConfiguration().size() == 0) {
                 this.createSubscription(this.nonGreenlandicCprNumbers);
             }
@@ -192,7 +191,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 }
                 this.createSubscription(this.nonGreenlandicChildrenCprNumbers);
             }
-            return result;
         } finally {
             this.nonGreenlandicCprNumbers.clear();
             this.nonGreenlandicFatherCprNumbers.clear();

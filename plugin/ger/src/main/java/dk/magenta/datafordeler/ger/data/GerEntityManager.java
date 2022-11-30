@@ -119,7 +119,7 @@ public abstract class GerEntityManager<E extends GerEntity> extends EntityManage
     protected abstract E createBasicEntity(RawData record, Session session);
 
     @Override
-    public List<? extends Registration> parseData(InputStream sheetData, ImportMetadata importMetadata) throws DataFordelerException {
+    public void parseData(InputStream sheetData, ImportMetadata importMetadata) throws DataFordelerException {
 
         String extension = "xlsx";
         if (sheetData instanceof ImportInputStream) {
@@ -175,7 +175,6 @@ public abstract class GerEntityManager<E extends GerEntity> extends EntityManage
             importMetadata.setTransactionInProgress(false);
         }
         log.info(timer.formatAllTotal());
-        return null;
     }
 
     private E getEntity(HashMap<UUID, E> entityCache, Session session, RawData rawData) {

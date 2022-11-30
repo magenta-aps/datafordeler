@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
@@ -177,7 +176,7 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
     private static final String TASK_CHUNK_HANDLE = "CprChunk";
 
     @Override
-    public List<? extends Registration> parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+    public void parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         //String charset = "UTF8";//this.getConfiguration().getRegisterCharset(this);
         String charset = this.getConfiguration().getRegisterCharset(this);
         CprSubParser<T> parser = this.getParser();
@@ -336,7 +335,6 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                 throw e;
             }
         }
-        return null;
     }
 
 
