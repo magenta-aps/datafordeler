@@ -959,6 +959,7 @@ public class PersonEntity extends CprRecordEntity {
 
             if (!compareExisting) {
                 //Special case for direct lookup
+                System.out.println("add item");
                 return set.add((E) newItem);
             }
 
