@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.prisme;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -10,7 +11,9 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
+import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
@@ -19,6 +22,10 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscriptionAssignmentStatus;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
+import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
+import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonStatusDataRecord;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
@@ -45,8 +52,10 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 
@@ -916,4 +925,239 @@ public class CprTest extends TestBase {
         Assert.assertEquals(18, adressList.size());
         System.out.println(response.getBody());
     }
+
+
+    @Autowired PersonOutputWrapperPrisme personOutputWrapperPrisme;
+    @Test
+    public void testDeadPerson() {
+
+        GeoLookupService lookupService = new GeoLookupService(sessionManager);
+        personOutputWrapperPrisme.setLookupService(lookupService);
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+
+        OffsetDateTime birth = OffsetDateTime.parse("1920-01-01T00:00:00Z");
+        OffsetDateTime death = OffsetDateTime.parse("2022-01-01T00:00:00Z");
+
+        Bitemporality beforeDeath = new Bitemporality(
+                birth, death,
+                birth, null
+        );
+        Bitemporality afterDeathPast = new Bitemporality(
+                death, null,
+                birth, death
+        );
+        Bitemporality afterDeathPresent = new Bitemporality(
+                death, null,
+                death, null
+        );
+
+        PersonEntity personEntity = new PersonEntity(UUID.randomUUID(), "testing");
+        personEntity.setPersonnummer("1234567890");
+        List<CprBitemporalPersonRecord> records = new ArrayList<>();
+
+        PersonStatusDataRecord aliveStatus = new PersonStatusDataRecord(5);
+        aliveStatus.setBitemporality(beforeDeath);
+
+        AddressDataRecord aliveAddress = new AddressDataRecord(956, 254, "B-3197", "18", "kld", "1", null, null, null, null, null, 0, 955);
+        aliveAddress.setBitemporality(beforeDeath);
+        records.add(aliveAddress);
+
+        AddressDataRecord deadAddress = aliveAddress.clone();
+        deadAddress.setBitemporality(afterDeathPast);
+        records.add(deadAddress);
+
+        PersonStatusDataRecord aliveStatusPast = new PersonStatusDataRecord(5);
+        aliveStatusPast.setBitemporality(afterDeathPast);
+        records.add(aliveStatusPast);
+
+        PersonStatusDataRecord deadStatusPresent = new PersonStatusDataRecord(90);
+        deadStatusPresent.setBitemporality(afterDeathPresent);
+        records.add(deadStatusPresent);
+
+        session.save(personEntity);
+        session.save(personEntity.getIdentification());
+        for (CprBitemporalPersonRecord record : records) {
+            record.setDafoUpdated(OffsetDateTime.now());
+            record.setEntity(personEntity);
+            personEntity.addBitemporalRecord(record, session, false);
+            session.save(record);
+        }
+        session.flush();
+        transaction.commit();
+
+        ObjectNode output = (ObjectNode) personOutputWrapperPrisme.wrapRecordResult(personEntity, null);
+
+        Assert.assertEquals(90, output.get("statuskode").asInt());
+        Assert.assertEquals("1920-01-01", output.get("tilflytningsdato").asText());
+        Assert.assertEquals(956, output.get("myndighedskode").asInt());
+        Assert.assertEquals(254, output.get("vejkode").asInt());
+        Assert.assertEquals("Kommuneqarfik Sermersooq", output.get("kommune").asText());
+        Assert.assertEquals(3900, output.get("postnummer").asInt());
+        Assert.assertEquals(600, output.get("stedkode").asInt());
+        Assert.assertEquals("GL", output.get("landekode").asText());
+
+        session.close();
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/1/" + "1234567890",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        String jsonExpected = "{\"cprNummer\":\"1234567890\"," +
+                "\"adressebeskyttelse\":false," +
+                "\"statuskode\":90," +
+                "\"statuskodedato\":\"2022-01-01\"," +
+                "\"tilflytningsdato\":\"1920-01-01\"," +
+                "\"myndighedskode\":956," +
+                "\"vejkode\":254," +
+                "\"kommune\":\"Kommuneqarfik Sermersooq\"," +
+                "\"adresse\":\"Qarsaalik 18, kld. 1 (B-3197)\"," +
+                "\"postnummer\":3900," +
+                "\"bynavn\":\"Nuuk\"," +
+                "\"stedkode\":600," +
+                "\"landekode\":\"GL\"}";
+        try {
+            Assert.assertTrue(
+                   new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(response.getBody())) == 0
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void testDeadPersonWithOverlap() {
+
+        GeoLookupService lookupService = new GeoLookupService(sessionManager);
+        personOutputWrapperPrisme.setLookupService(lookupService);
+        ImportMetadata importMetadata = new ImportMetadata();
+        Session session = sessionManager.getSessionFactory().openSession();
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+
+        OffsetDateTime birth = OffsetDateTime.parse("1920-01-01T00:00:00Z");
+        OffsetDateTime death = OffsetDateTime.parse("2022-01-01T00:00:00Z");
+
+        Bitemporality beforeDeath = new Bitemporality(
+                birth, death,
+                birth, null
+        );
+        Bitemporality afterDeathPast = new Bitemporality(
+                death, null,
+                birth, death
+        );
+        Bitemporality afterDeathPast0 = new Bitemporality(
+                death, null,
+                birth, OffsetDateTime.parse("2022-01-01T01:00:00Z")
+        );
+        Bitemporality afterDeathPresent = new Bitemporality(
+                death, null,
+                death, null
+        );
+
+        PersonEntity personEntity = new PersonEntity(UUID.randomUUID(), "testing");
+        personEntity.setPersonnummer("1234567890");
+        List<CprBitemporalPersonRecord> records = new ArrayList<>();
+
+
+        AddressDataRecord aliveAddress1 = new AddressDataRecord(956, 254, "B-3197", "18", "kld", "1", null, null, null, null, null, 0, 955);
+        aliveAddress1.setBitemporality(beforeDeath);
+        records.add(aliveAddress1);
+
+        AddressDataRecord aliveAddress2 = new AddressDataRecord(956, 254, "B-3197", "18", "kld", "2", null, null, null, null, null, 0, 955);
+        aliveAddress2.setBitemporality(beforeDeath);
+        records.add(aliveAddress2);
+
+        AddressDataRecord deadAddress1 = aliveAddress1.clone();
+        deadAddress1.setBitemporality(afterDeathPast0);  // This one has a later effectTo, so it should be chosen over deadAddress2
+        records.add(deadAddress1);
+
+        AddressDataRecord deadAddress2 = aliveAddress2.clone();
+        deadAddress2.setBitemporality(afterDeathPast);
+        records.add(deadAddress2);
+
+        PersonStatusDataRecord aliveStatus = new PersonStatusDataRecord(5);
+        aliveStatus.setBitemporality(beforeDeath);
+        records.add(aliveStatus);
+
+        PersonStatusDataRecord aliveStatusPast = new PersonStatusDataRecord(5);
+        aliveStatusPast.setBitemporality(afterDeathPast);
+        records.add(aliveStatusPast);
+
+        PersonStatusDataRecord deadStatusPresent = new PersonStatusDataRecord(90);
+        deadStatusPresent.setBitemporality(afterDeathPresent);
+        records.add(deadStatusPresent);
+
+        session.save(personEntity);
+        session.save(personEntity.getIdentification());
+        for (CprBitemporalPersonRecord record : records) {
+            record.setDafoUpdated(OffsetDateTime.now());
+            personEntity.addBitemporalRecord(record, session, false);
+            session.save(record);
+        }
+        session.flush();
+        transaction.commit();
+
+        ObjectNode output = (ObjectNode) personOutputWrapperPrisme.wrapRecordResult(personEntity, null);
+
+        Assert.assertEquals(90, output.get("statuskode").asInt());
+        Assert.assertEquals("1920-01-01", output.get("tilflytningsdato").asText());
+        Assert.assertEquals(956, output.get("myndighedskode").asInt());
+        Assert.assertEquals(254, output.get("vejkode").asInt());
+        Assert.assertEquals("Kommuneqarfik Sermersooq", output.get("kommune").asText());
+        Assert.assertEquals(3900, output.get("postnummer").asInt());
+        Assert.assertEquals(600, output.get("stedkode").asInt());
+        Assert.assertEquals("GL", output.get("landekode").asText());
+
+        session.close();
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        this.applyAccess(testUserDetails);
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/prisme/cpr/1/" + "1234567890",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        String jsonExpected = "{\"cprNummer\":\"1234567890\"," +
+                "\"adressebeskyttelse\":false," +
+                "\"statuskode\":90," +
+                "\"statuskodedato\":\"2022-01-01\"," +
+                "\"tilflytningsdato\":\"1920-01-01\"," +
+                "\"myndighedskode\":956," +
+                "\"vejkode\":254," +
+                "\"kommune\":\"Kommuneqarfik Sermersooq\"," +
+                "\"adresse\":\"Qarsaalik 18, kld. 1 (B-3197)\"," +
+                "\"postnummer\":3900," +
+                "\"bynavn\":\"Nuuk\"," +
+                "\"stedkode\":600," +
+                "\"landekode\":\"GL\"}";
+        try {
+            Assert.assertTrue(
+                    new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(response.getBody())) == 0
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
+

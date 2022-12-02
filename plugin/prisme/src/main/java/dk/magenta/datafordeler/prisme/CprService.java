@@ -101,7 +101,6 @@ public class CprService {
             personQuery.setRegistrationFromBefore(now);
             personQuery.setRegistrationToAfter(now);
             personQuery.setEffectFromBefore(now);
-            personQuery.setEffectToAfter(now);
 
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);

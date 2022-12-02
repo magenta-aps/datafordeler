@@ -29,7 +29,7 @@ import java.nio.file.Files;
 import java.util.Properties;
 import java.util.regex.Matcher;
 
-@ComponentScan({"dk.magenta.datafordeler", "dk.magenta.datafordeler.core", "dk.magenta.datafordeler.core.gapi", "dk.magenta.datafordeler.core.database", "dk.magenta.datafordeler.core.util"})
+@ComponentScan({"dk.magenta.datafordeler", "dk.magenta.datafordeler.core", "dk.magenta.datafordeler.core.database", "dk.magenta.datafordeler.core.util"})
 @EntityScan("dk.magenta.datafordeler")
 @ServletComponentScan
 @SpringBootApplication

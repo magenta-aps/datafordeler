@@ -7,8 +7,11 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
+import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +20,12 @@ import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
@@ -33,33 +40,41 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
     }
 
     private <T extends CprBitemporalPersonRecord> T getLatest(Collection<T> records) {
-        //OffsetDateTime latestEffect = OffsetDateTime.MIN;
-        OffsetDateTime latestRegistration = OffsetDateTime.MIN;
-        ArrayList<T> latest = new ArrayList<>();
         OffsetDateTime now = OffsetDateTime.now();
-        Bitemporality currentBitemp = new Bitemporality(now, now, now, now);
-        OffsetDateTime latestUpdated = OffsetDateTime.MIN;
-        for (T record : records) {
-            // TODO: Døde personer skal vise adresse selvom den er udløbet
-            if (record.getBitemporality().contains(currentBitemp) && !record.getDafoUpdated().isBefore(latestUpdated) && !record.isUndone()/* && record.getCorrector() == null*/) {
-                OffsetDateTime registrationFrom = record.getRegistrationFrom();
-                if (registrationFrom == null) {
-                    registrationFrom = OffsetDateTime.MIN;
-                }
-                if (!registrationFrom.isBefore(latestRegistration)) {
-                    if (!registrationFrom.isEqual(latestRegistration)) {
-                        latest.clear();
-                    }
-                    latest.add(record);
-                    latestUpdated = record.getDafoUpdated();
-                    latestRegistration = registrationFrom;
-                }
-            }
+        boolean getLatestNonCovered = true;
+
+        // Consider only records that are not marked as "undone"
+        Stream<T> notUndone = records.stream().filter(r -> !r.isUndone());
+        // consider only records that have a current registration
+        List<T> currentlyRegistered = notUndone.filter(r -> r.getBitemporality().containsRegistration(now, now)).collect(Collectors.toList());
+        // Get records that are currently in effect
+        List<T> latest = currentlyRegistered.stream().filter(r -> r.getBitemporality().containsEffect(now, now)).collect(Collectors.toList());
+        if (getLatestNonCovered && latest.isEmpty()) {
+            // If none are found, and we are allowed to, use records that were effective in the past
+            latest = currentlyRegistered.stream()
+                    .filter(r -> r.getBitemporality().effectFrom == null || !r.getBitemporality().effectFrom.isAfter(now))
+                    .collect(Collectors.toList());
         }
-        if (latest.size() > 1) {
-            latest.sort(Comparator.comparing(CprBitemporalPersonRecord::getId));
+
+        if (latest.isEmpty()) {
+            return null;
+        } else if (latest.size() == 1) {
+            return latest.get(0);
+        } else {
+            // If more than one candidate was found, pick the last one from a sorted list
+            // where we first sort by effectTo (last effectTo wins, null (infinity) beats all)
+            // in case of a tie, sort by dafoUpdated (last dafoUpdated wins)
+            // if even that fails, sort by id (greatest id wins, meaning last inserted in DB)
+            Function<T, OffsetDateTime> getEffectTo = CprBitemporalRecord::getEffectTo;
+            Function<T, OffsetDateTime> getDafoUpdated = CprBitemporalRecord::getDafoUpdated;
+            Function<T, Long> getId = CprBitemporalRecord::getId;
+            latest.sort(
+                    Comparator.nullsLast(Comparator.comparing(getEffectTo))
+                    .thenComparing(getDafoUpdated)
+                    .thenComparing(getId)
+            );
+            return latest.get(latest.size() - 1);
         }
-        return latest.isEmpty() ? null : latest.get(latest.size() - 1);
     }
 
     public Object wrapRecordResult(PersonEntity input, BaseQuery query) {
@@ -147,7 +162,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         ForeignAddressDataRecord personForeignAddressData = this.getLatest(input.getForeignAddress());
         AddressDataRecord personAddressData = this.getLatest(input.getAddress());
 
-        if (personForeignAddressData != null && (personAddressData == null || personForeignAddressData.getEffectFrom().isAfter(personAddressData.getEffectFrom()))) {
+        if (personForeignAddressData != null && (personAddressData == null || (personForeignAddressData.getEffectFrom() != null && personForeignAddressData.getEffectFrom().isAfter(personAddressData.getEffectFrom())))) {
             String address = personForeignAddressData.join("\n");
             root.put("udlandsadresse", address);
             ForeignAddressEmigrationDataRecord personEmigrationData = this.getLatest(input.getEmigration());

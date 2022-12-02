@@ -271,6 +271,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * If there is any P-numbers that is assigned under a CVR-number that does not exist in datafordeler, ad the missing CVR to a list for fetching
      */
     public void subscribeToMissingCvr() {
+        List<Integer> companies = null;
         try (Session sessionSub = this.getSessionManager().getSessionFactory().openSession()) {
             Transaction tx = sessionSub.beginTransaction();
             String hql_companies = "SELECT DISTINCT companyUnit.newestCvrRelation FROM " + CompanyUnitMetadataRecord.class.getCanonicalName() + " companyUnit " +
@@ -281,8 +282,19 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                     "JOIN " + CompanyMetadataRecord.class.getCanonicalName() + " companyMetadata ON company.id" + "=companyMetadata." + CompanyMetadataRecord.DB_FIELD_COMPANY + ")";
 
             Query querya = sessionSub.createQuery(hql_companies);
-            List<Integer> companies = querya.getResultList();
-            for (Integer cvr : companies) {
+            companies = querya.getResultList();
+
+            Query<Integer> existingQuery = sessionSub.createQuery(
+                    " select "+CompanySubscription.DB_FIELD_CVR_NUMBER+
+                            " from "+CompanySubscription.class.getCanonicalName()+
+                            " where "+CompanySubscription.DB_FIELD_CVR_NUMBER+" in :cvrs",
+                    Integer.class
+            );
+            existingQuery.setParameterList("cvrs", companies);
+            companies.removeAll(existingQuery.getResultList());
+
+            Set<Integer> uniqueCvrs = companies.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+            for (Integer cvr : uniqueCvrs) {
                 try {
                     CompanySubscription companySubscription = new CompanySubscription(cvr);
                     sessionSub.save(companySubscription);
@@ -293,7 +305,8 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             sessionSub.flush();
             tx.commit();
         } catch (Exception e) {
-            log.error("Error creating subscription for CVR", e.getStackTrace());
+            String companies_csep = (companies == null) ? null : companies.stream().map(Object::toString).collect(Collectors.joining(", "));
+            log.error("Error creating subscription for CVR: "+companies_csep);
         }
     }
 
