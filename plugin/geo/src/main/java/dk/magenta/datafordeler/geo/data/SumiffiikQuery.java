@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.geo.data;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.JoinedQuery;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.fapi.QueryField;
 
@@ -40,7 +41,10 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
-        this.setSumiffiik(parameters.getFirst(SUMIFFIIK));
+        this.setSumiffiik(parameters.getFirstI(SUMIFFIIK));
+        for (JoinedQuery relatedQuery : this.getRelated()) {
+            relatedQuery.getJoined().setFromParameters(parameters);
+        }
     }
 
     private static final HashMap<String, String> joinHandles = new HashMap<>();
@@ -56,6 +60,7 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         String sumiffiik = this.sumiffiik;
         if (sumiffiik != null) {
             sumiffiik.replaceFirst("^\\{$", "\\{");
@@ -65,7 +70,7 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.sumiffiik != null;
+    public boolean isEmpty() {
+        return super.isEmpty() && this.sumiffiik == null;
     }
 }

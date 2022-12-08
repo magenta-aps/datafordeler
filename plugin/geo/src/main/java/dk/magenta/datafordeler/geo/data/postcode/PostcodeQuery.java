@@ -72,15 +72,15 @@ public class PostcodeQuery extends SumiffiikQuery<PostcodeEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.code.isEmpty() && this.name.isEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.code.isEmpty() && this.name.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setName(parameters.getFirst(NAME));
+        this.setCode(parameters.getFirstI(CODE));
+        this.setName(parameters.getFirstI(NAME));
     }
 
     @Override

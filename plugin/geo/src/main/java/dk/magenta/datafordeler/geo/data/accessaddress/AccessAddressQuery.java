@@ -37,6 +37,12 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     private final List<String> municipalityCode = new ArrayList<>();
 
 
+    public static final String POSTCODE = AccessAddressEntity.IO_FIELD_POSTCODE;
+
+    @QueryField(type = QueryField.FieldType.INT, queryName = POSTCODE)
+    private final List<String> postCode = new ArrayList<>();
+
+
     public static final String ROAD_UUID = AccessAddressEntity.IO_FIELD_ROAD + "_uuid";
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = ROAD_UUID)
@@ -141,6 +147,31 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         this.addMunicipalityCode(Integer.toString(municipalityCode));
     }
 
+    public List<String> getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) throws InvalidClientInputException {
+        this.postCode.clear();
+        this.addPostCode(postCode);
+        this.updatedParameters();
+    }
+
+    public void addPostCode(String postCode) throws InvalidClientInputException {
+        if (postCode != null) {
+            ensureNumeric(MUNICIPALITY, postCode);
+            this.postCode.add(postCode);
+            this.updatedParameters();
+        }
+    }
+
+    public void setPostCode(int postCode) throws InvalidClientInputException {
+        this.setPostCode(Integer.toString(postCode));
+    }
+
+    public void addPostCode(int postCode) throws InvalidClientInputException {
+        this.addPostCode(Integer.toString(postCode));
+    }
 
     public List<UUID> getRoadUUID() {
         return roadUUID;
@@ -224,20 +255,21 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
-        return super.isEmpty() && this.bnr.isEmpty() && this.houseNumber.isEmpty() && this.roadCode.isEmpty() && this.roadUUID.isEmpty() && this.localityUUID.isEmpty() && this.municipalityCode.isEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.bnr.isEmpty() && this.houseNumber.isEmpty() && this.roadCode.isEmpty() && this.roadUUID.isEmpty() && this.localityUUID.isEmpty() && this.municipalityCode.isEmpty() && this.postCode.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setBnr(parameters.getFirst(BNR));
+        this.setBnr(parameters.getFirstI(BNR));
 
-        this.setRoadCode(parameters.getFirst(ROAD));
-        this.setHouseNumber(parameters.getFirst(HOUSE_NUMBER));
-        this.setMunicipalityCode(parameters.getFirst(MUNICIPALITY));
+        this.setRoadCode(parameters.getFirstI(ROAD));
+        this.setHouseNumber(parameters.getFirstI(HOUSE_NUMBER));
+        this.setMunicipalityCode(parameters.getFirstI(MUNICIPALITY));
+        this.setPostCode(parameters.getFirstI(POSTCODE));
 
-        String roadUUID = parameters.getFirst(ROAD_UUID);
+        String roadUUID = parameters.getFirstI(ROAD_UUID);
         if (roadUUID != null) {
             try {
                 this.setRoadUUID(UUID.fromString(roadUUID));
@@ -245,7 +277,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
                 throw new InvalidClientInputException("Parameter " + ROAD_UUID + " must be a uuid", e);
             }
         }
-        String localityUUID = parameters.getFirst(LOCALITY_UUID);
+        String localityUUID = parameters.getFirstI(LOCALITY_UUID);
         if (localityUUID != null) {
             try {
                 this.setLocalityUUID(UUID.fromString(localityUUID));
@@ -296,6 +328,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         this.addCondition("roadcode", this.roadCode, Integer.class);
         this.addCondition("municipalitycode", this.municipalityCode, Integer.class);
         this.addCondition("localitycode", this.locality);
+        this.addCondition("postcode", this.postCode, Integer.class);
         if (this.uuid != null) {
             this.addCondition("uuid", Collections.singletonList(this.uuid.toString()), UUID.class);
         }
@@ -342,6 +375,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
         return Objects.equals(bnr, that.bnr) &&
                 Objects.equals(roadCode, that.roadCode) &&
                 Objects.equals(municipalityCode, that.municipalityCode) &&
+                Objects.equals(postCode, that.postCode) &&
                 Objects.equals(roadUUID, that.roadUUID) &&
                 Objects.equals(localityUUID, that.localityUUID) &&
                 Objects.equals(locality, that.locality) &&
@@ -351,6 +385,6 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(bnr, roadCode, municipalityCode, roadUUID, localityUUID, locality, houseNumber, uuid);
+        return Objects.hash(bnr, roadCode, municipalityCode, postCode, roadUUID, localityUUID, locality, houseNumber, uuid);
     }
 }

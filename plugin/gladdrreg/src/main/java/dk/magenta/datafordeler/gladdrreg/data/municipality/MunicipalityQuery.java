@@ -103,9 +103,9 @@ public class MunicipalityQuery extends SumiffiikQuery<MunicipalityEntity> {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setAbbrev(parameters.getFirst(ABBREV));
-        this.setName(parameters.getFirst(NAME));
+        this.setCode(parameters.getFirstI(CODE));
+        this.setAbbrev(parameters.getFirstI(ABBREV));
+        this.setName(parameters.getFirstI(NAME));
     }
 
     @Override

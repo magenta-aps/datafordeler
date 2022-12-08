@@ -81,8 +81,8 @@ public class PostalCodeQuery extends SumiffiikQuery<PostalCodeEntity> {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setName(parameters.getFirst(NAME));
+        this.setCode(parameters.getFirstI(CODE));
+        this.setName(parameters.getFirstI(NAME));
     }
 
     @Override

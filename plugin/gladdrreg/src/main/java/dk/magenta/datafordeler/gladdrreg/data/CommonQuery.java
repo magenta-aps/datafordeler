@@ -107,10 +107,10 @@ public abstract class CommonQuery<E extends Entity> extends Query<E> {
 
     @Override
     public void setFromParameters(ParameterMap parameters) {
-        this.setActive(Query.booleanFromString(parameters.getFirst(ACTIVE)));
-        this.setNote(parameters.getFirst(NOTE));
-        this.setRegistration_user(parameters.getFirst(REGISTRATION_USER));
-        this.setState(parameters.getFirst(STATE));
+        this.setActive(Query.booleanFromString(parameters.getFirstI(ACTIVE)));
+        this.setNote(parameters.getFirstI(NOTE));
+        this.setRegistration_user(parameters.getFirstI(REGISTRATION_USER));
+        this.setState(parameters.getFirstI(STATE));
     }
 
 }

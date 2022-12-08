@@ -50,8 +50,8 @@ public class DemoRecordQuery extends BaseQuery {
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.postnr.isEmpty() && this.bynavn.isEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.postnr.isEmpty() && this.bynavn.isEmpty();
     }
 
     @Override
@@ -84,6 +84,7 @@ public class DemoRecordQuery extends BaseQuery {
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("postnr", this.postnr.stream().collect(Collectors.toList()), Integer.class);
         this.addCondition("bynavn", this.bynavn.stream().collect(Collectors.toList()), String.class);
     }

@@ -2,10 +2,7 @@ package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -52,7 +49,10 @@ public class MultiCondition extends Condition {
 
     public String toHql() {
         // Join leaf nodes' hql together with our operator ("AND" or "OR")
-        return this.conditions.stream().filter(c -> !c.isEmpty()).map(c -> (c.size() == 1) ? c.toHql() : ("(" + c.toHql() + ")")).collect(Collectors.joining(" " + this.operator + " "));
+        return this.conditions.stream()
+                .filter(c -> !c.isEmpty())
+                .map(c -> (c.size() == 1) ? c.toHql() : ("(" + c.toHql() + ")"))
+                .collect(Collectors.joining(" " + this.operator + " "));
     }
 
     public boolean isEmpty() {
@@ -85,5 +85,18 @@ public class MultiCondition extends Condition {
 
     public MultiCondition asMultiCondition() {
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MultiCondition that = (MultiCondition) o;
+        return conditions.equals(that.conditions) && operator.equals(that.operator);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(conditions, operator);
     }
 }

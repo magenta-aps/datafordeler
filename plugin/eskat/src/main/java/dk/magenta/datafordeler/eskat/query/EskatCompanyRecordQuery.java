@@ -90,18 +90,18 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
         this.setParameter(STATUS, parameters.getI("companyStatus"));
-        this.setCompanyStatusValidityFromGTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidity.GTE")));
-        this.setCompanyStatusValidityFromLTE(DateConverter.parseDate(parameters.getFirst("companyStatusValidity.LTE")));
+        this.setCompanyStatusValidityFromGTE(DateConverter.parseDate(parameters.getFirstI("companyStatusValidity.GTE")));
+        this.setCompanyStatusValidityFromLTE(DateConverter.parseDate(parameters.getFirstI("companyStatusValidity.LTE")));
 
-        this.setCompanyStartDateGTE(DateConverter.parseDate(parameters.getFirst("companyStartDate.GTE")));
-        this.setCompanyStartDateLTE(DateConverter.parseDate(parameters.getFirst("companyStartDate.LTE")));
-        this.setCompanyEndDateGTE(DateConverter.parseDate(parameters.getFirst("companyEndDate.GTE")));
-        this.setCompanyEndDateLTE(DateConverter.parseDate(parameters.getFirst("companyEndDate.LTE")));
+        this.setCompanyStartDateGTE(DateConverter.parseDate(parameters.getFirstI("companyStartDate.GTE")));
+        this.setCompanyStartDateLTE(DateConverter.parseDate(parameters.getFirstI("companyStartDate.LTE")));
+        this.setCompanyEndDateGTE(DateConverter.parseDate(parameters.getFirstI("companyEndDate.GTE")));
+        this.setCompanyEndDateLTE(DateConverter.parseDate(parameters.getFirstI("companyEndDate.LTE")));
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.parametersEmpty() &&
+    public boolean isEmpty() {
+        return super.isEmpty() && this.parametersEmpty() &&
                 this.companyrecordValidityTimeGTE == null && this.companyrecordValidityTimeLTE == null &&
                 this.companyStartDateGTE == null && this.companyStartDateLTE == null && this.companyEndDateGTE == null && this.companyEndDateLTE == null;
     }

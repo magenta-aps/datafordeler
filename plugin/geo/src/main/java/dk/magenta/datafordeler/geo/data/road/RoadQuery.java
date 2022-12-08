@@ -179,18 +179,18 @@ public class RoadQuery extends SumiffiikQuery<GeoRoadEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
         return super.isEmpty() && this.municipalityCode.isEmpty() && this.code.isEmpty() && this.name.isEmpty() && this.addressingName.isEmpty() && this.locality.isEmpty() && this.localityUUID.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setName(parameters.getFirst(NAME));
-        this.setAddressingName(parameters.getFirst(ADDRESSING_NAME));
-        this.setLocality(parameters.getFirst(LOCALITY));
-        this.setMunicipalityCode(parameters.getFirst(MUNICIPALITY));
+        this.setCode(parameters.getFirstI(CODE));
+        this.setName(parameters.getFirstI(NAME));
+        this.setAddressingName(parameters.getFirstI(ADDRESSING_NAME));
+        this.setLocality(parameters.getFirstI(LOCALITY));
+        this.setMunicipalityCode(parameters.getFirstI(MUNICIPALITY));
     }
 
     @Override

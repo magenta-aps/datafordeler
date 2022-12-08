@@ -37,7 +37,7 @@ public class QueryTest {
         }
 
         @Override
-        protected boolean isEmpty() {
+        public boolean isEmpty() {
             return false;
         }
 

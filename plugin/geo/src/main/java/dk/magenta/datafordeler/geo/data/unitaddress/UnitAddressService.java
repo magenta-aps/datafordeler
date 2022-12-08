@@ -5,20 +5,25 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
+import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.geo.GeoAreaRestrictionDefinition;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.GeoRolesDefinition;
+import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressQuery;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 @RestController("GeoUnitAddressService")
@@ -74,7 +79,9 @@ public class UnitAddressService extends FapiBaseService<UnitAddressEntity, UnitA
 
     @Override
     protected UnitAddressQuery getEmptyQuery() {
-        return new UnitAddressQuery();
+        UnitAddressQuery query = new UnitAddressQuery();
+        query.addRelatedAccessAddressQuery();
+        return query;
     }
 
     @Override

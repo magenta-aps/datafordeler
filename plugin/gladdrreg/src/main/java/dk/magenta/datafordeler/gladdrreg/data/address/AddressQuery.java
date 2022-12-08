@@ -135,9 +135,9 @@ public class AddressQuery extends SumiffiikQuery<AddressEntity> {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
-        this.setHouseNumber(parameters.getFirst(HOUSE_NUMBER));
-        this.setFloor(parameters.getFirst(FLOOR));
-        this.setRoom(parameters.getFirst(ROOM));
+        this.setHouseNumber(parameters.getFirstI(HOUSE_NUMBER));
+        this.setFloor(parameters.getFirstI(FLOOR));
+        this.setRoom(parameters.getFirstI(ROOM));
     }
 
     @Override

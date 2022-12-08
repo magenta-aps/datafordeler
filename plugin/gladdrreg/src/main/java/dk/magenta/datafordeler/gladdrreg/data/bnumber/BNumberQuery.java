@@ -103,9 +103,9 @@ public class BNumberQuery extends SumiffiikQuery<BNumberEntity> {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setType(parameters.getFirst(TYPE));
-        this.setName(parameters.getFirst(NAME));
+        this.setCode(parameters.getFirstI(CODE));
+        this.setType(parameters.getFirstI(TYPE));
+        this.setName(parameters.getFirstI(NAME));
     }
 
     @Override

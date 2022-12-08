@@ -75,14 +75,14 @@ public class UnitQuery extends GerQuery<UnitEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
         return super.isEmpty() && this.name.isEmpty() && this.deid.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setName(parameters.getFirst(NAME));
+        this.setName(parameters.getFirstI(NAME));
     }
 
     @Override
@@ -110,6 +110,7 @@ public class UnitQuery extends GerQuery<UnitEntity> {
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("deid", this.deid.stream().map(UUID::toString).collect(Collectors.toList()), UUID.class);
         this.addCondition("name", this.name);
         this.addCondition("gernr", this.getGerNr(), Integer.class);

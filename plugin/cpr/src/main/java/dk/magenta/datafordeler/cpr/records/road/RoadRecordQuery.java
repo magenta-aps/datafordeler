@@ -157,6 +157,7 @@ public class RoadRecordQuery extends BaseQuery {
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("municipalitycode", this.kommunekoder, Integer.class);
         this.addCondition("roadcode", this.vejkoder, Integer.class);
         this.addCondition("name", this.vejnavne);
@@ -164,8 +165,8 @@ public class RoadRecordQuery extends BaseQuery {
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.vejnavne.isEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.vejnavne.isEmpty();
     }
 
     @Override

@@ -85,7 +85,7 @@ public class TestGenericServices extends GeoTest {
         Assert.assertEquals("0600", locality1.get("lokalitetskode").textValue());
         Assert.assertNull(locality1.get("registreringFra"));
 
-        response = this.lookup("/geo/locality/1/rest/search?fmt=dataonly&kommune=956");
+        response = this.lookup("/geo/locality/1/rest/search?fmt=dataonly&kommunekode=956");
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode locality2 = (ObjectNode) responseContent.get("results").get(0);
         Assert.assertEquals(locality1, locality2);
@@ -142,7 +142,7 @@ public class TestGenericServices extends GeoTest {
         Assert.assertNull(accessAdress1.get("registreringFra"));
 
 
-        response = this.lookup("/geo/accessaddress/1/rest/search?fmt=dataonly&vej=0254");
+        response = this.lookup("/geo/accessaddress/1/rest/search?fmt=dataonly&vejKode=0254");
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode accessAdress2 = (ObjectNode) responseContent.get("results").get(0);
         Assert.assertEquals(accessAdress1, accessAdress2);

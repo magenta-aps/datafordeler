@@ -114,10 +114,10 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
-        this.setVejkode(parameters.getFirst(VEJKODE));
-        this.setHusnummer(parameters.getFirst(HUSNUMMER));
-        this.setEtage(parameters.getFirst(ETAGE));
-        this.setSideDoer(parameters.getFirst(SIDE_DOER));
+        this.setVejkode(parameters.getFirstI(VEJKODE));
+        this.setHusnummer(parameters.getFirstI(HUSNUMMER));
+        this.setEtage(parameters.getFirstI(ETAGE));
+        this.setSideDoer(parameters.getFirstI(SIDE_DOER));
         if (parameters.containsKey(KOMMUNEKODE)) {
             for (String kommunekode : parameters.get(KOMMUNEKODE)) {
                 this.addKommunekode(kommunekode);
@@ -156,8 +156,8 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.kommunekoder.isEmpty() && this.vejkode.isEmpty() && this.husnummer.isEmpty() && this.etage.isEmpty() && this.sideDoer.isEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.kommunekoder.isEmpty() && this.vejkode.isEmpty() && this.husnummer.isEmpty() && this.etage.isEmpty() && this.sideDoer.isEmpty();
     }
 
 }

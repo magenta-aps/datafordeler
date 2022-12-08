@@ -51,13 +51,13 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         for (String key : new String[]{
                 LASTUPDATED
         }) {
-            this.setParameter(key, parameters.getFirst(key));
+            this.setParameter(key, parameters.getFirstI(key));
         }
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.parametersEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.parametersEmpty();
     }
 
     @Override
@@ -92,6 +92,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("pnr", P_NUMBER, Integer.class);
         this.addCondition("cvr", ASSOCIATED_COMPANY_CVR, Integer.class);
         this.addCondition("primaryindustrycode", PRIMARYINDUSTRY, String.class);

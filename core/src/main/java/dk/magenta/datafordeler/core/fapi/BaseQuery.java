@@ -613,7 +613,6 @@ public abstract class BaseQuery {
         this.setPage(parameterMap.getFirstOf(PARAM_PAGE));
         this.setPageSize(parameterMap.getFirstOf(PARAM_PAGESIZE));
         try {
-            OffsetDateTime now = OffsetDateTime.now();
             this.setRegistrationFromBefore(parameterMap.getFirstOf(PARAM_REGISTRATION_FROM_BEFORE)); // If not set, use current time
             this.setRegistrationFromAfter(parameterMap.getFirstOf(PARAM_REGISTRATION_FROM_AFTER));
             this.setRegistrationToBefore(parameterMap.getFirstOf(PARAM_REGISTRATION_TO_BEFORE));
@@ -640,7 +639,14 @@ public abstract class BaseQuery {
         this.updatedParameters();
     }
 
-    protected abstract boolean isEmpty();
+    public boolean isEmpty() {
+        for (JoinedQuery query : this.getRelated()) {
+            if (!query.getJoined().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public abstract void setFromParameters(ParameterMap parameterMap) throws InvalidClientInputException;
 
@@ -1011,13 +1017,6 @@ public abstract class BaseQuery {
             try {
                 this.setupConditions();
 
-                for (JoinedQuery joinedQuery : this.related) {
-                    this.condition.add(joinedQuery);
-                    BaseQuery relatedQuery = joinedQuery.getJoined();
-                    relatedQuery.setupConditions();
-                    this.condition.add(joinedQuery.getJoined().getCondition());
-                }
-
                 if (this.recordAfter != null) {
                     this.addCondition(
                             "dafoUpdated",
@@ -1040,7 +1039,14 @@ public abstract class BaseQuery {
         this.finalizedConditions = false;
     }
 
-    protected abstract void setupConditions() throws QueryBuildException;
+    protected void setupConditions() throws QueryBuildException {
+        for (JoinedQuery joinedQuery : this.related) {
+            this.condition.add(joinedQuery);
+            BaseQuery relatedQuery = joinedQuery.getJoined();
+            relatedQuery.setupConditions();
+            this.condition.add(joinedQuery.getJoined().getCondition());
+        }
+    }
 
     private final Set<JoinedQuery> related = new HashSet<>();
 
@@ -1060,41 +1066,40 @@ public abstract class BaseQuery {
     }
 
     protected List<String> getEntityIdentifiers() {
-        ArrayList<String> identifiers = new ArrayList<>();
+        LinkedHashSet<String> identifiers = new LinkedHashSet<>();
         identifiers.add(this.getEntityIdentifier());
         for (JoinedQuery joinedQuery : this.related) {
             identifiers.addAll(joinedQuery.getJoined().getEntityIdentifiers());
         }
         identifiers.addAll(this.extraTables.keySet());
-        return identifiers;
+        return new ArrayList<>(identifiers);
     }
 
     protected List<String> getEntityClassnameStrings() {
-        ArrayList<String> classnames = new ArrayList<>();
+        LinkedHashSet<String> classnames = new LinkedHashSet<>();
         classnames.add(this.getEntityClassname() + " " + this.getEntityIdentifier());
         for (JoinedQuery joinedQuery : this.related) {
             classnames.addAll(joinedQuery.getJoined().getEntityClassnameStrings());
         }
-        return classnames;
+        return new ArrayList<>(classnames);
     }
 
     public List<String> getEntityClassnames() {
-        ArrayList<String> classnames = new ArrayList<>();
+        LinkedHashSet<String> classnames = new LinkedHashSet<>();
         classnames.add(this.getEntityClassname());
         for (JoinedQuery joinedQuery : this.related) {
             classnames.addAll(joinedQuery.getJoined().getEntityClassnames());
         }
         classnames.addAll(this.extraTables.values().stream().map(Class::getCanonicalName).collect(Collectors.toList()));
-        return classnames;
+        return new ArrayList<>(classnames);
     }
 
     protected List<Join> getAllJoins() {
-        ArrayList<Join> joins = new ArrayList<>();
-        joins.addAll(this.joins);
+        LinkedHashSet<Join> joins = new LinkedHashSet<>(this.joins);
         for (JoinedQuery joinedQuery : this.related) {
             joins.addAll(joinedQuery.getJoined().getAllJoins());
         }
-        return joins;
+        return new ArrayList<>(joins);
     }
 
 

@@ -46,8 +46,8 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.parametersEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.parametersEmpty();
     }
 
     @Override
@@ -84,6 +84,7 @@ public class ParticipantRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("unit", UNITNUMBER, Long.class);
         this.addCondition("cvr", ASSOCIATED_COMPANY_CVR, Long.class);
         this.addCondition("name", NAVN, String.class);
