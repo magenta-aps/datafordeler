@@ -191,11 +191,11 @@ public class RoadQuery extends SumiffiikQuery<RoadEntity> {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setName(parameters.getFirst(NAME));
-        this.setShortName(parameters.getFirst(SHORT_NAME));
-        this.setAlternateName(parameters.getFirst(ALTERNATE_NAME));
-        this.setCprName(parameters.getFirst(CPR_NAME));
+        this.setCode(parameters.getFirstI(CODE));
+        this.setName(parameters.getFirstI(NAME));
+        this.setShortName(parameters.getFirstI(SHORT_NAME));
+        this.setAlternateName(parameters.getFirstI(ALTERNATE_NAME));
+        this.setCprName(parameters.getFirstI(CPR_NAME));
     }
 
     @Override

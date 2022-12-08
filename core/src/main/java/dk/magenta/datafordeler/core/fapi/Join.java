@@ -50,8 +50,7 @@ public class Join {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Join join = (Join) o;
-        return base.equals(join.base) &&
-                member.equals(join.member);
+        return base.equals(join.base) && member.equals(join.member);
     }
 
     @Override

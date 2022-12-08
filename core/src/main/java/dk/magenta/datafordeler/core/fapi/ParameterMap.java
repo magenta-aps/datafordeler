@@ -92,6 +92,11 @@ public class ParameterMap extends ListHashMap<String, String> {
         return values;
     }
 
+    public String getFirstI(String key) {
+        List<String> values = this.getI(key);
+        return values.isEmpty() ? null : values.get(0);
+    }
+
     public MultiValueMap<String, String> asMultiValuedMap() {
         LinkedMultiValueMap map = new LinkedMultiValueMap<String, String>();
         for (String key : this.keySet()) {

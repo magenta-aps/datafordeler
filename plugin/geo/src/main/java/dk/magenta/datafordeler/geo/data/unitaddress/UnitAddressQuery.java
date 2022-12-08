@@ -109,8 +109,8 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.floor.isEmpty() && this.bnr.isEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.floor.isEmpty() && this.bnr.isEmpty();
     }
 
     @Override

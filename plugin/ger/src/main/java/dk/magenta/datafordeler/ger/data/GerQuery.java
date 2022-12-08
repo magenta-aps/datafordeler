@@ -48,13 +48,13 @@ public abstract class GerQuery<E extends GerEntity> extends BaseQuery {
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
-        this.setGerNr(parameters.getFirst(GERNR));
+        this.setGerNr(parameters.getFirstI(GERNR));
     }
 
 
     @Override
-    protected boolean isEmpty() {
-        return this.gerNr.isEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.gerNr.isEmpty();
     }
 
 

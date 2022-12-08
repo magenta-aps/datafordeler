@@ -74,7 +74,10 @@ public class AccessAddressService extends FapiBaseService<AccessAddressEntity, A
 
     @Override
     protected AccessAddressQuery getEmptyQuery() {
-        return new AccessAddressQuery();
+        AccessAddressQuery query = new AccessAddressQuery();
+        query.addRelatedPostcodeQuery();
+        query.addRelatedLocalityQuery();
+        return query;
     }
 
     @Override

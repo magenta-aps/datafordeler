@@ -47,14 +47,14 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
         return super.isEmpty() && this.name.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setName(parameters.getFirst(NAME));
+        this.setName(parameters.getFirstI(NAME));
     }
 
     @Override
@@ -81,6 +81,7 @@ public class CompanyQuery extends GerQuery<CompanyEntity> {
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("gernr", this.getGerNr(), Integer.class);
         this.addCondition("name", this.name);
     }

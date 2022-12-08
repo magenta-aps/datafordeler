@@ -81,15 +81,15 @@ public class MunicipalityQuery extends SumiffiikQuery<GeoMunicipalityEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
         return super.isEmpty() && this.code.isEmpty() && this.name.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setName(parameters.getFirst(NAME));
+        this.setCode(parameters.getFirstI(CODE));
+        this.setName(parameters.getFirstI(NAME));
     }
 
     @Override

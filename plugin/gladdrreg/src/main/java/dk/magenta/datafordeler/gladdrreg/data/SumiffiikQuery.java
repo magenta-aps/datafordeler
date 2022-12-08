@@ -67,7 +67,7 @@ public abstract class SumiffiikQuery<E extends Entity> extends CommonQuery<E> {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
-        this.setSumiffiik(parameters.getFirst(SUMIFFIIK));
-        this.setSumiffiik_domain(parameters.getFirst(SUMIFFIIK_DOMAIN));
+        this.setSumiffiik(parameters.getFirstI(SUMIFFIIK));
+        this.setSumiffiik_domain(parameters.getFirstI(SUMIFFIIK_DOMAIN));
     }
 }

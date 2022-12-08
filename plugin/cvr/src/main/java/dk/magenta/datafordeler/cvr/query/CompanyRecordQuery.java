@@ -115,13 +115,13 @@ public class CompanyRecordQuery extends BaseQuery {
         for (String key : new String[]{
                 REKLAMEBESKYTTELSE, LASTUPDATED
         }) {
-            this.setParameter(key, parameters.getFirst(key));
+            this.setParameter(key, parameters.getFirstI(key));
         }
     }
 
     @Override
-    protected boolean isEmpty() {
-        return this.parametersEmpty();
+    public boolean isEmpty() {
+        return super.isEmpty() && this.parametersEmpty();
     }
 
     @Override
@@ -168,6 +168,7 @@ public class CompanyRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("cvr", CVRNUMMER, Integer.class);
         this.addCondition("formcode", VIRKSOMHEDSFORM, String.class);
         this.addCondition("advertprotection", REKLAMEBESKYTTELSE, Boolean.class);

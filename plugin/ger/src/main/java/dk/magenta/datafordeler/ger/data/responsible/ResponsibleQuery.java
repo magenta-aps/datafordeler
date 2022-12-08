@@ -78,16 +78,16 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
         return super.isEmpty() && this.name.isEmpty() && this.cvrGuid.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setName(parameters.getFirst(NAME));
-        this.setGerNr(parameters.getFirst(GERNR));
-        this.setCvrGuid(parameters.getFirst(CVR_GUID));
+        this.setName(parameters.getFirstI(NAME));
+        this.setGerNr(parameters.getFirstI(GERNR));
+        this.setCvrGuid(parameters.getFirstI(CVR_GUID));
     }
 
     @Override
@@ -116,6 +116,7 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
 
     @Override
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("name", this.name);
         this.addCondition("gernr", this.getGerNr(), Integer.class);
         this.addCondition("guid", this.cvrGuid, UUID.class);

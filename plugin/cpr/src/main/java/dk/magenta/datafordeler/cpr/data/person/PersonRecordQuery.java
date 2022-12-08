@@ -500,6 +500,7 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws QueryBuildException {
+        super.setupConditions();
         this.addCondition("pnr", this.personnumre);
         this.addCondition("firstname", this.fornavn);
         this.addCondition("lastname", this.efternavn);
@@ -524,8 +525,8 @@ public class PersonRecordQuery extends BaseQuery {
 
 
     @Override
-    protected boolean isEmpty() {
-        return this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() &&
+    public boolean isEmpty() {
+        return super.isEmpty() && this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() &&
                 this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() &&
                 this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() &&
                 this.personevents.isEmpty() && this.personeventTimeAfter == null && this.persondataevents.isEmpty() &&

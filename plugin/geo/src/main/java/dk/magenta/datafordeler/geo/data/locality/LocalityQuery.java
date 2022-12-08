@@ -8,10 +8,7 @@ import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.geo.data.SumiffiikQuery;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lars on 19-05-17.
@@ -19,7 +16,9 @@ import java.util.Map;
 public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
 
     public static final String CODE = GeoLocalityEntity.IO_FIELD_CODE;
+    public static final String CODE_ALIAS = "lokalitetskode";
     public static final String NAME = GeoLocalityEntity.IO_FIELD_NAME;
+    public static final String NAME_ALIAS = "lokalitetsnavn";
     public static final String MUNICIPALITY = GeoLocalityEntity.IO_FIELD_MUNICIPALITY;
     public static final String STATUS = GeoLocalityEntity.IO_FIELD_STATUS;
 
@@ -45,6 +44,22 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         this.addCode(code);
     }
 
+    public void setCode(Collection<String> codes) throws InvalidClientInputException {
+        this.code.clear();
+        for (String code : codes) {
+            this.addCode(code);
+        }
+    }
+
+    public void addCode(Collection<String> codes) throws InvalidClientInputException {
+        if (codes != null) {
+            for (String code : codes) {
+                this.addCode(code);
+            }
+            this.updatedParameters();
+        }
+    }
+
     public void addCode(String code) throws InvalidClientInputException {
         if (code != null) {
             ensureNumeric(CODE, code);
@@ -63,6 +78,24 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         this.addName(name);
     }
 
+    public void setName(Collection<String> names) throws InvalidClientInputException {
+        this.name.clear();
+        for (String name : names) {
+            this.addName(name);
+        }
+    }
+
+    public void addName(Collection<String> names) {
+        if (names != null) {
+            for (String name : names) {
+                if (name != null) {
+                    this.name.add(name);
+                }
+            }
+            this.updatedParameters();
+        }
+    }
+
     public void addName(String name) {
         if (name != null) {
             this.name.add(name);
@@ -78,6 +111,14 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
         this.municipality.clear();
         this.updatedParameters();
         this.addMunicipality(municipality);
+    }
+
+    public void setMunicipality(Collection<String> municipalities) {
+        this.municipality.clear();
+        this.updatedParameters();
+        for (String municipality : municipalities) {
+            this.addMunicipality(municipality);
+        }
     }
 
     public void addMunicipality(String municipality) {
@@ -119,16 +160,18 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
         return super.isEmpty() && this.code.isEmpty() && this.name.isEmpty() && this.municipality.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setName(parameters.getFirst(NAME));
-        this.setMunicipality(parameters.getFirst(MUNICIPALITY));
+        this.addCode(parameters.getI(CODE));
+        this.addCode(parameters.getI(CODE_ALIAS));
+        this.addName(parameters.getI(NAME));
+        this.addName(parameters.getI(NAME_ALIAS));
+        this.setMunicipality(parameters.getI(MUNICIPALITY));
     }
 
     @Override
@@ -145,7 +188,7 @@ public class LocalityQuery extends SumiffiikQuery<GeoLocalityEntity> {
 
     static {
         joinHandles.put("code", GeoLocalityEntity.DB_FIELD_CODE);
-        joinHandles.put("name", GeoLocalityEntity.DB_FIELD_NAME);
+        joinHandles.put("name", GeoLocalityEntity.DB_FIELD_NAME + BaseQuery.separator + LocalityNameRecord.DB_FIELD_NAME);
         joinHandles.put("municipalitycode", GeoLocalityEntity.DB_FIELD_MUNICIPALITY + BaseQuery.separator + LocalityMunicipalityRecord.DB_FIELD_CODE);
     }
 

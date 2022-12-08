@@ -57,8 +57,8 @@ public class EskatParticipantRecordQuery extends ParticipantRecordQuery {
 
 
     @Override
-    protected boolean isEmpty() {
-        return this.parametersEmpty()
+    public boolean isEmpty() {
+        return super.isEmpty() && this.parametersEmpty()
                 && this.relationstartTimeGTE == null && this.relationstartTimeLTE == null
                 && this.relationendTimeGTE == null && this.relationendTimeLTE == null;
     }

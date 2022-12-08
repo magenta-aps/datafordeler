@@ -103,9 +103,9 @@ public class StateQuery extends SumiffiikQuery<StateEntity> {
     @Override
     public void setFromParameters(ParameterMap parameters) {
         super.setFromParameters(parameters);
-        this.setCode(parameters.getFirst(CODE));
-        this.setName(parameters.getFirst(NAME));
-        this.setDescription(parameters.getFirst(DESCRIPTION));
+        this.setCode(parameters.getFirstI(CODE));
+        this.setName(parameters.getFirstI(NAME));
+        this.setDescription(parameters.getFirstI(DESCRIPTION));
     }
 
     @Override

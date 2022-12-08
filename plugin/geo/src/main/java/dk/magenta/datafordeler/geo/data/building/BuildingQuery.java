@@ -70,15 +70,15 @@ public class BuildingQuery extends SumiffiikQuery<BuildingEntity> {
     }
 
     @Override
-    protected boolean isEmpty() {
+    public boolean isEmpty() {
         return super.isEmpty() && this.anr.isEmpty() && this.bnr.isEmpty();
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
         super.setFromParameters(parameters);
-        this.setAnr(parameters.getFirst(ANR));
-        this.setBnr(parameters.getFirst(BNR));
+        this.setAnr(parameters.getFirstI(ANR));
+        this.setBnr(parameters.getFirstI(BNR));
     }
 
     @Override
