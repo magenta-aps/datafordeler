@@ -3,10 +3,12 @@ package dk.magenta.datafordeler.cvr.query;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ public class ParticipantRecordQuery extends BaseQuery {
     public static final String KOMMUNEKODE = Municipality.IO_FIELD_CODE;
     public static final String VEJKODE = AddressRecord.IO_FIELD_ROADCODE;
     public static final String FORRETNINGSNOEGLE = ParticipantRecord.IO_FIELD_BUSINESS_KEY;
+    public static final String LASTUPDATED = CvrBitemporalRecord.IO_FIELD_LAST_UPDATED;
 
     @Override
     public Map<String, Object> getSearchParameters() {
@@ -28,7 +31,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         for (String key : new String[]{
                 UNITNUMBER, ASSOCIATED_COMPANY_CVR, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
         }) {
-            map.put(key, this.getParameters(key));
+            map.put(key, this.getParameter(key));
         }
         return map;
     }
@@ -42,6 +45,13 @@ public class ParticipantRecordQuery extends BaseQuery {
                 UNITNUMBER, ASSOCIATED_COMPANY_CVR, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
         }) {
             this.setParameter(key, parameters.getI(key));
+        }
+        for (String key : new String[]{
+                LASTUPDATED
+        }) {
+            String value = parameters.getFirst(key);
+            ensureTemporal(key, value);
+            this.setParameter(key, value);
         }
     }
 
@@ -76,6 +86,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
         joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
         joinHandles.put("unitCode", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
+        joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
     }
 
     @Override
@@ -90,7 +101,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         this.addCondition("name", NAVN, String.class);
         this.addCondition("municipalitycode", KOMMUNEKODE, Integer.class);
         this.addCondition("roadcode", VEJKODE, Integer.class);
-        this.addCondition("municipalitycode", KOMMUNEKODE, Integer.class);
         this.addCondition("businessKey", FORRETNINGSNOEGLE, Long.class);
+        this.addCondition("lastUpdated", Condition.Operator.GT, this.getParameter(LASTUPDATED).asOffsetDateTime(), OffsetDateTime.class, false);
     }
 }

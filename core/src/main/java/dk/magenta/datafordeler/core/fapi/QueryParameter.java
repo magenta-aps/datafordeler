@@ -1,7 +1,11 @@
 package dk.magenta.datafordeler.core.fapi;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class QueryParameter extends ArrayList<String> {
 
@@ -31,5 +35,9 @@ public class QueryParameter extends ArrayList<String> {
                 this.add(value);
             }
         }
+    }
+
+    public List<OffsetDateTime> asOffsetDateTime() throws DateTimeParseException {
+        return this.stream().map(BaseQuery::parseDateTime).collect(Collectors.toList());
     }
 }

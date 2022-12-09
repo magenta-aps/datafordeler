@@ -201,8 +201,13 @@ public abstract class BaseQuery {
         return true;
     }
 
-    public QueryParameter getParameters(String name) {
-        return this.urlParameters.get(name);
+    public QueryParameter getParameter(String name) {
+        QueryParameter parameter = this.urlParameters.get(name);
+        if (parameter == null) {
+            parameter = new QueryParameter(this);
+            this.urlParameters.put(name, parameter);
+        }
+        return parameter;
     }
 
 
@@ -1125,6 +1130,21 @@ public abstract class BaseQuery {
             parameter = parameter.replace("*", "");
             if (!parameter.matches("^\\d*$")) {
                 throw new InvalidClientInputException("Parameter " + name + " must be a number (got '"+parameter+"')");
+            }
+        }
+    }
+
+
+    static protected void ensureTemporal(String name, String parameter) throws InvalidClientInputException {
+        ensureTemporal(name, Collections.singletonList(parameter));
+    }
+
+    static protected void ensureTemporal(String name, Collection<String> parameters) throws InvalidClientInputException {
+        for (String parameter : parameters) {
+            try {
+                BaseQuery.parseDateTime(parameter);
+            } catch (DateTimeParseException e) {
+                throw new InvalidClientInputException("Parameter "+name+" must parse as a temporal value (got '"+parameter+"')");
             }
         }
     }

@@ -5,7 +5,6 @@ import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
-import dk.magenta.datafordeler.core.fapi.QueryParameter;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 
@@ -33,7 +32,7 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         for (String key : new String[]{
                 P_NUMBER, ASSOCIATED_COMPANY_CVR, PRIMARYINDUSTRY, KOMMUNEKODE, VEJKODE, LASTUPDATED
         }) {
-            map.put(key, this.getParameters(key));
+            map.put(key, this.getParameter(key));
         }
         return map;
     }
@@ -51,7 +50,9 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         for (String key : new String[]{
                 LASTUPDATED
         }) {
-            this.setParameter(key, parameters.getFirstI(key));
+            String value = parameters.getFirstI(key);
+            ensureTemporal(key, value);
+            this.setParameter(key, value);
         }
     }
 
@@ -99,9 +100,6 @@ public class CompanyUnitRecordQuery extends BaseQuery {
         this.addCondition("municipalitycode", KOMMUNEKODE, Integer.class);
         this.addCondition("roadcode", VEJKODE, Integer.class);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
-        QueryParameter lastUpdated = this.getParameters(LASTUPDATED);
-        if (lastUpdated != null) {
-            this.addCondition("lastUpdated", Condition.Operator.GT, lastUpdated, OffsetDateTime.class, false);
-        }
+        this.addCondition("lastUpdated", Condition.Operator.GT, this.getParameter(LASTUPDATED).asOffsetDateTime(), OffsetDateTime.class, false);
     }
 }

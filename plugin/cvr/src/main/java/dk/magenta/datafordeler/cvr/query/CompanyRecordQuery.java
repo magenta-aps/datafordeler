@@ -94,7 +94,7 @@ public class CompanyRecordQuery extends BaseQuery {
                 EMAILADRESSE, VIRKSOMHEDSFORM, KOMMUNEKODE, VEJKODE, HUSNUMMER,
                 ETAGE, DOOR, ORGANIZATIONTYPE, LASTUPDATED
         }) {
-            map.put(key, this.getParameters(key));
+            map.put(key, this.getParameter(key));
         }
         return map;
     }
@@ -113,9 +113,16 @@ public class CompanyRecordQuery extends BaseQuery {
         }
 
         for (String key : new String[]{
-                REKLAMEBESKYTTELSE, LASTUPDATED
+                REKLAMEBESKYTTELSE
         }) {
             this.setParameter(key, parameters.getFirstI(key));
+        }
+        for (String key : new String[]{
+                LASTUPDATED
+        }) {
+            String value = parameters.getFirst(key);
+            ensureTemporal(key, value);
+            this.setParameter(key, value);
         }
     }
 
@@ -182,7 +189,7 @@ public class CompanyRecordQuery extends BaseQuery {
         this.addCondition("door", DOOR, String.class);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
 
-        List<String> husnummer = this.getParameters(HUSNUMMER);
+        List<String> husnummer = this.getParameter(HUSNUMMER);
         if (husnummer != null && !husnummer.isEmpty()) {
             // Match hvis housenumberfrom == value   eller   housenumberfrom <= value og housenumberto >= value
             MultiCondition multiCondition = new MultiCondition(this.getCondition(), "OR");
@@ -194,14 +201,11 @@ public class CompanyRecordQuery extends BaseQuery {
             this.makeCondition(rangeCondition, "housenumberto", Condition.Operator.GTE, husnummer, Integer.class, false);
         }
 
-        List<String> organizationType = this.getParameters(ORGANIZATIONTYPE);
+        List<String> organizationType = this.getParameter(ORGANIZATIONTYPE);
         if (organizationType != null) {
             this.addCondition("participantOrganizationType", organizationType);
         }
-        QueryParameter lastUpdated = this.getParameters(LASTUPDATED);
-        if (lastUpdated != null) {
-            this.addCondition("lastUpdated", Condition.Operator.GT, lastUpdated, OffsetDateTime.class, false);
-        }
+        this.addCondition("lastUpdated", Condition.Operator.GT, this.getParameter(LASTUPDATED).asOffsetDateTime(), OffsetDateTime.class, false);
         if (this.companyrecordeventTimeAfter != null) {
             this.addCondition("companyrecordeventTime.GTE", Condition.Operator.GTE, this.companyrecordeventTimeAfter, OffsetDateTime.class, false);
         }
@@ -218,7 +222,7 @@ public class CompanyRecordQuery extends BaseQuery {
         ObjectNode bool = DirectLookup.addObject(objectMapper, query, "bool");
         ArrayNode must = DirectLookup.addList(objectMapper, bool, "must");
 
-        List<String> cvrNumre = this.getParameters(CVRNUMMER);
+        List<String> cvrNumre = this.getParameter(CVRNUMMER);
         if (cvrNumre != null && !cvrNumre.isEmpty()) {
             ObjectNode wrap = DirectLookup.addObject(objectMapper, must);
             ObjectNode terms = DirectLookup.addObject(objectMapper, wrap, "terms");

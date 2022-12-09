@@ -76,7 +76,7 @@ public class EskatCompanyRecordQuery extends CompanyRecordQuery {
     @Override
     public Map<String, Object> getSearchParameters() {
         Map<String, Object> map = super.getSearchParameters();
-        map.put("companyStatus", this.getParameters(STATUS));
+        map.put("companyStatus", this.getParameter(STATUS));
         map.put("companyStatusValidity.GTE", this.companyrecordValidityTimeGTE);
         map.put("companyStatusValidity.LTE", this.companyrecordValidityTimeLTE);
         map.put("companyStartDate.GTE", this.companyStartDateGTE);
