@@ -161,7 +161,7 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
             allRecords.addAll(localResults);
         }
 
-        HashSet<String> cvrNumbers = new HashSet<>(query.getParameters(CompanyRecordQuery.CVRNUMMER));
+        HashSet<String> cvrNumbers = new HashSet<>(query.getParameter(CompanyRecordQuery.CVRNUMMER));
         if (!cvrNumbers.isEmpty()) {
             cvrNumbers.removeAll(allRecords.stream().map(resultset -> Integer.toString(resultset.getPrimaryEntity().getCvrNumber())).collect(Collectors.toSet()));
             query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);

@@ -122,7 +122,7 @@ public class ParticipantRecordService extends FapiBaseService<ParticipantRecord,
             allRecords.addAll(localResults);
         }
 
-        HashSet<String> eNumbers = new HashSet<>(query.getParameters(ParticipantRecordQuery.UNITNUMBER));
+        HashSet<String> eNumbers = new HashSet<>(query.getParameter(ParticipantRecordQuery.UNITNUMBER));
         if (!eNumbers.isEmpty()) {
             eNumbers.removeAll(localResults.stream().map(resultset -> Long.toString(resultset.getPrimaryEntity().getUnitNumber())).collect(Collectors.toSet()));
             query.setParameter(ParticipantRecordQuery.UNITNUMBER, eNumbers);

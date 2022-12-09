@@ -122,7 +122,7 @@ public class CompanyUnitRecordService extends FapiBaseService<CompanyUnitRecord,
             allRecords.addAll(localResults);
         }
 
-        HashSet<String> pNumbers = new HashSet<>(query.getParameters(CompanyUnitRecordQuery.P_NUMBER));
+        HashSet<String> pNumbers = new HashSet<>(query.getParameter(CompanyUnitRecordQuery.P_NUMBER));
         if (!pNumbers.isEmpty()) {
             pNumbers.removeAll(localResults.stream().map(
                     resultset -> Integer.toString(resultset.getPrimaryEntity().getpNumber())
