@@ -151,7 +151,7 @@ public class AddressDataService extends PersonStatisticsService {
                     continue;
                 }
                 count++;
-                personQuery.addPersonnummer(pnr);
+                personQuery.addParameter(PersonRecordQuery.PERSONNUMMER, pnr);
                 // The database complains when there's more that 2100 values in a comparison list,
                 // so split the query into chunks of a reasonable size. <limit> is chosen.
                 if (count >= limit) {

@@ -77,7 +77,7 @@ public class CprResidentService {
 
         try (final Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setPersonnummer(cprNummer);
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
             OffsetDateTime now = OffsetDateTime.now();
             personQuery.setRegistrationFromBefore(now);
             personQuery.setRegistrationToAfter(now);

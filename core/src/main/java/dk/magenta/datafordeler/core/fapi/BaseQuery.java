@@ -168,17 +168,33 @@ public abstract class BaseQuery {
 
     private final HashMap<String, QueryParameter> urlParameters = new HashMap<>();
 
-    public void setParameter(String name, Collection<String> values) {
+
+    public QueryParameter getParameter(String name) {
         QueryParameter parameter = this.urlParameters.get(name);
         if (parameter == null) {
             parameter = new QueryParameter(this);
             this.urlParameters.put(name, parameter);
         }
-        parameter.set(values);
+        return parameter;
+    }
+    public void setParameter(String name, Collection<String> values) {
+        this.getParameter(name).set(values);
     }
 
     public void setParameter(String name, String value) {
         this.setParameter(name, Collections.singletonList(value));
+    }
+
+    public void setParameter(String name, int value) {
+        this.setParameter(name, String.valueOf(value));
+    }
+
+    public void addParameter(String name, Collection<String> values) {
+        this.getParameter(name).addAll(values);
+    }
+
+    public void addParameter(String name, String value) {
+        this.getParameter(name).add(value);
     }
 
     public void clearParameter(String name) {
@@ -200,16 +216,6 @@ public abstract class BaseQuery {
         }
         return true;
     }
-
-    public QueryParameter getParameter(String name) {
-        QueryParameter parameter = this.urlParameters.get(name);
-        if (parameter == null) {
-            parameter = new QueryParameter(this);
-            this.urlParameters.put(name, parameter);
-        }
-        return parameter;
-    }
-
 
     public int getPageSize() {
         return this.pageSize;

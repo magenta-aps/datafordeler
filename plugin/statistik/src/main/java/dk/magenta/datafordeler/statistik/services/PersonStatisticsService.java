@@ -97,9 +97,7 @@ public abstract class PersonStatisticsService extends StatisticsService {
     protected PersonRecordQuery getQuery(Filter filter) throws InvalidClientInputException {
         PersonRecordQuery personQuery = new PersonRecordQuery();
         if (filter.onlyPnr != null) {
-            for (String pnr : filter.onlyPnr) {
-                personQuery.addPersonnummer(pnr);
-            }
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, filter.onlyPnr);
         }
         return personQuery;
     }

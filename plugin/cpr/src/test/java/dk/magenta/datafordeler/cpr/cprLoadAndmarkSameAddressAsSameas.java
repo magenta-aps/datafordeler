@@ -96,7 +96,7 @@ public class cprLoadAndmarkSameAddressAsSameas {
 
         session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
-        query.setPersonnummer("0101014321");
+        query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101014321");
         query.setRegistrationFromAfter(Query.parseDateTime("2019-04-01"));
         query.applyFilters(session);
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
@@ -123,7 +123,7 @@ public class cprLoadAndmarkSameAddressAsSameas {
 
         session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
-        query.setPersonnummer("0101011234");
+        query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
         query.setRegistrationFromAfter(Query.parseDateTime("2018-01-01"));
         query.applyFilters(session);
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
@@ -136,7 +136,7 @@ public class cprLoadAndmarkSameAddressAsSameas {
         session.close();
         session = sessionManager.getSessionFactory().openSession();
         query = new PersonRecordQuery();
-        query.setPersonnummer("0101011234");
+        query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
         query.setRegistrationFromAfter(Query.parseDateTime("2016-01-01"));
         query.applyFilters(session);
 

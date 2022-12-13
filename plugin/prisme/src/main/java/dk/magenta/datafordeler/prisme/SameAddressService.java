@@ -86,7 +86,7 @@ public class SameAddressService {
             GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setPersonnummer(cprNummer);
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
 
             OffsetDateTime now = OffsetDateTime.now();
             personQuery.setRegistrationFromBefore(now);
@@ -127,12 +127,12 @@ public class SameAddressService {
                     if (lookup != null && !lookup.isAdministrativ()) {
                         PersonRecordQuery personSameAddressQuery = new PersonRecordQuery();
                         personSameAddressQuery.setPageSize("30");
-                        personSameAddressQuery.addKommunekode(address.getMunicipalityCode());
-                        personSameAddressQuery.addVejkode(address.getRoadCode());
-                        personSameAddressQuery.addHouseNo(address.getHouseNumber());
-                        personSameAddressQuery.addDoor(address.getDoor());
-                        personSameAddressQuery.addFloor(address.getFloor());
-                        personSameAddressQuery.addBuildingNo(address.getBuildingNumber());
+                        personSameAddressQuery.setParameter(PersonRecordQuery.KOMMUNEKODE, address.getMunicipalityCode());
+                        personSameAddressQuery.setParameter(PersonRecordQuery.VEJKODE, address.getRoadCode());
+                        personSameAddressQuery.setParameter(PersonRecordQuery.HOUSENO, address.getHouseNumber());
+                        personSameAddressQuery.setParameter(PersonRecordQuery.DOOR, address.getDoor());
+                        personSameAddressQuery.setParameter(PersonRecordQuery.FLOOR, address.getFloor());
+                        personSameAddressQuery.setParameter(PersonRecordQuery.BUILDINGNO, address.getBuildingNumber());
 
                         List<PersonEntity> personEntitiesOnSameAdd = QueryManager.getAllEntities(session, personSameAddressQuery, PersonEntity.class);
                         for (PersonEntity personentity : personEntitiesOnSameAdd) {
@@ -167,7 +167,7 @@ public class SameAddressService {
         AreaRestrictionType municipalityType = areaRestrictionDefinition.getAreaRestrictionTypeByName(CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER);
         for (AreaRestriction restriction : restrictions) {
             if (restriction.getType() == municipalityType) {
-                query.addKommunekode(restriction.getValue());
+                query.addKommunekodeRestriction(restriction.getValue());
             }
         }
     }

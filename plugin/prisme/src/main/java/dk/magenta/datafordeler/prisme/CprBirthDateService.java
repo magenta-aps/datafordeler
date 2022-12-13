@@ -112,7 +112,7 @@ public class CprBirthDateService {
         personQuery.setRegistrationAt(now);
         personQuery.setEffectAt(now);
         personQuery.setBirthTimeAfter(LocalDateTime.now().minusYears(18));
-        personQuery.setKommunekoder(municipalitycodeNumbers);
+        personQuery.setParameter(PersonRecordQuery.KOMMUNEKODE, municipalitycodeNumbers);
         personQuery.setRecordAfter(offsetTimestampGTE);
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {

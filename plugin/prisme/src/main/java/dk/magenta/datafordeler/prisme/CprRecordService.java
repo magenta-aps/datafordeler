@@ -95,7 +95,7 @@ public class CprRecordService {
             personOutputWrapper.setLookupService(lookupService);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setPersonnummer(cprNummer);
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
 
             OffsetDateTime now = OffsetDateTime.now();
             personQuery.setRegistrationFromBefore(now);
@@ -164,9 +164,7 @@ public class CprRecordService {
         } else if (cprNumbers.size() > 400) {
             throw new InvalidParameterException("Maximum 400 numbers is allowed");
         }
-        for (String cprNumber : cprNumbers) {
-            personQuery.addPersonnummer(cprNumber);
-        }
+        personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);
 
         OffsetDateTime now = OffsetDateTime.now();
         personQuery.setRegistrationFromBefore(now);
@@ -240,7 +238,7 @@ public class CprRecordService {
         AreaRestrictionType municipalityType = areaRestrictionDefinition.getAreaRestrictionTypeByName(CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER);
         for (AreaRestriction restriction : restrictions) {
             if (restriction.getType() == municipalityType) {
-                query.addKommunekode(restriction.getValue());
+                query.addKommunekodeRestriction(restriction.getValue());
             }
         }
     }

@@ -563,15 +563,15 @@ public class FetchEventsTest {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.addPersonnummer("0101011235");
-            query.addPersonnummer("0101011236");
-            query.addPersonnummer("0101011237");
-            query.addPersonnummer("0101011238");
-            query.addPersonnummer("0101011239");
-            query.addPersonnummer("0101011240");
-            query.addPersonnummer("0101011241");
-            query.addPersonnummer("0101011242");
-            query.addPersonnummer("0101011243");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011235");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011236");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011237");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011238");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011239");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011240");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011241");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011242");
+            query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011243");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             System.out.println(entities);
         }

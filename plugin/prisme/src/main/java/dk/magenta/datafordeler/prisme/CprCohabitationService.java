@@ -86,7 +86,7 @@ public class CprCohabitationService {
             }
         }
 
-        personQuery.setPersonnumre(cprNumbers);
+        personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);
         if (cprs.size() > 2) {
             throw new QueryBuildException("Maximum 2 numbers is allowed");
         }

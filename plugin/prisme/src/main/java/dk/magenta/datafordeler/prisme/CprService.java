@@ -95,7 +95,7 @@ public class CprService {
             personOutputWrapper.setLookupService(lookupService);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setPersonnummer(cprNummer);
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
 
             OffsetDateTime now = OffsetDateTime.now();
             personQuery.setRegistrationFromBefore(now);
@@ -164,11 +164,9 @@ public class CprService {
         }
 
         if (cprNumbers != null) {
-            for (String cprNumber : cprNumbers) {
-                personQuery.addPersonnummer(cprNumber);
-            }
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);
         }
-        if (personQuery.getPersonnumre().isEmpty()) {
+        if (personQuery.parameterEmpty(PersonRecordQuery.PERSONNUMMER)) {
             throw new InvalidClientInputException("Please specify at least one CPR number");
         }
 
@@ -246,7 +244,7 @@ public class CprService {
         AreaRestrictionType municipalityType = areaRestrictionDefinition.getAreaRestrictionTypeByName(CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER);
         for (AreaRestriction restriction : restrictions) {
             if (restriction.getType() == municipalityType) {
-                query.addKommunekode(restriction.getValue());
+                query.addKommunekodeRestriction(restriction.getValue());
             }
         }
     }

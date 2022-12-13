@@ -162,10 +162,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicFatherCprNumbers.isEmpty() && importMetadata.getImportConfiguration().size() == 0) {
                 try (Session session = sessionManager.getSessionFactory().openSession()) {
                     PersonRecordQuery personQuery = new PersonRecordQuery();
-                    for (String fatherCpr : nonGreenlandicFatherCprNumbers) {
-                        personQuery.addPersonnummer(fatherCpr);
-                    }
-
+                    personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicFatherCprNumbers);
                     personQuery.applyFilters(session);
                     List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
 
@@ -178,10 +175,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicChildrenCprNumbers.isEmpty() && importMetadata.getImportConfiguration().size() == 0) {
                 try (Session session = sessionManager.getSessionFactory().openSession()) {
                     PersonRecordQuery personQuery = new PersonRecordQuery();
-                    for (String fatherCpr : nonGreenlandicChildrenCprNumbers) {
-                        personQuery.addPersonnummer(fatherCpr);
-                    }
-
+                    personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicChildrenCprNumbers);
                     personQuery.applyFilters(session);
                     List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
 
@@ -206,9 +200,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             String[] testPersonList = testpersonList.split(",");
-            for (String testPerson : testPersonList) {
-                personQuery.addPersonnummer(testPerson);
-            }
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, Arrays.asList(testPersonList));
             session.beginTransaction();
             personQuery.setPageSize(1000);
             personQuery.applyFilters(session);

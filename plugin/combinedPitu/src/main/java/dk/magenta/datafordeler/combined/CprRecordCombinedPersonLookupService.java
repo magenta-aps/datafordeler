@@ -92,7 +92,7 @@ public class CprRecordCombinedPersonLookupService {
             personOutputWrapper.setLookupService(lookupService);
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setPersonnummer(cprNummer);
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
 
             OffsetDateTime now = OffsetDateTime.now();
             personQuery.setRegistrationAt(now);
@@ -154,7 +154,7 @@ public class CprRecordCombinedPersonLookupService {
             }
         }
 
-        personQuery.setPersonnumre(cprNumbers);
+        personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);
         personQuery.setPageSize(100);
         if (cprs.size() > 100) {
             throw new QueryBuildException("Maximum 100 numbers is allowed");

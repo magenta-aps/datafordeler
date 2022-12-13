@@ -94,7 +94,7 @@ public class cprMatchLogicTest {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("1111111111");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111111");
             OffsetDateTime now = Query.parseDateTime("2018-08-08");
 
             query.setEffectToAfter(now);
