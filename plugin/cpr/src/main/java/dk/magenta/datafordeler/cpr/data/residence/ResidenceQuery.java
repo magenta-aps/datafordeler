@@ -21,107 +21,27 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
     public static final String SIDE_DOER = ResidenceBaseData.IO_FIELD_DOOR;
 
 
-    @QueryField(type = QueryField.FieldType.STRING, queryName = KOMMUNEKODE)
-    private final List<String> kommunekoder = new ArrayList<>();
-
-    public Collection<String> getKommunekoder() {
-        return this.kommunekoder;
-    }
-
-    public void addKommunekode(String kommunekode) throws InvalidClientInputException {
-        ensureNumeric(KOMMUNEKODE, kommunekode);
-        this.kommunekoder.add(kommunekode);
-        if (kommunekode != null) {
-            this.updatedParameters();
-        }
-    }
-
-    public void addKommunekode(int kommunekode) throws InvalidClientInputException {
-        this.addKommunekode(String.format("%03d", kommunekode));
-    }
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
-    private String vejkode;
-
-    public String getVejkode() {
-        return this.vejkode;
-    }
-
-    public void setVejkode(String vejkode) throws InvalidClientInputException {
-        ensureNumeric(VEJKODE, vejkode);
-        this.vejkode = vejkode;
-        if (vejkode != null) {
-            this.updatedParameters();
-        }
-    }
-
-    public void setVejkode(int vejkode) throws InvalidClientInputException {
-        this.setVejkode(String.format("%03d", vejkode));
-    }
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = HUSNUMMER)
-    private String husnummer;
-
-    public String getHusnummer() {
-        return this.husnummer;
-    }
-
-    public void setHusnummer(String husnummer) {
-        this.husnummer = husnummer;
-        if (husnummer != null) {
-            this.updatedParameters();
-        }
-    }
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = ETAGE)
-    private String etage;
-
-    public String getEtage() {
-        return this.etage;
-    }
-
-    public void setEtage(String etage) {
-        this.etage = etage;
-        if (etage != null) {
-            this.updatedParameters();
-        }
-    }
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = SIDE_DOER)
-    private String sideDoer;
-
-    public String getSideDoer() {
-        return this.sideDoer;
-    }
-
-    public void setSideDoer(String sideDoer) {
-        this.sideDoer = sideDoer;
-        if (sideDoer != null) {
-            this.updatedParameters();
-        }
-    }
-
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put(KOMMUNEKODE, this.kommunekoder);
-        map.put(VEJKODE, this.vejkode);
-        map.put(HUSNUMMER, this.husnummer);
-        map.put(ETAGE, this.etage);
-        map.put(SIDE_DOER, this.sideDoer);
+        for (String key : new String[]{
+                KOMMUNEKODE, VEJKODE, HUSNUMMER,
+                ETAGE, SIDE_DOER
+        }) {
+            map.put(key, this.getParameter(key));
+        }
         return map;
     }
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
-        this.setVejkode(parameters.getFirstI(VEJKODE));
-        this.setHusnummer(parameters.getFirstI(HUSNUMMER));
-        this.setEtage(parameters.getFirstI(ETAGE));
-        this.setSideDoer(parameters.getFirstI(SIDE_DOER));
-        if (parameters.containsKey(KOMMUNEKODE)) {
-            for (String kommunekode : parameters.get(KOMMUNEKODE)) {
-                this.addKommunekode(kommunekode);
-            }
+        for (String key : new String[]{KOMMUNEKODE, VEJKODE}) {
+            ensureNumeric(key, parameters.getI(key));
+        }
+        for (String key : new String[]{
+                KOMMUNEKODE, KOMMUNEKODE, VEJKODE, HUSNUMMER, ETAGE, SIDE_DOER,
+        }) {
+            this.setParameter(key, parameters.getI(key));
         }
     }
 
@@ -157,7 +77,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
 
     @Override
     public boolean isEmpty() {
-        return super.isEmpty() && this.kommunekoder.isEmpty() && this.vejkode.isEmpty() && this.husnummer.isEmpty() && this.etage.isEmpty() && this.sideDoer.isEmpty();
+        return super.isEmpty() && this.parametersEmpty();
     }
 
 }

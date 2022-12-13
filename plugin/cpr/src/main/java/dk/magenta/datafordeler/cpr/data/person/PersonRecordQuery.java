@@ -34,185 +34,6 @@ public class PersonRecordQuery extends BaseQuery {
     public static final String PERSONDATAEVENTTIME = PersonDataEventDataRecord.DB_FIELD_TIMESTAMP;
     public static final String PERSONBIRTHDATE = BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME;
 
-    @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONNUMMER)
-    private final List<String> personnumre = new ArrayList<>();
-
-    public Collection<String> getPersonnumre() {
-        return this.personnumre;
-    }
-
-    public void addPersonnummer(String personnummer) throws InvalidClientInputException {
-        ensureNumeric(PERSONNUMMER, personnummer);
-        this.personnumre.add(personnummer);
-        if (personnummer != null) {
-            this.updatedParameters();
-        }
-    }
-
-    public void setPersonnummer(String personnummer) throws InvalidClientInputException {
-        this.clearPersonnumre();
-        this.addPersonnummer(personnummer);
-    }
-
-    public void clearPersonnumre() {
-        this.personnumre.clear();
-        this.updatedParameters();
-    }
-
-    public void setPersonnumre(Collection<String> personnumre) throws InvalidClientInputException {
-        this.clearPersonnumre();
-        if (personnumre != null) {
-            ensureNumeric(PERSONNUMMER, personnumre);
-            this.personnumre.addAll(personnumre);
-            this.updatedParameters();
-        }
-    }
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = FORNAVNE)
-    private final List<String> fornavn = new ArrayList<>();
-
-    public List<String> getFornavn() {
-        return fornavn;
-    }
-
-    public void clearFornavn() {
-        this.fornavn.clear();
-        this.updatedParameters();
-    }
-
-    public void addFornavn(String fornavn) {
-        this.fornavn.add(fornavn);
-        if (fornavn != null) {
-            this.updatedParameters();
-        }
-    }
-
-    public void setFornavne(Collection<String> fornavne) {
-        this.clearFornavn();
-        if (fornavne != null) {
-            this.fornavn.addAll(fornavne);
-            this.updatedParameters();
-        }
-    }
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = EFTERNAVN)
-    private final List<String> efternavn = new ArrayList<>();
-
-    public List<String> getEfternavn() {
-        return efternavn;
-    }
-
-    public void clearEfternavn() {
-        this.efternavn.clear();
-        this.updatedParameters();
-    }
-
-    public void setEfternavn(String efternavn) {
-        this.clearEfternavn();
-        this.efternavn.add(efternavn);
-        if (efternavn != null) {
-            this.updatedParameters();
-        }
-    }
-
-    public void setEfternavne(Collection<String> efternavne) {
-        this.clearEfternavn();
-        if (efternavne != null) {
-            this.efternavn.addAll(efternavne);
-            this.updatedParameters();
-        }
-    }
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = KOMMUNEKODE)
-    private final List<String> kommunekoder = new ArrayList<>();
-
-    public Collection<String> getKommunekoder() {
-        return this.kommunekoder;
-    }
-
-    public void addKommunekode(String kommunekode) {
-        if (kommunekode != null) {
-            this.kommunekoder.add(kommunekode);
-            this.updatedParameters();
-        }
-    }
-
-    public void addKommunekode(int kommunekode) {
-        this.addKommunekode(String.format("%03d", kommunekode));
-    }
-
-    public void clearKommunekode() {
-        this.kommunekoder.clear();
-        this.updatedParameters();
-    }
-
-    public void setKommunekoder(Collection<String> kommunekoder) {
-        this.clearKommunekode();
-        if (kommunekoder != null) {
-            this.kommunekoder.addAll(kommunekoder);
-            this.updatedParameters();
-        }
-    }
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = VEJKODE)
-    private final List<String> vejkoder = new ArrayList<>();
-
-    public Collection<String> getVejkoder() {
-        return this.vejkoder;
-    }
-
-    public void addVejkode(String vejkode) {
-        if (vejkode != null) {
-            this.vejkoder.add(vejkode);
-            this.updatedParameters();
-        }
-    }
-
-    public void addVejkode(int vejkode) {
-        this.addVejkode(String.format("%03d", vejkode));
-    }
-
-    public void clearVejkode() {
-        this.vejkoder.clear();
-        this.updatedParameters();
-    }
-
-    public void setVejkoder(Collection<String> vejkoder) {
-        this.clearVejkode();
-        if (vejkoder != null) {
-            this.vejkoder.addAll(vejkoder);
-            this.updatedParameters();
-        }
-    }
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = DOOR)
-    private final List<String> doors = new ArrayList<>();
-
-    public Collection<String> getDoors() {
-        return this.doors;
-    }
-
-    public void addDoor(String door) {
-        this.doors.add(door);
-        this.updatedParameters();
-    }
-
-    public void clearDoor() {
-        this.doors.clear();
-        this.updatedParameters();
-    }
-
-    public void setDoors(Collection<String> doors) {
-        this.clearDoor();
-        if (doors != null) {
-            this.doors.addAll(doors);
-            this.updatedParameters();
-        }
-    }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONBIRTHDATE)
     private LocalDateTime birthTimeAfter;
@@ -230,107 +51,6 @@ public class PersonRecordQuery extends BaseQuery {
         this.updatedParameters();
     }
 
-    @QueryField(type = QueryField.FieldType.STRING, queryName = CUSTODYPNR)
-    private final List<String> custodyPnr = new ArrayList<>();
-
-    public Collection<String> getCustodyPnr() {
-        return this.custodyPnr;
-    }
-
-    public void addCustodyPnr(String custodyPnr) {
-        this.custodyPnr.add(custodyPnr);
-        this.updatedParameters();
-    }
-
-    public void clearCustodyPnr() {
-        this.custodyPnr.clear();
-        this.updatedParameters();
-    }
-
-    public void setCustodyPnr(Collection<String> custodyPnr) {
-        this.clearCustodyPnr();
-        if (custodyPnr != null) {
-            this.custodyPnr.addAll(custodyPnr);
-            this.updatedParameters();
-        }
-    }
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = FLOOR)
-    private final List<String> floors = new ArrayList<>();
-
-    public Collection<String> getFloors() {
-        return this.floors;
-    }
-
-    public void addFloor(String floor) {
-        this.floors.add(floor);
-        this.updatedParameters();
-    }
-
-    public void clearFloor() {
-        this.floors.clear();
-        this.updatedParameters();
-    }
-
-    public void setFloors(Collection<String> floors) {
-        this.floors.clear();
-        if (floors != null) {
-            this.floors.addAll(floors);
-            this.updatedParameters();
-        }
-    }
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = HOUSENO)
-    private final List<String> houseNos = new ArrayList<>();
-
-    public Collection<String> getHouseNos() {
-        return this.houseNos;
-    }
-
-    public void addHouseNo(String houseNo) {
-        this.houseNos.add(houseNo);
-        this.updatedParameters();
-    }
-
-    public void clearHouseNo() {
-        this.houseNos.clear();
-        this.updatedParameters();
-    }
-
-    public void setHouseNos(Collection<String> houseNos) {
-        this.houseNos.clear();
-        if (houseNos != null) {
-            this.houseNos.addAll(houseNos);
-            this.updatedParameters();
-        }
-    }
-
-
-    @QueryField(type = QueryField.FieldType.STRING, queryName = BUILDINGNO)
-    private final List<String> buildingNos = new ArrayList<>();
-
-    public Collection<String> getBuildingNos() {
-        return this.buildingNos;
-    }
-
-    public void addBuildingNo(String houseNo) {
-        this.buildingNos.add(houseNo);
-        this.updatedParameters();
-    }
-
-    public void clearBuildingNo() {
-        this.buildingNos.clear();
-        this.updatedParameters();
-    }
-
-    public void setBuildingNos(Collection<String> buildingNos) {
-        this.buildingNos.clear();
-        if (buildingNos != null) {
-            this.buildingNos.addAll(buildingNos);
-            this.updatedParameters();
-        }
-    }
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = PERSONEVENT)
     private final List<String> personevents = new ArrayList<>();
@@ -427,17 +147,12 @@ public class PersonRecordQuery extends BaseQuery {
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put(PERSONNUMMER, this.personnumre);
-        map.put(FORNAVNE, this.fornavn);
-        map.put(EFTERNAVN, this.efternavn);
-        map.put(KOMMUNEKODE, this.kommunekoder);
-        map.put(VEJKODE, this.vejkoder);
-        map.put(DOOR, this.doors);
-        map.put(FLOOR, this.floors);
-        map.put(HOUSENO, this.houseNos);
-        map.put(BUILDINGNO, this.buildingNos);
-        map.put(PERSONEVENT, this.personevents);
-        map.put(PERSONDATAEVENT, this.persondataevents);
+        for (String key : new String[]{
+                PERSONNUMMER, FORNAVNE, EFTERNAVN, KOMMUNEKODE, VEJKODE, DOOR,
+                FLOOR, HOUSENO, BUILDINGNO, PERSONEVENT, PERSONDATAEVENT
+        }) {
+            map.put(key, this.getParameter(key));
+        }
         return map;
     }
 
@@ -446,15 +161,11 @@ public class PersonRecordQuery extends BaseQuery {
         for (String key : new String[]{PERSONNUMMER, KOMMUNEKODE, VEJKODE}) {
             ensureNumeric(key, parameters.getI(key));
         }
-        this.setPersonnumre(parameters.get(PERSONNUMMER));
-        this.setFornavne(parameters.get(FORNAVNE));
-        this.setEfternavne(parameters.get(EFTERNAVN));
-        this.setKommunekoder(parameters.get(KOMMUNEKODE));
-        this.setVejkoder(parameters.get(VEJKODE));
-        this.setDoors(parameters.get(DOOR));
-        this.setFloors(parameters.get(FLOOR));
-        this.setHouseNos(parameters.get(HOUSENO));
-        this.setBuildingNos(parameters.get(BUILDINGNO));
+        for (String key : new String[]{
+                PERSONNUMMER, FORNAVNE, EFTERNAVN, KOMMUNEKODE, VEJKODE, DOOR, FLOOR, HOUSENO, BUILDINGNO,
+        }) {
+            this.setParameter(key, parameters.getI(key));
+        }
         this.setEvents(parameters.get(PERSONEVENT));
         this.setDataEvents(parameters.get(PERSONDATAEVENT));
     }
@@ -500,18 +211,18 @@ public class PersonRecordQuery extends BaseQuery {
     }
 
     protected void setupConditions() throws QueryBuildException {
-        super.setupConditions();
-        this.addCondition("pnr", this.personnumre);
-        this.addCondition("firstname", this.fornavn);
-        this.addCondition("lastname", this.efternavn);
-        this.addCondition("municipalitycode", this.kommunekoder, Integer.class);
-        this.addCondition("roadcode", this.vejkoder, Integer.class);
-        this.addCondition("floor", this.floors);
-        this.addCondition("door", this.doors);
-        this.addCondition("housenumber", this.houseNos);
-        this.addCondition("bnr", this.buildingNos);
+		super.setupConditions();
+        this.addCondition("pnr", PERSONNUMMER, String.class);
+        this.addCondition("firstname", FORNAVNE, String.class);
+        this.addCondition("lastname", EFTERNAVN, String.class);
+        this.addCondition("municipalitycode", KOMMUNEKODE, Integer.class);
+        this.addCondition("roadcode", VEJKODE, Integer.class);
+        this.addCondition("floor", FLOOR, String.class);
+        this.addCondition("door", DOOR, String.class);
+        this.addCondition("housenumber", HOUSENO, String.class);
+        this.addCondition("bnr", BUILDINGNO, String.class);
+        this.addCondition("custodyPnr", CUSTODYPNR, String.class);
         this.addCondition("municipalitycode", this.getKommunekodeRestriction(), Integer.class);
-        this.addCondition("custodyPnr", this.custodyPnr);
         this.addCondition("birthtime.GTE", Condition.Operator.GTE, this.birthTimeAfter, LocalDateTime.class, true);
         this.addCondition("birthtime.LTE", Condition.Operator.LTE, this.birthTimeBefore, LocalDateTime.class, true);
 
@@ -523,14 +234,9 @@ public class PersonRecordQuery extends BaseQuery {
         this.addCondition("persondataeventTime.LTE", Condition.Operator.LTE, this.persondataeventTimeBefore, OffsetDateTime.class, true);
     }
 
-
     @Override
     public boolean isEmpty() {
-        return super.isEmpty() && this.personnumre.isEmpty() && this.fornavn.isEmpty() && this.efternavn.isEmpty() &&
-                this.kommunekoder.isEmpty() && this.vejkoder.isEmpty() && this.houseNos.isEmpty() &&
-                this.buildingNos.isEmpty() && this.floors.isEmpty() && this.doors.isEmpty() &&
-                this.personevents.isEmpty() && this.personeventTimeAfter == null && this.persondataevents.isEmpty() &&
-                this.personeventTimeAfter == null && this.birthTimeAfter == null && this.birthTimeBefore == null;
+        return super.isEmpty() && this.parametersEmpty();
     }
 
 }

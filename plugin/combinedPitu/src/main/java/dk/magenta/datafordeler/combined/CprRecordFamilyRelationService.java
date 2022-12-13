@@ -83,7 +83,7 @@ public class CprRecordFamilyRelationService {
             GeoLookupService lookupService = new GeoLookupService(sessionManager);
             personOutputWrapper.setLookupService(lookupService);
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setPersonnummer(cprNummer);
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
 
             OffsetDateTime now = OffsetDateTime.now();
             personQuery.setRegistrationAt(now);
@@ -104,7 +104,7 @@ public class CprRecordFamilyRelationService {
             PersonEntity fatherEntity = null;
             if (fatherRec != null) {
                 fatherPnr = fatherRec.getCprNumber();
-                personQuery.setPersonnummer(fatherPnr);
+                personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, fatherPnr);
                 fatherEntity = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
             }
             ParentDataRecord motherRec = personEntity.getMother().current().stream().findFirst().orElse(null);
@@ -112,7 +112,7 @@ public class CprRecordFamilyRelationService {
             PersonEntity motherEntity = null;
             if (motherRec != null) {
                 motherPnr = motherRec.getCprNumber();
-                personQuery.setPersonnummer(motherPnr);
+                personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, motherPnr);
                 motherEntity = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
             }
 

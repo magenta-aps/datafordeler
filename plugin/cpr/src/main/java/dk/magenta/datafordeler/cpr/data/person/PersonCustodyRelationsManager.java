@@ -41,7 +41,7 @@ public class PersonCustodyRelationsManager {
 
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
-        query.addPersonnummer(pnr);
+        query.setParameter(PersonRecordQuery.PERSONNUMMER, pnr);
         List<PersonEntity> requestedInstancesOfPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
         List<ChildInfo> collectiveCustodyArrayList = new ArrayList<ChildInfo>();
         //Empty list is the person is not found in datafordeler
@@ -63,9 +63,7 @@ public class PersonCustodyRelationsManager {
         //Lookup all the found children
         query = new PersonRecordQuery();
         query.setPageSize(40);
-        for (String item : childCprArrayList) {
-            query.addPersonnummer(item);
-        }
+        query.setParameter(PersonRecordQuery.PERSONNUMMER, childCprArrayList);
         if (!childCprArrayList.isEmpty()) {
             List<PersonEntity> childrenOfTheRequestedPerson = QueryManager.getAllEntities(session, query, PersonEntity.class);
             for (PersonEntity child : childrenOfTheRequestedPerson) {
@@ -85,7 +83,7 @@ public class PersonCustodyRelationsManager {
                 } else if (child.getCustody().size() == 0) {
                     //If there is no registration of custody the child should be added to the parent
                     query = new PersonRecordQuery();
-                    query.setPersonnummer(child.getPersonnummer());
+                    query.setParameter(PersonRecordQuery.PERSONNUMMER, child.getPersonnummer());
                     collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), QueryManager.getAllEntities(session, query, PersonEntity.class).get(0).getStatus().current().get(0).getStatus()));
                 } else {
                     List<CustodyDataRecord> currentCustodyList = child.getCustody().current();
@@ -94,7 +92,7 @@ public class PersonCustodyRelationsManager {
 
                     if (motherhasCustody && childsMother.equals(pnr) || fatherhasCustody && childsFather.equals(pnr)) {
                         query = new PersonRecordQuery();
-                        query.setPersonnummer(child.getPersonnummer());
+                        query.setParameter(PersonRecordQuery.PERSONNUMMER, child.getPersonnummer());
                         collectiveCustodyArrayList.add(new ChildInfo(child.getPersonnummer(), QueryManager.getAllEntities(session, query, PersonEntity.class).get(0).getStatus().current().get(0).getStatus()));
                     }
                 }
@@ -103,7 +101,7 @@ public class PersonCustodyRelationsManager {
 
         //Find other persons that the person in quest has custody over
         query = new PersonRecordQuery();
-        query.addCustodyPnr(pnr);
+        query.setParameter(PersonRecordQuery.CUSTODYPNR, pnr);
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
         for (PersonEntity personEntityItem : entities) {
             collectiveCustodyArrayList.add(new ChildInfo(personEntityItem.getPersonnummer(), personEntityItem.getStatus().current().get(0).getStatus()));

@@ -111,7 +111,7 @@ public class RecordTest {
             OffsetDateTime time = OffsetDateTime.now();
             query.setRegistrationToAfter(time);
             query.setEffectAt(time.withYear(2018));
-            query.setPersonnummer("0211081111");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0211081111");
 
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             Assert.assertEquals(1, entities.size());
@@ -138,21 +138,21 @@ public class RecordTest {
             query.setEffectToAfter(time);
             query.applyFilters(session);
 
-            query.addKommunekode(956);
+            query.setParameter(PersonRecordQuery.KOMMUNEKODE, 956);
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearKommunekode();
 
-            query.addKommunekode(958);
+            query.setParameter(PersonRecordQuery.KOMMUNEKODE, 958);
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearKommunekode();
-            query.addFornavn("Tester");
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearFornavn();
+            query.clearParameter(PersonRecordQuery.KOMMUNEKODE);
 
-            query.setEfternavn("Tystersen");
+            query.setParameter(PersonRecordQuery.FORNAVNE, "Tester");
+            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            query.clearParameter(PersonRecordQuery.FORNAVNE);
+
+            query.setParameter(PersonRecordQuery.EFTERNAVN, "Tystersen");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
-            query.setEfternavn("Testersen");
+            query.setParameter(PersonRecordQuery.EFTERNAVN, "Testersen");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             time = OffsetDateTime.parse("2000-01-01T00:00:00Z");
@@ -160,7 +160,7 @@ public class RecordTest {
             query.setEffectToAfter(time);
             query.applyFilters(session);
 
-            query.setEfternavn("Testersen");
+            query.setParameter(PersonRecordQuery.EFTERNAVN,"Testersen");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
 
@@ -246,7 +246,7 @@ public class RecordTest {
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
 
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("0101011234");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
             Assert.assertEquals(4, personEntity.getChildren().size());
@@ -258,7 +258,7 @@ public class RecordTest {
 
             //Find a child and from that the person who has custody over the child
             query = new PersonRecordQuery();
-            query.setPersonnummer("0101141234");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101141234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
             Assert.assertEquals(0, personEntity.getChildren().size());
@@ -267,7 +267,7 @@ public class RecordTest {
 
             //Find a child and from that the person who has custody over the child
             query = new PersonRecordQuery();
-            query.setPersonnummer("0101131234");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101131234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
             Assert.assertEquals(0, personEntity.getChildren().size());
@@ -276,14 +276,14 @@ public class RecordTest {
 
             //Find a parent-ish and from that the child-ish custody relation
             query = new PersonRecordQuery();
-            query.addCustodyPnr("0101991234");
+            query.setParameter(PersonRecordQuery.CUSTODYPNR, "0101991234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
             Assert.assertEquals("0101141234", personEntity.getPersonnummer());
 
             //Find a parent-ish and from that the child-ish custody relation
             query = new PersonRecordQuery();
-            query.addCustodyPnr("0101011234");
+            query.setParameter(PersonRecordQuery.CUSTODYPNR, "0101011234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
             Assert.assertEquals("0101131234", personEntity.getPersonnummer());
@@ -326,7 +326,7 @@ public class RecordTest {
             this.loadPerson("/personsWithEvents.txt", importMetadata);
 
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("0101011234");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
 
@@ -428,7 +428,7 @@ public class RecordTest {
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("1111111111");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111111");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
             Assert.assertTrue("Validate that when setting a name and undoing that name, it must be possible to set that same name again ",
@@ -452,7 +452,7 @@ public class RecordTest {
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("0101011234");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
 
@@ -483,7 +483,7 @@ public class RecordTest {
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("1111111111");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111111");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
 
@@ -492,7 +492,7 @@ public class RecordTest {
             Assert.assertTrue("Validate that the person has an active address ",
                     personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
 
-            query.setPersonnummer("1111111113");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111113");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
 
@@ -521,37 +521,37 @@ public class RecordTest {
             query.setEffectToAfter(time);
             query.applyFilters(session);
 
-            query.addVejkode(2);
+            query.setParameter(PersonRecordQuery.VEJKODE, 2);
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearVejkode();
+            query.clearParameter(PersonRecordQuery.VEJKODE);
 
-            query.addVejkode(111);
+            query.setParameter(PersonRecordQuery.VEJKODE, 111);
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearVejkode();
+            query.clearParameter(PersonRecordQuery.VEJKODE);
 
-            query.addHouseNo("2");
+            query.setParameter(PersonRecordQuery.HOUSENO, "2");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearHouseNo();
+            query.clearParameter(PersonRecordQuery.HOUSENO);
 
-            query.addHouseNo("3");
+            query.setParameter(PersonRecordQuery.HOUSENO, "3");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearHouseNo();
+            query.clearParameter(PersonRecordQuery.HOUSENO);
 
-            query.addFloor("01");
+            query.setParameter(PersonRecordQuery.FLOOR, "01");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearFloor();
+            query.clearParameter(PersonRecordQuery.FLOOR);
 
-            query.addFloor("02");
+            query.setParameter(PersonRecordQuery.FLOOR, "02");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearFloor();
+            query.clearParameter(PersonRecordQuery.FLOOR);
 
-            query.addDoor("3");
+            query.setParameter(PersonRecordQuery.DOOR, "3");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearDoor();
+            query.clearParameter(PersonRecordQuery.DOOR);
 
-            query.addDoor("4");
+            query.setParameter(PersonRecordQuery.DOOR, "4");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
-            query.clearDoor();
+            query.clearParameter(PersonRecordQuery.DOOR);
 
         } finally {
             session.close();
@@ -568,7 +568,7 @@ public class RecordTest {
         this.loadPerson("/persondata2.txt", importMetadata);
         try {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("0101001234");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101001234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
             Assert.assertEquals(1, personEntity.getConame().size());
@@ -613,7 +613,7 @@ public class RecordTest {
         this.loadPerson("/overwrite_cpr_import.txt", importMetadata);
         try {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("0101010123");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101010123");
             OffsetDateTime time = OffsetDateTime.now();
             query.setEffectToAfter(time);
             query.setRegistrationToAfter(time);
@@ -642,7 +642,7 @@ public class RecordTest {
 
         try {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("0101010123");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101010123");
             OffsetDateTime time = OffsetDateTime.now();
             query.setEffectToAfter(time);
             query.setRegistrationToAfter(time);
@@ -674,7 +674,7 @@ public class RecordTest {
 
         try {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("0101010123");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101010123");
             OffsetDateTime time = OffsetDateTime.now();
 
             query.setEffectToAfter(time);
@@ -796,7 +796,7 @@ public class RecordTest {
 
         session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
-        query.setPersonnummer("0101011234");
+        query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
         query.setDataEvent("cpr_person_address_record");
         query.applyFilters(session);
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
@@ -820,7 +820,7 @@ public class RecordTest {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setPersonnummer("0101011234");
+            query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             Assert.assertEquals(1, entities.size());
             Assert.assertEquals(4, entities.get(0).getChildren().size());
@@ -871,7 +871,7 @@ public class RecordTest {
             query.setEffectTo(time);*/
             query.applyFilters(session);
 
-            query.addKommunekode(958);
+            query.setParameter(PersonRecordQuery.KOMMUNEKODE, 958);
             PersonEntity personEntity = QueryManager.getAllEntities(session, query, PersonEntity.class).get(0);
 
             System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.personRecordOutputWrapper.wrapResult(personEntity, query, OutputWrapper.Mode.LEGACY)));

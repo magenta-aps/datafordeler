@@ -180,7 +180,7 @@ public class PullTest {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.addFornavn("Tester");
+            personQuery.setParameter(PersonRecordQuery.FORNAVNE, "Tester");
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             Assert.assertEquals(1, personEntities.size());
             Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());
@@ -238,7 +238,7 @@ public class PullTest {
         try {
 
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setPersonnummer("0101001234");
+            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, "0101001234");
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             Assert.assertEquals(1, personEntities.size());
             PersonEntity personEntity = personEntities.get(0);

@@ -94,13 +94,13 @@ public class CivilStatusDataServiceTest extends TestBase {
 
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
-        query.setPersonnummer("0101011234");
+        query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
         List<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, query, PersonEntity.class).collect(Collectors.toList());
         Assert.assertEquals(1, personEntities.size());
         PersonEntity personEntity = personEntities.get(0);
         Assert.assertEquals(5, personEntity.getCivilstatus().size());
 
-        query.setPersonnummer("0101011235");
+        query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011235");
         personEntities = QueryManager.getAllEntitiesAsStream(session, query, PersonEntity.class).collect(Collectors.toList());
         Assert.assertEquals(1, personEntities.size());
         personEntity = personEntities.get(0);

@@ -92,8 +92,8 @@ public class ResidenceTest extends TestBase {
             loadResidence(importMetadata);
 
             ResidenceQuery query = new ResidenceQuery();
-            query.addKommunekode(360);
-            query.setVejkode(206);
+            query.setParameter(ResidenceQuery.KOMMUNEKODE, 360);
+            query.setParameter(ResidenceQuery.VEJKODE, 206);
 
             List<ResidenceEntity> entities = QueryManager.getAllEntities(session, query, ResidenceEntity.class);
             Assert.assertEquals(1, entities.size());
@@ -205,8 +205,8 @@ public class ResidenceTest extends TestBase {
         Session session = this.getSessionManager().getSessionFactory().openSession();
         try {
             ResidenceQuery roadQuery = new ResidenceQuery();
-            roadQuery.addKommunekode(730);
-            roadQuery.setVejkode(4);
+            roadQuery.setParameter(ResidenceQuery.KOMMUNEKODE, 730);
+            roadQuery.setParameter(ResidenceQuery.VEJKODE, 4);
             List<ResidenceEntity> roadEntities = QueryManager.getAllEntities(session, roadQuery, ResidenceEntity.class);
             Assert.assertEquals(1, roadEntities.size());
             Assert.assertEquals(ResidenceEntity.generateUUID(360, 206, "44E", null, null), roadEntities.get(0).getUUID());

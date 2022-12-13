@@ -96,9 +96,7 @@ public class EboksRecieveLookupService {
             ArrayNode validCprList = objectMapper.createArrayNode();
 
             if (cprs != null && !cprs.isEmpty()) {
-                for (String cprNumber : cprs) {
-                    personQuery.addPersonnummer(cprNumber);
-                }
+                personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprs);
                 // The date that the eboks-system was initiated
                 // This date is relevant in order to find out if the person can be excluded from recieving eboks-letters for not beeing from greenland.
                 // A person that has not had adress in greenland since 8. June 2017, gan not recieve eboks-letters

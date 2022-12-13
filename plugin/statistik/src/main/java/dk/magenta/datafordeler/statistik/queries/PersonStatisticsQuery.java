@@ -34,7 +34,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
         this.setOriginTimeAfter(LocalDate.parse(request.getParameter(StatisticsService.ORIGIN_AFTER)));
         String pnr = request.getParameter("pnr");
         if (pnr != null) {
-            this.setPersonnummer(pnr);
+            this.setParameter(PersonRecordQuery.PERSONNUMMER, pnr);
         }
         this.setPageSize(1000000);
         this.addOrderField(this.getEntityIdentifier(), PersonEntity.DB_FIELD_CPR_NUMBER);
@@ -52,7 +52,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
         this.setOriginTimeAfter(filter.originAfter);
         if (filter.onlyPnr != null) {
             for (String pnr : filter.onlyPnr) {
-                this.addPersonnummer(pnr);
+                this.addParameter(PersonRecordQuery.PERSONNUMMER, pnr);
             }
         }
         this.setPageSize(1000000);
