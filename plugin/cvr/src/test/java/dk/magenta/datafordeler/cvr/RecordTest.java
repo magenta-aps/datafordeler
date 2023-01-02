@@ -961,10 +961,8 @@ public class RecordTest {
         // Mostly for our own sake during developement
         CompanyRecordQuery query = new CompanyRecordQuery();
         OffsetDateTime now = OffsetDateTime.now();
-        query.setRegistrationFromBefore(now);
-        query.setEffectFromBefore(now);
-        query.setRegistrationToAfter(now);
-        query.setEffectToAfter(now);
+        query.setRegistrationAt(now);
+        query.setEffectAt(now);
         query.setParameter(CompanyRecordQuery.CVRNUMMER, "25052943");
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");

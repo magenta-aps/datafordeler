@@ -132,10 +132,8 @@ public class RecordTest {
 
             PersonRecordQuery query = new PersonRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
-            query.setRegistrationFromBefore(time);
-            query.setRegistrationToAfter(time);
-            query.setEffectFromBefore(time);
-            query.setEffectToAfter(time);
+            query.setRegistrationAt(time);
+            query.setEffectAt(time);
             query.applyFilters(session);
 
             query.setParameter(PersonRecordQuery.KOMMUNEKODE, 956);
@@ -515,10 +513,8 @@ public class RecordTest {
 
             PersonRecordQuery query = new PersonRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
-            query.setRegistrationFromBefore(time);
-            query.setRegistrationToAfter(time);
-            query.setEffectFromBefore(time);
-            query.setEffectToAfter(time);
+            query.setRegistrationAt(time);
+            query.setEffectAt(time);
             query.applyFilters(session);
 
             query.setParameter(PersonRecordQuery.VEJKODE, 2);

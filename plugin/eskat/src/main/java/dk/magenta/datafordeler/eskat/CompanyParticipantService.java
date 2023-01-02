@@ -103,8 +103,6 @@ public class CompanyParticipantService {
             companyRecordQuery.setCompanyEndDateGTE(DateConverter.parseDate(companyendTimeGTE));
         }
 
-        companyRecordQuery.setRegistrationFromBefore(now);
-        companyRecordQuery.setRegistrationToAfter(now);
         companyRecordQuery.setRegistrationAt(now);
         companyRecordQuery.setEffectAt(now);
         companyRecordQuery.setPage(page);

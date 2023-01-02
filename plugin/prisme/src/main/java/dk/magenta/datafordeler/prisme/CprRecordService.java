@@ -98,10 +98,8 @@ public class CprRecordService {
             personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
 
             OffsetDateTime now = OffsetDateTime.now();
-            personQuery.setRegistrationFromBefore(now);
-            personQuery.setRegistrationToAfter(now);
-            personQuery.setEffectFromBefore(now);
-            personQuery.setEffectToAfter(now);
+            personQuery.setRegistrationAt(now);
+            personQuery.setEffectAt(now);
 
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
@@ -167,10 +165,8 @@ public class CprRecordService {
         personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);
 
         OffsetDateTime now = OffsetDateTime.now();
-        personQuery.setRegistrationFromBefore(now);
-        personQuery.setRegistrationToAfter(now);
-        personQuery.setEffectFromBefore(now);
-        personQuery.setEffectToAfter(now);
+        personQuery.setRegistrationAt(now);
+        personQuery.setEffectAt(now);
 
         return outputStream -> {
 

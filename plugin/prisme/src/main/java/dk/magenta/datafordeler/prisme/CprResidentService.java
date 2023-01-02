@@ -79,8 +79,7 @@ public class CprResidentService {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
             OffsetDateTime now = OffsetDateTime.now();
-            personQuery.setRegistrationFromBefore(now);
-            personQuery.setRegistrationToAfter(now);
+            personQuery.setRegistrationAt(now);
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);

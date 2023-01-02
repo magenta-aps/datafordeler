@@ -97,11 +97,9 @@ public class cprMatchLogicTest {
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111111");
             OffsetDateTime now = Query.parseDateTime("2018-08-08");
 
-            query.setEffectToAfter(now);
-            query.setEffectFromBefore(now);
 
-            query.setRegistrationToAfter(OffsetDateTime.now());
-            query.setRegistrationFromBefore(OffsetDateTime.now());
+            query.setRegistrationAt(OffsetDateTime.now());
+            query.setEffectAt(now);
 
             query.applyFilters(session);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);

@@ -103,10 +103,8 @@ public class cprLoadTestdatasetTest {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
-            query.setEffectToAfter(OffsetDateTime.now());
-            query.setEffectFromBefore(OffsetDateTime.now());
-            query.setRegistrationToAfter(OffsetDateTime.now());
-            query.setRegistrationFromBefore(OffsetDateTime.now());
+            query.setEffectAt(OffsetDateTime.now());
+            query.setRegistrationAt(OffsetDateTime.now());
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
