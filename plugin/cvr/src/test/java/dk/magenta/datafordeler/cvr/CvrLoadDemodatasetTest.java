@@ -85,10 +85,8 @@ public class CvrLoadDemodatasetTest {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
-            query.setRegistrationFromBefore(time);
-            query.setRegistrationToAfter(time);
-            query.setEffectToAfter(time);
-            query.setEffectFromBefore(time);
+            query.setRegistrationAt(time);
+            query.setEffectAt(time);
             query.applyFilters(session);
 
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
@@ -137,10 +135,8 @@ public class CvrLoadDemodatasetTest {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
-            query.setRegistrationFromBefore(time);
-            query.setRegistrationToAfter(time);
-            query.setEffectToAfter(time);
-            query.setEffectFromBefore(time);
+            query.setRegistrationAt(time);
+            query.setEffectAt(time);
             query.applyFilters(session);
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
             Assert.assertEquals(4, companyList.size());
@@ -166,10 +162,8 @@ public class CvrLoadDemodatasetTest {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
-            query.setRegistrationFromBefore(time);
-            query.setRegistrationToAfter(time);
-            query.setEffectToAfter(time);
-            query.setEffectFromBefore(time);
+            query.setRegistrationAt(time);
+            query.setEffectAt(time);
             query.applyFilters(session);
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
             Assert.assertEquals(0, companyList.size());

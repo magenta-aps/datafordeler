@@ -22,7 +22,7 @@ build-mssql-image:
     - cat /kaniko/.docker/config.json
     - /kaniko/executor
       --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile.sqlserver
+      --dockerfile=${CI_PROJECT_DIR}/docker/Dockerfile.sqlserver
       --destination=${IMAGE_SQL}
       --cache=true
 
@@ -33,7 +33,7 @@ build-image:
     - cat /kaniko/.docker/config.json
     - /kaniko/executor
       --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/docker/dockerFile
+      --dockerfile=${CI_PROJECT_DIR}/docker/Dockerfile
       --destination=${IMAGE_DEV}
       --cache=true
 

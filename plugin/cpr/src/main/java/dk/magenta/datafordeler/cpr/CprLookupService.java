@@ -232,9 +232,7 @@ public class CprLookupService {
 
     private static void setQueryNow(BaseQuery query) {
         OffsetDateTime now = OffsetDateTime.now();
-        query.setRegistrationFromBefore(now);
-        query.setRegistrationToAfter(now);
-        query.setEffectFromBefore(now);
-        query.setEffectToAfter(now);
+        query.setRegistrationAt(now);
+        query.setEffectAt(now);
     }
 }

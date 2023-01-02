@@ -98,8 +98,7 @@ public class CprService {
             personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNummer);
 
             OffsetDateTime now = OffsetDateTime.now();
-            personQuery.setRegistrationFromBefore(now);
-            personQuery.setRegistrationToAfter(now);
+            personQuery.setRegistrationAt(now);
             personQuery.setEffectFromBefore(now);
 
             personQuery.applyFilters(session);
@@ -171,10 +170,8 @@ public class CprService {
         }
 
         OffsetDateTime now = OffsetDateTime.now();
-        personQuery.setRegistrationFromBefore(now);
-        personQuery.setRegistrationToAfter(now);
-        personQuery.setEffectFromBefore(now);
-        personQuery.setEffectToAfter(now);
+        personQuery.setRegistrationAt(now);
+        personQuery.setEffectAt(now);
 
         return new StreamingResponseBody() {
 
