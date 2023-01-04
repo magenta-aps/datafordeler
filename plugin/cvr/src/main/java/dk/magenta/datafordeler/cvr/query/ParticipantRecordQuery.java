@@ -38,17 +38,18 @@ public class ParticipantRecordQuery extends BaseQuery {
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
-        for (String key : new String[]{UNITNUMBER, ASSOCIATED_COMPANY_CVR, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE}) {
-            ensureNumeric(key, parameters.getI(key));
-        }
-        for (String key : new String[]{
-                UNITNUMBER, ASSOCIATED_COMPANY_CVR, NAVN, KOMMUNEKODE, VEJKODE, FORRETNINGSNOEGLE
-        }) {
+        for (String key : new String[]{UNITNUMBER, FORRETNINGSNOEGLE}) {
+            ensureNumeric(key, parameters.getI(key), true);
             this.setParameter(key, parameters.getI(key));
         }
-        for (String key : new String[]{
-                LASTUPDATED
-        }) {
+        for (String key : new String[]{ASSOCIATED_COMPANY_CVR, KOMMUNEKODE, VEJKODE}) {
+            ensureNumeric(key, parameters.getI(key));
+            this.setParameter(key, parameters.getI(key));
+        }
+        for (String key : new String[]{NAVN}) {
+            this.setParameter(key, parameters.getI(key));
+        }
+        for (String key : new String[]{LASTUPDATED}) {
             String value = parameters.getFirst(key);
             ensureTemporal(key, value);
             this.setParameter(key, value);

@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.testutil.Order;
 import dk.magenta.datafordeler.core.testutil.OrderedRunner;
@@ -747,5 +748,29 @@ public class FapiTest {
             output.add(lineOutput.toString());
         }
         return output.toString();
+    }
+
+    @Test
+    public void testEnsureNumeric() throws InvalidClientInputException {
+
+        // These should not throw exception
+        BaseQuery.ensureNumeric("test", "1234");
+        BaseQuery.ensureNumeric("test", "1234*");
+        BaseQuery.ensureNumeric("test", "1234", false);
+        BaseQuery.ensureNumeric("test", "1234*", false);
+        BaseQuery.ensureNumeric("test", "1234", true);
+        BaseQuery.ensureNumeric("test", "1234*", true);
+        BaseQuery.ensureNumeric("test", "4003279411", true);
+        BaseQuery.ensureNumeric("test", "2147483647", true);
+        BaseQuery.ensureNumeric("test", "9223372036854775807", true);
+
+        // These should throw exception
+        Assert.assertThrows(InvalidClientInputException.class, () -> {
+            BaseQuery.ensureNumeric("test", "2147483648", false);
+            BaseQuery.ensureNumeric("test", "4003279411", false);
+            BaseQuery.ensureNumeric("test", "4003279411", true);
+            BaseQuery.ensureNumeric("test", "9223372036854775808", true);
+            BaseQuery.ensureNumeric("test", "124A", false);
+        });
     }
 }

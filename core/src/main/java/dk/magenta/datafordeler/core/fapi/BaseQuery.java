@@ -1128,14 +1128,34 @@ public abstract class BaseQuery {
     }
 
     static protected void ensureNumeric(String name, String parameter) throws InvalidClientInputException {
-        ensureNumeric(name, Collections.singletonList(parameter));
+        ensureNumeric(name, parameter, false);
+    }
+    static protected void ensureNumeric(String name, String parameter, boolean allowLong) throws InvalidClientInputException {
+        ensureNumeric(name, Collections.singletonList(parameter), allowLong);
     }
 
     static protected void ensureNumeric(String name, Collection<String> parameters) throws InvalidClientInputException {
+        ensureNumeric(name, parameters, false);
+    }
+
+    static protected void ensureNumeric(String name, Collection<String> parameters, boolean allowLong) throws InvalidClientInputException {
         for (String parameter : parameters) {
             parameter = parameter.replace("*", "");
             if (!parameter.matches("^\\d*$")) {
                 throw new InvalidClientInputException("Parameter " + name + " must be a number (got '"+parameter+"')");
+            }
+            if (allowLong) {
+                try {
+                    Long.parseLong(parameter);
+                } catch (NumberFormatException e) {
+                    throw new InvalidClientInputException("Parameter " + name + " is too large");
+                }
+            } else {
+                try {
+                    Integer.parseInt(parameter);
+                } catch (NumberFormatException e) {
+                    throw new InvalidClientInputException("Parameter " + name + " is too large");
+                }
             }
         }
     }
