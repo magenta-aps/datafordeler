@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Service container to be subclassed for each Entity class, serving REST and SOAP
+ * Service container to be subclassed for each Entity class, serving REST
  */
 @RequestMapping("/fapi_service_with_no_requestmapping")
 public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends BaseQuery> {
@@ -129,15 +129,11 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
     @RequestMapping(path = "", produces = "application/json")
     public String index(HttpServletRequest request) throws JsonProcessingException {
         String servletPath = request.getServletPath();
-        return this.objectMapper.writeValueAsString(this.getServiceDescriptor(servletPath, false));
+        return this.objectMapper.writeValueAsString(this.getServiceDescriptor(servletPath));
     }
 
-    public ServiceDescriptor getServiceDescriptor(String servletPath, boolean isSoap) {
-        if (isSoap) {
-            return null;
-        } else {
-            return new RestServiceDescriptor(this.getPlugin(), this.getServiceName(), servletPath, this.getEmptyQuery().getClass());
-        }
+    public ServiceDescriptor getServiceDescriptor(String servletPath) {
+        return new RestServiceDescriptor(this.getPlugin(), this.getServiceName(), servletPath, this.getEmptyQuery().getClass());
     }
 
     /**
