@@ -28,20 +28,6 @@
                     </ul>
                 </dd>
             </dl>
-            <dl th:if="${serviceDescriptor.type == 'soap'}" class="dl-horizontal">
-                <dt>Type:</dt>
-                <dd>SOAP</dd>
-                <dt>WSDL address:</dt>
-                <dd>
-                    <a th:href="${serviceDescriptor.wsdlAddress}" th:text="${serviceDescriptor.wsdlAddress}"></a>
-                </dd>
-                <dt>Query fields:</dt>
-                <dd>
-                    <ul class="list-unstyled">
-                        <li th:each="queryField : ${serviceDescriptor.fields}" th:text="|${queryField.type} ${queryField.namesAsString()}|"></li>
-                    </ul>
-                </dd>
-            </dl>
         </div>
     </div>
 </body>

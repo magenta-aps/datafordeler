@@ -47,7 +47,7 @@ public class IndexTest {
     @Test
     public void testServiceDescriptor() {
         String path = "/test";
-        ServiceDescriptor serviceDescriptor = entityService.getServiceDescriptor(path, false);
+        ServiceDescriptor serviceDescriptor = entityService.getServiceDescriptor(path);
         Assert.assertTrue(serviceDescriptor instanceof RestServiceDescriptor);
         Assert.assertEquals(plugin, serviceDescriptor.getPlugin());
         Assert.assertEquals("rest", serviceDescriptor.getType());
@@ -133,16 +133,11 @@ public class IndexTest {
             serviceMap.put(serviceObject.get("metadata_url").textValue(), serviceObject);
             String type = serviceObject.get("type").textValue();
             Assert.assertNotNull(type);
-            Assert.assertTrue(type.equals("soap") || type.equals("rest"));
+            Assert.assertEquals("rest", type);
             Assert.assertNotNull(serviceObject.get("service_name").textValue());
-            if (type.equals("rest")) {
-                Assert.assertEquals("https://redmine.magenta-aps.dk/projects/dafodoc/wiki/API", serviceObject.get("declaration_url").textValue());
-                Assert.assertNotNull(serviceObject.get("fetch_url").textValue());
-                Assert.assertNotNull(serviceObject.get("search_url").textValue());
-            }
-            if (type.equals("soap")) {
-                Assert.assertNotNull(serviceObject.get("wsdl_url").textValue());
-            }
+            Assert.assertEquals("https://redmine.magenta-aps.dk/projects/dafodoc/wiki/API", serviceObject.get("declaration_url").textValue());
+            Assert.assertNotNull(serviceObject.get("fetch_url").textValue());
+            Assert.assertNotNull(serviceObject.get("search_url").textValue());
             JsonNode queryFieldsNode = serviceObject.get("search_queryfields");
             Assert.assertNotNull(queryFieldsNode);
             Assert.assertTrue(queryFieldsNode instanceof ArrayNode);

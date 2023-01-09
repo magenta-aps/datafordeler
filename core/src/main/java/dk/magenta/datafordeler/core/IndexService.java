@@ -7,8 +7,6 @@ import dk.magenta.datafordeler.core.fapi.ServiceDescriptor;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,49 +34,43 @@ public class IndexService {
 
     @PostConstruct
     public void init() {
-        this.pluginManager.addPostConstructCallBackHandler(new PluginManagerCallbackHandler() {
-
-            @Override
-            public void executePluginManagerCallback(PluginManager pluginManager) {
-                HashMap<String, Pair<FapiBaseService, Boolean>> serviceMap = new HashMap<>();
-                for (Plugin plugin : pluginManager.getPlugins()) {
-                    RegisterManager registerManager = plugin.getRegisterManager();
-                    if (registerManager != null) {
-                        for (EntityManager entityManager : registerManager.getEntityManagers()) {
-                            FapiBaseService restService = entityManager.getEntityService();
-                            if (restService != null) {
-                                String[] servicePaths = restService.getServicePaths();
-                                if (servicePaths != null) {
-                                    for (String servicePath : servicePaths) {
-                                        serviceMap.put(servicePath, new ImmutablePair<>(restService, false));
-                                    }
+        this.pluginManager.addPostConstructCallBackHandler(pluginManager -> {
+            HashMap<String, FapiBaseService> serviceMap = new HashMap<>();
+            for (Plugin plugin : pluginManager.getPlugins()) {
+                RegisterManager registerManager = plugin.getRegisterManager();
+                if (registerManager != null) {
+                    for (EntityManager entityManager : registerManager.getEntityManagers()) {
+                        FapiBaseService restService = entityManager.getEntityService();
+                        if (restService != null) {
+                            String[] servicePaths = restService.getServicePaths();
+                            if (servicePaths != null) {
+                                for (String servicePath : servicePaths) {
+                                    serviceMap.put(servicePath, restService);
                                 }
                             }
                         }
                     }
                 }
-
-                ObjectMapper objectMapper = new ObjectMapper();
-                ObjectNode root = objectMapper.createObjectNode();
-
-                IndexService.this.serviceDescriptors = new ArrayList<>();
-
-                List<String> servicePaths = new ArrayList<>(serviceMap.keySet());
-                Collections.sort(servicePaths);
-
-                for (String servicePath : servicePaths) {
-                    Pair<FapiBaseService, Boolean> mapEntry = serviceMap.get(servicePath);
-                    FapiBaseService service = mapEntry.getLeft();
-                    boolean isSoap = mapEntry.getRight();
-                    ServiceDescriptor serviceDescriptor = service.getServiceDescriptor(servicePath, isSoap);
-                    if (serviceDescriptor != null) {
-                        IndexService.this.serviceDescriptors.add(serviceDescriptor);
-                    }
-                }
-
-                root.set("services", objectMapper.valueToTree(IndexService.this.serviceDescriptors));
-                IndexService.this.preparedJsonResponse = root.toString();
             }
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode root = objectMapper.createObjectNode();
+
+            IndexService.this.serviceDescriptors = new ArrayList<>();
+
+            List<String> servicePaths = new ArrayList<>(serviceMap.keySet());
+            Collections.sort(servicePaths);
+
+            for (String servicePath : servicePaths) {
+                FapiBaseService service = serviceMap.get(servicePath);
+                ServiceDescriptor serviceDescriptor = service.getServiceDescriptor(servicePath);
+                if (serviceDescriptor != null) {
+                    IndexService.this.serviceDescriptors.add(serviceDescriptor);
+                }
+            }
+
+            root.set("services", objectMapper.valueToTree(IndexService.this.serviceDescriptors));
+            IndexService.this.preparedJsonResponse = root.toString();
         });
 
     }
