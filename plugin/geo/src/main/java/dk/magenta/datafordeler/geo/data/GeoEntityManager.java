@@ -171,6 +171,11 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
             }
         });
 
+        List<E> allEntities = QueryManager.getAllEntities(session, this.getEntityClass());
+        for (E entity : allEntities) {
+            entity.wire(session, wireCache);
+        }
+
         if (!wrappedInTransaction) {
             session.getTransaction().commit();
             importMetadata.setTransactionInProgress(false);
