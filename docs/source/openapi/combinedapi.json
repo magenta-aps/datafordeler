@@ -140,7 +140,7 @@
     "/combined/personLookup/1/": {
       "get": {
         "summary": "Bulkopslag i CPR pu en person, på baggrund af dennes CPR-nummer",
-        "description": "Servicen fremsøger personoplysninger på en personer der indlæses i den Grønlandske datafordeler via natlige opdateringer. <br/>Hvis den forespurgte person ikke kan findes i informationer der er cashet fra det danske CPR-register, så forsøges det at lave et live-opslag i det danske adresseregister. \nPersoninformationerne beriges med adresseinformationer fra det Grønlandske adresseregister GAR.<br/>Attributter udgår hvis de ikke indeholder nogen værdier.<br/><br/>PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-PERSONLOOKUP/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/cpr/",
+        "description": "Servicen fremsøger personoplysninger på en personer der indlæses i den Grønlandske datafordeler via natlige opdateringer. <br/>Hvis den forespurgte person ikke kan findes i informationer der er cachet fra det danske CPR-register, så forsøges det at lave et live-opslag i det danske adresseregister. \nPersoninformationerne beriges med adresseinformationer fra det Grønlandske adresseregister GAR.<br/>Attributter udgår hvis de ikke indeholder nogen værdier.<br/>Der begrænses til 100 CPR-numre pr. opslag.<br/><br/>PITU:<br />Servicenavn: PITU/GOV/DIA/magenta_services/DAFO-COMBINED-PERSONLOOKUP/1<br />Sti under /restapi/: /search/<br />Fuld sti ved kald til pitu: http[s]://<security-server>/restapi/1/cpr/",
         "parameters": [
           {
             "name": "cpr",

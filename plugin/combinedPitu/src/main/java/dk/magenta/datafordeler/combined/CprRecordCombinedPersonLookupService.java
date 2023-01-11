@@ -1,6 +1,8 @@
 package dk.magenta.datafordeler.combined;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
@@ -36,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -132,7 +135,7 @@ public class CprRecordCombinedPersonLookupService {
     }
 
     @GetMapping("/cpr")
-    public StreamingResponseBody findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidDataInputException, QueryBuildException, InvalidClientInputException {
+    public String findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidDataInputException, QueryBuildException, InvalidClientInputException {
 
         List<String> cprs = requestParams.get("cpr");
         String allowDirect = requestParams.getFirst("allowDirect");
@@ -148,10 +151,7 @@ public class CprRecordCombinedPersonLookupService {
         List<String> cprNumbers = new ArrayList<String>();
 
         for (String cpr : cprs) {
-            String[] subCprList = cpr.split(",");
-            for (String subCpr : subCprList) {
-                cprNumbers.add(subCpr);
-            }
+            cprNumbers.addAll(Arrays.asList(cpr.split(",")));
         }
 
         personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);
@@ -164,79 +164,56 @@ public class CprRecordCombinedPersonLookupService {
         personQuery.setRegistrationAt(now);
         personQuery.setEffectAt(now);
 
-        return outputStream -> {
+        ObjectNode objects = objectMapper.createObjectNode();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
 
-            try (Session session = sessionManager.getSessionFactory().openSession()) {
+            GeoLookupService lookupService = new GeoLookupService(sessionManager);
+            personOutputWrapper.setLookupService(lookupService);
 
+            personQuery.applyFilters(session);
+            this.applyAreaRestrictionsToQuery(personQuery, user);
 
-                GeoLookupService lookupService = new GeoLookupService(sessionManager);
-                personOutputWrapper.setLookupService(lookupService);
+            Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
 
-                personQuery.applyFilters(session);
-                this.applyAreaRestrictionsToQuery(personQuery, user);
-
-                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
-
-                final FinalWrapper<Boolean> first = new FinalWrapper<>(true);
-                Consumer<PersonEntity> entityWriter = personEntity -> {
-                    if (personEntity != null && personEntity.getPersonnummer() != null) {
-                        try {
-                            cprNumbers.remove(personEntity.getPersonnummer());
-                            if (!first.getInner()) {
-                                outputStream.flush();
-                                outputStream.write(OBJECT_SEPARATOR);
-                            } else {
-                                first.setInner(false);
-                            }
-
-                            outputStream.write(("\"" + personEntity.getPersonnummer() + "\":").getBytes());
-                            outputStream.write(
-                                    objectMapper.writeValueAsString(
-                                            personOutputWrapper.wrapRecordResult(personEntity, personQuery)
-                                    ).getBytes(StandardCharsets.UTF_8)
-                            );
-                        } catch (IOException e) {
-                            log.error("IOException", e.getStackTrace());
-                        }
-                        session.evict(personEntity);
-                    }
-                };
-
-                outputStream.write(START_OBJECT);
-                personEntities.forEach(entityWriter);
-
-                HashSet<String> found = new HashSet<>();
-                if (!cprNumbers.isEmpty() && !hasAreaRestrictions(user) && "true".equals(allowDirect)) {
-                    List<String> remaining = new ArrayList<>(cprNumbers);
-                    remaining.stream().map(cprNummer -> {
-                        try {
-                            PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
-                            entityManager.createSubscription(Collections.singleton(cprNummer));
-                            if (personEntity != null) {
-                                found.add(cprNummer);
-                                return personEntity;
-                            }
-                        } catch (DataStreamException e) {
-                            log.warn(e);
-                        }
-                        return null;
-                    }).forEach(entityWriter);
+            final FinalWrapper<Boolean> first = new FinalWrapper<>(true);
+            Consumer<PersonEntity> entityWriter = personEntity -> {
+                if (personEntity != null && personEntity.getPersonnummer() != null) {
+                    cprNumbers.remove(personEntity.getPersonnummer());
+                    objects.set(personEntity.getPersonnummer(), personOutputWrapper.wrapRecordResult(personEntity, personQuery));
+                    session.evict(personEntity);
                 }
+            };
+            personEntities.forEach(entityWriter);
 
-                outputStream.write(END_OBJECT);
-                outputStream.flush();
-
-                entityManager.createSubscription(found);
-
-            } catch (InvalidClientInputException e) {
-                log.warn("InvalidClientInputException");
+            HashSet<String> found = new HashSet<>();
+            if (!cprNumbers.isEmpty() && !hasAreaRestrictions(user) && "true".equals(allowDirect)) {
+                List<String> remaining = new ArrayList<>(cprNumbers);
+                remaining.stream().map(cprNummer -> {
+                    try {
+                        PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
+                        entityManager.createSubscription(Collections.singleton(cprNummer));
+                        if (personEntity != null) {
+                            found.add(cprNummer);
+                            return personEntity;
+                        }
+                    } catch (DataStreamException e) {
+                        log.warn(e);
+                    }
+                    return null;
+                }).forEach(entityWriter);
             }
-        };
+            try {
+                entityManager.createSubscription(found);
+            } catch (Exception e) {
+                log.error("Failed to create subscription for "+found.stream().collect(Collectors.joining(","))+": "+e.getMessage());
+            }
+        }
+        try {
+            return objectMapper.writeValueAsString(objects);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
-
-    private static final byte[] START_OBJECT = "{".getBytes();
-    private static final byte[] END_OBJECT = "}".getBytes();
-    private static final byte[] OBJECT_SEPARATOR = ",\n".getBytes();
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
         try {

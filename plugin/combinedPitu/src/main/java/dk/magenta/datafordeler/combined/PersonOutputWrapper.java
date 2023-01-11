@@ -61,7 +61,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         return latest.isEmpty() ? null : latest.get(latest.size() - 1);
     }
 
-    public Object wrapRecordResult(PersonEntity input, BaseQuery query) {
+    public ObjectNode wrapRecordResult(PersonEntity input, BaseQuery query) {
 
         // Root
         NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
