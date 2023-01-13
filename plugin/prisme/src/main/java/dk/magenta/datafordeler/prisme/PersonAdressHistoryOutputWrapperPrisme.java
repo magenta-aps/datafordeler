@@ -115,7 +115,7 @@ public class PersonAdressHistoryOutputWrapperPrisme extends OutputWrapper {
                     personAdress.setVejkode(adressRecord.getRoadCode());
                     GeoLookupDTO lookupDto = null;
                     try {
-                        lookupDto = lookupService.doLookup(adressRecord.getMunicipalityCode(), adressRecord.getRoadCode(), adressRecord.getHouseNumber());
+                        lookupDto = lookupService.doLookup(adressRecord.getMunicipalityCode(), adressRecord.getRoadCode(), adressRecord.getHouseNumber(), true);
                     } catch (InvalidClientInputException e) {
                         throw new RuntimeException(e);
                     }

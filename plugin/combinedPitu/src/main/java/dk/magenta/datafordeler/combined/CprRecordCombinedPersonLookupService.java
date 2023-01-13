@@ -167,8 +167,7 @@ public class CprRecordCombinedPersonLookupService {
         ObjectNode objects = objectMapper.createObjectNode();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
-            GeoLookupService lookupService = new GeoLookupService(sessionManager);
-            personOutputWrapper.setLookupService(lookupService);
+                personOutputWrapper.setLookupService(new GeoLookupService(sessionManager));
 
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);

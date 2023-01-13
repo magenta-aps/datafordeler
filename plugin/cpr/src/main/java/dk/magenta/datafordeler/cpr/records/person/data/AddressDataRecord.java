@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + AddressDataRecord.TABLE_NAME, indexes = {
@@ -244,6 +245,18 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
         }
     }
 
+    public String getRoadAddressLines() {
+        String[] lines = new String[]{
+            this.getRoadAddressLine1(),
+            this.getRoadAddressLine2(),
+            this.getRoadAddressLine3(),
+            this.getRoadAddressLine4(),
+            this.getRoadAddressLine5()
+        };
+        return Arrays.stream(lines)
+                .filter(Objects::nonNull).filter(t -> !t.isBlank())
+                .collect(Collectors.joining("\n"));
+    }
 
     public static final String DB_FIELD_ADDRESS_TEXT_TYPE = "addressTextType";
     public static final String IO_FIELD_ADDRESS_TEXT_TYPE = "adressetekststype";

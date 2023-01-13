@@ -292,7 +292,8 @@ public class BirthDataService extends PersonStatisticsService {
             lookup = lookupService.doLookup(
                     addressDataRecord.getMunicipalityCode(),
                     addressDataRecord.getRoadCode(),
-                    addressDataRecord.getHouseNumber()
+                    addressDataRecord.getHouseNumber(),
+                    true
             );
         } catch (InvalidClientInputException e) {
             throw new RuntimeException(e);

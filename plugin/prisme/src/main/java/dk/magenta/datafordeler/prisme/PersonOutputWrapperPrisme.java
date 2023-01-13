@@ -181,9 +181,9 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
                 if (roadCode > 0) {
                     root.put("vejkode", roadCode);
 
-                    GeoLookupDTO lookup = null;
+                    GeoLookupDTO lookup;
                     try {
-                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber, true);
                     } catch (InvalidClientInputException e) {
                         throw new RuntimeException(e);
                     }

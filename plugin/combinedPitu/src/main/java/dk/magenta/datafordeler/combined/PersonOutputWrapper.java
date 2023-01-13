@@ -7,9 +7,12 @@ import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
+import dk.magenta.datafordeler.cpr.CprLookupDTO;
+import dk.magenta.datafordeler.cpr.CprLookupService;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
+import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,9 +156,9 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                 if (roadCode > 0) {
                     root.put("vejkode", roadCode);
 
-                    GeoLookupDTO lookup = null;
+                    GeoLookupDTO lookup;
                     try {
-                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber, true);
                     } catch (InvalidClientInputException e) {
                         throw new RuntimeException(e);
                     }
@@ -177,6 +180,11 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                         ));
                     } else if (buildingNumber != null && !buildingNumber.isEmpty()) {
                         root.put("adresse", buildingNumber);
+                    } else {
+                        String lines = personAddressData.getRoadAddressLines();
+                        if (lines != null && !lines.isEmpty()) {
+                            root.put("adresse", lines);
+                        }
                     }
 
                     root.put("postnummer", lookup.getPostalCode());
@@ -294,7 +302,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
 
                     GeoLookupDTO lookup = null;
                     try {
-                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber, true);
                     } catch (InvalidClientInputException e) {
                         throw new RuntimeException(e);
                     }

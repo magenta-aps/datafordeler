@@ -280,9 +280,10 @@ public class VoteListDataService extends PersonStatisticsService {
             // Use the lookup service to extract locality & postcode data from a municipality code and road code
             GeoLookupDTO lookup = null;
             try {
-                lookup = lookupService.doLookupBestEffort(
+                lookup = lookupService.doLookup(
                         addressDataRecord.getMunicipalityCode(),
-                        addressDataRecord.getRoadCode()
+                        addressDataRecord.getRoadCode(),
+                        true
                 );
             } catch (InvalidClientInputException e) {
                 throw new RuntimeException(e);

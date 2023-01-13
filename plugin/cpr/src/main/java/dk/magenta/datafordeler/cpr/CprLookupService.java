@@ -230,7 +230,7 @@ public class CprLookupService {
         return null;
     }
 
-    private static void setQueryNow(BaseQuery query) {
+    protected static void setQueryNow(BaseQuery query) {
         OffsetDateTime now = OffsetDateTime.now();
         query.setRegistrationAt(now);
         query.setEffectAt(now);

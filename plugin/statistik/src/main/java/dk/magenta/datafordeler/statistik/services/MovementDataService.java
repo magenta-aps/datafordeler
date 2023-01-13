@@ -245,7 +245,7 @@ public class MovementDataService extends PersonStatisticsService {
                         item.put(ORIGIN_BNR, formatBnr(previousDomesticAddress.getBuildingNumber()));
                         GeoLookupDTO lookup = null;
                         try {
-                            lookup = lookupService.doLookup(previousDomesticAddress.getMunicipalityCode(), previousDomesticAddress.getRoadCode());
+                            lookup = lookupService.doLookup(previousDomesticAddress.getMunicipalityCode(), previousDomesticAddress.getRoadCode(), true);
                         } catch (InvalidClientInputException e) {
                             throw new RuntimeException(e);
                         }
@@ -271,7 +271,7 @@ public class MovementDataService extends PersonStatisticsService {
 
                         GeoLookupDTO lookup = null;
                         try {
-                            lookup = lookupService.doLookup(currentDomesticAddress.getMunicipalityCode(), currentDomesticAddress.getRoadCode());
+                            lookup = lookupService.doLookup(currentDomesticAddress.getMunicipalityCode(), currentDomesticAddress.getRoadCode(), true);
                         } catch (InvalidClientInputException e) {
                             throw new RuntimeException(e);
                         }

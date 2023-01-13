@@ -40,7 +40,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
         GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
-        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197");
+        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197", false);
 
         Assert.assertEquals("Kommuneqarfik Sermersooq", geoLookupDTO.getMunicipalityName());
         Assert.assertEquals("B-3197", geoLookupDTO.getbNumber());
@@ -60,7 +60,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
         GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
-        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197");
+        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197", false);
         Assert.assertEquals("Kommuneqarfik Sermersooq", geoLookupDTO.getMunicipalityName());
         Assert.assertTrue("Qarsaalik".equals(geoLookupDTO.getRoadName()) || "Qarsaalik_previous".equals(geoLookupDTO.getRoadName()));
     }
@@ -77,7 +77,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
         List<GeoMunicipalityEntity> localities = QueryManager.getAllEntities(session, query, GeoMunicipalityEntity.class);
         GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
-        GeoLookupDTO geoLookupDTO = lookupService.doLookup(730, 1, "18");
+        GeoLookupDTO geoLookupDTO = lookupService.doLookup(730, 1, "18", false);
 
         Assert.assertEquals("Randers", geoLookupDTO.getMunicipalityName());
         Assert.assertEquals(null, geoLookupDTO.getbNumber());
@@ -85,7 +85,7 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
         Assert.assertEquals(8920, geoLookupDTO.getPostalCode());
         Assert.assertEquals("Randers NV", geoLookupDTO.getPostalDistrict());
 
-        geoLookupDTO = lookupService.doLookup(730, 4, "18");
+        geoLookupDTO = lookupService.doLookup(730, 4, "18", false);
 
         Assert.assertEquals("Randers", geoLookupDTO.getMunicipalityName());
         Assert.assertEquals(null, geoLookupDTO.getbNumber());

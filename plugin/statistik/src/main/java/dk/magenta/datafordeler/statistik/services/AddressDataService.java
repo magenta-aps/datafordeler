@@ -182,7 +182,7 @@ public class AddressDataService extends PersonStatisticsService {
             if (addressData.getBitemporality().registrationTo == null && addressData.getBitemporality().containsEffect(effectTime, effectTime)) {
                 GeoLookupDTO lookup = null;
                 try {
-                    lookup = lookupService.doLookup(addressData.getMunicipalityCode(), addressData.getRoadCode(), addressData.getHouseNumber());
+                    lookup = lookupService.doLookup(addressData.getMunicipalityCode(), addressData.getRoadCode(), addressData.getHouseNumber(), true);
                 } catch (InvalidClientInputException e) {
                     throw new RuntimeException(e);
                 }

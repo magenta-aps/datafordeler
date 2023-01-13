@@ -295,7 +295,7 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
                 if (municipalityCode > 0 && lookupService != null) {
                     GeoLookupDTO lookup = null;
                     try {
-                        lookup = lookupService.doLookup(municipalityCode, roadCode);
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, true);
                     } catch (InvalidClientInputException e) {
                         throw new RuntimeException(e);
                     }

@@ -115,7 +115,7 @@ public class SameAddressService {
 
                     GeoLookupDTO lookup = null;
                     if (municipalityCode > 0 && lookupService != null) {
-                        lookup = lookupService.doLookup(municipalityCode, roadCode);
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, true);
                         if (lookup.getLocalityCodeNumber() != 0) {
                             root.put("localityCode", lookup.getLocalityCodeNumber());
                             root.put("roadName", lookup.getRoadName());
