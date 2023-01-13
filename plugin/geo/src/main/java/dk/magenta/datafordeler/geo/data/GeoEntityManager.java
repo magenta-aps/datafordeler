@@ -244,11 +244,10 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
         try {
             GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
                 String globalId = jsonNode.get("attributes").get("GlobalID").asText();
-                //long deletedDate = jsonNode.get("DeletedDate").asLong();
-                //Instant deletionTime = Instant.ofEpochMilli(deletedDate);
+                long deletionTime = jsonNode.get("attributes").get("DeletedDate").asLong(); // Epoch millisecond
                 UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
                 E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
-                if (entity != null) {
+                if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
                     session.delete(entity);
                 }
             });
@@ -263,6 +262,9 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
 
 
     protected void updateEntity(E entity, T rawData, ImportMetadata importMetadata) {
+        if (rawData instanceof SumiffiikRawData) {
+            entity.setEditDate(((SumiffiikRawData)rawData).getProperties().editDate);
+        }
         entity.update(rawData, importMetadata.getImportTime());
     }
 

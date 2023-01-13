@@ -72,6 +72,23 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
         this.setCreationDate(Instant.ofEpochMilli(creationDate).atOffset(ZoneOffset.UTC));
     }
 
+    public static final String DB_FIELD_EDIT_DATE = "editDate";
+    @Column(name = DB_FIELD_EDIT_DATE)
+    private OffsetDateTime editDate;
+
+    public OffsetDateTime getEditDate() {
+        return this.editDate;
+    }
+
+    @JsonProperty(value = "EditDate")
+    public void setEditDate(OffsetDateTime editDate) {
+        this.editDate = editDate;
+    }
+
+    @JsonProperty(value = "EditDate")
+    public void setEditDate(long editDate) {
+        this.setEditDate(Instant.ofEpochMilli(editDate).atOffset(ZoneOffset.UTC));
+    }
 
     public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
