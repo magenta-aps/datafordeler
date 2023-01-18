@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.road;
 
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
+import dk.magenta.datafordeler.geo.data.WireCache;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -77,5 +78,9 @@ public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawDa
             }
         }
         return roadQuery;
+    }
+
+    protected void populateWireCache(WireCache wireCache, Session session) {
+        wireCache.loadAllLocalities(session);
     }
 }

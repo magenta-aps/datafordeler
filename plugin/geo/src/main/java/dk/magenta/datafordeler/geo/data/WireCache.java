@@ -6,9 +6,11 @@ import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.geo.data.building.BuildingEntity;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityQuery;
+import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeQuery;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.road.RoadQuery;
 import org.hibernate.Session;
 
@@ -28,6 +30,13 @@ public class WireCache {
             this.localityCacheByCode.add(code, list);
         }
         return this.localityCacheByCode.get(code);
+    }
+
+    public void loadAllLocalities(Session session) {
+        for (GeoLocalityEntity entity : QueryManager.getAllEntities(session, GeoLocalityEntity.class)) {
+            this.localityCacheByCode.add(entity.getCode(), entity);
+            this.localityCacheByUUID.put(entity.getUUID(), entity);
+        }
     }
 
 
@@ -52,6 +61,12 @@ public class WireCache {
         return this.buildingCacheByUUID.get(uuid);
     }
 
+    public void loadAllBuildings(Session session) {
+        for (BuildingEntity entity : QueryManager.getAllEntities(session, BuildingEntity.class)) {
+            this.buildingCacheByUUID.put(entity.getUUID(), entity);
+        }
+    }
+
 
     public ListHashMap<Integer, GeoRoadEntity> roadCacheByCode = new ListHashMap<>();
 
@@ -65,6 +80,16 @@ public class WireCache {
             this.roadCacheByCode.add(code, list);
         }
         return this.roadCacheByCode.get(code);
+    }
+
+    public void loadAllRoads(Session session) {
+        for (GeoRoadEntity entity : QueryManager.getAllEntities(session, GeoRoadEntity.class)) {
+            RoadMunicipalityRecord roadMunicipalityRecord = entity.getMunicipality().current();
+            if (roadMunicipalityRecord != null && roadMunicipalityRecord.getCode() != null) {
+                Integer code = 10000 * roadMunicipalityRecord.getCode() + entity.getCode();
+                this.roadCacheByCode.add(code, entity);
+            }
+        }
     }
 
 
@@ -84,6 +109,20 @@ public class WireCache {
             }
         }
         return this.postcodeCacheByCode.get(code);
+    }
+
+
+    public void loadAllPostcodes(Session session) {
+        for (PostcodeEntity entity : QueryManager.getAllEntities(session, PostcodeEntity.class)) {
+            this.postcodeCacheByCode.put(entity.getCode(), entity);
+        }
+    }
+
+    public void loadAll(Session session) {
+        this.loadAllLocalities(session);
+        this.loadAllRoads(session);
+        this.loadAllBuildings(session);
+        this.loadAllPostcodes(session);
     }
 
 }

@@ -6,7 +6,10 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.Identification;
+import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.ImportInterruptedException;
@@ -124,6 +127,8 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
 
     protected abstract E createBasicEntity(T record, Session session);
 
+    protected void populateWireCache(WireCache wireCache, Session session) {
+    }
     @Override
     public void parseData(InputStream jsonData, ImportMetadata importMetadata) throws DataFordelerException {
         HashMap<UUID, E> entityCache = new HashMap<>();
@@ -135,6 +140,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
         }
         timer.clear();
         final WireCache wireCache = new WireCache();
+        this.populateWireCache(wireCache, session);
         Charset charset = this.geoConfigurationManager.getConfiguration().getCharset();
 
         GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
@@ -159,7 +165,6 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
 
                 timer.start(TASK_POPULATE_DATA);
                 this.updateEntity(entity, rawData, importMetadata);
-                entity.wire(session, wireCache);
                 timer.measure(TASK_POPULATE_DATA);
 
                 timer.start(TASK_SAVE);
@@ -170,6 +175,8 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 log.error("Error importing " + this.getEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
             }
         });
+
+        this.wireAll(session, wireCache);
 
         if (!wrappedInTransaction) {
             session.getTransaction().commit();
@@ -307,5 +314,12 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
         GeoConfiguration configuration = this.getRegisterManager().getConfigurationManager().getConfiguration();
         GeoConfiguration.RegisterType registerType = configuration.getRegisterType(this.getSchema());
         return (registerType != null && registerType != GeoConfiguration.RegisterType.DISABLED);
+    }
+
+    protected void wireAll(Session session, WireCache wireCache) {
+        List<E> items = QueryManager.getAllEntities(session, this.getEntityClass());
+        for (E item : items) {
+            item.wire(session, wireCache);
+        }
     }
 }

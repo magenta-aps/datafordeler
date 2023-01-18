@@ -88,7 +88,7 @@ public class AccessAddressRoadRecord extends GeoMonotemporalRecord<AccessAddress
 
 
     public void wire(Session session, WireCache wireCache) {
-        if (this.reference == null && this.municipalityCode != null && this.roadCode != null) {
+        if (this.municipalityCode != null && this.roadCode != null) {
             try {
                 for (GeoRoadEntity road : wireCache.getRoad(session, this.municipalityCode, this.roadCode)) {
                     this.reference = road.getIdentification();
