@@ -65,7 +65,7 @@ public class LocalityReferenceRecord<E extends GeoEntity> extends GeoMonotempora
     }
 
     public void wire(Session session, WireCache wireCache) {
-        if (this.reference == null && this.code != null) {
+        if (this.code != null) {
             List<GeoLocalityEntity> localityEntities = null;
             try {
                 localityEntities = wireCache.getLocality(session, this.code);
@@ -77,7 +77,7 @@ public class LocalityReferenceRecord<E extends GeoEntity> extends GeoMonotempora
                 break;
             }
         }
-        if (this.reference == null && this.uuid != null) {
+        if (this.uuid != null) {
             GeoLocalityEntity geoLocalityEntity = wireCache.getLocality(session, this.uuid);
             if (geoLocalityEntity != null) {
                 this.reference = geoLocalityEntity.getIdentification();

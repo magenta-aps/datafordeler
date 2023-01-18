@@ -51,7 +51,7 @@ public class AccessAddressBuildingReferenceRecord extends GeoMonotemporalRecord<
     }
 
     public void wire(Session session, WireCache wireCache) {
-        if (this.reference == null && this.uuid != null) {
+        if (this.uuid != null) {
             BuildingEntity buildingEntity = wireCache.getBuilding(session, this.uuid);
             if (buildingEntity != null) {
                 this.reference = buildingEntity.getIdentification();

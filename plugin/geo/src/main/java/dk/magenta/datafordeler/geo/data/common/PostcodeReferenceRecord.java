@@ -50,7 +50,7 @@ public class PostcodeReferenceRecord<E extends GeoEntity> extends GeoMonotempora
     }
 
     public void wire(Session session, WireCache wireCache) {
-        if (this.reference == null && this.postcode != null) {
+        if (this.postcode != null) {
             PostcodeEntity postcodeEntity = wireCache.getPostcode(session, this.postcode);
             if (postcodeEntity != null) {
                 this.reference = postcodeEntity.getIdentification();
