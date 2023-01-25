@@ -1141,6 +1141,9 @@ public abstract class BaseQuery {
     static protected void ensureNumeric(String name, Collection<String> parameters, boolean allowLong) throws InvalidClientInputException {
         for (String parameter : parameters) {
             parameter = parameter.replace("*", "");
+            if (parameter.isBlank()) {
+                continue;
+            }
             if (!parameter.matches("^\\d*$")) {
                 throw new InvalidClientInputException("Parameter " + name + " must be a number (got '"+parameter+"')");
             }
