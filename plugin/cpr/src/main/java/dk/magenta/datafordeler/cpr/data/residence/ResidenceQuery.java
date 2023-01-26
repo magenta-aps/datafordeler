@@ -39,7 +39,7 @@ public class ResidenceQuery extends CprQuery<ResidenceEntity> {
             ensureNumeric(key, parameters.getI(key));
         }
         for (String key : new String[]{
-                KOMMUNEKODE, KOMMUNEKODE, VEJKODE, HUSNUMMER, ETAGE, SIDE_DOER,
+                KOMMUNEKODE, VEJKODE, HUSNUMMER, ETAGE, SIDE_DOER,
         }) {
             this.setParameter(key, parameters.getI(key));
         }

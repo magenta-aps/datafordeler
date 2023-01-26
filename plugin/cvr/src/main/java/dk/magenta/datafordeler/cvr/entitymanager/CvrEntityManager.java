@@ -295,11 +295,13 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
             Set<Integer> uniqueCvrs = companies.stream().filter(Objects::nonNull).collect(Collectors.toSet());
             for (Integer cvr : uniqueCvrs) {
-                try {
-                    CompanySubscription companySubscription = new CompanySubscription(cvr);
-                    sessionSub.save(companySubscription);
-                } catch (Exception e) {
-                    // Empty catch as a convenient way for if the system tries to add the same cvr twice
+                if (cvr != null && cvr != 0) {
+                    try {
+                        CompanySubscription companySubscription = new CompanySubscription(cvr);
+                        sessionSub.save(companySubscription);
+                    } catch (Exception e) {
+                        // Empty catch as a convenient way for if the system tries to add the same cvr twice
+                    }
                 }
             }
             sessionSub.flush();

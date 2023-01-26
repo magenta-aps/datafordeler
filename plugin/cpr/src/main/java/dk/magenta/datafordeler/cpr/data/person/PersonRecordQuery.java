@@ -158,7 +158,10 @@ public class PersonRecordQuery extends BaseQuery {
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
-        for (String key : new String[]{PERSONNUMMER, KOMMUNEKODE, VEJKODE}) {
+        for (String key : new String[]{PERSONNUMMER}) {
+            ensureNumeric(key, parameters.getI(key), true);
+        }
+        for (String key : new String[]{KOMMUNEKODE, VEJKODE}) {
             ensureNumeric(key, parameters.getI(key));
         }
         for (String key : new String[]{

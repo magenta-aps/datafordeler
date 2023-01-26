@@ -187,7 +187,7 @@ public class QueryManager {
         return results;
     }
 
-    private static final boolean logQuery = true;
+    private static final boolean logQuery = false;
 
     public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
         query.applyFilters(session);
