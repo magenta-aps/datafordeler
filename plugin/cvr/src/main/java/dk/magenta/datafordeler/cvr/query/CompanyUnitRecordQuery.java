@@ -39,7 +39,10 @@ public class CompanyUnitRecordQuery extends BaseQuery {
 
     @Override
     public void setFromParameters(ParameterMap parameters) throws InvalidClientInputException {
-        for (String key : new String[]{P_NUMBER, KOMMUNEKODE, VEJKODE}) {
+        for (String key : new String[]{P_NUMBER}) {
+            ensureNumeric(key, parameters.getI(key), true);
+        }
+        for (String key : new String[]{KOMMUNEKODE, VEJKODE}) {
             ensureNumeric(key, parameters.getI(key));
         }
         for (String key : new String[]{
