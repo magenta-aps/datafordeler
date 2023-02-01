@@ -160,21 +160,20 @@ public class PullTest {
         personContents.close();
 
         FtpService personFtp = new FtpService();
-        int personPort = 2101;
+        int personPort = 2102;
         personFtp.startServer(username, password, personPort, Collections.singletonList(personFile));
-
-        configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
-        configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
-        configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
-        configuration.setPersonRegisterFtpUsername(username);
-        configuration.setPersonRegisterFtpPassword(password);
-        configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-
-
-        Pull pull = new Pull(engine, plugin);
-        pull.run();
-
-        personFtp.stopServer();
+        try {
+            configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
+            configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
+            configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpUsername(username);
+            configuration.setPersonRegisterFtpPassword(password);
+            configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
+            Pull pull = new Pull(engine, plugin);
+            pull.run();
+        } finally {
+            personFtp.stopServer();
+        }
         personFile.delete();
 
         Session session = sessionManager.getSessionFactory().openSession();
@@ -218,20 +217,20 @@ public class PullTest {
         personContents.close();
 
         FtpService personFtp = new FtpService();
-        int personPort = 2101;
+        int personPort = 2106;
         personFtp.startServer(username, password, personPort, Collections.singletonList(personFile));
-
-        configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
-        configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
-        configuration.setPersonRegisterFtpUsername(username);
-        configuration.setPersonRegisterFtpPassword(password);
-        configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-
-        ObjectNode config = (ObjectNode) objectMapper.readTree("{\"" + CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE + "\": [5], \"remote\":true}");
-        Pull pull = new Pull(engine, plugin, config);
-        pull.run();
-
-        personFtp.stopServer();
+        try {
+            configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
+            configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpUsername(username);
+            configuration.setPersonRegisterFtpPassword(password);
+            configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
+            ObjectNode config = (ObjectNode) objectMapper.readTree("{\"" + CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE + "\": [5], \"remote\":true}");
+            Pull pull = new Pull(engine, plugin, config);
+            pull.run();
+        } finally {
+            personFtp.stopServer();
+        }
         personFile.delete();
 
         Session session = sessionManager.getSessionFactory().openSession();
@@ -264,12 +263,7 @@ public class PullTest {
         when(personEntityManager.getCustomerId()).thenReturn(1234);
         when(personEntityManager.getJobId()).thenReturn(123456);
         //when(personEntityManager.getLastUpdated(any(Session.class))).thenReturn(null);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                return null;
-            }
-        }).when(personEntityManager).getLastUpdated(any(Session.class));
+        doAnswer(invocationOnMock -> null).when(personEntityManager).getLastUpdated(any(Session.class));
 
         File localCacheSubFolder = File.createTempFile("foo", "bar");
         localCacheSubFolder.delete();
@@ -279,21 +273,17 @@ public class PullTest {
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
 
-        doAnswer(new Answer<FtpCommunicator>() {
-            @Override
-            public FtpCommunicator answer(InvocationOnMock invocation) throws Throwable {
-                FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
-                ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
-                return ftpCommunicator;
-            }
+        doAnswer((Answer<FtpCommunicator>) invocation -> {
+            FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
+            ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
+            return ftpCommunicator;
         }).when(cprRegisterManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
 
 
         String username = "test";
         String password = "test";
 
-
-        int personPort = 2101;
+        int personPort = 2107;
         InputStream personContents = this.getClass().getResourceAsStream("/persondata.txt");
         File personFile = File.createTempFile("persondata", "txt");
         personFile.createNewFile();
@@ -302,22 +292,20 @@ public class PullTest {
 
         FtpService personFtp = new FtpService();
         personFtp.startServer(username, password, personPort, Collections.singletonList(personFile));
-
-        configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
-        configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
-        configuration.setPersonRegisterFtpUsername(username);
-        configuration.setPersonRegisterFtpPassword(password);
-        configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-
-        configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
-        configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
-
-
-        Pull pull = new Pull(engine, plugin);
-        pull.run();
-
-
-        personFtp.stopServer();
+        try {
+            configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
+            configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
+            configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpUsername(username);
+            configuration.setPersonRegisterFtpPassword(password);
+            configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
+            configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
+            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
+            Pull pull = new Pull(engine, plugin);
+            pull.run();
+        } finally {
+            personFtp.stopServer();
+        }
         personFile.delete();
 
         personContents = this.getClass().getResourceAsStream("/persondata2.txt");
@@ -349,8 +337,8 @@ public class PullTest {
             Assert.assertEquals("06123400OP0101001234                                                            \r\n" +
                     "071234560101001234               ", contents);
 
-            personFtp.stopServer();
         } finally {
+            personFtp.stopServer();
             localSubFolder.delete();
         }
     }

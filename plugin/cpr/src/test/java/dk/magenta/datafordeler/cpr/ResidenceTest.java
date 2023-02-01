@@ -175,7 +175,7 @@ public class ResidenceTest extends TestBase {
 
         String username = "test";
         String password = "test";
-        int port = 2101;
+        int port = 2103;
 
         CprConfiguration configuration = this.getConfiguration();
 
@@ -186,20 +186,19 @@ public class ResidenceTest extends TestBase {
         residenceContents.close();
 
         this.startFtp(username, password, port, Collections.singletonList(residenceFile));
-
-        configuration.setPersonRegisterType(CprConfiguration.RegisterType.DISABLED);
-        configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
-        configuration.setResidenceRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
-        configuration.setResidenceRegisterFtpAddress("ftps://localhost:" + port);
-        configuration.setResidenceRegisterFtpUsername(username);
-        configuration.setResidenceRegisterFtpPassword(password);
-        configuration.setResidenceRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-
-
-        Pull pull = new Pull(this.getEngine(), this.getPlugin());
-        pull.run();
-
-        this.stopFtp();
+        try {
+            configuration.setPersonRegisterType(CprConfiguration.RegisterType.DISABLED);
+            configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
+            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
+            configuration.setResidenceRegisterFtpAddress("ftps://localhost:" + port);
+            configuration.setResidenceRegisterFtpUsername(username);
+            configuration.setResidenceRegisterFtpPassword(password);
+            configuration.setResidenceRegisterDataCharset(CprConfiguration.Charset.UTF_8);
+            Pull pull = new Pull(this.getEngine(), this.getPlugin());
+            pull.run();
+        } finally {
+            this.stopFtp();
+        }
         residenceFile.delete();
 
         Session session = this.getSessionManager().getSessionFactory().openSession();

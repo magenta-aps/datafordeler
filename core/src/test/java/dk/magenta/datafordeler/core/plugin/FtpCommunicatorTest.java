@@ -50,7 +50,7 @@ public class FtpCommunicatorTest {
     public void testDownloadNoNewFiles() throws Exception {
         //TODO implement test for correct handling of no new files
 
-        int port = 2101;
+        int port = 2102;
         String contents = null;
         File tempFile = File.createTempFile("ftpdownload2102", FtpCommunicator.DONE_FILE_ENDING);
         tempFile.createNewFile();

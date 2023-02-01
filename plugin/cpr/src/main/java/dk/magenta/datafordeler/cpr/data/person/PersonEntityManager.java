@@ -2,11 +2,12 @@ package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.Registration;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.util.CronUtil;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.cpr.direct.CprDirectPasswordUpdate;
@@ -19,10 +20,9 @@ import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.cpr.records.service.PersonEntityRecordService;
 import dk.magenta.datafordeler.cpr.synchronization.SubscriptionTimerTask;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,6 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
-import java.util.Calendar;
 import java.util.*;
 
 @Component
@@ -57,6 +56,9 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     @Value("${dafo.cpr.person.direct.password-change-enabled:false}")
     private boolean directPasswordChangeEnabled;
 
+    @Value("${dafo.cpr.person.subscription.generate-schedule:0 4 * * *}")
+    private String subscriptionGenerateSchedule;
+
     @Value("${dafo.cpr.testpersonList}")
     private String testpersonList;
 
@@ -71,24 +73,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
     @Autowired
     private CprDirectLookup directLookup;
-
-    private final Timer subscriptionUploadTimer = new Timer();
-
-    /**
-     * Run bean initialization. Make the application upload subscriptions every morning at 6.
-     */
-    @PostConstruct
-    public void init() {
-        if (setupSubscriptionEnabled) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 5);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            Date time = calendar.getTime();
-            subscriptionUploadTimer.schedule(new SubscriptionTimerTask(this), time, 1000 * 60 * 60 * 24);
-        }
-    }
-
 
     private static PersonEntityManager instance;
 
@@ -377,17 +361,24 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
      * Create the subscription-file from the table of subscriptions, and upload them to FTP-server
      */
     public void createSubscriptionFile() {
+        log.info("Creating subscription file");
         String charset = this.getConfiguration().getRegisterCharset(this);
 
         Transaction transaction = null;
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
+        Session session = sessionManager.getSessionFactory().openSession();
+        try {
             transaction = session.beginTransaction();
-            Criteria criteria = session.createCriteria(PersonSubscription.class);
-            criteria.add(Restrictions.eq(PersonSubscription.DB_FIELD_CPR_ASSIGNMENT_STATUS, PersonSubscriptionAssignmentStatus.CreatedInTable));
-            List<PersonSubscription> subscriptionList = criteria.list();
-            // If there if no subscription to upload just log
+
+            Query<PersonSubscription> subscriptionQuery = session.createQuery(
+                    "from "+PersonSubscription.class.getCanonicalName()+" "+
+                    "where "+PersonSubscription.DB_FIELD_CPR_ASSIGNMENT_STATUS+"="+PersonSubscriptionAssignmentStatus.CreatedInTable.ordinal(),
+                    PersonSubscription.class
+            );
+            List<PersonSubscription> subscriptionList = subscriptionQuery.getResultList();
+
+            // If there is no subscription to upload just log
             if (subscriptionList.size() == 0) {
-                log.info("There is found nu subscriptions for upload");
+                log.info("No subscriptions found for upload");
                 return;
             }
 
@@ -424,12 +415,18 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                         )
                 );
             }
+            log.info("Uploading subscription file with "+subscriptionList.size()+" items");
             this.addSubscription(content.toString(), charset, this);
+            for (PersonSubscription subscription : subscriptionList) {
+                session.save(subscription);
+            }
             transaction.commit();
 
         } catch (Exception e) {
             log.error(e);
             transaction.rollback();
+        } finally {
+            session.close();
         }
     }
 
@@ -493,6 +490,33 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         }
     }
 
+    @PostConstruct
+    public void setupSubscriptionUploader() {
+        if (setupSubscriptionEnabled) {
+            try {
+                String cronExpression = CronUtil.reformatSchedule(this.subscriptionGenerateSchedule);
+                if (cronExpression != null) {
+                    CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
+                    Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+                    JobDataMap jobData = new JobDataMap();
+                    jobData.put("personManager", this);
+                    JobDetail job = JobBuilder.newJob(SubscriptionTimerTask.Task.class)
+                            .withIdentity("CprSubscription")
+                            .setJobData(jobData)
+                            .build();
+                    Trigger trigger = TriggerBuilder.newTrigger()
+                            .withIdentity("CprSubscription")
+                            .withSchedule(scheduleBuilder)
+                            .build();
+                    scheduler.scheduleJob(job, Collections.singleton(trigger), true);
+                    scheduler.start();
+                }
+            } catch (SchedulerException | ConfigurationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
     public BaseQuery getQuery() {
         return new PersonRecordQuery();
@@ -502,6 +526,5 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     public BaseQuery getQuery(String... strings) {
         return this.getQuery();
     }
-
 
 }

@@ -137,7 +137,7 @@ public class FatherSubscriptionTest {
         String password = "test";
 
 
-        int personPort = 2101;
+        int personPort = 2105;
         InputStream personContents = this.getClass().getResourceAsStream("/personWithParentRelation.txt");
         File personFile = File.createTempFile("persondata", "txt");
         personFile.createNewFile();
@@ -146,22 +146,20 @@ public class FatherSubscriptionTest {
 
         FtpService personFtp = new FtpService();
         personFtp.startServer(username, password, personPort, Collections.singletonList(personFile));
-
-        configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
-        configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
-        configuration.setPersonRegisterFtpUsername(username);
-        configuration.setPersonRegisterFtpPassword(password);
-        configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-
-        configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
-        configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
-
-
         Pull pull = new Pull(engine, plugin);
-        pull.run();
+        try {
+            configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
+            configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpUsername(username);
+            configuration.setPersonRegisterFtpPassword(password);
+            configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
+            configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
+            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
+            pull.run();
+        } finally {
+            personFtp.stopServer();
+        }
 
-
-        personFtp.stopServer();
         personFile.delete();
 
         personContents = this.getClass().getResourceAsStream("/personWithParentRelation.txt");
@@ -172,10 +170,11 @@ public class FatherSubscriptionTest {
 
         personFtp = new FtpService();
         personFtp.startServer(username, password, personPort, Collections.singletonList(personFile));
-
-        pull.run();
-
-        personFtp.stopServer();
+        try {
+            pull.run();
+        } finally {
+            personFtp.stopServer();
+        }
         personFile.delete();
 
         Session session = sessionManager.getSessionFactory().openSession();
