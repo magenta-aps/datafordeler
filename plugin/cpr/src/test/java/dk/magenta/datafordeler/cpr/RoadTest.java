@@ -240,7 +240,7 @@ public class RoadTest extends TestBase {
 
         String username = "test";
         String password = "test";
-        int port = 2101;
+        int port = 2104;
 
         CprConfiguration configuration = this.getConfiguration();
 
@@ -251,19 +251,20 @@ public class RoadTest extends TestBase {
         roadContents.close();
 
         this.startFtp(username, password, port, Collections.singletonList(roadFile));
+        try {
+            configuration.setPersonRegisterType(CprConfiguration.RegisterType.DISABLED);
+            configuration.setRoadRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
+            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
+            configuration.setRoadRegisterFtpAddress("ftps://localhost:" + port);
+            configuration.setRoadRegisterFtpUsername(username);
+            configuration.setRoadRegisterFtpPassword(password);
+            configuration.setRoadRegisterDataCharset(CprConfiguration.Charset.UTF_8);
+            Pull pull = new Pull(this.getEngine(), this.getPlugin());
+            pull.run();
+        } finally {
+            this.stopFtp();
+        }
 
-        configuration.setPersonRegisterType(CprConfiguration.RegisterType.DISABLED);
-        configuration.setRoadRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
-        configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
-        configuration.setRoadRegisterFtpAddress("ftps://localhost:" + port);
-        configuration.setRoadRegisterFtpUsername(username);
-        configuration.setRoadRegisterFtpPassword(password);
-        configuration.setRoadRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-
-        Pull pull = new Pull(this.getEngine(), this.getPlugin());
-        pull.run();
-
-        this.stopFtp();
         roadFile.delete();
 
         Session session = this.getSessionManager().getSessionFactory().openSession();
