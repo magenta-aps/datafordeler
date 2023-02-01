@@ -85,20 +85,26 @@ public class GeoLookupService extends CprLookupService {
                     geoLookupDTO.setPostalDistrict(hardcodedAdress.getCityname());
                 }
             }
-// Find postalcode for road. This is only available through access addresses on the road. In theory there could be several postal codes for one road
+            // Find postalcode for road. This is only available through access addresses on the road. In theory there could be several postal codes for one road
             AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
             accessAddressQuery.setMunicipalityCode(municipalityCode);
 
             accessAddressQuery.setRoadCode(roadCode);
             setQueryNow(accessAddressQuery);
-            List<AccessAddressEntity> accessAddress = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
+            List<AccessAddressEntity> accessAddresses = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
 
-            if (accessAddress != null && accessAddress.size() > 0) {
+            if (accessAddresses != null && accessAddresses.size() > 0) {
                 //There can be more than one access-address, we just take the first one.
                 //There can be more than one accessaddress on a road, but they have the same postalcode and postaldistrict
-                geoLookupDTO.setPostalCode(accessAddress.get(0).getPostcode().iterator().next().getPostcode());
-                PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(geoLookupDTO.getPostalCode()), PostcodeEntity.class);
-                geoLookupDTO.setPostalDistrict(entity.getName().iterator().next().getName());
+                for (AccessAddressEntity accessAddress : accessAddresses) {
+                    if (!accessAddress.getPostcode().isEmpty() && accessAddress.getPostcode().current() != null) {
+                        geoLookupDTO.setPostalCode(accessAddress.getPostcode().current().getPostcode());
+                        PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(geoLookupDTO.getPostalCode()), PostcodeEntity.class);
+                        geoLookupDTO.setPostalDistrict(entity.getName().current().getName());
+                        break;
+                    }
+                }
+
             } else {
                 //Fallback to supplying with danish postalcodes
                 CprLookupDTO cprDto = super.doLookup(municipalityCode, roadCode, "");
@@ -167,6 +173,7 @@ public class GeoLookupService extends CprLookupService {
                     }
                 }
 
+                geoLookupDTO.setbNumber(formatBNumber(bNumber));
 
                 AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
                 accessAddressQuery.setMunicipalityCode(municipalityCode);
@@ -176,20 +183,23 @@ public class GeoLookupService extends CprLookupService {
                 }
                 accessAddressQuery.setRoadCode(roadCode);
                 setQueryNow(accessAddressQuery);
-                List<AccessAddressEntity> accessAddress = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
+                List<AccessAddressEntity> accessAddresses = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
 
-                if (accessAddress.size() == 0) {
+                if (accessAddresses.size() == 0) {
                     accessAddressQuery.clearHouseNumber();
-                    accessAddress = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
+                    accessAddresses = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
                 }
-
-                geoLookupDTO.setbNumber(formatBNumber(bNumber));
-                if (accessAddress != null && accessAddress.size() > 0) {
+                if (accessAddresses != null && accessAddresses.size() > 0) {
                     //There can be more than one access-address, we just take the first one.
                     //There can be more than one accessaddress on a road, but they have the same postalcode and postaldistrict
-                    geoLookupDTO.setPostalCode(accessAddress.get(0).getPostcode().iterator().next().getPostcode());
-                    PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(geoLookupDTO.getPostalCode()), PostcodeEntity.class);
-                    geoLookupDTO.setPostalDistrict(entity.getName().iterator().next().getName());
+                    for (AccessAddressEntity accessAddress : accessAddresses) {
+                        if (!accessAddress.getPostcode().isEmpty() && accessAddress.getPostcode().current() != null) {
+                            geoLookupDTO.setPostalCode(accessAddress.getPostcode().current().getPostcode());
+                            PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(geoLookupDTO.getPostalCode()), PostcodeEntity.class);
+                            geoLookupDTO.setPostalDistrict(entity.getName().current().getName());
+                            break;
+                        }
+                    }
                 }
 
                 LocalityQuery localityQuery = new LocalityQuery();
