@@ -461,16 +461,15 @@ public class CvrConfiguration implements Configuration {
         return false;
     }
 
-
-    public boolean encryptCompanyDirectRegisterPassword() {
-
+    public boolean encryptCompanyDirectRegisterPassword(boolean overwrite) {
         if (
                 this.companyRegisterPasswordEncryptionFile != null &&
                         !(this.companyRegisterDirectLookupPassword == null || this.companyRegisterDirectLookupPassword.isEmpty()) &&
-                        (this.companyRegisterDirectLookupPasswordEncrypted == null || this.companyRegisterDirectLookupPasswordEncrypted.length == 0)
+                        (overwrite || this.companyRegisterDirectLookupPasswordEncrypted == null || this.companyRegisterDirectLookupPasswordEncrypted.length == 0)
         ) {
             try {
                 this.companyRegisterDirectLookupPasswordEncrypted = Encryption.encrypt(this.companyRegisterPasswordEncryptionFile, this.companyRegisterDirectLookupPassword);
+                this.companyRegisterDirectLookupPassword = null;
                 return true;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
