@@ -90,7 +90,7 @@ public class CvrServiceDirect extends CvrRecordService {
     }
 
     @Override
-    protected Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers, DafoUserDetails user) throws DataFordelerException {
+    protected Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers, DafoUserDetails user) {
         return companyEntityManager.directLookup(new HashSet<>(cvrNumbers), null, this.getMunicipalityRestrictions(user));
     }
 
@@ -100,7 +100,7 @@ public class CvrServiceDirect extends CvrRecordService {
 
     @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getBulk(HttpServletRequest request)
-            throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, IOException, HttpNotFoundException, InvalidCertificateException {
+            throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, InvalidCertificateException {
         JsonNode requestBody;
         try {
             requestBody = objectMapper.readTree(request.getInputStream());

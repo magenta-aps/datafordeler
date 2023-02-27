@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * Lookup functionality for finding companys and participants first in local database.
- * If the recuested item could no be found locally try finding it on virk.dk
+ * If the requested item could not be found locally try finding it on virk.dk
  */
 @Component
 public class CollectiveCvrLookup {
@@ -32,7 +32,7 @@ public class CollectiveCvrLookup {
         this.directLookup = directLookup;
     }
 
-    public Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers) throws DataFordelerException {
+    public Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers) {
         CompanyRecordQuery query = new CompanyRecordQuery();
         query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
 
@@ -43,7 +43,7 @@ public class CollectiveCvrLookup {
         }
 
         if (!cvrNumbers.isEmpty()) {
-            companyRecords.addAll(companyEntityManager.directLookup(new HashSet<String>(cvrNumbers), null, null));
+            companyRecords.addAll(companyEntityManager.directLookup(new HashSet<>(cvrNumbers), null, null));
         }
 
         return companyRecords;
