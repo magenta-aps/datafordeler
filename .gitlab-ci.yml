@@ -147,8 +147,6 @@ build-openapi-image:
     
     ERRORFILE_DIR: "cache/log"
 
-  tags:
-    - docker
   services:
     - name: ${DAFOSQL_IMAGE_SHA}
       alias: datafordeler-db
