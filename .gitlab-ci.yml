@@ -153,6 +153,8 @@ test-combinedPitu:
 
 test-statistik:
   <<: *test-default
+  tags:
+    - docker
   before_script:
     - cd /code/plugin/statistik
   script:
