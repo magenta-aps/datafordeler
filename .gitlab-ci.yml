@@ -8,8 +8,6 @@ variables:
 
 .build-default: &build-default
   stage: build
-  tags:
-    - docker
   image:
     # We use the `:debug` image as it contains `sh` needed by gitlab-ci.
     name: gcr.io/kaniko-project/executor:debug-v0.16.0
@@ -50,8 +48,6 @@ build-image:
     #M$ sql variables
     ACCEPT_EULA: "Y"
     SA_PASSWORD: "testTEST1"
-  tags:
-    - docker
   services:
     - name: ${IMAGE_SQL}
       alias: datafordeler-db
