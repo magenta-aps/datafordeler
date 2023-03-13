@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Datafordeler",
-    "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere. For at få adgang til datafordelerens cprservices skal brugeren indhente en adgangsgivende token fra datafordeleren. Det gøres ved f.eks. med cURL hvor <brugernavn> og <kodeord> udfyldes med de brugeroplysninger, som man tidligere har fået udleveret: curl -u <brugernavn>:<kodeord> -X GET https://sts.test.data.gl/get_token_passive Som respons får man en adgangsgivende token, som man skal sende med i headeren for ens forespørgsler til datafordelerens prismeservices. Headeren skal hedde Authorization og værdien skal være SAML efter fulgt af et mellemrum og dernæst den adgangsgivende token. F.eks: curl -H \"Authorization: SAML <token>\" -X GET https://dafo.data.gl/prisme/cvr/1/<cvrnummer> Der refereres i dette dokument til dafo-prodserverens endpoint, der findes tilsvarende for testmiljøet ved adgang til prodmiljøet skal .test – delen indgå i url’en. Den samlede url bliver dermed https://dafo.test.data.gl" ,
+    "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere. Der refereres i dette dokument til dafo-produktionsserverens endpoint; der findes tilsvarende for testmiljøet ved adgang til produktionsmiljøet skal .test – delen indgå i url’en. Den samlede url bliver dermed https://dafo.test.data.gl" ,
     "version": "1.0.0"
   },
   "servers": [
@@ -29,7 +29,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste over CPR-numre som denne person har forældremyndighed over. Udovere CPR-nummeret leveres statuskoden for barnet. Statuskoden benyttes generelt til at indikere en status på personer i CPR-registeret. Dek kan være bopæl i Grønland/Danmark eller at personen er forsvundet eller dødForældremyndigheden beregnes ud fra fremsøgning af en liste over personens børn. Herefter fratrækkes børn som er blevet tildelt en ny forældremyndighed, og der tilføjes børn som denne person har fået tildelt forældremyndigheden over. Børn som er blevet over 18 år fremsøges ikke da forældreemyndigheden dermed er udløbet. Der kan læses om statuskoder på dette link: https://kaqa.gl/Anvendelse/Brugervejledning/Folkeregister/CPR-koder",
+            "description": "Liste over CPR-numre som denne person har forældremyndighed over. Udover CPR-nummeret leveres statuskoden for barnet. Statuskoden benyttes generelt til at indikere en status på personer i CPR-registeret. Det kan være bopæl i Grønland/Danmark eller at personen er forsvundet eller død. Forældremyndigheden beregnes ud fra fremsøgning af en liste over personens børn. Herefter fratrækkes børn som er blevet tildelt en ny forældremyndighed, og der tilføjes børn som denne person har fået tildelt forældremyndigheden over. Børn som er blevet over 18 år fremsøges ikke, da forældreemyndigheden dermed er udløbet. Der kan læses om statuskoder på dette link: https://kaqa.gl/Anvendelse/Brugervejledning/Folkeregister/CPR-koder",
             "content": {
               "application/json": {
                 "schema": {

@@ -46,7 +46,7 @@
         "EditDate": 1535538676000,
         "a_nummer": null,
         "BygningSumiffik": "{DC2CAE1B-1F98-44FF-AE8F-6A52556B13FD}",
-        "location_id": "{F0966470-F09F-474D-A820-E8A46ED6FCC7}",
+        "Lokalitetskode": "{F0966470-F09F-474D-A820-E8A46ED6FCC7}",
         "GlobalID": "{AF3550F5-2998-404D-B784-A70C4DEB2A18}",
         "SHAPE.STArea()": 1.178636921395082e-08,
         "SHAPE.STLength()": 0.00051423889574690588

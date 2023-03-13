@@ -134,96 +134,48 @@
             }
           },
           {
-            "name": "registreringFraEfter",
+            "name": "eventId",
             "in": "query",
-            "description": "RegistreringFra skal være efter dette tidspunkt",
+            "description": "EventID",
             "examples": {
               "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
-          },
-          {
-            "name": "registreringFraFør",
-            "in": "query",
-            "description": "RegistreringFra skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
+                "value": "A20"
               }
             }
           },
           {
-            "name": "registreringTilEfter",
+            "name": "field",
             "in": "query",
-            "description": "RegistreringTil skal være efter dette tidspunkt",
+            "description": "DataEvent feltnavn",
             "examples": {
               "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
-          },
-          {
-            "name": "registreringTilFør",
-            "in": "query",
-            "description": "RegistreringTil skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
+                "value": "cpr_person_name_authoritytext_record"
               }
             }
           },
           {
-            "name": "virkningFraEfter",
-            "in": "query",
-            "description": "VirkningFra skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/registrationFromAfter"
           },
           {
-            "name": "virkningFraFør",
-            "in": "query",
-            "description": "VirkningFra skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/registrationFromBefore"
           },
           {
-            "name": "virkningTilEfter",
-            "in": "query",
-            "description": "VirkningTil skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/registrationToAfter"
           },
           {
-            "name": "virkningTilFør",
-            "in": "query",
-            "description": "VirkningTil skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/registrationToBefore"
+          },
+          {
+            "$ref": "#/components/parameters/effectFromAfter"
+          },
+          {
+            "$ref": "#/components/parameters/effectFromBefore"
+          },
+          {
+            "$ref": "#/components/parameters/effectToAfter"
+          },
+          {
+            "$ref": "#/components/parameters/effectToBefore"
           }
         ],
         "responses": {
@@ -787,96 +739,28 @@
             }
           },
           {
-            "name": "registreringFraEfter",
-            "in": "query",
-            "description": "RegistreringFra skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/registrationFromAfter"
           },
           {
-            "name": "registreringFraFør",
-            "in": "query",
-            "description": "RegistreringFra skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/registrationFromBefore"
           },
           {
-            "name": "registreringTilEfter",
-            "in": "query",
-            "description": "RegistreringTil skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/registrationToAfter"
           },
           {
-            "name": "registreringTilFør",
-            "in": "query",
-            "description": "RegistreringTil skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/registrationToBefore"
           },
           {
-            "name": "virkningFraEfter",
-            "in": "query",
-            "description": "VirkningFra skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/effectFromAfter"
           },
           {
-            "name": "virkningFraFør",
-            "in": "query",
-            "description": "VirkningFra skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/effectFromBefore"
           },
           {
-            "name": "virkningTilEfter",
-            "in": "query",
-            "description": "VirkningTil skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/effectToAfter"
           },
           {
-            "name": "virkningTilFør",
-            "in": "query",
-            "description": "VirkningTil skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/effectToBefore"
           }
         ],
         "responses": {
@@ -1146,96 +1030,28 @@
             }
           },
           {
-            "name": "registreringFraEfter",
-            "in": "query",
-            "description": "RegistreringFra skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/registrationFromAfter"
           },
           {
-            "name": "registreringFraFør",
-            "in": "query",
-            "description": "RegistreringFra skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/registrationFromBefore"
           },
           {
-            "name": "registreringTilEfter",
-            "in": "query",
-            "description": "RegistreringTil skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/registrationToAfter"
           },
           {
-            "name": "registreringTilFør",
-            "in": "query",
-            "description": "RegistreringTil skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/registrationToBefore"
           },
           {
-            "name": "virkningFraEfter",
-            "in": "query",
-            "description": "VirkningFra skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/effectFromAfter"
           },
           {
-            "name": "virkningFraFør",
-            "in": "query",
-            "description": "VirkningFra skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/effectFromBefore"
           },
           {
-            "name": "virkningTilEfter",
-            "in": "query",
-            "description": "VirkningTil skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/effectToAfter"
           },
           {
-            "name": "virkningTilFør",
-            "in": "query",
-            "description": "VirkningTil skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/effectToBefore"
           }
         ],
         "responses": {
@@ -1378,7 +1194,6 @@
               }
             }
           },
-
           {
             "name": "navne",
             "in": "query",
@@ -1392,7 +1207,6 @@
               }
             }
           },
-
           {
             "name": "kommunekode",
             "in": "query",
@@ -1420,96 +1234,28 @@
             }
           },
           {
-            "name": "registreringFraEfter",
-            "in": "query",
-            "description": "RegistreringFra skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/registrationFromAfter"
           },
           {
-            "name": "registreringFraFør",
-            "in": "query",
-            "description": "RegistreringFra skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/registrationFromBefore"
           },
           {
-            "name": "registreringTilEfter",
-            "in": "query",
-            "description": "RegistreringTil skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/registrationToAfter"
           },
           {
-            "name": "registreringTilFør",
-            "in": "query",
-            "description": "RegistreringTil skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/registrationToBefore"
           },
           {
-            "name": "virkningFraEfter",
-            "in": "query",
-            "description": "VirkningFra skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/effectFromAfter"
           },
           {
-            "name": "virkningFraFør",
-            "in": "query",
-            "description": "VirkningFra skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/effectFromBefore"
           },
           {
-            "name": "virkningTilEfter",
-            "in": "query",
-            "description": "VirkningTil skal være efter dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            },
-            "schema": {
-              "default": "Nuværende tidspunkt"
-            }
+            "$ref": "#/components/parameters/effectToAfter"
           },
           {
-            "name": "virkningTilFør",
-            "in": "query",
-            "description": "VirkningTil skal være før dette tidspunkt",
-            "examples": {
-              "fuld": {
-                "value": "2022-01-01"
-              }
-            }
+            "$ref": "#/components/parameters/effectToBefore"
           }
         ],
         "responses": {
@@ -1556,7 +1302,7 @@
                             "type": "string",
                             "example": "https://data.gl/cvr/company/1/rest/"
                           },
-                          "stilling":{
+                          "stilling": {
                             "type": "string",
                             "example": "Direktør"
                           },
@@ -1616,6 +1362,810 @@
                                 "$ref": "#/components/schemas/virksomhedsadresse"
                               }
                             }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/municipality/1/rest/search": {
+      "get": {
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "kode",
+            "in": "query",
+            "description": "kommunekode",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "9*"
+              }
+            }
+          },
+          {
+            "name": "navn",
+            "in": "query",
+            "description": "kommunenavn",
+            "examples": {
+              "fuld": {
+                "value": "Kommuneqarfik Sermersooq"
+              },
+              "wildcard": {
+                "value": "Kommune*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende kommuner",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "0f0f5070-a729-4c74-94e6-cd005928695d"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/geo/municipality/1/rest"
+                          },
+                          "sumiffiik": {
+                            "type": "string",
+                            "example": "{f9cc7431-87c5-4f83-b14b-a62dc28971b1}"
+                          },
+                          "kommunekode": {
+                            "type": "integer",
+                            "example": 959
+                          },
+                          "navn": {
+                            "type": "string",
+                            "example": "Kommune Qeqertalik"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/locality/1/rest/search": {
+      "get": {
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "kode",
+            "in": "query",
+            "description": "lokalitetskode",
+            "examples": {
+              "fuld": {
+                "value": "0600"
+              },
+              "wildcard": {
+                "value": "0*"
+              }
+            }
+          },
+          {
+            "name": "navn",
+            "in": "query",
+            "description": "lokalitetsnavn",
+            "examples": {
+              "fuld": {
+                "value": "Nuuk"
+              },
+              "wildcard": {
+                "value": "A*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "kommunekode",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende lokaliteter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "0f0f5070-a729-4c74-94e6-cd005928695d"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/geo/locality/1/rest"
+                          },
+                          "sumiffiik": {
+                            "type": "string",
+                            "example": "{f9cc7431-87c5-4f83-b14b-a62dc28971b1}"
+                          },
+                          "lokalitetskode": {
+                            "type": "integer",
+                            "example": 1707
+                          },
+                          "kommune": {
+                            "type": "integer",
+                            "example": 960
+                          },
+                          "navn": {
+                            "type": "string",
+                            "example": "Qeqertat"
+                          },
+                          "forkortelse": {
+                            "type": "string",
+                            "example": "QET"
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": null
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/postcode/1/rest/search": {
+      "get": {
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "kode",
+            "in": "query",
+            "description": "postnummer",
+            "examples": {
+              "fuld": {
+                "value": "3900"
+              },
+              "wildcard": {
+                "value": "3*"
+              }
+            }
+          },
+          {
+            "name": "navn",
+            "in": "query",
+            "description": "postdistrikt",
+            "examples": {
+              "fuld": {
+                "value": "Nuuk"
+              },
+              "wildcard": {
+                "value": "N*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende postdistrikter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "0f0f5070-a729-4c74-94e6-cd005928695d"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/geo/postcode/1/rest"
+                          },
+                          "postnummer": {
+                            "type": "integer",
+                            "example": 3951
+                          },
+                          "postdistrikt": {
+                            "type": "string",
+                            "example": "Qasigiannguit"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/road/1/rest/search": {
+      "get": {
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "kode",
+            "in": "query",
+            "description": "vejkode",
+            "examples": {
+              "fuld": {
+                "value": "37"
+              },
+              "wildcard": {
+                "value": "30*"
+              }
+            }
+          },
+          {
+            "name": "navn",
+            "in": "query",
+            "description": "vejnavn",
+            "examples": {
+              "fuld": {
+                "value": "Imaneq"
+              },
+              "wildcard": {
+                "value": "*vej"
+              }
+            }
+          },
+          {
+            "name": "addresseringsNavn",
+            "in": "query",
+            "description": "addresseringsnavn",
+            "examples": {
+              "fuld": {
+                "value": "Imaneq"
+              },
+              "wildcard": {
+                "value": "*vej"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "kommunekode",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "lokalitetskode",
+            "in": "query",
+            "description": "lokalitetskode",
+            "examples": {
+              "fuld": {
+                "value": "0600"
+              },
+              "wildcard": {
+                "value": "06*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende veje",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "762632e3-a675-4218-8aaf-65c6c0eb812f"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/geo/road/1/rest"
+                          },
+                          "sumiffiik": {
+                            "type": "string",
+                            "example": "{f9cc7431-87c5-4f83-b14b-a62dc28971b1}"
+                          },
+                          "vejkode": {
+                            "type": "integer",
+                            "example": 280
+                          },
+                          "lokalitet": {
+                            "type": "string",
+                            "example": "0600"
+                          },
+                          "kommune": {
+                            "type": "integer",
+                            "example": 956
+                          },
+                          "navn": {
+                            "type": "object",
+                            "properties": {
+                              "navn": {
+                                "type": "string",
+                                "example": "Sam Kleinschmidtip Aqqutaa"
+                              },
+                              "addresseringsNavn": {
+                                "type": "string",
+                                "example": "Sam Kleinschmidt Aqq"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/building/1/rest/search": {
+      "get": {
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "anr",
+            "in": "query",
+            "description": "A-nummer",
+            "examples": {
+              "fuld": {
+                "value": "A-10421"
+              },
+              "wildcard": {
+                "value": "A-10*"
+              }
+            }
+          },
+          {
+            "name": "bnr",
+            "in": "query",
+            "description": "B-nummer",
+            "examples": {
+              "fuld": {
+                "value": "B-4103"
+              },
+              "wildcard": {
+                "value": "B-41*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende bygninger",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "0f0f5070-a729-4c74-94e6-cd005928695d"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/geo/building/1/rest"
+                          },
+                          "sumiffiik": {
+                            "type": "string",
+                            "example": "{f9cc7431-87c5-4f83-b14b-a62dc28971b1}"
+                          },
+                          "anr": {
+                            "type": "string",
+                            "example": "A-10421"
+                          },
+                          "bnr": {
+                            "type": "string",
+                            "example": "B-4103"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/accessaddress/1/rest/search": {
+      "get": {
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "bnr",
+            "in": "query",
+            "description": "B-nummer",
+            "examples": {
+              "fuld": {
+                "value": "B-4103"
+              },
+              "wildcard": {
+                "value": "B-41*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "kommunekode",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "vejkode",
+            "examples": {
+              "fuld": {
+                "value": "37"
+              },
+              "wildcard": {
+                "value": "30*"
+              }
+            }
+          },
+          {
+            "name": "vej_uuid",
+            "in": "query",
+            "description": "vej-uuid",
+            "examples": {
+              "fuld": {
+                "value": "328c7dce-ced0-4819-be97-1416c741a71a"
+              }
+            }
+          },
+          {
+            "name": "lokalitet_uuid",
+            "in": "query",
+            "description": "lokalitet-uuid",
+            "examples": {
+              "fuld": {
+                "value": "081d48f3-82e7-450e-a940-508507d357ae"
+              }
+            }
+          },
+          {
+            "name": "husNummer",
+            "in": "query",
+            "description": "vej-uuid",
+            "examples": {
+              "fuld": {
+                "value": "37"
+              },
+              "wildcard": {
+                "value": "30*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende adgangsadresser",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "a1784e24-6d0a-4baa-b4c6-4b2879b30032"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/geo/accessaddress/1/rest"
+                          },
+                          "sumiffiik": {
+                            "type": "string",
+                            "example": "{b21ff92a-ab34-41e5-aecc-f0ac74d3510a}"
+                          },
+                          "bnr": {
+                            "type": "string",
+                            "example": "B-4102"
+                          },
+                          "bloknavn": {
+                            "type": "string",
+                            "example": null
+                          },
+                          "vej": {
+                            "type": "object",
+                            "properties": {
+                              "kommunekode": {
+                                "type": "integer",
+                                "example": 956
+                              },
+                              "kommunenavn": {
+                                "type": "string",
+                                "example": "Kommuneqarfik Sermersooq"
+                              },
+                              "vejkode": {
+                                "type": "integer",
+                                "example": 234
+                              },
+                              "vejnavn": {
+                                "type": "string",
+                                "example": "Piloq"
+                              },
+                              "lokalitetskode": {
+                                "type": "string",
+                                "example": "0600"
+                              }
+                            }
+                          },
+                          "lokalitet": {
+                            "type": "object",
+                            "properties": {
+                              "lokalitetskode": {
+                                "type": "string",
+                                "example": "0600"
+                              },
+                              "lokalitetsnavn": {
+                                "type": "string",
+                                "example": "Nuuk"
+                              }
+                            }
+                          },
+                          "husNummer": {
+                            "type": "string",
+                            "example": "2"
+                          },
+                          "dataKilde": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "status": {
+                            "type": "integer",
+                            "example": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/geo/unitaddress/1/rest/search": {
+      "get": {
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "bnr",
+            "in": "query",
+            "description": "B-nummer",
+            "examples": {
+              "fuld": {
+                "value": "B-4103"
+              },
+              "wildcard": {
+                "value": "B-41*"
+              }
+            }
+          },
+          {
+            "name": "kommunekode",
+            "in": "query",
+            "description": "kommunekode",
+            "examples": {
+              "fuld": {
+                "value": "956"
+              },
+              "wildcard": {
+                "value": "95*"
+              }
+            }
+          },
+          {
+            "name": "vejkode",
+            "in": "query",
+            "description": "vejkode",
+            "examples": {
+              "fuld": {
+                "value": "37"
+              },
+              "wildcard": {
+                "value": "30*"
+              }
+            }
+          },
+          {
+            "name": "vej_uuid",
+            "in": "query",
+            "description": "vej-uuid",
+            "examples": {
+              "fuld": {
+                "value": "328c7dce-ced0-4819-be97-1416c741a71a"
+              }
+            }
+          },
+          {
+            "name": "lokalitet_uuid",
+            "in": "query",
+            "description": "lokalitet-uuid",
+            "examples": {
+              "fuld": {
+                "value": "081d48f3-82e7-450e-a940-508507d357ae"
+              }
+            }
+          },
+          {
+            "name": "husNummer",
+            "in": "query",
+            "description": "vej-uuid",
+            "examples": {
+              "fuld": {
+                "value": "37"
+              },
+              "wildcard": {
+                "value": "30*"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste af matchende enhedsadresser",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uuid": {
+                            "type": "string",
+                            "example": "762632e3-a675-4218-8aaf-65c6c0eb812f"
+                          },
+                          "domæne": {
+                            "type": "string",
+                            "example": "https://data.gl/geo/unitaddress/1/rest"
+                          },
+                          "sumiffiik": {
+                            "type": "string",
+                            "example": "{f9cc7431-87c5-4f83-b14b-a62dc28971b1}"
+                          },
+                          "accessaddress": {
+                            "type": "object",
+                            "properties": {
+                              "kommunekode": {
+                                "type": "integer",
+                                "example": 956
+                              },
+                              "kommunenavn": {
+                                "type": "string",
+                                "example": "Kommuneqarfik Sermersooq"
+                              },
+                              "vejkode": {
+                                "type": "integer",
+                                "example": 234
+                              },
+                              "vejnavn": {
+                                "type": "string",
+                                "example": "Piloq"
+                              },
+                              "lokalitetskode": {
+                                "type": "string",
+                                "example": "0600"
+                              },
+                              "lokalitetsnavn": {
+                                "type": "string",
+                                "example": "Nuuk"
+                              },
+                              "postnummer": {
+                                "type": "string",
+                                "example": "3900"
+                              },
+                              "postdistrikt": {
+                                "type": "string",
+                                "example": "Nuuk"
+                              },
+                              "uuid": {
+                                "type": "string",
+                                "example": "4664f4e5-9256-4563-a02a-21ce0cefd13c"
+                              }
+                            }
+                          },
+                          "etage": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "nummer": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "anvendelse": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "status": {
+                            "type": "integer",
+                            "example": 2
+                          },
+                          "kilde": {
+                            "type": "integer",
+                            "example": 1
                           }
                         }
                       }
@@ -1804,7 +2354,7 @@
           {
             "name": "vej_kode.gt",
             "in": "query",
-            "description":"Fremsøgning på den unikke vejkode større end",
+            "description": "Fremsøgning på den unikke vejkode større end",
             "examples": {
               "fuld": {
                 "value": "212"
@@ -1952,6 +2502,124 @@
     }
   },
   "components": {
+    "parameters": {
+      "registrationFromAfter": {
+        "name": "registreringFraEfter",
+        "in": "query",
+        "description": "RegistreringFra skal være efter dette tidspunkt. Defaulter til at der ikke filtreres.",
+        "examples": {
+          "dato": {
+            "value": "2022-01-01"
+          },
+          "dato og tid": {
+            "value": "2022-01-01T08:15:00+02:00"
+          }
+        }
+      },
+      "registrationFromBefore": {
+        "name": "registreringFraFør",
+        "in": "query",
+        "description": "RegistreringFra skal være før dette tidspunkt. Defaulter til nuværende tidspunkt.",
+        "examples": {
+          "dato": {
+            "value": "2022-01-01"
+          },
+          "dato og tid": {
+            "value": "2022-01-01T08:15:00+02:00"
+          },
+          "Al fortid": {
+            "value": "ALWAYS"
+          }
+        }
+      },
+      "registrationToAfter": {
+        "name": "registreringTilEfter",
+        "in": "query",
+        "description": "RegistreringTil skal være efter dette tidspunkt. Defaulter til nuværende tidspunkt.",
+        "examples": {
+          "dato": {
+            "value": "2022-01-01"
+          },
+          "dato og tid": {
+            "value": "2020-01-01T08:15:00+02:00"
+          },
+          "Al fremtid": {
+            "value": "ALWAYS"
+          }
+        }
+      },
+      "registrationToBefore": {
+        "name": "registreringTilFør",
+        "in": "query",
+        "description": "RegistreringTil skal være før dette tidspunkt. Defaulter til at der ikke filtreres.",
+        "examples": {
+          "dato": {
+            "value": "2022-01-01"
+          },
+          "dato og tid": {
+            "value": "2022-01-01T08:15:00+02:00"
+          }
+        }
+      },
+      "effectFromAfter": {
+        "name": "virkningFraEfter",
+        "in": "query",
+        "description": "VirkningFra skal være efter dette tidspunkt. Defaulter til at der ikke filtreres.",
+        "examples": {
+          "dato": {
+            "value": "2022-01-01"
+          },
+          "dato og tid": {
+            "value": "2022-01-01T08:15:00+02:00"
+          }
+        }
+      },
+      "effectFromBefore": {
+        "name": "virkningFraFør",
+        "in": "query",
+        "description": "VirkningFra skal være før dette tidspunkt. Defaulter til nuværende tidspunkt.",
+        "examples": {
+          "dato": {
+            "value": "2022-01-01"
+          },
+          "dato og tid": {
+            "value": "2020-01-01T08:15:00+02:00"
+          },
+          "Al fortid": {
+            "value": "ALWAYS"
+          }
+        }
+      },
+      "effectToAfter": {
+        "name": "virkningTilEfter",
+        "in": "query",
+        "description": "VirkningTil skal være efter dette tidspunkt. Defaulter til nuværende tidspunkt.",
+        "examples": {
+          "dato": {
+            "value": "2022-01-01"
+          },
+          "dato og tid": {
+            "value": "2020-01-01T08:15:00+02:00"
+          },
+          "Al fremtid": {
+            "value": "ALWAYS"
+          }
+        }
+      },
+      "effectToBefore": {
+        "name": "virkningTilFør",
+        "in": "query",
+        "description": "VirkningTil skal være før dette tidspunkt. Defaulter til at der ikke filtreres.",
+        "examples": {
+          "dato": {
+            "value": "2022-01-01"
+          },
+          "dato og tid": {
+            "value": "2022-01-01T08:15:00+02:00"
+          }
+        }
+      }
+    },
     "schemas": {
       "virksomhedsform": {
         "type": "array",
