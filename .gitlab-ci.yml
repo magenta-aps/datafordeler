@@ -5,6 +5,7 @@ stages:
 variables:
   IMAGE_DEV: ${CI_REGISTRY_IMAGE}:dev
   IMAGE_SQL: ${CI_REGISTRY_IMAGE}:sql
+  IMAGE_DOC: ${CI_REGISTRY_IMAGE}:doc
 
 .build-default: &build-default
   stage: build
@@ -35,6 +36,17 @@ build-image:
       --context=${CI_PROJECT_DIR}
       --dockerfile=${CI_PROJECT_DIR}/docker/Dockerfile
       --destination=${IMAGE_DEV}
+      --cache=true
+
+build-openapi-image:
+  <<: *build-default
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context=${CI_PROJECT_DIR}
+      --dockerfile=${CI_PROJECT_DIR}/docker/Dockerfile.openapi
+      --destination=${IMAGE_DOC}
       --cache=true
 
 
