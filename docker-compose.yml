@@ -58,6 +58,13 @@ services:
     command: bash -c "cd /code && mvn --batch-mode -T 2C test"
     #use docker-compose test to execute tests
 
+  openapi:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.openapi
+    ports:
+      - "8080:8080"
+
 
 volumes:
   datafordeler-gl:
