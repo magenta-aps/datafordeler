@@ -43,9 +43,7 @@ public class BuildingRawData extends SumiffiikRawData {
     public List<GeoMonotemporalRecord> getMonotemporalRecords() {
         ArrayList<GeoMonotemporalRecord> records = new ArrayList<>();
 
-        records.add(
-                new BuildingLocalityRecord(SumiffiikRawData.getSumiffiikAsUUID(this.properties.locality))
-        );
+        records.add(new BuildingLocalityRecord(this.properties.locality));
 
         MultiPolygon multiPolygon = null;
         if (this.shape instanceof Polygon) {
