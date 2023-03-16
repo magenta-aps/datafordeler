@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * Service container to be subclassed for each Entity class, serving REST and SOAP
+ * Service container to be subclassed for each Entity class, serving REST
  */
 @RequestMapping("/fapi_service_with_no_requestmapping")
 public abstract class FapiService<E extends Entity, Q extends Query> extends FapiBaseService<E, Q> {

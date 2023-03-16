@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
-import javax.jws.WebMethod;
 
 @RestController
 @RequestMapping("/demo/postnummer/1/rest")
@@ -32,13 +31,11 @@ public class DemoEntityService extends FapiBaseService<DemoEntityRecord, DemoRec
     }
 
     @Override
-    @WebMethod(exclude = true)
     public int getVersion() {
         return 1;
     }
 
     @Override
-    @WebMethod(exclude = true)
     public String getServiceName() {
         return "postnummer";
     }
