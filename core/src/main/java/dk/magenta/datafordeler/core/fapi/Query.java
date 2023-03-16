@@ -8,7 +8,6 @@ import java.time.OffsetDateTime;
 /**
  * Query object specifying a search, with basic filter parameters
  * Subclasses should specify further searchable parameters, annotated with @QueryField.
- * SOAP clients should pass a serialized instance of a Query class to the SOAP interface
  */
 public abstract class Query<E extends Entity> extends BaseQuery {
 

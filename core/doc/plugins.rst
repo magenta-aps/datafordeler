@@ -42,7 +42,7 @@ EntityManager
 Service
   Udstiller data for omverdenen med et webinterface.
   Størstedelen af funktionaliteteten er implementeret i core i en abstrakt superklasse (FapiService),
-  hvor der findes interfaces til opslag ud fra parametre eller objekt-UUID, med REST og SOAP.
+  hvor der findes interfaces til opslag ud fra parametre eller objekt-UUID, med REST.
   I plugins befinder sig en tynd subklasse heraf for hver entitetstype, som således udstiller webservicen i praksis.
 
 Query

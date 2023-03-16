@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.jws.WebMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -79,7 +78,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      *
      * @return service version, e.g. 1
      */
-    @WebMethod(exclude = true)
     public abstract int getVersion();
 
 
@@ -88,14 +86,12 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      *
      * @return service name, e.g. "postnummer"
      */
-    @WebMethod(exclude = true)
     public abstract String getServiceName();
 
 
     /**
      * @return Entity subclass
      */
-    @WebMethod(exclude = true)
     protected abstract Class<E> getEntityClass();
 
 
@@ -163,7 +159,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param requestParams url parameters
      * @return Found Entity, or null if none found.
      */
-    @WebMethod(exclude = true)
     @RequestMapping(path = "/{uuid}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Envelope getRest(@PathVariable("uuid") String uuid, @RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request)
             throws DataFordelerException {
@@ -225,7 +220,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      *
      * @see #getRest(String, MultiValueMap, HttpServletRequest)
      */
-    @WebMethod(exclude = true)
     @RequestMapping(path = "/{id}", produces = {
             "text/csv",
             "text/tsv",
@@ -283,7 +277,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param requestParams Request Parameters from spring boot
      * @return Found Entities
      */
-    @WebMethod(exclude = true)
     @RequestMapping(path = "/search", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Envelope searchRest(@RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request) throws DataFordelerException {
         Session session = this.getSessionManager().getSessionFactory().openSession();
@@ -334,7 +327,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      *
      * @see #searchRest(MultiValueMap, HttpServletRequest)
      */
-    @WebMethod(exclude = true)
     @RequestMapping(path = "/search", produces = {
             "text/csv",
             "text/tsv",
@@ -400,9 +392,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param query Query objects to search by
      * @return Found Entities
      */
-    //@WebMethod(exclude = true)
     //protected abstract Set<E> searchByQuery(Q query);
-    @WebMethod(exclude = true) // Non-soap methods must have this
     public List<ResultSet<E>> searchByQuery(Q query, Session session) {
         return QueryManager.getAllEntitySets(session, query, this.getEntityClass());
     }
@@ -413,9 +403,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param query Query objects to search by
      * @return Found Entities
      */
-    //@WebMethod(exclude = true)
     //protected abstract Set<E> searchByQuery(Q query);
-    @WebMethod(exclude = true) // Non-soap methods must have this
     protected Stream<E> searchByQueryAsStream(Q query, Session session) {
         return QueryManager.getAllEntitiesAsStream(
                 session, query,
@@ -430,7 +418,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param query Query object modifying the output (such as a bitemporal range)
      * @return Found Entities
      */
-    @WebMethod(exclude = true)
     protected E searchById(String id, Q query, Session session) {
         return this.searchById(UUID.fromString(id), query, session);
     }
@@ -443,7 +430,6 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param query Query object modifying the output (such as a bitemporal range)
      * @return Found Entities
      */
-    @WebMethod(exclude = true)
     protected E searchById(UUID uuid, Q query, Session session) {
         query.applyFilters(session);
         E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
