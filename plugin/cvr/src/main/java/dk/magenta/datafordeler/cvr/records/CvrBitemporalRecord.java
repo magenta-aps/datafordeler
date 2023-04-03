@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
+import org.apache.poi.ss.formula.functions.Offset;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -163,25 +164,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         this.registrationTo = registrationTo;
     }
 
-    /**
-     * Given a Collection of CvrRecord objects, group them into buckets that share
-     * bitemporality. That way, we can treat all records in a bucket the same way,
-     * thus we won’t have to look up the appropriate Registration/Effect more than once
-     */
-    public static <T extends CvrBitemporalRecord> ListHashMap<String, T> sortIntoGroups(Collection<T> records) {
-        // Sort the records into groups that share bitemporality
-        ListHashMap<String, T> recordGroups = new ListHashMap<>();
-        for (T record : records) {
-            // Find the appropriate registration object
-            OffsetDateTime registrationFrom = record.getRegistrationFrom();
-            OffsetDateTime registrationTo = record.getRegistrationTo();
-            LocalDate effectFrom = record.getValidFrom();
-            LocalDate effectTo = record.getValidTo();
-            String groupKey = registrationFrom + "|" + registrationTo + "|" + effectFrom + "|" + effectTo;
-            recordGroups.add(groupKey, record);
-        }
-        return recordGroups;
-    }
 
     @Override
     public boolean equals(Object o) {

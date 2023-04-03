@@ -402,6 +402,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         }
     }
 
+    protected void closeRegistrations(T entity) {
+
+    }
+
 
     /**
      * Sorts a collection of records into buckets sharing bitemporality
