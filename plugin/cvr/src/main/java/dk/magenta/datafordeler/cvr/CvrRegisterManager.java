@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -212,12 +213,16 @@ public class CvrRegisterManager extends RegisterManager {
                             break;
                     }
                     if (uri != null) {
-                        File demoCompanyFile = new File(uri);
-                        FileInputStream demoCompanyFileInputStream = new FileInputStream(demoCompanyFile);
-                        String content = new String(demoCompanyFileInputStream.readAllBytes());
+                        String content = "";
+                        if (uri.getScheme().equals("file")) {
+                            File demoCompanyFile = new File(uri);
+                            content = new String(new FileInputStream(demoCompanyFile).readAllBytes());
+                        } else if (uri.getScheme().equals("classpath")) {
+                            content = new String(new ClassPathResource(uri.getPath()).getInputStream().readAllBytes());
+                        }
                         String noLineContent = content.replace("\n", "").replace("\r", "");
                         InputStream stream = new ByteArrayInputStream(noLineContent.getBytes(StandardCharsets.UTF_8));
-                        return new ImportInputStream(stream, demoCompanyFile);
+                        return new ImportInputStream(stream);
                     }
                 } catch (Exception e) {
                     log.error("Failed loading demodata", e);

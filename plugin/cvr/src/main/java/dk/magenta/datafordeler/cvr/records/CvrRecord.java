@@ -85,4 +85,9 @@ public abstract class CvrRecord extends DatabaseEntry {
             itemCallback.accept(this);
         }
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

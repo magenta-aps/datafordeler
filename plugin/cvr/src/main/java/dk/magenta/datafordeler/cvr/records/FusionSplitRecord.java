@@ -223,4 +223,20 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
         this.getOutgoing().traverse(setCallback, itemCallback);
         this.getName().traverse(setCallback, itemCallback);
     }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.name));
+        for (AttributeRecord attribute : this.incoming) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        for (AttributeRecord attribute : this.outgoing) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        return updated;
+    }
 }

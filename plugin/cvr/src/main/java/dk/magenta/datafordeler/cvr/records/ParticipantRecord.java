@@ -681,4 +681,27 @@ public class ParticipantRecord extends CvrEntityRecord {
         this.getCompanyRelation().traverse(setCallback, itemCallback);
         this.getMetadata().traverse(setCallback, itemCallback);
     }
+
+
+    @Override
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.businessAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.phoneNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.emailAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.faxNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.postalAddress));
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        for (CompanyParticipantRelationRecord participantRelation : this.companyRelation) {
+            updated.addAll(participantRelation.closeRegistrations());
+        }
+        updated.addAll(this.metadata.closeRegistrations());
+        return updated;
+    }
 }

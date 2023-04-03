@@ -25,7 +25,7 @@ import java.util.function.Consumer;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
+public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_participant_metadata";
 
@@ -172,5 +172,30 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
         super.traverse(setCallback, itemCallback);
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
         this.getNewestLocation().traverse(setCallback, itemCallback);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ParticipantMetadataRecord clone = (ParticipantMetadataRecord) super.clone();
+
+        HashSet<AddressRecord> clonedNewestLocation = new HashSet<>();
+        for (AddressRecord addressRecord : this.newestLocation) {
+            clonedNewestLocation.add((AddressRecord) addressRecord.clone());
+        }
+        clone.setNewestLocation(clonedNewestLocation);
+
+        HashSet<MetadataContactRecord> clonedMetadataContact = new HashSet<>();
+        for (MetadataContactRecord metadataContactRecord : this.metadataContactRecords) {
+            clonedMetadataContact.add((MetadataContactRecord) metadataContactRecord.clone());
+        }
+        clone.metadataContactRecords = clonedMetadataContact;
+
+        return clone;
+    }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestLocation));
+        return updated;
     }
 }

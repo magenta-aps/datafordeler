@@ -27,7 +27,7 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + SecNameRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SecNameRecord extends CvrBitemporalDataRecord {
+public class SecNameRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_name2";
 
@@ -90,4 +90,13 @@ public class SecNameRecord extends CvrBitemporalDataRecord {
         return secondary == that.secondary &&
                 Objects.equals(name, that.name);
     }*/
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        SecNameRecord clone = (SecNameRecord) super.clone();
+        clone.setName(this.getName());
+        clone.setSecondary(this.isSecondary());
+        return clone;
+    }
+
 }

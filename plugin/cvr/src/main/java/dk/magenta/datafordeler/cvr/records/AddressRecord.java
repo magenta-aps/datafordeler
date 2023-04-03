@@ -46,7 +46,7 @@ import java.util.function.Consumer;
 
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressRecord extends CvrBitemporalDataMetaRecord {
+public class AddressRecord extends CvrBitemporalDataMetaRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_address";
 
@@ -623,5 +623,37 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         if (this.municipality != null) {
             this.municipality.traverse(setCallback, itemCallback);
         }
+    }
+
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        AddressRecord clone = (AddressRecord) super.clone();
+        clone.setAddressId(this.getAddressId());
+        clone.setAddressText(this.getAddressText());
+        clone.setCityName(this.getCityName());
+        clone.setDoor(this.getDoor());
+        clone.setFloor(this.getFloor());
+        clone.setFreeText(this.getFreeText());
+        clone.setCoName(this.getCoName());
+        clone.setCountryCode(this.getCountryCode());
+        clone.setHouseNumberFrom(this.getHouseNumberFrom());
+        clone.setHouseNumberTo(this.getHouseNumberTo());
+        clone.setLetterFrom(this.getLetterFrom());
+        clone.setLetterTo(this.getLetterTo());
+        clone.setPostBox(this.getPostBox());
+        clone.setPostdistrikt(this.getPostdistrikt());
+        clone.setPostnummer(this.getPostnummer());
+        clone.setPost(this.getPost());
+        clone.setRoadCode(this.getRoadCode());
+        clone.setRoadName(this.getRoadName());
+        clone.setSupplementalCityName(this.getSupplementalCityName());
+        clone.setType(this.getType());
+        clone.setMunicipality(this.getMunicipality());
+        clone.setOfficeUnitRecord(this.getOfficeUnitRecord());
+        clone.setRelationParticipantRecord(this.getRelationParticipantRecord());
+        clone.setParticipantRecord(this.getParticipantRecord());
+        clone.setLastValidated(this.getLastValidated());
+        return clone;
     }
 }

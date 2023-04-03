@@ -993,4 +993,30 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         this.getMetadata().traverse(setCallback, itemCallback);
     }
 
+
+    @Override
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.phoneNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.emailAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.faxNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.postalAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.primaryIndustry));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry1));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry2));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry3));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.companyLinkRecords));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.lifecycle));
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        updated.addAll(this.metadata.closeRegistrations());
+        return updated;
+    }
+
+
 }
