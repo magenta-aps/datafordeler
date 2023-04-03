@@ -133,13 +133,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
     }
 
-
-    /*public void merge(CvrBitemporalRecord other) {
-        if (other != null && other.getClass() == this.getClass()) {
-
-        }
-    }*/
-
     /**
      * For sorting purposes; we implement the Comparable interface, so we should
      * provide a comparison method. Here, we sort CvrRecord objects by registrationFrom, with nulls first
@@ -163,6 +156,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = registrationTo;
     }
+
+
 
 
     @Override
