@@ -22,7 +22,7 @@ import java.util.function.Consumer;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OrganizationRecord.TABLE_NAME + "__relation", columnList = OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION + DatabaseEntry.REF)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OrganizationRecord extends CvrRecord {
+public class OrganizationRecord extends CvrRecord implements Cloneable {
 
     public static final String TABLE_NAME = CompanyParticipantRelationRecord.TABLE_NAME + "_organization";
 
@@ -56,6 +56,10 @@ public class OrganizationRecord extends CvrRecord {
         return this.unitNumber;
     }
 
+    public void setUnitNumber(long unitNumber) {
+        this.unitNumber = unitNumber;
+    }
+
 
     public static final String DB_FIELD_MAIN_TYPE = "mainType";
     public static final String IO_FIELD_MAIN_TYPE = "hovedtype";
@@ -66,6 +70,10 @@ public class OrganizationRecord extends CvrRecord {
 
     public String getMainType() {
         return this.mainType;
+    }
+
+    public void setMainType(String mainType) {
+        this.mainType = mainType;
     }
 
 
@@ -221,12 +229,52 @@ public class OrganizationRecord extends CvrRecord {
     }
 
 
-
-
-
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getMemberData().traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
+    }
+
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        for (OrganizationMemberdataRecord memberdata : this.memberData) {
+            updated.addAll(memberdata.closeRegistrations());
+        }
+        return updated;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        OrganizationRecord clone = (OrganizationRecord) super.clone();
+        clone.setMainType(this.mainType);
+        clone.setUnitNumber(this.unitNumber);
+
+
+        HashSet<BaseNameRecord> clonedNames = new HashSet<>();
+        for (BaseNameRecord nameRecord : this.names) {
+            clonedNames.add((BaseNameRecord) nameRecord.clone());
+        }
+        clone.setNames(clonedNames);
+
+        HashSet<AttributeRecord> clonedAttributes = new HashSet<>();
+        for (AttributeRecord attributeRecord : this.attributes) {
+            clonedAttributes.add((AttributeRecord) attributeRecord.clone());
+        }
+        clone.setAttributes(clonedAttributes);
+
+        HashSet<OrganizationMemberdataRecord> clonedMemberdata = new HashSet<>();
+        for (OrganizationMemberdataRecord memberdataRecord : this.memberData) {
+            clonedMemberdata.add((OrganizationMemberdataRecord) memberdataRecord.clone());
+        }
+        clone.setMemberData(clonedMemberdata);
+
+        return clone;
     }
 }

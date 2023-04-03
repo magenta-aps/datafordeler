@@ -3,8 +3,10 @@ package dk.magenta.datafordeler.cvr;
 import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
 
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,4 +105,15 @@ public class BitemporalSet<R extends CvrBitemporalRecord> extends RecordSet<R> i
         ).findFirst().orElse(null);
     }
 
+    public List<R> ordered() {
+        ArrayList<R> list = new ArrayList<>(this.inner);
+        // Sortering efter registrationFrom, registrationTo, effectFrom, effectTo
+        list.sort(
+                Comparator.comparing(R::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                        .thenComparing(R::getRegistrationTo, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(R::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                        .thenComparing(R::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
+        );
+        return list;
+    }
 }

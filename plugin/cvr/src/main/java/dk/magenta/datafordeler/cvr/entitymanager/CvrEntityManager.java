@@ -225,7 +225,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                         try {
                             int count = this.parseData(this.getObjectMapper().readTree(data), importMetadata, session, filter);
                         } catch (JsonParseException e) {
-                            e.printStackTrace();
                             ImportInterruptedException ex = new ImportInterruptedException(e);
                             session.getTransaction().rollback();
                             importMetadata.setTransactionInProgress(false);
@@ -329,6 +328,17 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * democompanys is used on the demoenvironment for demo and education purposes
      */
     public void cleanDemoData(Session session) {
+        CompanyRecordQuery personQuery = new CompanyRecordQuery();
+        List<String> testCompanyList = Arrays.asList(cvrDemoList.split(","));
+        personQuery.setParameter(CompanyRecordQuery.CVRNUMMER, testCompanyList);
+        session.beginTransaction();
+        personQuery.setPageSize(1000);
+        personQuery.applyFilters(session);
+        List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
+        for (CompanyRecord companyForDeletion : companyEntities) {
+            session.delete(companyForDeletion);
+        }
+        session.getTransaction().commit();
     }
 
 
@@ -482,7 +492,20 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
-
+    public void closeAllEligibleRegistrations() {
+        Session session = getSessionManager().getSessionFactory().openSession();
+        List<T> items = QueryManager.getAllEntities(session, this.getRecordClass());
+        Transaction transaction = session.beginTransaction();
+        try {
+            items.forEach(t -> {
+                    Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
+                    session.persist(updated);
+            });
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+        }
+    }
 
     protected String finalizeQuery(ObjectNode query) {
         ObjectNode queryNode = objectMapper.createObjectNode();

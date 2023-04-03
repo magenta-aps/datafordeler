@@ -27,7 +27,7 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ContactRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ContactRecord extends CvrBitemporalDataRecord {
+public class ContactRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_contact";
 
@@ -54,6 +54,9 @@ public class ContactRecord extends CvrBitemporalDataRecord {
         return this.contactInformation;
     }
 
+    public void setContactInformation(String contactInformation) {
+        this.contactInformation = contactInformation;
+    }
 
     public static final String DB_FIELD_SECRET = "secret";
     public static final String IO_FIELD_SECRET = "hemmelig";
@@ -66,6 +69,9 @@ public class ContactRecord extends CvrBitemporalDataRecord {
         return this.secret;
     }
 
+    public void setSecret(boolean secret) {
+        this.secret = secret;
+    }
 
     public static final String DB_FIELD_SECONDARY = "secondary";
 
@@ -123,4 +129,13 @@ public class ContactRecord extends CvrBitemporalDataRecord {
                 type == that.type &&
                 Objects.equals(contactInformation, that.contactInformation);
     }*/
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ContactRecord clone = (ContactRecord) super.clone();
+        clone.setSecondary(this.secondary);
+        clone.setSecret(this.secret);
+        clone.setContactInformation(this.contactInformation);
+        return clone;
+    }
 }

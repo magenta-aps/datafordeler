@@ -452,4 +452,15 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
         }
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
     }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestName));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestLocation));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestPrimaryIndustry));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry2));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry2));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry3));
+        return updated;
+    }
 }

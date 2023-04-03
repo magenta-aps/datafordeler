@@ -178,4 +178,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         this.traverse(RecordSet::clear, session::remove);
         session.remove(this);
     }
+
+    public abstract ArrayList<CvrBitemporalRecord> closeRegistrations();
 }
