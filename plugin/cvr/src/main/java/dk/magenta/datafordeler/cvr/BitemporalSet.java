@@ -205,4 +205,16 @@ public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
     public Stream<R> parallelStream() {
         return this.inner.parallelStream();
     }
+
+    public List<R> ordered() {
+        ArrayList<R> list = new ArrayList<>(this.inner);
+        // Sortering efter registrationFrom, registrationTo, effectFrom, effectTo
+        list.sort(
+                Comparator.comparing(R::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                        .thenComparing(R::getRegistrationTo, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(R::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                        .thenComparing(R::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
+        );
+        return list;
+    }
 }

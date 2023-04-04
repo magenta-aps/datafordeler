@@ -26,7 +26,7 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FormRecord extends CvrBitemporalDataRecord {
+public class FormRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_form";
 
@@ -105,6 +105,13 @@ public class FormRecord extends CvrBitemporalDataRecord {
     @JsonIgnore
     private CompanyForm companyForm;
 
+    public CompanyForm getCompanyForm() {
+        return this.companyForm;
+    }
+
+    public void setCompanyForm(CompanyForm companyForm) {
+        this.companyForm = companyForm;
+    }
 
     public static final String DB_FIELD_PARTICIPANT_COMPANY_RELATION = "relationCompanyRecord";
 
@@ -152,4 +159,13 @@ public class FormRecord extends CvrBitemporalDataRecord {
                 Objects.equals(responsibleDatasource, that.responsibleDatasource) &&
                 Objects.equals(companyForm, that.companyForm);
     }*/
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        FormRecord clone = (FormRecord) super.clone();
+        clone.setCompanyForm(this.companyForm);
+        clone.setCompanyMetadataRecord(this.companyMetadataRecord);
+        clone.setRelationCompanyRecord(this.relationCompanyRecord);
+        return clone;
+    }
 }

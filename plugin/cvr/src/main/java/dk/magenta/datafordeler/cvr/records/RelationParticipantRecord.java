@@ -127,6 +127,8 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
 
+    // TODO: Postadresse?
+
     @OneToOne(targetEntity = CompanyParticipantRelationRecord.class, mappedBy = CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION)
     @JsonIgnore
     private CompanyParticipantRelationRecord companyParticipantRelationRecord;
@@ -188,5 +190,12 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
         subs.addAll(this.names);
         subs.addAll(this.locationAddress);
         return subs;
+    }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+        return updated;
     }
 }

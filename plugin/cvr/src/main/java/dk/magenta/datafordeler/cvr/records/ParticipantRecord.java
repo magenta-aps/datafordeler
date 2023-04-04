@@ -670,4 +670,9 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
         return subs;
     }
+
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        return new ArrayList<>();
+    }
 }

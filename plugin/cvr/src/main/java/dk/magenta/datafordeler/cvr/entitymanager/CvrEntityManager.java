@@ -40,7 +40,9 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Base EntityManager for CVR, implementing shared methods for the Company, CompanyUnit and Participant EntityManagers.
@@ -355,6 +357,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * @throws ParseException
      */
     public int parseData(JsonNode jsonNode, ImportMetadata importMetadata, Session session) throws DataFordelerException {
+        System.out.println("parseData");
         timer.start(TASK_PARSE);
         this.checkInterrupt(importMetadata);
         List<T> items = this.parseNode(jsonNode);
@@ -368,6 +371,8 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     protected void beforeParseSave(T item, ImportMetadata importMetadata, Session session) {
         item.setDafoUpdateOnTree(importMetadata.getImportTime());
+        System.out.println("beforeParseSave");
+        item.closeRegistrations();
     }
 
     public List<T> parseNode(JsonNode jsonNode) {
@@ -400,10 +405,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             e.printStackTrace();
             return Collections.EMPTY_LIST;
         }
-    }
-
-    protected void closeRegistrations(T entity) {
-
     }
 
 
@@ -477,6 +478,28 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         CvrConfiguration configuration = this.getRegisterManager().getConfigurationManager().getConfiguration();
         CvrConfiguration.RegisterType registerType = configuration.getRegisterType(this.getSchema());
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
+    }
+
+    public void closeAllEligibleRegistrations() {
+        Session session = getSessionManager().getSessionFactory().openSession();
+            // Stream<T> stream = QueryManager.getAllItemsAsStream(session, this.getRecordClass());
+            CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
+            companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, "12950160");
+            Stream<T> stream = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, this.getRecordClass());
+            stream.forEach(new Consumer<T>() {
+                @Override
+                public void accept(T t) {
+                    Transaction transaction = session.beginTransaction();
+                    try {
+                        Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
+                        session.saveOrUpdate(updated);
+                        transaction.commit();
+                    } catch (Exception e) {
+                        transaction.rollback();
+                    }
+                }
+            });
+
     }
 
 }

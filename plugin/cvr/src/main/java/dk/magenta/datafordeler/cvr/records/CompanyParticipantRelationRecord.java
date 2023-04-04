@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
@@ -295,4 +296,22 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
                 Objects.equals(offices, that.offices) &&
                 Objects.equals(organizations, that.organizations);
     }*/
+
+
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        System.out.println("closeRegistrations");
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        if (this.relationParticipantRecord != null) {
+            updated.addAll(this.relationParticipantRecord.closeRegistrations());
+        }
+        for (OfficeRelationRecord officeRelation : this.offices) {
+            updated.addAll(officeRelation.closeRegistrations());
+        }
+        for (OrganizationRecord organization : this.organizations) {
+            updated.addAll(organization.closeRegistrations());
+        }
+        return updated;
+    }
+
 }

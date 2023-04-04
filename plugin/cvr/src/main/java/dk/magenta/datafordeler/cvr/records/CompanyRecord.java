@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.util.DoubleHashMap;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
@@ -1043,6 +1044,18 @@ public class CompanyRecord extends CvrEntityRecord {
         return new BitemporalSet<>(this.yearlyNumbers);
     }
 
+    @JsonIgnore
+    public HashMap<Integer, BitemporalSet<CompanyYearlyNumbersRecord>> getYearlyNumbersGrouped() {
+        HashMap<Integer, BitemporalSet<CompanyYearlyNumbersRecord>> groups = new HashMap<>();
+        for (CompanyYearlyNumbersRecord record : this.yearlyNumbers) {
+            int year = record.getYear();
+            if (!groups.containsKey(year)) {
+                groups.put(year, new BitemporalSet<>(new HashSet<>()));
+            }
+            groups.get(year).add(record);
+        }
+        return groups;
+    }
 
     public static final String DB_FIELD_QUARTERLY_NUMBERS = "quarterlyNumbers";
     public static final String IO_FIELD_QUARTERLY_NUMBERS = "kvartalsbeskaeftigelse";
@@ -1081,6 +1094,19 @@ public class CompanyRecord extends CvrEntityRecord {
         return new BitemporalSet<>(this.quarterlyNumbers);
     }
 
+    @JsonIgnore
+    public DoubleHashMap<Integer, Integer, BitemporalSet<CompanyQuarterlyNumbersRecord>> getQuarterlyNumbersGrouped() {
+        DoubleHashMap<Integer, Integer, BitemporalSet<CompanyQuarterlyNumbersRecord>> groups = new DoubleHashMap<>();
+        for (CompanyQuarterlyNumbersRecord record : this.quarterlyNumbers) {
+            int year = record.getYear();
+            int quarter = record.getQuarter();
+            if (!groups.containsKey(year, quarter)) {
+                groups.put(year, quarter, new BitemporalSet<>(new HashSet<>()));
+            }
+            groups.get(year, quarter).add(record);
+        }
+        return groups;
+    }
 
     public static final String DB_FIELD_MONTHLY_NUMBERS = "monthlyNumbers";
     public static final String IO_FIELD_MONTHLY_NUMBERS = "maanedsbeskaeftigelse";
@@ -1117,6 +1143,20 @@ public class CompanyRecord extends CvrEntityRecord {
 
     public BitemporalSet<CompanyMonthlyNumbersRecord> getMonthlyNumbers() {
         return new BitemporalSet<>(this.monthlyNumbers);
+    }
+
+    @JsonIgnore
+    public DoubleHashMap<Integer, Integer, BitemporalSet<CompanyMonthlyNumbersRecord>> getMonthlyNumbersGrouped() {
+        DoubleHashMap<Integer, Integer, BitemporalSet<CompanyMonthlyNumbersRecord>> groups = new DoubleHashMap<>();
+        for (CompanyMonthlyNumbersRecord record : this.monthlyNumbers) {
+            int year = record.getYear();
+            int month = record.getMonth();
+            if (!groups.containsKey(year, month)) {
+                groups.put(year, month, new BitemporalSet<>(new HashSet<>()));
+            }
+            groups.get(year, month).add(record);
+        }
+        return groups;
     }
 
 
@@ -1628,6 +1668,57 @@ public class CompanyRecord extends CvrEntityRecord {
         ArrayList<BaseQuery> queries = new ArrayList<>();
         queries.addAll(this.locationAddress.stream().map(a -> a.getAssoc()).flatMap(x -> x.stream()).collect(Collectors.toList()));
         return queries;
+    }
+
+    @Override
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        System.out.println("closeRegistrations");
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.companyForm));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.status));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.companyStatus));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.phoneNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.emailAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.mandatoryEmailAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.homepage));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.faxNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.postalAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.primaryIndustry));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry1));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry2));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry3));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.regNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.lifecycle));
+
+        updated.addAll(
+                CvrBitemporalRecord.closeRegistrationsGroup(this.getYearlyNumbersGrouped().values())
+        );
+        updated.addAll(
+                CvrBitemporalRecord.closeRegistrationsGroup(this.getQuarterlyNumbersGrouped().subvalues())
+        );
+        updated.addAll(
+                CvrBitemporalRecord.closeRegistrationsGroup(this.getMonthlyNumbersGrouped().subvalues())
+        );
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+
+        for (CompanyParticipantRelationRecord participantRelation : this.participants) {
+            updated.addAll(participantRelation.closeRegistrations());
+        }
+
+        for (FusionSplitRecord fusion : this.fusions) {
+            updated.addAll(fusion.closeRegistrations());
+        }
+        for (FusionSplitRecord split : this.splits) {
+            updated.addAll(split.closeRegistrations());
+        }
+
+        return updated;
     }
 
 }

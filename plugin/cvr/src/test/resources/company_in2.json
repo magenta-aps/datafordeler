@@ -31,7 +31,7 @@
                 "sidstOpdateret": "1999-11-29T16:37:10.000+01:00"
               },
               {
-                "navn": "MAGENTA ApS",
+                "navn": "MAGENTA ApS 2",
                 "periode": {
                   "gyldigFra": "2000-02-21",
                   "gyldigTil": null
@@ -1702,7 +1702,7 @@
                       "sidstOpdateret": null,
                       "navne": [
                         {
-                          "navn": "MAGENTA ApS",
+                          "navn": "MAGENTA ApS 3",
                           "periode": {
                             "gyldigFra": "2000-02-21",
                             "gyldigTil": null
@@ -3183,7 +3183,7 @@
                       "bogstavTil": null,
                       "etage": "1",
                       "sidedoer": "777",
-                      "conavn": "Magenta ApS",
+                      "conavn": "Magenta ApS 4",
                       "postboks": null,
                       "vejnavn": "Studiestræde",
                       "bynavn": null,
@@ -4200,7 +4200,7 @@
             ],
             "virksomhedMetadata": {
               "nyesteNavn": {
-                "navn": "MAGENTA ApS",
+                "navn": "MAGENTA ApS 5",
                 "periode": {
                   "gyldigFra": "2000-02-21",
                   "gyldigTil": null

@@ -15,6 +15,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
@@ -24,6 +25,7 @@ import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
+import org.apache.poi.ss.formula.functions.Offset;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -44,8 +46,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -1004,6 +1012,56 @@ public class RecordTest {
         record = records.get(0);
         Assert.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
         session.close();
+    }
+
+    @Test
+    public void testCloseRegistration() throws DataFordelerException, IOException {
+        CompanyRecord company = new CompanyRecord();
+        OffsetDateTime time = OffsetDateTime.now();
+        OffsetDateTime timeTruncated = time.toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC);
+        SecNameRecord name1 = new SecNameRecord();
+        name1.setSecondary(false);
+        name1.setName("Name1");
+        name1.setRegistrationFrom(null);
+        name1.setEffectTo(null);
+        company.addName(name1);
+
+        SecNameRecord name2 = new SecNameRecord();
+        name2.setSecondary(false);
+        name2.setName("Name2");
+        name2.setRegistrationFrom(time);
+        name2.setEffectFrom(time);
+        company.addName(name2);
+
+        company.closeRegistrations();
+
+        List<SecNameRecord> nameRecords = company.getNames().ordered();
+        Assert.assertEquals(3, nameRecords.size());
+
+        for (SecNameRecord record : nameRecords) {
+            System.out.println(record.getName()+"  "+record.getBitemporality());
+        }
+
+        SecNameRecord actualName1 = nameRecords.get(0);
+        Assert.assertEquals("Name1", actualName1.getName());
+        Assert.assertNull(actualName1.getRegistrationFrom());
+        Assert.assertEquals(time, actualName1.getRegistrationTo());
+        Assert.assertNull(actualName1.getEffectFrom());
+        Assert.assertNull(actualName1.getEffectTo());
+
+        SecNameRecord actualName2 = nameRecords.get(1);
+        Assert.assertEquals("Name1", actualName2.getName());
+        Assert.assertEquals(time, actualName2.getRegistrationFrom());
+        Assert.assertNull(actualName2.getRegistrationTo());
+        Assert.assertNull(actualName2.getEffectFrom());
+        Assert.assertEquals(timeTruncated, actualName2.getEffectTo());
+
+        SecNameRecord actualName3 = nameRecords.get(2);
+        Assert.assertEquals("Name2", actualName3.getName());
+        Assert.assertEquals(time, actualName3.getRegistrationFrom());
+        Assert.assertNull(actualName3.getRegistrationTo());
+        Assert.assertEquals(timeTruncated, actualName3.getEffectFrom());
+        Assert.assertNull(actualName3.getEffectTo());
     }
 
 

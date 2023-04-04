@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BaseAttributeValueRecord extends CvrBitemporalRecord {
+public class BaseAttributeValueRecord extends CvrBitemporalRecord implements Cloneable {
 
     public static final String DB_FIELD_VALUE = "value";
     public static final String IO_FIELD_VALUE = "vaerdi";
@@ -42,5 +42,12 @@ public class BaseAttributeValueRecord extends CvrBitemporalRecord {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), value);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        BaseAttributeValueRecord clone = (BaseAttributeValueRecord) super.clone();
+        clone.setValue(this.value);
+        return clone;
     }
 }

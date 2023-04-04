@@ -23,7 +23,7 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyStatusRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyStatusRecord extends CvrBitemporalDataRecord {
+public class CompanyStatusRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_company_status";
 
@@ -81,4 +81,12 @@ public class CompanyStatusRecord extends CvrBitemporalDataRecord {
         return Objects.equals(status, that.status);
     }
     */
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        CompanyStatusRecord clone = (CompanyStatusRecord) super.clone();
+        clone.setStatus(this.status);
+        clone.setRelationCompanyRecord(this.relationCompanyRecord);
+        return clone;
+    }
 }

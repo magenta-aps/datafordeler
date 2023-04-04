@@ -23,7 +23,7 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRegNumberRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyRegNumberRecord extends CvrBitemporalDataRecord {
+public class CompanyRegNumberRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_company_regnumber";
 
@@ -43,6 +43,9 @@ public class CompanyRegNumberRecord extends CvrBitemporalDataRecord {
         return this.regNumber;
     }
 
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
 
     public static final String DB_FIELD_PARTICIPANT_COMPANY_RELATION = "participantRelationCompanyRecord";
 
@@ -76,4 +79,12 @@ public class CompanyRegNumberRecord extends CvrBitemporalDataRecord {
         CompanyRegNumberRecord that = (CompanyRegNumberRecord) o;
         return Objects.equals(regNumber, that.regNumber);
     }*/
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        CompanyRegNumberRecord clone = (CompanyRegNumberRecord) super.clone();
+        clone.setRegNumber(this.regNumber);
+        clone.setParticipantRelationCompanyRecord(this.participantRelationCompanyRecord);
+        return clone;
+    }
 }

@@ -170,4 +170,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     public IdentifiedEntity getNewest(Collection<IdentifiedEntity> collection) {
         return null;
     }
+
+
+    public abstract ArrayList<CvrBitemporalRecord> closeRegistrations();
 }

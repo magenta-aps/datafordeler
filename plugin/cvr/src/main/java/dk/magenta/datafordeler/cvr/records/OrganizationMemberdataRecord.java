@@ -119,4 +119,15 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         subs.addAll(this.attributes);
         return subs;
     }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        System.out.println("closeRegistrations");
+        ArrayList<dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord> updated = new ArrayList<>();
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        return updated;
+    }
 }

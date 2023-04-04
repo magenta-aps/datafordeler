@@ -41,12 +41,20 @@ public class CompanyQuarterlyNumbersRecord extends CompanyNumbersRecord {
     @JsonProperty(value = IO_FIELD_YEAR)
     private int year;
 
+    public int getYear() {
+        return this.year;
+    }
+
     public static final String DB_FIELD_QUARTER = "quarter";
     public static final String IO_FIELD_QUARTER = "kvartal";
 
     @Column(name = DB_FIELD_QUARTER)
     @JsonProperty(value = IO_FIELD_QUARTER)
     private int quarter;
+
+    public int getQuarter() {
+        return this.quarter;
+    }
 
     @Override
     public boolean equals(Object o) {

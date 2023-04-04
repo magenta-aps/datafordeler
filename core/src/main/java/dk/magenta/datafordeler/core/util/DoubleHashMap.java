@@ -1,5 +1,7 @@
 package dk.magenta.datafordeler.core.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,5 +68,13 @@ public class DoubleHashMap<K, S, V> extends HashMap<K, HashMap<S, V>> {
             return subMap.get(subKey);
         }
         return null;
+    }
+
+    public Collection<V> subvalues() {
+        ArrayList<V> subvalues = new ArrayList<>();
+        for (HashMap<S, V> values : this.values()) {
+            subvalues.addAll(values.values());
+        }
+        return subvalues;
     }
 }

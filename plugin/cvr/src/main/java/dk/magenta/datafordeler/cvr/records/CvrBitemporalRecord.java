@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import org.apache.poi.ss.formula.functions.Offset;
 
 import javax.persistence.Column;
@@ -15,7 +16,9 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -90,7 +93,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return this.lastLoaded;
     }
 
-    @JsonIgnore
+    //@JsonIgnore
     public OffsetDateTime getRegistrationFrom() {
         return (this.lastUpdated != null) ? this.lastUpdated : this.lastLoaded;
     }
@@ -146,7 +149,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
-    @JsonIgnore
+    //@JsonIgnore
     private OffsetDateTime registrationTo;
 
     public OffsetDateTime getRegistrationTo() {
@@ -157,7 +160,54 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         this.registrationTo = registrationTo;
     }
 
+    public static <T extends CvrBitemporalRecord> Collection<T> closeRegistrations(Collection<T> records) {
+        System.out.println("closeRegistrations");
+        int unclosedCount = 0;
+        ArrayList<T> updated = new ArrayList<>();
+        for (T record : records) {
+            if (record instanceof SecNameRecord) {
+                System.out.println(((SecNameRecord) record).getName());
+                System.out.println(record.getBitemporality());
+            }
+            if (record.getRegistrationTo() == null && record.getEffectTo() == null) {
+                unclosedCount++;
+            }
+        }
+        System.out.println("unclosedCount: "+unclosedCount);
+        if (unclosedCount > 1) {
+            ArrayList<T> sorted = new ArrayList<>(records);
+            sorted.sort(Comparator.comparing(CvrBitemporalRecord::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder())));
+            T previous = null;
+            for (T current : sorted) {
+                if (previous != null && previous.getRegistrationTo() == null && previous.getEffectTo() == null) {
+                    OffsetDateTime registrationCut = current.getRegistrationFrom();
+                    // For every group there can only ever be one that has both registrationTo=null and effectTo=null
+                    try {
+                        T clone = (T) previous.clone();
+                        clone.setEffectTo(current.getEffectFrom());
+                        clone.setRegistrationFrom(registrationCut);
+                        updated.add(clone);
+                        records.add(clone);
+                        previous.setRegistrationTo(registrationCut);
+                        updated.add(previous);
+                    } catch (CloneNotSupportedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                previous = current;
+            }
+        }
+        System.out.println("END");
+        return updated;
+    }
 
+    static <R extends CvrBitemporalRecord> Collection<R> closeRegistrationsGroup(Collection<BitemporalSet<R>> setCollection) {
+        ArrayList<R> updated = new ArrayList<>();
+        for (BitemporalSet<R> values : setCollection) {
+            updated.addAll(CvrBitemporalRecord.closeRegistrations(values));
+        }
+        return updated;
+    }
 
 
     @Override
@@ -213,5 +263,16 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     public static LocalDate convertTime(OffsetDateTime time) {
         return time != null ? time.atZoneSameInstant(ZoneOffset.UTC).toLocalDate() : null;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        CvrBitemporalRecord clone = (CvrBitemporalRecord) super.clone();
+        clone.validity = new CvrRecordPeriod();
+        clone.setRegistrationFrom(this.getRegistrationFrom());
+        clone.setRegistrationTo(this.getRegistrationTo());
+        clone.setEffectFrom(this.getEffectFrom());
+        clone.setEffectTo(this.getEffectTo());
+        return clone;
     }
 }
