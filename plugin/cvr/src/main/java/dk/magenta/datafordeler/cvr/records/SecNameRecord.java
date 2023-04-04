@@ -98,4 +98,11 @@ public class SecNameRecord extends CvrBitemporalDataRecord implements Cloneable 
         clone.setSecondary(this.isSecondary());
         return clone;
     }
+
+    @Override
+    public String toString() {
+        return "SecNameRecord{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

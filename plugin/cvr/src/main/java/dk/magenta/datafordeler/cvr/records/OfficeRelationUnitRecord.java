@@ -174,7 +174,6 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
 
 
     public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        System.out.println("closeRegistrations");
         ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));

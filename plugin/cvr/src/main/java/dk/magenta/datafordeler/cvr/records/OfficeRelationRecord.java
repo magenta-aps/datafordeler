@@ -133,7 +133,6 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
     }
 
     public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        System.out.println("closeRegistrations");
         ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
         updated.addAll(this.officeRelationUnitRecord.closeRegistrations());
         for (AttributeRecord attribute : this.attributes) {

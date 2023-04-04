@@ -121,7 +121,6 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     }
 
     public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        System.out.println("closeRegistrations");
         ArrayList<dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord> updated = new ArrayList<>();
         for (AttributeRecord attribute : this.attributes) {
             updated.addAll(

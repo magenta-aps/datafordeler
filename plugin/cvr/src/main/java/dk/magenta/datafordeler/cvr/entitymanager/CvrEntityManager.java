@@ -5,7 +5,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.InterruptedPull;
+import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.ImportInterruptedException;
@@ -371,8 +374,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     protected void beforeParseSave(T item, ImportMetadata importMetadata, Session session) {
         item.setDafoUpdateOnTree(importMetadata.getImportTime());
-        System.out.println("beforeParseSave");
-        item.closeRegistrations();
+        Collection<CvrBitemporalRecord> updated = item.closeRegistrations();
+        for (CvrBitemporalRecord r : updated) {
+            session.saveOrUpdate(r);
+        }
     }
 
     public List<T> parseNode(JsonNode jsonNode) {

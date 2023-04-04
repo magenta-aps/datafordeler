@@ -225,7 +225,6 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
 
 
     public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        System.out.println("closeRegistrations");
         ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
         for (AttributeRecord attribute : this.attributes) {

@@ -300,7 +300,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
 
 
     public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        System.out.println("closeRegistrations");
         ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
         if (this.relationParticipantRecord != null) {
             updated.addAll(this.relationParticipantRecord.closeRegistrations());

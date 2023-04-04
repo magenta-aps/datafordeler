@@ -215,7 +215,6 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
 
 
     public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        System.out.println("closeRegistrations");
         ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.name));
         for (AttributeRecord attribute : this.incoming) {
