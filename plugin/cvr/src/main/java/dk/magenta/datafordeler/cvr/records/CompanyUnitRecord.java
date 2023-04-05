@@ -1001,6 +1001,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
                     CvrBitemporalRecord.closeRegistrations(attribute.getValues())
             );
         }
+        updated.addAll(this.metadata.closeRegistrations());
         return updated;
     }
 

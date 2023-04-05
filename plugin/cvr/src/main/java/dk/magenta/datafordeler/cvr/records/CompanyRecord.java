@@ -1690,7 +1690,6 @@ public class CompanyRecord extends CvrEntityRecord {
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry3));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.regNumber));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.lifecycle));
-
         updated.addAll(
                 CvrBitemporalRecord.closeRegistrationsGroup(this.getYearlyNumbersGrouped().values())
         );
@@ -1705,18 +1704,16 @@ public class CompanyRecord extends CvrEntityRecord {
                     CvrBitemporalRecord.closeRegistrations(attribute.getValues())
             );
         }
-
         for (CompanyParticipantRelationRecord participantRelation : this.participants) {
             updated.addAll(participantRelation.closeRegistrations());
         }
-
         for (FusionSplitRecord fusion : this.fusions) {
             updated.addAll(fusion.closeRegistrations());
         }
         for (FusionSplitRecord split : this.splits) {
             updated.addAll(split.closeRegistrations());
         }
-
+        updated.addAll(this.metadata.closeRegistrations());
         return updated;
     }
 

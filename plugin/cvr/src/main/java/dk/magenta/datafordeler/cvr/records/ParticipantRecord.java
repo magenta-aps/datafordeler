@@ -689,6 +689,7 @@ public class ParticipantRecord extends CvrEntityRecord {
         for (CompanyParticipantRelationRecord participantRelation : this.companyRelation) {
             updated.addAll(participantRelation.closeRegistrations());
         }
+        updated.addAll(this.metadata.closeRegistrations());
         return updated;
     }
 

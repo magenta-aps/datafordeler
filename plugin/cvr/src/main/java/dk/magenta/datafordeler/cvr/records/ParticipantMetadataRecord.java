@@ -182,4 +182,10 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implement
 
         return clone;
     }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestLocation));
+        return updated;
+    }
 }
