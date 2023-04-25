@@ -57,6 +57,7 @@ import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -1016,31 +1017,41 @@ public class RecordTest {
 
     @Test
     public void testCloseRegistration() throws DataFordelerException, IOException {
+        Session session = sessionManager.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
         CompanyRecord company = new CompanyRecord();
         OffsetDateTime time = OffsetDateTime.now();
         OffsetDateTime timeTruncated = time.toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC);
-        SecNameRecord name1 = new SecNameRecord();
-        name1.setSecondary(false);
-        name1.setName("Name1");
-        name1.setRegistrationFrom(null);
-        name1.setEffectTo(null);
-        company.addName(name1);
+        try {
+            SecNameRecord name1 = new SecNameRecord();
+            name1.setSecondary(false);
+            name1.setName("Name1");
+            name1.setRegistrationFrom(null);
+            name1.setEffectTo(null);
+            company.addName(name1);
 
-        SecNameRecord name2 = new SecNameRecord();
-        name2.setSecondary(false);
-        name2.setName("Name2");
-        name2.setRegistrationFrom(time);
-        name2.setEffectFrom(time);
-        company.addName(name2);
+            SecNameRecord name2 = new SecNameRecord();
+            name2.setSecondary(false);
+            name2.setName("Name2");
+            name2.setRegistrationFrom(time);
+            name2.setEffectFrom(time);
+            company.addName(name2);
 
-        company.closeRegistrations();
+            session.save(company);
+            for (SecNameRecord nameRecord : company.getNames()) {
+                session.save(nameRecord);
+            }
+            List<CvrBitemporalRecord> updated = company.closeRegistrations();
+            for (CvrBitemporalRecord nameRecord : updated) {
+                session.save(nameRecord);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+        }
 
         List<SecNameRecord> nameRecords = company.getNames().ordered();
         Assert.assertEquals(3, nameRecords.size());
-
-        for (SecNameRecord record : nameRecords) {
-            System.out.println(record.getName()+"  "+record.getBitemporality());
-        }
 
         SecNameRecord actualName1 = nameRecords.get(0);
         Assert.assertEquals("Name1", actualName1.getName());

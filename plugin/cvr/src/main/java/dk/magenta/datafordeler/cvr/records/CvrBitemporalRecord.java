@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import org.apache.poi.ss.formula.functions.Offset;
+import org.hibernate.Session;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -176,7 +178,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                     // For every group there can only ever be one that has both registrationTo=null and effectTo=null
                     // Find records that have open bitemporality,
                     // and find other records that are registered and effected after them
-                    Stream<T> candidates = recordList.stream();
+                    Stream<T> candidates = recordList.stream().filter(c -> c != current);
                     if (current.getRegistrationFrom() != null) {
                         candidates = candidates.filter(record -> record.getRegistrationFrom() != null)
                                                .filter(record -> record.getRegistrationFrom().isAfter(current.getRegistrationFrom()));
@@ -193,6 +195,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             clone.setEffectTo(next.getEffectFrom());
                             clone.setRegistrationFrom(registrationCut);
                             updated.add(clone);
+                            records.add(clone);
                             current.setRegistrationTo(registrationCut);
                             updated.add(current);
                         } catch (CloneNotSupportedException e) {
@@ -269,14 +272,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return time != null ? time.atZoneSameInstant(ZoneOffset.UTC).toLocalDate() : null;
     }
 
-    @Column
-    @JsonProperty
-    private boolean isClone = false;
-
-    public boolean isClone() {
-        return this.isClone;
-    }
-
     @Override
     protected Object clone() throws CloneNotSupportedException {
         CvrBitemporalRecord clone = (CvrBitemporalRecord) super.clone();
@@ -285,7 +280,15 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         clone.setRegistrationTo(this.getRegistrationTo());
         clone.setEffectFrom(this.getEffectFrom());
         clone.setEffectTo(this.getEffectTo());
-        clone.isClone=true;
+        clone.clonedFrom = this.getId();
         return clone;
+    }
+
+    @Column
+    @JsonIgnore
+    private Long clonedFrom = null;
+
+    public Long getClonedFrom() {
+        return this.clonedFrom;
     }
 }

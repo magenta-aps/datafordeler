@@ -1713,7 +1713,9 @@ public class CompanyRecord extends CvrEntityRecord {
         for (FusionSplitRecord split : this.splits) {
             updated.addAll(split.closeRegistrations());
         }
-        updated.addAll(this.metadata.closeRegistrations());
+        if (this.metadata != null) {
+            updated.addAll(this.metadata.closeRegistrations());
+        }
         return updated;
     }
 
