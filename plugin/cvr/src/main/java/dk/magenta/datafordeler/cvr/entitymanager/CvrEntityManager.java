@@ -489,7 +489,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         Session session = getSessionManager().getSessionFactory().openSession();
             // Stream<T> stream = QueryManager.getAllItemsAsStream(session, this.getRecordClass());
             CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-            companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, "12950160");
+            companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, "12950160");  // Magenta Grønland
             Stream<T> stream = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, this.getRecordClass());
             stream.forEach(new Consumer<T>() {
                 @Override
