@@ -360,7 +360,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * @throws ParseException
      */
     public int parseData(JsonNode jsonNode, ImportMetadata importMetadata, Session session) throws DataFordelerException {
-        System.out.println("parseData");
         timer.start(TASK_PARSE);
         this.checkInterrupt(importMetadata);
         List<T> items = this.parseNode(jsonNode);
@@ -374,10 +373,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     protected void beforeParseSave(T item, ImportMetadata importMetadata, Session session) {
         item.setDafoUpdateOnTree(importMetadata.getImportTime());
-        /*Collection<CvrBitemporalRecord> updated = item.closeRegistrations();
+        Collection<CvrBitemporalRecord> updated = item.closeRegistrations();
         for (CvrBitemporalRecord r : updated) {
             session.saveOrUpdate(r);
-        }*/
+        }
     }
 
     public List<T> parseNode(JsonNode jsonNode) {
@@ -485,12 +484,12 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
-    public void closeAllEligibleRegistrations(String cvr) {
+    public void closeAllEligibleRegistrations() {
         Session session = getSessionManager().getSessionFactory().openSession();
-        // Stream<T> stream = QueryManager.getAllItemsAsStream(session, this.getRecordClass());
-        CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-        companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, cvr);
-        List<T> items = QueryManager.getAllEntities(session, companyRecordQuery, this.getRecordClass());
+        List<T> items = QueryManager.getAllEntities(session, this.getRecordClass());
+        //CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
+        //companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, cvr);
+        //List<T> items = QueryManager.getAllEntities(session, companyRecordQuery, this.getRecordClass());
         System.out.println("Closing registrations on "+items.size()+" companies");
         items.forEach(t -> {
                 Transaction transaction = session.beginTransaction();

@@ -191,21 +191,21 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                     T next = candidates.min(comparator).orElse(null);
                     if (next != null) {
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
-                        try {
-                            System.out.println(current+" needs to be split");
-                            T clone = (T) current.clone();
+                        //try {
+                            System.out.println(current+" needs to be split at "+registrationCut);
+                            /*T clone = (T) current.clone();
                             clone.setEffectTo(next.getEffectFrom());
                             clone.setRegistrationFrom(registrationCut);
                             updated.add(clone);
                             records.add(clone);
                             current.setRegistrationTo(registrationCut);
-                            updated.add(current);
+                            updated.add(current);*/
                             System.out.println("    "+current);
-                            System.out.println("    "+clone);
+                            //System.out.println("    "+clone);
                             System.out.println("    "+next);
-                        } catch (CloneNotSupportedException e) {
+                        /*} catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
-                        }
+                        }*/
                     }
                 }
             }

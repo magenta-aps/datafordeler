@@ -1515,7 +1515,6 @@ public class CompanyRecord extends CvrEntityRecord {
 
     @Override
     public void save(Session session) {
-        System.out.println("Save "+this.cvrNumber);
         for (AddressRecord address : this.locationAddress) {
             address.wire(session);
         }

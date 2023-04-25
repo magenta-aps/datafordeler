@@ -16,11 +16,9 @@ public class CompanyCloseService {
     @Autowired
     CompanyEntityManager companyEntityManager;
 
-    @RequestMapping(
-            path = {"/{cvr}"}
-    )
-    public void close(@PathVariable("cvr") String cvr, HttpServletRequest request) throws DataFordelerException {
-        this.companyEntityManager.closeAllEligibleRegistrations(cvr);
+    @RequestMapping("/")
+    public void close(HttpServletRequest request) throws DataFordelerException {
+        this.companyEntityManager.closeAllEligibleRegistrations();
     }
 
 }
