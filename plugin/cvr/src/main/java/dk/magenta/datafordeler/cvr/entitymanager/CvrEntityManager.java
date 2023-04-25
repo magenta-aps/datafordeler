@@ -374,10 +374,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     protected void beforeParseSave(T item, ImportMetadata importMetadata, Session session) {
         item.setDafoUpdateOnTree(importMetadata.getImportTime());
-        Collection<CvrBitemporalRecord> updated = item.closeRegistrations();
+        /*Collection<CvrBitemporalRecord> updated = item.closeRegistrations();
         for (CvrBitemporalRecord r : updated) {
             session.saveOrUpdate(r);
-        }
+        }*/
     }
 
     public List<T> parseNode(JsonNode jsonNode) {

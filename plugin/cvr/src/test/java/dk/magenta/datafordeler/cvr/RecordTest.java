@@ -1041,10 +1041,10 @@ public class RecordTest {
             for (SecNameRecord nameRecord : company.getNames()) {
                 session.save(nameRecord);
             }
-            /*List<CvrBitemporalRecord> updated = company.closeRegistrations();
+            List<CvrBitemporalRecord> updated = company.closeRegistrations();
             for (CvrBitemporalRecord nameRecord : updated) {
                 session.save(nameRecord);
-            }*/
+            }
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
