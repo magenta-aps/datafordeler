@@ -485,23 +485,21 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
+    @PostConstruct
     public void closeAllEligibleRegistrations() {
         Session session = getSessionManager().getSessionFactory().openSession();
             // Stream<T> stream = QueryManager.getAllItemsAsStream(session, this.getRecordClass());
             CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
             companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, "12950160");  // Magenta Grønland
             Stream<T> stream = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, this.getRecordClass());
-            stream.forEach(new Consumer<T>() {
-                @Override
-                public void accept(T t) {
-                    Transaction transaction = session.beginTransaction();
-                    try {
-                        Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
-                        session.saveOrUpdate(updated);
-                        transaction.commit();
-                    } catch (Exception e) {
-                        transaction.rollback();
-                    }
+            stream.forEach(t -> {
+                Transaction transaction = session.beginTransaction();
+                try {
+                    Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
+                    session.saveOrUpdate(updated);
+                    transaction.commit();
+                } catch (Exception e) {
+                    transaction.rollback();
                 }
             });
 
