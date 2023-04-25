@@ -488,11 +488,12 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     @PostConstruct
     public void closeAllEligibleRegistrations() {
         Session session = getSessionManager().getSessionFactory().openSession();
-            // Stream<T> stream = QueryManager.getAllItemsAsStream(session, this.getRecordClass());
-            CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-            companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, "12950160");  // Magenta Grønland
-            Stream<T> stream = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, this.getRecordClass());
-            stream.forEach(t -> {
+        // Stream<T> stream = QueryManager.getAllItemsAsStream(session, this.getRecordClass());
+        CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
+        companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, "12950160");  // Magenta Grønland
+        List<T> items = QueryManager.getAllEntities(session, companyRecordQuery, this.getRecordClass());
+        System.out.println("Closing registrations on "+items.size()+" companies");
+        items.forEach(t -> {
                 Transaction transaction = session.beginTransaction();
                 try {
                     Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
