@@ -1420,6 +1420,7 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
+    @JsonIgnore
     public Set<CompanyDataEventRecord> getDataevent() {
         return this.dataevent;
     }
@@ -1672,6 +1673,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
     @Override
     public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        System.out.println("Closing registrations for "+this.cvrNumber);
         ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
