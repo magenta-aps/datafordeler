@@ -485,12 +485,11 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
-    @PostConstruct
-    public void closeAllEligibleRegistrations() {
+    public void closeAllEligibleRegistrations(String cvr) {
         Session session = getSessionManager().getSessionFactory().openSession();
         // Stream<T> stream = QueryManager.getAllItemsAsStream(session, this.getRecordClass());
         CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-        companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, "12950160");  // Magenta Grønland
+        companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, cvr);
         List<T> items = QueryManager.getAllEntities(session, companyRecordQuery, this.getRecordClass());
         System.out.println("Closing registrations on "+items.size()+" companies");
         items.forEach(t -> {
