@@ -285,15 +285,15 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         clone.setRegistrationTo(this.getRegistrationTo());
         clone.setEffectFrom(this.getEffectFrom());
         clone.setEffectTo(this.getEffectTo());
-        clone.clonedFrom = this.getId();
+        //clone.clonedFrom = this.getId();
         return clone;
     }
-
+/*
     @Column
     @JsonIgnore
     private Long clonedFrom = null;
 
     public Long getClonedFrom() {
         return this.clonedFrom;
-    }
+    }*/
 }
