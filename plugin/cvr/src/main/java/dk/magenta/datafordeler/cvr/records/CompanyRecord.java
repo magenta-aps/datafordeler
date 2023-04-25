@@ -1403,7 +1403,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_DATAEVENT = "dataevent";
 
     @OneToMany(targetEntity = CompanyDataEventRecord.class, mappedBy = CompanyDataEventRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonProperty(value = IO_FIELD_DATAEVENT)
+    @JsonIgnore
     private Set<CompanyDataEventRecord> dataevent = new HashSet<>();
 
     public void setDataEventRecord(Set<CompanyDataEventRecord> dataevent) {
