@@ -41,6 +41,7 @@ public class AccessAddressOutputWrapper extends GeoOutputWrapper<AccessAddressEn
         container.addMonotemporal("vej", item.getRoad());
         container.addMonotemporal("status", item.getStatus());
         container.addNontemporal("sumiffiik", item.getSumiffiikId());
+        container.addMonotemporal("postnummer", item.getPostcode());
     }
 
 
