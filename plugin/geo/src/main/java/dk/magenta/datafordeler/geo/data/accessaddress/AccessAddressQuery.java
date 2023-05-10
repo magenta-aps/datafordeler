@@ -201,12 +201,14 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     public void setLocalityUUID(UUID localityUUID) {
         this.localityUUID.clear();
+        this.updatedParameters();
         this.addLocalityUUID(localityUUID);
     }
 
     public void addLocalityUUID(UUID localityUUID) {
         if (localityUUID != null) {
             this.localityUUID.add(localityUUID);
+            this.updatedParameters();
         }
     }
 
@@ -217,6 +219,7 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
 
     public void clearHouseNumber() {
         houseNumber.clear();
+        this.updatedParameters();
     }
 
 
@@ -225,13 +228,14 @@ public class AccessAddressQuery extends SumiffiikQuery<AccessAddressEntity> {
     }
 
     public void setHouseNumber(String houseNumber) {
-        this.houseNumber.clear();
+        this.clearHouseNumber();
         this.addHouseNumber(houseNumber);
     }
 
     public void addHouseNumber(String houseNumber) {
         if (houseNumber != null) {
             this.houseNumber.add(houseNumber);
+            this.updatedParameters();
         }
     }
 

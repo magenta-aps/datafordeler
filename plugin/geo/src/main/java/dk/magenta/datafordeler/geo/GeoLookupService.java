@@ -194,9 +194,12 @@ public class GeoLookupService extends CprLookupService {
                     //There can be more than one accessaddress on a road, but they have the same postalcode and postaldistrict
                     for (AccessAddressEntity accessAddress : accessAddresses) {
                         if (!accessAddress.getPostcode().isEmpty() && accessAddress.getPostcode().current() != null) {
-                            geoLookupDTO.setPostalCode(accessAddress.getPostcode().current().getPostcode());
-                            PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(geoLookupDTO.getPostalCode()), PostcodeEntity.class);
-                            geoLookupDTO.setPostalDistrict(entity.getName().current().getName());
+                            int postcode = accessAddress.getPostcode().current().getPostcode();
+                            geoLookupDTO.setPostalCode(postcode);
+                            PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(postcode), PostcodeEntity.class);
+                            if (entity != null) {
+                                geoLookupDTO.setPostalDistrict(entity.getName().current().getName());
+                            }
                             break;
                         }
                     }

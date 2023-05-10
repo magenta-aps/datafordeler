@@ -199,7 +199,10 @@ public class AddressDataService extends PersonStatisticsService {
                 item.put(BNR, bnr);
 
                 if (lookup.getPostalCode() == 0) {
-                    log.error("Failed to lookup postalcode on " + addressData.getMunicipalityCode() + "|" + addressData.getRoadCode() + " (" + lookup.getRoadName() + ")");
+                    log.error(
+                            "Failed to lookup postalcode on " + addressData.getMunicipalityCode() + "|" + addressData.getRoadCode() + " (" + lookup.getRoadName() + ")" +
+                            " | " + addressData.getHouseNumber() + " while searching for address of "+person.getPersonnummer()
+                    );
                 }
             }
         }
