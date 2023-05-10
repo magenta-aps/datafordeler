@@ -103,7 +103,7 @@ public class CprRecordCombinedPersonLookupService {
 
             personQuery.applyFilters(session);
             this.applyAreaRestrictionsToQuery(personQuery, user);
-            if ("true".equals(forceDirect)) {
+            if ("true".equalsIgnoreCase(forceDirect)) {
                 PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
                 if (personEntity == null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
@@ -117,7 +117,7 @@ public class CprRecordCombinedPersonLookupService {
             if (!personEntities.isEmpty()) {
                 personEntity = personEntities.get(0);
             }
-            if (personEntity == null && "true".equals(allowDirect)) {
+            if (personEntity == null && "true".equalsIgnoreCase(allowDirect)) {
                 personEntity = cprDirectLookup.getPerson(cprNummer);
                 entityManager.createSubscription(Collections.singleton(cprNummer));
             }
@@ -186,7 +186,7 @@ public class CprRecordCombinedPersonLookupService {
             personEntities.forEach(entityWriter);
 
             HashSet<String> found = new HashSet<>();
-            if (!cprNumbers.isEmpty() && !hasAreaRestrictions(user) && "true".equals(allowDirect)) {
+            if (!cprNumbers.isEmpty() && !hasAreaRestrictions(user) && "true".equalsIgnoreCase(allowDirect)) {
                 List<String> remaining = new ArrayList<>(cprNumbers);
                 remaining.stream().map(cprNummer -> {
                     try {

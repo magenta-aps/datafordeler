@@ -138,6 +138,7 @@ public class CprDirectLookup {
 
         CprConfiguration configuration = this.getConfiguration(); // TODO: Cache configuration?
 
+        Exception exception = null;
         for (int attempt = 0; attempt < 3; attempt++) {
             String dataType = "06";
             String request = String.format("%-39.39s",
@@ -151,31 +152,31 @@ public class CprDirectLookup {
                             pnr
             ); // must be 39 bytes
 
-            String response = null;
-            try {
-                response = this.request(request);
-            } catch (IOException e) {
-                throw new DataStreamException("Failed lookup at CPR Direct for "+pnr+": "+e.getMessage(), e);
-            }
 
-            int errorCode = this.parseErrorCode(response);
-            if (errorCode == 0) {
-                // All ok, return response
-                return response;
-            }
-            if (errorCode == 5) {
-                // Unknown cpr
-                log.warn("cpr not found " + pnr);
-                return null;
-            } else if (errorCode == ERR_TOKEN_EXPIRED) {
-                // Login and try again
-                this.login();
-            } else {
-                // Some other error, bail
-                throw new DataStreamException("Got statuscode " + errorCode + " from CPR Direct");
+            try {
+                String response = this.request(request);
+
+                int errorCode = this.parseErrorCode(response);
+                if (errorCode == 0) {
+                    // All ok, return response
+                    return response;
+                }
+                if (errorCode == 5) {
+                    // Unknown cpr
+                    log.warn("cpr not found " + pnr);
+                    return null;
+                } else if (errorCode == ERR_TOKEN_EXPIRED) {
+                    // Login and try again
+                    this.login();
+                } else {
+                    // Some other error, bail
+                    throw new DataStreamException("Got statuscode " + errorCode + " from CPR Direct");
+                }
+            } catch (IOException e) {
+                exception = e;
             }
         }
-        throw new DataStreamException("Failed lookup for CPR Direct: 3 attempts unsuccessful");
+        throw new DataStreamException("Failed lookup for CPR Direct: 3 attempts unsuccessful", exception);
     }
 
     private SSLSocket getSocket() throws IOException {

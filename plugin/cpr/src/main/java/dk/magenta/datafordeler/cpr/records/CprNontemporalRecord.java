@@ -87,6 +87,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public static final String DB_FIELD_SAME_AS = "sameas";
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private S sameas;
 
     public S getSameAs() {
