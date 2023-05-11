@@ -182,7 +182,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                     root.put("postnummer", lookup.getPostalCode());
                     root.put("bynavn", lookup.getPostalDistrict());
                     root.put("stedkode", lookup.getLocalityCodeNumber());
-                    root.put("lokalitetsnavn", lookup.getLocalityCode());
+                    root.put("lokalitetsnavn", lookup.getLocalityName());
                     root.put("lokalitetsforkortelse", lookup.getLocalityAbbrev());
                 }
 
