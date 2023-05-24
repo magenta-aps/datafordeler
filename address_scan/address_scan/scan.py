@@ -98,6 +98,8 @@ def get_address(nr, komkod, vejkod):
     except (KeyError, IndexError):
         pass
     else:
+        if not "adresse" in generic_data:
+            return None, None
         for adresse in generic_data["adresse"]:
             if komkod == adresse["kommunekode"] and vejkod == adresse["vejkode"]:
                 husnummer = adresse["husnummer"]
@@ -165,6 +167,9 @@ def scan(nr):
 
 
 def scan_worksheet_row(index, row):
+    if row["COUNTRYREGIONID"] != "GRL":
+        row.update({"Status": "Udenfor Grønland"})
+        return row
     number_cell = row["CPR_CVR"]
     nr = str(number_cell)
     if len(nr) == 9:
