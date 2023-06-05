@@ -173,7 +173,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
                     new URI(configuration.getScrollAddress(schema)),
                     requestBody
             );
-            JsonNode topNode = this.getObjectMapper().readTree(rawData);
+            JsonNode topNode = this.getObjectMapper().readTree(rawData.readAllBytes());
             ObjectReader reader = this.getObjectMapper().readerFor(CompanyRecord.class);
             if (topNode != null && topNode.has("hits")) {
                 topNode = topNode.get("hits");

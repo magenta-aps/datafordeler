@@ -135,7 +135,7 @@ public class CvrRecordCombinedService {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public StreamingResponseBody getBulk(HttpServletRequest request)
+    public String getBulk(HttpServletRequest request)
             throws DataFordelerException, IOException {
         JsonNode requestBody;
         try {
@@ -161,12 +161,7 @@ public class CvrRecordCombinedService {
 
         ObjectNode formattedRecord = getJSONFromCvrList(cvrNumbers, returnParticipantDetails, true);
         loggerHelper.urlResponsePersistablelogs("CvrRecordCombinedService");
-        return new StreamingResponseBody() {
-            @Override
-            public void writeTo(OutputStream outputStream) throws IOException {
-                outputStream.write(objectMapper.writeValueAsString(formattedRecord).getBytes());
-            }
-        };
+        return objectMapper.writeValueAsString(formattedRecord);
     }
 
     private ObjectNode getJSONFromCvrList(List<String> cvrNumbers, boolean returnParticipantDetails, boolean asList) throws DataFordelerException, JsonProcessingException {

@@ -176,7 +176,7 @@ public class CprDirectLookup {
                 exception = e;
             }
         }
-        throw new DataStreamException("Failed lookup for CPR Direct: 3 attempts unsuccessful", exception);
+        throw new DataStreamException("Failed lookup for CPR Direct: 3 attempts unsuccessful: "+(exception != null ? exception.getMessage(): ""), exception);
     }
 
     private SSLSocket getSocket() throws IOException {
