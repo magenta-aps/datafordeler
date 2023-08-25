@@ -142,6 +142,7 @@ public class FtpCommunicator implements Communicator {
     public ImportInputStream fetchLocal() throws DataStreamException {
         ArrayList<File> files = new ArrayList<>(Arrays.asList(localCopyFolder.toFile().listFiles()));
         files.sort(File::compareTo);
+        log.info("Fetching from local files in "+localCopyFolder);
         try {
             InputStream inputStream = this.buildChainedInputStream(files);
             if (inputStream != null) {
@@ -176,6 +177,7 @@ public class FtpCommunicator implements Communicator {
                 ftpClient.download(path, outputFile);
                 currentFiles.add(outputFile);
             }
+            log.info("Downloaded "+currentFiles.size()+" files");
 
 
             this.onBeforeBuildStream(ftpClient, currentFiles, uri, downloadPaths);

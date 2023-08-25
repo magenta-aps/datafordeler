@@ -5,13 +5,10 @@ import dk.magenta.datafordeler.core.database.Effect;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
-import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
-import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -69,7 +65,7 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
             Function<T, OffsetDateTime> getDafoUpdated = CprBitemporalRecord::getDafoUpdated;
             Function<T, Long> getId = CprBitemporalRecord::getId;
             latest.sort(
-                    Comparator.nullsLast(Comparator.comparing(getEffectTo))
+                    Comparator.nullsLast(Comparator.comparing(getEffectTo, Comparator.nullsLast(Comparator.naturalOrder())))
                     .thenComparing(getDafoUpdated)
                     .thenComparing(getId)
             );
