@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.RecordOutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
+import dk.magenta.datafordeler.core.util.BitemporalityQuery;
 import dk.magenta.datafordeler.core.util.DoubleListHashMap;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
@@ -31,10 +32,10 @@ public class DemoRecordOutputWrapper extends RecordOutputWrapper<DemoEntityRecor
     }
 
     @Override
-    protected ObjectNode fallbackOutput(Mode mode, RecordOutputWrapper.OutputContainer recordOutput, Bitemporality mustContain) {
+    protected ObjectNode fallbackOutput(Mode mode, RecordOutputWrapper.OutputContainer recordOutput, BitemporalityQuery mustMatch) {
         if (mode == Mode.LEGACY) {
             HashMap<String, String> keyConversion = new HashMap<>();
-            return recordOutput.getRDV(mustContain, keyConversion, null);
+            return recordOutput.getRDV(mustMatch, keyConversion, null);
         }
         return null;
     }

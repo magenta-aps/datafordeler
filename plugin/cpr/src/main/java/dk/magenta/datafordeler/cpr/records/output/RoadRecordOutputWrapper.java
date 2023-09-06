@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
-import dk.magenta.datafordeler.core.util.Bitemporality;
-import dk.magenta.datafordeler.cpr.records.CprBitemporality;
+import dk.magenta.datafordeler.core.util.BitemporalityQuery;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,8 +37,8 @@ public class RoadRecordOutputWrapper extends CprRecordOutputWrapper<RoadEntity> 
 
     @Override
     public Object wrapResult(RoadEntity record, BaseQuery query, Mode mode) {
-        CprBitemporality mustContain = new CprBitemporality(query.getRegistrationFrom(), query.getRegistrationTo(), query.getEffectFrom(), query.getEffectTo());
-        return this.getNode(record, mustContain, mode);
+        BitemporalityQuery mustMatch = new BitemporalityQuery(query);
+        return this.getNode(record, mustMatch, mode);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class RoadRecordOutputWrapper extends CprRecordOutputWrapper<RoadEntity> 
     }
 
     @Override
-    protected ObjectNode fallbackOutput(Mode mode, OutputContainer outputContainer, Bitemporality bitemporality) {
+    protected ObjectNode fallbackOutput(Mode mode, OutputContainer outputContainer, BitemporalityQuery mustMatch) {
         return null;
     }
 

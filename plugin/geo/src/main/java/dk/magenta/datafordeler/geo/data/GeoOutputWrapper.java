@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.util.Bitemporality;
+import dk.magenta.datafordeler.core.util.BitemporalityQuery;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +20,9 @@ public abstract class GeoOutputWrapper<E extends GeoEntity> extends dk.magenta.d
     }
 
     @Override
-    protected ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, Bitemporality mustContain) {
+    protected ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, BitemporalityQuery mustMatch) {
         if (mode == Mode.LEGACY) {
-            return recordOutput.getRVD(mustContain);
+            return recordOutput.getRVD(mustMatch);
         }
         return null;
     }

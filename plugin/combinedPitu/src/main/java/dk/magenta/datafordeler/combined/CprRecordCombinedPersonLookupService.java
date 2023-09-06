@@ -175,7 +175,6 @@ public class CprRecordCombinedPersonLookupService {
 
             Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class);
 
-            final FinalWrapper<Boolean> first = new FinalWrapper<>(true);
             Consumer<PersonEntity> entityWriter = personEntity -> {
                 if (personEntity != null && personEntity.getPersonnummer() != null) {
                     cprNumbers.remove(personEntity.getPersonnummer());

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.*;
 import dk.magenta.datafordeler.core.database.*;
-import dk.magenta.datafordeler.core.util.Bitemporality;
-import dk.magenta.datafordeler.core.util.BitemporalityComparator;
-import dk.magenta.datafordeler.core.util.DoubleListHashMap;
-import dk.magenta.datafordeler.core.util.ListHashMap;
+import dk.magenta.datafordeler.core.util.*;
 import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
@@ -64,7 +61,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
     protected abstract void fillContainer(OutputContainer container, E item, Mode m);
 
-    protected abstract ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, Bitemporality mustContain);
+    protected abstract ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, BitemporalityQuery mustMatch);
 
 
     public Object wrapResultSet(ResultSet<E> input, BaseQuery query, Mode mode) {
@@ -239,7 +236,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         }
 
 
-        public ObjectNode getRVD(Bitemporality mustOverlap) {
+        public ObjectNode getRVD(BitemporalityQuery mustMatch) {
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
             ArrayNode registrationsNode = objectMapper.createArrayNode();
             ArrayList<Bitemporality> bitemporalities = new ArrayList<>(this.bitemporalData.keySet());
@@ -273,8 +270,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                 if (i < terminators.size() - 1) {
                     OffsetDateTime next = terminators.get(i + 1);
                     if (!presentBitemporalities.isEmpty()) {
-
-                        if (mustOverlap == null || mustOverlap.overlapsRegistration(t, next)) {
+                        if (mustMatch == null || mustMatch.matchesRegistration(Bitemporality.pureRegistration(t, next))) {
                             ObjectNode registrationNode = objectMapper.createObjectNode();
                             registrationsNode.add(registrationNode);
                             registrationNode.put(REGISTRATION_FROM, formatTime(t));
@@ -327,11 +323,11 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         }
 
 
-        public ObjectNode getRDV(Bitemporality mustOverlap) {
-            return this.getRDV(mustOverlap, null, null);
+        public ObjectNode getRDV(BitemporalityQuery mustMatch) {
+            return this.getRDV(mustMatch, null, null);
         }
 
-        public ObjectNode getRDV(Bitemporality mustOverlap, Map<String, String> keyConversion, Function<Pair<String, ObjectNode>, ObjectNode> dataConversion) {
+        public ObjectNode getRDV(BitemporalityQuery mustMatch, Map<String, String> keyConversion, Function<Pair<String, ObjectNode>, ObjectNode> dataConversion) {
 
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
             ArrayNode registrationsNode = objectMapper.createArrayNode();
@@ -365,7 +361,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                     OffsetDateTime next = terminators.get(i + 1);
                     if (!presentBitemporalities.isEmpty()) {
 
-                        if (mustOverlap == null || mustOverlap.overlapsRegistration(t, next)) {
+                        if (mustMatch == null || mustMatch.matchesRegistration(Bitemporality.pureRegistration(t, next))) {
                             ObjectNode registrationNode = objectMapper.createObjectNode();
                             registrationsNode.add(registrationNode);
                             registrationNode.put(REGISTRATION_FROM, formatTime(t));
@@ -414,11 +410,11 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
 
         // DRV
-        public ObjectNode getDRV(Bitemporality mustOverlap) {
+        public ObjectNode getDRV(BitemporalityQuery mustMatch) {
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
             ObjectNode objectNode = objectMapper.createObjectNode();
             for (Bitemporality bitemporality : this.bitemporalData.keySet()) {
-                if (bitemporality.overlaps(mustOverlap)) {
+                if (mustMatch == null || bitemporality == null || mustMatch.matches(bitemporality)) {
                     HashMap<String, ArrayList<JsonNode>> data = this.bitemporalData.get(bitemporality);
                     for (String key : data.keySet()) {
                         ArrayNode arrayNode = (ArrayNode) objectNode.get(key);
@@ -436,11 +432,11 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         }
 
         // DataOnly
-        public ObjectNode getDataOnly(Bitemporality mustOverlap) {
+        public ObjectNode getDataOnly(BitemporalityQuery mustMatch) {
             ObjectMapper objectMapper = RecordOutputWrapper.this.getObjectMapper();
             ObjectNode objectNode = objectMapper.createObjectNode();
             for (Bitemporality bitemporality : this.bitemporalData.keySet()) {
-                if (bitemporality.overlaps(mustOverlap)) {
+                if (mustMatch == null || bitemporality == null || mustMatch.matches(bitemporality)) {
                     HashMap<String, ArrayList<JsonNode>> data = this.bitemporalData.get(bitemporality);
                     for (String key : data.keySet()) {
                         ArrayNode arrayNode = (ArrayNode) objectNode.get(key);
@@ -489,20 +485,15 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
     @Override
     public Object wrapResult(E record, BaseQuery query, Mode mode) {
-        Bitemporality mustContain = new Bitemporality(
-                query.getRegistrationToAfter(),
-                query.getRegistrationFromBefore(),
-                query.getEffectToAfter(),
-                query.getEffectFromBefore()
-        );
-        return this.getNode(record, mustContain, mode);
+        BitemporalityQuery mustMatch = new BitemporalityQuery(query);
+        return this.getNode(record, mustMatch, mode);
     }
 
     protected OutputContainer createOutputContainer() {
         return new OutputContainer();
     }
 
-    public ObjectNode getNode(E record, Bitemporality overlap, Mode mode) {
+    public ObjectNode getNode(E record, BitemporalityQuery mustMatch, Mode mode) {
         ObjectNode root = this.getObjectMapper().createObjectNode();
         if (record.getIdentification() != null) {
             root.put(Identification.IO_FIELD_UUID, record.getIdentification().getUuid().toString());
@@ -513,19 +504,19 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         root.setAll(recordOutput.getBase());
         switch (mode) {
             case RVD:
-                root.setAll(recordOutput.getRVD(overlap));
+                root.setAll(recordOutput.getRVD(mustMatch));
                 break;
             case RDV:
-                root.setAll(recordOutput.getRDV(overlap));
+                root.setAll(recordOutput.getRDV(mustMatch));
                 break;
             case DRV:
-                root.setAll(recordOutput.getDRV(overlap));
+                root.setAll(recordOutput.getDRV(mustMatch));
                 break;
             case DATAONLY:
-                root.setAll(recordOutput.getDataOnly(overlap));
+                root.setAll(recordOutput.getDataOnly(mustMatch));
                 break;
             default:
-                root.setAll(this.fallbackOutput(mode, recordOutput, overlap));
+                root.setAll(this.fallbackOutput(mode, recordOutput, mustMatch));
                 break;
         }
         return root;
