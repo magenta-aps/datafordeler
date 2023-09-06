@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.RecordOutputWrapper;
 import dk.magenta.datafordeler.core.util.Bitemporality;
+import dk.magenta.datafordeler.core.util.BitemporalityQuery;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
@@ -46,7 +47,7 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
     }
 
     @Override
-    protected ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, Bitemporality mustContain) {
+    protected ObjectNode fallbackOutput(Mode mode, OutputContainer recordOutput, BitemporalityQuery mustContain) {
         return null;
     }
 
@@ -63,12 +64,12 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
     }
 
     @Override
-    public ObjectNode getNode(E record, Bitemporality overlap, Mode mode) {
+    public ObjectNode getNode(E record, BitemporalityQuery mustMatch, Mode mode) {
         if (mode == LEGACY) {
             return this.getObjectMapper().setFilterProvider(this.getFilterProvider()).valueToTree(record);
         }
 
-        ObjectNode root = super.getNode(record, overlap, mode);
+        ObjectNode root = super.getNode(record, mustMatch, mode);
 
         CvrOutputContainer metadataRecordOutput = new CvrOutputContainer();
         boolean metadata = this.fillMetadataContainer(metadataRecordOutput, record, mode);
@@ -78,19 +79,19 @@ public abstract class CvrRecordOutputWrapper<E extends CvrEntityRecord> extends 
             metaNode.setAll(metadataRecordOutput.getBase());
             switch (mode) {
                 case RVD:
-                    metaNode.setAll(metadataRecordOutput.getRVD(overlap));
+                    metaNode.setAll(metadataRecordOutput.getRVD(mustMatch));
                     break;
                 case RDV:
-                    metaNode.setAll(metadataRecordOutput.getRDV(overlap));
+                    metaNode.setAll(metadataRecordOutput.getRDV(mustMatch));
                     break;
                 case DRV:
-                    metaNode.setAll(metadataRecordOutput.getDRV(overlap));
+                    metaNode.setAll(metadataRecordOutput.getDRV(mustMatch));
                     break;
                 case DATAONLY:
-                    metaNode.setAll(metadataRecordOutput.getDataOnly(overlap));
+                    metaNode.setAll(metadataRecordOutput.getDataOnly(mustMatch));
                     break;
                 default:
-                    metaNode.setAll(this.fallbackOutput(mode, metadataRecordOutput, overlap));
+                    metaNode.setAll(this.fallbackOutput(mode, metadataRecordOutput, mustMatch));
                     break;
             }
         }
