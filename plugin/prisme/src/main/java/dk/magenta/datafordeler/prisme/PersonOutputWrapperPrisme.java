@@ -66,8 +66,8 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
             Function<T, Long> getId = CprBitemporalRecord::getId;
             latest.sort(
                     Comparator.nullsLast(Comparator.comparing(getEffectTo, Comparator.nullsLast(Comparator.naturalOrder())))
-                    .thenComparing(getDafoUpdated)
-                    .thenComparing(getId)
+                    .thenComparing(Comparator.nullsLast(Comparator.comparing(getDafoUpdated)))
+                    .thenComparing(Comparator.nullsLast(Comparator.comparing(getId)))
             );
             return latest.get(latest.size() - 1);
         }
