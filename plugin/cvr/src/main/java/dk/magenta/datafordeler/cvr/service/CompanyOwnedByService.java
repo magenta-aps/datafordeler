@@ -31,7 +31,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/cvr/owned_by/")
-public class CompanyOwnerService {
+public class CompanyOwnedByService {
 
     @Autowired
     private DafoUserManager dafoUserManager;
@@ -42,7 +42,7 @@ public class CompanyOwnerService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private final Logger log = LogManager.getLogger(CompanyOwnerService.class.getCanonicalName());
+    private final Logger log = LogManager.getLogger(CompanyOwnedByService.class.getCanonicalName());
 
 
     @RequestMapping(
