@@ -158,7 +158,7 @@ public class GeoLookupService extends CprLookupService {
                 if (roadEntities != null && roadEntities.size() > 0) {
                     GeoRoadEntity roadEntity = roadEntities.stream().min(Comparator.comparing(GeoRoadEntity::getId)).get();
                     //There can be more than one roadEntities, we just take the first one.
-                    //This is becrause ane road can be split into many roadentities by sideroads.
+                    //This is because any road can be split into many roadentities by sideroads.
                     //If all sideeroads does not have the same name, it is an error at the delivered data.
                     geoLookupDTO.setRoadName(roadEntity.getName().iterator().next().getName());
                     geoLookupDTO.setLocalityCode(roadEntity.getLocality().iterator().next().getCode());
@@ -200,6 +200,12 @@ public class GeoLookupService extends CprLookupService {
                             if (entity != null) {
                                 geoLookupDTO.setPostalDistrict(entity.getName().current().getName());
                             }
+                        }
+                        if (geoLookupDTO.getLocalityCode() == null && !accessAddress.getLocality().isEmpty() && accessAddress.getLocality().current() != null) {
+                            String localityCode = accessAddress.getLocality().current().getCode();
+                            geoLookupDTO.setLocalityCode(localityCode);
+                        }
+                        if (geoLookupDTO.getPostalCode() != 0 && geoLookupDTO.getLocalityCode() != null) {
                             break;
                         }
                     }
