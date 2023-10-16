@@ -1,14 +1,15 @@
-FROM maven:3-jdk-11
-#FROM maven:3.8.3-openjdk-16
+FROM eclipse-temurin:17.0.8.1_1-jdk
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends maven
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
 COPY pom.xml /code/pom.xml
 COPY core /code/core
 COPY plugin /code/plugin
 WORKDIR /code/
 RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
-RUN mkdir -p /dist/core && mkdir -p /dist/plugin/jar \
-    &&  mv /code/core/target/*.jar /dist/core/ \
-    && mv /code/plugin/jar/*.jar /dist/plugin/jar/
+RUN mkdir -p /dist/core && mkdir -p /dist/plugin/jar && \
+    mv /code/core/target/*.jar /dist/core/ && \
+    mv /code/plugin/jar/*.jar /dist/plugin/jar/
 COPY docker/hibernate.xml /configs/hibernate.xml
 COPY docker/dev-settings.properties /dist/core/application.properties
 
