@@ -98,6 +98,8 @@ public class CompanyOwnersService {
                     for (AttributeRecord organizationAttribute : organizationRecord.getAttributes()) {
                         // TODO: Brug info til at tjekke om det er en ejer
                         //legaleEjere.add(relationRecord);
+                        //reelleEjere.add(relationRecord);
+                        //fuldtAnsvarligeDeltagere.add(relationRecord);
                     }
                 }
                 long participantUnitNumber = relationRecord.getParticipantUnitNumber();
