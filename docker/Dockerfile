@@ -13,6 +13,6 @@ COPY docker/hibernate.xml /configs/hibernate.xml
 COPY docker/dev-settings.properties /dist/core/application.properties
 
 WORKDIR /dist/core
-CMD ["java", "-jar", "datafordeler-core-exec.jar"]
+CMD ["java", "-Dloader.path=/dist/plugin/jar/", "-cp", "datafordeler-core-exec.jar", "org.springframework.boot.loader.PropertiesLauncher"]
 
 #https://git.magenta.dk/osflow/osflow/-/blob/develop/backend/docker/Dockerfile
