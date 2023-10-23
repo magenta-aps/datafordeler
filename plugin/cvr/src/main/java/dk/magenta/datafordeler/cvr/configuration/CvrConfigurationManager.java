@@ -76,6 +76,10 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
                     // Must use merge instead of save, because we are updating an object that was born in another session
                     configuration = (CvrConfiguration) session.merge(configuration);
                 }
+                if (configuration.encryptParticipantDirectRegisterPassword(true)) {
+                    // Must use merge instead of save, because we are updating an object that was born in another session
+                    configuration = (CvrConfiguration) session.merge(configuration);
+                }
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();

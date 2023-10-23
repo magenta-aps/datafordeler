@@ -479,14 +479,15 @@ public class CvrConfiguration implements Configuration {
     }
 
 
-    public boolean encryptParticipantDirectRegisterPassword() {
+    public boolean encryptParticipantDirectRegisterPassword(boolean overwrite) {
         if (
                 this.participantRegisterPasswordEncryptionFile != null &&
                         !(this.participantRegisterDirectLookupPassword == null || this.participantRegisterDirectLookupPassword.isEmpty()) &&
-                        (this.participantRegisterDirectLookupPasswordEncrypted == null || this.participantRegisterDirectLookupPasswordEncrypted.length == 0)
+                        (overwrite || this.participantRegisterDirectLookupPasswordEncrypted == null || this.participantRegisterDirectLookupPasswordEncrypted.length == 0)
         ) {
             try {
                 this.participantRegisterDirectLookupPasswordEncrypted = Encryption.encrypt(this.participantRegisterPasswordEncryptionFile, this.participantRegisterDirectLookupPassword);
+                this.participantRegisterDirectLookupPassword = null;
                 return true;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
