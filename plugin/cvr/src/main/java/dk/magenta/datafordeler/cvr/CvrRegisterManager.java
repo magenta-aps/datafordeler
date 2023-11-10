@@ -12,12 +12,14 @@ import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanySubscription;
 import dk.magenta.datafordeler.cvr.synchronization.CvrSourceData;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -34,6 +36,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -216,13 +219,18 @@ public class CvrRegisterManager extends RegisterManager {
                         CriteriaBuilder subscriptionBuilder = missingCompanySession.getCriteriaBuilder();
                         CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
                         allCompanySubscription.from(CompanySubscription.class);
-                        List<Integer> missingCompanyList = missingCompanySession.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
+                        List<Integer> subscribedCompanyList = missingCompanySession.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
+
+                        Query<Integer> query = missingCompanySession.createQuery("select "+CompanyRecord.DB_FIELD_CVR_NUMBER+" from "+CompanyRecord.class.getCanonicalName(), Integer.class);
+                        HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
+                        missingCompanyList.removeAll(new HashSet<>(query.list()));
 
                         requestBody = String.format(
                                 configuration.getQuery(schema),
                                 lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                                missingCompanyList,
-                                lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                                subscribedCompanyList,
+                                lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                                new ArrayList<>(missingCompanyList)
                         );
 
                         eventCommunicator.setUsername(configuration.getUsername(schema));

@@ -95,12 +95,6 @@
             <artifactId>jackson-jaxrs-xml-provider</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-csv</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
