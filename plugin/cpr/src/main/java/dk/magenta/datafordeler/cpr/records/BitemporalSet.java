@@ -22,7 +22,13 @@ public class BitemporalSet<R extends CprBitemporalRecord> implements Set<R> {
      * @return
      */
     public List<R> current() {
-        return this.stream().filter(r -> r.getRegistrationTo() == null).filter(r -> r.getEffectTo() == null).collect(Collectors.toList());
+        OffsetDateTime now = OffsetDateTime.now();
+        return this.stream()
+                .filter(r -> r.getRegistrationTo() == null || r.getRegistrationTo().isAfter(now))
+                .filter(r -> r.getRegistrationFrom() == null || r.getRegistrationFrom().isBefore(now))
+                .filter(r -> r.getEffectTo() == null || r.getEffectTo().isAfter(now))
+                .filter(r -> r.getEffectFrom() == null || r.getEffectFrom().isBefore(now))
+                .collect(Collectors.toList());
     }
 
     public R getFirstCurrent() {

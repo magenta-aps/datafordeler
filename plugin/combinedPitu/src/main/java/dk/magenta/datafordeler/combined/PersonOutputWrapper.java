@@ -15,11 +15,13 @@ import dk.magenta.datafordeler.geo.GeoLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
@@ -210,6 +212,19 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                 }
             }
         }
+
+        List<Integer> protections = input.getProtection().current().stream()
+                .filter(p -> p.getDeletionDate() == null || p.getDeletionDate().isAfter(LocalDate.now()))
+                .map(ProtectionDataRecord::getProtectionType)
+                .collect(Collectors.toList());
+        ArrayNode protectionList = objectMapper.createArrayNode();
+        for (Integer i : protections) {
+            if (i != null) {
+                protectionList.add(i);
+            }
+        }
+        root.putArray("beskyttelsestyper", protectionList);
+
         return root.getNode();
     }
 
