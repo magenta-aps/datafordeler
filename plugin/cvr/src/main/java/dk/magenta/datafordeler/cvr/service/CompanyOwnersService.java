@@ -32,10 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -94,14 +91,68 @@ public class CompanyOwnersService {
             HashSet<CompanyParticipantRelationRecord> fuldtAnsvarligeDeltagere = new HashSet<>();
 
             companyRecord.getParticipants().currentStream().forEach(relationRecord -> {
+                boolean harVirksomhedReelEjerOrganisation = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), "REELLE EJERE"));
+                boolean harVirksomhedTagetstillningTilReelleEjere = harVirksomhedReelEjerOrganisation;
+                boolean harVirksomhedAktiveReelleEjere = relationRecord.getOrganizations().stream().anyMatch(o -> o.active && Objects.equals(o.getMainType(), "REELLE EJERE"));
+                boolean erVirksomhedErhvervsdrivendeFonde = Objects.equals(companyRecord.getCompanyForm().getFirst(true, true).getCompanyFormCode(), "100");
+                boolean virksomhedErOphoert = companyRecord.getLifecycle().current().isEmpty();
+                boolean erVirksomhedBoersnoteret = companyRecord.getAttributes().stream().anyMatch(
+                        a -> Objects.equals(a.getType(), "BØRSNOTERET")
+                        && a.getValues().stream().anyMatch(v -> v.getBitemporality().isCurrent() && v.getValue().equalsIgnoreCase("true"))
+                );
+
+                boolean bestyrelseAnsesSomReelleEjere = harVirksomhedReelEjerOrganisation && erVirksomhedErhvervsdrivendeFonde && harVirksomhedTagetstillningTilReelleEjere && !virksomhedErOphoert;
+
+                boolean erLegalEjer = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), "LEGALE EJERE"));
+                boolean erReelEjer = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), "REELLE EJERE"));
+
+                boolean fooLegalEjer;
+                boolean fooReelEjer;
+
                 for (OrganizationRecord organizationRecord : relationRecord.getOrganizations()) {
-                    for (AttributeRecord organizationAttribute : organizationRecord.getAttributes()) {
-                        // TODO: Brug info til at tjekke om det er en ejer
-                        //legaleEjere.add(relationRecord);
-                        //reelleEjere.add(relationRecord);
-                        //fuldtAnsvarligeDeltagere.add(relationRecord);
+                    Set<String> currentOrganizationNames = organizationRecord.getNames().current().stream().map(n -> n.getName()).collect(Collectors.toSet());
+
+                    // Tjek Ejerregister
+                    if (currentOrganizationNames.contains("EJERREGISTER")) {
+                        for (OrganizationMemberdataRecord organizationMemberdataRecord : organizationRecord.memberData) {
+                            for (AttributeRecord attributeRecord : organizationMemberdataRecord.attributes) {
+                                if (Objects.equals(attributeRecord.getType(), "EJERANDEL_PROCENT")) {
+                                    for (AttributeValueRecord value : attributeRecord.getValues()) {
+                                        if (value.getBitemporality().isCurrent()) {
+                                            float ejerandel = Float.parseFloat(value.getValue());
+                                            if (ejerandel >= 0.05) {
+                                                fooLegalEjer = true;
+                                            }
+                                            if (ejerandel > 0.25) {
+                                                fooReelEjer = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (Objects.equals(attributeRecord.getType(), "EJERANDEL_STEMMERET_PROCENT")) {
+                                    for (AttributeValueRecord value : attributeRecord.getValues()) {
+                                        if (value.getBitemporality().isCurrent()) {
+                                            float ejerandel = Float.parseFloat(value.getValue());
+                                            if (ejerandel > 0.25) {
+                                                fooReelEjer = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Tjek Register
+                    if (organizationRecord.getMainType().equalsIgnoreCase("REGISTER") && currentOrganizationNames.contains("Reelle ejere")) {
+                        fooReelEjer = true;
                     }
                 }
+
+
+
+
+
                 long participantUnitNumber = relationRecord.getParticipantUnitNumber();
                 participantMap.put(participantUnitNumber, null);
             });

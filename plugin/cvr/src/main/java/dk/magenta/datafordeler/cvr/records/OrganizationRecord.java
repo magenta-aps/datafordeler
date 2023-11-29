@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import org.hibernate.Session;
 
@@ -73,8 +74,8 @@ public class OrganizationRecord extends CvrRecord {
     @JsonProperty(value = IO_FIELD_NAME)
     public Set<BaseNameRecord> names;
 
-    public Set<BaseNameRecord> getNames() {
-        return this.names;
+    public BitemporalSet<BaseNameRecord> getNames() {
+        return new BitemporalSet<>(this.names);
     }
 
     public void setNames(Set<BaseNameRecord> names) {
