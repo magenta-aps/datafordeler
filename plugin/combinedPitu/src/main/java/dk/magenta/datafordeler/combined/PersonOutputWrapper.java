@@ -225,6 +225,9 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         }
         root.putArray("beskyttelsestyper", protectionList);
 
+        AddressNameDataRecord addressNameDataRecord = this.getLatest(input.getAddressName());
+        root.put("adresseringsnavn", addressNameDataRecord != null ? addressNameDataRecord.getAddressName() : null);
+
         return root.getNode();
     }
 
