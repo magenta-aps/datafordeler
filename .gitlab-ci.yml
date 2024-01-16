@@ -56,7 +56,7 @@ variables:
     - docker
   image:
     # We use the `:debug` image as it contains `sh` needed by gitlab-ci.
-    name: gcr.io/kaniko-project/executor:debug-v0.16.0
+    name: gcr.io/kaniko-project/executor:v1.15.0-debug
     entrypoint: [ "" ]
 
 build-mssql-image:
