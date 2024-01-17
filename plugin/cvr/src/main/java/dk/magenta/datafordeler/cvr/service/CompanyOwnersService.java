@@ -53,6 +53,9 @@ public class CompanyOwnersService {
     @Autowired
     ParticipantRecordOutputWrapper participantRecordOutputWrapper;
 
+    private static final String LEGALE_EJERE = "LEGALE EJERE";
+    private static final String REELLE_EJERE = "REELLE EJERE";
+
 
     @RequestMapping(
             path = {"/{cvr}"},
@@ -90,26 +93,65 @@ public class CompanyOwnersService {
             HashSet<CompanyParticipantRelationRecord> reelleEjere = new HashSet<>();
             HashSet<CompanyParticipantRelationRecord> fuldtAnsvarligeDeltagere = new HashSet<>();
 
+
+            boolean virksomhedErOphoert = companyRecord.getLifecycle().current().isEmpty();
+            boolean erVirksomhedErhvervsdrivendeFonde = Objects.equals(companyRecord.getCompanyForm().getFirst(true, true).getCompanyFormCode(), "100");
+
             companyRecord.getParticipants().currentStream().forEach(relationRecord -> {
 
                 boolean useGroovyCode = true;
 
                 if (useGroovyCode) {
-                    boolean harVirksomhedReelEjerOrganisation = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), "REELLE EJERE"));
+                    boolean harVirksomhedReelEjerOrganisation = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), REELLE_EJERE));
 
-                    boolean harVirksomhedTagetstillningTilReelleEjere = harVirksomhedReelEjerOrganisation;
-                    boolean harVirksomhedAktiveReelleEjere = relationRecord.getOrganizations().stream().anyMatch(o -> o.active && Objects.equals(o.getMainType(), "REELLE EJERE"));
-                    boolean erVirksomhedErhvervsdrivendeFonde = Objects.equals(companyRecord.getCompanyForm().getFirst(true, true).getCompanyFormCode(), "100");
-                    boolean virksomhedErOphoert = companyRecord.getLifecycle().current().isEmpty();
+                    boolean harVirksomhedTagetstillingTilReelleEjere = harVirksomhedReelEjerOrganisation;
+                    boolean harVirksomhedAktiveReelleEjere = relationRecord.getOrganizations().stream().anyMatch(o -> o.active && Objects.equals(o.getMainType(), REELLE_EJERE));
                     boolean erVirksomhedBoersnoteret = companyRecord.getAttributes().stream().anyMatch(
                             a -> Objects.equals(a.getType(), "BØRSNOTERET")
                                     && a.getValues().stream().anyMatch(v -> v.getBitemporality().isCurrent() && v.getValue().equalsIgnoreCase("true"))
                     );
 
-                    boolean bestyrelseAnsesSomReelleEjere = harVirksomhedReelEjerOrganisation && erVirksomhedErhvervsdrivendeFonde && harVirksomhedTagetstillningTilReelleEjere && !virksomhedErOphoert;
+                    boolean bestyrelseAnsesSomReelleEjere = harVirksomhedReelEjerOrganisation &&
+                            erVirksomhedErhvervsdrivendeFonde &&
+                            harVirksomhedTagetstillingTilReelleEjere &&
+                            !virksomhedErOphoert;
 
-                    boolean erLegalEjer = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), "LEGALE EJERE"));
-                    boolean erReelEjer = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), "REELLE EJERE"));
+                    boolean virksomhedHarIkkeReelleEjereOgLedelseErIndsat = harVirksomhedReelEjerOrganisation &&
+                            !harVirksomhedAktiveReelleEjere &&
+                            !erVirksomhedErhvervsdrivendeFonde &&
+                            !erVirksomhedBoersnoteret &&
+                            !relationRecord.getOrganizations().stream().anyMatch(o -> o.getAttributes().getCurrentAttributeValues("KAN_IKKE_IDENTIFICERE_REELLE_EJERE", "boolean").contains(Boolean.TRUE)) &&
+                            !virksomhedErOphoert;
+
+                    boolean virksomhedHarIkkeKunnetIdentificereReelleEjereLedelseErIndsat = harVirksomhedReelEjerOrganisation &&
+                                !harVirksomhedAktiveReelleEjere &&
+                                !erVirksomhedErhvervsdrivendeFonde &&
+                                !erVirksomhedBoersnoteret &&
+                                relationRecord.getOrganizations().stream().anyMatch(o -> o.getAttributes().getCurrentAttributeValues("KAN_IKKE_IDENTIFICERE_REELLE_EJERE", "boolean").contains(Boolean.TRUE)) &&
+                                !virksomhedErOphoert;
+
+                    boolean erLegalEjer = false;
+                    boolean erReelEjer = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), REELLE_EJERE));
+
+                    for (OrganizationRecord organizationRecord : relationRecord.getOrganizations()) {
+                        String type = organizationRecord.getMainType();
+                        if (Objects.equals(type, LEGALE_EJERE)) {
+                            erLegalEjer = true;
+                        }
+                        if (Objects.equals(type, REELLE_EJERE)) {
+                            erReelEjer = true;  // er i aktiveReelleEjere
+                        }
+                        if (organizationRecord.getAttributes().getCurrentAttributeValues("FUNKTION", "string").contains("Reelle ejere")) {
+                            erReelEjer = true;
+                        }
+                    }
+
+
+                    if (!erReelEjer) {
+                        // Se om andre data gør personen til reel ejer
+
+                    }
+
 
                 } else {
                     boolean erLegalEjer;
