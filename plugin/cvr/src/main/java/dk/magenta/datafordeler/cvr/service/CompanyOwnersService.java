@@ -105,7 +105,7 @@ public class CompanyOwnersService {
                     boolean harVirksomhedReelEjerOrganisation = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), REELLE_EJERE));
 
                     boolean harVirksomhedTagetstillingTilReelleEjere = harVirksomhedReelEjerOrganisation;
-                    boolean harVirksomhedAktiveReelleEjere = relationRecord.getOrganizations().stream().anyMatch(o -> o.active && Objects.equals(o.getMainType(), REELLE_EJERE));
+                    boolean harVirksomhedAktiveReelleEjere = relationRecord.getOrganizations().stream().anyMatch(o -> /*o.active && */Objects.equals(o.getMainType(), REELLE_EJERE));
                     boolean erVirksomhedBoersnoteret = companyRecord.getAttributes().stream().anyMatch(
                             a -> Objects.equals(a.getType(), "BØRSNOTERET")
                                     && a.getValues().stream().anyMatch(v -> v.getBitemporality().isCurrent() && v.getValue().equalsIgnoreCase("true"))
