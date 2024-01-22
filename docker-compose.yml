@@ -6,6 +6,8 @@ services:
       dockerfile: docker/Dockerfile
     depends_on:
       - datafordeler-db
+    env_file:
+      - ./dev-environment/datafordeler.env
     volumes:
       - ./docker/dev-env/application:/app/dev-env/local
       - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
