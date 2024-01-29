@@ -24,7 +24,7 @@ public class SessionManager {
     
     //private final SessionFactory sessionFactory;
     @Autowired
-    private SessionFactory sessionFactory; // TODO: Maybe final?
+    private SessionFactory sessionFactory;
 
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
