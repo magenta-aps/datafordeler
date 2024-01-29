@@ -1,9 +1,12 @@
 package dk.magenta.datafordeler.core.database;
 
+import dk.magenta.datafordeler.core.DatabaseConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -18,18 +21,27 @@ import java.util.Set;
  * sessionManager.getSessionFactory().openSession();
  */
 public class SessionManager {
-
-    private final SessionFactory sessionFactory;
+    
+    //private final SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory; // TODO: Maybe final?
 
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
+
+    /*
 
     public SessionManager(SessionManagerConfiguration smConfig) {
         try {
             log.info("Initialize SessionManager");
+            // Create our session factory
+            log.info("Creating SessionFactory");
+            //DatabaseConfiguration databaseConfiguration = new DatabaseConfiguration();
+            //this.sessionFactory = databaseConfiguration.sessionFactory().getObject();
 
             // Create empty configuration object
             Configuration configuration = new Configuration();
 
+            // TODO: Refactor to get configuration from core/DatabaseConfiguration.java
             log.info("Loading configuration from " + smConfig.getPrimaryHibernateConfigurationFile());
             configuration.configure(smConfig.getPrimaryHibernateConfigurationFile());
 
@@ -68,14 +80,17 @@ public class SessionManager {
             }
 
             // Create our session factory
-            log.info("Creating SessionFactory");
+            //log.info("Creating SessionFactory");
+            //this.sessionFactory = databaseConfiguration.sessionFactory().getObject();
             this.sessionFactory = configuration.buildSessionFactory();
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
             log.error("Initial SessionFactory creation failed.", ex);
             throw new ExceptionInInitializerError(ex);
         }
+    
     }
+    */
 
     /**
      * Get the session factory, used for obtaining Sessions
