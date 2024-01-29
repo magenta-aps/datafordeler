@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.command.Command;
+import dk.magenta.datafordeler.core.DatabaseConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;

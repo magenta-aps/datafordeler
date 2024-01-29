@@ -23,11 +23,13 @@ public class SessionManagerConfiguration {
     public String getSecondaryHibernateConfigurationFile() {
         return secondaryHibernateConfigurationFile;
     }
-
+    
+    /*
     @Bean
     public SessionManager sessionManager(SessionManagerConfiguration configuration) {
         return new SessionManager(configuration);
     }
+    */
 
     @Bean
     public ConfigurationSessionManager configurationSessionManager(SessionManagerConfiguration configuration) {
