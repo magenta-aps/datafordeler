@@ -11,6 +11,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import java.util.Set;
  * A bean to obtain Sessions with. This should be autowired in, and sessions obtained with
  * sessionManager.getSessionFactory().openSession();
  */
+@Component
 public class SessionManager {
     
     //private final SessionFactory sessionFactory;
