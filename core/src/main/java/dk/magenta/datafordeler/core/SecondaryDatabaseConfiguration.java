@@ -20,36 +20,24 @@ import java.util.Properties;
 
 @Configuration
 //public class DatabaseConfiguration extends org.hibernate.cfg.Configuration {
-public class DatabaseConfiguration {
+public class SecondaryDatabaseConfiguration {
 
     //private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
     @Bean
-    public HashSet<Class> managedClasses() {
-        HashSet<Class> managedClasses = new HashSet<Class>();
-        managedClasses.add(dk.magenta.datafordeler.core.database.Identification.class);
-        managedClasses.add(dk.magenta.datafordeler.core.database.Entity.class);
-        managedClasses.add(dk.magenta.datafordeler.core.database.Registration.class);
-        managedClasses.add(dk.magenta.datafordeler.core.database.Effect.class);
-        managedClasses.add(dk.magenta.datafordeler.core.database.DataItem.class);
-        managedClasses.add(dk.magenta.datafordeler.core.database.RecordCollection.class);
-        managedClasses.add(dk.magenta.datafordeler.core.database.RecordData.class);
-        managedClasses.add(dk.magenta.datafordeler.core.database.LastUpdated.class);
+    public HashSet<Class> managedSecondaryClasses() {
+        HashSet<Class> managedSecondaryClasses = new HashSet<Class>();
+        managedSecondaryClasses.add(dk.magenta.datafordeler.core.command.Command.class);
+        managedSecondaryClasses.add(dk.magenta.datafordeler.core.database.InterruptedPull.class);
+        managedSecondaryClasses.add(dk.magenta.datafordeler.core.database.InterruptedPullFile.class);
 
-        Iterator<Class> itr = managedClasses.iterator();
+        Iterator<Class> itr = managedSecondaryClasses.iterator();
         /*
-        for (Class cls : managedClasses) {
+        for (Class cls : managedSecondaryClasses) {
             log.info("Located hardcoded data class " + cls.getCanonicalName());
         }*/
         ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
-        componentProvider.addIncludeFilter(new AnnotationTypeFilter(javax.persistence.Entity.class));
-        componentProvider.addExcludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
-
-        while (itr.hasNext()) {
-            Class cls = itr.next();
-            //log.info("Located hardcoded data class " + cls.getCanonicalName());
-            componentProvider.addExcludeFilter(new AssignableTypeFilter(cls));
-        }
+        componentProvider.addIncludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
 
         /*
         for (Class cls : ConfigurationSessionManager.getManagedClasses()) {
@@ -63,35 +51,35 @@ public class DatabaseConfiguration {
             for (BeanDefinition component : components) {
                 Class cls = Class.forName(component.getBeanClassName(), true, cl);
                 //log.info("Located autodetected data class " + cls.getCanonicalName());
-                managedClasses.add(cls);
+                managedSecondaryClasses.add(cls);
             }
         } catch (Throwable ex) {
             //log.error("Initial SessionFactoryBean creation failed.", ex);
             throw new ExceptionInInitializerError(ex);
         }
-        return managedClasses;
+        return managedSecondaryClasses;
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("dk.magenta.datafordeler");
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        while (managedClasses().iterator().hasNext()) {
-            sessionFactory.setAnnotatedClasses(managedClasses().iterator().next());
+    public LocalSessionFactoryBean secondarySessionFactory() {
+        LocalSessionFactoryBean secondarySessionFactory = new LocalSessionFactoryBean();
+        secondarySessionFactory.setDataSource(secondaryDataSource());
+        secondarySessionFactory.setPackagesToScan("dk.magenta.datafordeler");
+        secondarySessionFactory.setHibernateProperties(hibernateProperties());
+        while (managedSecondaryClasses().iterator().hasNext()) {
+            secondarySessionFactory.setAnnotatedClasses(managedSecondaryClasses().iterator().next());
         }
-        return sessionFactory;
+        return secondarySessionFactory;
     }
 
     @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(System.getenv("DATABASE_CLASS"));
-        dataSource.setUrl(System.getenv("DATABASE_URL"));
-        dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
-        dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
-        return dataSource;
+    public DataSource secondaryDataSource() {
+        DriverManagerDataSource secondaryDataSource = new DriverManagerDataSource();
+        secondaryDataSource.setDriverClassName(System.getenv("SECONDARY_DATABASE_CLASS"));
+        secondaryDataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
+        secondaryDataSource.setUsername(System.getenv("SECONDARY_DATABASE_USERNAME"));
+        secondaryDataSource.setPassword(System.getenv("SECONDARY_DATABASE_PASSWORD"));
+        return secondaryDataSource;
     }
 
     private final Properties hibernateProperties() {
@@ -103,10 +91,12 @@ public class DatabaseConfiguration {
         hibernateProperties.setProperty("hibernate.show_sql",
             (System.getenv("DATABASE_SHOW_SQL") != null)
             ? System.getenv("DATABASE_SHOW_SQL") : "false");
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto",
+            (System.getenv("SECONDARY_DATABASE_METHOD") != null)
+            ? System.getenv("SECONDARY_DATABASE_METHOD") : "validate");
         hibernateProperties.setProperty("hibernate.default_schema",
-            (System.getenv("DATABASE_DEFAULT_SCHEMA") != null)
-            ? System.getenv("DATABASE_DEFAULT_SCHEMA") : null);
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
+            (System.getenv("SECONDARY_DATABASE_DEFAULT_SCHEMA") != null)
+            ? System.getenv("SECONDARY_DATABASE_DEFAULT_SCHEMA") : null);
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
         hibernateProperties.setProperty("hibernate.c3p0.min_size", "5");
         hibernateProperties.setProperty("hibernate.c3p0.max_size", "200");
