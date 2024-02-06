@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.util.Encryption;
 import org.apache.logging.log4j.LogManager;
@@ -44,6 +45,9 @@ public class Application {
     @Autowired
     SessionManager sessionManager;
 
+    @Autowired
+    ConfigurationSessionManager configurationSessionManager;
+
     private static final Logger log = LogManager.getLogger(Application.class.getCanonicalName());
 
     public static final int servicePort = 8445;
@@ -61,7 +65,9 @@ public class Application {
 
         // Run Spring
         try {
+            System.out.println("RUN SPRING APPLICATION");
             SpringApplication.run(Application.class, args);
+            System.out.println("SPRING APPLICATION FINISHED RUNNING");
         } catch (Throwable e) {
             log.error(e);
             while (e != null) {
