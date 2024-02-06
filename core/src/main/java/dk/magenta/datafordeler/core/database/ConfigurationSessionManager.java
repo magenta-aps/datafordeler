@@ -63,6 +63,12 @@ public class ConfigurationSessionManager extends SessionManager {
         dataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
         dataSource.setUsername(System.getenv("SECONDARY_DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("SECONDARY_DATABASE_PASSWORD"));
+
+//        dataSource.setDriverClassName(getEnv("SECONDARY_DATABASE_CLASS", "org.h2.Driver"));
+//        dataSource.setUrl(getEnv("SECONDARY_DATABASE_URL", "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO"));
+//        dataSource.setUsername(getEnv("SECONDARY_DATABASE_USERNAME", "sa"));
+//        dataSource.setPassword(getEnv("SECONDARY_DATABASE_PASSWORD", "testTEST1"));
+
         return dataSource;
     }
 

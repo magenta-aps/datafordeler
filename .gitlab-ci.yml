@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - release
+  - configure
 
 # https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
 .if-default-branch-refs: &if-default-branch-refs
@@ -34,6 +35,9 @@ include:
       - "/gitlab-ci-templates/common/saltbert.v1.yml"
       - "/gitlab-ci-templates/common/docker-build-meta.v2.yml"
       - "/gitlab-ci-templates/common/docker-release-meta.v1.yml"
+      - "/gitlab-ci-templates/common/config-updater-meta.v1.yml"
+      - "/gitlab-ci-templates/common/conventional-commits-meta.v1.yml"
+      - "/gitlab-ci-templates/common/conventional-commits-changelog-meta.v1.yml"
 
 variables:
   RELEASE_REGISTRY: docker.io
@@ -108,6 +112,8 @@ build-openapi-image:
     #M$ sql variables
     ACCEPT_EULA: "Y"
     SA_PASSWORD: "testTEST1"
+    SERVERNAME: "dafodev"
+    SERVER_PORT: "80"
 
     DATABASE_CLASS: "org.h2.Driver"
     DATABASE_URL: "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO"
@@ -126,6 +132,31 @@ build-openapi-image:
     SECONDARY_DATABASE_PASSWORD: "testTEST1"
     SECONDARY_DATABASE_METHOD: "create-drop"
     SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
+
+    SSL_ENABLE: "false"
+    
+    USER_DATABASE_ENABLED: "false"
+    USER_DATABASE_SECURITY_DISABLED: "false"
+    USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler"
+    USER_DATABASE_USERNAME: "sa"
+    USER_DATABASE_PASSWORD: "testTEST1"
+    STS_METADATA_PATH: "/app/conf/sts_metadata.xml"
+    
+    STATISTICS_ENABLE: "false"
+    PULL_ENABLE: "true"
+    CRON_ENABLE: "true"
+    IP_WHITELIST: "127.0.0.1"
+    
+    CPR_PROXY_URL: ""
+    CPR_LOCAL_DIR: "/app/dev-env/local/cpr/download"
+    CPR_SUBSCRIPTION_ENABLE: "true"
+    CPR_ENCRYPTION_KEYFILE: "/tmp/testfile"
+    
+    CVR_DEMO_COMPANYFILE: "file:///app/dev-env/local/cvr/company_in.json"
+    CVR_DEMO_UNITFILE: "file:///app/dev-env/local/cvr/unit.json"
+    CVR_DEMO_PARTICIPANTFILE: "file:///app/dev-env/local/cvr/person.json"
+    
+    ERRORFILE_DIR: "cache/log"
 
   tags:
     - docker
@@ -276,6 +307,7 @@ Release Datafordeler image:
       "docker://${DAFO_IMAGE_SHA}"
       "docker://${DAFO_IMAGE_TAG}"
 
+# TODO: Remove when no longer needed
 Release Datafordeler-test-db image:
   extends:
     - .rules:semver-all
@@ -286,3 +318,25 @@ Release Datafordeler-test-db image:
       --dest-creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD}
       "docker://${DAFOSQL_IMAGE_SHA}"
       "docker://${DAFOSQL_IMAGE_TAG}"
+
+
+# Configure stage
+#################
+
+Configure Test:
+  stage: configure
+  extends:
+    - .rules:semver-all
+    - .config:endpoint-with-tag
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
+  variables:
+    ENDPOINT: datafordeler/salt/update-test
+
+Configure Production:
+  stage: configure
+  extends:
+    - .rules:semver-core
+    - .config:endpoint-with-tag
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
+  variables:
+    ENDPOINT: datafordeler/salt/update-production
