@@ -19,23 +19,22 @@ import java.util.Set;
 import java.util.Properties;
 
 @Configuration
-//public class DatabaseConfiguration extends org.hibernate.cfg.Configuration {
 public class SecondaryDatabaseConfiguration {
 
-    //private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
+    private static final Logger log = LogManager.getLogger(SecondaryDatabaseConfiguration.class.getCanonicalName());
 
     @Bean
     public HashSet<Class> managedSecondaryClasses() {
+        System.out.println("SETTING UP SECONDARY MANAGED CLASSES");
         HashSet<Class> managedSecondaryClasses = new HashSet<Class>();
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.command.Command.class);
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.database.InterruptedPull.class);
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.database.InterruptedPullFile.class);
 
         Iterator<Class> itr = managedSecondaryClasses.iterator();
-        /*
         for (Class cls : managedSecondaryClasses) {
-            log.info("Located hardcoded data class " + cls.getCanonicalName());
-        }*/
+            log.info("Located hardcoded secondary data class " + cls.getCanonicalName());
+        }
         ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
         componentProvider.addIncludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
 
@@ -50,11 +49,11 @@ public class SecondaryDatabaseConfiguration {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             for (BeanDefinition component : components) {
                 Class cls = Class.forName(component.getBeanClassName(), true, cl);
-                //log.info("Located autodetected data class " + cls.getCanonicalName());
+                log.info("Located autodetected secondary data class " + cls.getCanonicalName());
                 managedSecondaryClasses.add(cls);
             }
         } catch (Throwable ex) {
-            //log.error("Initial SessionFactoryBean creation failed.", ex);
+            log.error("Initial SessionFactoryBean creation failed.", ex);
             throw new ExceptionInInitializerError(ex);
         }
         return managedSecondaryClasses;
@@ -62,6 +61,7 @@ public class SecondaryDatabaseConfiguration {
 
     @Bean
     public LocalSessionFactoryBean secondarySessionFactory() {
+        System.out.println("SECONDARY DATABASE CONFIGURATION STARTED");
         LocalSessionFactoryBean secondarySessionFactory = new LocalSessionFactoryBean();
         secondarySessionFactory.setDataSource(secondaryDataSource());
         secondarySessionFactory.setPackagesToScan("dk.magenta.datafordeler");
@@ -74,6 +74,7 @@ public class SecondaryDatabaseConfiguration {
 
     @Bean
     public DataSource secondaryDataSource() {
+        System.out.println("SET UP SECONDARY DATASOURCE");
         DriverManagerDataSource secondaryDataSource = new DriverManagerDataSource();
         secondaryDataSource.setDriverClassName(System.getenv("SECONDARY_DATABASE_CLASS"));
         secondaryDataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
@@ -83,6 +84,7 @@ public class SecondaryDatabaseConfiguration {
     }
 
     private final Properties hibernateProperties() {
+        System.out.println("SET UP SECONDARY HIBERNATE PROPERTIES");
         Properties hibernateProperties = new Properties();
 
         hibernateProperties.setProperty("hibernate.dialect",
