@@ -2,7 +2,7 @@ package dk.magenta.datafordeler.core.database;
 
 
 import dk.magenta.datafordeler.core.command.Command;
-import dk.magenta.datafordeler.core.SecondaryDatabaseConfiguration;
+//import dk.magenta.datafordeler.core.SecondaryDatabaseConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -21,7 +21,7 @@ import java.util.Set;
  * A bean to obtain Sessions with. Autowire this in, and obtain sessions with
  * sessionManager.getSessionFactory().openSession();
  */
-@Component
+//@Component
 public class ConfigurationSessionManager {
 
     @Autowired
@@ -88,6 +88,7 @@ public class ConfigurationSessionManager {
      * Get the session factory, used for obtaining Sessions
      */
     public SessionFactory getSessionFactory() {
+        System.out.println("GET SECONDARY SESSIONFACTORY");
         return this.secondarySessionFactory;
     }
 

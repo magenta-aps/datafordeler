@@ -1,6 +1,6 @@
 package dk.magenta.datafordeler.core.database;
 
-import dk.magenta.datafordeler.core.DatabaseConfiguration;
+//import dk.magenta.datafordeler.core.DatabaseConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -21,15 +21,14 @@ import java.util.Set;
  * A bean to obtain Sessions with. This should be autowired in, and sessions obtained with
  * sessionManager.getSessionFactory().openSession();
  */
-@Component
+//@Component
 public class SessionManager {
     
-    //private final SessionFactory sessionFactory;
     @Autowired
     private SessionFactory sessionFactory;
 
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
-
+    
     /*
 
     public SessionManager(SessionManagerConfiguration smConfig) {
@@ -98,6 +97,7 @@ public class SessionManager {
      * Get the session factory, used for obtaining Sessions
      */
     public SessionFactory getSessionFactory() {
+        System.out.println("MESSING AROUND IN DATABASE/SESSIONFACTORY.JAVA");
         return this.sessionFactory;
     }
 
