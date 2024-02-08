@@ -27,7 +27,6 @@ public class DatabaseConfiguration {
 
     //@Bean
     public HashSet<Class> managedClasses() {
-        System.out.println("SETTING UP THE MANAGED CLASSES");
         HashSet<Class> managedClasses = new HashSet<Class>();
         managedClasses.add(dk.magenta.datafordeler.core.database.Identification.class);
         managedClasses.add(dk.magenta.datafordeler.core.database.Entity.class);
@@ -49,11 +48,6 @@ public class DatabaseConfiguration {
             log.info("Located hardcoded data class " + cls.getCanonicalName());
             componentProvider.addExcludeFilter(new AssignableTypeFilter(cls));
         }
-        /*
-        for (Class cls : ConfigurationSessionManager.getManagedClasses()) {
-            componentProvider.addExcludeFilter(new AssignableTypeFilter(cls));
-        }
-        */
 
         Set<BeanDefinition> components = componentProvider.findCandidateComponents("dk.magenta.datafordeler");
         try {
@@ -71,7 +65,6 @@ public class DatabaseConfiguration {
     }
 
     public LocalSessionFactoryBean sessionFactory() {
-        System.out.println("DATABASE CONFIGURATION STARTED");
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("dk.magenta.datafordeler", "dk.magenta.datafordeler.database");
@@ -81,8 +74,6 @@ public class DatabaseConfiguration {
         }
         try {
             sessionFactory.afterPropertiesSet();
-            System.out.println("AFTERPROPERTIESSET");
-            System.out.println(sessionFactory.getObject());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -90,17 +81,11 @@ public class DatabaseConfiguration {
     }
 
     public DataSource dataSource() {
-        System.out.println("SET UP PRIMARY DATASOURCE");
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        System.out.println("SET DATABASE CLASS TO " + System.getenv("DATABASE_CLASS"));
         dataSource.setDriverClassName(System.getenv("DATABASE_CLASS"));
-        System.out.println("SET DATABASE URL TO " + System.getenv("DATABASE_URL"));
         dataSource.setUrl(System.getenv("DATABASE_URL"));
-        System.out.println("SET DATABASE USERNAME");
         dataSource.setUsername(System.getenv("DATABASE_USERNAME TO ") + System.getenv("DATABASE_USERNAME"));
-        System.out.println("SET DATABASE PASSWORD");
         dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
-        System.out.println("PRIMARY DATASOURCE SETUP COMPLETE");
         return dataSource;
     }
 
@@ -110,7 +95,6 @@ public class DatabaseConfiguration {
     }
 
     private Properties hibernateProperties() {
-        System.out.println("CREATE PRIMARY HIBERNATE PROPERTIES");
         Properties hibernateProperties = new Properties();
 
         hibernateProperties.setProperty("hibernate.dialect", getEnv("DATABASE_DIALECT", "org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect"));
