@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.core;
+package dk.magenta.datafordeler.core.database.setup;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,11 +26,13 @@ public class SecondaryDatabaseConfiguration {
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.database.InterruptedPull.class);
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.database.InterruptedPullFile.class);
 
-        for (Class cls : managedSecondaryClasses) {
-            log.info("Located hardcoded secondary data class " + cls.getCanonicalName());
-        }
         ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
         componentProvider.addIncludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
+
+        for (Class cls : managedSecondaryClasses) {
+            log.info("Located hardcoded configuration data class " + cls.getCanonicalName());
+            componentProvider.addExcludeFilter(new AssignableTypeFilter(cls));
+        }
 
         Set<BeanDefinition> components = componentProvider.findCandidateComponents("dk.magenta.datafordeler");
         try {
@@ -47,20 +49,16 @@ public class SecondaryDatabaseConfiguration {
         return managedSecondaryClasses;
     }
 
-    public LocalSessionFactoryBean secondarySessionFactory() {
-        LocalSessionFactoryBean secondarySessionFactory = new LocalSessionFactoryBean();
-        secondarySessionFactory.setDataSource(secondaryDataSource());
-        secondarySessionFactory.setPackagesToScan("dk.magenta.datafordeler");
-        secondarySessionFactory.setHibernateProperties(hibernateProperties());
+    public LocalSessionFactoryBean sessionFactory() throws IOException {
+        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+        sessionFactoryBean.setDataSource(secondaryDataSource());
+        sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
+        sessionFactoryBean.setHibernateProperties(hibernateProperties());
         for (Class managedClass : managedSecondaryClasses()) {
-            secondarySessionFactory.setAnnotatedClasses(managedClass);
+            sessionFactoryBean.setAnnotatedClasses(managedClass);
         }
-        try {
-            secondarySessionFactory.afterPropertiesSet();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return secondarySessionFactory;
+        sessionFactoryBean.afterPropertiesSet();
+        return sessionFactoryBean;
     }
 
     public DataSource secondaryDataSource() {
@@ -77,7 +75,7 @@ public class SecondaryDatabaseConfiguration {
         return (value != null) ? value : fallback;
     }
 
-    private final Properties hibernateProperties() {
+    private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
 
         hibernateProperties.setProperty("hibernate.dialect", getEnv("DATABASE_DIALECT", "org.hibernate.dialect.H2Dialect"));

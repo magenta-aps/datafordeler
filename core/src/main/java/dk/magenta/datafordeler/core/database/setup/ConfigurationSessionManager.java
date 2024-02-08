@@ -1,8 +1,6 @@
-package dk.magenta.datafordeler.core.database;
+package dk.magenta.datafordeler.core.database.setup;
 
 
-import dk.magenta.datafordeler.core.SecondaryDatabaseConfiguration;
-import dk.magenta.datafordeler.core.command.Command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -11,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
 
 /**
  * A bean to obtain Sessions with. Autowire this in, and obtain sessions with
@@ -28,40 +25,18 @@ public class ConfigurationSessionManager {
 
     private static final Logger log = LogManager.getLogger(ConfigurationSessionManager.class.getCanonicalName());
 
-    private static final HashSet<Class> managedClasses = new HashSet<>();
-
-    static {
-        managedClasses.add(Command.class);
-        managedClasses.add(InterruptedPull.class);
-        managedClasses.add(InterruptedPullFile.class);
-    }
-
-    public static Set<Class> getManagedClasses() {
-        return managedClasses;
-    }
-
-
-    public ConfigurationSessionManager() {
-    }
-
     @PostConstruct
-    private void init() {
-        this.sessionFactory = this.databaseConfiguration.secondarySessionFactory().getObject();
+    private void init() throws IOException {
+        this.sessionFactory = this.databaseConfiguration.sessionFactory().getObject();
     }
 
-    /**
-     * Get the session factory, used for obtaining Sessions
-     */
     public SessionFactory getSessionFactory() {
-
-
         return this.sessionFactory;
     }
 
     @PreDestroy
     public void shutdown() {
         log.info("Shutting down SessionManager. Closing SessionFactory.");
-        // Close caches and connection pools
         this.sessionFactory.close();
     }
 

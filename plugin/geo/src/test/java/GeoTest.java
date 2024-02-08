@@ -1,4 +1,4 @@
-import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;

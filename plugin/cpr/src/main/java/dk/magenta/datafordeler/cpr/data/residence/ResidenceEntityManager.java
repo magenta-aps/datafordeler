@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.cpr.data.residence;
 
 import dk.magenta.datafordeler.core.database.RegistrationReference;
-import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.cpr.data.CprGeoEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRegistrationReference;
