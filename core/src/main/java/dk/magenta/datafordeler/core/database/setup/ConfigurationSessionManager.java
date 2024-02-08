@@ -58,19 +58,19 @@ public class ConfigurationSessionManager extends SessionManager {
     }
 
     public DataSource dataSource() {
-        DriverManagerDataSource secondaryDataSource = new DriverManagerDataSource();
-        secondaryDataSource.setDriverClassName(System.getenv("SECONDARY_DATABASE_CLASS"));
-        secondaryDataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
-        secondaryDataSource.setUsername(System.getenv("SECONDARY_DATABASE_USERNAME"));
-        secondaryDataSource.setPassword(System.getenv("SECONDARY_DATABASE_PASSWORD"));
-        return secondaryDataSource;
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(System.getenv("SECONDARY_DATABASE_CLASS"));
+        dataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
+        dataSource.setUsername(System.getenv("SECONDARY_DATABASE_USERNAME"));
+        dataSource.setPassword(System.getenv("SECONDARY_DATABASE_PASSWORD"));
+        return dataSource;
     }
 
     protected Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
 
-        hibernateProperties.setProperty("hibernate.dialect", getEnv("DATABASE_DIALECT", "org.hibernate.dialect.H2Dialect"));
-        hibernateProperties.setProperty("hibernate.show_sql", getEnv("DATABASE_SHOW_SQL", "false"));
+        hibernateProperties.setProperty("hibernate.dialect", getEnv("SECONDARY_DATABASE_DIALECT", "org.hibernate.dialect.H2Dialect"));
+        hibernateProperties.setProperty("hibernate.show_sql", getEnv("SECONDARY_DATABASE_SHOW_SQL", "false"));
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", getEnv("SECONDARY_DATABASE_METHOD", "validate"));
         hibernateProperties.setProperty("hibernate.default_schema", getEnv("SECONDARY_DATABASE_DEFAULT_SCHEMA", "dbo"));
 
