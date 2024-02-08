@@ -65,7 +65,7 @@ public class CompanyOwnersService {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for owners of cvr " + cvr);
-        this.checkAndLogAccess(loggerHelper);
+        //this.checkAndLogAccess(loggerHelper);
         Session session = sessionManager.getSessionFactory().openSession();
 
         OffsetDateTime now = OffsetDateTime.now();
@@ -87,6 +87,7 @@ public class CompanyOwnersService {
         List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
         if (companyRecords != null && !companyRecords.isEmpty()) {
             CompanyRecord companyRecord = companyRecords.get(0);
+            System.out.println("Fandt en CompanyRecord");
 
             HashMap<Long, ParticipantRecord> participantMap = new HashMap<>();
             HashSet<CompanyParticipantRelationRecord> legaleEjere = new HashSet<>();
@@ -97,9 +98,14 @@ public class CompanyOwnersService {
             boolean virksomhedErOphoert = companyRecord.getLifecycle().current().isEmpty();
             boolean erVirksomhedErhvervsdrivendeFonde = Objects.equals(companyRecord.getCompanyForm().getFirst(true, true).getCompanyFormCode(), "100");
 
+            System.out.println("Der er "+companyRecord.getParticipants().current().size()+" deltagere");
             companyRecord.getParticipants().currentStream().forEach(relationRecord -> {
+                System.out.println("Undersøger deltager "+relationRecord.getParticipantUnitNumber());
 
-                boolean useGroovyCode = true;
+                boolean useGroovyCode = false;
+                boolean erLegalEjer = false;
+                boolean erReelEjer = false;
+
 
                 if (useGroovyCode) {
                     boolean harVirksomhedReelEjerOrganisation = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), REELLE_EJERE));
@@ -130,19 +136,21 @@ public class CompanyOwnersService {
                                 relationRecord.getOrganizations().stream().anyMatch(o -> o.getAttributes().getCurrentAttributeValues("KAN_IKKE_IDENTIFICERE_REELLE_EJERE", "boolean").contains(Boolean.TRUE)) &&
                                 !virksomhedErOphoert;
 
-                    boolean erLegalEjer = false;
-                    boolean erReelEjer = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), REELLE_EJERE));
+                    erReelEjer = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), REELLE_EJERE));
 
                     for (OrganizationRecord organizationRecord : relationRecord.getOrganizations()) {
                         String type = organizationRecord.getMainType();
                         if (Objects.equals(type, LEGALE_EJERE)) {
+                            System.out.println("Er i LEGALE_EJERE");
                             erLegalEjer = true;
                         }
                         if (Objects.equals(type, REELLE_EJERE)) {
                             erReelEjer = true;  // er i aktiveReelleEjere
+                            System.out.println("Er i REELLE_EJERE");
                         }
                         if (organizationRecord.getAttributes().getCurrentAttributeValues("FUNKTION", "string").contains("Reelle ejere")) {
                             erReelEjer = true;
+                            System.out.println("Er i en organisation er har FUNKTION='Reelle Ejere'");
                         }
                     }
 
@@ -152,10 +160,10 @@ public class CompanyOwnersService {
 
                     }
 
-
                 } else {
-                    boolean erLegalEjer;
-                    boolean erReelEjer;
+
+                    boolean person = Objects.equals(relationRecord.getRelationParticipantRecord().getUnitType(), "PERSON");
+                    boolean virksomhed = Objects.equals(relationRecord.getRelationParticipantRecord().getUnitType(), "VIRKSOMHED");
 
 
                     // Ifølge Ejerforhold_Doc.png
@@ -171,19 +179,22 @@ public class CompanyOwnersService {
                                             if (value.getBitemporality().isCurrent()) {
                                                 float ejerandel = Float.parseFloat(value.getValue());
                                                 if (ejerandel >= 0.05) {
+                                                    System.out.println("Har ejerandel over 5%");
                                                     erLegalEjer = true;
                                                 }
-                                                if (ejerandel > 0.25) {
+                                                if (person && ejerandel > 0.25) {
+                                                    System.out.println("Har ejerandel over 25%");
                                                     erReelEjer = true;
                                                 }
                                             }
                                         }
                                     }
-                                    if (Objects.equals(attributeRecord.getType(), "EJERANDEL_STEMMERET_PROCENT")) {
+                                    if (person && Objects.equals(attributeRecord.getType(), "EJERANDEL_STEMMERET_PROCENT")) {
                                         for (AttributeValueRecord value : attributeRecord.getValues()) {
                                             if (value.getBitemporality().isCurrent()) {
                                                 float ejerandel = Float.parseFloat(value.getValue());
                                                 if (ejerandel > 0.25) {
+                                                    System.out.println("Har stemmeret over 25%");
                                                     erReelEjer = true;
                                                 }
                                             }
@@ -203,6 +214,12 @@ public class CompanyOwnersService {
 
                 }
 
+                if (erReelEjer) {
+                    reelleEjere.add(relationRecord);
+                }
+                if (erLegalEjer) {
+                    legaleEjere.add(relationRecord);
+                }
 
 
                 long participantUnitNumber = relationRecord.getParticipantUnitNumber();
@@ -248,13 +265,14 @@ public class CompanyOwnersService {
                 node.put(ParticipantRecord.IO_FIELD_UNIT_NUMBER, relationRecord.getParticipantUnitNumber());
                 output.add(node);
             } else {
-                output.add(
+                /*output.add(
                         (ObjectNode) participantRecordOutputWrapper.wrapResult(
                                 participantRecord,
                                 participantRecordQuery,
                                 OutputWrapper.Mode.DATAONLY
                         )
-                );
+                );*/
+                output.add(participantRecord.getBusinessKey());
             }
         }
         return output;
