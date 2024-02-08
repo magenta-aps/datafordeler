@@ -35,20 +35,20 @@ public class SessionManagerConfiguration {
         return new SessionManager(configuration);
     }
     */
-    @Bean
-    public SessionManager sessionManager() {
-        System.out.println("SET UP NEW SESSIONMANAGER");
-        return new SessionManager();
-    }
+//    @Bean
+//    public SessionManager sessionManager() {
+//        System.out.println("SET UP NEW SESSIONMANAGER");
+//        return new SessionManager();
+//    }
     /*
     @Bean
     public ConfigurationSessionManager configurationSessionManager(SessionManagerConfiguration configuration) {
         return new ConfigurationSessionManager(configuration);
     }
     */
-    @Bean
-    public ConfigurationSessionManager configurationSessionManager() {
-        System.out.println("SET UP NEW CONFIGURATIONSESSIONMANAGER");
-        return new ConfigurationSessionManager();
-    }
+//    @Bean
+//    public ConfigurationSessionManager configurationSessionManager() {
+//        System.out.println("SET UP NEW CONFIGURATIONSESSIONMANAGER");
+//        return new ConfigurationSessionManager();
+//    }
 }
