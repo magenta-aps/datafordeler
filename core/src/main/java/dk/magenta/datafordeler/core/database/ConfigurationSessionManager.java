@@ -1,4 +1,4 @@
-package dk.magenta.datafordeler.core.database.setup;
+package dk.magenta.datafordeler.core.database;
 
 
 import org.apache.logging.log4j.LogManager;

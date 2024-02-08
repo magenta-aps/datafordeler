@@ -3,7 +3,7 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.Pull;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.setup.SessionManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.ger.GerRegisterManager;
 import dk.magenta.datafordeler.ger.configuration.GerConfiguration;
 import dk.magenta.datafordeler.ger.configuration.GerConfigurationManager;

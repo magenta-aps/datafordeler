@@ -2,7 +2,7 @@ package dk.magenta.datafordeler.eskat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.MonitorService;
-import dk.magenta.datafordeler.core.database.setup.SessionManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
