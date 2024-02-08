@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.cpr.data.road;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import dk.magenta.datafordeler.core.database.setup.SessionManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
