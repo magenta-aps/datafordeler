@@ -1,14 +1,9 @@
 package dk.magenta.datafordeler.core;
 
-import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -17,9 +12,8 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.Properties;
+import java.util.Set;
 
 @Component
 public class SecondaryDatabaseConfiguration {
@@ -27,7 +21,6 @@ public class SecondaryDatabaseConfiguration {
     private static final Logger log = LogManager.getLogger(SecondaryDatabaseConfiguration.class.getCanonicalName());
 
     public HashSet<Class> managedSecondaryClasses() {
-        System.out.println("SETTING UP SECONDARY MANAGED CLASSES");
         HashSet<Class> managedSecondaryClasses = new HashSet<>();
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.command.Command.class);
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.database.InterruptedPull.class);
@@ -38,12 +31,6 @@ public class SecondaryDatabaseConfiguration {
         }
         ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
         componentProvider.addIncludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
-
-
-//        for (Class cls : ConfigurationSessionManager.getManagedClasses()) {
-//            componentProvider.addExcludeFilter(new AssignableTypeFilter(cls));
-//        }
-//
 
         Set<BeanDefinition> components = componentProvider.findCandidateComponents("dk.magenta.datafordeler");
         try {
@@ -57,12 +44,10 @@ public class SecondaryDatabaseConfiguration {
             log.error("Initial SessionFactoryBean creation failed.", ex);
             throw new ExceptionInInitializerError(ex);
         }
-        System.out.println("DONE");
         return managedSecondaryClasses;
     }
 
     public LocalSessionFactoryBean secondarySessionFactory() {
-        System.out.println("SECONDARY DATABASE CONFIGURATION STARTED");
         LocalSessionFactoryBean secondarySessionFactory = new LocalSessionFactoryBean();
         secondarySessionFactory.setDataSource(secondaryDataSource());
         secondarySessionFactory.setPackagesToScan("dk.magenta.datafordeler");
@@ -72,8 +57,6 @@ public class SecondaryDatabaseConfiguration {
         }
         try {
             secondarySessionFactory.afterPropertiesSet();
-            System.out.println("AFTERPROPERTIESSET");
-            System.out.println(secondarySessionFactory.getObject());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -81,7 +64,6 @@ public class SecondaryDatabaseConfiguration {
     }
 
     public DataSource secondaryDataSource() {
-        System.out.println("SET UP SECONDARY DATASOURCE");
         DriverManagerDataSource secondaryDataSource = new DriverManagerDataSource();
         secondaryDataSource.setDriverClassName(System.getenv("SECONDARY_DATABASE_CLASS"));
         secondaryDataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
@@ -96,7 +78,6 @@ public class SecondaryDatabaseConfiguration {
     }
 
     private final Properties hibernateProperties() {
-        System.out.println("SET UP SECONDARY HIBERNATE PROPERTIES");
         Properties hibernateProperties = new Properties();
 
         hibernateProperties.setProperty("hibernate.dialect", getEnv("DATABASE_DIALECT", "org.hibernate.dialect.H2Dialect"));
@@ -111,7 +92,6 @@ public class SecondaryDatabaseConfiguration {
         hibernateProperties.setProperty("hibernate.c3p0.max_statements", "50");
         hibernateProperties.setProperty("hibernate.c3p0.idle_test_period", "3000");
 
-        System.out.println(hibernateProperties.toString());
         return hibernateProperties;
     }
 }
