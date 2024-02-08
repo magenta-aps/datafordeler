@@ -33,7 +33,7 @@ public class SessionManager {
     public SessionManager() throws IOException {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setDataSource(dataSource());
-        sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler", "dk.magenta.datafordeler.database");
+        sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
         sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
         for (Class managedClass : managedClasses()) {
             sessionFactoryBean.setAnnotatedClasses(managedClass);
@@ -106,8 +106,8 @@ public class SessionManager {
 
         hibernateProperties.setProperty("hibernate.dialect", getEnv("DATABASE_DIALECT", "org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect"));
         hibernateProperties.setProperty("hibernate.show_sql", getEnv("DATABASE_SHOW_SQL", "false"));
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", getEnv("SECONDARY_DATABASE_METHOD", "validate"));
-        hibernateProperties.setProperty("hibernate.default_schema", getEnv("SECONDARY_DATABASE_DEFAULT_SCHEMA", "dbo"));
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", getEnv("DATABASE_METHOD", "validate"));
+        hibernateProperties.setProperty("hibernate.default_schema", getEnv("DATABASE_DEFAULT_SCHEMA", "dbo"));
 
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
