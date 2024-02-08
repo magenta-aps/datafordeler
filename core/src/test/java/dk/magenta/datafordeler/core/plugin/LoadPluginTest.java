@@ -2,7 +2,7 @@ package dk.magenta.datafordeler.core.plugin;
 
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.PluginManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.testutil.Order;
 import dk.magenta.datafordeler.core.testutil.OrderedRunner;
 import dk.magenta.datafordeler.plugindemo.DemoEntityManager;
