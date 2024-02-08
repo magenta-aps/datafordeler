@@ -1,7 +1,7 @@
 BEGIN
-    IF NOT EXISTS (SELECT * FROM Datafordeler.dbo.cpr_config)
+    IF NOT EXISTS (SELECT * FROM DatafordelerConfig.dbo.cpr_config)
         BEGIN
-        INSERT INTO Datafordeler.dbo.cpr_config (
+        INSERT INTO DatafordelerConfig.dbo.cpr_config (
         id,
         personRegisterType, personRegisterLocalFile, personRegisterFtpAddress,
         directCustomerNumber,
@@ -17,7 +17,7 @@ BEGIN
         END
     ELSE
         BEGIN
-        UPDATE Datafordeler.dbo.cpr_config SET
+        UPDATE DatafordelerConfig.dbo.cpr_config SET
         personRegisterType = 1,
         personRegisterLocalFile = '/app/dev-env/local/cpr/download/d170608.l534902',
         personRegisterFtpAddress = 'ftp://dummy'
@@ -25,9 +25,9 @@ BEGIN
 END
 
 BEGIN
-    IF NOT EXISTS (SELECT * FROM Datafordeler.dbo.geo_config)
+    IF NOT EXISTS (SELECT * FROM DatafordelerConfig.dbo.geo_config)
         BEGIN
-        INSERT INTO Datafordeler.dbo.geo_config (
+        INSERT INTO DatafordelerConfig.dbo.geo_config (
             id, charsetName,
             municipalityRegisterType, municipalityRegisterURL,
             localityRegisterType, localityRegisterURL,
@@ -49,7 +49,7 @@ BEGIN
             END
     ELSE
         BEGIN
-        UPDATE Datafordeler.dbo.geo_config SET
+        UPDATE DatafordelerConfig.dbo.geo_config SET
         municipalityRegisterType = 1, municipalityRegisterURL = 'file:///app/dev-env/local/geo/municipality.json',
         localityRegisterType = 1, localityRegisterURL = 'file:///app/dev-env/local/geo/locality.json',
         postcodeRegisterType = 1, postcodeRegisterURL = 'file:///app/dev-env/local/geo/post.json',
@@ -61,7 +61,7 @@ BEGIN
 END
 GO
 
-INSERT INTO Datafordeler.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cpr"}', 'pull', 'dev-env', 0)
-INSERT INTO Datafordeler.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cvr"}', 'pull', 'dev-env', 0)
-INSERT INTO Datafordeler.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "geo"}', 'pull', 'dev-env', 0)
+INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cpr"}', 'pull', 'dev-env', 0)
+INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cvr"}', 'pull', 'dev-env', 0)
+INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "geo"}', 'pull', 'dev-env', 0)
 GO
