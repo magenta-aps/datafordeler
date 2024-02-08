@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.core.database;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.plugindemo.fapi.DemoRecordQuery;
 import dk.magenta.datafordeler.plugindemo.model.DemoDataRecord;

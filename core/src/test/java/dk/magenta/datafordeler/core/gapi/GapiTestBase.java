@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.core.gapi;
 
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.setup.SessionManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.testutil.CallbackController;
 import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
 import org.apache.commons.io.IOUtils;
