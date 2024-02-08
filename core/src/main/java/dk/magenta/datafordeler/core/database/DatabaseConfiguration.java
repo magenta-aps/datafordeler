@@ -11,14 +11,16 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Properties;
 
-@Configuration
+@Component
 public class DatabaseConfiguration {
 
     private static final Logger log = LogManager.getLogger(DatabaseConfiguration.class.getCanonicalName());
@@ -36,7 +38,6 @@ public class DatabaseConfiguration {
         managedClasses.add(dk.magenta.datafordeler.core.database.RecordData.class);
         managedClasses.add(dk.magenta.datafordeler.core.database.LastUpdated.class);
 
-        Iterator<Class> itr = managedClasses.iterator();
         for (Class cls : managedClasses) {
             log.info("Located hardcoded data class " + cls.getCanonicalName());
         }
@@ -44,8 +45,7 @@ public class DatabaseConfiguration {
         componentProvider.addIncludeFilter(new AnnotationTypeFilter(javax.persistence.Entity.class));
         componentProvider.addExcludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
 
-        while (itr.hasNext()) {
-            Class cls = itr.next();
+        for (Class cls : managedClasses) {
             log.info("Located hardcoded data class " + cls.getCanonicalName());
             componentProvider.addExcludeFilter(new AssignableTypeFilter(cls));
         }
@@ -70,24 +70,29 @@ public class DatabaseConfiguration {
         return managedClasses;
     }
 
-    @Bean
     public LocalSessionFactoryBean sessionFactory() {
         System.out.println("DATABASE CONFIGURATION STARTED");
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan("dk.magenta.datafordeler", "dk.magenta.datafordeler.database");
         sessionFactory.setHibernateProperties(hibernateProperties());
-        while (managedClasses().iterator().hasNext()) {
-            sessionFactory.setAnnotatedClasses(this.managedClasses().iterator().next());
+        for (Class managedClass : managedClasses()) {
+            sessionFactory.setAnnotatedClasses(managedClass);
+        }
+        try {
+            sessionFactory.afterPropertiesSet();
+            System.out.println("AFTERPROPERTIESSET");
+            System.out.println(sessionFactory.getObject());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return sessionFactory;
     }
 
-    @Bean
     public DataSource dataSource() {
         System.out.println("SET UP PRIMARY DATASOURCE");
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        System.out.println("SET DATABASE CLASS TO" + System.getenv("DATABASE_CLASS"));
+        System.out.println("SET DATABASE CLASS TO " + System.getenv("DATABASE_CLASS"));
         dataSource.setDriverClassName(System.getenv("DATABASE_CLASS"));
         System.out.println("SET DATABASE URL TO " + System.getenv("DATABASE_URL"));
         dataSource.setUrl(System.getenv("DATABASE_URL"));
@@ -99,19 +104,20 @@ public class DatabaseConfiguration {
         return dataSource;
     }
 
-    private final Properties hibernateProperties() {
+    private static String getEnv(String key, String fallback) {
+        String value = System.getenv(key);
+        return (value != null) ? value : fallback;
+    }
+
+    private Properties hibernateProperties() {
         System.out.println("CREATE PRIMARY HIBERNATE PROPERTIES");
         Properties hibernateProperties = new Properties();
 
-        hibernateProperties.setProperty("hibernate.dialect",
-            (System.getenv("DATABASE_DIALECT") != null)
-            ? System.getenv("DATABASE_DIALECT") : "org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect");
-        hibernateProperties.setProperty("hibernate.show_sql",
-            (System.getenv("DATABASE_SHOW_SQL") != null)
-            ? System.getenv("DATABASE_SHOW_SQL") : "false");
-        hibernateProperties.setProperty("hibernate.default_schema",
-            (System.getenv("DATABASE_DEFAULT_SCHEMA") != null)
-            ? System.getenv("DATABASE_DEFAULT_SCHEMA") : null);
+        hibernateProperties.setProperty("hibernate.dialect", getEnv("DATABASE_DIALECT", "org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect"));
+        hibernateProperties.setProperty("hibernate.show_sql", getEnv("DATABASE_SHOW_SQL", "false"));
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", getEnv("SECONDARY_DATABASE_METHOD", "validate"));
+        hibernateProperties.setProperty("hibernate.default_schema", getEnv("SECONDARY_DATABASE_DEFAULT_SCHEMA", "dbo"));
+
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
         hibernateProperties.setProperty("hibernate.c3p0.min_size", "5");
