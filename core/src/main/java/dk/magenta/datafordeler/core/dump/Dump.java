@@ -5,7 +5,7 @@ import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.command.Worker;
 import dk.magenta.datafordeler.core.database.DumpInfo;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.setup.SessionManager;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.util.MockInternalServletRequest;

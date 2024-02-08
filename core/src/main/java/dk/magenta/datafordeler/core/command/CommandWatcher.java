@@ -1,6 +1,6 @@
 package dk.magenta.datafordeler.core.command;
 
-import dk.magenta.datafordeler.core.database.setup.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
