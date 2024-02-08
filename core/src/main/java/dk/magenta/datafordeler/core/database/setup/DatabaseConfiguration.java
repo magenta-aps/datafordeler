@@ -1,11 +1,8 @@
-package dk.magenta.datafordeler.core;
+package dk.magenta.datafordeler.core.database.setup;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
@@ -16,9 +13,8 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.Properties;
+import java.util.Set;
 
 @Component
 public class DatabaseConfiguration {
@@ -37,9 +33,6 @@ public class DatabaseConfiguration {
         managedClasses.add(dk.magenta.datafordeler.core.database.RecordData.class);
         managedClasses.add(dk.magenta.datafordeler.core.database.LastUpdated.class);
 
-        for (Class cls : managedClasses) {
-            log.info("Located hardcoded data class " + cls.getCanonicalName());
-        }
         ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
         componentProvider.addIncludeFilter(new AnnotationTypeFilter(javax.persistence.Entity.class));
         componentProvider.addExcludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
@@ -64,27 +57,23 @@ public class DatabaseConfiguration {
         return managedClasses;
     }
 
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("dk.magenta.datafordeler", "dk.magenta.datafordeler.database");
-        sessionFactory.setHibernateProperties(hibernateProperties());
+    public LocalSessionFactoryBean sessionFactory() throws IOException {
+        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+        sessionFactoryBean.setDataSource(dataSource());
+        sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler", "dk.magenta.datafordeler.database");
+        sessionFactoryBean.setHibernateProperties(hibernateProperties());
         for (Class managedClass : managedClasses()) {
-            sessionFactory.setAnnotatedClasses(managedClass);
+            sessionFactoryBean.setAnnotatedClasses(managedClass);
         }
-        try {
-            sessionFactory.afterPropertiesSet();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return sessionFactory;
+        sessionFactoryBean.afterPropertiesSet();
+        return sessionFactoryBean;
     }
 
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(System.getenv("DATABASE_CLASS"));
         dataSource.setUrl(System.getenv("DATABASE_URL"));
-        dataSource.setUsername(System.getenv("DATABASE_USERNAME TO ") + System.getenv("DATABASE_USERNAME"));
+        dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
         return dataSource;
     }
