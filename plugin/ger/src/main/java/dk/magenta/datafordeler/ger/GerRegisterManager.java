@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.ger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;

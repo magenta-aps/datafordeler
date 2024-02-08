@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Engine;
-import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.plugin.FtpCommunicator;
 import dk.magenta.datafordeler.core.user.DafoUserManager;

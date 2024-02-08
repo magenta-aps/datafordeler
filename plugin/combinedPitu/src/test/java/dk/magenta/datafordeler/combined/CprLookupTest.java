@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;

@@ -2,7 +2,7 @@ package dk.magenta.datafordeler.combined;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;

@@ -1,6 +1,5 @@
-package dk.magenta.datafordeler.core.database;
+package dk.magenta.datafordeler.core.database.setup;
 
-import dk.magenta.datafordeler.core.DatabaseConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.IOException;
 
 /**
  * A bean to obtain Sessions with. This should be autowired in, and sessions obtained with
@@ -24,16 +24,11 @@ public class SessionManager {
 
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
-    public SessionManager() {
-    }
     @PostConstruct
-    private void init() {
+    private void init() throws IOException {
         this.sessionFactory = this.databaseConfiguration.sessionFactory().getObject();
     }
 
-    /**
-     * Get the session factory, used for obtaining Sessions
-     */
     public SessionFactory getSessionFactory() {
         return this.sessionFactory;
     }
@@ -41,7 +36,6 @@ public class SessionManager {
     @PreDestroy
     public void shutdown() {
         log.info("Shutting down SessionManager. Closing SessionFactory.");
-        // Close caches and connection pools
         this.sessionFactory.close();
     }
 

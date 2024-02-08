@@ -2,8 +2,8 @@ package dk.magenta.datafordeler.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.setup.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.setup.SessionManager;
 import dk.magenta.datafordeler.core.util.Encryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

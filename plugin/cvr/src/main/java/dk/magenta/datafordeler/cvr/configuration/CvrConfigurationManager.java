@@ -1,7 +1,7 @@
 package dk.magenta.datafordeler.cvr.configuration;
 
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
-import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.setup.ConfigurationSessionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 @Component
 public class CvrConfigurationManager extends ConfigurationManager<CvrConfiguration> {
