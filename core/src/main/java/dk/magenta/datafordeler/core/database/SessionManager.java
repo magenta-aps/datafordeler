@@ -87,7 +87,7 @@ public class SessionManager {
         return managedClasses;
     }
 
-    public DataSource dataSource() {
+    protected DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(System.getenv("DATABASE_CLASS"));
         dataSource.setUrl(System.getenv("DATABASE_URL"));
