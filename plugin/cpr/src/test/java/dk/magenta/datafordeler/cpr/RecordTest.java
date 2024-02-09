@@ -23,7 +23,9 @@ import org.hamcrest.Matchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -69,9 +71,6 @@ public class RecordTest {
     private PersonRecordOutputWrapper personRecordOutputWrapper;
 
     @Autowired
-    private CprPlugin plugin;
-
-    @Autowired
     private TestRestTemplate restTemplate;
 
     private static final HashMap<String, String> schemaMap = new HashMap<>();
@@ -82,6 +81,12 @@ public class RecordTest {
 
     @SpyBean
     private DafoUserManager dafoUserManager;
+
+    @Before
+    @After
+    public void cleanup() {
+        QueryManager.clearCaches();
+    }
 
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
@@ -180,6 +185,8 @@ public class RecordTest {
             query.setRegistrationAt(time);
             query.setEffectAt(time);
             query.applyFilters(session);
+
+            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             query.setBirthTimeBefore(LocalDateTime.now());
             List<PersonEntity> personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
@@ -516,6 +523,8 @@ public class RecordTest {
             query.setRegistrationAt(time);
             query.setEffectAt(time);
             query.applyFilters(session);
+
+            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             query.setParameter(PersonRecordQuery.VEJKODE, 2);
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
