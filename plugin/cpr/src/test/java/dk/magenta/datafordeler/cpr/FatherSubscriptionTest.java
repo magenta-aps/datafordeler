@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.plugin.FtpCommunicator;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import org.apache.commons.io.FileUtils;
@@ -18,15 +19,18 @@ import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -78,6 +82,15 @@ public class FatherSubscriptionTest {
         QueryManager.clearCaches();
     }
 
+    @BeforeEach
+    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
+        JdbcTestUtils.deleteFromTables(
+                jdbcTemplate,
+                PersonEntity.TABLE_NAME,
+                PersonSubscription.TABLE_NAME
+        );
+    }
+
     private static SSLSocketFactory getTrustAllSSLSocketFactory() throws NoSuchAlgorithmException, KeyManagementException {
         TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() {
@@ -107,12 +120,7 @@ public class FatherSubscriptionTest {
         when(personEntityManager.isSetupSubscriptionEnabled()).thenReturn(true);
         when(personEntityManager.getCustomerId()).thenReturn(1234);
         when(personEntityManager.getJobId()).thenReturn(123456);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                return null;
-            }
-        }).when(personEntityManager).getLastUpdated(any(Session.class));
+        doAnswer(invocationOnMock -> null).when(personEntityManager).getLastUpdated(any(Session.class));
 
 
         File localSubFolder = File.createTempFile("foo", "bar");
@@ -123,13 +131,10 @@ public class FatherSubscriptionTest {
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
 
-        doAnswer(new Answer<FtpCommunicator>() {
-            @Override
-            public FtpCommunicator answer(InvocationOnMock invocation) throws Throwable {
-                FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
-                ftpCommunicator.setSslSocketFactory(FatherSubscriptionTest.getTrustAllSSLSocketFactory());
-                return ftpCommunicator;
-            }
+        doAnswer((Answer<FtpCommunicator>) invocation -> {
+            FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
+            ftpCommunicator.setSslSocketFactory(FatherSubscriptionTest.getTrustAllSSLSocketFactory());
+            return ftpCommunicator;
         }).when(cprRegisterManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
 
 
