@@ -1,13 +1,8 @@
 package dk.magenta.datafordeler.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.util.Encryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -20,11 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.regex.Matcher;
 
 @ComponentScan({"dk.magenta.datafordeler", "dk.magenta.datafordeler.core", "dk.magenta.datafordeler.core.database", "dk.magenta.datafordeler.core.util"})
 @EntityScan("dk.magenta.datafordeler")
@@ -32,21 +23,6 @@ import java.util.regex.Matcher;
 @SpringBootApplication
 @EnableScheduling
 public class Application {
-
-    @Autowired
-    PluginManager pluginManager;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    XmlMapper xmlMapper;
-
-    @Autowired
-    SessionManager sessionManager;
-
-    @Autowired
-    ConfigurationSessionManager configurationSessionManager;
 
     private static final Logger log = LogManager.getLogger(Application.class.getCanonicalName());
 
@@ -75,24 +51,6 @@ public class Application {
                 e = e.getCause();
             }
         }
-    }
-
-    private static InputStream getConfigStream(String path) {
-        int typeSepIndex = path.indexOf(":");
-        if (typeSepIndex != -1) {
-            String type = path.substring(0, typeSepIndex);
-            String value = path.substring(typeSepIndex + 1);
-            switch (type) {
-                case "file":
-                    value = value.replaceAll("\\\\+", Matcher.quoteReplacement(File.separator));
-                    try {
-                        return new FileInputStream(value);
-                    } catch (FileNotFoundException e) {
-                        log.warn("Config file not found: " + value);
-                    }
-            }
-        }
-        return null;
     }
 
     @Bean
