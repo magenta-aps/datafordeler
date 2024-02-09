@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -20,13 +21,16 @@ import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -180,6 +184,13 @@ public class CvrLoadDemodatasetTest {
     private Engine engine;
 
 
+    @BeforeEach
+    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
+        JdbcTestUtils.deleteFromTables(
+                jdbcTemplate,
+                CompanyRecord.TABLE_NAME
+        );
+    }
     /**
      * Verify that testdata can be cleaned through calling pull with flag "cleantestdatafirst":true
      *
@@ -193,16 +204,16 @@ public class CvrLoadDemodatasetTest {
         entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
         entityManager.setCvrDemoList("88888881,88888882,88888883,88888884");
 
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, CompanyRecord.class);
+            Assert.assertEquals(0, companyRecords.size());//Validate that 0 company from the file persondata is initiated
+        }
 
         //Clean the testdata
         ObjectNode config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cpr\",\"remote\":false,\"cleantestdatafirst\":true}");
         Pull pull = new Pull(engine, plugin, config);
         pull.run();
 
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            List<CompanyRecord> personEntities = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assert.assertEquals(0, personEntities.size());//Validate that 0 company from the file persondata is initiated
-        }
 
         when(plugin.getRegisterManager(), registerManager, "/GLBASETEST.json");
         //Clean the testdata
@@ -211,8 +222,8 @@ public class CvrLoadDemodatasetTest {
         pull.run();
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            List<CompanyRecord> personEntities = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assert.assertEquals(4, personEntities.size());//Validate that 4 company from the file persondata is initiated
+            List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, CompanyRecord.class);
+            Assert.assertEquals(4, companyRecords.size());//Validate that 4 company from the file persondata is initiated
         }
 
         when(plugin.getRegisterManager(), registerManager, "/EMPTYGLBASETEST.json");
