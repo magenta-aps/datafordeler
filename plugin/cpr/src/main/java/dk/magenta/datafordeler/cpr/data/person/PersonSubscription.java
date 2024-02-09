@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_subscription_list")
 public class PersonSubscription extends DatabaseEntry {
 
+    public static final String TABLE_NAME = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_subscription_list";
+
     public static final String DB_FIELD_CPR_NUMBER = "personNumber";
     public static final String DB_FIELD_CPR_ASSIGNMENT_STATUS = "personAssignmentStatus";
     public static final String DB_FIELD_CPR_ASSIGNMENT_REASON = "personAssignmentReason";
