@@ -115,6 +115,9 @@ public class FatherSubscriptionTest {
     @Test
     public void testParentSubscription() throws Exception {
 
+        Session session = sessionManager.getSessionFactory().openSession();
+        Assert.assertEquals(0, QueryManager.getAllItems(session, PersonSubscription.class).size());
+
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         when(cprConfigurationManager.getConfiguration()).thenReturn(configuration);
         when(personEntityManager.isSetupSubscriptionEnabled()).thenReturn(true);
@@ -182,7 +185,6 @@ public class FatherSubscriptionTest {
         }
         personFile.delete();
 
-        Session session = sessionManager.getSessionFactory().openSession();
         try {
             List<PersonSubscription> subscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
             //There is 5 fathers in the test-file
