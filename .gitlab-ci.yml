@@ -108,6 +108,25 @@ build-openapi-image:
     #M$ sql variables
     ACCEPT_EULA: "Y"
     SA_PASSWORD: "testTEST1"
+
+    DATABASE_CLASS: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    DATABASE_URL: jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler
+    DATABASE_DIALECT: org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect
+    DATABASE_SHOW_SQL: "false"
+    DATABASE_USERNAME: "sa"
+    DATABASE_PASSWORD: "testTEST1"
+    DATABASE_METHOD: "update"
+    DATABASE_DEFAULT_SCHEMA: "dbo"
+
+    SECONDARY_DATABASE_CLASS: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    SECONDARY_DATABASE_URL: jdbc:sqlserver://datafordeler-db:1433;databaseName=DatafordelerConfig
+    SECONDARY_DATABASE_DIALECT: org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect
+    SECONDARY_DATABASE_SHOW_SQL: "false"
+    SECONDARY_DATABASE_USERNAME: "sa"
+    SECONDARY_DATABASE_PASSWORD: "testTEST1"
+    SECONDARY_DATABASE_METHOD: "update"
+    SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
+
   tags:
     - docker
   services:
