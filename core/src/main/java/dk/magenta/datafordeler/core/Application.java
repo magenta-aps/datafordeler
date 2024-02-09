@@ -65,9 +65,7 @@ public class Application {
 
         // Run Spring
         try {
-            System.out.println("RUN SPRING APPLICATION");
             SpringApplication.run(Application.class, args);
-            System.out.println("SPRING APPLICATION FINISHED RUNNING");
         } catch (Throwable e) {
             log.error(e);
             while (e != null) {
