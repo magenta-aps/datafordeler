@@ -27,6 +27,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,6 +84,14 @@ public class RecordTest {
 
     @SpyBean
     private DafoUserManager dafoUserManager;
+
+    @BeforeEach
+    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
+        JdbcTestUtils.deleteFromTables(
+                jdbcTemplate,
+                PersonEntity.TABLE_NAME
+        );
+    }
 
     @Before
     @After
@@ -175,6 +186,8 @@ public class RecordTest {
     @Test
     public void testExperimentPerson() throws DataFordelerException, IOException {
         Session session = sessionManager.getSessionFactory().openSession();
+        Assert.assertEquals(0, QueryManager.getAllEntities(session, PersonEntity.class).size());
+
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
