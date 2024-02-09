@@ -99,6 +99,7 @@ build-openapi-image:
 .test-default: &test-default
   stage: test
   needs:
+    - build-mssql-image
     - build-image
   image: ${DAFO_IMAGE_SHA}
   variables:
@@ -128,6 +129,9 @@ build-openapi-image:
 
   tags:
     - docker
+  services:
+    - name: ${DAFOSQL_IMAGE_SHA}
+      alias: datafordeler-db
 
 
 test-core:
