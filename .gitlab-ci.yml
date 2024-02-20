@@ -115,7 +115,7 @@ build-openapi-image:
     DATABASE_SHOW_SQL: "false"
     DATABASE_USERNAME: "sa"
     DATABASE_PASSWORD: "testTEST1"
-    DATABASE_METHOD: "update"
+    DATABASE_METHOD: "create"
     DATABASE_DEFAULT_SCHEMA: "dbo"
 
     SECONDARY_DATABASE_CLASS: "org.h2.Driver"
@@ -124,7 +124,7 @@ build-openapi-image:
     SECONDARY_DATABASE_SHOW_SQL: "false"
     SECONDARY_DATABASE_USERNAME: "sa"
     SECONDARY_DATABASE_PASSWORD: "testTEST1"
-    SECONDARY_DATABASE_METHOD: "update"
+    SECONDARY_DATABASE_METHOD: "create"
     SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
 
   tags:
