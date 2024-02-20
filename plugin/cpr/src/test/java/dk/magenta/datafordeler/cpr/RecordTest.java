@@ -38,6 +38,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
@@ -59,6 +60,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Transactional
+@Rollback
 public class RecordTest {
 
     @Autowired
@@ -88,18 +90,23 @@ public class RecordTest {
     @SpyBean
     private DafoUserManager dafoUserManager;
 
-    @BeforeEach
+    /*@BeforeEach
     void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
         JdbcTestUtils.deleteFromTables(
                 jdbcTemplate,
                 PersonEntity.TABLE_NAME
         );
-    }
-
+    }*/
+    @Autowired
+    JdbcTemplate jdbcTemplate;
     @Before
     @After
     public void cleanup() {
         QueryManager.clearCaches();
+        JdbcTestUtils.deleteFromTables(
+                jdbcTemplate,
+                PersonEntity.TABLE_NAME
+        );
     }
 
     private void applyAccess(TestUserDetails testUserDetails) {
