@@ -56,7 +56,7 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @DataJpaTest
 @ContextConfiguration(classes = Application.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class RecordTest {
 
@@ -125,6 +125,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personwithReverts.txt", importMetadata);
+            session.flush();
             PersonRecordQuery query = new PersonRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
             query.setRegistrationToAfter(time);
@@ -146,6 +147,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
+        session.flush();
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -193,6 +195,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
+        session.flush();
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -264,6 +267,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+            session.flush();
 
             PersonRecordQuery query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
@@ -344,6 +348,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personsWithEvents.txt", importMetadata);
+            session.flush();
 
             PersonRecordQuery query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
@@ -383,6 +388,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+            session.flush();
         }
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -445,6 +451,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/personUndoRedoName.txt", importMetadata);
+        session.flush();
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -469,6 +476,7 @@ public class RecordTest {
         this.loadPerson("/undoneNewAdress1.txt", importMetadata);
         this.loadPerson("/undoneNewAdress2.txt", importMetadata);
         transaction.commit();
+        session.flush();
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -500,6 +508,7 @@ public class RecordTest {
         this.loadPerson("/d111114.111112", importMetadata);
 
         transaction.commit();
+        session.flush();
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -531,6 +540,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
+        session.flush();
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -586,6 +596,7 @@ public class RecordTest {
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
         this.loadPerson("/persondata2.txt", importMetadata);
+        session.flush();
         try {
             PersonRecordQuery query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101001234");
@@ -631,6 +642,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/overwrite_cpr_import.txt", importMetadata);
+        session.flush();
         try {
             PersonRecordQuery query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101010123");
@@ -659,6 +671,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/overwrite_civilstate.txt", importMetadata);
+        session.flush();
 
         try {
             PersonRecordQuery query = new PersonRecordQuery();
@@ -691,6 +704,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/overwrite_birth_import.txt", importMetadata);
+        session.flush();
 
         try {
             PersonRecordQuery query = new PersonRecordQuery();
@@ -726,6 +740,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/personsWithEvents.txt", importMetadata);
+        session.flush();
         session.close();
 
         session = sessionManager.getSessionFactory().openSession();
@@ -812,6 +827,7 @@ public class RecordTest {
         this.loadPerson("/personsWithNewAdresses.txt", importMetadata);
         this.loadPerson("/personsWithNewAdresses2.txt", importMetadata);
         this.loadPerson("/personsWithNewAdresses3.txt", importMetadata);
+        session.flush();
         session.close();
 
         session = sessionManager.getSessionFactory().openSession();
@@ -836,6 +852,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+            session.flush();
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -854,6 +871,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
+        session.flush();
         // TODO: check updated
     }
 
@@ -883,6 +901,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/persondata.txt", importMetadata);
+            session.flush();
 
             PersonRecordQuery query = new PersonRecordQuery();
             /*OffsetDateTime time = OffsetDateTime.now();
