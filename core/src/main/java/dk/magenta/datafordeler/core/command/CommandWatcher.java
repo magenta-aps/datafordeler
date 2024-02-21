@@ -100,6 +100,16 @@ public class CommandWatcher {
         }
     }
 
+    @PostConstruct
+    public void dummy() {
+        Command command = new Command("pull");
+        command.setStatus(Command.Status.QUEUED);
+        command.setCommandBody("{\"plugin\":\"cvr\", }");
+        command.setReceived();
+        command.setIssuer("Dummy");
+        this.startCommand(command);
+    }
+
     private void startCommand(Command command) {
         CommandHandler commandHandler = this.getHandler(command.getCommandName());
         if (commandHandler.accept(command)) {

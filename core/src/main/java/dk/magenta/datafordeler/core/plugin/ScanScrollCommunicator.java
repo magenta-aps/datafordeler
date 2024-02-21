@@ -242,6 +242,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         arrayNode.add(s);
                     }
                     objectNode.set(ScanScrollCommunicator.this.scrollIdJsonKey, arrayNode);
+                    System.out.println(scrollDelete.getMethod()+" "+scrollDelete.getURI().toString());
                     System.out.println(objectNode.toString());
                     scrollDelete.setEntity(new StringEntity(objectNode.toString(), "utf-8"));
                     scrollDelete.setHeader("Content-Type", "application/json");
