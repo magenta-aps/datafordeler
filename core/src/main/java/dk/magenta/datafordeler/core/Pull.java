@@ -181,7 +181,7 @@ public class Pull extends Worker implements Runnable {
 
                 this.registerManager.beforePull(entityManager, this.importMetadata);
                 InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
-                /*if (stream != null) {
+                if (stream != null) {
                     session = this.engine.sessionManager.getSessionFactory().openSession();
                     this.importMetadata.setSession(session);
 
@@ -202,7 +202,7 @@ public class Pull extends Worker implements Runnable {
                         this.importMetadata.setSession(null);
                         stream.close();
                     }
-                }*/
+                }
             }
 
             if (this.doCancel) {

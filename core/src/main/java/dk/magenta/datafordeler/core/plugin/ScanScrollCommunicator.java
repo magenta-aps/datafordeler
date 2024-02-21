@@ -114,7 +114,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                 scrollUri.getPath(),
                 null,
                 null
-                );
+        );
 
         PipedInputStream inputStream = new PipedInputStream(); // Return this one
         BufferedOutputStream outputStream = new BufferedOutputStream(new PipedOutputStream(inputStream));
@@ -186,7 +186,6 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                                 m = ScanScrollCommunicator.this.scrollIdPattern.matcher(content);
                                 if (m.find()) {
                                     scrollId = m.group(1);
-                                    System.out.println("Got scrollid "+scrollId);
                                 } else {
                                     scrollId = null;
                                     log.info("next scrollId not found");
@@ -216,9 +215,6 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         }
                         writer.flush();
                     }
-
-
-
                 } catch (DataStreamException | IOException | URISyntaxException | HttpStatusException e) {
                     log.error(e);
                     throw new RuntimeException(e);
@@ -243,8 +239,6 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         arrayNode.add(s);
                     }
                     objectNode.set(ScanScrollCommunicator.this.scrollIdJsonKey, arrayNode);
-                    System.out.println(scrollDelete.getMethod()+" "+scrollDelete.getURI().toString());
-                    System.out.println(objectNode.toString());
                     scrollDelete.setEntity(new StringEntity(objectNode.toString(), "utf-8"));
                     scrollDelete.setHeader("Content-Type", "application/json");
                     try {
