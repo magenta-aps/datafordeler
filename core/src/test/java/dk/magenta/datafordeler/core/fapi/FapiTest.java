@@ -136,7 +136,7 @@ public class FapiTest {
             JsonNode jsonBody = objectMapper.readTree(resp.getBody());
 
 
-            System.out.println("jsonBody: "+objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonBody));
+//            System.out.println("jsonBody: "+objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonBody));
 
 
 /*

@@ -178,8 +178,17 @@ public class QueryManager {
      * @return
      */
     public static <E extends DatabaseEntry> List<E> getAllEntities(Session session, Class<E> eClass) {
+        return getAllEntities(session, eClass, true);
+    }
+
+    public static <E extends DatabaseEntry> List<E> getAllEntities(Session session, Class<E> eClass, boolean joinIdentity) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName());
-        org.hibernate.query.Query<E> databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " join " + ENTITY + ".identification i where i.uuid != null", eClass);
+        org.hibernate.query.Query<E> databaseQuery;
+        if (joinIdentity) {
+            databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " join " + ENTITY + ".identification i where i.uuid != null", eClass);
+        } else {
+            databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY, eClass);
+        }
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
         List<E> results = databaseQuery.getResultList();

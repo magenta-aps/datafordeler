@@ -16,8 +16,10 @@ import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -38,22 +40,8 @@ import java.util.stream.Collectors;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class cprMatchLogicTest {
-
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private PersonEntityManager personEntityManager;
-
-
-    private static final HashMap<String, String> schemaMap = new HashMap<>();
-
-    static {
-        schemaMap.put("person", PersonEntity.schema);
-    }
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class cprMatchLogicTest extends TestBase {
 
     private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
         personEntityManager.getRegisterManager().getConfigurationManager().getConfiguration().setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
@@ -70,14 +58,6 @@ public class cprMatchLogicTest {
         personEntityManager.parseData(inp2, importMetadata);
         testData2.close();
     }
-
-
-    @After
-    public void clean() {
-        Session session = sessionManager.getSessionFactory().openSession();
-        session.close();
-    }
-
 
     @Test
     public void testSameAdressWhenTimestampIsRemoved() throws DataFordelerException, IOException, URISyntaxException {
