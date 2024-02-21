@@ -14,11 +14,9 @@ import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -42,44 +40,8 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class QueryTest {
-
-    @Autowired
-    private CprPlugin plugin;
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private PersonEntityManager personEntityManager;
-
-    @Autowired
-    private RoadEntityManager roadEntityManager;
-
-    @Autowired
-    private ResidenceEntityManager residenceEntityManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Before
-    public void initialize() throws Exception {
-        QueryManager.clearCaches();
-    }
-
-    @After
-    public void cleanup() {
-        QueryManager.clearCaches();
-        residenceEntityManager = new ResidenceEntityManager();
-        personEntityManager = new PersonEntityManager();
-    }
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class QueryTest extends TestBase {
 
     public void loadPerson(ImportMetadata importMetadata) throws Exception {
         InputStream testData = QueryTest.class.getResourceAsStream("/persondata.txt");
@@ -98,29 +60,6 @@ public class QueryTest {
         roadEntityManager.parseData(testData, importMetadata);
         testData.close();
     }
-
-    private void applyAccess(TestUserDetails testUserDetails) {
-        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
-    }
-
-    private void whitelistLocalhost() {
-        when(dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
-    }
-
-    private ResponseEntity<String> restSearch(ParameterMap parameters, String type) throws URISyntaxException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/json");
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange(new URI("/cpr/" + type + "/1/rest/search?" + parameters.asUrlParams()), HttpMethod.GET, httpEntity, String.class);
-    }
-
-    private ResponseEntity<String> uuidSearch(String id, String type) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/json");
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", headers);
-        return this.restTemplate.exchange("/cpr/" + type + "/1/rest/" + id, HttpMethod.GET, httpEntity, String.class);
-    }
-
 
     @Test
     public void testPersonAccess() throws Exception {
@@ -402,7 +341,6 @@ public class QueryTest {
 
         searchParameters.add("husnummer", "3");
         response = restSearch(searchParameters, "person");
-        System.out.println(response.getBody());
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results6 = jsonBody.get("results");
         Assert.assertEquals(results5, results6);
@@ -450,7 +388,6 @@ public class QueryTest {
     @Test
     public void testPersonMunicipalityRestriction() throws Exception {
         whitelistLocalhost();
-        OffsetDateTime now = OffsetDateTime.now();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
         importMetadata.setSession(session);
@@ -474,7 +411,7 @@ public class QueryTest {
         JsonNode jsonBody = objectMapper.readTree(response.getBody());
         JsonNode mustFail = jsonBody.get("results");
         Assert.assertTrue(mustFail.isArray());
-        Assert.assertEquals(0, mustFail.size());
+        Assert.assertEquals(response.getBody(), 0, mustFail.size());
         searchParameters.remove("pnr");
 
         searchParameters.set("pnr", "0101006666");
@@ -519,7 +456,6 @@ public class QueryTest {
 
         searchParameters.set("husnummer", "3");
         response = restSearch(searchParameters, "person");
-        System.out.println(response.getBody());
         jsonBody = objectMapper.readTree(response.getBody());
         JsonNode results6 = jsonBody.get("results");
         Assert.assertTrue(results6.isArray());

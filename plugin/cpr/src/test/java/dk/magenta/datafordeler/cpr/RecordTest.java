@@ -23,12 +23,10 @@ import org.hamcrest.Matchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -55,63 +53,12 @@ import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@Transactional
-@Rollback
-public class RecordTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private PersonEntityManager personEntityManager;
-
-    @Autowired
-    private PersonCustodyRelationsManager custodyManager;
-
-    @Autowired
-    private PersonRecordOutputWrapper personRecordOutputWrapper;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    private static final HashMap<String, String> schemaMap = new HashMap<>();
-
-    static {
-        schemaMap.put("person", PersonEntity.schema);
-    }
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    /*@BeforeEach
-    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
-        JdbcTestUtils.deleteFromTables(
-                jdbcTemplate,
-                PersonEntity.TABLE_NAME
-        );
-    }*/
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-    @Before
-    @After
-    public void cleanup() {
-        QueryManager.clearCaches();
-        JdbcTestUtils.deleteFromTables(
-                jdbcTemplate,
-                PersonEntity.TABLE_NAME
-        );
-    }
-
-    private void applyAccess(TestUserDetails testUserDetails) {
-        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
-    }
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class RecordTest extends TestBase {
 
     private void loadPerson(String resource, ImportMetadata importMetadata) throws DataFordelerException, IOException {
         InputStream testData = RecordTest.class.getResourceAsStream(resource);
@@ -356,7 +303,6 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personsWithEvents.txt", importMetadata);
-            
 
             PersonRecordQuery query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
@@ -368,13 +314,13 @@ public class RecordTest {
 
             String hql = "SELECT personEntity " +
                     "FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
-                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + PersonEntity.DB_FIELD_IDENTIFICATION + " " +
-                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + PersonEntity.DB_FIELD_IDENTIFICATION + " " +
-                    " WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + motherPnr +
-                    " AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + fatherPnr;
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity " +
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity " +
+                    "WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + motherPnr + " " +
+                    "AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + fatherPnr;
 
 
-            Query query2 = session.createQuery(hql);
+            Query<PersonEntity> query2 = session.createQuery(hql, PersonEntity.class);
 
             List<PersonEntity> resultList = query2.getResultList();
             Assert.assertEquals(17, resultList.size());
@@ -915,7 +861,7 @@ public class RecordTest {
             query.setParameter(PersonRecordQuery.KOMMUNEKODE, 958);
             PersonEntity personEntity = QueryManager.getAllEntities(session, query, PersonEntity.class).get(0);
 
-            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.personRecordOutputWrapper.wrapResult(personEntity, query, OutputWrapper.Mode.LEGACY)));
+            //System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.personRecordOutputWrapper.wrapResult(personEntity, query, OutputWrapper.Mode.LEGACY)));
 
         } finally {
             session.close();

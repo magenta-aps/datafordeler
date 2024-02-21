@@ -2,38 +2,27 @@ package dk.magenta.datafordeler.cpr;
 
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import org.hibernate.Session;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,33 +32,7 @@ import java.util.List;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class cprLoadTestdatasetTest {
-
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private PersonEntityManager personEntityManager;
-
-
-    private static final HashMap<String, String> schemaMap = new HashMap<>();
-
-    static {
-        schemaMap.put("person", PersonEntity.schema);
-    }
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    @BeforeEach
-    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
-        JdbcTestUtils.deleteFromTables(
-                jdbcTemplate,
-                PersonEntity.TABLE_NAME
-        );
-    }
+public class cprLoadTestdatasetTest extends TestBase {
 
     private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
         InputStream testData1 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST");
@@ -91,24 +54,12 @@ public class cprLoadTestdatasetTest {
         testData3.close();
     }
 
-
-    @After
-    public void clean() {
-        Session session = sessionManager.getSessionFactory().openSession();
-        session.close();
-    }
-
-
     /**
      * Confirm that all the loaded persons is cleared again
      *
-     * @throws DataFordelerException
-     * @throws IOException
-     * @throws URISyntaxException
      */
     @Test
-    public void test_D_ReadingDemoDataset() throws DataFordelerException, IOException, URISyntaxException {
-
+    public void test_D_ReadingDemoDataset() {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
             query.setEffectAt(OffsetDateTime.now());

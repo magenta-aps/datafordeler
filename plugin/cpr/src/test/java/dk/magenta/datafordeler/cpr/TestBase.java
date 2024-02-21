@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Engine;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.plugin.FtpCommunicator;
@@ -13,6 +14,17 @@ import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
+import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
+import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
+import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
+import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.mockito.stubbing.Answer;
@@ -36,10 +48,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -49,23 +58,44 @@ import static org.mockito.Mockito.when;
 public abstract class TestBase {
 
     @Autowired
-    private CprPlugin plugin;
+    protected CprPlugin plugin;
 
     public CprPlugin getPlugin() {
         return this.plugin;
     }
 
     @Autowired
-    private Engine engine;
+    protected Engine engine;
 
     public Engine getEngine() {
         return this.engine;
     }
 
     @SpyBean
-    private CprConfigurationManager configurationManager;
+    protected CprConfigurationManager configurationManager;
 
-    private CprConfiguration configuration;
+    protected CprConfiguration configuration;
+
+    private static final HashMap<String, String> schemaMap = new HashMap<>();
+
+    static {
+        schemaMap.put("person", PersonEntity.schema);
+    }
+
+    @Autowired
+    protected PersonCustodyRelationsManager custodyManager;
+
+    @SpyBean
+    protected PersonEntityManager personEntityManager;
+
+    @Autowired
+    protected RoadEntityManager roadEntityManager;
+
+    @Autowired
+    protected ResidenceEntityManager residenceEntityManager;
+
+    @Autowired
+    protected PersonRecordOutputWrapper personRecordOutputWrapper;
 
     @Before
     public void setupConfiguration() {
@@ -90,35 +120,34 @@ public abstract class TestBase {
     }
 
     @Autowired
-    private SessionManager sessionManager;
+    protected SessionManager sessionManager;
 
     public SessionManager getSessionManager() {
         return this.sessionManager;
     }
 
     @Autowired
-    private ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
 
     public ObjectMapper getObjectMapper() {
         return this.objectMapper;
     }
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    protected TestRestTemplate restTemplate;
 
     public TestRestTemplate getRestTemplate() {
         return this.restTemplate;
     }
 
-    private static final HashSet<String> ignoreKeys = new HashSet<String>();
+    protected static final HashSet<String> ignoreKeys = new HashSet<String>();
 
     static {
         ignoreKeys.add("sidstImporteret");
     }
 
     @SpyBean
-    private DafoUserManager dafoUserManager;
-
+    protected DafoUserManager dafoUserManager;
 
     protected void applyAccess(TestUserDetails testUserDetails) {
         when(this.dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
@@ -308,5 +337,23 @@ public abstract class TestBase {
             return jsonExpected.asBoolean() == jsonActual.asBoolean();
         }
         return true;
+    }
+
+    @After
+    public void cleanup() {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            QueryManager.clearCaches();
+            Transaction transaction = session.beginTransaction();
+            for (PersonEntity entity : QueryManager.getAllEntities(session, PersonEntity.class)) {
+                session.delete(entity);
+            }
+            for (RoadEntity entity : QueryManager.getAllEntities(session, RoadEntity.class)) {
+                session.delete(entity);
+            }
+            for (PersonSubscription entity : QueryManager.getAllEntities(session, PersonSubscription.class, false)) {
+                session.delete(entity);
+            }
+            transaction.commit();
+        }
     }
 }

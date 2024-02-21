@@ -17,8 +17,10 @@ import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -40,11 +42,8 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class cprLoadAndmarkSameAddressAsSameas {
-
-    @Autowired
-    private ObjectMapper objectMapper;
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class cprLoadAndmarkSameAddressAsSameas extends TestBase {
 
     @Autowired
     private SessionManager sessionManager;
@@ -52,26 +51,10 @@ public class cprLoadAndmarkSameAddressAsSameas {
     @Autowired
     private PersonEntityManager personEntityManager;
 
-    @Autowired
-    private PersonRecordOutputWrapper personRecordOutputWrapper;
-
-    @Autowired
-    private CprPlugin plugin;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
     private static final HashMap<String, String> schemaMap = new HashMap<>();
 
     static {
         schemaMap.put("person", PersonEntity.schema);
-    }
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    private void applyAccess(TestUserDetails testUserDetails) {
-        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
     private void loadPerson(String resource, ImportMetadata importMetadata) throws DataFordelerException, IOException {
