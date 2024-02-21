@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.database.LastUpdated;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
@@ -19,6 +20,7 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -100,6 +102,10 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     public boolean pullEnabled() {
         CvrConfiguration configuration = configurationManager.getConfiguration();
         return (configuration.getCompanyRegisterType() != CvrConfiguration.RegisterType.DISABLED);
+    }
+
+    public OffsetDateTime getLastUpdated(Session session) {
+        return null;
     }
 
 
