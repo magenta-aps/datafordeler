@@ -20,6 +20,7 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.formula.functions.Offset;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -105,7 +106,8 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     }
 
     public OffsetDateTime getLastUpdated(Session session) {
-        return null;
+        OffsetDateTime d = super.getLastUpdated(session);
+        return d.minusDays(1);
     }
 
 
