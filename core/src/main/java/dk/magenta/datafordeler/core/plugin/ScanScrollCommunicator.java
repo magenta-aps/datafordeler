@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.plugin;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
@@ -19,6 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,7 +96,24 @@ public class ScanScrollCommunicator extends HttpCommunicator {
     public InputStream fetch(URI initialUri, URI scrollUri, final String body) throws HttpStatusException, DataStreamException, URISyntaxException, IOException {
         CloseableHttpClient httpclient = this.buildClient();
 
-        final URI startUri = new URI(initialUri.getScheme(), initialUri.getUserInfo(), initialUri.getHost(), initialUri.getPort(), initialUri.getPath(), "search_type=query_then_fetch&scroll=1m", null);
+        final URI startUri = new URI(
+                initialUri.getScheme(),
+                initialUri.getUserInfo(),
+                initialUri.getHost(),
+                initialUri.getPort(),
+                initialUri.getPath(),
+                "search_type=query_then_fetch&scroll=1m",
+                null
+        );
+        final URI endUri = new URI(
+                scrollUri.getScheme(),
+                scrollUri.getUserInfo(),
+                scrollUri.getHost(),
+                scrollUri.getPort(),
+                scrollUri.getPath(),
+                null,
+                null
+        );
 
         PipedInputStream inputStream = new PipedInputStream(); // Return this one
         BufferedOutputStream outputStream = new BufferedOutputStream(new PipedOutputStream(inputStream));
@@ -104,6 +123,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
         Thread fetcher = new Thread(new Runnable() {
             @Override
             public void run() {
+                HashSet<String> scrollIds = new HashSet<>();
                 try {
                     JsonNode responseNode;
                     log.info("Scan-scroll fetching from " + startUri + " with body:\n" + body);
@@ -136,6 +156,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         writer.append(delimiter);
                     }
                     while (scrollId != null) {
+                        scrollIds.add(scrollId);
 
                         URI fetchUri = new URI(scrollUri.getScheme(), scrollUri.getUserInfo(), scrollUri.getHost(), scrollUri.getPort(), scrollUri.getPath(), "scroll=10m", null);
                         HttpGetWithEntity partialGet = new HttpGetWithEntity(fetchUri);
@@ -204,6 +225,27 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                     } catch (IOException e1) {
                     }
                     ScanScrollCommunicator.this.fetches.remove(inputStream);
+
+                    HttpPost scrollDelete = new HttpPost(endUri) {
+                        @Override
+                        public String getMethod() {
+                            return "DELETE";
+                        }
+                    };
+                    ObjectNode objectNode = objectMapper.createObjectNode();
+                    ArrayNode arrayNode = objectMapper.createArrayNode();
+                    for (String s : scrollIds) {
+                        arrayNode.add(s);
+                    }
+                    objectNode.set(ScanScrollCommunicator.this.scrollIdJsonKey, arrayNode);
+                    scrollDelete.setEntity(new StringEntity(objectNode.toString(), "utf-8"));
+                    scrollDelete.setHeader("Content-Type", "application/json");
+                    try {
+                        httpclient.execute(scrollDelete);
+                    } catch (IOException e) {
+                        log.error(e);
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
