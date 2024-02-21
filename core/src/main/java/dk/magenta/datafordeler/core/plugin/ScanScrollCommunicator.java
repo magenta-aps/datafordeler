@@ -186,6 +186,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                                 m = ScanScrollCommunicator.this.scrollIdPattern.matcher(content);
                                 if (m.find()) {
                                     scrollId = m.group(1);
+                                    System.out.println("Got scrollid "+scrollId);
                                 } else {
                                     scrollId = null;
                                     log.info("next scrollId not found");
