@@ -1,12 +1,9 @@
 package dk.magenta.datafordeler.cpr;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.Pull;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
@@ -16,27 +13,21 @@ import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthPlaceDataRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
-import org.junit.After;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -64,42 +55,8 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class PullTest {
-
-    @Autowired
-    private CprPlugin plugin;
-
-    @Autowired
-    private Engine engine;
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @SpyBean
-    private CprConfigurationManager cprConfigurationManager;
-
-    @SpyBean
-    private CprRegisterManager cprRegisterManager;
-
-    @SpyBean
-    private PersonEntityManager personEntityManager;
-
-    @After
-    public void cleanup() {
-        QueryManager.clearCaches();
-    }
-
-    @BeforeEach
-    void clearDatabase(@Autowired JdbcTemplate jdbcTemplate) {
-        JdbcTestUtils.deleteFromTables(
-                jdbcTemplate,
-                PersonEntity.TABLE_NAME
-        );
-    }
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class PullTest extends TestBase {
 
     private static SSLSocketFactory getTrustAllSSLSocketFactory() {
         TrustManager[] trustManager = new TrustManager[]{new X509TrustManager() {
@@ -145,7 +102,7 @@ public class PullTest {
     public void pull() throws Exception {
 
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
-        when(cprConfigurationManager.getConfiguration()).thenReturn(configuration);
+        when(configurationManager.getConfiguration()).thenReturn(configuration);
 
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
@@ -157,7 +114,7 @@ public class PullTest {
                 ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
                 return ftpCommunicator;
             }
-        }).when(cprRegisterManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
+        }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
 
 
         String username = "test";
@@ -202,7 +159,7 @@ public class PullTest {
     @Test
     public void testConfiguredPull() throws Exception {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
-        when(cprConfigurationManager.getConfiguration()).thenReturn(configuration);
+        when(configurationManager.getConfiguration()).thenReturn(configuration);
 
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
@@ -214,7 +171,7 @@ public class PullTest {
                 ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
                 return ftpCommunicator;
             }
-        }).when(cprRegisterManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
+        }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
 
 
         String username = "test";
@@ -269,7 +226,7 @@ public class PullTest {
     public void testSubscription() throws Exception {
 
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
-        when(cprConfigurationManager.getConfiguration()).thenReturn(configuration);
+        when(configurationManager.getConfiguration()).thenReturn(configuration);
         when(personEntityManager.isSetupSubscriptionEnabled()).thenReturn(true);
         when(personEntityManager.getCustomerId()).thenReturn(1234);
         when(personEntityManager.getJobId()).thenReturn(123456);
@@ -288,7 +245,7 @@ public class PullTest {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
             ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
-        }).when(cprRegisterManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
+        }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
 
 
         String username = "test";
