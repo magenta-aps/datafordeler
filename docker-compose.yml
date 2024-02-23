@@ -78,7 +78,7 @@ services:
       - SECONDARY_DATABASE_DEFAULT_SCHEMA=dbo
     ports:
       - 8082:80
-    command: bash -c "cd /code/plugin/statistik && mvn --batch-mode -T 2C test"
+    command: bash -c "cd /code && mvn --batch-mode -T 2C test"
     # command: bash -c "cd /code/plugin/cvr && mvn --batch-mode -T 2C -Dtest=dk.magenta.datafordeler.cvr.RecordTest test"
     #use docker-compose up test to execute tests
 
