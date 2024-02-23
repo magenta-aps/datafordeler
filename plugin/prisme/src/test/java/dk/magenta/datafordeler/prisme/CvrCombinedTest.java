@@ -47,37 +47,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CvrCombinedTest extends TestBase {
-
-    private final Logger log = LogManager.getLogger(CvrCombinedTest.class.getCanonicalName());
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private CompanyEntityManager companyEntityManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    TestRestTemplate restTemplate;
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    @Autowired
-    private CvrPlugin cvrPlugin;
-
-    @Autowired
-    private GerPlugin gerPlugin;
-
-
-    @After
-    public void cleanup() {
-        this.cleanupCompanyData(sessionManager);
-        this.cleanupGeoData(sessionManager);
-    }
-
+    protected final Logger log = LogManager.getLogger(CvrCombinedTest.class.getCanonicalName());
 
     @Test
     public void testCompanyPrisme() throws IOException, DataFordelerException {

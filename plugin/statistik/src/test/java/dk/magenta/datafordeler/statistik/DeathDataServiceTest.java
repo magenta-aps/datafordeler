@@ -34,32 +34,14 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class DeathDataServiceTest extends TestBase {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
 
     @Autowired
     private DeathDataService deathDataService;
 
-    @Autowired
-    private TestUtil testUtil;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    TestUserDetails testUserDetails;
-
     @Before
     public void initialize() throws Exception {
-        testsUtils.setPath();
+        this.setPath();
         testsUtils.loadPersonData("deadperson.txt");
         this.loadAllGeoAdress(sessionManager);
         deathDataService.setUseTimeintervallimit(false);
@@ -67,7 +49,6 @@ public class DeathDataServiceTest extends TestBase {
 
     @After
     public void cleanup() {
-        testsUtils.clearPath();
         testsUtils.deleteAll();
     }
 
@@ -78,7 +59,7 @@ public class DeathDataServiceTest extends TestBase {
         ResponseEntity<String> response = restTemplate.exchange("/statistik/death_data/?registrationAfter=2017-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(403, response.getStatusCodeValue());
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -89,8 +70,8 @@ public class DeathDataServiceTest extends TestBase {
         String expected = "\"Status\";\"DoedDto\";\"ProdDto\";\"ProdFilDto\";\"Pnr\";\"CivSt\";\"FoedAar\";\"M_Pnr\";\"F_Pnr\";\"AegtePnr\";\"PnrGaeld\";\"StatKod\";\"FoedMynKod\";\"FoedMynTxt\";\"KomKod\";\"LokNavn\";\"LokKortNavn\";\"LokKode\";\"VejKod\";\"HusNr\";\"Etage\";\"SideDoer\";\"Bnr\"\n" +
                 "\"90\";\"30-08-2017\";\"31-08-2017\";\"\";\"0101501234\";\"\";\"2000\";\"2903641234\";\"0101641234\";;;;\"9516\";\"\";\"956\";\"Nuuk\";\"NUK\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\"";
         Assert.assertEquals(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim())
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim())
         );
     }
 
@@ -101,7 +82,7 @@ public class DeathDataServiceTest extends TestBase {
         ResponseEntity<String> response = restTemplate.exchange("/statistik/death_data/?registrationAfter=2017-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(403, response.getStatusCodeValue());
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -122,8 +103,8 @@ public class DeathDataServiceTest extends TestBase {
         String expected = "\"Status\";\"DoedDto\";\"ProdDto\";\"ProdFilDto\";\"Pnr\";\"CivSt\";\"FoedAar\";\"M_Pnr\";\"F_Pnr\";\"AegtePnr\";\"PnrGaeld\";\"StatKod\";\"FoedMynKod\";\"FoedMynTxt\";\"KomKod\";\"LokNavn\";\"LokKortNavn\";\"LokKode\";\"VejKod\";\"HusNr\";\"Etage\";\"SideDoer\";\"Bnr\"\n" +
                 "\"90\";\"30-08-2017\";\"31-08-2017\";\"\";\"0101501234\";\"\";\"2000\";\"2903641234\";\"0101641234\";;;;\"9516\";\"\";\"956\";\"Nuuk\";\"NUK\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\"";
         Assert.assertEquals(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(contents.trim())
+                this.csvToJsonString(expected),
+                this.csvToJsonString(contents.trim())
         );
 
     }

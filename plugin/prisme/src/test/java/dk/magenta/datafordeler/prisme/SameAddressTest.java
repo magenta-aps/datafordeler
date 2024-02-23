@@ -45,26 +45,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class SameAddressTest extends TestBase {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private PersonEntityManager personEntityManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    @Autowired
-    private CprPlugin cprPlugin;
 
     HashSet<Entity> createdEntities = new HashSet<>();
 
@@ -269,7 +250,7 @@ public class SameAddressTest extends TestBase {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    private void cleanup() {
+    private void cleanupEntities() {
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         try {

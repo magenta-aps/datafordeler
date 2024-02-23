@@ -240,8 +240,11 @@ public class GeoLookupService extends CprLookupService {
     public String getPostalCodeDistrict(int code) {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PostcodeEntity entity = QueryManager.getEntity(session, PostcodeEntity.generateUUID(code), PostcodeEntity.class);
-            return entity.getName().iterator().next().getName();
+            if (entity != null) {
+                return entity.getName().iterator().next().getName();
+            }
         }
+        return null;
     }
 
     private static void setQueryNow(BaseQuery query) {

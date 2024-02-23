@@ -46,31 +46,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CvrOwnerHistoryTest extends TestBase {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private CompanyEntityManager companyEntityManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    TestRestTemplate restTemplate;
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    @Autowired
-    private CvrPlugin cvrPlugin;
-
-    @SpyBean
-    private DirectLookup directLookup;
 
     @Test
     public void testCompanyOwnerHistoryPrisme() throws IOException, DataFordelerException {
@@ -146,7 +124,7 @@ public class CvrOwnerHistoryTest extends TestBase {
                         "\"shortDescription\":\"I/S\",\"longDescription\":\"Interessentskab\",\"pnrs\":[{\"pnr\":" +
                         "\"1111111111\",\"enhedDetaljer\":{\"enhedsNummer\":4000000000,\"gyldigFra\":\"2015-07-24\"," +
                         "\"gyldigTil\":null}},{\"pnr\":\"1111111112\",\"enhedDetaljer\":{\"enhedsNummer\":4000000001," +
-                        "\"gyldigFra\":\"2015-07-24\",\"gyldigTil\":2018-09-01}},{\"pnr\":\"1111111113\",\"enhedDetaljer\":{" +
+                        "\"gyldigFra\":\"2015-07-24\",\"gyldigTil\":\"2018-09-01\"}},{\"pnr\":\"1111111113\",\"enhedDetaljer\":{" +
                         "\"enhedsNummer\":4000000002,\"gyldigFra\":\"2018-09-01\",\"gyldigTil\":null}}],\"cvrs\":[{" +
                         "\"cvr\":73585511,\"enhedDetaljer\":{\"enhedsNummer\":4000395354,\"gyldigFra\":\"2015-03-01\"," +
                         "\"gyldigTil\":null}}]}",

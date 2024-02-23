@@ -37,32 +37,14 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class CivilStatusDataServiceTest extends TestBase {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
 
     @Autowired
     private CivilStatusDataService civilStatusDataService;
 
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private TestUtil testUtil;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    TestUserDetails testUserDetails;
-
     @Before
     public void initialize() throws Exception {
-        testsUtils.setPath();
+        this.setPath();
         testsUtils.loadPersonData("marriedperson2.txt");
         testsUtils.loadPersonData("marriedperson3.txt");
         this.loadAllGeoAdress(sessionManager);
@@ -71,7 +53,6 @@ public class CivilStatusDataServiceTest extends TestBase {
 
     @After
     public void cleanup() {
-        testsUtils.clearPath();
         testsUtils.deleteAll();
     }
 
@@ -113,7 +94,7 @@ public class CivilStatusDataServiceTest extends TestBase {
         ResponseEntity<String> response = restTemplate.exchange("/statistik/civilstate_data/?CivSt=G&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(403, response.getStatusCodeValue());
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -128,8 +109,8 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"15-03-2018\";;\"15-03-2018\";\"0101011235\";\"1111111111\";\"340\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"";
 
         compareJSONARRAYWithIgnoredValues(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), "CivDto");
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim()), "CivDto");
 
         response = restTemplate.exchange("/statistik/civilstate_data/?registrationAfter=2019-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(200, response.getStatusCodeValue());
@@ -139,8 +120,8 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"09-08-2019\";;\"03-09-2019\";\"0101011234\";\"1111111114\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"";
 
         compareJSONARRAYWithIgnoredValues(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()),
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim()),
                 "CivDto"
         );
 
@@ -155,8 +136,8 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"F\";\"16-12-2018\";;\"16-12-2018\";\"0101011235\";\"1111111111\";\"1350\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"";
 
         compareJSONARRAYWithIgnoredValues(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()),
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim()),
                 "CivDto"
         );
     }
@@ -166,7 +147,7 @@ public class CivilStatusDataServiceTest extends TestBase {
     public void testCivilStateChangeWithPnr0101011234() throws JsonProcessingException {
 
         civilStatusDataService.setWriteToLocalFile(false);
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -180,8 +161,8 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"G\";\"09-08-2019\";;\"03-09-2019\";\"0101011234\";\"1111111114\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"";
 
         compareJSONARRAYWithIgnoredValues(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()),
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim()),
                 "CivDto"
         );
     }
@@ -190,7 +171,7 @@ public class CivilStatusDataServiceTest extends TestBase {
     public void testCivilStateChangeWithPnr0101011235() throws JsonProcessingException {
 
         civilStatusDataService.setWriteToLocalFile(false);
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -203,8 +184,8 @@ public class CivilStatusDataServiceTest extends TestBase {
                 "\"F\";\"16-12-2018\";;\"16-12-2018\";\"0101011235\";\"1111111111\";\"1350\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"";
 
         assertJsonEquals(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim())
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim())
         );
     }
 
