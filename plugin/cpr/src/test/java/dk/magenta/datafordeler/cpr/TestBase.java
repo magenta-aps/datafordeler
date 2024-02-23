@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Engine;
+import dk.magenta.datafordeler.core.database.LastUpdated;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
@@ -23,7 +24,12 @@ import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.metadata.CollectionMetadata;
+import org.hibernate.persister.collection.AbstractCollectionPersister;
+import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,6 +47,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.ManagedType;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -341,8 +349,12 @@ public abstract class TestBase {
 
     @After
     public void cleanup() {
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
+        SessionFactory sessionFactory = sessionManager.getSessionFactory();
+        try (Session session = sessionFactory.openSession()) {
             QueryManager.clearCaches();
+
+            // Tøm tabeller efter hver test
+            // Undersøg gerne om der findes bedre metoder som også faktisk virker
             Transaction transaction = session.beginTransaction();
             for (PersonEntity entity : QueryManager.getAllEntities(session, PersonEntity.class)) {
                 session.delete(entity);
@@ -351,6 +363,9 @@ public abstract class TestBase {
                 session.delete(entity);
             }
             for (PersonSubscription entity : QueryManager.getAllEntities(session, PersonSubscription.class, false)) {
+                session.delete(entity);
+            }
+            for (LastUpdated entity : QueryManager.getAllEntities(session, LastUpdated.class, false)) {
                 session.delete(entity);
             }
             transaction.commit();
