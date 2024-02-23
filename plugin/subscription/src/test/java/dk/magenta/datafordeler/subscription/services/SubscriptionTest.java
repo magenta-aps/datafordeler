@@ -36,26 +36,12 @@ import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class SubscriptionTest {
-
-    @Autowired
-    TestRestTemplate restTemplate;
-
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-    @SpyBean
-    private DafoUserManager dafoUserManager;
+public class SubscriptionTest extends TestBase {
 
     MockMvc mvc;
 
-
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         initMocks(this);
         ManageSubscription controller = new ManageSubscription();
