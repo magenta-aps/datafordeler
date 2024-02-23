@@ -9,6 +9,8 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -23,7 +25,6 @@ import java.util.*;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyParticipantRelationRecord.TABLE_NAME + "__company", columnList = CompanyParticipantRelationRecord.DB_FIELD_COMPANY + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyParticipantRelationRecord.TABLE_NAME + "__unit", columnList = CompanyParticipantRelationRecord.DB_FIELD_COMPANYUNIT + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyParticipantRelationRecord.TABLE_NAME + "__participant", columnList = CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT + DatabaseEntry.REF),
-
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyParticipantRelationRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyParticipantRelationRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyParticipantRelationRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
@@ -41,6 +42,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     }
 
     @OneToOne(targetEntity = RelationParticipantRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_PARTICIPANT_RELATION)
     private RelationParticipantRecord relationParticipantRecord;
 
@@ -65,6 +67,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_COMPANY_RELATION = "virksomhed";
 
     @OneToOne(targetEntity = RelationCompanyRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_COMPANY_RELATION)
     private RelationCompanyRecord relationCompanyRecord;
 
@@ -87,6 +90,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_OFFICES = "kontorsteder";
 
     @OneToMany(targetEntity = OfficeRelationRecord.class, mappedBy = OfficeRelationRecord.DB_FIELD_COMPANY_RELATION, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_OFFICES)
     private Set<OfficeRelationRecord> offices = new HashSet<>();
 
@@ -106,6 +110,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_ORGANIZATIONS = "organisationer";
 
     @OneToMany(mappedBy = OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION, targetEntity = OrganizationRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_ORGANIZATIONS)
     private Set<OrganizationRecord> organizations;
 
