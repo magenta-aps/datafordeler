@@ -15,7 +15,9 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
+import dk.magenta.datafordeler.cpr.records.person.NameRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthPlaceDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.junit.Assert;
@@ -98,8 +100,23 @@ public class PullTest extends TestBase {
         testData1.close();
     }
 
+
     @Test
-    public void pull() throws Exception {
+    public void testPull() throws Exception {
+        this.pull();
+        Session session = sessionManager.getSessionFactory().openSession();
+        try {
+            PersonRecordQuery personQuery = new PersonRecordQuery();
+            personQuery.setParameter(PersonRecordQuery.FORNAVNE, "Tester");
+            List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
+            Assert.assertEquals(1, personEntities.size());
+            Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());
+        } finally {
+            session.close();
+        }
+    }
+
+    private void pull() throws Exception {
 
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         when(configurationManager.getConfiguration()).thenReturn(configuration);
@@ -107,19 +124,15 @@ public class PullTest extends TestBase {
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
 
-        doAnswer(new Answer<FtpCommunicator>() {
-            @Override
-            public FtpCommunicator answer(InvocationOnMock invocation) throws Throwable {
-                FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
-                ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
-                return ftpCommunicator;
-            }
+        doAnswer((Answer<FtpCommunicator>) invocation -> {
+            FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
+            ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
+            return ftpCommunicator;
         }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
 
 
         String username = "test";
         String password = "test";
-
 
         InputStream personContents = this.getClass().getResourceAsStream("/persondata.txt");
         File personFile = File.createTempFile("persondata", "txt");
@@ -143,17 +156,6 @@ public class PullTest extends TestBase {
             personFtp.stopServer();
         }
         personFile.delete();
-
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
-            PersonRecordQuery personQuery = new PersonRecordQuery();
-            personQuery.setParameter(PersonRecordQuery.FORNAVNE, "Tester");
-            List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());
-            Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());
-        } finally {
-            session.close();
-        }
     }
 
     @Test
@@ -164,19 +166,15 @@ public class PullTest extends TestBase {
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
 
-        doAnswer(new Answer<FtpCommunicator>() {
-            @Override
-            public FtpCommunicator answer(InvocationOnMock invocation) throws Throwable {
-                FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
-                ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
-                return ftpCommunicator;
-            }
+        doAnswer((Answer<FtpCommunicator>) invocation -> {
+            FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
+            ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
+            return ftpCommunicator;
         }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
 
 
         String username = "test";
         String password = "test";
-
 
         InputStream personContents = this.getClass().getResourceAsStream("/persondata.txt");
         File personFile = File.createTempFile("persondata", "txt");
@@ -323,7 +321,7 @@ public class PullTest extends TestBase {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(0, personEntities.size());//Validate that no persons is initiated in the beginning of this test
         }
-        pull();//Pull 1 person from persondata
+        pull();  // Pull 1 person from persondata
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
