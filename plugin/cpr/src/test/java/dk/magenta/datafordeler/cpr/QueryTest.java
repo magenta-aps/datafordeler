@@ -41,6 +41,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class QueryTest extends TestBase {
 
     public void loadPerson(ImportMetadata importMetadata) throws Exception {
@@ -411,7 +412,7 @@ public class QueryTest extends TestBase {
         JsonNode jsonBody = objectMapper.readTree(response.getBody());
         JsonNode mustFail = jsonBody.get("results");
         Assert.assertTrue(mustFail.isArray());
-        Assert.assertEquals(response.getBody(), 0, mustFail.size());
+        Assert.assertEquals(0, mustFail.size());
         searchParameters.remove("pnr");
 
         searchParameters.set("pnr", "0101006666");
