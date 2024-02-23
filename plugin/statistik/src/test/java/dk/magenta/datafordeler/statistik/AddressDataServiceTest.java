@@ -28,29 +28,14 @@ import org.springframework.util.MultiValueMap;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AddressDataServiceTest extends TestBase {
 
     @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
-
-    @Autowired
-    private AddressDataService addressDataService;
-
-    @Autowired
-    private TestUtil testUtil;
-
-    TestUserDetails testUserDetails;
+    protected AddressDataService addressDataService;
 
     @Before
     public void initialize() throws Exception {
-        testsUtils.setPath();
+        this.setPath();
         testsUtils.loadPersonData("bornperson.txt");
         this.loadAllGeoAdress(sessionManager);
         addressDataService.setUseTimeintervallimit(false);
@@ -60,7 +45,7 @@ public class AddressDataServiceTest extends TestBase {
     public void testService() throws JsonProcessingException {
         addressDataService.setWriteToLocalFile(false);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testsUtils.applyAccess(testUserDetails);
 
@@ -74,8 +59,8 @@ public class AddressDataServiceTest extends TestBase {
         String expected = "\"Pnr\";\"Fornavn\";\"Mellemnavn\";\"Efternavn\";\"Bnr\";\"VejNavn\";\"HusNr\";\"Etage\";\"SideDoer\";\"Postnr\";\"PostDistrikt\"\n" +
                 "\"0101001234\";\"Tester Testmember\";;\"Testersen\";\"1234\";\"Qarsaalik\";\"18\";\"1\";\"tv\";\"3900\";\"Nuuk\";\n";
         Assert.assertEquals(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim())
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim())
         );
 
     }

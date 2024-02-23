@@ -7,10 +7,18 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
+import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.DirectLookup;
+import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
 import dk.magenta.datafordeler.geo.data.building.BuildingEntityManager;
@@ -22,10 +30,19 @@ import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import dk.magenta.datafordeler.ger.GerPlugin;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntity;
+import dk.magenta.datafordeler.ger.data.unit.UnitEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.checkerframework.checker.units.qual.C;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.junit.After;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -33,30 +50,68 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+@Component
 public abstract class TestBase {
 
+    @Autowired
+    protected SessionManager sessionManager;
 
     @Autowired
-    private LocalityEntityManager localityEntityManager;
+    protected LocalityEntityManager localityEntityManager;
 
     @Autowired
-    private RoadEntityManager roadEntityManager;
+    protected RoadEntityManager roadEntityManager;
 
     @Autowired
-    private BuildingEntityManager buildingEntityManager;
+    protected BuildingEntityManager buildingEntityManager;
 
     @Autowired
-    private MunicipalityEntityManager municipalityEntityManager;
+    protected MunicipalityEntityManager municipalityEntityManager;
 
     @Autowired
-    private PostcodeEntityManager postcodeEntityManager;
+    protected PostcodeEntityManager postcodeEntityManager;
 
     @Autowired
-    private AccessAddressEntityManager accessAddressEntityManager;
+    protected AccessAddressEntityManager accessAddressEntityManager;
 
     @Autowired
-    private UnitAddressEntityManager unitAddressEntityManager;
+    protected UnitAddressEntityManager unitAddressEntityManager;
 
+    @Autowired
+    protected PersonEntityManager personEntityManager;
+
+    @Autowired
+    protected TestRestTemplate restTemplate;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+
+    @SpyBean
+    protected DafoUserManager dafoUserManager;
+
+    @Autowired
+    protected CprPlugin cprPlugin;
+
+    @Autowired
+    protected CprService cprService;
+
+    @Autowired
+    protected PersonOutputWrapperPrisme personOutputWrapper;
+
+    @Autowired
+    protected CompanyEntityManager companyEntityManager;
+
+    @Autowired
+    protected CvrPlugin cvrPlugin;
+
+    @Autowired
+    protected GerPlugin gerPlugin;
+
+    @SpyBean
+    protected DirectLookup directLookup;
+
+    @Autowired
+    protected CvrRecordService cvrRecordService;
 
     protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
         this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
@@ -69,10 +124,22 @@ public abstract class TestBase {
     }
 
 
-    protected void cleanup(SessionManager sessionManager, Class[] classes) {
-        Session session = sessionManager.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        try {
+    @After
+    public void cleanup() {
+        SessionFactory sessionFactory = sessionManager.getSessionFactory();
+        try (Session session = sessionFactory.openSession()) {
+            QueryManager.clearCaches();
+            Class[] classes = new Class[]{
+                    PersonEntity.class,
+                    CompanyRecord.class,
+                    CompanyUnitRecord.class,
+                    ParticipantRecord.class,
+                    CompanyEntity.class,
+                    UnitEntity.class,
+                    ResponsibleEntity.class,
+                    PersonSubscription.class
+            };
+            Transaction transaction = session.beginTransaction();
             for (Class cls : classes) {
                 List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
                 for (DatabaseEntry e : eList) {
@@ -80,11 +147,7 @@ public abstract class TestBase {
                 }
             }
             transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        } finally {
-            session.close();
+            QueryManager.clearCaches();
         }
     }
 
@@ -184,25 +247,6 @@ public abstract class TestBase {
     protected void cleanupGeoData(SessionManager sessionManager) {
         //TODO: might be needed for some cleanup between tests
 
-    }
-
-    protected void cleanupPersonData(SessionManager sessionManager) {
-        this.cleanup(sessionManager, new Class[]{
-                PersonEntity.class,
-        });
-        QueryManager.clearCaches();
-    }
-
-    protected void cleanupCompanyData(SessionManager sessionManager) {
-        this.cleanup(sessionManager, new Class[]{
-                dk.magenta.datafordeler.cvr.records.CompanyRecord.class,
-                dk.magenta.datafordeler.cvr.records.CompanyUnitRecord.class,
-                dk.magenta.datafordeler.cvr.records.ParticipantRecord.class,
-                dk.magenta.datafordeler.ger.data.company.CompanyEntity.class,
-                dk.magenta.datafordeler.ger.data.unit.UnitEntity.class,
-                dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntity.class
-        });
-        QueryManager.clearCaches();
     }
 
 }

@@ -42,39 +42,6 @@ import static org.mockito.Mockito.when;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CvrTest extends TestBase {
 
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private CompanyEntityManager companyEntityManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    TestRestTemplate restTemplate;
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    @Autowired
-    private CvrPlugin cvrPlugin;
-
-    @Autowired
-    private GerPlugin gerPlugin;
-
-    @Autowired
-    private CvrRecordService cvrRecordService;
-
-    HashSet<Entity> createdEntities = new HashSet<>();
-
-    @After
-    public void cleanup() {
-        this.cleanupCompanyData(sessionManager);
-        this.cleanupGeoData(sessionManager);
-    }
-
-
     @Test
     public void testCompanyPrisme() throws IOException, DataFordelerException {
         loadAllGeoAdress(sessionManager);
