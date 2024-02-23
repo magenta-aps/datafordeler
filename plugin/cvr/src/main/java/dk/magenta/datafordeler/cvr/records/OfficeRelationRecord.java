@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import org.hibernate.Session;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -45,6 +47,7 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
 
     @OneToOne(targetEntity = OfficeRelationUnitRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = DB_FIELD_UNIT + DatabaseEntry.REF)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_UNIT)
     private OfficeRelationUnitRecord officeRelationUnitRecord;
 
@@ -66,6 +69,7 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(targetEntity = AttributeRecord.class, mappedBy = AttributeRecord.DB_FIELD_OFFICE, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     private Set<AttributeRecord> attributes = new HashSet<>();
 
