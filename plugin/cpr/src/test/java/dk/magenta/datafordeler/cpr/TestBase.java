@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Engine;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.LastUpdated;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -352,23 +353,21 @@ public abstract class TestBase {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
             QueryManager.clearCaches();
-
-            // Tøm tabeller efter hver test
-            // Undersøg gerne om der findes bedre metoder som også faktisk virker
+            Class[] classes = new Class[]{
+                    PersonEntity.class,
+                    RoadEntity.class,
+                    PersonSubscription.class,
+                    LastUpdated.class,
+            };
             Transaction transaction = session.beginTransaction();
-            for (PersonEntity entity : QueryManager.getAllEntities(session, PersonEntity.class)) {
-                session.delete(entity);
-            }
-            for (RoadEntity entity : QueryManager.getAllEntities(session, RoadEntity.class)) {
-                session.delete(entity);
-            }
-            for (PersonSubscription entity : QueryManager.getAllEntities(session, PersonSubscription.class, false)) {
-                session.delete(entity);
-            }
-            for (LastUpdated entity : QueryManager.getAllEntities(session, LastUpdated.class, false)) {
-                session.delete(entity);
+            for (Class cls : classes) {
+                List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
+                for (DatabaseEntry e : eList) {
+                    session.delete(e);
+                }
             }
             transaction.commit();
+            QueryManager.clearCaches();
         }
     }
 }

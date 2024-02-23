@@ -10,50 +10,81 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
+import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
 import dk.magenta.datafordeler.geo.data.building.BuildingEntityManager;
+import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityEntityManager;
+import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityEntityManager;
+import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
+import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
+import dk.magenta.datafordeler.statistik.reportExecution.ReportAssignment;
+import dk.magenta.datafordeler.statistik.services.AddressDataService;
+import dk.magenta.datafordeler.statistik.services.StatisticsService;
+import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
+@Component
 public abstract class TestBase {
 
+    @Autowired
+    protected SessionManager sessionManager;
 
     @Autowired
-    private LocalityEntityManager localityEntityManager;
+    protected LocalityEntityManager localityEntityManager;
 
     @Autowired
-    private RoadEntityManager roadEntityManager;
+    protected RoadEntityManager roadEntityManager;
 
     @Autowired
-    private BuildingEntityManager buildingEntityManager;
+    protected BuildingEntityManager buildingEntityManager;
 
     @Autowired
-    private MunicipalityEntityManager municipalityEntityManager;
+    protected MunicipalityEntityManager municipalityEntityManager;
 
     @Autowired
-    private PostcodeEntityManager postcodeEntityManager;
+    protected PostcodeEntityManager postcodeEntityManager;
 
     @Autowired
-    private AccessAddressEntityManager accessAddressEntityManager;
+    protected AccessAddressEntityManager accessAddressEntityManager;
 
     @Autowired
-    private UnitAddressEntityManager unitAddressEntityManager;
+    protected UnitAddressEntityManager unitAddressEntityManager;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
 
+    @Autowired
+    protected TestRestTemplate restTemplate;
+
+    @Autowired
+    protected TestUtils testsUtils;
 
     protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
         this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
@@ -65,11 +96,70 @@ public abstract class TestBase {
         this.loadGeoData(sessionManager, accessAddressEntityManager, "/access.json");
     }
 
+    private String oldPath = null;
 
-    protected void cleanup(SessionManager sessionManager, Class[] classes) {
-        Session session = sessionManager.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
+    public void setPath() throws IOException {
+        //Use this code block when temp directories need to be created
+        if (this.oldPath == null) {
+            Path path = Files.createTempDirectory("statistik");
+            this.oldPath = StatisticsService.PATH_FILE;
+            StatisticsService.PATH_FILE = String.valueOf(path);
+        }
+    }
+
+    @After
+    public void clearPath() {
+        if (this.oldPath != null && !Objects.equals(StatisticsService.PATH_FILE, this.oldPath)) {
+            this.deleteFiles(StatisticsService.PATH_FILE);
+        }
+        StatisticsService.PATH_FILE = oldPath;
+    }
+
+    private void deleteFiles(String path_file) {
+        //This code can be places in @After
+        File tempDir = null;
         try {
+            tempDir = new File(path_file);
+            boolean exists = tempDir.exists();
+            Assert.assertEquals(true, exists);
+        } catch (Exception e) {
+            // if any error occurs
+            e.printStackTrace();
+        } finally {
+            File[] listOfFiles = tempDir.listFiles();
+            if (listOfFiles.length > 0) {
+                System.out.println("Number of files to delete: " + listOfFiles.length);
+                for (File file : listOfFiles) {
+                    file.deleteOnExit();
+                    System.out.println("Deleted file: " + file.getName());
+                }
+            }
+            try {
+                FileUtils.deleteDirectory(new File(path_file));
+                System.out.println("Deleted directory: " + path_file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Before
+    @After
+    public void cleanup() {
+        SessionFactory sessionFactory = sessionManager.getSessionFactory();
+        try (Session session = sessionFactory.openSession()) {
+            QueryManager.clearCaches();
+            Class[] classes = new Class[]{
+                    PersonEntity.class,
+                    ReportAssignment.class,
+                    GeoMunicipalityEntity.class,
+                    GeoRoadEntity.class,
+                    PostcodeEntity.class,
+                    GeoLocalityEntity.class,
+                    AccessAddressEntity.class,
+                    UnitAddressEntity.class,
+            };
+            Transaction transaction = session.beginTransaction();
             for (Class cls : classes) {
                 List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
                 for (DatabaseEntry e : eList) {
@@ -77,11 +167,7 @@ public abstract class TestBase {
                 }
             }
             transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        } finally {
-            session.close();
+            QueryManager.clearCaches();
         }
     }
 
@@ -103,13 +189,6 @@ public abstract class TestBase {
             session.close();
             data.close();
         }
-    }
-
-    protected void cleanupPersonData(SessionManager sessionManager) {
-        this.cleanup(sessionManager, new Class[]{
-                PersonEntity.class,
-        });
-        QueryManager.clearCaches();
     }
 
     /**
@@ -134,4 +213,31 @@ public abstract class TestBase {
                 new UnorderedJsonListComparator().compare(expectedJsonArray, actualJsonArray) == 0
         );
     }
+
+
+    public ArrayNode csvToJson(String csv) {
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+        String[] lines = csv.split("\n");
+        String[] headers = lines[0].split(";");
+        for (int i = 1; i < lines.length; i++) {
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            String[] values = lines[i].split(";");
+            for (int j = 0; j < values.length; j++) {
+                objectNode.put(strip(headers[j]), strip(values[j]));
+            }
+            arrayNode.add(objectNode);
+        }
+        return arrayNode;
+    }
+
+    public String csvToJsonString(String csv) throws JsonProcessingException {
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+                this.csvToJson(csv)
+        );
+    }
+
+    private static String strip(String subject) {
+        return subject.replaceAll("^\"|\"$", "");
+    }
+
 }

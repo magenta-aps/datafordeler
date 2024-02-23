@@ -34,29 +34,21 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReportProgressServiceTest extends TestBase {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
-
-    private TestUserDetails testUserDetails;
 
     @Autowired
     private BirthDataService birthDataService;//Just one of the reportservices to use in test
 
-
     @Test
     public void testQueueReport() throws Exception {
 
-        String reportUuid = null;
-        String reportCollectionUuid = null;
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            List<ReportAssignment> existingSubscriptions = QueryManager.getAllItems(session, ReportAssignment.class);
+            Assert.assertEquals(0, existingSubscriptions.size());
+        }
+
+        String reportUuid;
+        String reportCollectionUuid;
 
         try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
@@ -84,7 +76,6 @@ public class ReportProgressServiceTest extends TestBase {
             query.setHint(QueryHints.HINT_CACHEABLE, true);
 
             Assert.assertEquals(1, repSync.getReportList(reportCollectionUuid, ReportProgressStatus.started).size());
-
         }
 
 
@@ -133,7 +124,7 @@ public class ReportProgressServiceTest extends TestBase {
             Assert.assertTrue(repSync.createReportStatusObject(report));
         }
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -154,7 +145,7 @@ public class ReportProgressServiceTest extends TestBase {
             Assert.assertTrue(repSync.createReportStatusObject(report));
         }
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -169,7 +160,7 @@ public class ReportProgressServiceTest extends TestBase {
         birthDataService.setWriteToLocalFile(true);
         birthDataService.setUseTimeintervallimit(false);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);

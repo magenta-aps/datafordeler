@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cvr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Engine;
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.LastUpdated;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -18,6 +19,8 @@ import org.hibernate.Transaction;
 import org.junit.After;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public abstract class TestBase {
@@ -38,34 +41,28 @@ public abstract class TestBase {
     protected Engine engine;
 
     @After
-    public synchronized void cleanup() {
+    public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
             QueryManager.clearCaches();
 
             // Tøm tabeller efter hver test
             // Undersøg gerne om der findes bedre metoder som også faktisk virker
+            Class[] classes = new Class[] {
+                    CompanyRecord.class,
+                    CompanyUnitRecord.class,
+                    ParticipantRecord.class,
+                    LastUpdated.class,
+            };
             Transaction transaction = session.beginTransaction();
-
-            //sessio.createQuery("delete from "+CompanyRecord.class.getCanonicalName()).executeUpdate();
-            for (AttributeValueRecord entity : QueryManager.getAllEntities(session, AttributeValueRecord.class, false)) {
-                session.delete(entity);
-            }
-
-
-            for (CompanyRecord entity : QueryManager.getAllEntities(session, CompanyRecord.class)) {
-                session.delete(entity);
-            }
-            for (CompanyUnitRecord entity : QueryManager.getAllEntities(session, CompanyUnitRecord.class)) {
-                session.delete(entity);
-            }
-            for (ParticipantRecord entity : QueryManager.getAllEntities(session, ParticipantRecord.class)) {
-                session.delete(entity);
-            }
-            for (LastUpdated entity : QueryManager.getAllEntities(session, LastUpdated.class, false)) {
-                session.delete(entity);
+            for (Class cls : classes) {
+                List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
+                for (DatabaseEntry e : eList) {
+                    session.delete(e);
+                }
             }
             transaction.commit();
+            QueryManager.clearCaches();
         }
     }
 }
