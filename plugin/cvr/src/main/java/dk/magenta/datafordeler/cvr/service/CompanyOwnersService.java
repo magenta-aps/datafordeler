@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -26,6 +29,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,6 +59,23 @@ public class CompanyOwnersService {
 
     private static final String LEGALE_EJERE = "LEGALE EJERE";
     private static final String REELLE_EJERE = "REELLE EJERE";
+
+    private static final Map<String, Pair<String, String>> intervalMap;
+    static {
+        HashMap<String, Pair<String, String>> map = new HashMap<>();
+        map.put("0.05", Pair.of("0.05", "0.0999"));
+        map.put("0.10", Pair.of("0.1", "0.1499"));
+        map.put("0.15", Pair.of("0.15", "0.1999"));
+        map.put("0.2", Pair.of("0.20", "0.2499"));
+        map.put("0.25", Pair.of("0.25", "0.3333"));
+        map.put("0.3333", Pair.of("0.3334", "0.4999"));
+        map.put("0.5", Pair.of("0.5", "0.6665"));
+        map.put("0.6667", Pair.of("0.6666", "0.8999"));
+        map.put("0.9", Pair.of("0.9", "0.9999"));
+        map.put("1.0", Pair.of("1", "1"));
+        intervalMap = Collections.unmodifiableMap(map);
+    }
+
 
 
     @RequestMapping(
@@ -90,9 +111,15 @@ public class CompanyOwnersService {
             System.out.println("Fandt en CompanyRecord");
 
             HashMap<Long, ParticipantRecord> participantMap = new HashMap<>();
-            HashSet<CompanyParticipantRelationRecord> legaleEjere = new HashSet<>();
-            HashSet<CompanyParticipantRelationRecord> reelleEjere = new HashSet<>();
-            HashSet<CompanyParticipantRelationRecord> fuldtAnsvarligeDeltagere = new HashSet<>();
+//            HashSet<CompanyParticipantRelationRecord> legaleEjere = new HashSet<>();
+//            HashSet<CompanyParticipantRelationRecord> reelleEjere = new HashSet<>();
+//            HashSet<CompanyParticipantRelationRecord> fuldtAnsvarligeDeltagere = new HashSet<>();
+
+            ArrayNode legaleEjere = objectMapper.createArrayNode();
+            ArrayNode reelleEjere = objectMapper.createArrayNode();
+
+            root.set("legale_ejere", legaleEjere);
+            root.set("reelle_ejere", reelleEjere);
 
 
             boolean virksomhedErOphoert = companyRecord.getLifecycle().current().isEmpty();
@@ -162,91 +189,76 @@ public class CompanyOwnersService {
 
                 } else {
 
-                    boolean person = Objects.equals(relationRecord.getRelationParticipantRecord().getUnitType(), "PERSON");
-                    boolean virksomhed = Objects.equals(relationRecord.getRelationParticipantRecord().getUnitType(), "VIRKSOMHED");
+//                    boolean person = Objects.equals(relationRecord.getRelationParticipantRecord().getUnitType(), "PERSON");
+//                    boolean virksomhed = Objects.equals(relationRecord.getRelationParticipantRecord().getUnitType(), "VIRKSOMHED");
 
 
                     // Ifølge Ejerforhold_Doc.png
                     for (OrganizationRecord organizationRecord : relationRecord.getOrganizations()) {
-                        Set<String> currentOrganizationNames = organizationRecord.getNames().current().stream().map(n -> n.getName()).collect(Collectors.toSet());
+                        if (organizationRecord.getMainType().equals("REGISTER")) {
+                            Set<String> currentOrganizationNames = organizationRecord.getNames().current().stream().map(n -> n.getName()).collect(Collectors.toSet());
+                            Set<String> currentOrganizationFunctions = organizationRecord.getAttributes().getCurrentAttributeValues("FUNKTION", "string").stream().map(String::valueOf).collect(Collectors.toSet());
 
-                        // Tjek Ejerregister
-                        if (currentOrganizationNames.contains("EJERREGISTER")) {
-                            for (OrganizationMemberdataRecord organizationMemberdataRecord : organizationRecord.memberData) {
-                                for (AttributeRecord attributeRecord : organizationMemberdataRecord.attributes) {
-                                    if (Objects.equals(attributeRecord.getType(), "EJERANDEL_PROCENT")) {
-                                        for (AttributeValueRecord value : attributeRecord.getValues()) {
-                                            if (value.getBitemporality().isCurrent()) {
-                                                float ejerandel = Float.parseFloat(value.getValue());
-                                                if (ejerandel >= 0.05) {
-                                                    System.out.println("Har ejerandel over 5%");
-                                                    erLegalEjer = true;
-                                                }
-                                                if (person && ejerandel > 0.25) {
-                                                    System.out.println("Har ejerandel over 25%");
-                                                    erReelEjer = true;
-                                                }
-                                            }
-                                        }
+                            // Legale ejere
+                            if (currentOrganizationNames.contains("EJERREGISTER") || currentOrganizationFunctions.contains("EJERREGISTER")) {
+                                erLegalEjer = true;
+                            }
+
+                            // Reelle ejere
+                            if (currentOrganizationNames.contains("Reelle ejere") || currentOrganizationFunctions.contains("Reelle ejere")) {
+                                erReelEjer = true;
+                            }
+
+                            if (erLegalEjer || erReelEjer) {
+                                ObjectNode ejer = objectMapper.createObjectNode();
+
+                                RelationParticipantRecord participantRecord = relationRecord.getRelationParticipantRecord();
+                                ejer.put(
+                                        "deltager",
+                                        objectMapper.setFilterProvider(this.getFilterProvider()).valueToTree(participantRecord)
+                                );
+
+                                String ejerandel = null;
+                                HashSet<String> særligeEjerforhold = new HashSet<>();
+                                for (OrganizationMemberdataRecord memberdataRecord : organizationRecord.getMemberData()) {
+                                    String memberEjerandel = memberdataRecord.getAttributes().getCurrentAttributeValues("EJERANDEL_PROCENT", "decimal", false).stream().map(String::valueOf).findFirst().orElse(null);
+                                    if (memberEjerandel != null) {
+                                        ejerandel = memberEjerandel;
                                     }
-                                    if (person && Objects.equals(attributeRecord.getType(), "EJERANDEL_STEMMERET_PROCENT")) {
-                                        for (AttributeValueRecord value : attributeRecord.getValues()) {
-                                            if (value.getBitemporality().isCurrent()) {
-                                                float ejerandel = Float.parseFloat(value.getValue());
-                                                if (ejerandel > 0.25) {
-                                                    System.out.println("Har stemmeret over 25%");
-                                                    erReelEjer = true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    // TODO: Har anden afgørende kontrol, fx. vetoret, ret til at udpege bestyrelsesmedlemmer el. lign.
-                                    // erReelEjer = true;
+                                    særligeEjerforhold.addAll(memberdataRecord.getAttributes().getCurrentAttributeValues("SÆRLIGE_EJERFORHOLD", "string").stream().map(String::valueOf).collect(Collectors.toSet()));
                                 }
+
+                                if (erLegalEjer) {
+                                    if (ejerandel != null) {
+                                        Pair<String, String> ejerandelRange = intervalMap.get(ejerandel);
+                                        ObjectNode ejerandelObject = objectMapper.createObjectNode();
+                                        ejerandelObject.put("fra", ejerandelRange.getFirst());
+                                        ejerandelObject.put("til", ejerandelRange.getSecond());
+                                        ejer.set("ejerandel", ejerandelObject);
+                                    }
+                                } else {
+                                    ejer.put("ejerandel", ejerandel);
+                                }
+
+                                if (!særligeEjerforhold.isEmpty()) {
+                                    ArrayNode ejerforhold = objectMapper.createArrayNode();
+                                    for (String e : særligeEjerforhold) {
+                                        ejerforhold.add(e);
+                                    }
+                                    ejer.put("særlige_ejerforhold", ejerforhold);
+                                }
+
+                                if (erLegalEjer) {
+                                    legaleEjere.add(ejer);
+                                } else {
+                                    reelleEjere.add(ejer);
+                                }
+
                             }
                         }
-
-                        // Tjek Register
-                        if (organizationRecord.getMainType().equalsIgnoreCase("REGISTER") && currentOrganizationNames.contains("Reelle ejere")) {
-                            erReelEjer = true;
-                        }
                     }
-
                 }
-
-                if (erReelEjer) {
-                    reelleEjere.add(relationRecord);
-                }
-                if (erLegalEjer) {
-                    legaleEjere.add(relationRecord);
-                }
-
-
-                long participantUnitNumber = relationRecord.getParticipantUnitNumber();
-                participantMap.put(participantUnitNumber, null);
             });
-            ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-            participantRecordQuery.setParameter(
-                    ParticipantRecordQuery.UNITNUMBER,
-                    participantMap.keySet().stream().map(Object::toString).collect(Collectors.toList())
-            );
-
-            for (ParticipantRecord participantRecord : QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class)) {
-                participantMap.put(participantRecord.getUnitNumber(), participantRecord);
-            }
-
-            root.set(
-                    "legaleEjere",
-                    outputParticipantList(participantMap, legaleEjere, participantRecordQuery, participantRecordOutputWrapper)
-            );
-            root.set(
-                    "reelleEjere",
-                    outputParticipantList(participantMap, reelleEjere, participantRecordQuery, participantRecordOutputWrapper)
-            );
-            root.set(
-                    "fuldtAnsvarligeDeltagere",
-                    outputParticipantList(participantMap, fuldtAnsvarligeDeltagere, participantRecordQuery, participantRecordOutputWrapper)
-            );
         }
 
         try {
@@ -254,28 +266,6 @@ public class CompanyOwnersService {
         } catch (JsonProcessingException e) {
             throw new DataStreamException(e);
         }
-    }
-
-    private ArrayNode outputParticipantList(HashMap<Long, ParticipantRecord> participantMap, HashSet<CompanyParticipantRelationRecord> participantRelationRecords, ParticipantRecordQuery participantRecordQuery, ParticipantRecordOutputWrapper participantRecordOutputWrapper) {
-        ArrayNode output = this.objectMapper.createArrayNode();
-        for (CompanyParticipantRelationRecord relationRecord : participantRelationRecords) {
-            ParticipantRecord participantRecord = participantMap.get(relationRecord.getParticipantUnitNumber());
-            if (participantRecord == null) {
-                ObjectNode node = this.objectMapper.createObjectNode();
-                node.put(ParticipantRecord.IO_FIELD_UNIT_NUMBER, relationRecord.getParticipantUnitNumber());
-                output.add(node);
-            } else {
-                /*output.add(
-                        (ObjectNode) participantRecordOutputWrapper.wrapResult(
-                                participantRecord,
-                                participantRecordQuery,
-                                OutputWrapper.Mode.DATAONLY
-                        )
-                );*/
-                output.add(participantRecord.getBusinessKey());
-            }
-        }
-        return output;
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
@@ -295,5 +285,12 @@ public class CompanyOwnersService {
                     parameterValue
             );
         }
+    }
+
+    protected FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider().addFilter(
+                "ParticipantRecordFilter",
+                SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
+        );
     }
 }
