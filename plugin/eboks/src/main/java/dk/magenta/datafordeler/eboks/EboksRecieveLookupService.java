@@ -19,6 +19,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
 import dk.magenta.datafordeler.cvr.records.AddressRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.eboks.utils.FilterUtilities;
@@ -145,11 +146,12 @@ public class EboksRecieveLookupService {
                     String status = k.getMetadata().getCompanyStatusRecord(k).getStatus();
                     if (!"NORMAL".equals(status) && !"Aktiv".equals(status) && !"Fremtid".equals(status)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.CEASED));
-                    } else if (adress.getMunicipality().getMunicipalityCode() < 950) {
+                    } else if (!this.companyFromGreenland(adress)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.NOTFROMGREENLAND));
                     } else {
                         cvrList.add(cvrNumber);
                     }
+
                     cvrs.remove(cvrNumber);
                 });
             }
@@ -222,6 +224,12 @@ public class EboksRecieveLookupService {
         return null;
     }
 
+    private boolean companyFromGreenland(AddressRecord addressRecord) {
+        AddressMunicipalityRecord municipalityRecord = addressRecord.getMunicipality();
+        if (municipalityRecord != null) {
+            return municipalityRecord.getMunicipalityCode() >= 950;
+        } else return "GL".equalsIgnoreCase(addressRecord.getCountryCode());
+    }
 
     public HashSet<CompanyEntity> gerCompanyLookup(Session session, Collection<String> cvrNumbers) {
         CompanyQuery query = new CompanyQuery();
