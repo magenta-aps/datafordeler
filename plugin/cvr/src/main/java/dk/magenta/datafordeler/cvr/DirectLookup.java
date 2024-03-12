@@ -72,7 +72,7 @@ public class DirectLookup {
         }
         CvrEntityManager<R> entityManager = (CvrEntityManager<R>) cvrRegisterManager.getEntityManager(schema);
 
-        try (InputStream response = httpCommunicator.post(queryUri, new StringEntity(requestBody.toString()), null) {
+        try (InputStream response = httpCommunicator.post(queryUri, new StringEntity(requestBody.toString()), null)) {
             Scanner scanner = new Scanner(response, StandardCharsets.UTF_8).useDelimiter(String.valueOf(ScanScrollCommunicator.delimiter));
             List<R> companyRecords = new ArrayList<>();
             while (scanner.hasNext()) {
