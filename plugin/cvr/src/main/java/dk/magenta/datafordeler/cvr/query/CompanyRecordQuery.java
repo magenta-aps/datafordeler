@@ -214,7 +214,7 @@ public class CompanyRecordQuery extends BaseQuery {
         }
     }
 
-
+    @Deprecated
     public ObjectNode getDirectLookupQuery(ObjectMapper objectMapper) {
         boolean anySet = false;
         ObjectNode root = objectMapper.createObjectNode();

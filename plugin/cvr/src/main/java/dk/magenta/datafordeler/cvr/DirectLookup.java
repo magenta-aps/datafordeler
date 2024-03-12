@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CvrEntityRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
+import org.apache.http.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,22 +62,17 @@ public class DirectLookup {
         } catch (GeneralSecurityException | IOException e) {
             throw new DataStreamException(e);
         }
-        ScanScrollCommunicator httpCommunicator = new ScanScrollCommunicator(keystore, keystorePassword);
-
+        HttpCommunicator httpCommunicator = new HttpCommunicator(keystore, keystorePassword);
 
         URI queryUri;
-        URI scrollURI;
         try {
             queryUri = new URL(configuration.getStartAddress(schema)).toURI();
-            scrollURI = new URL(configuration.getScrollAddress(schema)).toURI();
         } catch (URISyntaxException | MalformedURLException e) {
             throw new DataStreamException(e);
         }
         CvrEntityManager<R> entityManager = (CvrEntityManager<R>) cvrRegisterManager.getEntityManager(schema);
 
-        httpCommunicator.setScrollIdJsonKey("_scroll_id");
-
-        try (InputStream response = httpCommunicator.fetch(queryUri, scrollURI, requestBody.toString())) {
+        try (InputStream response = httpCommunicator.post(queryUri, new StringEntity(requestBody.toString()), null) {
             Scanner scanner = new Scanner(response, StandardCharsets.UTF_8).useDelimiter(String.valueOf(ScanScrollCommunicator.delimiter));
             List<R> companyRecords = new ArrayList<>();
             while (scanner.hasNext()) {
