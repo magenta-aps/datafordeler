@@ -907,42 +907,55 @@ public class CompanyUnitRecord extends CvrEntityRecord {
             for (SecNameRecord nameRecord : otherRecord.getNames()) {
                 this.addName(nameRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.names);
             for (AddressRecord addressRecord : otherRecord.getLocationAddress()) {
                 this.addLocationAddress(addressRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.locationAddress);
             for (AddressRecord addressRecord : otherRecord.getPostalAddress()) {
                 this.addPostalAddress(addressRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.postalAddress);
             for (ContactRecord contactRecord : otherRecord.getPhoneNumber()) {
                 this.addPhoneNumber(contactRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.phoneNumber);
             for (ContactRecord contactRecord : otherRecord.getFaxNumber()) {
                 this.addFaxNumber(contactRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.faxNumber);
             for (ContactRecord contactRecord : otherRecord.getEmailAddress()) {
                 this.addEmailAddress(contactRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.emailAddress);
             for (LifecycleRecord lifecycleRecord : otherRecord.getLifecycle()) {
                 this.addLifecycle(lifecycleRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.lifecycle);
             for (CompanyIndustryRecord companyIndustryRecord : otherRecord.getPrimaryIndustry()) {
                 this.addPrimaryIndustry(companyIndustryRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.primaryIndustry);
             for (CompanyIndustryRecord companyIndustryRecord : otherRecord.getSecondaryIndustry1()) {
                 this.addSecondaryIndustry1(companyIndustryRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.secondaryIndustry1);
             for (CompanyIndustryRecord companyIndustryRecord : otherRecord.getSecondaryIndustry2()) {
                 this.addSecondaryIndustry2(companyIndustryRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.secondaryIndustry2);
             for (CompanyIndustryRecord companyIndustryRecord : otherRecord.getSecondaryIndustry3()) {
                 this.addSecondaryIndustry3(companyIndustryRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.secondaryIndustry3);
             for (CompanyYearlyNumbersRecord yearlyNumbersRecord : otherRecord.getYearlyNumbers()) {
                 this.addYearlyNumbers(yearlyNumbersRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.yearlyNumbers);
             for (CompanyQuarterlyNumbersRecord quarterlyNumbersRecord : otherRecord.getQuarterlyNumbers()) {
                 this.addQuarterlyNumbers(quarterlyNumbersRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.quarterlyNumbers);
             for (AttributeRecord attributeRecord : otherRecord.getAttributes()) {
                 this.mergeAttribute(attributeRecord);
             }
@@ -980,5 +993,28 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
         return subs;
     }
+
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.names);
+//        sets.add(this.locationAddress);
+//        sets.add(this.postalAddress);
+//        sets.add(this.phoneNumber);
+//        sets.add(this.faxNumber);
+//        sets.add(this.emailAddress);
+//        sets.add(this.lifecycle);
+//        sets.add(this.primaryIndustry);
+//        sets.add(this.secondaryIndustry1);
+//        sets.add(this.secondaryIndustry2);
+//        sets.add(this.secondaryIndustry3);
+//        sets.add(this.yearlyNumbers);
+//        sets.add(this.quarterlyNumbers);
+//        for (AttributeRecord attributeRecord : this.attributes) {
+//            sets.addAll(attributeRecord.getBitemporalSets());
+//        }
+//        sets.add(this.participantRelations);
+//        sets.add(this.companyLinkRecords);
+//        return sets;
+//    }
 
 }

@@ -265,21 +265,27 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
             for (CompanyRegNumberRecord regNumber : other.getRegNumber()) {
                 this.addRegNumber(regNumber);
             }
+            CvrBitemporalRecord.updateRegistrations(this.regNumber);
             for (BaseNameRecord name : other.getNames()) {
                 this.addName(name);
             }
+            CvrBitemporalRecord.updateRegistrations(this.names);
             for (LifecycleRecord lifecycle : other.getLifecycle()) {
                 this.addLifecycle(lifecycle);
             }
+            CvrBitemporalRecord.updateRegistrations(this.lifecycle);
             for (StatusRecord status : other.getStatus()) {
                 this.addStatus(status);
             }
+            CvrBitemporalRecord.updateRegistrations(this.status);
             for (CompanyStatusRecord status : other.getCompanyStatus()) {
                 this.addCompanyStatus(status);
             }
+            CvrBitemporalRecord.updateRegistrations(this.companyStatus);
             for (FormRecord form : other.getForm()) {
                 this.addForm(form);
             }
+            CvrBitemporalRecord.updateRegistrations(this.form);
         }
     }
 
@@ -311,4 +317,15 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         subs.addAll(this.form);
         return subs;
     }
+
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.regNumber);
+//        sets.add(this.names);
+//        sets.add(this.lifecycle);
+//        sets.add(this.status);
+//        sets.add(this.companyStatus);
+//        sets.add(this.form);
+//        return sets;
+//    }
 }

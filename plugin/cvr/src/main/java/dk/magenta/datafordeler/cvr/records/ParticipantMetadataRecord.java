@@ -16,7 +16,6 @@ import java.util.*;
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__participant", columnList = ParticipantMetadataRecord.DB_FIELD_PARTICIPANT + DatabaseEntry.REF, unique = true),
-
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
@@ -141,6 +140,7 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
             for (AddressRecord addressRecord : other.getNewestLocation()) {
                 this.addNewestLocation(addressRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.newestLocation);
             for (MetadataContactRecord contactRecord : other.getMetadataContactRecords()) {
                 this.addMetadataContactData(contactRecord);
             }
@@ -163,4 +163,9 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
         ParticipantMetadataRecord that = (ParticipantMetadataRecord) o;
         return this.cvrNumber == that.cvrNumber;
     }*/
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.newestLocation);
+//        return sets;
+//    }
 }

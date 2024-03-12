@@ -522,6 +522,13 @@ public class CompanyMetadataRecord extends MetadataRecord {
             for (MetadataContactRecord metadataContactRecord : otherRecord.getMetadataContactRecords()) {
                 this.addMetadataContactRecord(metadataContactRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.newestForm);
+            CvrBitemporalRecord.updateRegistrations(this.newestName);
+            CvrBitemporalRecord.updateRegistrations(this.newestLocation);
+            CvrBitemporalRecord.updateRegistrations(this.newestPrimaryIndustry);
+            CvrBitemporalRecord.updateRegistrations(this.newestSecondaryIndustry1);
+            CvrBitemporalRecord.updateRegistrations(this.newestSecondaryIndustry2);
+            CvrBitemporalRecord.updateRegistrations(this.newestSecondaryIndustry3);
             return true;
         }
         return false;
@@ -539,5 +546,17 @@ public class CompanyMetadataRecord extends MetadataRecord {
         subs.addAll(this.newestSecondaryIndustry3);
         return subs;
     }
+//
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.newestForm);
+//        sets.add(this.newestName);
+//        sets.add(this.newestLocation);
+//        sets.add(this.newestPrimaryIndustry);
+//        sets.add(this.newestSecondaryIndustry1);
+//        sets.add(this.newestSecondaryIndustry2);
+//        sets.add(this.newestSecondaryIndustry3);
+//        return sets;
+//    }
 
 }

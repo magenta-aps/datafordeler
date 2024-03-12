@@ -131,4 +131,12 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
         }
         return subs;
     }
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        for (AttributeRecord attributeRecord : this.attributes) {
+//            sets.addAll(attributeRecord.getBitemporalSets());
+//        }
+//        sets.addAll(this.officeRelationUnitRecord.getBitemporalSets());
+//        return sets;
+//    }
 }

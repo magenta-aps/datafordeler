@@ -623,24 +623,31 @@ public class ParticipantRecord extends CvrEntityRecord {
             for (SecNameRecord nameRecord : otherRecord.getNames()) {
                 this.addName(nameRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.names);
             for (AddressRecord addressRecord : otherRecord.getLocationAddress()) {
                 this.addLocationAddress(addressRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.locationAddress);
             for (AddressRecord addressRecord : otherRecord.getPostalAddress()) {
                 this.addPostalAddress(addressRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.postalAddress);
             for (AddressRecord addressRecord : otherRecord.getBusinessAddress()) {
                 this.addBusinessAddress(addressRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.businessAddress);
             for (ContactRecord contactRecord : otherRecord.getPhoneNumber()) {
                 this.addPhoneNumber(contactRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.phoneNumber);
             for (ContactRecord contactRecord : otherRecord.getFaxNumber()) {
                 this.addFaxNumber(contactRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.faxNumber);
             for (ContactRecord contactRecord : otherRecord.getEmailAddress()) {
                 this.addEmailAddress(contactRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.emailAddress);
             for (AttributeRecord attributeRecord : otherRecord.getAttributes()) {
                 this.mergeAttribute(attributeRecord);
             }
@@ -670,4 +677,25 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
         return subs;
     }
+
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.names);
+//        sets.add(this.locationAddress);
+//        sets.add(this.postalAddress);
+//        sets.add(this.businessAddress);
+//        sets.add(this.phoneNumber);
+//        sets.add(this.faxNumber);
+//        sets.add(this.emailAddress);
+//        sets.add(this.companyRelation);
+//
+//
+//        for (AttributeRecord attributeRecord : this.attributes) {
+//            sets.addAll(attributeRecord.getBitemporalSets());
+//        }
+//        if (this.metadata != null) {
+//            sets.addAll(this.metadata.getBitemporalSets());
+//        }
+//        return sets;
+//    }
 }

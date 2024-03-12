@@ -170,9 +170,13 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
             for (BaseNameRecord name : other.getNames()) {
                 this.addName(name);
             }
+            CvrBitemporalRecord.updateRegistrations(this.names);
+            System.out.println("Add "+other.getLocationAddress().size()+" addresses to "+this.getLocationAddress().size()+":");
             for (AddressRecord address : other.getLocationAddress()) {
                 this.addLocationAddress(address);
             }
+            System.out.println(this.getLocationAddress().size());
+            CvrBitemporalRecord.updateRegistrations(this.locationAddress);
         }
     }
 
@@ -189,4 +193,12 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
         subs.addAll(this.locationAddress);
         return subs;
     }
+
+//
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.names);
+//        sets.add(this.locationAddress);
+//        return sets;
+//    }
 }

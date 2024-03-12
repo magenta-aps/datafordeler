@@ -199,6 +199,7 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
             for (AttributeRecord attributeRecord : otherRecord.getOutgoing()) {
                 this.mergeOutgoing(attributeRecord);
             }
+            CvrBitemporalRecord.updateRegistrations(this.name);
             return true;
         }
         return false;
@@ -212,4 +213,18 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
         subs.addAll(this.outgoing);
         return subs;
     }
+
+//
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.name);
+//        for (AttributeRecord attributeRecord : this.incoming) {
+//            sets.addAll(attributeRecord.getBitemporalSets());
+//        }
+//        for (AttributeRecord attributeRecord : this.outgoing) {
+//            sets.addAll(attributeRecord.getBitemporalSets());
+//        }
+//        return sets;
+//    }
+
 }

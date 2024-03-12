@@ -1,14 +1,19 @@
 package dk.magenta.datafordeler.cvr;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.util.StringJoiner;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.service.CompanyOwnersService;
 import org.hibernate.Session;
 import org.junit.Assert;
@@ -32,6 +37,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -75,16 +81,45 @@ public class CompanyOwnersTest {
 
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
-            query.setRegistrationAt(time);
-            query.setEffectAt(time);
+//            query.setRegistrationAt(time);
+//            query.setEffectAt(time);
             query.applyFilters(session);
 
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
 
+            FilterProvider fp = new SimpleFilterProvider().addFilter(
+                    "ParticipantRecordFilter",
+                    SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
+            );
+            System.out.println("QUERY RESULT:");
             for (CompanyRecord c : companyList) {
                 System.out.println(c.getCvrNumber());
+                try {
+                    System.out.println(objectMapper.setFilterProvider(fp).writerWithDefaultPrettyPrinter().writeValueAsString(c));
+                    System.out.println("\n\n\n");
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
             }
             Assert.assertEquals(1, companyList.size());
+
+            for (CompanyRecord c : companyList) {
+                for (CompanyParticipantRelationRecord p : c.getParticipants()) {
+                    System.out.println(p.getParticipantUnitNumber());
+                    for (OrganizationRecord o : p.getOrganizations()) {
+                        System.out.println(new StringJoiner(", ").addAll(o.getNames().stream().map(n -> n.getName()).collect(Collectors.toSet())).toString());
+                        for (OrganizationMemberdataRecord m : o.getMemberData()) {
+                            for (AttributeRecord a : m.getAttributes()) {
+                                System.out.println("    "+a.getType());
+                                for (AttributeValueRecord v : a.getValues()) {
+                                    System.out.println("        "+v.getValue()+" ("+v.getBitemporality()+")");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
 
             ResponseEntity<String> response = restTemplate.exchange(
                     "/cvr/owners/"+companyList.get(0).getCvrNumberString(),
@@ -92,7 +127,7 @@ public class CompanyOwnersTest {
                     new HttpEntity<>("", new HttpHeaders()),
                     String.class
             );
-            System.out.println(response.getBody());
+//            System.out.println(response.getBody());
         }
     }
 }

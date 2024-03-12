@@ -14,8 +14,7 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @MappedSuperclass
 public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord> {
@@ -152,7 +151,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
-    @JsonIgnore
+//    @JsonIgnore
     private OffsetDateTime registrationTo;
 
     public OffsetDateTime getRegistrationTo() {
@@ -236,5 +235,22 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     public static LocalDate convertTime(OffsetDateTime time) {
         return time != null ? time.atZoneSameInstant(ZoneOffset.UTC).toLocalDate() : null;
+    }
+
+    public static void updateRegistrations(Set<? extends CvrBitemporalRecord> records) {
+        if (records != null && records.size() > 1) {
+            System.out.println("Sorting:");
+
+            TreeSet<CvrBitemporalRecord> sorted = new TreeSet<>(Comparator.comparing(CvrBitemporalRecord::getLastUpdated, Comparator.nullsFirst(Comparator.naturalOrder())));
+            sorted.addAll(records);
+            Iterator<CvrBitemporalRecord> iterator = sorted.descendingIterator();
+            OffsetDateTime nextUpdateTime = null;
+            while (iterator.hasNext()) {
+                CvrBitemporalRecord record = iterator.next();
+//                record.setRegistrationTo(nextUpdateTime);
+//                nextUpdateTime = record.getRegistrationFrom();
+                System.out.println("    "+record.getLastUpdated()+" "+record.getRegistrationTo()+"    "+record.getClass().getSimpleName());
+            }
+        }
     }
 }

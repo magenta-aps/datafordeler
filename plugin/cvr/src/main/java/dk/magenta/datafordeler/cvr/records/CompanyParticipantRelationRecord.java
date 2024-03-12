@@ -295,4 +295,15 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
                 Objects.equals(offices, that.offices) &&
                 Objects.equals(organizations, that.organizations);
     }*/
+
+//
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        for (OrganizationRecord organizationRecord : this.organizations) {
+//            sets.addAll(organizationRecord.getBitemporalSets());
+//        }
+//        sets.addAll(this.relationCompanyRecord.getBitemporalSets());
+//        sets.addAll(this.relationParticipantRecord.getBitemporalSets());
+//        return sets;
+//    }
 }

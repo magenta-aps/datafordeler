@@ -118,4 +118,12 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         subs.addAll(this.attributes);
         return subs;
     }
+
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        for (AttributeRecord attributeRecord : this.attributes) {
+//            sets.addAll(attributeRecord.getBitemporalSets());
+//        }
+//        return sets;
+//    }
 }

@@ -510,7 +510,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         AddressRecord that = (AddressRecord) o;
-        return type == that.type &&
+        boolean eq = type == that.type &&
                 roadCode == that.roadCode &&
                 postnummer == that.postnummer &&
                 Objects.equals(addressId, that.addressId) &&
@@ -532,11 +532,16 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
                 Objects.equals(addressText, that.addressText) &&
                 Objects.equals(lastValidated, that.lastValidated) &&
                 Objects.equals(freeText, that.freeText);
+        System.out.println("Address "+this.roadName+" and "+that.roadName+" are "+(eq?"equal":"NOT equal"));
+        return eq;
     }
+
+
+    // TODO: Objekter i samme set, der har samme data (vejnavn osv, ikke temporalitet og lastValidated), skal sorteres og påføres registreringstid
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), type, addressId, roadCode, cityName, supplementalCityName, roadName, houseNumberFrom, houseNumberTo, letterFrom, letterTo, floor, door, municipality, post, postnummer, postdistrikt, postBox, coName, countryCode, addressText, lastValidated, freeText);
+        return Objects.hash(super.hashCode(), type, addressId, roadCode, cityName, supplementalCityName, roadName, houseNumberFrom, houseNumberTo, letterFrom, letterTo, floor, door, municipality, post, postnummer, postdistrikt, postBox, coName, countryCode, addressText, /*lastValidated,*/ freeText);
     }
 
     @Override

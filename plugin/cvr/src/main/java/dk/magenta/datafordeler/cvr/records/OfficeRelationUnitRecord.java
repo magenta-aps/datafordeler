@@ -18,7 +18,6 @@ import java.util.Set;
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__unit", columnList = OfficeRelationUnitRecord.DB_FIELD_UNITNUMBER),
-
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + OfficeRelationUnitRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
@@ -148,6 +147,8 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
                 this.addLocationAddress(address);
             }
         }
+        CvrBitemporalRecord.updateRegistrations(this.names);
+        CvrBitemporalRecord.updateRegistrations(this.locationAddress);
     }
 
     @Override
@@ -157,4 +158,11 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         subs.addAll(this.locationAddress);
         return subs;
     }
+
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.names);
+//        sets.add(this.locationAddress);
+//        return sets;
+//    }
 }

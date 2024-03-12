@@ -190,6 +190,7 @@ public class OrganizationRecord extends CvrRecord {
         for (BaseNameRecord name : other.getNames()) {
             this.addName(name);
         }
+        CvrBitemporalRecord.updateRegistrations(this.names);
         for (AttributeRecord attribute : other.getAttributes()) {
             this.mergeAttribute(attribute);
         }
@@ -217,4 +218,16 @@ public class OrganizationRecord extends CvrRecord {
         subs.addAll(this.memberData);
         return subs;
     }
+
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.names);
+//        for (AttributeRecord attributeRecord : this.attributes) {
+//            sets.addAll(attributeRecord.getBitemporalSets());
+//        }
+//        for (OrganizationMemberdataRecord organizationMemberdataRecord : this.memberData) {
+//            sets.addAll(organizationMemberdataRecord.getBitemporalSets());
+//        }
+//        return sets;
+//    }
 }

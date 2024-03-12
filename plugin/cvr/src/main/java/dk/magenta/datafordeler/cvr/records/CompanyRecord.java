@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.hibernate.Session;
 import org.hibernate.annotations.*;
+import org.w3c.dom.Attr;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,6 +21,8 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -1581,6 +1584,38 @@ public class CompanyRecord extends CvrEntityRecord {
                 this.mergeSplit(fusionSplitRecord);
             }
 
+            CvrBitemporalRecord.updateRegistrations(this.names);
+            CvrBitemporalRecord.updateRegistrations(this.secondaryNames);
+            CvrBitemporalRecord.updateRegistrations(this.locationAddress);
+            CvrBitemporalRecord.updateRegistrations(this.postalAddress);
+            CvrBitemporalRecord.updateRegistrations(this.phoneNumber);
+            CvrBitemporalRecord.updateRegistrations(this.secondaryPhoneNumber);
+            CvrBitemporalRecord.updateRegistrations(this.faxNumber);
+            CvrBitemporalRecord.updateRegistrations(this.secondaryFaxNumber);
+            CvrBitemporalRecord.updateRegistrations(this.emailAddress);
+            CvrBitemporalRecord.updateRegistrations(this.homepage);
+            CvrBitemporalRecord.updateRegistrations(this.mandatoryEmailAddress);
+            CvrBitemporalRecord.updateRegistrations(this.lifecycle);
+            CvrBitemporalRecord.updateRegistrations(this.primaryIndustry);
+            CvrBitemporalRecord.updateRegistrations(this.secondaryIndustry1);
+            CvrBitemporalRecord.updateRegistrations(this.secondaryIndustry2);
+            CvrBitemporalRecord.updateRegistrations(this.secondaryIndustry3);
+            CvrBitemporalRecord.updateRegistrations(this.status);
+            CvrBitemporalRecord.updateRegistrations(this.companyStatus);
+            CvrBitemporalRecord.updateRegistrations(this.companyForm);
+            CvrBitemporalRecord.updateRegistrations(this.yearlyNumbers);
+            CvrBitemporalRecord.updateRegistrations(this.quarterlyNumbers);
+            CvrBitemporalRecord.updateRegistrations(this.monthlyNumbers);
+            CvrBitemporalRecord.updateRegistrations(this.productionUnits);
+            CvrBitemporalRecord.updateRegistrations(this.participants);
+
+
+
+
+            for (AttributeRecord attributeRecord : this.attributes) {
+                this.mergeAttribute(attributeRecord);
+            }
+
 
             this.metadata.merge(otherRecord.getMetadata());
             return true;
@@ -1629,5 +1664,46 @@ public class CompanyRecord extends CvrEntityRecord {
         queries.addAll(this.locationAddress.stream().map(a -> a.getAssoc()).flatMap(x -> x.stream()).collect(Collectors.toList()));
         return queries;
     }
+
+//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
+//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
+//        sets.add(this.names);
+//        sets.add(this.secondaryNames);
+//        sets.add(this.locationAddress);
+//        sets.add(this.postalAddress);
+//        sets.add(this.phoneNumber);
+//        sets.add(this.secondaryPhoneNumber);
+//        sets.add(this.faxNumber);
+//        sets.add(this.secondaryFaxNumber);
+//        sets.add(this.emailAddress);
+//        sets.add(this.homepage);
+//        sets.add(this.mandatoryEmailAddress);
+//        sets.add(this.lifecycle);
+//        sets.add(this.primaryIndustry);
+//        sets.add(this.secondaryIndustry1);
+//        sets.add(this.secondaryIndustry2);
+//        sets.add(this.secondaryIndustry3);
+//        sets.add(this.status);
+//        sets.add(this.companyStatus);
+//        sets.add(this.companyForm);
+//        sets.add(this.yearlyNumbers);
+//        sets.add(this.quarterlyNumbers);
+//        sets.add(this.monthlyNumbers);
+//        for (AttributeRecord attributeRecord : this.attributes) {
+//            sets.addAll(attributeRecord.getBitemporalSets());
+//        }
+//        sets.add(this.productionUnits);
+//        sets.add(this.participants);
+//        for (FusionSplitRecord fusionRecord : this.fusions) {
+//            sets.addAll(fusionRecord.getBitemporalSets());
+//        }
+//        for (FusionSplitRecord splitRecord : this.splits) {
+//            sets.addAll(splitRecord.getBitemporalSets());
+//        }
+//        if (this.metadata != null) {
+//            sets.addAll(this.metadata.getBitemporalSets());
+//        }
+//        return sets;
+//    }
 
 }
