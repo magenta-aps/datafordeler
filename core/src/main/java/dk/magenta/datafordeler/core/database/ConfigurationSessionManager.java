@@ -1,31 +1,58 @@
 package dk.magenta.datafordeler.core.database;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 
 /**
  * A bean to obtain Sessions with. Autowire this in, and obtain sessions with
  * sessionManager.getSessionFactory().openSession();
  */
+//NOTE: Copy(ish) from SessionManager, instead of inheriting, so we have 2 ~identical classes, that aren't related
 @Component
-public class ConfigurationSessionManager extends SessionManager {
+public class ConfigurationSessionManager {
+
+    protected SessionFactory sessionFactory;
 
     private static final Logger log = LogManager.getLogger(ConfigurationSessionManager.class.getCanonicalName());
 
     public ConfigurationSessionManager() throws IOException {
-        super();
+        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+        sessionFactoryBean.setDataSource(dataSource());
+        sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
+        sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
+        for (Class managedClass : managedClasses()) {
+            System.out.println(this.getClass().getSimpleName() + " : "+  managedClass.getSimpleName());
+            sessionFactoryBean.setAnnotatedClasses(managedClass);
+        }
+        sessionFactoryBean.afterPropertiesSet();
+        this.sessionFactory = sessionFactoryBean.getObject();
+    }
+
+    public SessionFactory getSessionFactory() {
+        return this.sessionFactory;
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        log.info("Shutting down SessionManager. Closing SessionFactory.");
+        this.sessionFactory.close();
     }
 
     protected HashSet<Class> managedClasses() {
@@ -63,7 +90,22 @@ public class ConfigurationSessionManager extends SessionManager {
         dataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
         dataSource.setUsername(System.getenv("SECONDARY_DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("SECONDARY_DATABASE_PASSWORD"));
+        try {
+            Connection connection = dataSource.getConnection();
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet rs = metaData.getTables(null, null, "%", null);
+            while (rs.next()) {
+                System.out.println(connection.getCatalog() + ": " + rs.getString("TABLE_NAME"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return dataSource;
+    }
+
+    protected static String getEnv(String key, String fallback) {
+        String value = System.getenv(key);
+        return (value != null) ? value : fallback;
     }
 
     protected Properties hibernateProperties() {

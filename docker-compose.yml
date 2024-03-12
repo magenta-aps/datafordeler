@@ -51,6 +51,8 @@ services:
       - ./docker/dev-env/local:/app/dev-env/local
       - ./docker/dev-env/db/initiate-db.sql:/app/initiate-db.sql
       - ./docker/manual_initiate.sh:/app/manual_initiate.sh
+    ports:
+      - "1433:1433"
 
   test:
     profiles:

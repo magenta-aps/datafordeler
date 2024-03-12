@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Component;
@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 
 /**
  * A bean to obtain Sessions with. This should be autowired in, and sessions obtained with
@@ -29,13 +32,13 @@ public class SessionManager {
 
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
-
     public SessionManager() throws IOException {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setDataSource(dataSource());
         sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
         sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
         for (Class managedClass : managedClasses()) {
+            System.out.println(this.getClass().getSimpleName() + " : "+  managedClass.getSimpleName());
             sessionFactoryBean.setAnnotatedClasses(managedClass);
         }
         sessionFactoryBean.afterPropertiesSet();
@@ -93,6 +96,16 @@ public class SessionManager {
         dataSource.setUrl(System.getenv("DATABASE_URL"));
         dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
+        try {
+            Connection connection = dataSource.getConnection();
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet rs = metaData.getTables(null, null, "%", null);
+            while (rs.next()) {
+                System.out.println(connection.getCatalog() + ": " + rs.getString("TABLE_NAME"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return dataSource;
     }
 
