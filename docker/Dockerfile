@@ -5,9 +5,9 @@ COPY pom.xml /code/pom.xml
 COPY core /code/core
 COPY plugin /code/plugin
 WORKDIR /code/
-RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
+RUN mvn $MAVEN_CLI_OPTS clean install package -DskipTests
 RUN mkdir -p /dist/core && mkdir -p /dist/plugin/jar \
-    &&  mv /code/core/target/*.jar /dist/core/ \
+    && mv /code/core/target/*.jar /dist/core/ \
     && mv /code/plugin/jar/*.jar /dist/plugin/jar/
 COPY docker/dev-settings.properties /dist/core/application.properties
 

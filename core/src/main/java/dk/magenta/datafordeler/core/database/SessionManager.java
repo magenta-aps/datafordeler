@@ -33,14 +33,12 @@ public class SessionManager {
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
     public SessionManager() throws IOException {
+        log.info("Initialize SessionManager");
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setDataSource(dataSource());
-        sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
+        DataSource dataSource = dataSource();
+        sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
-        for (Class managedClass : managedClasses()) {
-            System.out.println(this.getClass().getSimpleName() + " : "+  managedClass.getSimpleName());
-            sessionFactoryBean.setAnnotatedClasses(managedClass);
-        }
+        sessionFactoryBean.setAnnotatedClasses(managedClasses().toArray(new Class[0]));
         sessionFactoryBean.afterPropertiesSet();
         this.sessionFactory = sessionFactoryBean.getObject();
     }
@@ -96,17 +94,19 @@ public class SessionManager {
         dataSource.setUrl(System.getenv("DATABASE_URL"));
         dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
+        return dataSource;
+    }
+    private void printTables(DataSource dataSource) {
         try {
             Connection connection = dataSource.getConnection();
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet rs = metaData.getTables(null, null, "%", null);
             while (rs.next()) {
-                System.out.println(connection.getCatalog() + ": " + rs.getString("TABLE_NAME"));
+                System.out.println("Table in "+connection.getCatalog() + ": " + rs.getString("TABLE_NAME"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return dataSource;
     }
 
     protected static String getEnv(String key, String fallback) {
@@ -132,6 +132,7 @@ public class SessionManager {
         hibernateProperties.setProperty("hibernate.c3p0.timeout", "300");
         hibernateProperties.setProperty("hibernate.c3p0.max_statements", "50");
         hibernateProperties.setProperty("hibernate.c3p0.idle_test_period", "3000");
+        log.info("Primary hibernateProperties: \n" + hibernateProperties);
         return hibernateProperties;
     }
 
