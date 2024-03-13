@@ -163,9 +163,5 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
         ParticipantMetadataRecord that = (ParticipantMetadataRecord) o;
         return this.cvrNumber == that.cvrNumber;
     }*/
-//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
-//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
-//        sets.add(this.newestLocation);
-//        return sets;
-//    }
+
 }

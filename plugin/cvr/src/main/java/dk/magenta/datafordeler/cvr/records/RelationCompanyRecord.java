@@ -318,14 +318,4 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         return subs;
     }
 
-//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
-//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
-//        sets.add(this.regNumber);
-//        sets.add(this.names);
-//        sets.add(this.lifecycle);
-//        sets.add(this.status);
-//        sets.add(this.companyStatus);
-//        sets.add(this.form);
-//        return sets;
-//    }
 }

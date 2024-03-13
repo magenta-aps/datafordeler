@@ -131,13 +131,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
     }
 
-
-    /*public void merge(CvrBitemporalRecord other) {
-        if (other != null && other.getClass() == this.getClass()) {
-
-        }
-    }*/
-
     /**
      * For sorting purposes; we implement the Comparable interface, so we should
      * provide a comparison method. Here, we sort CvrRecord objects by registrationFrom, with nulls first
@@ -151,7 +144,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
-//    @JsonIgnore
 
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
@@ -245,9 +237,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     public static void updateRegistrations(Set<? extends CvrBitemporalRecord> records) {
         if (records != null && records.size() > 1) {
-            System.out.println("Sorting:");
-
-            TreeSet<CvrBitemporalRecord> sorted = new TreeSet<>(Comparator.comparing(CvrBitemporalRecord::getLastUpdated, Comparator.nullsFirst(Comparator.naturalOrder())));
+            TreeSet<CvrBitemporalRecord> sorted = new TreeSet<>(
+                    Comparator.comparing(CvrBitemporalRecord::getLastUpdated, Comparator.nullsFirst(Comparator.naturalOrder()))
+            );
             sorted.addAll(records);
             Iterator<CvrBitemporalRecord> iterator = sorted.descendingIterator();
             OffsetDateTime nextUpdateTime = null;
@@ -255,7 +247,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 CvrBitemporalRecord record = iterator.next();
                 record.setRegistrationTo(nextUpdateTime);
                 nextUpdateTime = record.getRegistrationFrom();
-                System.out.println("    "+record.getLastUpdated()+" "+record.getRegistrationTo()+"    "+record.getClass().getSimpleName());
             }
         }
     }

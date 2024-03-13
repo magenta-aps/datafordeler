@@ -215,11 +215,4 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         subs.addAll(this.values);
         return subs;
     }
-
-
-//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
-//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
-//        sets.add(this.values);
-//        return sets;
-//    }
 }

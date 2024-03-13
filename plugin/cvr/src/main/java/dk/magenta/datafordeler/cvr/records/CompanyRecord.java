@@ -1661,46 +1661,4 @@ public class CompanyRecord extends CvrEntityRecord {
         queries.addAll(this.locationAddress.stream().map(a -> a.getAssoc()).flatMap(x -> x.stream()).collect(Collectors.toList()));
         return queries;
     }
-
-//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
-//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
-//        sets.add(this.names);
-//        sets.add(this.secondaryNames);
-//        sets.add(this.locationAddress);
-//        sets.add(this.postalAddress);
-//        sets.add(this.phoneNumber);
-//        sets.add(this.secondaryPhoneNumber);
-//        sets.add(this.faxNumber);
-//        sets.add(this.secondaryFaxNumber);
-//        sets.add(this.emailAddress);
-//        sets.add(this.homepage);
-//        sets.add(this.mandatoryEmailAddress);
-//        sets.add(this.lifecycle);
-//        sets.add(this.primaryIndustry);
-//        sets.add(this.secondaryIndustry1);
-//        sets.add(this.secondaryIndustry2);
-//        sets.add(this.secondaryIndustry3);
-//        sets.add(this.status);
-//        sets.add(this.companyStatus);
-//        sets.add(this.companyForm);
-//        sets.add(this.yearlyNumbers);
-//        sets.add(this.quarterlyNumbers);
-//        sets.add(this.monthlyNumbers);
-//        for (AttributeRecord attributeRecord : this.attributes) {
-//            sets.addAll(attributeRecord.getBitemporalSets());
-//        }
-//        sets.add(this.productionUnits);
-//        sets.add(this.participants);
-//        for (FusionSplitRecord fusionRecord : this.fusions) {
-//            sets.addAll(fusionRecord.getBitemporalSets());
-//        }
-//        for (FusionSplitRecord splitRecord : this.splits) {
-//            sets.addAll(splitRecord.getBitemporalSets());
-//        }
-//        if (this.metadata != null) {
-//            sets.addAll(this.metadata.getBitemporalSets());
-//        }
-//        return sets;
-//    }
-
 }

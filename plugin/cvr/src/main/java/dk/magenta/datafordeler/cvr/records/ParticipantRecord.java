@@ -677,25 +677,4 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
         return subs;
     }
-
-//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
-//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
-//        sets.add(this.names);
-//        sets.add(this.locationAddress);
-//        sets.add(this.postalAddress);
-//        sets.add(this.businessAddress);
-//        sets.add(this.phoneNumber);
-//        sets.add(this.faxNumber);
-//        sets.add(this.emailAddress);
-//        sets.add(this.companyRelation);
-//
-//
-//        for (AttributeRecord attributeRecord : this.attributes) {
-//            sets.addAll(attributeRecord.getBitemporalSets());
-//        }
-//        if (this.metadata != null) {
-//            sets.addAll(this.metadata.getBitemporalSets());
-//        }
-//        return sets;
-//    }
 }

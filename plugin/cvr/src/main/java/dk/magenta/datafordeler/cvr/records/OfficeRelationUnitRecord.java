@@ -159,10 +159,4 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         return subs;
     }
 
-//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
-//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
-//        sets.add(this.names);
-//        sets.add(this.locationAddress);
-//        return sets;
-//    }
 }

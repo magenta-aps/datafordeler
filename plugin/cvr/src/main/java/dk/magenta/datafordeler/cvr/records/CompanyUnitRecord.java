@@ -994,27 +994,4 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         return subs;
     }
 
-//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
-//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
-//        sets.add(this.names);
-//        sets.add(this.locationAddress);
-//        sets.add(this.postalAddress);
-//        sets.add(this.phoneNumber);
-//        sets.add(this.faxNumber);
-//        sets.add(this.emailAddress);
-//        sets.add(this.lifecycle);
-//        sets.add(this.primaryIndustry);
-//        sets.add(this.secondaryIndustry1);
-//        sets.add(this.secondaryIndustry2);
-//        sets.add(this.secondaryIndustry3);
-//        sets.add(this.yearlyNumbers);
-//        sets.add(this.quarterlyNumbers);
-//        for (AttributeRecord attributeRecord : this.attributes) {
-//            sets.addAll(attributeRecord.getBitemporalSets());
-//        }
-//        sets.add(this.participantRelations);
-//        sets.add(this.companyLinkRecords);
-//        return sets;
-//    }
-
 }

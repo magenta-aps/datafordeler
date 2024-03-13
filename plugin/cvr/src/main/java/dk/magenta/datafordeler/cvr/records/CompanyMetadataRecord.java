@@ -546,17 +546,4 @@ public class CompanyMetadataRecord extends MetadataRecord {
         subs.addAll(this.newestSecondaryIndustry3);
         return subs;
     }
-//
-//    public List<Set<? extends CvrBitemporalRecord>> getBitemporalSets() {
-//        ArrayList<Set<? extends CvrBitemporalRecord>> sets = new ArrayList<>();
-//        sets.add(this.newestForm);
-//        sets.add(this.newestName);
-//        sets.add(this.newestLocation);
-//        sets.add(this.newestPrimaryIndustry);
-//        sets.add(this.newestSecondaryIndustry1);
-//        sets.add(this.newestSecondaryIndustry2);
-//        sets.add(this.newestSecondaryIndustry3);
-//        return sets;
-//    }
-
 }
