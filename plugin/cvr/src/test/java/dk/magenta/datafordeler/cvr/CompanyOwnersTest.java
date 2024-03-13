@@ -90,7 +90,6 @@ public class CompanyOwnersTest {
                     new HttpEntity<>("", new HttpHeaders()),
                     String.class
             );
-            System.out.println(response.getBody());
             ObjectNode data = (ObjectNode) objectMapper.readTree(response.getBody());
             ArrayNode legale = (ArrayNode) data.get("legale_ejere");
             ArrayNode reelle = (ArrayNode) data.get("reelle_ejere");

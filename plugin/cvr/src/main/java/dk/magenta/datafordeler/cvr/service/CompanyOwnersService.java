@@ -105,7 +105,6 @@ public class CompanyOwnersService {
             root.set("legale_ejere", legaleEjere);
             root.set("reelle_ejere", reelleEjere);
 
-            System.out.println("Der er "+companyRecord.getParticipants().current().size()+" deltagere");
             companyRecord.getParticipants().currentStream().forEach(relationRecord -> {
 
                 boolean erLegalEjer = false;
