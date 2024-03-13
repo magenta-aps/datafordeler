@@ -35,8 +35,8 @@ import java.util.*;
         @FilterDef(name = Bitemporal.FILTER_EFFECTTO_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_EFFECTTO)),
         @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONFROM)),
         @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONFROM)),
-        //@FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
-        //@FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
+        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
+        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
         @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_AFTER, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_LASTUPDATED)),
         @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_LASTUPDATED))
 })
@@ -155,8 +155,8 @@ public class ParticipantRecord extends CvrEntityRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -195,8 +195,8 @@ public class ParticipantRecord extends CvrEntityRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -236,8 +236,8 @@ public class ParticipantRecord extends CvrEntityRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -277,8 +277,8 @@ public class ParticipantRecord extends CvrEntityRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -318,8 +318,8 @@ public class ParticipantRecord extends CvrEntityRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -360,8 +360,8 @@ public class ParticipantRecord extends CvrEntityRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -402,8 +402,8 @@ public class ParticipantRecord extends CvrEntityRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -506,8 +506,8 @@ public class ParticipantRecord extends CvrEntityRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -623,31 +623,31 @@ public class ParticipantRecord extends CvrEntityRecord {
             for (SecNameRecord nameRecord : otherRecord.getNames()) {
                 this.addName(nameRecord);
             }
-            CvrBitemporalRecord.updateRegistrations(this.names);
             for (AddressRecord addressRecord : otherRecord.getLocationAddress()) {
                 this.addLocationAddress(addressRecord);
             }
-            CvrBitemporalRecord.updateRegistrations(this.locationAddress);
             for (AddressRecord addressRecord : otherRecord.getPostalAddress()) {
                 this.addPostalAddress(addressRecord);
             }
-            CvrBitemporalRecord.updateRegistrations(this.postalAddress);
             for (AddressRecord addressRecord : otherRecord.getBusinessAddress()) {
                 this.addBusinessAddress(addressRecord);
             }
-            CvrBitemporalRecord.updateRegistrations(this.businessAddress);
             for (ContactRecord contactRecord : otherRecord.getPhoneNumber()) {
                 this.addPhoneNumber(contactRecord);
             }
-            CvrBitemporalRecord.updateRegistrations(this.phoneNumber);
             for (ContactRecord contactRecord : otherRecord.getFaxNumber()) {
                 this.addFaxNumber(contactRecord);
             }
-            CvrBitemporalRecord.updateRegistrations(this.faxNumber);
             for (ContactRecord contactRecord : otherRecord.getEmailAddress()) {
                 this.addEmailAddress(contactRecord);
             }
-            CvrBitemporalRecord.updateRegistrations(this.emailAddress);
+//            CvrBitemporalRecord.updateRegistrations(this.names);
+//            CvrBitemporalRecord.updateRegistrations(this.locationAddress);
+//            CvrBitemporalRecord.updateRegistrations(this.postalAddress);
+//            CvrBitemporalRecord.updateRegistrations(this.businessAddress);
+//            CvrBitemporalRecord.updateRegistrations(this.phoneNumber);
+//            CvrBitemporalRecord.updateRegistrations(this.faxNumber);
+//            CvrBitemporalRecord.updateRegistrations(this.emailAddress);
             for (AttributeRecord attributeRecord : otherRecord.getAttributes()) {
                 this.mergeAttribute(attributeRecord);
             }

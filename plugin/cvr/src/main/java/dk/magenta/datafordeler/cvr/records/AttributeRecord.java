@@ -86,8 +86,8 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -201,9 +201,9 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
                         Objects.equals(this.valueType, otherRecord.getValueType())
         ) {
             for (AttributeValueRecord attributeValueRecord : otherRecord.getValues()) {
-                System.out.println("Adding value to attribute "+this.getType()+". It had "+this.values.size()+" values before");
+//                System.out.println("Adding value to attribute "+this.getType()+". It had "+this.values.size()+" values before");
                 this.addValue(attributeValueRecord);
-                System.out.println("Now it has "+this.values.size()+" values");
+//                System.out.println("Now it has "+this.values.size()+" values");
             }
             CvrBitemporalRecord.updateRegistrations(this.values);
         }

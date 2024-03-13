@@ -190,7 +190,7 @@ public class OrganizationRecord extends CvrRecord {
         for (BaseNameRecord name : other.getNames()) {
             this.addName(name);
         }
-        CvrBitemporalRecord.updateRegistrations(this.names);
+//        CvrBitemporalRecord.updateRegistrations(this.names);
         for (AttributeRecord attribute : other.getAttributes()) {
             this.mergeAttribute(attribute);
         }

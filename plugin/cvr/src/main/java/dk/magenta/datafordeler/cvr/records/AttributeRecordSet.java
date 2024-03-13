@@ -18,7 +18,6 @@ public class AttributeRecordSet extends HashSet<AttributeRecord> {
     public List<AttributeRecord> byType(String type) {
         ArrayList<AttributeRecord> filtered = new ArrayList<>();
         for (AttributeRecord attributeRecord : this) {
-            System.out.println("type: "+attributeRecord.getType());
             if (Objects.equals(attributeRecord.getType(), type)) {
                 filtered.add(attributeRecord);
             }
@@ -41,9 +40,11 @@ public class AttributeRecordSet extends HashSet<AttributeRecord> {
     public List<Object> getCurrentAttributeValues(String type, String valueType, boolean parse) {
         ArrayList<Object> values = new ArrayList<>();
         for (AttributeRecord attributeRecord : this.byType(type)) {
-            System.out.println("valuetype: "+attributeRecord.getValueType());
+            System.out.println("attribute "+type);
             if (valueType == null || attributeRecord.getValueType().equals(valueType)) {
+                System.out.println("current values:");
                 for (AttributeValueRecord valueRecord : attributeRecord.getValues().current()) {
+                    System.out.println(valueRecord.getValue()+" ("+valueRecord.getBitemporality()+")");
                     String stringValue = valueRecord.getValue();
                     if (parse) {
                         Object value = null;

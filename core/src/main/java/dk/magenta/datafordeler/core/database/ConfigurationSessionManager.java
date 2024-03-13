@@ -49,7 +49,6 @@ public class ConfigurationSessionManager {
             Set<Class> managedClasses = new HashSet<>(ConfigurationSessionManager.managedClasses);
 
             for (Class cls : managedClasses) {
-
                 log.info("Located hardcoded data class " + cls.getCanonicalName());
             }
 

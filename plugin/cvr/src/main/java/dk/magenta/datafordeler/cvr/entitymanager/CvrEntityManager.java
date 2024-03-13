@@ -5,11 +5,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.database.*;
-import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.exception.DataStreamException;
+import dk.magenta.datafordeler.core.exception.ImportInterruptedException;
+import dk.magenta.datafordeler.core.exception.ParseException;
 import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
@@ -37,9 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -364,19 +362,12 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         for (T item : items) {
             this.beforeParseSave(item, importMetadata, session);
             item.save(session);
-
         }
         return items.size();
     }
 
     protected void beforeParseSave(T item, ImportMetadata importMetadata, Session session) {
         item.setDafoUpdateOnTree(importMetadata.getImportTime());
-
-        // TODO: Kør dette med eksisterende data i DB, så collections indeholder alt det gamle også
-//        List<Set<? extends CvrBitemporalRecord>> collections = item.getBitemporalSets();
-//        for (Set<? extends CvrBitemporalRecord> collection : collections) {
-//
-//        }
     }
 
     public List<T> parseNode(JsonNode jsonNode) {

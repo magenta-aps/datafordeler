@@ -170,13 +170,12 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
             for (BaseNameRecord name : other.getNames()) {
                 this.addName(name);
             }
-            CvrBitemporalRecord.updateRegistrations(this.names);
-            System.out.println("Add "+other.getLocationAddress().size()+" addresses to "+this.getLocationAddress().size()+":");
             for (AddressRecord address : other.getLocationAddress()) {
                 this.addLocationAddress(address);
             }
             System.out.println(this.getLocationAddress().size());
-            CvrBitemporalRecord.updateRegistrations(this.locationAddress);
+//            CvrBitemporalRecord.updateRegistrations(this.names);
+//            CvrBitemporalRecord.updateRegistrations(this.locationAddress);
         }
     }
 

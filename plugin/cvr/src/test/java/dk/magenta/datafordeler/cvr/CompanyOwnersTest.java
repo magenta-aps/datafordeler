@@ -81,13 +81,13 @@ public class CompanyOwnersTest {
 
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
-//            query.setRegistrationAt(time);
-//            query.setEffectAt(time);
+            query.setRegistrationAt(time);
+            query.setEffectAt(time);
             query.applyFilters(session);
 
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
 
-            FilterProvider fp = new SimpleFilterProvider().addFilter(
+            /*FilterProvider fp = new SimpleFilterProvider().addFilter(
                     "ParticipantRecordFilter",
                     SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
             );
@@ -100,9 +100,9 @@ public class CompanyOwnersTest {
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
-            }
+            }*/
             Assert.assertEquals(1, companyList.size());
-
+/*
             for (CompanyRecord c : companyList) {
                 for (CompanyParticipantRelationRecord p : c.getParticipants()) {
                     System.out.println(p.getParticipantUnitNumber());
@@ -119,7 +119,7 @@ public class CompanyOwnersTest {
                     }
                 }
             }
-
+*/
 
             ResponseEntity<String> response = restTemplate.exchange(
                     "/cvr/owners/"+companyList.get(0).getCvrNumberString(),
@@ -127,7 +127,7 @@ public class CompanyOwnersTest {
                     new HttpEntity<>("", new HttpHeaders()),
                     String.class
             );
-//            System.out.println(response.getBody());
+            System.out.println(response.getBody());
         }
     }
 }

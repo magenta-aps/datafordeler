@@ -57,9 +57,6 @@ public class CompanyOwnersService {
     @Autowired
     ParticipantRecordOutputWrapper participantRecordOutputWrapper;
 
-    private static final String LEGALE_EJERE = "LEGALE EJERE";
-    private static final String REELLE_EJERE = "REELLE EJERE";
-
     private static final Map<String, Pair<String, String>> intervalMap;
     static {
         HashMap<String, Pair<String, String>> map = new HashMap<>();
@@ -90,12 +87,8 @@ public class CompanyOwnersService {
         Session session = sessionManager.getSessionFactory().openSession();
 
         OffsetDateTime now = OffsetDateTime.now();
-        this.applyFilter(session, Bitemporal.FILTER_EFFECTFROM_BEFORE, Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, now);
-        this.applyFilter(session, Bitemporal.FILTER_EFFECTTO_AFTER, Bitemporal.FILTERPARAM_EFFECTTO_AFTER, now);
-
         CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
         companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, cvr);
-
 
         companyRecordQuery.setRegistrationAt(now);
         companyRecordQuery.setEffectAt(now);
@@ -108,12 +101,6 @@ public class CompanyOwnersService {
         List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
         if (companyRecords != null && !companyRecords.isEmpty()) {
             CompanyRecord companyRecord = companyRecords.get(0);
-            System.out.println("Fandt en CompanyRecord");
-
-            HashMap<Long, ParticipantRecord> participantMap = new HashMap<>();
-//            HashSet<CompanyParticipantRelationRecord> legaleEjere = new HashSet<>();
-//            HashSet<CompanyParticipantRelationRecord> reelleEjere = new HashSet<>();
-//            HashSet<CompanyParticipantRelationRecord> fuldtAnsvarligeDeltagere = new HashSet<>();
 
             ArrayNode legaleEjere = objectMapper.createArrayNode();
             ArrayNode reelleEjere = objectMapper.createArrayNode();
@@ -121,143 +108,86 @@ public class CompanyOwnersService {
             root.set("legale_ejere", legaleEjere);
             root.set("reelle_ejere", reelleEjere);
 
-
-            boolean virksomhedErOphoert = companyRecord.getLifecycle().current().isEmpty();
-            boolean erVirksomhedErhvervsdrivendeFonde = Objects.equals(companyRecord.getCompanyForm().getFirst(true, true).getCompanyFormCode(), "100");
-
             System.out.println("Der er "+companyRecord.getParticipants().current().size()+" deltagere");
             companyRecord.getParticipants().currentStream().forEach(relationRecord -> {
-                System.out.println("Undersøger deltager "+relationRecord.getParticipantUnitNumber());
 
-                boolean useGroovyCode = false;
                 boolean erLegalEjer = false;
                 boolean erReelEjer = false;
 
-
-                if (useGroovyCode) {
-                    boolean harVirksomhedReelEjerOrganisation = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), REELLE_EJERE));
-
-                    boolean harVirksomhedTagetstillingTilReelleEjere = harVirksomhedReelEjerOrganisation;
-                    boolean harVirksomhedAktiveReelleEjere = relationRecord.getOrganizations().stream().anyMatch(o -> /*o.active && */Objects.equals(o.getMainType(), REELLE_EJERE));
-                    boolean erVirksomhedBoersnoteret = companyRecord.getAttributes().stream().anyMatch(
-                            a -> Objects.equals(a.getType(), "BØRSNOTERET")
-                                    && a.getValues().stream().anyMatch(v -> v.getBitemporality().isCurrent() && v.getValue().equalsIgnoreCase("true"))
-                    );
-
-                    boolean bestyrelseAnsesSomReelleEjere = harVirksomhedReelEjerOrganisation &&
-                            erVirksomhedErhvervsdrivendeFonde &&
-                            harVirksomhedTagetstillingTilReelleEjere &&
-                            !virksomhedErOphoert;
-
-                    boolean virksomhedHarIkkeReelleEjereOgLedelseErIndsat = harVirksomhedReelEjerOrganisation &&
-                            !harVirksomhedAktiveReelleEjere &&
-                            !erVirksomhedErhvervsdrivendeFonde &&
-                            !erVirksomhedBoersnoteret &&
-                            !relationRecord.getOrganizations().stream().anyMatch(o -> o.getAttributes().getCurrentAttributeValues("KAN_IKKE_IDENTIFICERE_REELLE_EJERE", "boolean").contains(Boolean.TRUE)) &&
-                            !virksomhedErOphoert;
-
-                    boolean virksomhedHarIkkeKunnetIdentificereReelleEjereLedelseErIndsat = harVirksomhedReelEjerOrganisation &&
-                                !harVirksomhedAktiveReelleEjere &&
-                                !erVirksomhedErhvervsdrivendeFonde &&
-                                !erVirksomhedBoersnoteret &&
-                                relationRecord.getOrganizations().stream().anyMatch(o -> o.getAttributes().getCurrentAttributeValues("KAN_IKKE_IDENTIFICERE_REELLE_EJERE", "boolean").contains(Boolean.TRUE)) &&
-                                !virksomhedErOphoert;
-
-                    erReelEjer = relationRecord.getOrganizations().stream().anyMatch(o -> Objects.equals(o.getMainType(), REELLE_EJERE));
-
-                    for (OrganizationRecord organizationRecord : relationRecord.getOrganizations()) {
-                        String type = organizationRecord.getMainType();
-                        if (Objects.equals(type, LEGALE_EJERE)) {
-                            System.out.println("Er i LEGALE_EJERE");
-                            erLegalEjer = true;
-                        }
-                        if (Objects.equals(type, REELLE_EJERE)) {
-                            erReelEjer = true;  // er i aktiveReelleEjere
-                            System.out.println("Er i REELLE_EJERE");
-                        }
-                        if (organizationRecord.getAttributes().getCurrentAttributeValues("FUNKTION", "string").contains("Reelle ejere")) {
-                            erReelEjer = true;
-                            System.out.println("Er i en organisation er har FUNKTION='Reelle Ejere'");
-                        }
-                    }
-
-
-                    if (!erReelEjer) {
-                        // Se om andre data gør personen til reel ejer
-
-                    }
-
-                } else {
-
-//                    boolean person = Objects.equals(relationRecord.getRelationParticipantRecord().getUnitType(), "PERSON");
-//                    boolean virksomhed = Objects.equals(relationRecord.getRelationParticipantRecord().getUnitType(), "VIRKSOMHED");
-
-
                     // Ifølge Ejerforhold_Doc.png
+                    String ejerandel = null;
+                    String stemmeret = null;
+                    HashSet<String> særligeEjerforhold = new HashSet<>();
                     for (OrganizationRecord organizationRecord : relationRecord.getOrganizations()) {
                         if (organizationRecord.getMainType().equals("REGISTER")) {
                             Set<String> currentOrganizationNames = organizationRecord.getNames().current().stream().map(n -> n.getName()).collect(Collectors.toSet());
                             Set<String> currentOrganizationFunctions = organizationRecord.getAttributes().getCurrentAttributeValues("FUNKTION", "string").stream().map(String::valueOf).collect(Collectors.toSet());
 
+                            for (OrganizationMemberdataRecord memberdataRecord : organizationRecord.getMemberData()) {
+                                String memberEjerandel = memberdataRecord.getAttributes().getCurrentAttributeValues("EJERANDEL_PROCENT", "decimal", false).stream().map(String::valueOf).findFirst().orElse(null);
+                                if (memberEjerandel != null) {
+                                    ejerandel = memberEjerandel;
+                                }
+                                String memberStemmeret = memberdataRecord.getAttributes().getCurrentAttributeValues("EJERANDEL_STEMMERET_PROCENT", "decimal", false).stream().map(String::valueOf).findFirst().orElse(null);
+                                if (memberStemmeret != null) {
+                                    stemmeret = memberStemmeret;
+                                }
+                                særligeEjerforhold.addAll(memberdataRecord.getAttributes().getCurrentAttributeValues("SÆRLIGE_EJERFORHOLD", "string").stream().map(String::valueOf).collect(Collectors.toSet()));
+
+                            }
+
+
                             // Legale ejere
                             if (currentOrganizationNames.contains("EJERREGISTER") || currentOrganizationFunctions.contains("EJERREGISTER")) {
-                                erLegalEjer = true;
+                                if ((ejerandel != null && Float.parseFloat(ejerandel) >= 0.05) || (stemmeret != null && Float.parseFloat(stemmeret) >= 0.05)) {
+                                    erLegalEjer = true;
+                                }
                             }
 
                             // Reelle ejere
                             if (currentOrganizationNames.contains("Reelle ejere") || currentOrganizationFunctions.contains("Reelle ejere")) {
                                 erReelEjer = true;
                             }
-
-                            if (erLegalEjer || erReelEjer) {
-                                ObjectNode ejer = objectMapper.createObjectNode();
-
-                                RelationParticipantRecord participantRecord = relationRecord.getRelationParticipantRecord();
-                                ejer.put(
-                                        "deltager",
-                                        objectMapper.setFilterProvider(this.getFilterProvider()).valueToTree(participantRecord)
-                                );
-
-                                String ejerandel = null;
-                                HashSet<String> særligeEjerforhold = new HashSet<>();
-                                for (OrganizationMemberdataRecord memberdataRecord : organizationRecord.getMemberData()) {
-                                    String memberEjerandel = memberdataRecord.getAttributes().getCurrentAttributeValues("EJERANDEL_PROCENT", "decimal", false).stream().map(String::valueOf).findFirst().orElse(null);
-                                    if (memberEjerandel != null) {
-                                        ejerandel = memberEjerandel;
-                                    }
-                                    særligeEjerforhold.addAll(memberdataRecord.getAttributes().getCurrentAttributeValues("SÆRLIGE_EJERFORHOLD", "string").stream().map(String::valueOf).collect(Collectors.toSet()));
-                                }
-
-                                if (erLegalEjer) {
-                                    if (ejerandel != null) {
-                                        Pair<String, String> ejerandelRange = intervalMap.get(ejerandel);
-                                        ObjectNode ejerandelObject = objectMapper.createObjectNode();
-                                        ejerandelObject.put("fra", ejerandelRange.getFirst());
-                                        ejerandelObject.put("til", ejerandelRange.getSecond());
-                                        ejer.set("ejerandel", ejerandelObject);
-                                    }
-                                } else {
-                                    ejer.put("ejerandel", ejerandel);
-                                }
-
-                                if (!særligeEjerforhold.isEmpty()) {
-                                    ArrayNode ejerforhold = objectMapper.createArrayNode();
-                                    for (String e : særligeEjerforhold) {
-                                        ejerforhold.add(e);
-                                    }
-                                    ejer.put("særlige_ejerforhold", ejerforhold);
-                                }
-
-                                if (erLegalEjer) {
-                                    legaleEjere.add(ejer);
-                                } else {
-                                    reelleEjere.add(ejer);
-                                }
-
-                            }
                         }
                     }
-                }
+
+
+                    if (erLegalEjer || erReelEjer) {
+                        ObjectNode ejer = objectMapper.createObjectNode();
+
+                        RelationParticipantRecord participantRecord = relationRecord.getRelationParticipantRecord();
+                        ejer.put(
+                                "deltager",
+                                objectMapper.setFilterProvider(this.getFilterProvider()).valueToTree(participantRecord)
+                        );
+
+                        ejer.put("ejerandel", ejerandel);
+                        if (erLegalEjer && ejerandel != null) {
+                            System.out.println("ejerandel: "+ejerandel);
+                            Pair<String, String> ejerandelRange = intervalMap.get(ejerandel);
+                            if (ejerandelRange != null) {
+                                ObjectNode ejerandelObject = objectMapper.createObjectNode();
+                                ejerandelObject.put("fra", ejerandelRange.getFirst());
+                                ejerandelObject.put("til", ejerandelRange.getSecond());
+                                ejer.set("ejerandel", ejerandelObject);
+                            }
+                        }
+
+                        if (!særligeEjerforhold.isEmpty()) {
+                            ArrayNode ejerforhold = objectMapper.createArrayNode();
+                            for (String e : særligeEjerforhold) {
+                                ejerforhold.add(e);
+                            }
+                            ejer.put("særlige_ejerforhold", ejerforhold);
+                        }
+
+                        if (erLegalEjer) {
+                            legaleEjere.add(ejer);
+                        }
+                        if (erReelEjer) {
+                            reelleEjere.add(ejer);
+                        }
+                    }
             });
         }
 

@@ -265,27 +265,27 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
             for (CompanyRegNumberRecord regNumber : other.getRegNumber()) {
                 this.addRegNumber(regNumber);
             }
-            CvrBitemporalRecord.updateRegistrations(this.regNumber);
             for (BaseNameRecord name : other.getNames()) {
                 this.addName(name);
             }
-            CvrBitemporalRecord.updateRegistrations(this.names);
             for (LifecycleRecord lifecycle : other.getLifecycle()) {
                 this.addLifecycle(lifecycle);
             }
-            CvrBitemporalRecord.updateRegistrations(this.lifecycle);
             for (StatusRecord status : other.getStatus()) {
                 this.addStatus(status);
             }
-            CvrBitemporalRecord.updateRegistrations(this.status);
             for (CompanyStatusRecord status : other.getCompanyStatus()) {
                 this.addCompanyStatus(status);
             }
-            CvrBitemporalRecord.updateRegistrations(this.companyStatus);
             for (FormRecord form : other.getForm()) {
                 this.addForm(form);
             }
-            CvrBitemporalRecord.updateRegistrations(this.form);
+//            CvrBitemporalRecord.updateRegistrations(this.lifecycle);
+//            CvrBitemporalRecord.updateRegistrations(this.regNumber);
+//            CvrBitemporalRecord.updateRegistrations(this.names);
+//            CvrBitemporalRecord.updateRegistrations(this.status);
+//            CvrBitemporalRecord.updateRegistrations(this.companyStatus);
+//            CvrBitemporalRecord.updateRegistrations(this.form);
         }
     }
 

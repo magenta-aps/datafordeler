@@ -147,8 +147,8 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
                 this.addLocationAddress(address);
             }
         }
-        CvrBitemporalRecord.updateRegistrations(this.names);
-        CvrBitemporalRecord.updateRegistrations(this.locationAddress);
+//        CvrBitemporalRecord.updateRegistrations(this.names);
+//        CvrBitemporalRecord.updateRegistrations(this.locationAddress);
     }
 
     @Override
