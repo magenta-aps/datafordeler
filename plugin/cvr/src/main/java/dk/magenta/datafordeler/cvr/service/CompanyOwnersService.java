@@ -73,8 +73,6 @@ public class CompanyOwnersService {
         intervalMap = Collections.unmodifiableMap(map);
     }
 
-
-
     @RequestMapping(
             path = {"/{cvr}"},
             produces = {"application/json"}
@@ -96,7 +94,6 @@ public class CompanyOwnersService {
         companyRecordQuery.setPage(1);
         companyRecordQuery.setPageSize(1);
         ObjectNode root = this.objectMapper.createObjectNode();
-
 
         List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
         if (companyRecords != null && !companyRecords.isEmpty()) {
@@ -133,7 +130,6 @@ public class CompanyOwnersService {
                                     stemmeret = memberStemmeret;
                                 }
                                 særligeEjerforhold.addAll(memberdataRecord.getAttributes().getCurrentAttributeValues("SÆRLIGE_EJERFORHOLD", "string").stream().map(String::valueOf).collect(Collectors.toSet()));
-
                             }
 
 
@@ -163,7 +159,6 @@ public class CompanyOwnersService {
 
                         ejer.put("ejerandel", ejerandel);
                         if (erLegalEjer && ejerandel != null) {
-                            System.out.println("ejerandel: "+ejerandel);
                             Pair<String, String> ejerandelRange = intervalMap.get(ejerandel);
                             if (ejerandelRange != null) {
                                 ObjectNode ejerandelObject = objectMapper.createObjectNode();

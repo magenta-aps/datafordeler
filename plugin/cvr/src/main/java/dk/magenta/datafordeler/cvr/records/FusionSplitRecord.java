@@ -199,7 +199,7 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
             for (AttributeRecord attributeRecord : otherRecord.getOutgoing()) {
                 this.mergeOutgoing(attributeRecord);
             }
-            CvrBitemporalRecord.updateRegistrations(this.name);
+            // CvrBitemporalRecord.updateRegistrations(this.name);
             return true;
         }
         return false;

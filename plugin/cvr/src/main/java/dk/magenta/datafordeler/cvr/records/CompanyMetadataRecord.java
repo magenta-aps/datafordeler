@@ -546,4 +546,5 @@ public class CompanyMetadataRecord extends MetadataRecord {
         subs.addAll(this.newestSecondaryIndustry3);
         return subs;
     }
+
 }

@@ -16,6 +16,7 @@ import java.util.*;
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__participant", columnList = ParticipantMetadataRecord.DB_FIELD_PARTICIPANT + DatabaseEntry.REF, unique = true),
+
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
@@ -163,5 +164,4 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
         ParticipantMetadataRecord that = (ParticipantMetadataRecord) o;
         return this.cvrNumber == that.cvrNumber;
     }*/
-
 }

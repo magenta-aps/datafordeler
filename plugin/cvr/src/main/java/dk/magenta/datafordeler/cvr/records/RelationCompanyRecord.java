@@ -317,5 +317,4 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         subs.addAll(this.form);
         return subs;
     }
-
 }

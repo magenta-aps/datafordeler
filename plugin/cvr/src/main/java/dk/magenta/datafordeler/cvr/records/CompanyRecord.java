@@ -13,7 +13,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.hibernate.Session;
 import org.hibernate.annotations.*;
-import org.w3c.dom.Attr;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,8 +20,6 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -1576,6 +1573,7 @@ public class CompanyRecord extends CvrEntityRecord {
             }
             for (CompanyParticipantRelationRecord participantRelationRecord : otherRecord.getParticipants()) {
                 this.mergeParticipant(participantRelationRecord);
+                // TODO: save
             }
             for (FusionSplitRecord fusionSplitRecord : otherRecord.getFusions()) {
                 this.mergeFusion(fusionSplitRecord);
@@ -1661,4 +1659,5 @@ public class CompanyRecord extends CvrEntityRecord {
         queries.addAll(this.locationAddress.stream().map(a -> a.getAssoc()).flatMap(x -> x.stream()).collect(Collectors.toList()));
         return queries;
     }
+
 }

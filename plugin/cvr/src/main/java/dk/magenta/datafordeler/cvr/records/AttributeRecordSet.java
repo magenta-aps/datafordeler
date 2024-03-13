@@ -1,12 +1,7 @@
 package dk.magenta.datafordeler.cvr.records;
 
-import dk.magenta.datafordeler.core.util.BitemporalityComparator;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Stream;
-import org.springframework.data.util.Pair;
 
 
 public class AttributeRecordSet extends HashSet<AttributeRecord> {
@@ -40,11 +35,8 @@ public class AttributeRecordSet extends HashSet<AttributeRecord> {
     public List<Object> getCurrentAttributeValues(String type, String valueType, boolean parse) {
         ArrayList<Object> values = new ArrayList<>();
         for (AttributeRecord attributeRecord : this.byType(type)) {
-            System.out.println("attribute "+type);
             if (valueType == null || attributeRecord.getValueType().equals(valueType)) {
-                System.out.println("current values:");
                 for (AttributeValueRecord valueRecord : attributeRecord.getValues().current()) {
-                    System.out.println(valueRecord.getValue()+" ("+valueRecord.getBitemporality()+")");
                     String stringValue = valueRecord.getValue();
                     if (parse) {
                         Object value = null;

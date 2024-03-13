@@ -236,6 +236,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     public static void updateRegistrations(Set<? extends CvrBitemporalRecord> records) {
+        if (records != null && !records.isEmpty()) {
+            System.out.println("UpdateRegs for set of " + records.stream().findFirst().get().getClass().getSimpleName());
+        }
         if (records != null && records.size() > 1) {
             TreeSet<CvrBitemporalRecord> sorted = new TreeSet<>(
                     Comparator.comparing(CvrBitemporalRecord::getLastUpdated, Comparator.nullsFirst(Comparator.naturalOrder()))
@@ -247,6 +250,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 CvrBitemporalRecord record = iterator.next();
                 record.setRegistrationTo(nextUpdateTime);
                 nextUpdateTime = record.getRegistrationFrom();
+                System.out.println(nextUpdateTime);
             }
         }
     }

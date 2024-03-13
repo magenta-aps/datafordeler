@@ -91,6 +91,7 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         return new AttributeRecordSet(this.attributes);
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

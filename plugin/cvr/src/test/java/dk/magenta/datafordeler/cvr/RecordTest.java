@@ -1007,19 +1007,5 @@ public class RecordTest {
         session.close();
     }
 
-    @Test
-    public void testEjere() throws DataFordelerException, IOException {
-        TestUserDetails testUserDetails = new TestUserDetails();
-        HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
-
-        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
-        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        this.applyAccess(testUserDetails);
-
-        this.loadCompany();
-        this.loadParticipant("/person.json");
-        ResponseEntity<String> resp = restTemplate.exchange("/cvr/owners/25052943", HttpMethod.GET, httpEntity, String.class);
-        System.out.println(resp.getBody());
-    }
 
 }

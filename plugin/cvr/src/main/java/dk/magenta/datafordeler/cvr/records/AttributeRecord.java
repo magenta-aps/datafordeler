@@ -201,9 +201,7 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
                         Objects.equals(this.valueType, otherRecord.getValueType())
         ) {
             for (AttributeValueRecord attributeValueRecord : otherRecord.getValues()) {
-//                System.out.println("Adding value to attribute "+this.getType()+". It had "+this.values.size()+" values before");
                 this.addValue(attributeValueRecord);
-//                System.out.println("Now it has "+this.values.size()+" values");
             }
             CvrBitemporalRecord.updateRegistrations(this.values);
         }
