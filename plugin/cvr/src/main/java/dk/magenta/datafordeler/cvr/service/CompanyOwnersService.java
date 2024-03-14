@@ -110,15 +110,13 @@ public class CompanyOwnersService {
                     throw new RuntimeException(e);
                 }
 
-                boolean erLegalEjer = false;
-                boolean erReelEjer = false;
-
                 // Ifølge Ejerforhold_Doc.png
-                String ejerandel = null;
-                String stemmeret = null;
-                HashSet<String> særligeEjerforhold = new HashSet<>();
                 for (OrganizationRecord organizationRecord : relationRecord.getOrganizations()) {
                     if (organizationRecord.getMainType().equals("REGISTER")) {
+
+                        String ejerandel = null;
+                        String stemmeret = null;
+                        HashSet<String> særligeEjerforhold = new HashSet<>();
                         Set<String> currentOrganizationNames = organizationRecord.getNames().current().stream().map(n -> n.getName()).collect(Collectors.toSet());
                         Set<String> currentOrganizationFunctions = organizationRecord.getAttributes().getCurrentAttributeValues("FUNKTION", "string").stream().map(String::valueOf).collect(Collectors.toSet());
 
@@ -137,56 +135,57 @@ public class CompanyOwnersService {
 
                         // Legale ejere
                         if (currentOrganizationNames.contains("EJERREGISTER") || currentOrganizationFunctions.contains("EJERREGISTER")) {
-                            System.out.println("ejerandel: "+ejerandel);
-                            System.out.println("stemmeret: "+stemmeret);
+                            System.out.println("ejerandel: " + ejerandel);
+                            System.out.println("stemmeret: " + stemmeret);
                             if ((ejerandel != null && Float.parseFloat(ejerandel) >= 0.05) || (stemmeret != null && Float.parseFloat(stemmeret) >= 0.05)) {
-                                erLegalEjer = true;
                                 System.out.println("LEGAL EJER");
+
+                                ObjectNode legalEjer = objectMapper.createObjectNode();
+                                RelationParticipantRecord participantRecord = relationRecord.getRelationParticipantRecord();
+                                legalEjer.put(
+                                        "deltager",
+                                        objectMapper.setFilterProvider(CompanyOwnersService.this.getFilterProvider()).valueToTree(participantRecord)
+                                );
+                                if (ejerandel != null) {
+                                    Pair<String, String> ejerandelRange = intervalMap.get(ejerandel);
+                                    if (ejerandelRange != null) {
+                                        ObjectNode ejerandelObject = objectMapper.createObjectNode();
+                                        ejerandelObject.put("fra", ejerandelRange.getFirst());
+                                        ejerandelObject.put("til", ejerandelRange.getSecond());
+                                        legalEjer.set("ejerandel", ejerandelObject);
+                                    }
+                                }
+                                if (!særligeEjerforhold.isEmpty()) {
+                                    ArrayNode ejerforhold = objectMapper.createArrayNode();
+                                    for (String e : særligeEjerforhold) {
+                                        ejerforhold.add(e);
+                                    }
+                                    legalEjer.put("særlige_ejerforhold", ejerforhold);
+                                }
+                                legaleEjere.add(legalEjer);
                             }
                         }
 
                         // Reelle ejere
                         if (currentOrganizationNames.contains("Reelle ejere") || currentOrganizationFunctions.contains("Reelle ejere")) {
-                            erReelEjer = true;
                             System.out.println("REEL EJER");
+
+                            ObjectNode reelEjer = objectMapper.createObjectNode();
+                            RelationParticipantRecord participantRecord = relationRecord.getRelationParticipantRecord();
+                            reelEjer.put(
+                                    "deltager",
+                                    objectMapper.setFilterProvider(CompanyOwnersService.this.getFilterProvider()).valueToTree(participantRecord)
+                            );
+                            reelEjer.put("ejerandel", ejerandel);
+                            if (!særligeEjerforhold.isEmpty()) {
+                                ArrayNode ejerforhold = objectMapper.createArrayNode();
+                                for (String e : særligeEjerforhold) {
+                                    ejerforhold.add(e);
+                                }
+                                reelEjer.put("særlige_ejerforhold", ejerforhold);
+                            }
+                            reelleEjere.add(reelEjer);
                         }
-                    }
-                }
-
-
-                if (erLegalEjer || erReelEjer) {
-                    ObjectNode ejer = objectMapper.createObjectNode();
-
-                    RelationParticipantRecord participantRecord = relationRecord.getRelationParticipantRecord();
-                    ejer.put(
-                            "deltager",
-                            objectMapper.setFilterProvider(this.getFilterProvider()).valueToTree(participantRecord)
-                    );
-
-                    ejer.put("ejerandel", ejerandel);
-                    if (erLegalEjer && ejerandel != null) {
-                        Pair<String, String> ejerandelRange = intervalMap.get(ejerandel);
-                        if (ejerandelRange != null) {
-                            ObjectNode ejerandelObject = objectMapper.createObjectNode();
-                            ejerandelObject.put("fra", ejerandelRange.getFirst());
-                            ejerandelObject.put("til", ejerandelRange.getSecond());
-                            ejer.set("ejerandel", ejerandelObject);
-                        }
-                    }
-
-                    if (!særligeEjerforhold.isEmpty()) {
-                        ArrayNode ejerforhold = objectMapper.createArrayNode();
-                        for (String e : særligeEjerforhold) {
-                            ejerforhold.add(e);
-                        }
-                        ejer.put("særlige_ejerforhold", ejerforhold);
-                    }
-
-                    if (erLegalEjer) {
-                        legaleEjere.add(ejer);
-                    }
-                    if (erReelEjer) {
-                        reelleEjere.add(ejer);
                     }
                 }
             });

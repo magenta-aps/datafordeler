@@ -389,18 +389,22 @@ public abstract class BaseQuery {
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.setRegistrationToBefore(registrationTo);
+        this.setRegistrationToAfter(registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo, OffsetDateTime fallback) {
         this.setRegistrationToBefore(registrationTo, fallback);
+        this.setRegistrationToAfter(registrationTo, fallback);
     }
 
     public void setRegistrationTo(String registrationTo) {
         this.setRegistrationToBefore(registrationTo);
+        this.setRegistrationToAfter(registrationTo);
     }
 
     public void setRegistrationTo(String registrationTo, OffsetDateTime fallback) throws DateTimeParseException {
         this.setRegistrationToBefore(registrationTo, fallback);
+        this.setRegistrationToAfter(registrationTo, fallback);
     }
 
 

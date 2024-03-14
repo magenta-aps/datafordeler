@@ -24,7 +24,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String FILTERLOGIC_REGISTRATIONFROM_AFTER = "(" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " >= :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER + ")";
     public static final String FILTERLOGIC_REGISTRATIONFROM_BEFORE = "(" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE + " OR " + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " is null)";
     public static final String FILTERLOGIC_REGISTRATIONTO_AFTER = "(" + CvrBitemporalRecord.DB_FIELD_REGISTRATION_TO + " >= :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER + " OR " + CvrBitemporalRecord.DB_FIELD_REGISTRATION_TO + " is null)";
-    public static final String FILTERLOGIC_REGISTRATIONTO_BEFORE = "(" + CvrBitemporalRecord.DB_FIELD_REGISTRATION_TO + " < :" + Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE + ")";
+    public static final String FILTERLOGIC_REGISTRATIONTO_BEFORE = "(" + CvrBitemporalRecord.DB_FIELD_REGISTRATION_TO + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE + ")";
 
 
     public static final String FILTERLOGIC_EFFECTFROM_AFTER = "(" + CvrRecordPeriod.DB_FIELD_VALID_FROM + " >= :" + Bitemporal.FILTERPARAM_EFFECTFROM_AFTER + ")";

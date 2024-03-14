@@ -200,7 +200,6 @@ public class QueryManager {
             stringJoiner.add(queryString);
         }
 
-        //System.out.println(queryString);
         // Build query
         org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
 
