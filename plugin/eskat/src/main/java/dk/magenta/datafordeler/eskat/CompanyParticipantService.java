@@ -1,5 +1,9 @@
 package dk.magenta.datafordeler.eskat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/eskat/companyParticipantConnection/1/rest")
@@ -40,6 +45,9 @@ public class CompanyParticipantService {
 
     @Autowired
     private SessionManager sessionManager;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private final Logger log = LogManager.getLogger(CompanyParticipantService.class.getCanonicalName());
 
@@ -136,9 +144,10 @@ public class CompanyParticipantService {
                         }
 
                         CvrRecordPeriod period = findValidity(participant);
+                        BaseNameRecord navnRecord = participant.getRelationParticipantRecord().getNames().stream().findFirst().orElse(null);
                         ParticipantEntity participantObject = new ParticipantEntity(company.getCvrNumberString(),
                                 participant.getParticipantRecord() != null ? Long.toString(participant.getRelationParticipantRecord().getBusinessKey()) : null,
-                                participant.getRelationParticipantRecord().getNames().stream().findFirst().get().getName(),
+                                navnRecord != null ? navnRecord.getName() : null,
                                 company.getNames().getLast(true, false).getName(),
                                 form != null ? form.getLongDescription() : null,
                                 statusRecord != null ? statusRecord.getStatusText() : null,

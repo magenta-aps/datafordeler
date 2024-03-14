@@ -195,7 +195,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
     public void merge(RelationParticipantRecord other) {
-        System.out.println("MERGE");
         if (other != null) {
             for (BaseNameRecord name : other.getNames()) {
                 this.addName(name);
