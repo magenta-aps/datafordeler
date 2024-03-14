@@ -51,25 +51,30 @@ public class CompanyOwnersTest {
     private SessionManager sessionManager;
 
     @Autowired
-    private CvrPlugin plugin;
-
-    @Autowired
     private CvrRegisterManager registerManager;
-
-    private CvrEntityManager entityManager;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
     @Test
     public void testParseCompanyFile() throws DataFordelerException, URISyntaxException, JsonProcessingException {
+
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            CompanyRecordQuery query = new CompanyRecordQuery();
+            OffsetDateTime time = OffsetDateTime.now();
+            query.setRegistrationAt(time);
+            query.setEffectAt(time);
+            query.applyFilters(session);
+            List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
+            Assert.assertEquals(0, companyList.size());
+        }
         ImportMetadata importMetadata = new ImportMetadata();
 
         URL testData = ParseTest.class.getResource("/company_in4.json");
         String testDataPath = testData.toURI().toString();
         registerManager.setCvrDemoCompanyFile(testDataPath);
 
-        entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
+        CvrEntityManager entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
         entityManager.parseData(stream, importMetadata);
 

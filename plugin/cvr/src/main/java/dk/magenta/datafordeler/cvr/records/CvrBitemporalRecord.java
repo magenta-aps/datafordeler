@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @MappedSuperclass
 public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord> {
@@ -235,18 +237,18 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return time != null ? time.atZoneSameInstant(ZoneOffset.UTC).toLocalDate() : null;
     }
 
-    public static void updateRegistrations(Set<? extends CvrBitemporalRecord> records) {
-        if (records != null && !records.isEmpty()) {
-            System.out.println("UpdateRegs for set of " + records.stream().findFirst().get().getClass().getSimpleName());
-        }
+    public static void updateRegistrations(Set<? extends CvrBitemporalRecord> records, boolean onlyOneOpenRegistration) {
         if (records != null && records.size() > 1) {
             OffsetDateTime nextUpdateTime = null;
-            ArrayList<CvrBitemporalRecord> sorted = new ArrayList<>(records);
-            sorted.sort(Comparator.comparing(CvrBitemporalRecord::getLastUpdated, Comparator.nullsFirst(Comparator.naturalOrder())).reversed());
-            for (CvrBitemporalRecord record : sorted) {
+            Stream<? extends CvrBitemporalRecord> recordStream = records.stream();
+            if (!onlyOneOpenRegistration) {
+                recordStream = recordStream.filter(r -> r.getEffectTo() == null);
+            }
+            recordStream = recordStream.sorted(Comparator.comparing(CvrBitemporalRecord::getLastUpdated, Comparator.nullsFirst(Comparator.naturalOrder())).reversed());
+            List<CvrBitemporalRecord> recordList = recordStream.collect(Collectors.toList());
+            for (CvrBitemporalRecord record : recordList) {
                 record.setRegistrationTo(nextUpdateTime);
                 nextUpdateTime = record.getRegistrationFrom();
-                System.out.println(nextUpdateTime);
             }
         }
     }

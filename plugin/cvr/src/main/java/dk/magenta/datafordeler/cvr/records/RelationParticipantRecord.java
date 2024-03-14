@@ -204,8 +204,8 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
                 this.addLocationAddress(address);
             }
         }
-        CvrBitemporalRecord.updateRegistrations(this.names);
-        CvrBitemporalRecord.updateRegistrations(this.locationAddress);
+        CvrBitemporalRecord.updateRegistrations(this.names, false);
+        CvrBitemporalRecord.updateRegistrations(this.locationAddress, false);
     }
 
     public void wire(Session session) {
