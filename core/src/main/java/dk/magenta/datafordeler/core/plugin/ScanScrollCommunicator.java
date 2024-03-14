@@ -2,12 +2,13 @@ package dk.magenta.datafordeler.core.plugin;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
 import dk.magenta.datafordeler.core.util.HttpGetWithEntity;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -226,25 +227,11 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                     }
                     ScanScrollCommunicator.this.fetches.remove(inputStream);
 
-                    HttpPost scrollDelete = new HttpPost(endUri) {
-                        @Override
-                        public String getMethod() {
-                            return "DELETE";
-                        }
-                    };
-                    ObjectNode objectNode = objectMapper.createObjectNode();
-                    ArrayNode arrayNode = objectMapper.createArrayNode();
                     for (String s : scrollIds) {
-                        arrayNode.add(s);
-                    }
-                    objectNode.set(ScanScrollCommunicator.this.scrollIdJsonKey, arrayNode);
-                    scrollDelete.setEntity(new StringEntity(objectNode.toString(), "utf-8"));
-                    scrollDelete.setHeader("Content-Type", "application/json");
-                    try {
-                        httpclient.execute(scrollDelete);
-                    } catch (IOException e) {
-                        log.error(e);
-                        throw new RuntimeException(e);
+                        try {
+                            ScanScrollCommunicator.this.cleanupScrollId(httpclient, scrollUri, s);
+                        } catch (URISyntaxException e) {
+                        }
                     }
                 }
             }
@@ -267,6 +254,33 @@ public class ScanScrollCommunicator extends HttpCommunicator {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void cleanupScrollId(HttpClient httpClient, URI scrollUri, String scrollId) throws URISyntaxException {
+        final URI endUri = new URI(
+                scrollUri.getScheme(),
+                scrollUri.getUserInfo(),
+                scrollUri.getHost(),
+                scrollUri.getPort(),
+                scrollUri.getPath(),
+                null,
+                null
+        );
+        HttpPost scrollDelete = new HttpPost(endUri) {
+            @Override
+            public String getMethod() {
+                return "DELETE";
+            }
+        };
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.put("scroll_id", scrollId);
+        scrollDelete.setEntity(new StringEntity(objectNode.toString(), "utf-8"));
+        scrollDelete.setHeader("Content-Type", "application/json");
+        try {
+            HttpResponse response = httpClient.execute(scrollDelete);
+        } catch (IOException e) {
+            log.error(e);
         }
     }
 }
