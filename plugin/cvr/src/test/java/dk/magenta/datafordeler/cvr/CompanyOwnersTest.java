@@ -96,6 +96,7 @@ public class CompanyOwnersTest {
                     String.class
             );
             ObjectNode data = (ObjectNode) objectMapper.readTree(response.getBody());
+            System.out.println(response.getBody());
             ArrayNode legale = (ArrayNode) data.get("legale_ejere");
             ArrayNode reelle = (ArrayNode) data.get("reelle_ejere");
             Assert.assertEquals(1, legale.size());

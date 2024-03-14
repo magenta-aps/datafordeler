@@ -101,6 +101,7 @@ public class CompanyOwnersService {
             root.set("reelle_ejere", reelleEjere);
 
             companyRecord.getParticipants().currentStream().forEach(relationRecord -> {
+                System.out.println("Participant "+relationRecord.getRelationParticipantRecord().getNames().stream().findFirst().get().getName());
                 FilterProvider fp = new SimpleFilterProvider().addFilter("ParticipantRecordFilter", SimpleBeanPropertyFilter.serializeAll());
 
                 try {
@@ -136,14 +137,18 @@ public class CompanyOwnersService {
 
                         // Legale ejere
                         if (currentOrganizationNames.contains("EJERREGISTER") || currentOrganizationFunctions.contains("EJERREGISTER")) {
+                            System.out.println("ejerandel: "+ejerandel);
+                            System.out.println("stemmeret: "+stemmeret);
                             if ((ejerandel != null && Float.parseFloat(ejerandel) >= 0.05) || (stemmeret != null && Float.parseFloat(stemmeret) >= 0.05)) {
                                 erLegalEjer = true;
+                                System.out.println("LEGAL EJER");
                             }
                         }
 
                         // Reelle ejere
                         if (currentOrganizationNames.contains("Reelle ejere") || currentOrganizationFunctions.contains("Reelle ejere")) {
                             erReelEjer = true;
+                            System.out.println("REEL EJER");
                         }
                     }
                 }
