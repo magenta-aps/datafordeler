@@ -7,15 +7,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
-import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.fapi.OutputWrapper;
-import dk.magenta.datafordeler.core.fapi.RecordOutputWrapper;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
@@ -23,7 +19,6 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.output.ParticipantRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -106,6 +101,13 @@ public class CompanyOwnersService {
             root.set("reelle_ejere", reelleEjere);
 
             companyRecord.getParticipants().currentStream().forEach(relationRecord -> {
+                FilterProvider fp = new SimpleFilterProvider().addFilter("ParticipantRecordFilter", SimpleBeanPropertyFilter.serializeAll());
+
+                try {
+                    System.out.println(objectMapper.setFilterProvider(fp).writerWithDefaultPrettyPrinter().writeValueAsString(relationRecord.getOrganizations()));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
 
                 boolean erLegalEjer = false;
                 boolean erReelEjer = false;
