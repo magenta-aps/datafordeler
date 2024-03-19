@@ -66,13 +66,14 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                     for (OrganizationMemberdataRecord memberdataRecord : organizationRecord.getMemberData()) {
                         for (AttributeRecord attributeRecord : memberdataRecord.getAttributes()) {
                             for (AttributeValueRecord valueRecord : attributeRecord.getValues()) {
-                                System.out.println(valueRecord.getId() + " " + session.contains(valueRecord));
+                                System.out.println(valueRecord.getId() + " " + session.contains(valueRecord)+" "+attributeRecord.getType()+" "+valueRecord.getValue()+" "+valueRecord.getBitemporality());
                             }
                         }
                     }
                 }
             }
         }
+        session.flush();
 
     }
 
