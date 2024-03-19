@@ -76,7 +76,7 @@ public class CompanyOwnersService {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
         loggerHelper.info("Incoming request for owners of cvr " + cvr);
-        //this.checkAndLogAccess(loggerHelper);
+        this.checkAndLogAccess(loggerHelper);
         Session session = sessionManager.getSessionFactory().openSession();
 
         OffsetDateTime now = OffsetDateTime.now();
