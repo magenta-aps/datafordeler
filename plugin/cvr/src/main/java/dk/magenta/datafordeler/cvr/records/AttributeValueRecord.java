@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 
@@ -39,4 +40,8 @@ public class AttributeValueRecord extends BaseAttributeValueRecord {
         this.attribute = attribute;
     }
 
+    @JsonProperty
+    public Long getId() {
+        return super.getId();
+    }
 }

@@ -175,6 +175,11 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         this.officeRelationRecord = officeRelationRecord;
     }
 
+    @JsonProperty
+    public Long getId() {
+        return super.getId();
+    }
+
 
     @Override
     public boolean equals(Object o) {
