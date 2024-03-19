@@ -44,4 +44,8 @@ public class AttributeValueRecord extends BaseAttributeValueRecord {
     public Long getId() {
         return super.getId();
     }
+    @JsonProperty
+    public Long getFoo() {
+        return super.getId();
+    }
 }
