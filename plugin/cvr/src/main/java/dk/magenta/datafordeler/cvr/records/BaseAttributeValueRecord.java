@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.util.Equality;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -37,9 +38,9 @@ public class BaseAttributeValueRecord extends CvrBitemporalRecord {
         if (!super.equals(o)) return false;
         BaseAttributeValueRecord that = (BaseAttributeValueRecord) o;
         return Objects.equals(value, that.value) &&
-                Objects.equals(this.getRegistrationFrom(), that.getRegistrationFrom()) &&
-                Objects.equals(this.getEffectFrom(), that.getEffectFrom()) &&
-                Objects.equals(this.getEffectTo(), that.getEffectTo());
+                Equality.equal(this.getRegistrationFrom(), that.getRegistrationFrom()) &&
+                Equality.equal(this.getEffectFrom(), that.getEffectFrom()) &&
+                Equality.equal(this.getEffectTo(), that.getEffectTo());
     }
 
     @Override
