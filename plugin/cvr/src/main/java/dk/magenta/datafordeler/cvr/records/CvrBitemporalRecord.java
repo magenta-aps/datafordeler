@@ -249,7 +249,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             List<CvrBitemporalRecord> recordList = recordStream.collect(Collectors.toList());
             for (CvrBitemporalRecord record : recordList) {
                 record.setRegistrationTo(nextUpdateTime);
-                System.out.println(record.getRegistrationFrom()+" "+record.getRegistrationTo());
+                System.out.println(record.getId()+" "+record.getRegistrationFrom()+" "+record.getRegistrationTo());
                 nextUpdateTime = record.getRegistrationFrom();
             }
         }
