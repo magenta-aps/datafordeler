@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 
 /**
  * Record for Company, CompanyUnit or Participant attribute values.
@@ -47,5 +48,9 @@ public class AttributeValueRecord extends BaseAttributeValueRecord {
     @JsonProperty
     public Long getFoo() {
         return super.getId();
+    }
+    @JsonProperty
+    public String getBar() {
+        return this.getBitemporality().toString();
     }
 }

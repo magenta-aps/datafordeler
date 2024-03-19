@@ -270,7 +270,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
 
             this.parseData(responseBody, importMetadata);
 
-            transaction.rollback();
+            transaction.commit();
         }
     }
 
