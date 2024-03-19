@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
+import org.w3c.dom.Attr;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -163,6 +164,15 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         }
         for (OfficeRelationRecord officeRelationRecord : this.offices) {
             officeRelationRecord.wire(session);
+        }
+        for (OrganizationRecord organizationRecord : this.getOrganizations()) {
+            for (OrganizationMemberdataRecord memberdataRecord : organizationRecord.getMemberData()) {
+                for (AttributeRecord attributeRecord : memberdataRecord.getAttributes()) {
+                    for (AttributeValueRecord valueRecord : attributeRecord.getValues()) {
+                        System.out.println(session.contains(valueRecord));
+                    }
+                }
+            }
         }
     }
 
