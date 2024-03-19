@@ -73,6 +73,7 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     }
 
     public void mergeAttribute(AttributeRecord otherRecord) {
+        System.out.println(this.organizationRecord.names.stream().findFirst().get().getName());
         if (otherRecord != null) {
             System.out.println("otherRecord exists");
             String otherType = otherRecord.getType();
