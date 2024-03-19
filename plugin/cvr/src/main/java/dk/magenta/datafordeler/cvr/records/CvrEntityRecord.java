@@ -58,6 +58,22 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             System.out.println("Saving new");
             super.save(session);
         }
+
+        if (this instanceof CompanyRecord) {
+            CompanyRecord c = (CompanyRecord) this;
+            for (CompanyParticipantRelationRecord participantRelationRecord : c.getParticipants()) {
+                for (OrganizationRecord organizationRecord : participantRelationRecord.getOrganizations()) {
+                    for (OrganizationMemberdataRecord memberdataRecord : organizationRecord.getMemberData()) {
+                        for (AttributeRecord attributeRecord : memberdataRecord.getAttributes()) {
+                            for (AttributeValueRecord valueRecord : attributeRecord.getValues()) {
+                                System.out.println(valueRecord.getId() + " " + session.contains(valueRecord));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     public void setDafoUpdateOnTree(OffsetDateTime updateTime) {

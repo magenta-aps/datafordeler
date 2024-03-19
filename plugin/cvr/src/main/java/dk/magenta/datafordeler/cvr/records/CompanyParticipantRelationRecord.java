@@ -169,7 +169,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
             for (OrganizationMemberdataRecord memberdataRecord : organizationRecord.getMemberData()) {
                 for (AttributeRecord attributeRecord : memberdataRecord.getAttributes()) {
                     for (AttributeValueRecord valueRecord : attributeRecord.getValues()) {
-                        System.out.println(session.contains(valueRecord));
+                        System.out.println(valueRecord.getId()+" "+session.contains(valueRecord));
                     }
                 }
             }
