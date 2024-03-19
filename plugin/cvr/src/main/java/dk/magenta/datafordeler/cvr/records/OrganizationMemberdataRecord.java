@@ -74,6 +74,7 @@ public class OrganizationMemberdataRecord extends CvrRecord {
 
     public void mergeAttribute(AttributeRecord otherRecord) {
         if (otherRecord != null) {
+            System.out.println("otherRecord exists");
             String otherType = otherRecord.getType();
             String otherValueType = otherRecord.getValueType();
             int otherSequenceNumber = otherRecord.getSequenceNumber();
@@ -84,6 +85,8 @@ public class OrganizationMemberdataRecord extends CvrRecord {
                 }
             }
             this.addAttribute(otherRecord);
+        } else {
+            System.out.println("otherRecord does not exist");
         }
     }
 

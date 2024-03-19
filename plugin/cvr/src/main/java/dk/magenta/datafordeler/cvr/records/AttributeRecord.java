@@ -204,6 +204,7 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
             for (AttributeValueRecord attributeValueRecord : otherValues) {
                 this.addValue(attributeValueRecord);
             }
+            System.out.println("Update registrations for attributerecord");
             CvrBitemporalRecord.updateRegistrations(this.values, true);
         }
     }
