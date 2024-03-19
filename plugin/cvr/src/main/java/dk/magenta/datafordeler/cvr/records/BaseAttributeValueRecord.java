@@ -36,7 +36,10 @@ public class BaseAttributeValueRecord extends CvrBitemporalRecord {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         BaseAttributeValueRecord that = (BaseAttributeValueRecord) o;
-        return Objects.equals(value, that.value) && Objects.equals(this.getBitemporality(), that.getBitemporality());
+        return Objects.equals(value, that.value) &&
+                Objects.equals(this.getRegistrationFrom(), that.getRegistrationFrom()) &&
+                Objects.equals(this.getEffectFrom(), that.getEffectFrom()) &&
+                Objects.equals(this.getEffectTo(), that.getEffectTo());
     }
 
     @Override
