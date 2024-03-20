@@ -304,6 +304,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         importMetadata.setTransactionInProgress(true);
 
         session.delete(company);
+        session.flush();
 
         ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
         this.parseData(allCacheData, importMetadata, jsonNode -> {
