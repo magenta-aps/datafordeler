@@ -289,6 +289,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     }
 
     public void reloadCompany(CompanyRecord company) throws DataFordelerException {
+        String cvr = company.getCvrNumberString();
         System.out.println("reloadCompany");
         // TODO:
         ImportMetadata importMetadata = new ImportMetadata();
@@ -296,12 +297,15 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             importMetadata.setSession(session);
             Transaction transaction = session.beginTransaction();
             importMetadata.setTransactionInProgress(true);
+
+            session.delete(company);
+
             ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
             this.parseData(allCacheData, importMetadata, jsonNode -> {
                 if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
                     ObjectNode objectNode = (ObjectNode) jsonNode;
                     JsonNode cvrNode = objectNode.get("cvrNummer");
-                    if (cvrNode != null && Objects.equals(cvrNode.asText(), "12950160")) {
+                    if (cvrNode != null && Objects.equals(cvrNode.asText(), cvr)) {
                         System.out.println("Accepted company");
                         return true;
                     }
