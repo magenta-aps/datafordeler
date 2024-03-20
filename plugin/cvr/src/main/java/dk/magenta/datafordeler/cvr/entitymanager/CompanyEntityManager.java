@@ -20,7 +20,10 @@ import dk.magenta.datafordeler.cvr.CvrRegisterManager;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyParticipantRelationRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.RelationParticipantRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -302,6 +305,18 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         importMetadata.setSession(session);
         Transaction transaction = session.beginTransaction();
         importMetadata.setTransactionInProgress(true);
+
+        for (AddressRecord a : company.getPostalAddress()) {
+            session.delete(a.getMunicipality());
+        }
+        for (AddressRecord a : company.getLocationAddress()) {
+            session.delete(a.getMunicipality());
+        }
+        for (CompanyParticipantRelationRecord c : company.getParticipants()) {
+            for (AddressRecord a : c.getRelationParticipantRecord().getLocationAddress()) {
+                session.delete(a.getMunicipality());
+            }
+        }
 
         session.delete(company);
         session.flush();
