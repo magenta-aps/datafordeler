@@ -279,13 +279,13 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     }
 
     public void loadMagenta() {
-        /* int cvr = 12950160;
+        int cvr = 12950160;
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecord companyRecord = QueryManager.getEntity(session, CompanyRecord.generateUUID(cvr), CompanyRecord.class);
             if (companyRecord != null) {
                 this.reloadCompany(companyRecord, session);
             }
-        } catch (DataFordelerException e) {}*/
+        } catch (DataFordelerException e) {}
         // this.loadOneCompany("12950160");
         /*} catch (GeneralSecurityException | IOException | URISyntaxException | DataFordelerException e) {
             e.printStackTrace();

@@ -310,7 +310,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public static final String IO_FIELD_MUNICIPALITY = "kommune";
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name=DB_FIELD_MUNICIPALITY + DatabaseEntry.REF)
+    @JoinColumn(name = DB_FIELD_MUNICIPALITY + DatabaseEntry.REF)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private AddressMunicipalityRecord municipality;
 
