@@ -303,9 +303,9 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
                 System.out.println("Inspecting node");
                 if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
                     ObjectNode objectNode = (ObjectNode) jsonNode;
-                    Iterator<String> names = objectNode.fieldNames();
-                    while (names.hasNext()) {
-                        System.out.println(names.next());
+                    JsonNode cvrNode = objectNode.get("cvrNummer");
+                    if (cvrNode != null && Objects.equals(cvrNode.asText(), "12950160")) {
+                        return true;
                     }
                 }
                 return false;

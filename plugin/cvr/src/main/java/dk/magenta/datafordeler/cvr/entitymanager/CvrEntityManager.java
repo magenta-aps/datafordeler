@@ -196,6 +196,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             while (scanner.hasNext()) {
                 try {
                     String data = scanner.next();
+                    System.out.println("Reading "+data.length()+" chars");
                     if (chunkCount >= startChunk) {
                         log.info("Handling chunk " + chunkCount + (lines > 0 ? ("/" + lines) : "") + " (" + data.length() + " chars)");
 
