@@ -39,6 +39,7 @@ public class AttributeRecordSet extends HashSet<AttributeRecord> {
                 List<AttributeValueRecord> currentValues = attributeRecord.getValues().current();
                 if (currentValues.size() > 1) {
                     currentValues.sort(Comparator.comparing(CvrBitemporalRecord::getRegistrationFrom).reversed());
+                    System.out.println("Several records, picked "+currentValues.get(0).getBitemporality()+" "+currentValues.get(0).getValue());
                 }
                 if (!currentValues.isEmpty()) {
                     String stringValue = currentValues.get(0).getValue();
