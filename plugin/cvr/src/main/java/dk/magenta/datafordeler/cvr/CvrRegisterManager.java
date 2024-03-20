@@ -36,6 +36,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -155,6 +156,10 @@ public class CvrRegisterManager extends RegisterManager {
      */
     @Override
     public InputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
+        return this.pullRawData(eventInterface, entityManager, importMetadata, null);
+    }
+
+    public InputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata, CvrConfiguration.RegisterType registerType) throws DataFordelerException {
         if (!(entityManager instanceof CvrEntityManager)) {
             throw new WrongSubclassException(CvrEntityManager.class, entityManager);
         }
@@ -169,9 +174,11 @@ public class CvrRegisterManager extends RegisterManager {
         session.close();
 
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
-        CvrConfiguration.RegisterType registerType = configuration.getRegisterType(schema);
         if (registerType == null) {
-            registerType = CvrConfiguration.RegisterType.DISABLED;
+            registerType = configuration.getRegisterType(schema);
+            if (registerType == null) {
+                registerType = CvrConfiguration.RegisterType.DISABLED;
+            }
         }
         switch (registerType) {
             case DISABLED:
@@ -202,10 +209,26 @@ public class CvrRegisterManager extends RegisterManager {
                     log.error("Failed loading demodata", e);
                 }
                 break;
+            case ALL_LOCAL_FILES:
+                File cacheFolder = new File("local/cvr/");
+                if (cacheFolder.isDirectory()) {
+                    String[] files = cacheFolder.list((dir, name) -> name.startsWith(schema+"_"));
+                    if (files != null) {
+                        Arrays.sort(files);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                        for (String filename : files) {
+                            System.out.println(filename);
+                            //baos.write(line.getBytes());
+                        }
+
+                        //byte[] bytes = baos.toByteArray();
+                    }
+                }
             case REMOTE_HTTP:
                 final ArrayList<Throwable> errors = new ArrayList<>();
                 InputStream responseBody;
-                File cacheFile = new File("local/cvr/" + entityManager.getSchema() + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                File cacheFile = new File("local/cvr/" + schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
                 try (Session missingCompanySession = this.sessionManager.getSessionFactory().openSession()) {
                     if (!cacheFile.exists()) {
                         log.info("Cache file " + cacheFile.getAbsolutePath() + " doesn't exist. Creating new and filling from source");

@@ -37,6 +37,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static dk.magenta.datafordeler.cvr.configuration.CvrConfiguration.RegisterType.ALL_LOCAL_FILES;
+
 /**
  * Company-specific EntityManager, specifying various settings that methods in the superclass
  * will use to import data.
@@ -276,10 +278,21 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
 
     public void loadMagenta() {
         try {
-            this.loadOneCompany("12950160");
-        } catch (GeneralSecurityException | IOException | URISyntaxException | DataFordelerException e) {
+            // this.loadOneCompany("12950160");
+            this.reloadCompany(null);
+        } catch (DataFordelerException e) {}
+        /*} catch (GeneralSecurityException | IOException | URISyntaxException | DataFordelerException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
+        }*/
+    }
+
+    public void reloadCompany(CompanyRecord company) throws DataFordelerException {
+        // TODO:
+        ImportMetadata importMetadata = new ImportMetadata();
+        this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
+        // Check files, get lines for cvr
+        // remove all subrecords
+        // load data from lines
     }
 }
