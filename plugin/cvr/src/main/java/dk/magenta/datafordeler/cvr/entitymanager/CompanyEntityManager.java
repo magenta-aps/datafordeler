@@ -272,9 +272,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             importMetadata.setTransactionInProgress(true);
-
             this.parseData(responseBody, importMetadata);
-
             transaction.commit();
         }
     }
@@ -300,11 +298,11 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             importMetadata.setTransactionInProgress(true);
             ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
             this.parseData(allCacheData, importMetadata, jsonNode -> {
-                System.out.println("Inspecting node");
                 if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
                     ObjectNode objectNode = (ObjectNode) jsonNode;
                     JsonNode cvrNode = objectNode.get("cvrNummer");
                     if (cvrNode != null && Objects.equals(cvrNode.asText(), "12950160")) {
+                        System.out.println("Accepted company");
                         return true;
                     }
                 }

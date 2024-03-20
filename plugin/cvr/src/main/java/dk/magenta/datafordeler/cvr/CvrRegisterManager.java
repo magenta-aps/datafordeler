@@ -221,7 +221,7 @@ public class CvrRegisterManager extends RegisterManager {
 
                         for (File file : files) {
                             try (FileInputStream fileInputStream = new FileInputStream(file)) {
-                                String content = new String(fileInputStream.readAllBytes()).replace("\n", "").replace("\r", "") + ScanScrollCommunicator.delimiter;
+                                String content = new String(fileInputStream.readAllBytes());
                                 baos.write(content.getBytes(StandardCharsets.UTF_8));
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
