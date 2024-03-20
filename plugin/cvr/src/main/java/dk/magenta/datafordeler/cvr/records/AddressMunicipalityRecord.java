@@ -34,7 +34,7 @@ public class AddressMunicipalityRecord extends CvrBitemporalRecord {
     }
 
     @JsonIgnore
-    @OneToOne(mappedBy=DB_FIELD_MUNICIPALITY + DatabaseEntry.REF)
+    @OneToOne(mappedBy=DB_FIELD_MUNICIPALITY)
     private AddressRecord address;
 
     @Transient
