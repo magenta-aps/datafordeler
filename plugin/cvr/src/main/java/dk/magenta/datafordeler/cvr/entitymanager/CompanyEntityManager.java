@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
@@ -278,9 +279,13 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     }
 
     public void loadMagenta() {
-        try {
-            // this.loadOneCompany("12950160");
-            this.reloadCompany(null);
+        int cvr = 12950160;
+        // this.loadOneCompany("12950160");
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            CompanyRecord companyRecord = QueryManager.getEntity(session, CompanyRecord.generateUUID(cvr), CompanyRecord.class);
+            if (companyRecord != null) {
+                this.reloadCompany(companyRecord, session);
+            }
         } catch (DataFordelerException e) {}
         /*} catch (GeneralSecurityException | IOException | URISyntaxException | DataFordelerException e) {
             e.printStackTrace();
@@ -288,32 +293,32 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         }*/
     }
 
-    public void reloadCompany(CompanyRecord company) throws DataFordelerException {
+    public void reloadCompany(CompanyRecord company, Session session) throws DataFordelerException {
         String cvr = company.getCvrNumberString();
         System.out.println("reloadCompany");
         // TODO:
         ImportMetadata importMetadata = new ImportMetadata();
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            importMetadata.setSession(session);
-            Transaction transaction = session.beginTransaction();
-            importMetadata.setTransactionInProgress(true);
 
-            session.delete(company);
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
 
-            ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
-            this.parseData(allCacheData, importMetadata, jsonNode -> {
-                if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
-                    ObjectNode objectNode = (ObjectNode) jsonNode;
-                    JsonNode cvrNode = objectNode.get("cvrNummer");
-                    if (cvrNode != null && Objects.equals(cvrNode.asText(), cvr)) {
-                        System.out.println("Accepted company");
-                        return true;
-                    }
+        session.delete(company);
+
+        ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
+        this.parseData(allCacheData, importMetadata, jsonNode -> {
+            if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
+                ObjectNode objectNode = (ObjectNode) jsonNode;
+                JsonNode cvrNode = objectNode.get("cvrNummer");
+                if (cvrNode != null && Objects.equals(cvrNode.asText(), cvr)) {
+                    System.out.println("Accepted company");
+                    return true;
                 }
-                return false;
-            });
-            transaction.rollback();
-        }
+            }
+            return false;
+        });
+        transaction.rollback();
+
         // Check files, get lines for cvr
         // remove all subrecords
         // load data from lines
