@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
@@ -11,6 +12,7 @@ import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
+import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.ScanScrollCommunicator;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
@@ -36,6 +38,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
 
 import static dk.magenta.datafordeler.cvr.configuration.CvrConfiguration.RegisterType.ALL_LOCAL_FILES;
 
@@ -290,7 +293,20 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     public void reloadCompany(CompanyRecord company) throws DataFordelerException {
         // TODO:
         ImportMetadata importMetadata = new ImportMetadata();
-        this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
+        ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
+        this.parseData(allCacheData, importMetadata, new Function<JsonNode, Boolean>() {
+            @Override
+            public Boolean apply(JsonNode jsonNode) {
+                if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
+                    ObjectNode objectNode = (ObjectNode) jsonNode;
+                    Iterator<String> names = objectNode.fieldNames();
+                    while (names.hasNext()) {
+                        System.out.println(names.next());
+                    }
+                }
+                return false;
+            }
+        });
         // Check files, get lines for cvr
         // remove all subrecords
         // load data from lines

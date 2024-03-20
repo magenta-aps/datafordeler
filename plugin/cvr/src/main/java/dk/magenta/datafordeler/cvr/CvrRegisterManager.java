@@ -212,17 +212,24 @@ public class CvrRegisterManager extends RegisterManager {
             case ALL_LOCAL_FILES:
                 File cacheFolder = new File("local/cvr/");
                 if (cacheFolder.isDirectory()) {
-                    String[] files = cacheFolder.list((dir, name) -> name.startsWith(schema+"_"));
+                    File[] files = cacheFolder.listFiles((dir, name) -> name.startsWith(schema+"_"));
                     if (files != null) {
                         Arrays.sort(files);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-                        for (String filename : files) {
-                            System.out.println(filename);
-                            //baos.write(line.getBytes());
+                        for (File file : files) {
+                            try (FileInputStream fileInputStream = new FileInputStream(file)) {
+                                String content = new String(fileInputStream.readAllBytes()).replace("\n", "").replace("\r", "");
+                                baos.write(content.getBytes(StandardCharsets.UTF_8));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
-
-                        //byte[] bytes = baos.toByteArray();
+                        ImportInputStream stream = new ImportInputStream(new ByteArrayInputStream(baos.toByteArray()));
+                        for (File file : files) {
+                            stream.addCacheFile(file);
+                        }
+                        return stream;
                     }
                 }
             case REMOTE_HTTP:
