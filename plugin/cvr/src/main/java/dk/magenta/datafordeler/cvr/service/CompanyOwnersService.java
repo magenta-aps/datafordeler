@@ -83,8 +83,8 @@ public class CompanyOwnersService {
         CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
         companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, cvr);
 
-        companyRecordQuery.setRegistrationAt(now);
-        companyRecordQuery.setEffectAt(now);
+        //companyRecordQuery.setRegistrationAt(now);
+        //companyRecordQuery.setEffectAt(now);
         companyRecordQuery.applyFilters(session);
         companyRecordQuery.setPage(1);
         companyRecordQuery.setPageSize(1);
