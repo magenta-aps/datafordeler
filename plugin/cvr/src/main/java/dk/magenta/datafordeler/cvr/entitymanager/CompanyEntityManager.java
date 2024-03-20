@@ -284,10 +284,11 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     public void loadMagenta() {
         int cvr = 12950160;
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            CompanyRecord companyRecord = QueryManager.getEntity(session, CompanyRecord.generateUUID(cvr), CompanyRecord.class);
+            this.reloadCompany(null, session);
+            /*CompanyRecord companyRecord = QueryManager.getEntity(session, CompanyRecord.generateUUID(cvr), CompanyRecord.class);
             if (companyRecord != null) {
                 this.reloadCompany(companyRecord, session);
-            }
+            }*/
         } catch (DataFordelerException e) {}
         // this.loadOneCompany("12950160");
         /*} catch (GeneralSecurityException | IOException | URISyntaxException | DataFordelerException e) {
@@ -306,7 +307,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         Transaction transaction = session.beginTransaction();
         importMetadata.setTransactionInProgress(true);
 
-        for (AddressRecord a : company.getPostalAddress()) {
+        /*for (AddressRecord a : company.getPostalAddress()) {
             session.delete(a.getMunicipality());
         }
         for (AddressRecord a : company.getLocationAddress()) {
@@ -319,11 +320,11 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         }
 
         session.delete(company);
-        session.flush();
+        session.flush();*/
 
         ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
         this.parseData(allCacheData, importMetadata, jsonNode -> {
-            if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
+            /*if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
                 ObjectNode objectNode = (ObjectNode) jsonNode;
                 JsonNode cvrNode = objectNode.get("cvrNummer");
                 if (cvrNode != null && Objects.equals(cvrNode.asText(), cvr)) {
@@ -331,9 +332,10 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
                     return true;
                 }
             }
-            return false;
+            return false;*/
+            return true;
         });
-        transaction.rollback();
+        transaction.commit();
 
         // Check files, get lines for cvr
         // remove all subrecords
