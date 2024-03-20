@@ -36,8 +36,12 @@ public class AttributeRecordSet extends HashSet<AttributeRecord> {
         ArrayList<Object> values = new ArrayList<>();
         for (AttributeRecord attributeRecord : this.byType(type)) {
             if (valueType == null || attributeRecord.getValueType().equals(valueType)) {
-                for (AttributeValueRecord valueRecord : attributeRecord.getValues().current()) {
-                    String stringValue = valueRecord.getValue();
+                List<AttributeValueRecord> currentValues = attributeRecord.getValues().current();
+                if (currentValues.size() > 1) {
+                    currentValues.sort(Comparator.comparing(CvrBitemporalRecord::getRegistrationFrom).reversed());
+                }
+                if (!currentValues.isEmpty()) {
+                    String stringValue = currentValues.get(0).getValue();
                     if (parse) {
                         Object value = null;
                         switch (attributeRecord.getValueType()) {
