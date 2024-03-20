@@ -291,6 +291,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     }
 
     public void reloadCompany(CompanyRecord company) throws DataFordelerException {
+        System.out.println("reloadCompany");
         // TODO:
         ImportMetadata importMetadata = new ImportMetadata();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -298,18 +299,16 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             Transaction transaction = session.beginTransaction();
             importMetadata.setTransactionInProgress(true);
             ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
-            this.parseData(allCacheData, importMetadata, new Function<JsonNode, Boolean>() {
-                @Override
-                public Boolean apply(JsonNode jsonNode) {
-                    if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
-                        ObjectNode objectNode = (ObjectNode) jsonNode;
-                        Iterator<String> names = objectNode.fieldNames();
-                        while (names.hasNext()) {
-                            System.out.println(names.next());
-                        }
+            this.parseData(allCacheData, importMetadata, jsonNode -> {
+                System.out.println("Inspecting node");
+                if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
+                    ObjectNode objectNode = (ObjectNode) jsonNode;
+                    Iterator<String> names = objectNode.fieldNames();
+                    while (names.hasNext()) {
+                        System.out.println(names.next());
                     }
-                    return false;
                 }
+                return false;
             });
             transaction.rollback();
         }
