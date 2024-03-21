@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
 import org.hibernate.Session;
 import org.hibernate.annotations.OnDelete;
@@ -17,6 +18,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Record for Company, CompanyUnit and Participant address data.
@@ -600,5 +602,14 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         }
 
         return queries;
+    }
+
+
+    @Override
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        if (this.municipality != null) {
+            this.municipality.traverse(setCallback, itemCallback);
+        }
     }
 }

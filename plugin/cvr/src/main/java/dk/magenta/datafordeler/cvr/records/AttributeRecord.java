@@ -7,15 +7,17 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-import org.hibernate.annotations.*;
+import dk.magenta.datafordeler.cvr.RecordSet;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Record for Company, CompanyUnit or Participant attributes.
@@ -111,8 +113,8 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         }
     }
 
-    public Set<AttributeValueRecord> getValues() {
-        return this.values;
+    public BitemporalSet<AttributeValueRecord> getValues() {
+        return new BitemporalSet<>(this.values);
     }
 
 
@@ -214,5 +216,12 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         ArrayList<CvrRecord> subs = new ArrayList<>(super.subs());
         subs.addAll(this.values);
         return subs;
+    }
+
+
+
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getValues().traverse(setCallback, itemCallback);
     }
 }

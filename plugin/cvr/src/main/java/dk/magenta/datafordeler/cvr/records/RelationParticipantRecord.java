@@ -4,14 +4,22 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Record for one participant on a Company or CompanyUnit
@@ -99,8 +107,8 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<BaseNameRecord> getNames() {
-        return this.names;
+    public BitemporalSet<BaseNameRecord> getNames() {
+        return new BitemporalSet<>(this.names);
     }
 
 
@@ -109,6 +117,18 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
 
     @OneToMany(targetEntity = AddressRecord.class, mappedBy = AddressRecord.DB_FIELD_PARTICIPANT_RELATION, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Filters({
+            @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
+            @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
+            @Filter(name = Bitemporal.FILTER_EFFECTTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_AFTER),
+            @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
+            @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
+            //@Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_AFTER),
+            //@Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
+            @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
+    })
     @JsonProperty(value = IO_FIELD_LOCATION_ADDRESS)
     private Set<AddressRecord> locationAddress = new HashSet<>();
 
@@ -126,8 +146,8 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<AddressRecord> getLocationAddress() {
-        return this.locationAddress;
+    public BitemporalSet<AddressRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress);
     }
 
 
@@ -193,5 +213,13 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
         subs.addAll(this.names);
         subs.addAll(this.locationAddress);
         return subs;
+    }
+
+
+    @Override
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getNames().traverse(setCallback, itemCallback);
+        this.getLocationAddress().traverse(setCallback, itemCallback);
     }
 }

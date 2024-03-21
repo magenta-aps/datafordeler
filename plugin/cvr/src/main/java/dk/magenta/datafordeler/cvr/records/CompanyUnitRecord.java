@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.CompanyUnitRecordService;
 import org.hibernate.Session;
 import org.hibernate.annotations.*;
@@ -19,6 +20,7 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Base record for CompanyUnit data, parsed from JSON into a tree of objects
@@ -709,8 +711,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<AttributeRecord> getAttributes() {
-        return this.attributes;
+    public AttributeRecordSet getAttributes() {
+        return new AttributeRecordSet(this.attributes);
     }
 
 
@@ -996,6 +998,28 @@ public class CompanyUnitRecord extends CvrEntityRecord {
             subs.add(this.metadata);
         }
         return subs;
+    }
+
+    @Override
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getNames().traverse(setCallback, itemCallback);
+        this.getLocationAddress().traverse(setCallback, itemCallback);
+        this.getPostalAddress().traverse(setCallback, itemCallback);
+        this.getPhoneNumber().traverse(setCallback, itemCallback);
+        this.getFaxNumber().traverse(setCallback, itemCallback);
+        this.getEmailAddress().traverse(setCallback, itemCallback);
+        this.getLifecycle().traverse(setCallback, itemCallback);
+        this.getPrimaryIndustry().traverse(setCallback, itemCallback);
+        this.getSecondaryIndustry1().traverse(setCallback, itemCallback);
+        this.getSecondaryIndustry2().traverse(setCallback, itemCallback);
+        this.getSecondaryIndustry3().traverse(setCallback, itemCallback);
+        this.getYearlyNumbers().traverse(setCallback, itemCallback);
+        this.getQuarterlyNumbers().traverse(setCallback, itemCallback);
+        this.getAttributes().traverse(setCallback, itemCallback);
+        this.getParticipants().traverse(setCallback, itemCallback);
+        this.getCompanyLinkRecords().traverse(setCallback, itemCallback);
+        this.getMetadata().traverse(setCallback, itemCallback);
     }
 
 }

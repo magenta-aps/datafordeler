@@ -4,12 +4,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
+import dk.magenta.datafordeler.core.io.ImportInputStream;
+import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.ScanScrollCommunicator;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
@@ -19,6 +23,8 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,10 +36,9 @@ import java.security.GeneralSecurityException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
+
+import static dk.magenta.datafordeler.cvr.configuration.CvrConfiguration.RegisterType.ALL_LOCAL_FILES;
 
 /**
  * Company-specific EntityManager, specifying various settings that methods in the superclass
@@ -228,5 +233,70 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     @Override
     public BaseQuery getQuery(String... strings) {
         return this.getQuery();
+    }
+
+
+
+    private void loadOneCompany(String cvr) throws GeneralSecurityException, IOException, URISyntaxException, DataFordelerException {
+        String requestBody = String.format(
+                "{\"query\":{\"terms\":{\"Vrvirksomhed.cvrNummer\":[%s]}}}",
+                cvr
+        );
+        String schema = this.getSchema();
+        CvrRegisterManager registerManager = this.getRegisterManager();
+        CvrConfiguration configuration = this.getRegisterManager().getConfigurationManager().getConfiguration();
+
+        ScanScrollCommunicator eventCommunicator = (ScanScrollCommunicator) registerManager.getEventFetcher();
+        eventCommunicator.setThrottle(0);
+
+        eventCommunicator.setUsername(configuration.getUsername(schema));
+        eventCommunicator.setPassword(configuration.getPassword(schema));
+
+        final ArrayList<Throwable> errors = new ArrayList<>();
+        eventCommunicator.setUncaughtExceptionHandler((t, e) -> errors.add(e));
+        InputStream responseBody = eventCommunicator.fetch(
+                new URI(configuration.getStartAddress(schema)),
+                new URI(configuration.getScrollAddress(schema)),
+                requestBody
+        );
+
+        try (Session session = this.getSessionManager().getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            ImportMetadata importMetadata = new ImportMetadata();
+            importMetadata.setSession(session);
+            importMetadata.setTransactionInProgress(true);
+            this.parseData(responseBody, importMetadata);
+            transaction.commit();
+        }
+    }
+
+    public void loadMagenta() {
+        int cvr = 12950160;
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            this.reloadCompany(""+cvr, session);
+        } catch (DataFordelerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reloadCompany(String cvr, Session session) throws DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+
+        importMetadata.setSession(session);
+        Transaction transaction = session.beginTransaction();
+        importMetadata.setTransactionInProgress(true);
+
+        ImportInputStream allCacheData = (ImportInputStream) this.getRegisterManager().pullRawData(null, this, importMetadata, ALL_LOCAL_FILES);
+        this.parseData(allCacheData, importMetadata, jsonNode -> {
+            if (jsonNode.getNodeType() == JsonNodeType.OBJECT) {
+                ObjectNode objectNode = (ObjectNode) jsonNode;
+                JsonNode cvrNode = objectNode.get("cvrNummer");
+                if (cvrNode != null && Objects.equals(cvrNode.asText(), cvr)) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        transaction.commit();
     }
 }

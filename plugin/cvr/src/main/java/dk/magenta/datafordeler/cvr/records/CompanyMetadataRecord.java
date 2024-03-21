@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
 import org.hibernate.annotations.*;
 
@@ -16,6 +17,7 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyMetadataRecord.TABLE_NAME, indexes = {
@@ -66,8 +68,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public Set<FormRecord> getNewestForm() {
-        return this.newestForm;
+    public RecordSet<FormRecord> getNewestForm() {
+        return new RecordSet<>(this.newestForm);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_FORM)
@@ -118,8 +120,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public Set<BaseNameRecord> getNewestName() {
-        return this.newestName;
+    public RecordSet<BaseNameRecord> getNewestName() {
+        return new RecordSet<>(this.newestName);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_NAME)
@@ -170,8 +172,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public Set<AddressRecord> getNewestLocation() {
-        return this.newestLocation;
+    public RecordSet<AddressRecord> getNewestLocation() {
+        return new RecordSet<>(this.newestLocation);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_LOCATION)
@@ -224,8 +226,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public Set<CompanyIndustryRecord> getNewestPrimaryIndustry() {
-        return this.newestPrimaryIndustry;
+    public RecordSet<CompanyIndustryRecord> getNewestPrimaryIndustry() {
+        return new RecordSet<>(this.newestPrimaryIndustry);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_PRIMARY_INDUSTRY)
@@ -279,8 +281,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public Set<CompanyIndustryRecord> getNewestSecondaryIndustry1() {
-        return this.newestSecondaryIndustry1;
+    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry1() {
+        return new RecordSet<>(this.newestSecondaryIndustry1);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
@@ -334,8 +336,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public Set<CompanyIndustryRecord> getNewestSecondaryIndustry2() {
-        return this.newestSecondaryIndustry2;
+    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry2() {
+        return new RecordSet<>(this.newestSecondaryIndustry2);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY2)
@@ -389,8 +391,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public Set<CompanyIndustryRecord> getNewestSecondaryIndustry3() {
-        return this.newestSecondaryIndustry3;
+    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry3() {
+        return new RecordSet<>(this.newestSecondaryIndustry3);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY3)
@@ -475,8 +477,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<MetadataContactRecord> metadataContactRecords = new HashSet<>();
 
-    public Set<MetadataContactRecord> getMetadataContactRecords() {
-        return this.metadataContactRecords;
+    public RecordSet<MetadataContactRecord> getMetadataContactRecords() {
+        return new RecordSet<>(this.metadataContactRecords);
     }
 
     public void setMetadataContactRecords(Set<MetadataContactRecord> metadataContactRecords) {
@@ -549,6 +551,22 @@ public class CompanyMetadataRecord extends MetadataRecord {
         subs.addAll(this.newestSecondaryIndustry2);
         subs.addAll(this.newestSecondaryIndustry3);
         return subs;
+    }
+
+    @Override
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getNewestName().traverse(setCallback, itemCallback);
+        this.getNewestLocation().traverse(setCallback, itemCallback);
+        this.getNewestForm().traverse(setCallback, itemCallback);
+        StatusRecord statusRecord = this.getNewestStatus();
+        if (statusRecord != null) {
+            statusRecord.traverse(setCallback, itemCallback);
+        }
+        this.getNewestPrimaryIndustry().traverse(setCallback, itemCallback);
+        this.getNewestSecondaryIndustry1().traverse(setCallback, itemCallback);
+        this.getNewestSecondaryIndustry2().traverse(setCallback, itemCallback);
+        this.getNewestSecondaryIndustry3().traverse(setCallback, itemCallback);
     }
 
 }

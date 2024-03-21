@@ -10,12 +10,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BitemporalSet<R extends CvrBitemporalRecord> implements Set<R> {
-
-    Set<R> inner;
+public class BitemporalSet<R extends CvrBitemporalRecord> extends RecordSet<R> implements Set<R> {
 
     public BitemporalSet(Set<R> inner) {
-        this.inner = inner;
+        super(inner);
     }
 
     /**

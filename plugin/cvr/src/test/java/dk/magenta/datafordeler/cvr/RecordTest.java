@@ -470,12 +470,15 @@ public class RecordTest extends TestBase {
         HashMap<Integer, JsonNode> units = this.loadUnit("/unit.json");
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             for (int pNumber : units.keySet()) {
+                System.out.println("------------------------");
+                System.out.println(pNumber);
                 HashMap<String, Object> filter = new HashMap<>();
                 filter.put("pNumber", pNumber);
                 CompanyUnitRecord companyUnitRecord = QueryManager.getItem(session, CompanyUnitRecord.class, filter);
                 if (companyUnitRecord == null) {
                     System.out.println("Didn't find p number " + pNumber);
                 } else {
+                    // For some reason, json serialization omits non-current bitemporal records, though they exist in the fetched data
                     compareJson(units.get(pNumber), objectMapper.valueToTree(companyUnitRecord), Collections.singletonList("root"));
                 }
             }

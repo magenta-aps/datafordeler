@@ -5,8 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.InterruptedPull;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
@@ -42,6 +43,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -156,6 +158,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      */
     @Override
     public void parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
+        this.parseData(registrationData, importMetadata, null);
+    }
+
+    public void parseData(InputStream registrationData, ImportMetadata importMetadata, Function<JsonNode, Boolean> filter) throws DataFordelerException {
         Session session = importMetadata.getSession();
         if (session != null) {
             //With this flag true initiated testdata is cleared before initiation of new data is initiated
@@ -188,8 +194,8 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
         try {
             while (scanner.hasNext()) {
+                String data = scanner.next();
                 try {
-                    String data = scanner.next();
                     if (chunkCount >= startChunk) {
                         log.info("Handling chunk " + chunkCount + (lines > 0 ? ("/" + lines) : "") + " (" + data.length() + " chars)");
 
@@ -216,7 +222,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                             importMetadata.setTransactionInProgress(true);
                         }
                         try {
-                            int count = this.parseData(this.getObjectMapper().readTree(data), importMetadata, session);
+                            int count = this.parseData(this.getObjectMapper().readTree(data), importMetadata, session, filter);
                         } catch (JsonParseException e) {
                             ImportInterruptedException ex = new ImportInterruptedException(e);
                             session.getTransaction().rollback();
@@ -357,9 +363,12 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * @throws ParseException
      */
     public int parseData(JsonNode jsonNode, ImportMetadata importMetadata, Session session) throws DataFordelerException {
+        return this.parseData(jsonNode, importMetadata, session, null);
+    }
+    public int parseData(JsonNode jsonNode, ImportMetadata importMetadata, Session session, Function<JsonNode, Boolean> filter) throws DataFordelerException {
         timer.start(TASK_PARSE);
         this.checkInterrupt(importMetadata);
-        List<T> items = this.parseNode(jsonNode);
+        List<T> items = this.parseNode(jsonNode, filter);
         timer.measure(TASK_PARSE);
         for (T item : items) {
             this.beforeParseSave(item, importMetadata, session);
@@ -373,6 +382,9 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     }
 
     public List<T> parseNode(JsonNode jsonNode) {
+        return this.parseNode(jsonNode, null);
+    }
+    public List<T> parseNode(JsonNode jsonNode, Function<JsonNode, Boolean> filter) {
         if (jsonNode.has("hits")) {
             List<T> items = new ArrayList<T>();
             jsonNode = jsonNode.get("hits");
@@ -383,7 +395,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                 log.debug("Node contains " + jsonNode.size() + " subnodes");
                 for (JsonNode item : jsonNode) {
                     //this.parseData(item, importMetadata, session);
-                    items.addAll(this.parseNode(item));
+                    items.addAll(this.parseNode(item, filter));
                 }
                 return items;
             }
@@ -396,12 +408,14 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         if (jsonNode.has(jsonTypeName)) {
             jsonNode = jsonNode.get(jsonTypeName);
         }
-        try {
-            return Collections.singletonList(getObjectMapper().treeToValue(jsonNode, this.getRecordClass()));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return Collections.EMPTY_LIST;
+        if (filter == null || filter.apply(jsonNode)) {
+            try {
+                return Collections.singletonList(getObjectMapper().treeToValue(jsonNode, this.getRecordClass()));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
+        return Collections.EMPTY_LIST;
     }
 
 
