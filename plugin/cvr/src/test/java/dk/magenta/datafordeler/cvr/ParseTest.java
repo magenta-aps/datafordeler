@@ -151,10 +151,9 @@ public class ParseTest {
     @Test
     public void testUnitsWithNoMatchingCVR() throws IOException, DataFordelerException, URISyntaxException {
         ImportMetadata importMetadata = new ImportMetadata();
-        Transaction transaction = null;
         //Load units from unit.json
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
             importMetadata.setSession(session);
             InputStream input = ParseTest.class.getResourceAsStream("/unit.json");
             JsonNode root = objectMapper.readTree(input);

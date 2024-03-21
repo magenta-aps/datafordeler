@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
@@ -107,8 +108,8 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         }
     }
 
-    public Set<AttributeValueRecord> getValues() {
-        return this.values;
+    public BitemporalSet<AttributeValueRecord> getValues() {
+        return new BitemporalSet<>(this.values);
     }
 
 

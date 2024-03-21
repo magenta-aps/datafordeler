@@ -62,6 +62,8 @@ public class CvrPlugin extends Plugin {
         this.registerManager.addEntityManager(this.companyEntityManager);
         this.registerManager.addEntityManager(this.companyUnitEntityManager);
         this.registerManager.addEntityManager(this.participantEntityManager);
+
+        //this.companyEntityManager.loadMagenta();
     }
 
     /**

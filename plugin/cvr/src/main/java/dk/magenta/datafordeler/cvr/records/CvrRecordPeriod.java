@@ -1,11 +1,13 @@
 package dk.magenta.datafordeler.cvr.records;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.util.Equality;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
@@ -56,5 +58,10 @@ public class CvrRecordPeriod {
     @Override
     public int hashCode() {
         return Objects.hash(validFrom, validTo);
+    }
+
+    @JsonIgnore
+    public boolean isValidAt(LocalDate date) {
+        return (this.validFrom == null || date.isAfter(this.validFrom)) && (this.validTo == null || this.validTo.isAfter(date));
     }
 }
