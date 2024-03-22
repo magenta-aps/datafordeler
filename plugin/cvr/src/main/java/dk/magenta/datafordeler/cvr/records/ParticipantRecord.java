@@ -671,30 +671,4 @@ public class ParticipantRecord extends CvrEntityRecord {
         return subs;
     }
 
-    /*public <C extends CvrBitemporalDataRecord> BitemporalSet<C> getSet(Class<C> objectClass) {
-        if (BaseNameRecord.class.isAssignableFrom(objectClass)) {
-            return (BitemporalSet<C>) this.getNames();
-        }
-        if (AddressRecord.class.isAssignableFrom(objectClass)) {
-            return (BitemporalSet<C>) this.getLocationAddress();
-        }
-        if (BaseNameRecord.class.isAssignableFrom(objectClass)) {
-            return (BitemporalSet<C>) this.getNames();
-        }
-        if (BaseNameRecord.class.isAssignableFrom(objectClass)) {
-            return (BitemporalSet<C>) this.getNames();
-        }
-        if (BaseNameRecord.class.isAssignableFrom(objectClass)) {
-            return (BitemporalSet<C>) this.getNames();
-        }
-        if (BaseNameRecord.class.isAssignableFrom(objectClass)) {
-            return (BitemporalSet<C>) this.getNames();
-        }
-        if (BaseNameRecord.class.isAssignableFrom(objectClass)) {
-            return (BitemporalSet<C>) this.getNames();
-        }
-        if (BaseNameRecord.class.isAssignableFrom(objectClass)) {
-            return (BitemporalSet<C>) this.getNames();
-        }
-    }*/
 }

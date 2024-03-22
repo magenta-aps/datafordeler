@@ -251,11 +251,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                     }
                     chunkCount++;
                 } catch (IOException e) {
-                    e.printStackTrace();
                     throw new DataStreamException(e);
                 }
             }
-            //subscribeToMissingCvr();
+            subscribeToMissingCvr();
 
             log.info("All chunks handled\n" + timer.formatAllTotal());
             Session progressSession = this.configurationSessionManager.getSessionFactory().openSession();
@@ -370,7 +369,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         timer.start(TASK_PARSE);
         this.checkInterrupt(importMetadata);
         List<T> items = this.parseNode(jsonNode, filter);
-        System.out.println("Parsed "+items.size()+" items");
         timer.measure(TASK_PARSE);
         for (T item : items) {
             this.beforeParseSave(item, importMetadata, session);
@@ -412,7 +410,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         }
         if (filter == null || filter.apply(jsonNode)) {
             try {
-                System.out.println("Got accepted node");
                 return Collections.singletonList(getObjectMapper().treeToValue(jsonNode, this.getRecordClass()));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();

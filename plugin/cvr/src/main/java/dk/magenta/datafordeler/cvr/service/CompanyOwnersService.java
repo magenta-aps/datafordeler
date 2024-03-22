@@ -149,8 +149,13 @@ public class CompanyOwnersService {
             CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
             companyRecordQuery.setParameter(CompanyRecordQuery.CVRNUMMER, cvr);
 
+            // Get items that are registered now, but with all effects
+            // We need to find the latest registration and then filter effects
+            // but registrationTo is not set by source data, so we can't filter on that yet
+            // so the logic is:
+            //     first exclude attributes that are older than the latest registration
+            //     then exclude attributes that are not effective now
             companyRecordQuery.setRegistrationAt(now);
-            //companyRecordQuery.setEffectAt(now);
             companyRecordQuery.applyFilters(lookupSession);
             companyRecordQuery.setPage(1);
             companyRecordQuery.setPageSize(1);
@@ -168,7 +173,6 @@ public class CompanyOwnersService {
 
                 companyRecord.getParticipants().currentStream().forEach(relationRecord -> {
 
-                    // Ifølge Ejerforhold_Doc.png
                     for (OrganizationRecord organizationRecord : relationRecord.getOrganizations()) {
                         if (organizationRecord.getMainType().equals("REGISTER")) {
 

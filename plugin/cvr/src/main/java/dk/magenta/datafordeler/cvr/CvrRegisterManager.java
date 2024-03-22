@@ -176,11 +176,10 @@ public class CvrRegisterManager extends RegisterManager {
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
         if (registerType == null) {
             registerType = configuration.getRegisterType(schema);
-        if (registerType == null) {
-            registerType = CvrConfiguration.RegisterType.DISABLED;
+            if (registerType == null) {
+                registerType = CvrConfiguration.RegisterType.DISABLED;
+            }
         }
-        }
-        System.out.println("registerType: "+String.valueOf(registerType.getValue()));
         switch (registerType) {
             case DISABLED:
                 break;
@@ -215,7 +214,7 @@ public class CvrRegisterManager extends RegisterManager {
                 if (cacheFolder.isDirectory()) {
                     File[] files = cacheFolder.listFiles((dir, name) -> name.startsWith(schema+"_"));
                     if (files != null) {
-                        System.out.println("Loading data from "+files.length+" files");
+                        log.info("Loading data from "+files.length+" local files");
                         Arrays.sort(files);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -231,7 +230,6 @@ public class CvrRegisterManager extends RegisterManager {
                         for (File file : files) {
                             stream.addCacheFile(file);
                         }
-                        System.out.println("Loaded into stream");
                         return stream;
                     }
                 }
