@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
@@ -29,7 +28,6 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -39,7 +37,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Function;
 
 import static dk.magenta.datafordeler.cvr.configuration.CvrConfiguration.RegisterType.ALL_LOCAL_FILES;
 
@@ -256,12 +253,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         eventCommunicator.setPassword(configuration.getPassword(schema));
 
         final ArrayList<Throwable> errors = new ArrayList<>();
-        eventCommunicator.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable e) {
-                errors.add(e);
-            }
-        });
+        eventCommunicator.setUncaughtExceptionHandler((t, e) -> errors.add(e));
         InputStream responseBody = eventCommunicator.fetch(
                 new URI(configuration.getStartAddress(schema)),
                 new URI(configuration.getScrollAddress(schema)),
@@ -281,23 +273,13 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     public void loadMagenta() {
         int cvr = 12950160;
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-//            CompanyRecord companyRecord = QueryManager.getEntity(session, CompanyRecord.generateUUID(cvr), CompanyRecord.class);
-//            if (companyRecord != null) {
-                this.reloadCompany(""+cvr, session);
-//            }
+            this.reloadCompany(""+cvr, session);
         } catch (DataFordelerException e) {
             e.printStackTrace();
         }
-        // this.loadOneCompany("12950160");
-        /*} catch (GeneralSecurityException | IOException | URISyntaxException | DataFordelerException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }*/
     }
 
     public void reloadCompany(String cvr, Session session) throws DataFordelerException {
-        System.out.println("reloadCompany");
-        // TODO:
         ImportMetadata importMetadata = new ImportMetadata();
 
         importMetadata.setSession(session);
@@ -310,16 +292,11 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
                 ObjectNode objectNode = (ObjectNode) jsonNode;
                 JsonNode cvrNode = objectNode.get("cvrNummer");
                 if (cvrNode != null && Objects.equals(cvrNode.asText(), cvr)) {
-                    System.out.println("Accepted company");
                     return true;
                 }
             }
             return false;
         });
         transaction.commit();
-        System.out.println("DONE");
-        // Check files, get lines for cvr
-        // remove all subrecords
-        // load data from lines
     }
 }
