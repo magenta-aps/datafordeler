@@ -121,8 +121,14 @@ public class CompanyOwnersService {
                             jsonGenerator.writeObject(item);
                         }
                     } else {
-                        OffsetDateTime last = filterSet.stream().max(Comparator.comparing(CvrBitemporalRecord::getRegistrationFrom)).get().getRegistrationFrom();
-                        List<CvrBitemporalRecord> filtered = filterSet.stream().filter(i -> Equality.equal(i.getRegistrationFrom(), last)).sorted(Comparator.comparing(CvrBitemporalRecord::getEffectFrom)).collect(Collectors.toList());
+                        OffsetDateTime last = filterSet.stream().max(
+                                Comparator.comparing(CvrBitemporalRecord::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                        ).get().getRegistrationFrom();
+                        List<CvrBitemporalRecord> filtered = filterSet.stream().filter(
+                                i -> Equality.equal(i.getRegistrationFrom(), last)
+                        ).sorted(
+                                Comparator.comparing(CvrBitemporalRecord::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                        ).collect(Collectors.toList());
                         for (Object item : filtered) {
                             jsonGenerator.writeObject(item);
                         }

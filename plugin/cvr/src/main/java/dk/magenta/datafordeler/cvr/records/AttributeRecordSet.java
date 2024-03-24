@@ -35,7 +35,6 @@ public class AttributeRecordSet extends HashSet<AttributeRecord> {
     public List<Object> getCurrentAttributeValues(String type, String valueType) {
         return this.getCurrentAttributeValues(type, valueType, true);
     }
-
     public List<Object> getCurrentAttributeValues(String type, String valueType, boolean parse) {
         ArrayList<Object> values = new ArrayList<>();
         for (AttributeRecord attributeRecord : this.byType(type)) {
