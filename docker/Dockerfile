@@ -9,9 +9,11 @@ RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
 RUN mkdir -p /dist/core && mkdir -p /dist/plugin/jar \
     &&  mv /code/core/target/*.jar /dist/core/ \
     && mv /code/plugin/jar/*.jar /dist/plugin/jar/
-COPY docker/dev-settings.properties /dist/core/application.properties
+COPY core/application.properties /dist/core/application.properties
 
 WORKDIR /dist/core
+
+RUN rm -r /code
 CMD ["java", "-Dloader.path=/dist/plugin/jar/", "-cp", "datafordeler-core-exec.jar", "org.springframework.boot.loader.PropertiesLauncher"]
 
 #https://git.magenta.dk/osflow/osflow/-/blob/develop/backend/docker/Dockerfile
