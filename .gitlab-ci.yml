@@ -136,7 +136,7 @@ build-openapi-image:
     USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler"
     USER_DATABASE_USERNAME: "sa"
     USER_DATABASE_PASSWORD: "testTEST1"
-    STS_METADATA_PATH: "/app/dev-env/local/sts_metadata.xml"
+    STS_METADATA_PATH: "/app/conf/sts_metadata.xml"
     
     STATISTICS_ENABLE: "false"
     PULL_ENABLE: "true"
