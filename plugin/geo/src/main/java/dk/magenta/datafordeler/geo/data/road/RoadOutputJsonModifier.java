@@ -40,9 +40,9 @@ public class RoadOutputJsonModifier extends JsonModifier {
                     if (name != null && name.getName() != null && (existing == null || existing.length() < name.getName().length())) {
                         // Since we cannot be guaranteed that two road-pieces with the same codes have the same name, always pick the longest of those available
                         node.put("vejnavn", name.getName());
-                        RoadLocalityRecord locality = entity.getLocality().current();
-                        node.put("lokalitetskode", locality.getCode());
                     }
+                    RoadLocalityRecord locality = entity.getLocality().current();
+                    node.put("lokalitetskode", locality.getCode());
                 }
             }
         }
