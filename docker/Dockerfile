@@ -10,6 +10,8 @@ RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
 RUN mkdir -p /app/core && mkdir -p /app/plugin/jar \
  && mv /code/core/target/*.jar /app/core/ \
  && mv /code/plugin/jar/*.jar /app/plugin/jar/
+
+# RUN rm -r /code
 COPY core/application.properties /app/core/application.properties
 
 WORKDIR /app/core

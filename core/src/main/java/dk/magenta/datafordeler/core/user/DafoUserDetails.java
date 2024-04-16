@@ -35,10 +35,15 @@ public abstract class DafoUserDetails {
     }
 
     public void checkHasSystemRole(String role) throws AccessDeniedException {
+        System.out.println(this.getClass().getCanonicalName());
         if (!hasSystemRole(role)) {
+            System.out.println("!hasSystemRole("+role+")");
             throw new AccessDeniedException(
                     "User " + this + " does not have access to " + role
             );
+        }
+        else {
+            System.out.println("hasSystemRole("+role+")");
         }
     }
 

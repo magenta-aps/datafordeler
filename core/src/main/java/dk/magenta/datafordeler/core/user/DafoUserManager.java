@@ -88,6 +88,7 @@ public class DafoUserManager {
     public DafoUserDetails getUserFromRequest(HttpServletRequest request, boolean samlOnly)
             throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
         if (securityDisabled) {
+            System.out.println("securityDisabled");
 
             //VALIDATE SECURITY
             return new DafoUserDetails(null) {
@@ -137,6 +138,7 @@ public class DafoUserManager {
                 }
             };
         } else if (request instanceof MockInternalServletRequest) {
+            System.out.println("MockInternalServletRequest");
             return ((MockInternalServletRequest) request).getUserDetails();
         }
         if (!this.getIpWhitelist().contains(request.getRemoteAddr())) {
@@ -146,6 +148,7 @@ public class DafoUserManager {
         // SAML token based user.
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.indexOf("SAML ") == 0) {
+            System.out.println("SAML");
             LoggerHelper loggerHelper = new LoggerHelper(logger, request);
             loggerHelper.info("Authorizing with SAML token");
 
@@ -168,6 +171,7 @@ public class DafoUserManager {
         }
 
         if (!samlOnly) {
+            System.out.println("!samlOnly");
             // If an SSL_CLIENT_S_DN header is provided, create a clientcertificate-based user
             String sslClientSubjectDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_SUBJECT_DN);
             String sslClientIssuerDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_ISSUER_DN);
@@ -182,6 +186,7 @@ public class DafoUserManager {
             }
         }
 
+        System.out.println("Fallback");
         // Fall back to an anonymous user
         return this.getFallbackUser();
     }

@@ -132,7 +132,7 @@ build-openapi-image:
     SSL_ENABLE: "false"
     
     USER_DATABASE_ENABLED: "false"
-    USER_DATABASE_SECURITY_DISABLED: "true"
+    USER_DATABASE_SECURITY_DISABLED: "false"
     USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler"
     USER_DATABASE_USERNAME: "sa"
     USER_DATABASE_PASSWORD: "testTEST1"
