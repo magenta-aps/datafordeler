@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - release
+  - configure
 
 # https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
 .if-default-branch-refs: &if-default-branch-refs
@@ -303,6 +304,7 @@ Release Datafordeler image:
       "docker://${DAFO_IMAGE_SHA}"
       "docker://${DAFO_IMAGE_TAG}"
 
+# TODO: Remove when no longer needed
 Release Datafordeler-test-db image:
   extends:
     - .rules:semver-all
@@ -313,3 +315,25 @@ Release Datafordeler-test-db image:
       --dest-creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD}
       "docker://${DAFOSQL_IMAGE_SHA}"
       "docker://${DAFOSQL_IMAGE_TAG}"
+
+
+# Configure stage
+#################
+
+Configure Test:
+  stage: configure
+  extends:
+    - .rules:semver-all
+    - .config:endpoint-with-tag
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
+  variables:
+    ENDPOINT: datafordeler/salt/update-test
+
+Configure Production:
+  stage: configure
+  extends:
+    - .rules:semver-core
+    - .config:endpoint-with-tag
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
+  variables:
+    ENDPOINT: datafordeler/salt/update-production
