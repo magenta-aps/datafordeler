@@ -68,7 +68,6 @@ public class CommandService {
      */
     protected void checkAndLogAccess(LoggerHelper loggerHelper, SystemRole requiredRole)
             throws AccessDeniedException, AccessRequiredException {
-        System.out.println("checkAndLogAccess");
         try {
             this.checkAccess(loggerHelper.getUser(), requiredRole);
         } catch (AccessDeniedException | AccessRequiredException e) {
@@ -86,7 +85,6 @@ public class CommandService {
      */
     protected void checkAccess(DafoUserDetails dafoUserDetails, SystemRole requiredRole)
             throws AccessDeniedException, AccessRequiredException {
-        System.out.println("checkAccess");
         dafoUserDetails.checkHasSystemRole(requiredRole);
     }
 
@@ -241,9 +239,7 @@ public class CommandService {
     @RequestMapping(method = RequestMethod.POST, path = "/{command}")
     public void doPost(HttpServletRequest request, HttpServletResponse response, @PathVariable("command") String commandName)
             throws IOException, InvalidClientInputException, InvalidTokenException, AccessDeniedException, AccessRequiredException, DataStreamException, InvalidCertificateException {
-        System.out.println("POST TO COMMAND SERVICE");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
-        System.out.println("user: "+user);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("POST request received on address " + request.getServletPath());
         loggerHelper.info("Request for command '" + commandName + "'");
