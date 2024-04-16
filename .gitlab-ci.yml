@@ -140,7 +140,8 @@ build-openapi-image:
     
     STATISTICS_ENABLE: "false"
     PULL_ENABLE: "true"
-    CRON_ENABLE: "false"
+    CRON_ENABLE: "true"
+    IP_WHITELIST: "127.0.0.1"
     
     CPR_PROXY_URL: ""
     CPR_LOCAL_DIR: "/app/dev-env/local/cpr/download"

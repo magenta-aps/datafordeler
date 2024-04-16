@@ -11,7 +11,6 @@ services:
     env_file:
       - ./docker/dev-env/datafordeler.env
     volumes:
-      - ./docker/dev-env/application:/app/dev-env/local
       - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
       - ./plugin/cpr/src/test/resources/GLBASETEST2:/app/dev-env/local/cpr/download/d170610.l534901
       - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
@@ -87,7 +86,8 @@ services:
       - STS_METADATA_PATH=/code/core/src/main/resources/dk/magenta/datafordeler/core/user/sts_metadata.xml
       - STATISTICS_ENABLE=false
       - PULL_ENABLE=true
-      - CRON_ENABLE=false
+      - CRON_ENABLE=true
+      - IP_WHITELIST=127.0.0.1
       - CPR_PROXY_URL=""
       - CPR_LOCAL_DIR=/app/dev-env/local/cpr/download
       - CPR_SUBSCRIPTION_ENABLE=true
@@ -99,7 +99,7 @@ services:
     ports:
       - 8082:80
     # command: bash -c "cd /code && mvn --batch-mode -T 2C test"
-    command: bash -c "cd /code/core && mvn --batch-mode -T 2C -Dtest='dk.magenta.datafordeler.core.command.CommandTest#startAccessDeniedTest1' test"
+    command: bash -c "cd /code/core && mvn --batch-mode -T 2C -Dtest='dk.magenta.datafordeler.core.security.TokenTest#testParseInvalidToken' test"
     #use docker-compose up test to execute tests
 
   openapi:
