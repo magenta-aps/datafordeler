@@ -29,7 +29,7 @@ services:
       - 5005:5005
     command: [
       "java",
-      "-Dloader.path=/dist/plugin/jar/",
+      "-Dloader.path=/app/plugin/jar/",
       "--add-opens", "java.base/java.net=ALL-UNNAMED",
       "--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED",
       "-Xms128M", "-Xmx4096M",
@@ -80,7 +80,7 @@ services:
       - SECONDARY_DATABASE_DEFAULT_SCHEMA=dbo
       - SSL_ENABLE=false
       - USER_DATABASE_ENABLED=false
-      - USER_DATABASE_SECURITY_DISABLED=true
+      - USER_DATABASE_SECURITY_DISABLED=false
       - USER_DATABASE_URL=jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler
       - USER_DATABASE_USERNAME=sa
       - USER_DATABASE_PASSWORD=testTEST1
@@ -98,8 +98,8 @@ services:
       - ERRORFILE_DIR=cache/log
     ports:
       - 8082:80
-    command: bash -c "cd /code && mvn --batch-mode -T 2C test"
-    # command: bash -c "cd /code/plugin/cvr && mvn --batch-mode -T 2C -Dtest=dk.magenta.datafordeler.cvr.RecordTest test"
+    # command: bash -c "cd /code && mvn --batch-mode -T 2C test"
+    command: bash -c "cd /code/core && mvn --batch-mode -T 2C -Dtest='dk.magenta.datafordeler.core.command.CommandTest#startAccessDeniedTest1' test"
     #use docker-compose up test to execute tests
 
   openapi:
