@@ -98,8 +98,8 @@ services:
       - ERRORFILE_DIR=cache/log
     ports:
       - 8082:80
-    # command: bash -c "cd /code && mvn --batch-mode -T 2C test"
-    command: bash -c "cd /code/core && mvn --batch-mode -T 2C -Dtest='dk.magenta.datafordeler.core.security.TokenTest#testParseInvalidToken' test"
+    command: bash -c "cd /code && mvn --batch-mode -T 2C test"
+    # command: bash -c "cd /code/plugin/cvr && mvn --batch-mode -T 2C -Dtest=dk.magenta.datafordeler.cvr.RecordTest test"
     #use docker-compose up test to execute tests
 
   openapi:
