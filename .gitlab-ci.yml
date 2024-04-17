@@ -3,6 +3,7 @@ stages:
   - test
   - release
   - configure
+  - deploy
 
 # https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
 .if-default-branch-refs: &if-default-branch-refs
@@ -340,3 +341,67 @@ Configure Production:
   needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
   variables:
     ENDPOINT: datafordeler/salt/update-production
+
+
+# Deploy stage
+##############
+
+Deploy Test 1:
+  stage: deploy
+  when: manual
+  extends:
+    - .rules:semver-all
+    - .saltbert
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test"]
+  variables:
+    SALTBERT_ORCHESTRATION: groenland.datafordeler.service-test-1
+    SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
+  environment:
+    name: test
+    url: "https://test.data.gl"
+
+Deploy Test 2:
+  stage: deploy
+  when: manual
+  extends:
+    - .rules:semver-all
+    - .saltbert
+  # Depend on test 1, so we only have one server down at a time
+  # It needs to be checked that service 1 is up & running before taking down service 2
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test", "Deploy Test 1"]
+  variables:
+    SALTBERT_ORCHESTRATION: groenland.datafordeler.service-test-2
+    SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
+  environment:
+    name: test
+    url: "https://test.data.gl"
+
+Deploy Production 1:
+  stage: deploy
+  when: manual
+  extends:
+    - .rules:semver-core
+    - .saltbert
+  needs: ["Release Datafordeler image", "Configure Production"]
+  variables:
+    SALTBERT_ORCHESTRATION: groenland.datafordeler.service-prod-1
+    SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
+  environment:
+    name: production
+    url: "https://data.gl"
+
+Deploy Production 2:
+  stage: deploy
+  when: manual
+  extends:
+    - .rules:semver-core
+    - .saltbert
+  # Depend on test 1, so we only have one server down at a time
+  # It needs to be checked that service 1 is up & running before taking down service 2
+  needs: ["Release Datafordeler image", "Configure Production", "Deploy Production 1"]
+  variables:
+    SALTBERT_ORCHESTRATION: groenland.datafordeler.service-prod-2
+    SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
+  environment:
+    name: production
+    url: "https://data.gl"
