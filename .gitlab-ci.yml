@@ -35,6 +35,9 @@ include:
       - "/gitlab-ci-templates/common/saltbert.v1.yml"
       - "/gitlab-ci-templates/common/docker-build-meta.v2.yml"
       - "/gitlab-ci-templates/common/docker-release-meta.v1.yml"
+      - "/gitlab-ci-templates/common/config-updater-meta.v1.yml"
+      - "/gitlab-ci-templates/common/conventional-commits-meta.v1.yml"
+      - "/gitlab-ci-templates/common/conventional-commits-changelog-meta.v1.yml"
 
 variables:
   RELEASE_REGISTRY: docker.io
