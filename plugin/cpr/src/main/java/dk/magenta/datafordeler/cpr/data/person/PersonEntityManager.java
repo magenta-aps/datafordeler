@@ -59,7 +59,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     @Value("${dafo.cpr.person.subscription.generate-schedule:0 4 * * *}")
     private String subscriptionGenerateSchedule;
 
-    @Value("${dafo.cpr.testpersonList}")
+    @Value("${dafo.cpr.testpersonList:#{null}}")
     private String testpersonList;
 
     @Autowired
@@ -183,16 +183,18 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     public void cleanDemoData() {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            String[] testPersonList = testpersonList.split(",");
-            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, Arrays.asList(testPersonList));
-            session.beginTransaction();
-            personQuery.setPageSize(1000);
-            personQuery.applyFilters(session);
-            List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            for (PersonEntity personForDeletion : personEntities) {
-                session.delete(personForDeletion);
+            if (testpersonList != null) {
+                String[] testPersonList = testpersonList.split(",");
+                personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, Arrays.asList(testPersonList));
+                session.beginTransaction();
+                personQuery.setPageSize(1000);
+                personQuery.applyFilters(session);
+                List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
+                for (PersonEntity personForDeletion : personEntities) {
+                    session.delete(personForDeletion);
+                }
+                session.getTransaction().commit();
             }
-            session.getTransaction().commit();
         } catch (Exception e) {
             log.error("Failed cleaning data", e);
         }

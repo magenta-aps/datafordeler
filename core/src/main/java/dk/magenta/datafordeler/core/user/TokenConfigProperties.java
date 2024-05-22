@@ -11,13 +11,13 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 public class TokenConfigProperties {
 
 
-    @Value("${dafo.tokenvalidation.time-skew-in-seconds}")
+    @Value("${dafo.tokenvalidation.time-skew-in-seconds:5}")
     private int timeSkewInSeconds = 5;
 
-    @Value("${dafo.tokenvalidation.max-assertion-time-in-seconds}")
+    @Value("${dafo.tokenvalidation.max-assertion-time-in-seconds:3600}")
     private long maxAssertionTimeInSeconds = 60 * 60;
 
-    @Value("${dafo.tokenvalidation.issuer-metadata-path}")
+    @Value("${dafo.tokenvalidation.issuer-metadata-path:#{null}}")
     private String issuerMetadataPath = null;
 
     @Value("${dafo.tokenvalidation.audience-URI}")
