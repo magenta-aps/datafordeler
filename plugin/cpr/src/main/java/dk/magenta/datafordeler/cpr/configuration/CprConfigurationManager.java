@@ -23,10 +23,10 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
 
-    @Value("${cpr.encryption.keyfile:local/cpr/keyfile.json}")
+    @Value("${dafo.cpr.encryption.keyfile:local/cpr/keyfile.json}")
     private String encryptionKeyFileName;
 
-    @Value("${cpr.encryption.keyfile:local/cpr/encryptedpassword}")
+    @Value("${dafo.cpr.encryption.keyfile:local/cpr/encryptedpassword}")
     private String encryptedPassword;
 
     private final Logger log = LogManager.getLogger(CprConfigurationManager.class.getCanonicalName());
