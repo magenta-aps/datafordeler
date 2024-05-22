@@ -27,8 +27,10 @@ import dk.magenta.datafordeler.cvr.records.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -55,8 +57,8 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class RecordTest {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class RecordTest extends TestBase {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -74,13 +76,7 @@ public class RecordTest {
     private SessionManager sessionManager;
 
     @Autowired
-    private CompanyRecordOutputWrapper companyRecordOutputWrapper;
-
-    @Autowired
     private CvrPlugin plugin;
-
-    @Autowired
-    private CollectiveCvrLookup collectiveLookup;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -118,21 +114,33 @@ public class RecordTest {
 
     private HashMap<Integer, JsonNode> loadCompany(InputStream input, boolean linedFile) throws IOException, DataFordelerException {
         ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        ObjectMapper objectMapper = this.getObjectMapper();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            ObjectMapper objectMapper = this.getObjectMapper();
 
-        HashMap<Integer, JsonNode> companies = new HashMap<>();
-        try {
-            importMetadata.setSession(session);
+            HashMap<Integer, JsonNode> companies = new HashMap<>();
+            try {
+                importMetadata.setSession(session);
 
-            if (linedFile) {
-                int lineNumber = 0;
-                Scanner lineScanner = new Scanner(input, StandardCharsets.UTF_8).useDelimiter("\n");
-                while (lineScanner.hasNext()) {
-                    String data = lineScanner.next();
+                if (linedFile) {
+                    int lineNumber = 0;
+                    Scanner lineScanner = new Scanner(input, StandardCharsets.UTF_8).useDelimiter("\n");
+                    while (lineScanner.hasNext()) {
+                        String data = lineScanner.next();
 
-                    JsonNode root = objectMapper.readTree(data);
+                        JsonNode root = objectMapper.readTree(data);
+                        JsonNode itemList = root.get("hits").get("hits");
+                        Assert.assertTrue(itemList.isArray());
+                        for (JsonNode item : itemList) {
+                            String type = item.get("_type").asText();
+                            CompanyEntityManager entityManager = (CompanyEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                            JsonNode companyInputNode = item.get("_source").get("Vrvirksomhed");
+                            entityManager.parseData(companyInputNode, importMetadata, session);
+                            companies.put(companyInputNode.get("cvrNummer").asInt(), companyInputNode);
+                        }
+                    }
+                } else {
+                    JsonNode root = objectMapper.readTree(input);
                     JsonNode itemList = root.get("hits").get("hits");
                     Assert.assertTrue(itemList.isArray());
                     for (JsonNode item : itemList) {
@@ -143,25 +151,13 @@ public class RecordTest {
                         companies.put(companyInputNode.get("cvrNummer").asInt(), companyInputNode);
                     }
                 }
-            } else {
-                JsonNode root = objectMapper.readTree(input);
-                JsonNode itemList = root.get("hits").get("hits");
-                Assert.assertTrue(itemList.isArray());
-                for (JsonNode item : itemList) {
-                    String type = item.get("_type").asText();
-                    CompanyEntityManager entityManager = (CompanyEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
-                    JsonNode companyInputNode = item.get("_source").get("Vrvirksomhed");
-                    entityManager.parseData(companyInputNode, importMetadata, session);
-                    companies.put(companyInputNode.get("cvrNummer").asInt(), companyInputNode);
-                }
+                transaction.commit();
+            } finally {
+                QueryManager.clearCaches();
+                input.close();
             }
-            transaction.commit();
-        } finally {
-            session.close();
-            QueryManager.clearCaches();
-            input.close();
+            return companies;
         }
-        return companies;
     }
 
     @Test
@@ -170,8 +166,7 @@ public class RecordTest {
         this.loadCompany();
         ObjectMapper objectMapper = this.getObjectMapper();
         HashMap<Integer, JsonNode> companies = this.loadCompany();
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             for (int cvrNumber : companies.keySet()) {
                 HashMap<String, Object> filter = new HashMap<>();
                 filter.put("cvrNumber", cvrNumber);
@@ -231,15 +226,14 @@ public class RecordTest {
             query.setParameter(CompanyRecordQuery.NAVN, "MAGENTA ApS");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyRecord.class).size());
             query.clearParameter(CompanyRecordQuery.NAVN);
-
-
-        } finally {
-            session.close();
         }
     }
 
     @Test
     public void testUpdateCompany() throws IOException, DataFordelerException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Assert.assertEquals(0, QueryManager.getAllEntities(session, CompanyRecord.class).size());
+        }
         loadCompany("/company_in.json");
         loadCompany("/company_in2.json");
         ObjectMapper objectMapper = this.getObjectMapper();
@@ -270,14 +264,14 @@ public class RecordTest {
             Assert.assertEquals(12, companyRecord.getParticipants().size());
             Assert.assertEquals(1, companyRecord.getFusions().size());
 
-            Set<CompanyDataEventRecord> listOfdataevents = companyRecord.getDataevent();
+            Set<CompanyDataEventRecord> dataEventList = companyRecord.getDataevent();
 
-            long adressEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).count();
+            long adressEvents = dataEventList.stream().filter(item -> item.getField().equals("cvr_record_address")).count();
             Assert.assertEquals(6, adressEvents);
 
-            CompanyDataEventRecord record = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_address")).findFirst().get();
+            CompanyDataEventRecord record = dataEventList.stream().filter(item -> item.getField().equals("cvr_record_address")).findFirst().get();
 
-            long nameEvents = listOfdataevents.stream().filter(item -> item.getField().equals("cvr_record_company_status")).count();
+            long nameEvents = dataEventList.stream().filter(item -> item.getField().equals("cvr_record_company_status")).count();
             Assert.assertEquals(1, nameEvents);
 
             Assert.assertEquals(2, companyRecord.getFusions().iterator().next().getName().size());
@@ -413,24 +407,41 @@ public class RecordTest {
     private HashMap<Integer, JsonNode> loadUnit(String resource) throws IOException, DataFordelerException {
         ImportMetadata importMetadata = new ImportMetadata();
         ObjectMapper objectMapper = this.getObjectMapper();
-        Session session = sessionManager.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        InputStream input = RecordTest.class.getResourceAsStream(resource);
-        if (input == null) {
-            throw new MissingResourceException("Missing resource \"" + resource + "\"", resource, "key");
-        }
-        boolean linedFile = false;
-        HashMap<Integer, JsonNode> units = new HashMap<>();
-        try {
-            importMetadata.setSession(session);
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            InputStream input = RecordTest.class.getResourceAsStream(resource);
+            if (input == null) {
+                throw new MissingResourceException("Missing resource \"" + resource + "\"", resource, "key");
+            }
+            boolean linedFile = false;
+            HashMap<Integer, JsonNode> units = new HashMap<>();
+            try {
+                importMetadata.setSession(session);
 
-            if (linedFile) {
-                int lineNumber = 0;
-                Scanner lineScanner = new Scanner(input, StandardCharsets.UTF_8).useDelimiter("\n");
-                while (lineScanner.hasNext()) {
-                    String data = lineScanner.next();
+                if (linedFile) {
+                    int lineNumber = 0;
+                    Scanner lineScanner = new Scanner(input, StandardCharsets.UTF_8).useDelimiter("\n");
+                    while (lineScanner.hasNext()) {
+                        String data = lineScanner.next();
 
-                    JsonNode root = objectMapper.readTree(data);
+                        JsonNode root = objectMapper.readTree(data);
+                        JsonNode itemList = root.get("hits").get("hits");
+                        Assert.assertTrue(itemList.isArray());
+                        for (JsonNode item : itemList) {
+                            String type = item.get("_type").asText();
+                            CompanyUnitEntityManager entityManager = (CompanyUnitEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                            JsonNode unitInputNode = item.get("_source").get("VrproduktionsEnhed");
+                            entityManager.parseData(unitInputNode, importMetadata, session);
+                            units.put(unitInputNode.get("pNummer").asInt(), unitInputNode);
+                        }
+                        lineNumber++;
+                        System.out.println("loaded line " + lineNumber);
+                        if (lineNumber >= 10) {
+                            break;
+                        }
+                    }
+                } else {
+                    JsonNode root = objectMapper.readTree(input);
                     JsonNode itemList = root.get("hits").get("hits");
                     Assert.assertTrue(itemList.isArray());
                     for (JsonNode item : itemList) {
@@ -440,31 +451,15 @@ public class RecordTest {
                         entityManager.parseData(unitInputNode, importMetadata, session);
                         units.put(unitInputNode.get("pNummer").asInt(), unitInputNode);
                     }
-                    lineNumber++;
-                    System.out.println("loaded line " + lineNumber);
-                    if (lineNumber >= 10) {
-                        break;
-                    }
                 }
-            } else {
-                JsonNode root = objectMapper.readTree(input);
-                JsonNode itemList = root.get("hits").get("hits");
-                Assert.assertTrue(itemList.isArray());
-                for (JsonNode item : itemList) {
-                    String type = item.get("_type").asText();
-                    CompanyUnitEntityManager entityManager = (CompanyUnitEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
-                    JsonNode unitInputNode = item.get("_source").get("VrproduktionsEnhed");
-                    entityManager.parseData(unitInputNode, importMetadata, session);
-                    units.put(unitInputNode.get("pNummer").asInt(), unitInputNode);
-                }
+                transaction.commit();
+            } finally {
+                session.close();
+                QueryManager.clearCaches();
+                input.close();
             }
-            transaction.commit();
-        } finally {
-            session.close();
-            QueryManager.clearCaches();
-            input.close();
+            return units;
         }
-        return units;
     }
 
     @Test
@@ -473,8 +468,7 @@ public class RecordTest {
         this.loadUnit("/unit.json");
         ObjectMapper objectMapper = this.getObjectMapper();
         HashMap<Integer, JsonNode> units = this.loadUnit("/unit.json");
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             for (int pNumber : units.keySet()) {
                 HashMap<String, Object> filter = new HashMap<>();
                 filter.put("pNumber", pNumber);
@@ -528,8 +522,6 @@ public class RecordTest {
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, CompanyUnitRecord.class).size());
             query.clearParameter(CompanyUnitRecordQuery.KOMMUNEKODE);
 
-        } finally {
-            session.close();
         }
     }
 
@@ -538,8 +530,7 @@ public class RecordTest {
     public void testUpdateCompanyUnit() throws IOException, DataFordelerException {
         loadUnit("/unit.json");
         loadUnit("/unit2.json");
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyUnitRecordQuery query = new CompanyUnitRecordQuery();
             query.setParameter(CompanyUnitRecordQuery.P_NUMBER, "1020895337");
             List<CompanyUnitRecord> records = QueryManager.getAllEntities(session, query, CompanyUnitRecord.class);
@@ -564,8 +555,6 @@ public class RecordTest {
             Assert.assertEquals(2, companyUnitRecord.getMetadata().getNewestLocation().size());
             Assert.assertEquals(2, companyUnitRecord.getMetadata().getNewestPrimaryIndustry().size());
             Assert.assertEquals(1, companyUnitRecord.getMetadata().getNewestSecondaryIndustry1().size());
-        } finally {
-            session.close();
         }
     }
 
@@ -591,57 +580,58 @@ public class RecordTest {
     private HashMap<Long, JsonNode> loadParticipant(String resource) throws IOException, DataFordelerException {
         ObjectMapper objectMapper = this.getObjectMapper();
         ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        InputStream input = ParseTest.class.getResourceAsStream(resource);
-        if (input == null) {
-            throw new MissingResourceException("Missing resource \""+resource+"\"", resource, "key");
-        }
-        boolean linedFile = false;
-        HashMap<Long, JsonNode> persons = new HashMap<>();
-        try {
-            importMetadata.setSession(session);
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            InputStream input = ParseTest.class.getResourceAsStream(resource);
+            if (input == null) {
+                throw new MissingResourceException("Missing resource \"" + resource + "\"", resource, "key");
+            }
+            boolean linedFile = false;
+            HashMap<Long, JsonNode> persons = new HashMap<>();
+            try {
+                importMetadata.setSession(session);
 
-            if (linedFile) {
-                int lineNumber = 0;
-                Scanner lineScanner = new Scanner(input, "UTF-8").useDelimiter("\n");
-                while (lineScanner.hasNext()) {
-                    String data = lineScanner.next();
+                if (linedFile) {
+                    int lineNumber = 0;
+                    Scanner lineScanner = new Scanner(input, "UTF-8").useDelimiter("\n");
+                    while (lineScanner.hasNext()) {
+                        String data = lineScanner.next();
 
-                    JsonNode root = objectMapper.readTree(data);
+                        JsonNode root = objectMapper.readTree(data);
+                        JsonNode itemList = root.get("hits").get("hits");
+                        Assert.assertTrue(itemList.isArray());
+                        for (JsonNode item : itemList) {
+                            String type = item.get("_type").asText();
+                            ParticipantEntityManager entityManager = (ParticipantEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                            JsonNode participantInputNode = item.get("_source").get("Vrdeltagerperson");
+                            entityManager.parseData(participantInputNode, importMetadata, session);
+                            persons.put(participantInputNode.get("enhedsNummer").asLong(), participantInputNode);
+                        }
+                        lineNumber++;
+                        if (lineNumber >= 10) {
+                            break;
+                        }
+                    }
+                } else {
+                    JsonNode root = objectMapper.readTree(input);
                     JsonNode itemList = root.get("hits").get("hits");
                     Assert.assertTrue(itemList.isArray());
                     for (JsonNode item : itemList) {
                         String type = item.get("_type").asText();
                         ParticipantEntityManager entityManager = (ParticipantEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
-                        JsonNode participantInputNode = item.get("_source").get("Vrdeltagerperson");
-                        entityManager.parseData(participantInputNode, importMetadata, session);
-                        persons.put(participantInputNode.get("enhedsNummer").asLong(), participantInputNode);
-                    }
-                    lineNumber++;
-                    if (lineNumber >= 10) {
-                        break;
+                        JsonNode unitInputNode = item.get("_source").get("Vrdeltagerperson");
+                        entityManager.parseData(unitInputNode, importMetadata, session);
+                        persons.put(unitInputNode.get("enhedsNummer").asLong(), unitInputNode);
                     }
                 }
-            } else {
-                JsonNode root = objectMapper.readTree(input);
-                JsonNode itemList = root.get("hits").get("hits");
-                Assert.assertTrue(itemList.isArray());
-                for (JsonNode item : itemList) {
-                    String type = item.get("_type").asText();
-                    ParticipantEntityManager entityManager = (ParticipantEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
-                    JsonNode unitInputNode = item.get("_source").get("Vrdeltagerperson");
-                    entityManager.parseData(unitInputNode, importMetadata, session);
-                    persons.put(unitInputNode.get("enhedsNummer").asLong(), unitInputNode);
-                }
+                transaction.commit();
+            } finally {
+                session.close();
+                QueryManager.clearCaches();
+                input.close();
             }
-            transaction.commit();
-        } finally {
-            session.close();
-            QueryManager.clearCaches();
-            input.close();
+            return persons;
         }
-        return persons;
     }
 
     @Test
@@ -650,8 +640,7 @@ public class RecordTest {
         loadParticipant("/person.json");
         ObjectMapper objectMapper = this.getObjectMapper();
         HashMap<Long, JsonNode> persons = loadParticipant("/person.json");
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             for (long participantNumber : persons.keySet()) {
                 HashMap<String, Object> filter = new HashMap<>();
                 filter.put("unitNumber", participantNumber);
@@ -701,9 +690,6 @@ public class RecordTest {
             query.setParameter(ParticipantRecordQuery.KOMMUNEKODE, "101");
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
             query.clearParameter(ParticipantRecordQuery.KOMMUNEKODE);
-
-        } finally {
-            session.close();
         }
     }
 
@@ -711,9 +697,7 @@ public class RecordTest {
     public void testUpdateParticipant() throws IOException, DataFordelerException {
         loadParticipant("/person.json");
         loadParticipant("/person2.json");
-        ObjectMapper objectMapper = this.getObjectMapper();
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             ParticipantRecordQuery query = new ParticipantRecordQuery();
             query.setParameter(ParticipantRecordQuery.UNITNUMBER, "4000004988");
             List<ParticipantRecord> records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
@@ -742,8 +726,6 @@ public class RecordTest {
             }
             Assert.assertTrue(foundCompanyData);
 
-        } finally {
-            session.close();
         }
     }
 
@@ -984,26 +966,30 @@ public class RecordTest {
 
     @Test
     public void testEnrich() throws IOException, DataFordelerException {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Assert.assertEquals(0, QueryManager.getAllEntities(session, ParticipantRecord.class).size());
+        }
         loadParticipant("/person.json");
         ParticipantRecordQuery query = new ParticipantRecordQuery();
         query.setParameter(ParticipantRecordQuery.NAVN, "Morten*");
-        Session session = sessionManager.getSessionFactory().openSession();
-        List<ParticipantRecord> records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
-        session.close();
-        Assert.assertEquals(1, records.size());
-        ParticipantRecord record = records.get(0);
-        Assert.assertEquals(null, record.getBusinessKey());
-        ParticipantRecord mockParticipant = new ParticipantRecord();
-        mockParticipant.setBusinessKey(1234567890L);
-        doReturn(mockParticipant).when(directLookup).participantLookup(anyString());
+        List<ParticipantRecord> records;
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
+        }
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Assert.assertEquals(1, records.size());
+            ParticipantRecord record = records.get(0);
+            Assert.assertNull(record.getBusinessKey());
+            ParticipantRecord mockParticipant = new ParticipantRecord();
+            mockParticipant.setBusinessKey(1234567890L);
+            doReturn(mockParticipant).when(directLookup).participantLookup(anyString());
 
-        loadParticipant("/person.json");
-        session = sessionManager.getSessionFactory().openSession();
-        records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
-        Assert.assertEquals(1, records.size());
-        record = records.get(0);
-        Assert.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
-        session.close();
+            loadParticipant("/person.json");
+            records = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
+            Assert.assertEquals(1, records.size());
+            record = records.get(0);
+            Assert.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
+        }
     }
 
 

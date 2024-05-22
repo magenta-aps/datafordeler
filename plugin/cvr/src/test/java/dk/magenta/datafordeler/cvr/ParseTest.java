@@ -1,15 +1,12 @@
 package dk.magenta.datafordeler.cvr;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
-import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
@@ -20,9 +17,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,22 +38,7 @@ import java.util.stream.Collectors;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-public class ParseTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private CvrPlugin plugin;
-
-    @Autowired
-    private CvrRegisterManager registerManager;
-
-    private CvrEntityManager entityManager;
+public class ParseTest extends TestBase {
 
     private static final HashMap<String, String> schemaMap = new HashMap<>();
 
@@ -99,7 +79,7 @@ public class ParseTest {
         String testDataPath = testData.toURI().toString();
         registerManager.setCvrDemoCompanyFile(testDataPath);
 
-        entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
+        CompanyEntityManager entityManager = (CompanyEntityManager) this.registerManager.getEntityManager(CompanyRecord.schema);
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
         entityManager.parseData(stream, importMetadata);
 
@@ -174,7 +154,7 @@ public class ParseTest {
         String testDataPath = testData.toURI().toString();
         registerManager.setCvrDemoCompanyFile(testDataPath);
 
-        entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
+        CompanyEntityManager entityManager = (CompanyEntityManager) this.registerManager.getEntityManager(CompanyRecord.schema);
         InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
         entityManager.parseData(stream, importMetadataCompany);
 
@@ -190,7 +170,7 @@ public class ParseTest {
         }
 
         //Load companies from GLBASETEST.json again to lalidate error-handling
-        entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
+        entityManager = (CompanyEntityManager) this.registerManager.getEntityManager(CompanyRecord.schema);
         stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
         entityManager.parseData(stream, importMetadataCompany);
 
@@ -238,7 +218,7 @@ public class ParseTest {
             Assert.assertEquals(1, itemList.size());
             for (JsonNode item : itemList) {
                 String type = item.get("_type").asText();
-                ParticipantEntityManager entityManager = (ParticipantEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
+                ParticipantEntityManager entityManager = (ParticipantEntityManager) this.registerManager.getEntityManager(schemaMap.get(type));
                 entityManager.parseData(item.get("_source").get("Vrdeltagerperson"), importMetadata, session);
             }
         } finally {

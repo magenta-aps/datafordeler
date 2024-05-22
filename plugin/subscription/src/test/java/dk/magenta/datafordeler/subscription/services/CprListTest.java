@@ -39,23 +39,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class CprListTest {
-
-    @Autowired
-    TestRestTemplate restTemplate;
-
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-    @SpyBean
-    private DafoUserManager dafoUserManager;
+public class CprListTest extends TestBase {
 
     MockMvc mvc;
-
 
     /**
      * Initiate lists

@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 @Component
 public class CvrConfigurationManager extends ConfigurationManager<CvrConfiguration> {

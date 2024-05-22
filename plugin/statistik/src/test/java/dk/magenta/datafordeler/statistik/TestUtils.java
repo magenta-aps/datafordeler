@@ -74,20 +74,6 @@ public class TestUtils {
         this.personEntityManager = personEntityManager;
     }
 
-    private String oldPath;
-
-    public void setPath() throws IOException {
-        //Use this code block when temp directories need to be created
-        Path path = Files.createTempDirectory("statistik");
-        this.oldPath = StatisticsService.PATH_FILE;
-        StatisticsService.PATH_FILE = String.valueOf(path);
-    }
-
-    public void clearPath() {
-        if (!Objects.equals(StatisticsService.PATH_FILE, this.oldPath)) {
-            this.deleteFiles(StatisticsService.PATH_FILE);
-        }
-    }
 
     public void loadPersonData(File source) throws Exception {
         loadPersonData(new FileInputStream(source));
@@ -275,33 +261,4 @@ public class TestUtils {
         this.deleteAll(PersonEntity.class);
     }
 
-    public void deleteFiles(String path_file) {
-        //This code can be places in @After
-        File tempDir = null;
-        try {
-            tempDir = new File(path_file);
-            boolean exists = tempDir.exists();
-            Assert.assertEquals(true, exists);
-        } catch (Exception e) {
-            // if any error occurs
-            e.printStackTrace();
-        } finally {
-            File[] listOfFiles = tempDir.listFiles();
-            if (listOfFiles.length > 0) {
-
-                System.out.println("Number of files to delete: " + listOfFiles.length);
-                for (File file : listOfFiles) {
-                    file.deleteOnExit();
-                    System.out.println("Deleted file: " + file.getName());
-                }
-
-            }
-            try {
-                FileUtils.deleteDirectory(new File(path_file));
-                System.out.println("Deleted directory: " + path_file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }

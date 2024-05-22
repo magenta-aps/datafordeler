@@ -108,6 +108,25 @@ build-openapi-image:
     #M$ sql variables
     ACCEPT_EULA: "Y"
     SA_PASSWORD: "testTEST1"
+
+    DATABASE_CLASS: "org.h2.Driver"
+    DATABASE_URL: "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO"
+    DATABASE_DIALECT: "org.hibernate.dialect.H2Dialect"
+    DATABASE_SHOW_SQL: "false"
+    DATABASE_USERNAME: "sa"
+    DATABASE_PASSWORD: "testTEST1"
+    DATABASE_METHOD: "create-drop"
+    DATABASE_DEFAULT_SCHEMA: "dbo"
+
+    SECONDARY_DATABASE_CLASS: "org.h2.Driver"
+    SECONDARY_DATABASE_URL: "jdbc:h2:mem:db2;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO"
+    SECONDARY_DATABASE_DIALECT: "org.hibernate.dialect.H2Dialect"
+    SECONDARY_DATABASE_SHOW_SQL: "false"
+    SECONDARY_DATABASE_USERNAME: "sa"
+    SECONDARY_DATABASE_PASSWORD: "testTEST1"
+    SECONDARY_DATABASE_METHOD: "create-drop"
+    SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
+
   tags:
     - docker
   services:

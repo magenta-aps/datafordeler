@@ -25,32 +25,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AdoptionDataServiceTest extends TestBase {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
-
-    TestUserDetails testUserDetails;
-
-    @Autowired
-    private TestUtil testUtil;
 
     @Autowired
     private AdoptionDataService adoptionDataService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Before
     public void initialize() throws Exception {
-        testsUtils.setPath();
+        this.setPath();
         testsUtils.loadPersonData("adoptedpersons.txt");
         this.loadAllGeoAdress(sessionManager);
         adoptionDataService.setUseTimeintervallimit(false);
@@ -58,7 +40,6 @@ public class AdoptionDataServiceTest extends TestBase {
 
     @After
     public void cleanup() {
-        testsUtils.clearPath();
         testsUtils.deleteAll();
     }
 
@@ -69,7 +50,7 @@ public class AdoptionDataServiceTest extends TestBase {
         ResponseEntity<String> response = restTemplate.exchange("/statistik/adoption_data/", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(403, response.getStatusCodeValue());
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -86,8 +67,8 @@ public class AdoptionDataServiceTest extends TestBase {
                 "";
 
         Assert.assertEquals(
-                objectMapper.readTree(testUtil.csvToJsonString(expected)),
-                objectMapper.readTree(testUtil.csvToJsonString(response.getBody().trim()))
+                objectMapper.readTree(this.csvToJsonString(expected)),
+                objectMapper.readTree(this.csvToJsonString(response.getBody().trim()))
         );
     }
 }

@@ -11,6 +11,8 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
 import org.hibernate.Session;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
@@ -309,6 +311,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     @XmlElement(name = IO_FIELD_MUNICIPALITY)
     @OneToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private AddressMunicipalityRecord municipality;
 
     @JsonProperty(value = IO_FIELD_MUNICIPALITY)
