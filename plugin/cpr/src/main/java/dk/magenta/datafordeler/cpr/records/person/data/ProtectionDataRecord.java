@@ -6,6 +6,8 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
@@ -121,6 +123,7 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private final Set<ProtectionDataRecord> correctors = new HashSet<>();
 
     public Set<ProtectionDataRecord> getCorrectors() {

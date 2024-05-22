@@ -30,29 +30,14 @@ import java.io.IOException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class BirthDataServiceTest extends TestBase {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
-
-    TestUserDetails testUserDetails;
-
-    @Autowired
-    private TestUtil testUtil;
 
     @Autowired
     private BirthDataService birthDataService;
 
     @Before
     public void initialize() throws Exception {
-        testsUtils.setPath();
+        this.setPath();
         testsUtils.loadPersonData("bornperson.txt");
         this.loadAllGeoAdress(sessionManager);
         birthDataService.setUseTimeintervallimit(false);
@@ -60,7 +45,6 @@ public class BirthDataServiceTest extends TestBase {
 
     @After
     public void cleanup() {
-        testsUtils.clearPath();
         testsUtils.deleteAll();
     }
 
@@ -71,7 +55,7 @@ public class BirthDataServiceTest extends TestBase {
         ResponseEntity<String> response = restTemplate.exchange("/statistik/birth_data/", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(403, response.getStatusCodeValue());
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -83,8 +67,8 @@ public class BirthDataServiceTest extends TestBase {
         String expected = "\"B_Pnr\";\"B_FoedAar\";\"B_PnrGaeld\";\"B_FoedMynKod\";\"B_FoedMynTxt\";\"B_FoedMynKodTxt\";\"B_StatKod\";\"B_ProdDto\";\"B_ProdFilDto\";\"M_Pnr\";\"M_FoedMynKod\";\"M_FoedMynTxt\";\"M_FoedMynKodTxt\";\"M_StatKod\";\"M_KomKod\";\"M_LokNavn\";\"M_LokKode\";\"M_VejKod\";\"M_HusNr\";\"M_Etage\";\"M_SideDoer\";\"M_Bnr\";\"F_Pnr\";\"F_FoedMynKod\";\"F_FoedMynTxt\";\"F_FoedMynKodTxt\";\"F_StatKod\";\"F_KomKod\";\"F_LokNavn\";\"F_LokKode\";\"F_VejKod\";\"F_HusNr\";\"F_Etage\";\"F_SideDoer\";\"F_Bnr\"\n" +
                 "\"0101001234\";\"2000\";;\"9516\";\"\";\"0\";;\"13-01-2000\";\"\";\"2903641234\";\"6666\";\"\";;\"5100\";\"956\";\"Nuuk\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\";\"0101641234\";\"8888\";\"\";;\"5100\";\"956\";\"Nuuk\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\"";
         Assert.assertEquals(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim())
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim())
         );
         System.out.println("Body response: " + response.getBody());
 
@@ -99,7 +83,7 @@ public class BirthDataServiceTest extends TestBase {
         ResponseEntity<String> response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(403, response.getStatusCodeValue());
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -119,8 +103,8 @@ public class BirthDataServiceTest extends TestBase {
         String expected = "\"B_Pnr\";\"B_FoedAar\";\"B_PnrGaeld\";\"B_FoedMynKod\";\"B_FoedMynTxt\";\"B_FoedMynKodTxt\";\"B_StatKod\";\"B_ProdDto\";\"B_ProdFilDto\";\"M_Pnr\";\"M_FoedMynKod\";\"M_FoedMynTxt\";\"M_FoedMynKodTxt\";\"M_StatKod\";\"M_KomKod\";\"M_LokNavn\";\"M_LokKode\";\"M_VejKod\";\"M_HusNr\";\"M_Etage\";\"M_SideDoer\";\"M_Bnr\";\"F_Pnr\";\"F_FoedMynKod\";\"F_FoedMynTxt\";\"F_FoedMynKodTxt\";\"F_StatKod\";\"F_KomKod\";\"F_LokNavn\";\"F_LokKode\";\"F_VejKod\";\"F_HusNr\";\"F_Etage\";\"F_SideDoer\";\"F_Bnr\"\n" +
                 "\"0101001234\";\"2000\";;\"9516\";\"\";\"0\";;\"13-01-2000\";\"\";\"2903641234\";\"6666\";\"\";;\"5100\";\"956\";\"Nuuk\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\";\"0101641234\";\"8888\";\"\";;\"5100\";\"956\";\"Nuuk\";\"0600\";\"0254\";\"0018\";\"1\";\"tv\";\"1234\"";
         Assert.assertEquals(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(contents.trim())
+                this.csvToJsonString(expected),
+                this.csvToJsonString(contents.trim())
         );
 
     }

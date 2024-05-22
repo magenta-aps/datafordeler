@@ -25,7 +25,6 @@ import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
-import dk.magenta.datafordeler.subscription.data.subscriptionModel.CvrList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscription.queries.GeneralQuery;

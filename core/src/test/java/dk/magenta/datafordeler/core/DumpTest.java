@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.command.ScheduleChangedCommandHandler;
 import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.dump.Dump;
 import dk.magenta.datafordeler.core.dump.DumpConfiguration;
 import dk.magenta.datafordeler.core.dump.DumpConfiguration.Format;
