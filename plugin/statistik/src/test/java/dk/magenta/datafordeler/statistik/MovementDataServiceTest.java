@@ -30,31 +30,15 @@ import java.io.IOException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class MovementDataServiceTest extends TestBase {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
 
     @Autowired
     private MovementDataService movementDataService;
 
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private TestUtil testUtil;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Before
     public void initialize() throws Exception {
         testsUtils.deleteAll();
-        testsUtils.setPath();
+        this.setPath();
         this.loadAllGeoAdress(sessionManager);
         testsUtils.loadPersonData("movedperson.txt");
         testsUtils.loadPersonData("movedpersonExample2.txt");
@@ -63,7 +47,6 @@ public class MovementDataServiceTest extends TestBase {
 
     @After
     public void cleanup() {
-        testsUtils.clearPath();
         testsUtils.deleteAll();
     }
 
@@ -88,8 +71,8 @@ public class MovementDataServiceTest extends TestBase {
                 "\"0101001234\";\"2000\";;\"05\";\"9516\";;\"2903641234\";\"0101641234\";\"1111111111\";\"31-08-2016\";\"\";\"31-08-2016\";;\"0956\";\"NUK\";\"0254\";\"0018\";\"\";\"\";\"5678\";;\"0956\";\"NUK\";\"0254\";\"0018\";\"01\";\"tv\";\"1234\"\n" +
                 "\"0101001234\";\"2000\";;;\"9516\";;\"2903641234\";\"0101641234\";\"1111111111\";\"01-03-2018\";\"\";\"01-03-2012\";\"0\";;;;;;;;;\"0956\";\"NUK\";\"0254\";\"0018\";\"\";\"\";\"5678\"";
         compareJSONARRAYWithIgnoredValues(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()), "FlyDto");
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim()), "FlyDto");
     }
 
     @Test
@@ -106,17 +89,17 @@ public class MovementDataServiceTest extends TestBase {
         testsUtils.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/movement_data/?pnr=0101011235&registrationAfter=1900-01-01&registrationBefore=2019-08-01", HttpMethod.GET, httpEntity, String.class);
-        System.out.println(response.getStatusCodeValue());
+//        System.out.println(response.getStatusCodeValue());
         Assert.assertNotNull(response.getBody());
 
-        System.out.println(testUtil.csvToJsonString(response.getBody().trim()));
+//        System.out.println(testUtil.csvToJsonString(response.getBody().trim()));
 
         Assert.assertFalse(response.getBody().isEmpty());
         String expected = "\"Pnr\";\"FoedAar\";\"PnrGaeld\";\"Status\";\"FoedMynKod\";\"StatKod\";\"M_Pnr\";\"F_Pnr\";\"AegtePnr\";\"ProdDto\";\"ProdFilDto\";\"FlyDto\";\"FraLand\";\"FraKomKod\";\"FraLokKortNavn\";\"FraVejKod\";\"FraHusNr\";\"FraEtage\";\"FraSideDoer\";\"FraBnr\";\"TilLand\";\"TilKomKod\";\"TilLokKortNavn\";\"TilVejKod\";\"TilHusNr\";\"TilEtage\";\"TilSideDoer\";\"TilBnr\"\n" +
                 "\"0101011235\";\"2005\";;\"05\";;;\"1111111112\";\"1111111111\";;\"09-05-2019\";\"\";\"11-04-2019\";;\"0956\";\"\";\"0243\";\"\";\"\";\"\";\"1654\";;\"0957\";\"\";\"0102\";\"0002\";\"\";\"\";\"\"";
         compareJSONARRAYWithIgnoredValues(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()),
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim()),
                 "FlyDto"
         );
     }
@@ -136,10 +119,10 @@ public class MovementDataServiceTest extends TestBase {
         testsUtils.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/movement_data/?pnr=0101011236&registrationAfter=1900-01-01&registrationBefore=2019-08-01", HttpMethod.GET, httpEntity, String.class);
-        System.out.println(response.getStatusCodeValue());
+//        System.out.println(response.getStatusCodeValue());
         Assert.assertNotNull(response.getBody());
 
-        System.out.println(testUtil.csvToJsonString(response.getBody().trim()));
+//        System.out.println(testUtil.csvToJsonString(response.getBody().trim()));
 
         Assert.assertFalse(response.getBody().isEmpty());
         String expected = "\"Pnr\";\"FoedAar\";\"PnrGaeld\";\"Status\";\"FoedMynKod\";\"StatKod\";\"M_Pnr\";\"F_Pnr\";\"AegtePnr\";\"ProdDto\";\"ProdFilDto\";\"FlyDto\";\"FraLand\";\"FraKomKod\";\"FraLokKortNavn\";\"FraVejKod\";\"FraHusNr\";\"FraEtage\";\"FraSideDoer\";\"FraBnr\";\"TilLand\";\"TilKomKod\";\"TilLokKortNavn\";\"TilVejKod\";\"TilHusNr\";\"TilEtage\";\"TilSideDoer\";\"TilBnr\"\n" +
@@ -147,8 +130,8 @@ public class MovementDataServiceTest extends TestBase {
                 "\"0101011236\";\"1982\";;\"05\";\"9509\";;\"1111111111\";\"111111111\";\"\";\"11-02-2019\";\"\";\"01-02-2019\";;\"0956\";\"\";\"0204\";\"009A\";\"\";\"0402\";\"\";;\"0957\";\"\";\"0125\";\"0056\";\"\";\"O-1\";\"\"\n";
 
         compareJSONARRAYWithIgnoredValues(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(response.getBody().trim()),
+                this.csvToJsonString(expected),
+                this.csvToJsonString(response.getBody().trim()),
                 "FlyDto"
         );
     }
@@ -187,8 +170,8 @@ public class MovementDataServiceTest extends TestBase {
                 "\"0101001234\";\"2000\";\"\";\"\";\"9516\";\"\";\"2903641234\";\"0101641234\";\"1111111111\";\"01-03-2018\";\"\";\"01-03-2012\";\"0\";\"\";\"\";\"\";\"\";\"\";\"\";\"\";\"\";\"0956\";\"NUK\";\"0254\";\"0018\";\"\";\"\";\"5678\"";
 
         compareJSONARRAYWithIgnoredValues(
-                testUtil.csvToJsonString(expected),
-                testUtil.csvToJsonString(contents.trim()),
+                this.csvToJsonString(expected),
+                this.csvToJsonString(contents.trim()),
                 "FlyDto"
         );
     }

@@ -37,29 +37,14 @@ import java.io.IOException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class VoteListDataServiceTest extends TestBase {
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
 
     @Autowired
     private VoteListDataService voteListDataService;
 
-    private TestUserDetails testUserDetails;
-
-    @Autowired
-    private TestUtil testUtil;
-
     @Before
     public void initialize() throws Exception {
-        testsUtils.setPath();
+        this.setPath();
         testsUtils.loadPersonData("voter.txt");
         this.loadAllGeoAdress(sessionManager);
         voteListDataService.setUseTimeintervallimit(false);
@@ -67,7 +52,6 @@ public class VoteListDataServiceTest extends TestBase {
 
     @After
     public void cleanup() {
-        testsUtils.clearPath();
         testsUtils.deleteAll();
     }
 
@@ -83,7 +67,7 @@ public class VoteListDataServiceTest extends TestBase {
     public void test1Voters18At2029_11_11() throws IOException {
         voteListDataService.setWriteToLocalFile(true);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -99,14 +83,14 @@ public class VoteListDataServiceTest extends TestBase {
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(2, testUtil.csvToJson(contents.trim()).size());
+        Assert.assertEquals(2, this.csvToJson(contents.trim()).size());
     }
 
     @Test
     public void test2Voters18At2029_11_12() throws IOException {
         voteListDataService.setWriteToLocalFile(true);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -122,14 +106,14 @@ public class VoteListDataServiceTest extends TestBase {
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(3, testUtil.csvToJson(contents.trim()).size());
+        Assert.assertEquals(3, this.csvToJson(contents.trim()).size());
     }
 
     @Test
     public void test3Voters18At2029_11_13() throws IOException {
         voteListDataService.setWriteToLocalFile(true);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -145,7 +129,7 @@ public class VoteListDataServiceTest extends TestBase {
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(4, testUtil.csvToJson(contents.trim()).size());
+        Assert.assertEquals(4, this.csvToJson(contents.trim()).size());
     }
 
 
@@ -153,7 +137,7 @@ public class VoteListDataServiceTest extends TestBase {
     public void testValidate2VotersIn956() throws IOException {
         voteListDataService.setWriteToLocalFile(true);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -169,14 +153,14 @@ public class VoteListDataServiceTest extends TestBase {
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(3, testUtil.csvToJson(contents.trim()).size());
+        Assert.assertEquals(3, this.csvToJson(contents.trim()).size());
     }
 
     @Test
     public void testValidate1VotersIn957() throws IOException {
         voteListDataService.setWriteToLocalFile(true);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -191,14 +175,14 @@ public class VoteListDataServiceTest extends TestBase {
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(1, testUtil.csvToJson(contents.trim()).size());
+        Assert.assertEquals(1, this.csvToJson(contents.trim()).size());
     }
 
     @Test
     public void testAdHoc() throws IOException {
         voteListDataService.setWriteToLocalFile(true);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
@@ -214,6 +198,6 @@ public class VoteListDataServiceTest extends TestBase {
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(4, testUtil.csvToJson(contents.trim()).size());
+        Assert.assertEquals(4, this.csvToJson(contents.trim()).size());
     }
 }

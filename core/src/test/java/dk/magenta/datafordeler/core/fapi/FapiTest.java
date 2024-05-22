@@ -33,8 +33,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -138,7 +136,7 @@ public class FapiTest {
             JsonNode jsonBody = objectMapper.readTree(resp.getBody());
 
 
-            System.out.println("jsonBody: "+objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonBody));
+//            System.out.println("jsonBody: "+objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonBody));
 
 
 /*

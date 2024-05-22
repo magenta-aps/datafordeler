@@ -27,37 +27,22 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LocalityDataServiceTest {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private TestUtils testsUtils;
+public class LocalityDataServiceTest extends TestBase {
 
     @Autowired
     private LocalityDataService localityDataService;
 
-    @Autowired
-    private TestUtil testUtil;
-
-    TestUserDetails testUserDetails;
-
     @Before
     public void initialize() throws Exception {
-        testsUtils.setPath();
+        this.setPath();
         testsUtils.loadGeoLocalityData("Lokalitet_test.json");
-    }
-
-    @Test
-    public void testDummy() {
     }
 
     @Test
     public void testService() throws JsonProcessingException {
         localityDataService.setWriteToLocalFile(false);
 
-        testUserDetails = new TestUserDetails();
+        TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
         testsUtils.applyAccess(testUserDetails);
