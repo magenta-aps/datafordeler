@@ -48,8 +48,7 @@ public class PullTest extends GapiTestBase {
         ListenerManager listenerManager = scheduler.getListenerManager();
         TaskListener taskListener = new TaskListener("PullTest.schedule");
         listenerManager.addJobListener(
-            taskListener, KeyMatcher.keyEquals(new JobKey("pullTask-" + registerManagerId))
-        );
+            taskListener, KeyMatcher.keyEquals(new JobKey("pullTask-" + registerManagerId)));
 
         // A schedule to fire every second
         // Because we're down to 'every second', it will also fire immediately

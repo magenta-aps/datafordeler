@@ -88,7 +88,6 @@ public class DafoUserManager {
     public DafoUserDetails getUserFromRequest(HttpServletRequest request, boolean samlOnly)
             throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
         if (securityDisabled) {
-            System.out.println("securityDisabled");
 
             //VALIDATE SECURITY
             return new DafoUserDetails(null) {

@@ -63,7 +63,6 @@ public class CommandTest extends GapiTestBase {
     @Order(order = 1)
     @Test
     public void pullTest() throws IOException, InterruptedException, URISyntaxException {
-        System.out.println("Beginning Pulltest");
         UserProfile testUserProfile = new UserProfile("TestProfile", Arrays.asList(
                 DemoRolesDefinition.EXECUTE_DEMO_PULL_ROLE.getRoleName(),
                 DemoRolesDefinition.READ_DEMO_PULL_ROLE.getRoleName(),
