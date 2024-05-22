@@ -84,7 +84,6 @@ services:
       - USER_DATABASE_URL=jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler
       - USER_DATABASE_USERNAME=sa
       - USER_DATABASE_PASSWORD=testTEST1
-      - STS_METADATA_PATH=/code/core/src/main/resources/dk/magenta/datafordeler/core/user/sts_metadata.xml
       - STATISTICS_ENABLE=false
       - PULL_ENABLE=true
       - CRON_ENABLE=true

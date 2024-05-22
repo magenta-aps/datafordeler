@@ -11,6 +11,9 @@ import org.opensaml.util.resource.ResourceException;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.security.keyinfo.KeyInfoCredentialResolver;
 import org.opensaml.xml.signature.impl.ExplicitKeySignatureTrustEngine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -18,11 +21,13 @@ import java.io.*;
 import java.net.URISyntaxException;
 
 @org.springframework.context.annotation.Configuration
-@EnableConfigurationProperties(TokenConfigProperties.class)
 public class SamlMetadataConfiguration {
 
+    @Autowired
+    TokenConfigProperties config;
+
     @Bean
-    public MetadataProvider samlMetadataProvider(TokenConfigProperties config)
+    public MetadataProvider samlMetadataProvider()
             throws ResourceException, MetadataProviderException, URISyntaxException, IOException {
         String path = config.getIssuerMetadataPath();
         File metadataFile;

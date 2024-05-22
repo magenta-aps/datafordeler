@@ -20,6 +20,7 @@ import org.opensaml.xml.security.trust.TrustEngine;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,6 @@ import org.springframework.stereotype.Component;
  * Verifies a DAFO token according to expiration, issuer, signature and audience restriction.
  */
 @Component
-@EnableConfigurationProperties(TokenConfigProperties.class)
 public class TokenVerifier {
 
     @Autowired
