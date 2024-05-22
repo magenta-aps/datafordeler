@@ -23,18 +23,24 @@ import org.hamcrest.Matchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,45 +53,12 @@ import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class RecordTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private PersonEntityManager personEntityManager;
-
-    @Autowired
-    private PersonCustodyRelationsManager custodyManager;
-
-    @Autowired
-    private PersonRecordOutputWrapper personRecordOutputWrapper;
-
-    @Autowired
-    private CprPlugin plugin;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    private static final HashMap<String, String> schemaMap = new HashMap<>();
-
-    static {
-        schemaMap.put("person", PersonEntity.schema);
-    }
-
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    private void applyAccess(TestUserDetails testUserDetails) {
-        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
-    }
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class RecordTest extends TestBase {
 
     private void loadPerson(String resource, ImportMetadata importMetadata) throws DataFordelerException, IOException {
         InputStream testData = RecordTest.class.getResourceAsStream(resource);
@@ -107,6 +80,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personwithReverts.txt", importMetadata);
+            
             PersonRecordQuery query = new PersonRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
             query.setRegistrationToAfter(time);
@@ -128,6 +102,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
+        
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -170,9 +145,12 @@ public class RecordTest {
     @Test
     public void testExperimentPerson() throws DataFordelerException, IOException {
         Session session = sessionManager.getSessionFactory().openSession();
+        Assert.assertEquals(0, QueryManager.getAllEntities(session, PersonEntity.class).size());
+
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
+        
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -180,6 +158,8 @@ public class RecordTest {
             query.setRegistrationAt(time);
             query.setEffectAt(time);
             query.applyFilters(session);
+
+            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             query.setBirthTimeBefore(LocalDateTime.now());
             List<PersonEntity> personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
@@ -242,6 +222,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+            
 
             PersonRecordQuery query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
@@ -333,13 +314,13 @@ public class RecordTest {
 
             String hql = "SELECT personEntity " +
                     "FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
-                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + PersonEntity.DB_FIELD_IDENTIFICATION + " " +
-                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + PersonEntity.DB_FIELD_IDENTIFICATION + " " +
-                    " WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + motherPnr +
-                    " AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + fatherPnr;
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity " +
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity " +
+                    "WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + motherPnr + " " +
+                    "AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + fatherPnr;
 
 
-            Query query2 = session.createQuery(hql);
+            Query<PersonEntity> query2 = session.createQuery(hql, PersonEntity.class);
 
             List<PersonEntity> resultList = query2.getResultList();
             Assert.assertEquals(17, resultList.size());
@@ -361,6 +342,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+            
         }
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -423,6 +405,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/personUndoRedoName.txt", importMetadata);
+        
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -447,6 +430,7 @@ public class RecordTest {
         this.loadPerson("/undoneNewAdress1.txt", importMetadata);
         this.loadPerson("/undoneNewAdress2.txt", importMetadata);
         transaction.commit();
+        
         try {
 
             PersonRecordQuery query = new PersonRecordQuery();
@@ -516,6 +500,8 @@ public class RecordTest {
             query.setRegistrationAt(time);
             query.setEffectAt(time);
             query.applyFilters(session);
+
+            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             query.setParameter(PersonRecordQuery.VEJKODE, 2);
             Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
@@ -635,7 +621,6 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/overwrite_civilstate.txt", importMetadata);
-
         try {
             PersonRecordQuery query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101010123");
@@ -667,6 +652,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/overwrite_birth_import.txt", importMetadata);
+        
 
         try {
             PersonRecordQuery query = new PersonRecordQuery();
@@ -702,6 +688,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/personsWithEvents.txt", importMetadata);
+        
         session.close();
 
         session = sessionManager.getSessionFactory().openSession();
@@ -788,6 +775,7 @@ public class RecordTest {
         this.loadPerson("/personsWithNewAdresses.txt", importMetadata);
         this.loadPerson("/personsWithNewAdresses2.txt", importMetadata);
         this.loadPerson("/personsWithNewAdresses3.txt", importMetadata);
+        
         session.close();
 
         session = sessionManager.getSessionFactory().openSession();
@@ -812,6 +800,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/personWithChildrenAndCustodyChange.txt", importMetadata);
+            
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -830,6 +819,7 @@ public class RecordTest {
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
         this.loadPerson("/persondata.txt", importMetadata);
+        
         // TODO: check updated
     }
 
@@ -859,6 +849,7 @@ public class RecordTest {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPerson("/persondata.txt", importMetadata);
+            
 
             PersonRecordQuery query = new PersonRecordQuery();
             /*OffsetDateTime time = OffsetDateTime.now();
@@ -870,7 +861,7 @@ public class RecordTest {
             query.setParameter(PersonRecordQuery.KOMMUNEKODE, 958);
             PersonEntity personEntity = QueryManager.getAllEntities(session, query, PersonEntity.class).get(0);
 
-            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.personRecordOutputWrapper.wrapResult(personEntity, query, OutputWrapper.Mode.LEGACY)));
+            //System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this.personRecordOutputWrapper.wrapResult(personEntity, query, OutputWrapper.Mode.LEGACY)));
 
         } finally {
             session.close();

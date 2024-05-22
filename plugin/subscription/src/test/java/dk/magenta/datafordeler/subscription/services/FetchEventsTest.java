@@ -49,27 +49,7 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class FetchEventsTest {
-
-    @Autowired
-    TestRestTemplate restTemplate;
-
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-    @SpyBean
-    private DafoUserManager dafoUserManager;
-
-    @Autowired
-    private CvrPlugin plugin;
-
-
-    @Autowired
-    private PersonEntityManager personEntityManager;
+public class FetchEventsTest extends TestBase {
 
     private final OffsetDateTime timestampInitial = OffsetDateTime.now(ZoneOffset.UTC);
 
@@ -84,8 +64,6 @@ public class FetchEventsTest {
     @Before
     public void setUp() throws Exception {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-
-
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             InputStream testData = FindCprBusinessEvent.class.getResourceAsStream("/personsWithEvents.txt");

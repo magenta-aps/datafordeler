@@ -13,14 +13,13 @@ import dk.magenta.datafordeler.cpr.data.residence.data.ResidenceBaseData;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -35,22 +34,13 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResidenceTest extends TestBase {
 
     /*
     Allmost all tests regarding serching in residence is disabled as a cleanup of failing unittests.
     There has not been a lot of thanges to this functionality for a long time, at it is considered to be working as expected.
      */
-
-    @Autowired
-    private ResidenceEntityManager residenceEntityManager;
-
-    @Before
-    @After
-    public void cleanup() {
-        QueryManager.clearCaches();
-    }
-
 
     private void loadResidence(ImportMetadata importMetadata) throws DataFordelerException, IOException {
         InputStream testData = ResidenceTest.class.getResourceAsStream("/roaddata.txt");

@@ -52,8 +52,6 @@ public class CivilStatusDataService extends PersonStatisticsService {
     @Autowired
     private CprPlugin cprPlugin;
 
-    private String civilStatus;
-
     private final Logger log = LogManager.getLogger(CivilStatusDataService.class.getCanonicalName());
 
     /**

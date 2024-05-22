@@ -152,7 +152,7 @@ public class DemoEntityManager extends EntityManager {
     }
 
     public void parseData(JsonNode jsonNode, ImportMetadata importMetadata) throws ParseException {
-        System.out.println("parse this: "+jsonNode.toString());
+//        System.out.println("parse this: "+jsonNode.toString());
     }
 
 }
