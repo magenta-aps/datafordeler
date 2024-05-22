@@ -11,7 +11,7 @@ services:
     env_file:
       - ./docker/dev-env/datafordeler.env
     volumes:
-      - ./docker/dev-env/application:/app/dev-env/local
+      - ./docker/dev-env/sts_metadata.xml:/app/core/conf/sts_metadata.xml:ro
       - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
       - ./plugin/cpr/src/test/resources/GLBASETEST2:/app/dev-env/local/cpr/download/d170610.l534901
       - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json

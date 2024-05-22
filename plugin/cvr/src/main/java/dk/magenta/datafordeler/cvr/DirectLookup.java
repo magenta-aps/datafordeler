@@ -77,7 +77,7 @@ public class DirectLookup {
             List<R> companyRecords = new ArrayList<>();
             while (scanner.hasNext()) {
                 String data = scanner.next();
-                companyRecords.addAll(entityManager.parseNode(objectMapper.readTree(data)));
+                companyRecords.addAll(entityManager.parseNode(objectMapper.readTree(data), null));
             }
             return companyRecords;
         }

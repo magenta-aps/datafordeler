@@ -160,48 +160,25 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         if (this.relationParticipantRecord != null) {
             this.relationParticipantRecord.save(session);
         }
-        /*for (OrganizationRecord organizationRecord : this.organizations) {
-            organizationRecord.save(session);
-        }*/
     }
 
     public void wire(Session session) {
         if (this.relationParticipantRecord != null) {
             this.relationParticipantRecord.wire(session);
         }
-//        if (this.relationCompanyRecord != null) {
-//            this.relationCompanyRecord.wire(session);
-//        }
         for (OfficeRelationRecord officeRelationRecord : this.offices) {
             officeRelationRecord.wire(session);
         }
+//        for (OrganizationRecord organizationRecord : this.getOrganizations()) {
+//            for (OrganizationMemberdataRecord memberdataRecord : organizationRecord.getMemberData()) {
+//                for (AttributeRecord attributeRecord : memberdataRecord.getAttributes()) {
+//                    for (AttributeValueRecord valueRecord : attributeRecord.getValues()) {
+//                        System.out.println(valueRecord.getId()+" "+session.contains(valueRecord));
+//                    }
+//                }
+//            }
+//        }
     }
-
-    /*private Set<Identification> getOrganizationIdentifications(Session session) {
-        HashSet<Identification> organizationIdentifications = new HashSet<>();
-        for (OrganizationRecord organizationRecord : this.organizations) {
-            UUID organizationUUID = organizationRecord.generateUUID();
-            Identification organizationIdentification = QueryManager.getOrCreateIdentification(session, organizationUUID, CvrPlugin.getDomain());
-            organizationIdentifications.add(organizationIdentification);
-        }
-        return organizationIdentifications;
-    }*/
-/*
-    @Override
-    public void populateBaseData(CompanyBaseData baseData, Session session, Bitemporality bitemporality) {
-        baseData.addParticipantRelation(
-                this.getParticipantIdentification(session),
-                this.getOrganizationIdentifications(session)
-        );
-    }
-
-    @Override
-    public void populateBaseData(CompanyUnitBaseData baseData, Session session, Bitemporality bitemporality) {
-        baseData.addParticipantRelation(
-                this.getParticipantIdentification(session),
-                this.getOrganizationIdentifications(session)
-        );
-    }*/
 
 
     public void merge(CompanyParticipantRelationRecord other) {

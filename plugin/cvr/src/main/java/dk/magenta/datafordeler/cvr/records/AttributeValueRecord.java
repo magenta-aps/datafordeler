@@ -2,10 +2,12 @@ package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 
 /**
  * Record for Company, CompanyUnit or Participant attribute values.
@@ -38,4 +40,16 @@ public class AttributeValueRecord extends BaseAttributeValueRecord {
         this.attribute = attribute;
     }
 
+    @JsonProperty
+    public Long getId() {
+        return super.getId();
+    }
+    @JsonProperty
+    public Long getFoo() {
+        return super.getId();
+    }
+    @JsonProperty
+    public String getBar() {
+        return this.getBitemporality().toString();
+    }
 }

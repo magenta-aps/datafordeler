@@ -89,10 +89,10 @@ public class SessionManager {
 
     protected DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(System.getenv("DATABASE_CLASS"));
-        dataSource.setUrl(System.getenv("DATABASE_URL"));
-        dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
-        dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
+        dataSource.setDriverClassName(getEnv("DATABASE_CLASS", "com.microsoft.sqlserver.jdbc.SQLServerDriver"));
+        dataSource.setUrl(getEnv("DATABASE_URL", ""));
+        dataSource.setUsername(getEnv("DATABASE_USERNAME", ""));
+        dataSource.setPassword(getEnv("DATABASE_PASSWORD", ""));
         return dataSource;
     }
 
@@ -109,8 +109,8 @@ public class SessionManager {
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", getEnv("DATABASE_METHOD", "validate"));
         hibernateProperties.setProperty("hibernate.default_schema", getEnv("DATABASE_DEFAULT_SCHEMA", "dbo"));
 
-        hibernateProperties.setProperty("hibernate.connection.username", System.getenv("DATABASE_USERNAME"));
-        hibernateProperties.setProperty("hibernate.connection.password", System.getenv("DATABASE_PASSWORD"));
+        hibernateProperties.setProperty("hibernate.connection.username", getEnv("DATABASE_USERNAME", ""));
+        hibernateProperties.setProperty("hibernate.connection.password", getEnv("DATABASE_PASSWORD", ""));
 
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");

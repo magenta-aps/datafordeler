@@ -14,16 +14,17 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @MappedSuperclass
 public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord> {
 
     public static final String FILTERLOGIC_REGISTRATIONFROM_AFTER = "(" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " >= :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER + ")";
     public static final String FILTERLOGIC_REGISTRATIONFROM_BEFORE = "(" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE + " OR " + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " is null)";
-    public static final String FILTERLOGIC_REGISTRATIONTO_AFTER = "";
-    public static final String FILTERLOGIC_REGISTRATIONTO_BEFORE = "";
+    public static final String FILTERLOGIC_REGISTRATIONTO_AFTER = "(" + CvrBitemporalRecord.DB_FIELD_REGISTRATION_TO + " >= :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER + " OR " + CvrBitemporalRecord.DB_FIELD_REGISTRATION_TO + " is null)";
+    public static final String FILTERLOGIC_REGISTRATIONTO_BEFORE = "(" + CvrBitemporalRecord.DB_FIELD_REGISTRATION_TO + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE + ")";
 
 
     public static final String FILTERLOGIC_EFFECTFROM_AFTER = "(" + CvrRecordPeriod.DB_FIELD_VALID_FROM + " >= :" + Bitemporal.FILTERPARAM_EFFECTFROM_AFTER + ")";
@@ -132,13 +133,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
     }
 
-
-    /*public void merge(CvrBitemporalRecord other) {
-        if (other != null && other.getClass() == this.getClass()) {
-
-        }
-    }*/
-
     /**
      * For sorting purposes; we implement the Comparable interface, so we should
      * provide a comparison method. Here, we sort CvrRecord objects by registrationFrom, with nulls first
@@ -152,7 +146,12 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
-    @JsonIgnore
+
+    public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
+    public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
+
+    @JsonProperty(IO_FIELD_REGISTRATION_TO)
+    @Column(name = DB_FIELD_REGISTRATION_TO)
     private OffsetDateTime registrationTo;
 
     public OffsetDateTime getRegistrationTo() {
@@ -236,5 +235,23 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     public static LocalDate convertTime(OffsetDateTime time) {
         return time != null ? time.atZoneSameInstant(ZoneOffset.UTC).toLocalDate() : null;
+    }
+
+    public static void updateRegistrations(Set<? extends CvrBitemporalRecord> records, boolean onlyOneOpenRegistration) {
+        System.out.println("There are "+records.size()+" records");
+        if (records != null && records.size() > 1) {
+            OffsetDateTime nextUpdateTime = null;
+            Stream<? extends CvrBitemporalRecord> recordStream = records.stream();
+            if (!onlyOneOpenRegistration) {
+                recordStream = recordStream.filter(r -> r.getEffectTo() == null);
+            }
+            recordStream = recordStream.sorted(Comparator.comparing(CvrBitemporalRecord::getLastUpdated, Comparator.nullsFirst(Comparator.naturalOrder())).reversed());
+            List<CvrBitemporalRecord> recordList = recordStream.collect(Collectors.toList());
+            for (CvrBitemporalRecord record : recordList) {
+                record.setRegistrationTo(nextUpdateTime);
+                System.out.println(record.getId()+" "+record.getRegistrationFrom()+" "+record.getRegistrationTo());
+                nextUpdateTime = record.getRegistrationFrom();
+            }
+        }
     }
 }

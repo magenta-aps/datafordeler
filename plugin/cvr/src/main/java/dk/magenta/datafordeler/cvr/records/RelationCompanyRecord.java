@@ -289,6 +289,12 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
             for (FormRecord form : other.getForm()) {
                 this.addForm(form);
             }
+//            CvrBitemporalRecord.updateRegistrations(this.lifecycle);
+//            CvrBitemporalRecord.updateRegistrations(this.regNumber);
+//            CvrBitemporalRecord.updateRegistrations(this.names);
+//            CvrBitemporalRecord.updateRegistrations(this.status);
+//            CvrBitemporalRecord.updateRegistrations(this.companyStatus);
+//            CvrBitemporalRecord.updateRegistrations(this.form);
         }
     }
 

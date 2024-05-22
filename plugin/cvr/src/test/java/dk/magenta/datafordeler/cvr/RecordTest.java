@@ -15,6 +15,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
@@ -24,6 +25,7 @@ import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
+import org.apache.commons.math3.analysis.function.Add;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -291,6 +293,10 @@ public class RecordTest extends TestBase {
                     foundParticipantData = true;
 
                     Assert.assertEquals(2, participantRelationRecord.getRelationParticipantRecord().getNames().size());
+                    ArrayList<AddressRecord> a = new ArrayList<>(participantRelationRecord.getRelationParticipantRecord().getLocationAddress());
+                    for (AddressRecord x : a) {
+                        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(x));
+                    }
                     Assert.assertEquals(5, participantRelationRecord.getRelationParticipantRecord().getLocationAddress().size());
 
                     Assert.assertEquals(1, participantRelationRecord.getOffices().size());
