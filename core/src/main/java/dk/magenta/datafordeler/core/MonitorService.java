@@ -133,7 +133,7 @@ public class MonitorService {
         loggerHelper.urlResponsePersistablelogs(response.getStatus(), "Done checkPulls");
     }
 
-    @Value("${dafo.error_file:cache/log/${PID}.err}")
+    @Value("${dafo.error_file:cache/log/dafo.err}")
     private String errorFileConfig;
 
     @RequestMapping(path = "/errors")

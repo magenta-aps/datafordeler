@@ -9,7 +9,11 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -22,6 +26,8 @@ import java.nio.file.Files;
 @ServletComponentScan
 @SpringBootApplication
 @EnableScheduling
+@PropertySource("classpath:application.properties")
+@Configuration
 public class Application {
 
     private static final Logger log = LogManager.getLogger(Application.class.getCanonicalName());
@@ -61,7 +67,8 @@ public class Application {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
         PropertySourcesPlaceholderConfigurer p = new PropertySourcesPlaceholderConfigurer();
-        p.setIgnoreUnresolvablePlaceholders(true);
+        p.setLocation(new FileSystemResource("/app/core/application.properties"));
+        //p.setIgnoreUnresolvablePlaceholders(true);
         return p;
     }
 
