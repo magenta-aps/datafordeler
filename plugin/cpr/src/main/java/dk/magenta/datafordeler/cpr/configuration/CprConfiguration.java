@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cpr.configuration;
 
+import dk.magenta.datafordeler.core.Environment;
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
@@ -707,6 +708,85 @@ public class CprConfiguration implements Configuration {
             }
         }
         return false;
+    }
+
+    // Configuration loaded from environment
+
+    @Transient
+    private boolean subscriptionEnabled = Environment.getEnv("CPR_SUBSCRIPTION_ENABLE", false);
+
+    @Transient
+    private String localSubscriptionFolder = Environment.getEnv("CPR_LOCAL_SUBSCRIPTION_FOLDER", null);
+
+    @Transient
+    private int jobId = Environment.getEnv("CPR_JOB_ID", 0);
+
+    @Transient
+    private int customerId = Environment.getEnv("CPR_CUSTOMER_ID", 0);
+
+    @Transient
+    private boolean directPersonLookupEnabled = Environment.getEnv("DIRECT_PERSON_LOOKUP_ENABLE", false);
+
+    @Transient
+    private boolean directPasswordChangeEnable = Environment.getEnv("CPR_PASSWORD_CHANGE_ENABLE", false);
+
+    @Transient
+    private String subscriptionGenerateSchedule = Environment.getEnv("CPR_SUBSCRIPTION_GENERATE_SCHEDULE", "0 4 * * *");
+
+    @Transient
+    private String testpersonList = Environment.getEnv("CPR_TEST_PERSON_LIST", null);
+
+    @Transient
+    private String proxyUrl = Environment.getEnv("CPR_PROXY_URL", null);
+
+    @Transient
+    private String localCopyFolder = Environment.getEnv("CPR_LOCAL_COPY_FOLDER", null);
+
+    @Transient
+    private String encryptionKeyFileName = Environment.getEnv("CPR_ENCRYPTION_KEY_FILE", "local/cpr/keyfile.json");
+
+    public boolean isSubscriptionEnabled() {
+        return this.subscriptionEnabled;
+    }
+
+    public String getLocalSubscriptionFolder() {
+        return this.localSubscriptionFolder;
+    }
+
+    public int getJobId() {
+        return this.jobId;
+    }
+
+    public int getCustomerId() {
+        return this.customerId;
+    }
+
+    public boolean isDirectPersonLookupEnabled() {
+        return this.directPersonLookupEnabled;
+    }
+
+    public boolean isDirectPasswordChangeEnable() {
+        return this.directPasswordChangeEnable;
+    }
+
+    public String getSubscriptionGenerateSchedule() {
+        return this.subscriptionGenerateSchedule;
+    }
+
+    public String getTestpersonList() {
+        return this.testpersonList;
+    }
+
+    public String getProxyUrl() {
+        return this.proxyUrl;
+    }
+
+    public String getLocalCopyFolder() {
+        return this.localCopyFolder;
+    }
+
+    public String getEncryptionKeyFileName() {
+        return this.encryptionKeyFileName;
     }
 
 }

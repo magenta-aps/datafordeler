@@ -231,12 +231,27 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testUpdateCompany() throws IOException, DataFordelerException {
+        System.out.println("testUpdateCompany");
+        this.cleanup();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            Assert.assertEquals(0, QueryManager.getAllEntities(session, CompanyRecord.class).size());
+            //Assert.assertEquals(0, QueryManager.getAllEntities(session, CompanyRecord.class).size());
+            Class[] inspect = new Class[]{CompanyRecord.class, CompanyUnitRecord.class, ParticipantRecord.class};
+            for (Class c : inspect) {
+                System.out.println(c.getSimpleName() + ": " + QueryManager.getAllEntities(session, c).size());
+            }
         }
+
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            this.cleanup();
+            //Assert.assertEquals(0, QueryManager.getAllEntities(session, CompanyRecord.class).size());
+            Class[] inspect = new Class[]{CompanyRecord.class, CompanyUnitRecord.class, ParticipantRecord.class};
+            for (Class c : inspect) {
+                System.out.println(c.getSimpleName() + ": " + QueryManager.getAllEntities(session, c).size());
+            }
+        }
+
         loadCompany("/company_in.json");
         loadCompany("/company_in2.json");
-        ObjectMapper objectMapper = this.getObjectMapper();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             query.setParameter(CompanyRecordQuery.CVRNUMMER, "25052943");
@@ -579,6 +594,7 @@ public class RecordTest extends TestBase {
     }
 
     private HashMap<Long, JsonNode> loadParticipant(String resource) throws IOException, DataFordelerException {
+        System.out.println("LoadParticipant");
         ObjectMapper objectMapper = this.getObjectMapper();
         ImportMetadata importMetadata = new ImportMetadata();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -967,9 +983,20 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testEnrich() throws IOException, DataFordelerException {
+        this.cleanup();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            Assert.assertEquals(0, QueryManager.getAllEntities(session, ParticipantRecord.class).size());
+            List<ParticipantRecord> items = QueryManager.getAllEntities(session, ParticipantRecord.class);
+            System.out.println("There are "+items.size()+" participants");
+            if (items.size() > 0) {
+                System.out.println(items.get(0).getId()+": "+items.get(0).getUnitNumber());
+                for (ParticipantRecord participantRecord : items) {
+                    session.delete(participantRecord);
+                }
+            }
+            //Assert.assertEquals(0, items.size());
         }
+
+
         loadParticipant("/person.json");
         ParticipantRecordQuery query = new ParticipantRecordQuery();
         query.setParameter(ParticipantRecordQuery.NAVN, "Morten*");

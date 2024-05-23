@@ -58,13 +58,10 @@ public class CvrRegisterManager extends RegisterManager {
     @Autowired
     private SessionManager sessionManager;
 
-    @Value("${dafo.cvr.demoCompanyFile}")
     private String cvrDemoCompanyFile;
 
-    @Value("${dafo.cvr.demoUnitFile}")
     private String cvrDemoUnitFile;
 
-    @Value("${dafo.cvr.demoParticipantFile}")
     private String cvrDemoParticipantFile;
 
 
@@ -93,7 +90,9 @@ public class CvrRegisterManager extends RegisterManager {
     public void init() {
         this.commonFetcher = new ScanScrollCommunicator();
         this.commonFetcher.setScrollIdJsonKey("_scroll_id");
-
+        this.cvrDemoCompanyFile = configurationManager.getConfiguration().getCvrDemoCompanyFile();
+        this.cvrDemoUnitFile = configurationManager.getConfiguration().getCvrDemoUnitFile();
+        this.cvrDemoParticipantFile = configurationManager.getConfiguration().getCvrDemoParticipantFile();
     }
 
     @Override

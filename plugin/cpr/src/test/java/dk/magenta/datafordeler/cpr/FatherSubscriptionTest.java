@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.cpr;
 
-
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.Pull;
 import dk.magenta.datafordeler.core.database.QueryManager;
@@ -36,8 +35,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -73,17 +71,16 @@ public class FatherSubscriptionTest extends TestBase {
         Assert.assertEquals(0, QueryManager.getAllItems(session, PersonSubscription.class).size());
 
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
-        when(configurationManager.getConfiguration()).thenReturn(configuration);
-        when(personEntityManager.isSetupSubscriptionEnabled()).thenReturn(true);
-        when(personEntityManager.getCustomerId()).thenReturn(1234);
-        when(personEntityManager.getJobId()).thenReturn(123456);
+        doReturn(configuration).when(configurationManager).getConfiguration();
+        doReturn(true).when(personEntityManager).isSetupSubscriptionEnabled();
+        doReturn(1234).when(personEntityManager).getCustomerId();
+        doReturn(123456).when(personEntityManager).getJobId();
         doAnswer(invocationOnMock -> null).when(personEntityManager).getLastUpdated(any(Session.class));
-
 
         File localSubFolder = File.createTempFile("foo", "bar");
         localSubFolder.delete();
         localSubFolder.mkdirs();
-        when(personEntityManager.getLocalSubscriptionFolder()).thenReturn(localSubFolder.getAbsolutePath());
+        doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
 
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
@@ -94,10 +91,8 @@ public class FatherSubscriptionTest extends TestBase {
             return ftpCommunicator;
         }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
 
-
         String username = "test";
         String password = "test";
-
 
         int personPort = 2105;
         InputStream personContents = this.getClass().getResourceAsStream("/personWithParentRelation.txt");

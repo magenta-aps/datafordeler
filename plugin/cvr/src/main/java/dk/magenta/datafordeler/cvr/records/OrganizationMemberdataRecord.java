@@ -59,8 +59,7 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_ORGANIZATION_MEMBERDATA, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(value = IO_FIELD_ATTRIBUTES)
+        @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     public Set<AttributeRecord> attributes = new HashSet<>();
 
     public void setAttributes(Set<AttributeRecord> attributes) {

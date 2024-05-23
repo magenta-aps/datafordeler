@@ -11,10 +11,10 @@ services:
     env_file:
       - ./docker/dev-env/datafordeler.env
     volumes:
-      - ./docker/dev-env/application:/app/dev-env/local
+      - ./docker/dev-env/sts_metadata.xml:/app/conf/sts_metadata.xml:ro
       - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
       - ./plugin/cpr/src/test/resources/GLBASETEST2:/app/dev-env/local/cpr/download/d170610.l534901
-      - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
+#      - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
       - ./plugin/cvr/src/test/resources/unit.json:/app/dev-env/local/cvr/unit.json
       - ./plugin/cvr/src/test/resources/person.json:/app/dev-env/local/cvr/person.json
       - ./plugin/geo/src/test/resources/municipality.json:/app/dev-env/local/geo/municipality.json
@@ -59,13 +59,12 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+    env_file:
+      - ./docker/dev-env/datafordeler.env
     environment:
-      - SERVERNAME=dafodev
-      - SERVER_PORT=80
       - DATABASE_CLASS=org.h2.Driver
       - DATABASE_URL=jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO
       - DATABASE_DIALECT=org.hibernate.dialect.H2Dialect
-      - DATABASE_SHOW_SQL="false"
       - DATABASE_USERNAME=test
       - DATABASE_PASSWORD=test
       - DATABASE_METHOD=create-drop
@@ -73,30 +72,11 @@ services:
       - SECONDARY_DATABASE_CLASS=org.h2.Driver
       - SECONDARY_DATABASE_URL=jdbc:h2:mem:db2;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO
       - SECONDARY_DATABASE_DIALECT=org.hibernate.dialect.H2Dialect
-      - SECONDARY_DATABASE_SHOW_SQL="false"
       - SECONDARY_DATABASE_USERNAME=test
       - SECONDARY_DATABASE_PASSWORD=test
       - SECONDARY_DATABASE_METHOD=create-drop
       - SECONDARY_DATABASE_DEFAULT_SCHEMA=dbo
-      - SSL_ENABLE=false
-      - USER_DATABASE_ENABLED=false
-      - USER_DATABASE_SECURITY_DISABLED=false
-      - USER_DATABASE_URL=jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler
-      - USER_DATABASE_USERNAME=sa
-      - USER_DATABASE_PASSWORD=testTEST1
-      - STS_METADATA_PATH=/code/core/src/main/resources/dk/magenta/datafordeler/core/user/sts_metadata.xml
-      - STATISTICS_ENABLE=false
-      - PULL_ENABLE=true
       - CRON_ENABLE=true
-      - IP_WHITELIST=127.0.0.1
-      - CPR_PROXY_URL=""
-      - CPR_LOCAL_DIR=/app/dev-env/local/cpr/download
-      - CPR_SUBSCRIPTION_ENABLE=true
-      - CPR_ENCRYPTION_KEYFILE=/tmp/testfile
-      - CVR_DEMO_COMPANYFILE=file:///app/dev-env/local/cvr/company_in.json
-      - CVR_DEMO_UNITFILE=file:///app/dev-env/local/cvr/unit.json 
-      - CVR_DEMO_PARTICIPANTFILE=file:///app/dev-env/local/cvr/person.json
-      - ERRORFILE_DIR=cache/log
     ports:
       - 8082:80
     command: bash -c "cd /code && mvn --batch-mode -T 2C test"

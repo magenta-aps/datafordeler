@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,11 +18,12 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import java.io.File;
 import java.nio.file.Files;
 
-@ComponentScan({"dk.magenta.datafordeler", "dk.magenta.datafordeler.core", "dk.magenta.datafordeler.core.database", "dk.magenta.datafordeler.core.util"})
+@ComponentScan({"dk.magenta.datafordeler", "dk.magenta.datafordeler.core", "dk.magenta.datafordeler.core.database", "dk.magenta.datafordeler.core.util", "dk.magenta.datafordeler.core.user"})
 @EntityScan("dk.magenta.datafordeler")
 @ServletComponentScan
 @SpringBootApplication
 @EnableScheduling
+@PropertySource("classpath:/application.properties")
 public class Application {
 
     private static final Logger log = LogManager.getLogger(Application.class.getCanonicalName());

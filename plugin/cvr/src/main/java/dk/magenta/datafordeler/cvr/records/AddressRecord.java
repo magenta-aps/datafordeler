@@ -313,8 +313,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     @XmlElement(name = IO_FIELD_MUNICIPALITY)
     @OneToOne(cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private AddressMunicipalityRecord municipality;
+        private AddressMunicipalityRecord municipality;
 
     @JsonProperty(value = IO_FIELD_MUNICIPALITY)
     public AddressMunicipalityRecord getMunicipality() {

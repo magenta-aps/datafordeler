@@ -49,10 +49,10 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -117,7 +117,6 @@ public class PullTest extends TestBase {
     }
 
     private void pull() throws Exception {
-
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         when(configurationManager.getConfiguration()).thenReturn(configuration);
 
@@ -224,17 +223,16 @@ public class PullTest extends TestBase {
     public void testSubscription() throws Exception {
 
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
-        when(configurationManager.getConfiguration()).thenReturn(configuration);
-        when(personEntityManager.isSetupSubscriptionEnabled()).thenReturn(true);
-        when(personEntityManager.getCustomerId()).thenReturn(1234);
-        when(personEntityManager.getJobId()).thenReturn(123456);
-        //when(personEntityManager.getLastUpdated(any(Session.class))).thenReturn(null);
+        doReturn(configuration).when(configurationManager).getConfiguration();
+        doReturn(true).when(personEntityManager).isSetupSubscriptionEnabled();
+        doReturn(1234).when(personEntityManager).getCustomerId();
+        doReturn(123456).when(personEntityManager).getJobId();
         doAnswer(invocationOnMock -> null).when(personEntityManager).getLastUpdated(any(Session.class));
 
         File localCacheSubFolder = File.createTempFile("foo", "bar");
         localCacheSubFolder.delete();
         localCacheSubFolder.mkdirs();
-        when(personEntityManager.getLocalSubscriptionFolder()).thenReturn(localCacheSubFolder.getAbsolutePath());
+        doReturn(localCacheSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
 
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
@@ -268,18 +266,13 @@ public class PullTest extends TestBase {
             configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
             configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
             Pull pull = new Pull(engine, plugin);
+            System.out.println("TEST PULL");
             pull.run();
         } finally {
             personFtp.stopServer();
+            System.out.println("END TEST");
         }
         personFile.delete();
-
-        personContents = this.getClass().getResourceAsStream("/persondata2.txt");
-        personFile = File.createTempFile("persondata2", "txt");
-        personFile.createNewFile();
-        FileUtils.copyInputStreamToFile(personContents, personFile);
-        personContents.close();
-
 
         Session session = sessionManager.getSessionFactory().openSession();
         try {
@@ -295,7 +288,7 @@ public class PullTest extends TestBase {
         try {
             personEntityManager.createSubscriptionFile();
 
-            when(personEntityManager.getLocalSubscriptionFolder()).thenReturn(localSubFolder.getAbsolutePath());
+            doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
 
             File[] subFiles = personFtp.getTempDir().listFiles();
             Assert.assertEquals(1, subFiles.length);
@@ -321,11 +314,13 @@ public class PullTest extends TestBase {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(0, personEntities.size());//Validate that no persons is initiated in the beginning of this test
         }
+        System.out.println("testCleanTestdataThroughPull");
         pull();  // Pull 1 person from persondata
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
+        System.out.println("OK here 1");
 
         //Pull 39 persons from GLBASETEST
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -334,20 +329,26 @@ public class PullTest extends TestBase {
             this.loadPersonWithOrigin(importMetadata);
             session.close();
         }
+        System.out.println("OK here 2");
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assert.assertEquals(52, personEntities.size());//Validate that 52 persons is now initiated
         }
+        System.out.println("OK here 3");
 
         //Clean the testdata
         ObjectNode config = (ObjectNode) objectMapper.readTree("{\"" + CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE + "\": [5], \"cleantestdatafirst\":true}");
         Pull pull = new Pull(engine, plugin, config);
         pull.run();
 
+        System.out.println("OK here 4");
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
+            String cprs = personEntities.stream().map(p -> p.getPersonnummer()).collect(Collectors.joining(","));
+            Assert.assertEquals("Got "+cprs+" when expecting only 0101001234", 1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
+
+        System.out.println("OK here 5");
     }
 }

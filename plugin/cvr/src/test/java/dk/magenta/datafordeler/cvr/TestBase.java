@@ -13,14 +13,30 @@ import dk.magenta.datafordeler.cvr.records.AttributeValueRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
+import org.h2.jdbc.JdbcSQLException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.After;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 public abstract class TestBase {
@@ -40,29 +56,32 @@ public abstract class TestBase {
     @Autowired
     protected Engine engine;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private List<String> tableNames;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @PostConstruct
+    public void init() {
+        tableNames = entityManager.getMetamodel().getEntities().stream()
+                .filter(e -> e.getJavaType().getAnnotation(Table.class) != null)
+                .map(e -> e.getJavaType().getAnnotation(Table.class).name())
+                .sorted(Comparator.naturalOrder())
+                .collect(Collectors.toList());
+    }
+
+
     @After
     public void cleanup() {
-        SessionFactory sessionFactory = sessionManager.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
-            QueryManager.clearCaches();
-
-            // Tøm tabeller efter hver test
-            // Undersøg gerne om der findes bedre metoder som også faktisk virker
-            Class[] classes = new Class[] {
-                    CompanyRecord.class,
-                    CompanyUnitRecord.class,
-                    ParticipantRecord.class,
-                    LastUpdated.class,
-            };
-            Transaction transaction = session.beginTransaction();
-            for (Class cls : classes) {
-                List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
-                for (DatabaseEntry e : eList) {
-                    session.delete(e);
-                }
-            }
-            transaction.commit();
-            QueryManager.clearCaches();
+        System.out.println("Cleaning up database:");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, tableNames.toArray(new String[tableNames.size()]));
+        for (String tableName : tableNames) {
+            System.out.println("count table "+tableName+": "+JdbcTestUtils.countRowsInTable(jdbcTemplate, tableName));
         }
+        QueryManager.clearCaches();
+        System.out.println("Database cleaned");
     }
+
 }

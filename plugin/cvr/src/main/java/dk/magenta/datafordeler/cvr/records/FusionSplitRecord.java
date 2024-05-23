@@ -63,8 +63,7 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_ORGANIZATION_NAME = "organisationsNavn";
 
     @OneToMany(mappedBy = BaseNameRecord.DB_FIELD_FUSION, targetEntity = BaseNameRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(value = IO_FIELD_ORGANIZATION_NAME)
+        @JsonProperty(value = IO_FIELD_ORGANIZATION_NAME)
     private Set<BaseNameRecord> name;
 
     public Set<BaseNameRecord> getName() {
@@ -90,8 +89,7 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_INCOMING = "indgaaende";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_FUSION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Where(clause = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=false")
+        @Where(clause = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=false")
     @JsonProperty(value = IO_FIELD_INCOMING)
     private Set<AttributeRecord> incoming = new HashSet<>();
 
@@ -135,8 +133,7 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_OUTGOING = "udgaaende";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_FUSION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Where(clause = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=true")
+        @Where(clause = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=true")
     @JsonProperty(value = IO_FIELD_OUTGOING)
     private Set<AttributeRecord> outgoing = new HashSet<>();
 

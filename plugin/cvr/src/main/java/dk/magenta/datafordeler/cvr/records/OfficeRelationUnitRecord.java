@@ -86,8 +86,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_NAME = "navne";
 
     @OneToMany(mappedBy = BaseNameRecord.DB_FIELD_OFFICE_UNIT, targetEntity = BaseNameRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(value = IO_FIELD_NAME)
+        @JsonProperty(value = IO_FIELD_NAME)
     private Set<BaseNameRecord> names = new HashSet<>();
 
     public Set<BaseNameRecord> getNames() {
@@ -113,8 +112,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_OFFICE_UNIT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(value = IO_FIELD_LOCATION_ADDRESS)
+        @JsonProperty(value = IO_FIELD_LOCATION_ADDRESS)
     private Set<AddressRecord> locationAddress = new HashSet<>();
 
     public void setLocationAddress(Set<AddressRecord> locationAddress) {

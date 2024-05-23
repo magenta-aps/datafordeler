@@ -23,7 +23,6 @@ public class GeoIntegrationTest extends TestBase {
     @Autowired
     private PluginManager pluginManager;
 
-
     @Test
     public void testLookup() {
         // Mostly for our own sake during developement
@@ -37,11 +36,7 @@ public class GeoIntegrationTest extends TestBase {
         if (geoPlugin != null) {
 
             Session session = sessionManager.getSessionFactory().openSession();
-            //System.out.println(QueryManager.getFirstQuery(session, query));
             QueryManager.getAllEntitySets(session, query, CompanyRecord.class);
-
-            //AccessAddressQuery q = new AccessAddressQuery();
-            //q.setMunicipalityCode();
 
         }
     }

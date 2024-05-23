@@ -400,7 +400,11 @@ public class QueryTest extends TestBase {
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        AreaRestriction a = AreaRestriction.lookup(plugin.getName() + ":" + CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER + ":" + CprAreaRestrictionDefinition.RESTRICTION_KOMMUNE_SERMERSOOQ);
+        AreaRestriction a = AreaRestriction.lookup(
+                plugin.getName() + ":" +
+                        CprAreaRestrictionDefinition.RESTRICTIONTYPE_KOMMUNEKODER + ":" +
+                        CprAreaRestrictionDefinition.RESTRICTION_KOMMUNE_SERMERSOOQ
+        );
         testUserDetails.giveAccess(a);
         this.applyAccess(testUserDetails);
 

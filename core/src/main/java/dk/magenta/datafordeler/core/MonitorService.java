@@ -133,7 +133,7 @@ public class MonitorService {
         loggerHelper.urlResponsePersistablelogs(response.getStatus(), "Done checkPulls");
     }
 
-    @Value("${dafo.error_file:cache/log/${PID}.err}")
+    @Value("${dafo.error_file:cache/log/dafo.err}")
     private String errorFileConfig;
 
     @RequestMapping(path = "/errors")
@@ -142,7 +142,7 @@ public class MonitorService {
         loggerHelper.urlInvokePersistablelogs("checkErrors");
 
         PrintWriter output = response.getWriter();
-        String errorFilePath = this.errorFileConfig.replace("${PID}", new ApplicationPid().toString());
+        String errorFilePath = this.errorFileConfig;
         File errorFile = new File(errorFilePath);
         String filePath = errorFile.getAbsolutePath();
         if (!errorFile.exists()) {

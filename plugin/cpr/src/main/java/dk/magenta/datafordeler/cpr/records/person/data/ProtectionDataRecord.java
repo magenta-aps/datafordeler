@@ -123,8 +123,7 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = DB_FIELD_CORRECTION_OF)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private final Set<ProtectionDataRecord> correctors = new HashSet<>();
+        private final Set<ProtectionDataRecord> correctors = new HashSet<>();
 
     public Set<ProtectionDataRecord> getCorrectors() {
         return this.correctors;

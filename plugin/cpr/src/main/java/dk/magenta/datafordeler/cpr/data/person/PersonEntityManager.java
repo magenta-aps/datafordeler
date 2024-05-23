@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import dk.magenta.datafordeler.core.Environment;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
@@ -8,6 +9,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.util.CronUtil;
+import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.cpr.direct.CprDirectPasswordUpdate;
@@ -26,7 +28,6 @@ import org.hibernate.query.Query;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -37,30 +38,13 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord, PersonEntity> {
 
-    @Value("${dafo.cpr.person.subscription-enabled:false}")
-    private boolean setupSubscriptionEnabled;
-
-    @Value("${dafo.cpr.person.local-subscription-folder:cache}")
-    private String localSubscriptionFolder;
-
-    @Value("${dafo.cpr.person.jobid:0}")
-    private int jobId;
-
-    @Value("${dafo.cpr.person.customer-id:0}")
-    private int customerId;
-
-    @Value("${dafo.cpr.person.direct.password-change-enabled:false}")
-    private boolean directPasswordChangeEnabled;
-
-    @Value("${dafo.cpr.person.subscription.generate-schedule:0 4 * * *}")
-    private String subscriptionGenerateSchedule;
-
-    @Value("${dafo.cpr.testpersonList}")
-    private String testpersonList;
+    @Autowired
+    private CprConfigurationManager configurationManager;
 
     @Autowired
     private PersonEntityRecordService personEntityService;
@@ -81,19 +65,19 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     }
 
     public int getJobId() {
-        return this.jobId;
+        return configurationManager.getConfiguration().getJobId();
     }
 
     public int getCustomerId() {
-        return this.customerId;
+        return configurationManager.getConfiguration().getCustomerId();
     }
 
     public String getLocalSubscriptionFolder() {
-        return this.localSubscriptionFolder;
+        return configurationManager.getConfiguration().getLocalSubscriptionFolder();
     }
 
     public boolean isSetupSubscriptionEnabled() {
-        return this.setupSubscriptionEnabled;
+        return configurationManager.getConfiguration().isSubscriptionEnabled();
     }
 
     @Override
@@ -140,23 +124,22 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 cleanDemoData();
             }
             super.parseData(registrationData, importMetadata);
-            if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicCprNumbers.isEmpty() && importMetadata.getImportConfiguration().size() == 0) {
+            if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
                 this.createSubscription(this.nonGreenlandicCprNumbers);
             }
-            if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicFatherCprNumbers.isEmpty() && importMetadata.getImportConfiguration().size() == 0) {
+            if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicFatherCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
                 try (Session session = sessionManager.getSessionFactory().openSession()) {
                     PersonRecordQuery personQuery = new PersonRecordQuery();
                     personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicFatherCprNumbers);
                     personQuery.applyFilters(session);
                     List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-
                     for (PersonEntity person : personEntities) {
                         nonGreenlandicFatherCprNumbers.remove(person.getPersonnummer());
                     }
                 }
                 this.createSubscription(this.nonGreenlandicFatherCprNumbers);
             }
-            if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicChildrenCprNumbers.isEmpty() && importMetadata.getImportConfiguration().size() == 0) {
+            if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicChildrenCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
                 try (Session session = sessionManager.getSessionFactory().openSession()) {
                     PersonRecordQuery personQuery = new PersonRecordQuery();
                     personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicChildrenCprNumbers);
@@ -183,13 +166,17 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     public void cleanDemoData() {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            String[] testPersonList = testpersonList.split(",");
-            personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, Arrays.asList(testPersonList));
+            String[] testPersonList = configurationManager.getConfiguration().getTestpersonList().split(",");
+            personQuery.setParameter(
+                    PersonRecordQuery.PERSONNUMMER,
+                    Arrays.stream(testPersonList).filter(s -> !s.isBlank()).map(String::strip).collect(Collectors.toList())
+            );
             session.beginTransaction();
             personQuery.setPageSize(1000);
             personQuery.applyFilters(session);
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             for (PersonEntity personForDeletion : personEntities) {
+                System.out.println("Cleaning "+personForDeletion.getPersonnummer());
                 session.delete(personForDeletion);
             }
             session.getTransaction().commit();
@@ -470,7 +457,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
     @PostConstruct
     public void setupDirectPasswordChange() {
-        if (this.directPasswordChangeEnabled) {
+        if (configurationManager.getConfiguration().isDirectPasswordChangeEnable()) {
             try {
                 Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
                 ScheduleBuilder scheduleBuilder = CronScheduleBuilder.monthlyOnDayAndHourAndMinute(1, 8, 0);
@@ -492,9 +479,9 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
     @PostConstruct
     public void setupSubscriptionUploader() {
-        if (setupSubscriptionEnabled) {
+        if (configurationManager.getConfiguration().isSubscriptionEnabled()) {
             try {
-                String cronExpression = CronUtil.reformatSchedule(this.subscriptionGenerateSchedule);
+                String cronExpression = CronUtil.reformatSchedule(configurationManager.getConfiguration().getSubscriptionGenerateSchedule());
                 if (cronExpression != null) {
                     CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
                     Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
