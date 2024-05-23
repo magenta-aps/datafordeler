@@ -23,11 +23,8 @@ import java.net.URISyntaxException;
 @org.springframework.context.annotation.Configuration
 public class SamlMetadataConfiguration {
 
-    @Autowired
-    TokenConfigProperties config;
-
     @Bean
-    public MetadataProvider samlMetadataProvider()
+    public MetadataProvider samlMetadataProvider(TokenConfigProperties config)
             throws ResourceException, MetadataProviderException, URISyntaxException, IOException {
         String path = config.getIssuerMetadataPath();
         File metadataFile;
