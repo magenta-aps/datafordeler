@@ -1,15 +1,10 @@
 package dk.magenta.datafordeler.core.user;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Component
 public class TokenConfigProperties {
-
 
     @Value("${dafo.tokenvalidation.time-skew-in-seconds:5}")
     private int timeSkewInSeconds = 5;

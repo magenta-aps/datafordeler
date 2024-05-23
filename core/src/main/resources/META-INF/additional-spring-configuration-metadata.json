@@ -1,0 +1,133 @@
+{
+  "properties": [
+    {
+      "name": "dafo.statistics.enabled",
+      "type": "java.lang.String",
+      "description": "Description for dafo.statistics.enabled."
+    },
+    {
+      "name": "dafo.cpr.person.direct.allowDirectPersonLookup",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.person.direct.allowDirectPersonLookup."
+    },
+    {
+      "name": "dafo.cpr.person.direct.password-change-enabled",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.person.direct.password-change-enabled."
+    },
+    {
+      "name": "dafo.cpr.encryption.keyfile",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.encryption.keyfile."
+    },
+    {
+      "name": "dafo.cpr.proxy-url",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.proxy-url."
+    },
+    {
+      "name": "dafo.cpr.local-copy-folder",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.local-copy-folder."
+    },
+    {
+      "name": "dafo.cpr.person.subscription-enabled",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.person.subscription-enabled."
+    },
+    {
+      "name": "dafo.cpr.person.subscription.generate-schedule",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.person.subscription.generate-schedule."
+    },
+    {
+      "name": "dafo.cpr.person.local-subscription-folder",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.person.local-subscription-folder."
+    },
+    {
+      "name": "dafo.cpr.person.customer-id",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.person.customer-id."
+    },
+    {
+      "name": "dafo.cpr.person.jobid",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cpr.person.jobid."
+    },
+    {
+      "name": "dafo.cvr.demoCompanyFile",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cvr.demoCompanyFile."
+    },
+    {
+      "name": "dafo.cvr.demoUnitFile",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cvr.demoUnitFile."
+    },
+    {
+      "name": "dafo.cvr.demoParticipantFile",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cvr.demoParticipantFile."
+    },
+    {
+      "name": "dafo.tokenvalidation.issuer-metadata-path",
+      "type": "java.lang.String",
+      "description": "Description for dafo.tokenvalidation.issuer-metadata-path."
+    },
+    {
+      "name": "dafo.tokenvalidation.time-skew-in-seconds",
+      "type": "java.lang.String",
+      "description": "Description for dafo.tokenvalidation.time-skew-in-seconds."
+    },
+    {
+      "name": "dafo.tokenvalidation.max-assertion-time-in-seconds",
+      "type": "java.lang.String",
+      "description": "Description for dafo.tokenvalidation.max-assertion-time-in-seconds."
+    },
+    {
+      "name": "dafo.tokenvalidation.audience-URI",
+      "type": "java.lang.String",
+      "description": "Description for dafo.tokenvalidation.audience-URI."
+    },
+    {
+      "name": "dafo.cron.enabled",
+      "type": "java.lang.String",
+      "description": "Description for dafo.cron.enabled."
+    },
+    {
+      "name": "dafo.pull.enabled",
+      "type": "java.lang.String",
+      "description": "Description for dafo.pull.enabled."
+    },
+    {
+      "name": "dafo.dump.enabled",
+      "type": "java.lang.String",
+      "description": "Description for dafo.dump.enabled."
+    },
+    {
+      "name": "dafo.error_file",
+      "type": "java.lang.String",
+      "description": "Description for dafo.error_file."
+    },
+    {
+      "name": "pitu.sdn.whitelist",
+      "type": "java.lang.String",
+      "description": "Description for pitu.sdn.whitelist."
+    },
+    {
+      "name": "pitu.idn.whitelist",
+      "type": "java.lang.String",
+      "description": "Description for pitu.idn.whitelist."
+    },
+    {
+      "name": "pitu.base.url",
+      "type": "java.lang.String",
+      "description": "Description for pitu.base.url."
+    },
+    {
+      "name": "ip.whitelist",
+      "type": "java.lang.String",
+      "description": "Description for ip.whitelist."
+    }
+  ] }

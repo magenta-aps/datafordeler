@@ -19,15 +19,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.security.GeneralSecurityException;
 
 @ComponentScan({"dk.magenta.datafordeler", "dk.magenta.datafordeler.core", "dk.magenta.datafordeler.core.database", "dk.magenta.datafordeler.core.util"})
 @EntityScan("dk.magenta.datafordeler")
 @ServletComponentScan
 @SpringBootApplication
 @EnableScheduling
-@PropertySource("classpath:application.properties")
-@Configuration
 public class Application {
 
     private static final Logger log = LogManager.getLogger(Application.class.getCanonicalName());
@@ -37,11 +37,8 @@ public class Application {
     public static void main(final String[] args) throws Exception {
 
         //Used for finding the password for direct lookup in cpr
-        if (args.length == 3 && args[0].equals("DECRYPT")) {
-            File encryptionFile = new File(args[1]);
-            byte[] lastBytes = Files.readAllBytes(new File(args[2]).toPath());
-            String pass = Encryption.decrypt(encryptionFile, lastBytes);
-            System.out.println(pass);
+        if (shouldDecrypt(args)) {
+            showDecrypt(args);
             return;
         }
 
@@ -59,17 +56,14 @@ public class Application {
         }
     }
 
-    @Bean
-    public TaskScheduler taskScheduler() {
-        return new ConcurrentTaskScheduler(); //single threaded by default
+    private static boolean shouldDecrypt(String[] args) {
+        return (args.length == 3 && args[0].equals("DECRYPT"));
     }
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
-        PropertySourcesPlaceholderConfigurer p = new PropertySourcesPlaceholderConfigurer();
-        p.setLocation(new FileSystemResource("/app/core/application.properties"));
-        //p.setIgnoreUnresolvablePlaceholders(true);
-        return p;
+    private static void showDecrypt(String[] args) throws IOException, GeneralSecurityException {
+        File encryptionFile = new File(args[1]);
+        byte[] lastBytes = Files.readAllBytes(new File(args[2]).toPath());
+        String pass = Encryption.decrypt(encryptionFile, lastBytes);
+        System.out.println(pass);
     }
 
 }

@@ -11,7 +11,7 @@ RUN mkdir -p /app/core && mkdir -p /app/plugin/jar && mkdir -p /app/core/conf \
  && mv /code/plugin/jar/*.jar /app/plugin/jar/
 
 # RUN rm -r /code
-COPY core/application.properties /app/core/application.properties
+# COPY core/application.properties /app/core/application.properties
 
 WORKDIR /app/core
 

@@ -60,7 +60,6 @@ import java.util.stream.Collectors;
 
 @RunWith(OrderedRunner.class)
 @ContextConfiguration(classes = Application.class)
-@PropertySource("classpath:application-test.properties")
 @TestPropertySource(
     properties = {
         "spring.jackson.serialization.indent-output=true",
