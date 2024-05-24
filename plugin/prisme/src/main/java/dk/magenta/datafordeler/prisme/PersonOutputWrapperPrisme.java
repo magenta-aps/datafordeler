@@ -112,15 +112,10 @@ public class PersonOutputWrapperPrisme extends OutputWrapper<PersonEntity> {
         }
 
         root.put("adressebeskyttelse", false);
-        /*Collection<ProtectionDataRecord> personProtectionData = input.getProtection();
-        if (personProtectionData != null && !personProtectionData.isEmpty()) {
-            for (ProtectionDataRecord personProtectionDataItem : personProtectionData) {
-                if (personProtectionDataItem.getRegistrationTo() == null && (personProtectionDataItem.getEffectTo() == null || personProtectionDataItem.getEffectTo().isAfter(OffsetDateTime.now())) && personProtectionDataItem.getProtectionType() == 1) {
-                    root.put("adressebeskyttelse", true);
-                    break;
-                }
-            }
-        }*/
+        ProtectionDataRecord personProtectionData = this.getLatest(input.getProtection().stream().filter(p -> p.getProtectionType() == 1).collect(Collectors.toList()));
+        if (personProtectionData != null) {
+            root.put("adressebeskyttelse", true);
+        }
 
         PersonCoreDataRecord personCoreData = this.getLatest(input.getCore());
         if (personCoreData != null) {
