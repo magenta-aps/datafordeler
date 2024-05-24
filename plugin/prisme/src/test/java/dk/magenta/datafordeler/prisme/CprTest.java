@@ -771,7 +771,7 @@ public class CprTest extends TestBase {
         Assert.assertEquals("G", personObject.get("civilstand").asText());
         Assert.assertEquals("2017-10-12", personObject.get("civilstandsdato").asText());
         Assert.assertEquals("0202994321", personObject.get("ægtefælleCprNummer").asText());
-        Assert.assertEquals(false, personObject.get("adressebeskyttelse").asBoolean());
+        Assert.assertEquals(true, personObject.get("adressebeskyttelse").asBoolean());
         Assert.assertEquals("K", personObject.get("køn").asText());
         Assert.assertEquals(5, personObject.get("statuskode").asInt());
         Assert.assertEquals("0101641234", personObject.get("far").asText());
