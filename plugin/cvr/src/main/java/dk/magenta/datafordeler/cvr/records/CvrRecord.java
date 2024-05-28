@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
 
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 /**
@@ -60,6 +62,7 @@ public abstract class CvrRecord extends DatabaseEntry {
 
     public final List<CvrRecord> fullSubs() {
         ArrayList<CvrRecord> subs = new ArrayList<>();
+        //this.traverse(null, subs::add);
         this.addSubs(subs);
         return subs;
     }
@@ -70,6 +73,13 @@ public abstract class CvrRecord extends DatabaseEntry {
             if (sub != null) {
                 sub.addSubs(set);
             }
+        }
+    }
+
+
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        if (itemCallback != null) {
+            itemCallback.accept(this);
         }
     }
 

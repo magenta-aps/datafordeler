@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.records;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
@@ -163,6 +164,11 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         this.registrationTo = registrationTo;
     }
 
+
+    public boolean hasRegistrationAt(OffsetDateTime time) {
+        return (this.getRegistrationFrom() == null || this.getRegistrationFrom().isBefore(time)) && (this.getRegistrationTo() == null || this.getRegistrationTo().isAfter(time));
+    }
+
     /**
      * Given a Collection of CvrRecord objects, group them into buckets that share
      * bitemporality. That way, we can treat all records in a bucket the same way,
@@ -227,6 +233,10 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             this.validity = new CvrRecordPeriod();
         }
         this.validity.setValidTo(convertTime(offsetDateTime));
+    }
+
+    public boolean hasEffectAt(OffsetDateTime time) {
+        return this.validity == null || this.validity.isValidAt(convertTime(time));
     }
 
     @JsonIgnore

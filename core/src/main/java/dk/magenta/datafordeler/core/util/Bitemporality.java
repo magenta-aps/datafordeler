@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.TemporalAccessor;
+import java.util.*;
 
 public class Bitemporality implements Comparable<Bitemporality> {
     public OffsetDateTime registrationFrom;
@@ -142,8 +143,34 @@ public class Bitemporality implements Comparable<Bitemporality> {
         return time != null ? OffsetDateTime.from(time) : null;
     }
 
+    public boolean emptyEffect() {
+        return (this.effectFrom != null && this.effectTo != null && this.effectFrom.isEqual(this.effectTo));
+    }
+
     @Override
     public int compareTo(Bitemporality o) {
         return BitemporalityComparator.all(this.getClass()).compare(this, o);
     }
+
+    public static List<Bitemporality> unionOnEffect(Collection<Bitemporality> items) {
+        // Finder foreningsmængen af bitemporaliteter udfra effekt, dvs. reducerer overlappende bitemporaliteter til én
+        ArrayList<Bitemporality> result = new ArrayList<>();
+        Bitemporality current = null;
+        ArrayList<Bitemporality> sorted = new ArrayList<>(items);
+        sorted.sort(BitemporalityComparator.EFFECT);
+        for (Bitemporality item : sorted) {
+            if (current == null || (item.effectFrom != null && current.effectTo != null && item.effectFrom.isAfter(current.effectTo))) {
+                // Ingen current
+                current = new Bitemporality();
+                current.effectFrom = item.effectFrom;
+                current.effectTo = item.effectTo;
+                result.add(current);
+            } else if (current.effectTo != null && (item.effectTo == null || item.effectTo.isAfter(current.effectTo))) {
+                // Overlap
+                current.effectTo = item.effectTo;
+            }
+        }
+        return result;
+    }
+
 }

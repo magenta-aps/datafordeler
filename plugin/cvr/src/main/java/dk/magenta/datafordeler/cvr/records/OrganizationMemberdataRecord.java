@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 
 @Entity
@@ -90,8 +92,8 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         }
     }
 
-    public Set<AttributeRecord> getAttributes() {
-        return this.attributes;
+    public AttributeRecordSet getAttributes() {
+        return new AttributeRecordSet(this.attributes);
     }
 
 
@@ -121,5 +123,10 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         ArrayList<CvrRecord> subs = new ArrayList<>(super.subs());
         subs.addAll(this.attributes);
         return subs;
+    }
+
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getAttributes().traverse(setCallback, itemCallback);
     }
 }

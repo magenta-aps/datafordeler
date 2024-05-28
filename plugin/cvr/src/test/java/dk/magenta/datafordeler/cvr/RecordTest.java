@@ -476,6 +476,7 @@ public class RecordTest extends TestBase {
                 if (companyUnitRecord == null) {
                     System.out.println("Didn't find p number " + pNumber);
                 } else {
+                    // For some reason, json serialization omits non-current bitemporal records, though they exist in the fetched data
                     compareJson(units.get(pNumber), objectMapper.valueToTree(companyUnitRecord), Collections.singletonList("root"));
                 }
             }

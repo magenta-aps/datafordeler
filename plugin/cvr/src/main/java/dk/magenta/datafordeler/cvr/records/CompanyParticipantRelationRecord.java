@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
 import org.hibernate.annotations.OnDelete;
@@ -15,6 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Record for Company and CompanyUnit relationParticipantRecord relations.
@@ -101,8 +103,8 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         }
     }
 
-    public Set<OfficeRelationRecord> getOffices() {
-        return this.offices;
+    public RecordSet<OfficeRelationRecord> getOffices() {
+        return new RecordSet<>(this.offices);
     }
 
 
@@ -128,8 +130,8 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         }
     }
 
-    public Set<OrganizationRecord> getOrganizations() {
-        return this.organizations;
+    public RecordSet<OrganizationRecord> getOrganizations() {
+        return new RecordSet<>(this.organizations);
     }
 
 
@@ -300,4 +302,20 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
                 Objects.equals(offices, that.offices) &&
                 Objects.equals(organizations, that.organizations);
     }*/
+
+
+    @Override
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getOrganizations().traverse(setCallback, itemCallback);
+        this.getOffices().traverse(setCallback, itemCallback);
+        RelationParticipantRecord relationParticipantRecord = this.getRelationParticipantRecord();
+        if (relationParticipantRecord != null) {
+            relationParticipantRecord.traverse(setCallback, itemCallback);
+        }
+        RelationCompanyRecord relationCompanyRecord = this.getRelationCompanyRecord();
+        if (relationCompanyRecord != null) {
+            relationCompanyRecord.traverse(setCallback, itemCallback);
+        }
+    }
 }

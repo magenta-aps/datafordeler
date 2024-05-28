@@ -5,13 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Record for one participating organization on a Company or CompanyUnit
@@ -76,8 +79,8 @@ public class OrganizationRecord extends CvrRecord {
     @JsonProperty(value = IO_FIELD_NAME)
     public Set<BaseNameRecord> names;
 
-    public Set<BaseNameRecord> getNames() {
-        return this.names;
+    public BitemporalSet<BaseNameRecord> getNames() {
+        return new BitemporalSet<>(this.names);
     }
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -132,8 +135,8 @@ public class OrganizationRecord extends CvrRecord {
         }
     }
 
-    public Set<AttributeRecord> getAttributes() {
-        return this.attributes;
+    public AttributeRecordSet getAttributes() {
+        return new AttributeRecordSet(this.attributes);
     }
 
 
@@ -164,8 +167,8 @@ public class OrganizationRecord extends CvrRecord {
         }
     }
 
-    public Set<OrganizationMemberdataRecord> getMemberData() {
-        return this.memberData;
+    public RecordSet<OrganizationMemberdataRecord> getMemberData() {
+        return new RecordSet<>(this.memberData);
     }
 
 
@@ -220,5 +223,14 @@ public class OrganizationRecord extends CvrRecord {
         subs.addAll(this.attributes);
         subs.addAll(this.memberData);
         return subs;
+    }
+
+
+
+
+
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getMemberData().traverse(setCallback, itemCallback);
     }
 }
