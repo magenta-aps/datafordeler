@@ -470,8 +470,6 @@ public class RecordTest extends TestBase {
         HashMap<Integer, JsonNode> units = this.loadUnit("/unit.json");
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             for (int pNumber : units.keySet()) {
-                System.out.println("------------------------");
-                System.out.println(pNumber);
                 HashMap<String, Object> filter = new HashMap<>();
                 filter.put("pNumber", pNumber);
                 CompanyUnitRecord companyUnitRecord = QueryManager.getItem(session, CompanyUnitRecord.class, filter);
