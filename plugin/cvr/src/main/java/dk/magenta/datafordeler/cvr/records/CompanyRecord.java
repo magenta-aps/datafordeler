@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import org.hibernate.Session;
 import org.hibernate.annotations.*;
@@ -20,6 +21,7 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -1180,8 +1182,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<AttributeRecord> getAttributes() {
-        return this.attributes;
+    public AttributeRecordSet getAttributes() {
+        return new AttributeRecordSet(this.attributes);
     }
 
 
@@ -1292,8 +1294,8 @@ public class CompanyRecord extends CvrEntityRecord {
     @JsonProperty(value = IO_FIELD_FUSIONS)
     private Set<FusionSplitRecord> fusions = new HashSet<>();
 
-    public Set<FusionSplitRecord> getFusions() {
-        return this.fusions;
+    public RecordSet<FusionSplitRecord> getFusions() {
+        return new RecordSet<>(this.fusions);
     }
 
     public void setFusions(Set<FusionSplitRecord> fusions) {
@@ -1334,8 +1336,8 @@ public class CompanyRecord extends CvrEntityRecord {
     @JsonProperty(value = IO_FIELD_SPLITS)
     private Set<FusionSplitRecord> splits = new HashSet<>();
 
-    public Set<FusionSplitRecord> getSplits() {
-        return this.splits;
+    public RecordSet<FusionSplitRecord> getSplits() {
+        return new RecordSet<>(this.splits);
     }
 
     public void setSplits(Set<FusionSplitRecord> splits) {
@@ -1658,6 +1660,38 @@ public class CompanyRecord extends CvrEntityRecord {
         ArrayList<BaseQuery> queries = new ArrayList<>();
         queries.addAll(this.locationAddress.stream().map(a -> a.getAssoc()).flatMap(x -> x.stream()).collect(Collectors.toList()));
         return queries;
+    }
+
+    @Override
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        this.getNames().traverse(setCallback, itemCallback);
+        this.getSecondaryNames().traverse(setCallback, itemCallback);
+        this.getLocationAddress().traverse(setCallback, itemCallback);
+        this.getPostalAddress().traverse(setCallback, itemCallback);
+        this.getPhoneNumber().traverse(setCallback, itemCallback);
+        this.getSecondaryPhoneNumber().traverse(setCallback, itemCallback);
+        this.getFaxNumber().traverse(setCallback, itemCallback);
+        this.getSecondaryFaxNumber().traverse(setCallback, itemCallback);
+        this.getEmailAddress().traverse(setCallback, itemCallback);
+        this.getHomepage().traverse(setCallback, itemCallback);
+        this.getMandatoryEmailAddress().traverse(setCallback, itemCallback);
+        this.getLifecycle().traverse(setCallback, itemCallback);
+        this.getPrimaryIndustry().traverse(setCallback, itemCallback);
+        this.getSecondaryIndustry1().traverse(setCallback, itemCallback);
+        this.getSecondaryIndustry2().traverse(setCallback, itemCallback);
+        this.getSecondaryIndustry3().traverse(setCallback, itemCallback);
+        this.getStatus().traverse(setCallback, itemCallback);
+        this.getCompanyStatus().traverse(setCallback, itemCallback);
+        this.getCompanyForm().traverse(setCallback, itemCallback);
+        this.getYearlyNumbers().traverse(setCallback, itemCallback);
+        this.getQuarterlyNumbers().traverse(setCallback, itemCallback);
+        this.getMonthlyNumbers().traverse(setCallback, itemCallback);
+        this.getAttributes().traverse(setCallback, itemCallback);
+        this.getProductionUnits().traverse(setCallback, itemCallback);
+        this.getParticipants().traverse(setCallback, itemCallback);
+        this.getFusions().traverse(setCallback, itemCallback);
+        this.getSplits().traverse(setCallback, itemCallback);
+        this.getMetadata().traverse(setCallback, itemCallback);
     }
 
 }

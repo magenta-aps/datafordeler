@@ -1,12 +1,16 @@
 package dk.magenta.datafordeler.cvr.records;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
 import org.hibernate.annotations.*;
@@ -17,6 +21,7 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Base record for Participant data, parsed from JSON into a tree of objects
@@ -478,8 +483,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<AttributeRecord> getAttributes() {
-        return this.attributes;
+    public AttributeRecordSet getAttributes() {
+        return new AttributeRecordSet(this.attributes);
     }
 
 
@@ -679,5 +684,20 @@ public class ParticipantRecord extends CvrEntityRecord {
             subs.add(this.metadata);
         }
         return subs;
+    }
+
+
+    @Override
+    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+        this.getNames().traverse(setCallback, itemCallback);
+        this.getLocationAddress().traverse(setCallback, itemCallback);
+        this.getPostalAddress().traverse(setCallback, itemCallback);
+        this.getBusinessAddress().traverse(setCallback, itemCallback);
+        this.getPhoneNumber().traverse(setCallback, itemCallback);
+        this.getFaxNumber().traverse(setCallback, itemCallback);
+        this.getEmailAddress().traverse(setCallback, itemCallback);
+        this.getAttributes().traverse(setCallback, itemCallback);
+        this.getCompanyRelation().traverse(setCallback, itemCallback);
+        this.getMetadata().traverse(setCallback, itemCallback);
     }
 }

@@ -171,6 +171,11 @@ public class CvrLoadDemodatasetTest extends TestBase {
      */
     @Test
     public void testCleanTestdataThroughPull() throws Exception {
+        int prior = 0;
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, CompanyRecord.class);
+            prior = companyRecords.size();
+        }
 
         when(plugin.getRegisterManager(), registerManager, "/EMPTYGLBASETEST.json");
 
@@ -179,7 +184,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assert.assertEquals(0, companyRecords.size());//Validate that 0 company from the file persondata is initiated
+            Assert.assertEquals(prior, companyRecords.size());//Validate that 0 company from the file persondata is initiated
         }
 
         this.load();
@@ -198,7 +203,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assert.assertEquals(4, companyRecords.size());//Validate that 4 company from the file persondata is initiated
+            Assert.assertEquals(4+prior, companyRecords.size());//Validate that 4 company from the file persondata is initiated
         }
 
         when(plugin.getRegisterManager(), registerManager, "/EMPTYGLBASETEST.json");
@@ -209,7 +214,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> personEntities = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assert.assertEquals(0, personEntities.size());//Validate that 0 company from the file persondata is initiated
+            Assert.assertEquals(prior, personEntities.size());//Validate that 0 company from the file persondata is initiated
         }
     }
 
