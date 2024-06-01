@@ -241,13 +241,13 @@ public class RecordTest extends TestBase {
             }
         }
 
+        this.cleanup();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            this.cleanup();
-            //Assert.assertEquals(0, QueryManager.getAllEntities(session, CompanyRecord.class).size());
-            Class[] inspect = new Class[]{CompanyRecord.class, CompanyUnitRecord.class, ParticipantRecord.class};
+            Assert.assertEquals(0, QueryManager.getAllEntities(session, CompanyRecord.class).size());
+            /*Class[] inspect = new Class[]{CompanyRecord.class, CompanyUnitRecord.class, ParticipantRecord.class};
             for (Class c : inspect) {
                 System.out.println(c.getSimpleName() + ": " + QueryManager.getAllEntities(session, c).size());
-            }
+            }*/
         }
 
         loadCompany("/company_in.json");

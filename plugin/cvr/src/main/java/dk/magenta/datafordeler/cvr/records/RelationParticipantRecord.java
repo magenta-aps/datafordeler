@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import org.apache.tomcat.jni.Address;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
@@ -89,7 +90,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_NAME = "navne";
 
     @OneToMany(targetEntity = BaseNameRecord.class, mappedBy = BaseNameRecord.DB_FIELD_PARTICIPANT_RELATION, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_NAME)
     private Set<BaseNameRecord> names = new HashSet<>();
 
@@ -115,7 +115,7 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     public static final String DB_FIELD_LOCATION_ADDRESS = "locationAddress";
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
 
-    @OneToMany(targetEntity = AddressRecord.class, mappedBy = AddressRecord.DB_FIELD_PARTICIPANT_RELATION, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = AddressRecord.class, mappedBy = AddressRecord.DB_FIELD_PARTICIPANT_RELATION, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -132,9 +132,12 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     private Set<AddressRecord> locationAddress = new HashSet<>();
 
     public void setLocationAddress(Set<AddressRecord> locationAddress) {
+        System.out.println("setLocationAddress on "+this.getId());
+        System.out.println("  existing locationAddress: "+this.locationAddress.size());
+
         this.locationAddress = locationAddress;
-        for (AddressRecord name : locationAddress) {
-            name.setRelationParticipantRecord(this);
+        for (AddressRecord address : locationAddress) {
+            address.setRelationParticipantRecord(this);
         }
     }
 
@@ -215,9 +218,9 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback);
     }
 }

@@ -32,6 +32,9 @@ public abstract class CvrBitemporalDataMetaRecord extends CvrBitemporalDataRecor
         this.companyMetadataRecord = companyMetadataRecord;
     }
 
+    public MetadataRecord getCompanyMetadataRecord() {
+        return this.companyMetadataRecord;
+    }
 
     public static final String DB_FIELD_UNIT_METADATA = "unitMetadataRecord";
 
@@ -44,6 +47,9 @@ public abstract class CvrBitemporalDataMetaRecord extends CvrBitemporalDataRecor
         this.unitMetadataRecord = unitMetadataRecord;
     }
 
+    public MetadataRecord getUnitMetadataRecord() {
+        return this.unitMetadataRecord;
+    }
 
     public static final String DB_FIELD_PARTICIPANT_METADATA = "participantMetadataRecord";
 
@@ -56,4 +62,7 @@ public abstract class CvrBitemporalDataMetaRecord extends CvrBitemporalDataRecor
         this.participantMetadataRecord = participantMetadataRecord;
     }
 
+    public ParticipantMetadataRecord getParticipantMetadataRecord() {
+        return this.participantMetadataRecord;
+    }
 }

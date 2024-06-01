@@ -36,6 +36,9 @@ public abstract class CvrBitemporalDataRecord extends CvrBitemporalRecord {
         this.companyUnitRecord = companyUnitRecord;
     }
 
+    public CompanyUnitRecord getCompanyUnitRecord() {
+        return this.companyUnitRecord;
+    }
 
     public static final String DB_FIELD_PARTICIPANT = "participantRecord";
 

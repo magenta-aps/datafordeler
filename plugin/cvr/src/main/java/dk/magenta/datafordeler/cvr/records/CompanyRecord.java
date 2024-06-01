@@ -1126,7 +1126,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(targetEntity = AttributeRecord.class, mappedBy = AttributeRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JsonProperty(value = IO_FIELD_ATTRIBUTES)
+    @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     private Set<AttributeRecord> attributes = new HashSet<>();
 
     public void setAttributes(Set<AttributeRecord> attributes) {
@@ -1633,7 +1633,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getNames().traverse(setCallback, itemCallback);
         this.getSecondaryNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);

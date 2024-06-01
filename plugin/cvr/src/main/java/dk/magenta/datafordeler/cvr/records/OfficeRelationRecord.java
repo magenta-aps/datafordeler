@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Record for one participant on a Company or CompanyUnit
@@ -100,8 +102,8 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
         }
     }
 
-    public Set<AttributeRecord> getAttributes() {
-        return this.attributes;
+    public AttributeRecordSet getAttributes() {
+        return new AttributeRecordSet(this.attributes);
     }
 
 
@@ -132,5 +134,14 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
             subs.add(this.officeRelationUnitRecord);
         }
         return subs;
+    }
+
+    @Override
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        this.getAttributes().traverse(setCallback, itemCallback);
+        if (this.officeRelationUnitRecord != null) {
+            this.officeRelationUnitRecord.traverse(setCallback, itemCallback);
+        }
+        super.traverse(setCallback, itemCallback);
     }
 }

@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -170,5 +172,11 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     @Override
     public IdentifiedEntity getNewest(Collection<IdentifiedEntity> collection) {
         return null;
+    }
+
+    public void delete(Session session) {
+        this.traverse(RecordSet::clear, session::delete);
+        session.delete(this);
+        session.remove(this);
     }
 }

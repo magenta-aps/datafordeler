@@ -75,13 +75,13 @@ public abstract class TestBase {
 
     @After
     public void cleanup() {
-        System.out.println("Cleaning up database:");
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, tableNames.toArray(new String[tableNames.size()]));
-        for (String tableName : tableNames) {
-            System.out.println("count table "+tableName+": "+JdbcTestUtils.countRowsInTable(jdbcTemplate, tableName));
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            for (CompanyRecord companyRecord : QueryManager.getAllEntities(session, CompanyRecord.class)) {
+                Transaction transaction = session.beginTransaction();
+                companyRecord.delete(session);
+                transaction.commit();
+            }
         }
-        QueryManager.clearCaches();
-        System.out.println("Database cleaned");
     }
 
 }

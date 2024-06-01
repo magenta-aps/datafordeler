@@ -435,8 +435,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getNewestName().traverse(setCallback, itemCallback);
         this.getNewestLocation().traverse(setCallback, itemCallback);
         this.getNewestPrimaryIndustry().traverse(setCallback, itemCallback);
@@ -452,5 +451,6 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
             quarterlyNumbersRecord.traverse(setCallback, itemCallback);
         }
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback);
     }
 }

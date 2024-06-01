@@ -73,6 +73,9 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         this.officeUnitRecord = officeUnitRecord;
     }
 
+    public OfficeRelationUnitRecord getOfficeUnitRecord() {
+        return this.officeUnitRecord;
+    }
 
     public static final String DB_FIELD_PARTICIPANT_RELATION = "relationParticipantRecord";
 
@@ -83,6 +86,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     public void setRelationParticipantRecord(RelationParticipantRecord relationParticipantRecord) {
         this.relationParticipantRecord = relationParticipantRecord;
+    }
+
+    public RelationParticipantRecord getRelationParticipantRecord() {
+        return this.relationParticipantRecord;
     }
 
 
@@ -325,6 +332,13 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         this.municipality = municipality;
     }
 
+    public Integer getMunicipalitycode() {
+        if (this.municipality != null) {
+            return this.municipality.getMunicipalityCode();
+        }
+        return null;
+    }
+
     //----------------------------------------------------
 
     public static final String DB_FIELD_POSTCODE_REF = "post";
@@ -512,11 +526,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         AddressRecord that = (AddressRecord) o;
-        return type == that.type &&
+        if (!super.equals(o)) {System.out.println("super equals false");return false;}
+        boolean ret = type == that.type &&
                 roadCode == that.roadCode &&
-                postnummer == that.postnummer &&
                 Objects.equals(addressId, that.addressId) &&
                 Objects.equals(cityName, that.cityName) &&
                 Objects.equals(supplementalCityName, that.supplementalCityName) &&
@@ -528,19 +541,20 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
                 Objects.equals(floor, that.floor) &&
                 Objects.equals(door, that.door) &&
                 Objects.equals(municipality, that.municipality) &&
-                Objects.equals(post, that.post) &&
-                Objects.equals(postdistrikt, that.postdistrikt) &&
+                this.getPostnummer() == that.getPostnummer() &&
                 Objects.equals(postBox, that.postBox) &&
                 Objects.equals(coName, that.coName) &&
                 Objects.equals(countryCode, that.countryCode) &&
                 Objects.equals(addressText, that.addressText) &&
                 Objects.equals(lastValidated, that.lastValidated) &&
                 Objects.equals(freeText, that.freeText);
+        return ret;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), type, addressId, roadCode, cityName, supplementalCityName, roadName, houseNumberFrom, houseNumberTo, letterFrom, letterTo, floor, door, municipality, post, postnummer, postdistrikt, postBox, coName, countryCode, addressText, lastValidated, freeText);
+        int h = Objects.hash(super.hashCode(), type, addressId, roadCode, cityName, supplementalCityName, roadName, houseNumberFrom, houseNumberTo, letterFrom, letterTo, floor, door, this.getMunicipalitycode(), this.getPostnummer(), postBox, coName, countryCode, addressText, lastValidated, freeText);
+        return h;
     }
 
     @Override
@@ -605,10 +619,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         if (this.municipality != null) {
             this.municipality.traverse(setCallback, itemCallback);
         }
+        super.traverse(setCallback, itemCallback);
     }
 }

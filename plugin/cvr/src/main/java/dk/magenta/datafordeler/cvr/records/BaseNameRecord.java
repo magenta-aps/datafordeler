@@ -103,6 +103,9 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
         this.relationParticipantRecord = relationParticipantRecord;
     }
 
+    public RelationParticipantRecord getRelationParticipantRecord() {
+        return this.relationParticipantRecord;
+    }
 
     public static final String DB_FIELD_COMPANY_RELATION = "relationCompanyRecord";
 

@@ -59,7 +59,7 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_ORGANIZATION_MEMBERDATA, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-        @JsonProperty(value = IO_FIELD_ATTRIBUTES)
+    @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     public Set<AttributeRecord> attributes = new HashSet<>();
 
     public void setAttributes(Set<AttributeRecord> attributes) {
@@ -124,8 +124,8 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         return subs;
     }
 
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getAttributes().traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback);
     }
 }

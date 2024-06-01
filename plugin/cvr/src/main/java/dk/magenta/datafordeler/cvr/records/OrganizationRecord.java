@@ -226,8 +226,9 @@ public class OrganizationRecord extends CvrRecord {
 
 
 
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getMemberData().traverse(setCallback, itemCallback);
+        this.getAttributes().traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback);
     }
 }

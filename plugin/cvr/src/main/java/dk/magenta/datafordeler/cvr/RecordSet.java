@@ -16,12 +16,12 @@ public class RecordSet<R extends CvrRecord> implements Set<R> {
         this.inner = inner;
     }
 
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        for (R item : this.inner) {
+            item.traverse(setCallback, itemCallback);
+        }
         if (setCallback != null) {
             setCallback.accept(this);
-        }
-        for (R item : this) {
-            item.traverse(setCallback, itemCallback);
         }
     }
 

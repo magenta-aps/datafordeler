@@ -10,8 +10,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -301,8 +299,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getOrganizations().traverse(setCallback, itemCallback);
         this.getOffices().traverse(setCallback, itemCallback);
         RelationParticipantRecord relationParticipantRecord = this.getRelationParticipantRecord();
@@ -313,5 +310,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         if (relationCompanyRecord != null) {
             relationCompanyRecord.traverse(setCallback, itemCallback);
         }
+        super.traverse(setCallback, itemCallback);
     }
 }

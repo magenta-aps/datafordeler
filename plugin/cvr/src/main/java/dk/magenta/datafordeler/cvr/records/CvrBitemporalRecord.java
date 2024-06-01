@@ -196,13 +196,20 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         CvrBitemporalRecord that = (CvrBitemporalRecord) o;
         return Equality.equal(lastUpdated, that.lastUpdated) &&
                 Equality.equal(lastLoaded, that.lastLoaded) &&
-                Objects.equals(validity, that.validity) &&
+                Objects.equals(this.getValidFrom(), that.getValidFrom()) &&
+                Objects.equals(this.getValidTo(), that.getValidTo()) &&
                 Equality.equal(registrationTo, that.registrationTo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastUpdated, lastLoaded, validity, registrationTo);
+        return Objects.hash(
+                lastUpdated != null ? lastUpdated.toEpochSecond() : null,
+                lastLoaded != null ? lastLoaded.toEpochSecond() : null,
+                this.getValidFrom(),
+                this.getValidTo(),
+                registrationTo != null ? registrationTo.toEpochSecond() : null
+        );
     }
 
     @JsonIgnore

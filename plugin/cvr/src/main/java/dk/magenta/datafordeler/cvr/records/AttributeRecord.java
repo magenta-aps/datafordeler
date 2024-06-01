@@ -186,9 +186,9 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         if (o == null || getClass() != o.getClass()) return false;
         AttributeRecord that = (AttributeRecord) o;
         return sequenceNumber == that.sequenceNumber &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(valueType, that.valueType) &&
-                Objects.equals(values, that.values) &&
+                Objects.equals(getType(), that.getType()) &&
+                Objects.equals(getValueType(), that.getValueType()) &&
+                Objects.equals(getValues(), that.getValues()) &&
                 fusionOutgoing == that.fusionOutgoing;
     }
 
@@ -200,9 +200,9 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     public void merge(AttributeRecord otherRecord) {
         if (
                 otherRecord != null &&
-                        this.sequenceNumber == otherRecord.getSequenceNumber() &&
-                        Objects.equals(this.type, otherRecord.getType()) &&
-                        Objects.equals(this.valueType, otherRecord.getValueType())
+                        this.getSequenceNumber() == otherRecord.getSequenceNumber() &&
+                        Objects.equals(this.getType(), otherRecord.getType()) &&
+                        Objects.equals(this.getValueType(), otherRecord.getValueType())
         ) {
             for (AttributeValueRecord attributeValueRecord : otherRecord.getValues()) {
                 this.addValue(attributeValueRecord);
@@ -219,8 +219,8 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
 
 
 
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getValues().traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback);
     }
 }
