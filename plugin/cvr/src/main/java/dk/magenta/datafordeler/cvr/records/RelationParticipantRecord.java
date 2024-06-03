@@ -132,9 +132,6 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     private Set<AddressRecord> locationAddress = new HashSet<>();
 
     public void setLocationAddress(Set<AddressRecord> locationAddress) {
-        System.out.println("setLocationAddress on "+this.getId());
-        System.out.println("  existing locationAddress: "+this.locationAddress.size());
-
         this.locationAddress = locationAddress;
         for (AddressRecord address : locationAddress) {
             address.setRelationParticipantRecord(this);

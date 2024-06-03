@@ -179,7 +179,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_NAMES = "navne";
 
     @OneToMany(targetEntity = SecNameRecord.class, mappedBy = SecNameRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = SecNameRecord.DB_FIELD_SECONDARY + "=false")
+    @Where(clause = SecNameRecord.DB_FIELD_SECONDARY + "=false")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -223,7 +223,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_SECONDARY_NAMES = "binavne";
 
     @OneToMany(targetEntity = SecNameRecord.class, mappedBy = SecNameRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = SecNameRecord.DB_FIELD_SECONDARY + "=true")
+    @Where(clause = SecNameRecord.DB_FIELD_SECONDARY + "=true")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -267,7 +267,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
 
     @OneToMany(targetEntity = AddressRecord.class, mappedBy = AddressRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION)
+    @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -311,7 +311,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_POSTAL_ADDRESS = "postadresse";
 
     @OneToMany(targetEntity = AddressRecord.class, mappedBy = AddressRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL)
+    @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -355,7 +355,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_PHONE = "telefonNummer";
 
     @OneToMany(targetEntity = ContactRecord.class, mappedBy = ContactRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER + " AND " + ContactRecord.DB_FIELD_SECONDARY + "=false")
+    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER + " AND " + ContactRecord.DB_FIELD_SECONDARY + "=false")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -381,15 +381,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addPhoneNumber(ContactRecord record) {
-        if (record != null) {
-            record.setType(ContactRecord.TYPE_TELEFONNUMMER);
-            record.setCompanyRecord(this);
-            record.setSecondary(false);
-            if (!phoneNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.phoneNumber.stream().reduce((first, second) -> second).get().getId()));
-            }
-            this.phoneNumber.add(record);
-        }
+        this.addContact(record, this.getPhoneNumber(), ContactRecord.TYPE_TELEFONNUMMER, false);
     }
 
     public BitemporalSet<ContactRecord> getPhoneNumber() {
@@ -401,7 +393,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_PHONE_SECONDARY = "sekundaertTelefonNummer";
 
     @OneToMany(targetEntity = ContactRecord.class, mappedBy = ContactRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER + " AND " + ContactRecord.DB_FIELD_SECONDARY + "=true")
+    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER + " AND " + ContactRecord.DB_FIELD_SECONDARY + "=true")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -427,15 +419,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addSecondaryPhoneNumber(ContactRecord record) {
-        if (record != null) {
-            record.setType(ContactRecord.TYPE_TELEFONNUMMER);
-            record.setCompanyRecord(this);
-            record.setSecondary(true);
-            if (!phoneNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.phoneNumber.stream().reduce((first, second) -> second).get().getId()));
-            }
-            this.phoneNumber.add(record);
-        }
+        this.addContact(record, this.getSecondaryPhoneNumber(), ContactRecord.TYPE_TELEFONNUMMER, true);
     }
 
     public BitemporalSet<ContactRecord> getSecondaryPhoneNumber() {
@@ -447,7 +431,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_FAX = "telefaxNummer";
 
     @OneToMany(targetEntity = ContactRecord.class, mappedBy = ContactRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER)
+    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -473,15 +457,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addFaxNumber(ContactRecord record) {
-        if (record != null) {
-            record.setType(ContactRecord.TYPE_TELEFAXNUMMER);
-            record.setCompanyRecord(this);
-            record.setSecondary(false);
-            if (!faxNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.faxNumber.stream().reduce((first, second) -> second).get().getId()));
-            }
-            this.faxNumber.add(record);
-        }
+        this.addContact(record, this.getFaxNumber(), ContactRecord.TYPE_TELEFAXNUMMER, false);
     }
 
     public BitemporalSet<ContactRecord> getFaxNumber() {
@@ -519,15 +495,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addSecondaryFaxNumber(ContactRecord record) {
-        if (record != null) {
-            record.setType(ContactRecord.TYPE_TELEFAXNUMMER);
-            record.setCompanyRecord(this);
-            record.setSecondary(true);
-            if (!faxNumber.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.faxNumber.stream().reduce((first, second) -> second).get().getId()));
-            }
-            this.faxNumber.add(record);
-        }
+        this.addContact(record, this.getSecondaryFaxNumber(), ContactRecord.TYPE_TELEFAXNUMMER, true);
     }
 
     public BitemporalSet<ContactRecord> getSecondaryFaxNumber() {
@@ -539,7 +507,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_EMAIL = "elektroniskPost";
 
     @OneToMany(targetEntity = ContactRecord.class, mappedBy = ContactRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE)
+    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -564,14 +532,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addEmailAddress(ContactRecord record) {
-        if (record != null) {
-            record.setType(ContactRecord.TYPE_EMAILADRESSE);
-            record.setCompanyRecord(this);
-            if (!emailAddress.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.emailAddress.stream().reduce((first, second) -> second).get().getId()));
-            }
-            this.emailAddress.add(record);
-        }
+        this.addContact(record, this.getEmailAddress(), ContactRecord.TYPE_EMAILADRESSE, false);
     }
 
     public BitemporalSet<ContactRecord> getEmailAddress() {
@@ -583,7 +544,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_HOMEPAGE = "hjemmeside";
 
     @OneToMany(targetEntity = ContactRecord.class, mappedBy = ContactRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_HJEMMESIDE)
+    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_HJEMMESIDE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -608,14 +569,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addHomepage(ContactRecord record) {
-        if (record != null) {
-            record.setType(ContactRecord.TYPE_HJEMMESIDE);
-            record.setCompanyRecord(this);
-            if (!homepage.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.homepage.stream().reduce((first, second) -> second).get().getId()));
-            }
-            this.homepage.add(record);
-        }
+        this.addContact(record, this.getHomepage(), ContactRecord.TYPE_HJEMMESIDE, false);
     }
 
     public BitemporalSet<ContactRecord> getHomepage() {
@@ -627,7 +581,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_MANDATORY_EMAIL = "obligatoriskEmail";
 
     @OneToMany(targetEntity = ContactRecord.class, mappedBy = ContactRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_OBLIGATORISK_EMAILADRESSE)
+    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_OBLIGATORISK_EMAILADRESSE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -652,18 +606,31 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addMandatoryEmailAddress(ContactRecord record) {
-        if (record != null) {
-            record.setType(ContactRecord.TYPE_OBLIGATORISK_EMAILADRESSE);
-            record.setCompanyRecord(this);
-            if (!mandatoryEmailAddress.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.mandatoryEmailAddress.stream().reduce((first, second) -> second).get().getId()));
-            }
-            this.mandatoryEmailAddress.add(record);
-        }
+        this.addContact(record, this.getMandatoryEmailAddress(), ContactRecord.TYPE_OBLIGATORISK_EMAILADRESSE, false);
     }
 
     public BitemporalSet<ContactRecord> getMandatoryEmailAddress() {
         return new BitemporalSet<>(this.mandatoryEmailAddress);
+    }
+
+    private void addContact(ContactRecord record, RecordSet<ContactRecord> set, int type, boolean secondary) {
+        if (record != null) {
+            record.setType(type);
+            record.setSecondary(secondary);
+            if (!set.contains(record)) {
+                record.setCompanyRecord(this);
+                if (!set.isEmpty()) {
+                    this.addDataEventRecord(
+                            new CompanyDataEventRecord(
+                                    record.getLastUpdated(),
+                                    record.getFieldName(),
+                                    set.stream().reduce((first, second) -> second).get().getId()
+                            )
+                    );
+                }
+                set.add(record);
+            }
+        }
     }
 
 
@@ -1346,7 +1313,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
     @OneToOne(targetEntity = CompanyMetadataRecord.class, mappedBy = CompanyMetadataRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL)
     @JoinColumn(name = DB_FIELD_META + DatabaseEntry.REF)
-        @JsonProperty(value = IO_FIELD_META)
+    @JsonProperty(value = IO_FIELD_META)
     private CompanyMetadataRecord metadata;
 
     public void setMetadata(CompanyMetadataRecord metadata) {
@@ -1365,7 +1332,7 @@ public class CompanyRecord extends CvrEntityRecord {
     public static final String IO_FIELD_DATAEVENT = "dataevent";
 
     @OneToMany(targetEntity = CompanyDataEventRecord.class, mappedBy = CompanyDataEventRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JsonProperty(value = IO_FIELD_DATAEVENT)
+    @JsonProperty(value = IO_FIELD_DATAEVENT)
     private Set<CompanyDataEventRecord> dataevent = new HashSet<>();
 
     public void setDataEventRecord(Set<CompanyDataEventRecord> dataevent) {
@@ -1582,8 +1549,6 @@ public class CompanyRecord extends CvrEntityRecord {
             for (FusionSplitRecord fusionSplitRecord : otherRecord.getSplits()) {
                 this.mergeSplit(fusionSplitRecord);
             }
-
-
             this.metadata.merge(otherRecord.getMetadata());
             return true;
         }
@@ -1643,8 +1608,8 @@ public class CompanyRecord extends CvrEntityRecord {
         this.getFaxNumber().traverse(setCallback, itemCallback);
         this.getSecondaryFaxNumber().traverse(setCallback, itemCallback);
         this.getEmailAddress().traverse(setCallback, itemCallback);
-        this.getHomepage().traverse(setCallback, itemCallback);
         this.getMandatoryEmailAddress().traverse(setCallback, itemCallback);
+        this.getHomepage().traverse(setCallback, itemCallback);
         this.getLifecycle().traverse(setCallback, itemCallback);
         this.getPrimaryIndustry().traverse(setCallback, itemCallback);
         this.getSecondaryIndustry1().traverse(setCallback, itemCallback);

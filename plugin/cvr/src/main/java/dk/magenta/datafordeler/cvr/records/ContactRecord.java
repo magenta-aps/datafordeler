@@ -103,15 +103,15 @@ public class ContactRecord extends CvrBitemporalDataRecord {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ContactRecord that = (ContactRecord) o;
-        return secret == that.secret &&
-                secondary == that.secondary &&
-                type == that.type &&
-                Objects.equals(contactInformation, that.contactInformation);
+        return this.isSecret() == that.isSecret() &&
+                this.isSecondary() == that.isSecondary() &&
+                this.getType() == that.getType() &&
+                Objects.equals(this.getContactInformation(), that.getContactInformation());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), contactInformation, secret, secondary, type);
+        return Objects.hash(super.hashCode(), this.getContactInformation(), this.isSecret(), this.isSecondary(), this.getType());
     }
 
     /*@Override

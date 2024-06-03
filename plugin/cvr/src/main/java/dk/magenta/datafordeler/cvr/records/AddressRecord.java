@@ -527,8 +527,8 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AddressRecord that = (AddressRecord) o;
-        if (!super.equals(o)) {System.out.println("super equals false");return false;}
-        boolean ret = type == that.type &&
+        if (!super.equals(o)) return false;
+        return type == that.type &&
                 roadCode == that.roadCode &&
                 Objects.equals(addressId, that.addressId) &&
                 Objects.equals(cityName, that.cityName) &&
@@ -548,7 +548,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
                 Objects.equals(addressText, that.addressText) &&
                 Objects.equals(lastValidated, that.lastValidated) &&
                 Objects.equals(freeText, that.freeText);
-        return ret;
     }
 
     @Override

@@ -41,7 +41,18 @@ public class RecordSet<R extends CvrRecord> implements Set<R> {
 
     @Override
     public boolean contains(Object o) {
-        return this.inner.contains(o);
+		// Hibernate's own contains()-method is shit when determining this.
+		// For Company contactrecords it will return false on set.contains(set.stream().first().get())
+		// Basically denying that the member in the set is contained in the set
+        if (this.inner.contains(o)) {
+            return true;
+        }
+        for (R item : this.inner) {
+            if (item.equals(o)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

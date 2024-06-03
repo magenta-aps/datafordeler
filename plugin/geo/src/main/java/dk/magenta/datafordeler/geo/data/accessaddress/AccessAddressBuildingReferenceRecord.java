@@ -40,6 +40,12 @@ public class AccessAddressBuildingReferenceRecord extends GeoMonotemporalRecord<
         this.uuid = uuid;
     }
 
+    public UUID getUuid() {
+        if (this.reference != null) {
+            return this.reference.getUuid();
+        }
+        return this.uuid;
+    }
 
     public static final String DB_FIELD_REFERENCE = "reference";
     @ManyToOne
@@ -64,7 +70,7 @@ public class AccessAddressBuildingReferenceRecord extends GeoMonotemporalRecord<
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equalData(o)) return false;
         AccessAddressBuildingReferenceRecord that = (AccessAddressBuildingReferenceRecord) o;
-        return Objects.equals(this.reference, that.reference);
+        return Objects.equals(this.getUuid(), that.getUuid());
     }
 
 }

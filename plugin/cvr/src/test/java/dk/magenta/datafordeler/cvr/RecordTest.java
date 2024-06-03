@@ -231,25 +231,9 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testUpdateCompany() throws IOException, DataFordelerException {
-        System.out.println("testUpdateCompany");
-        this.cleanup();
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            //Assert.assertEquals(0, QueryManager.getAllEntities(session, CompanyRecord.class).size());
-            Class[] inspect = new Class[]{CompanyRecord.class, CompanyUnitRecord.class, ParticipantRecord.class};
-            for (Class c : inspect) {
-                System.out.println(c.getSimpleName() + ": " + QueryManager.getAllEntities(session, c).size());
-            }
-        }
-
-        this.cleanup();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Assert.assertEquals(0, QueryManager.getAllEntities(session, CompanyRecord.class).size());
-            /*Class[] inspect = new Class[]{CompanyRecord.class, CompanyUnitRecord.class, ParticipantRecord.class};
-            for (Class c : inspect) {
-                System.out.println(c.getSimpleName() + ": " + QueryManager.getAllEntities(session, c).size());
-            }*/
         }
-
         loadCompany("/company_in.json");
         loadCompany("/company_in2.json");
         try (Session session = sessionManager.getSessionFactory().openSession()) {

@@ -47,17 +47,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-public class CompanyOwnersTest {
-
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private CvrRegisterManager registerManager;
+public class CompanyOwnersTest extends TestBase {
 
     @Autowired
     private TestRestTemplate restTemplate;
