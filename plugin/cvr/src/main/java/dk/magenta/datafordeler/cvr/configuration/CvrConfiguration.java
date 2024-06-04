@@ -7,7 +7,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.io.File;

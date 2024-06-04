@@ -7,7 +7,6 @@ import dk.magenta.datafordeler.core.util.Equality;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**

@@ -6,9 +6,7 @@ import dk.magenta.datafordeler.cvr.RecordSet;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class AttributeRecordSet extends RecordSet<AttributeRecord> {

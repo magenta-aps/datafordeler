@@ -12,8 +12,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
 import org.hibernate.Session;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;

@@ -3,10 +3,8 @@ package dk.magenta.datafordeler.cvr;
 import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
 
 import java.time.OffsetDateTime;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

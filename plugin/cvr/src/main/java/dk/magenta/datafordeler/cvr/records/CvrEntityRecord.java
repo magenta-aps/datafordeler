@@ -13,7 +13,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.Consumer;
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
