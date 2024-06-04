@@ -10,8 +10,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
 import org.hibernate.Session;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -44,7 +42,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     }
 
     @OneToOne(targetEntity = RelationParticipantRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_PARTICIPANT_RELATION)
     private RelationParticipantRecord relationParticipantRecord;
 
@@ -69,7 +66,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_COMPANY_RELATION = "virksomhed";
 
     @OneToOne(targetEntity = RelationCompanyRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_COMPANY_RELATION)
     private RelationCompanyRecord relationCompanyRecord;
 
@@ -92,7 +88,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_OFFICES = "kontorsteder";
 
     @OneToMany(targetEntity = OfficeRelationRecord.class, mappedBy = OfficeRelationRecord.DB_FIELD_COMPANY_RELATION, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_OFFICES)
     private Set<OfficeRelationRecord> offices = new HashSet<>();
 
@@ -112,7 +107,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_ORGANIZATIONS = "organisationer";
 
     @OneToMany(mappedBy = OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION, targetEntity = OrganizationRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_ORGANIZATIONS)
     private Set<OrganizationRecord> organizations;
 
@@ -305,8 +299,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getOrganizations().traverse(setCallback, itemCallback);
         this.getOffices().traverse(setCallback, itemCallback);
         RelationParticipantRecord relationParticipantRecord = this.getRelationParticipantRecord();
@@ -317,5 +310,6 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         if (relationCompanyRecord != null) {
             relationCompanyRecord.traverse(setCallback, itemCallback);
         }
+        super.traverse(setCallback, itemCallback);
     }
 }

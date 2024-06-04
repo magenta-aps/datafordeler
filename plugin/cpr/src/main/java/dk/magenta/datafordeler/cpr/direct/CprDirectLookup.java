@@ -13,7 +13,6 @@ import dk.magenta.datafordeler.cpr.records.person.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -34,9 +33,6 @@ public class CprDirectLookup {
     //Documentation:
     //https://cprdocs.atlassian.net/wiki/spaces/CPR/pages/51155340/Gr+nsefladebeskrivelse+til+offentlige+myndigheder+-+CPR+Direkte+PNR
 
-    @Value("${dafo.cpr.person.direct.allowDirectPersonLookup:false}")
-    private boolean allowDirectPersonLookup;
-
     @Autowired
     private CprConfigurationManager configurationManager;
 
@@ -48,9 +44,12 @@ public class CprDirectLookup {
 
     private final Logger log = LogManager.getLogger(CprDirectLookup.class.getCanonicalName());
 
+    private boolean enabled;
+
     @PostConstruct
     public void init() {
         this.socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        this.enabled = this.configurationManager.getConfiguration().isDirectPersonLookupEnabled();
     }
 
     private CprConfiguration getConfiguration() {
@@ -128,7 +127,7 @@ public class CprDirectLookup {
     }
 
     public String lookup(String pnr) throws DataStreamException {
-        if (!allowDirectPersonLookup) {
+        if (!this.enabled) {
             return null;
         }
 

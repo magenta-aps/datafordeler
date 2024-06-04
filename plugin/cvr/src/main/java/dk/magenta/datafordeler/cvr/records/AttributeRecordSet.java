@@ -6,15 +6,13 @@ import dk.magenta.datafordeler.cvr.RecordSet;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
-public class AttributeRecordSet extends HashSet<AttributeRecord> {
+public class AttributeRecordSet extends RecordSet<AttributeRecord> {
 
-    public AttributeRecordSet(Collection<? extends AttributeRecord> c) {
-        super(c);
+    public AttributeRecordSet(Collection<AttributeRecord> c) {
+        super(new HashSet<>(c));
     }
 
     public List<AttributeRecord> byType(String type) {
@@ -80,13 +78,6 @@ public class AttributeRecordSet extends HashSet<AttributeRecord> {
             }
         }
         return values;
-    }
-
-
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        for (AttributeRecord attributeRecord : this) {
-            attributeRecord.traverse(setCallback, itemCallback);
-        }
     }
 
 }

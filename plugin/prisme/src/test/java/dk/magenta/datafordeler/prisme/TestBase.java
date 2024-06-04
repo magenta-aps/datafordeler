@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import dk.magenta.datafordeler.cvr.records.CvrEntityRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
@@ -131,9 +132,6 @@ public abstract class TestBase {
             QueryManager.clearCaches();
             Class[] classes = new Class[]{
                     PersonEntity.class,
-                    CompanyRecord.class,
-                    CompanyUnitRecord.class,
-                    ParticipantRecord.class,
                     CompanyEntity.class,
                     UnitEntity.class,
                     ResponsibleEntity.class,
@@ -144,6 +142,20 @@ public abstract class TestBase {
                 List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
                 for (DatabaseEntry e : eList) {
                     session.delete(e);
+                }
+            }
+            transaction.commit();
+
+            classes = new Class[]{
+                    CompanyRecord.class,
+                    CompanyUnitRecord.class,
+                    ParticipantRecord.class,
+            };
+            transaction = session.beginTransaction();
+            for (Class cls : classes) {
+                List<? extends CvrEntityRecord> eList = QueryManager.getAllItems(session, cls);
+                for (CvrEntityRecord e : eList) {
+                    e.delete(session);
                 }
             }
             transaction.commit();

@@ -538,7 +538,6 @@ public class FetchEventsTest extends TestBase {
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
 
-
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery query = new PersonRecordQuery();
             query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011235");
@@ -551,9 +550,7 @@ public class FetchEventsTest extends TestBase {
             query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011242");
             query.addParameter(PersonRecordQuery.PERSONNUMMER, "0101011243");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            System.out.println(entities);
         }
-
 
         ResponseEntity<String> response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE4&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",

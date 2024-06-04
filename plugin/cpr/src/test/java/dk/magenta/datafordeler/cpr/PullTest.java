@@ -49,10 +49,10 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -117,7 +117,6 @@ public class PullTest extends TestBase {
     }
 
     private void pull() throws Exception {
-
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         when(configurationManager.getConfiguration()).thenReturn(configuration);
 
@@ -224,17 +223,16 @@ public class PullTest extends TestBase {
     public void testSubscription() throws Exception {
 
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
-        when(configurationManager.getConfiguration()).thenReturn(configuration);
-        when(personEntityManager.isSetupSubscriptionEnabled()).thenReturn(true);
-        when(personEntityManager.getCustomerId()).thenReturn(1234);
-        when(personEntityManager.getJobId()).thenReturn(123456);
-        //when(personEntityManager.getLastUpdated(any(Session.class))).thenReturn(null);
+        doReturn(configuration).when(configurationManager).getConfiguration();
+        doReturn(true).when(personEntityManager).isSetupSubscriptionEnabled();
+        doReturn(1234).when(personEntityManager).getCustomerId();
+        doReturn(123456).when(personEntityManager).getJobId();
         doAnswer(invocationOnMock -> null).when(personEntityManager).getLastUpdated(any(Session.class));
 
         File localCacheSubFolder = File.createTempFile("foo", "bar");
         localCacheSubFolder.delete();
         localCacheSubFolder.mkdirs();
-        when(personEntityManager.getLocalSubscriptionFolder()).thenReturn(localCacheSubFolder.getAbsolutePath());
+        doReturn(localCacheSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
 
         CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
         registerManager.setProxyString(null);
@@ -274,13 +272,6 @@ public class PullTest extends TestBase {
         }
         personFile.delete();
 
-        personContents = this.getClass().getResourceAsStream("/persondata2.txt");
-        personFile = File.createTempFile("persondata2", "txt");
-        personFile.createNewFile();
-        FileUtils.copyInputStreamToFile(personContents, personFile);
-        personContents.close();
-
-
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             List<PersonSubscription> subscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
@@ -295,7 +286,7 @@ public class PullTest extends TestBase {
         try {
             personEntityManager.createSubscriptionFile();
 
-            when(personEntityManager.getLocalSubscriptionFolder()).thenReturn(localSubFolder.getAbsolutePath());
+            doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
 
             File[] subFiles = personFtp.getTempDir().listFiles();
             Assert.assertEquals(1, subFiles.length);
@@ -347,7 +338,8 @@ public class PullTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
+            String cprs = personEntities.stream().map(p -> p.getPersonnummer()).collect(Collectors.joining(","));
+            Assert.assertEquals("Got "+cprs+" when expecting only 0101001234", 1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
     }
 }

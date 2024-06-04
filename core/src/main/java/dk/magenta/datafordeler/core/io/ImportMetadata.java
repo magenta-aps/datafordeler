@@ -88,4 +88,8 @@ public class ImportMetadata {
     public void setImportConfiguration(ObjectNode importConfiguration) {
         this.importConfiguration = importConfiguration;
     }
+
+    public boolean hasImportConfiguration() {
+        return this.importConfiguration != null && !this.importConfiguration.isEmpty();
+    }
 }

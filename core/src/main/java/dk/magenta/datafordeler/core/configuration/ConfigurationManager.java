@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.configuration;
 
+import dk.magenta.datafordeler.core.Environment;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -12,7 +13,7 @@ import javax.persistence.NoResultException;
  * row. On loading the program, the Configuration object is retrieved from the database, or
  * if one doesn’t exist (such as on the first run), created and saved.
  */
-public abstract class ConfigurationManager<C extends Configuration> {
+public abstract class ConfigurationManager<C extends Configuration> extends Environment {
 
     /**
      * Locate Configuration object, or create one if none found.
@@ -73,8 +74,6 @@ public abstract class ConfigurationManager<C extends Configuration> {
             ).getSingleResult();
             session.refresh(configuration);
             return configuration;
-        } catch (NoResultException e) {
-            return null;
         } finally {
             session.close();
         }

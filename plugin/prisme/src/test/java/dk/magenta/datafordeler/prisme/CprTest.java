@@ -72,6 +72,9 @@ public class CprTest extends TestBase {
         importMetadata.setSession(session);
         Transaction transaction = session.beginTransaction();
         importMetadata.setTransactionInProgress(true);
+        ObjectNode importConfig = objectMapper.createObjectNode();
+        importConfig.put("skipSubscription", true);
+        importMetadata.setImportConfiguration(importConfig);
         personEntityManager.parseData(testData, importMetadata);
         transaction.commit();
         session.close();
@@ -690,6 +693,10 @@ public class CprTest extends TestBase {
 
     @Test
     public void testDirectLookup3() throws Exception {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
+            Assert.assertEquals(0, existingSubscriptions.size());
+        }
 
         String data = "038406uKBKxWLcWUDI0178001104000000000000003840120190815000000000010607621234          90200502051034 M1962-07-06 2005-10-20                                              0030607621234Petersen,Mads Munk                                                                                                                                                                                                                          0080607621234Mads                                               Munk                                     Petersen                                 196207061029 Petersen,Mads Munk                00906076212345180                    01006076212345180196207061029*0110607621234U1962-07-06 0120607621234D0506650038                                              200502051034             01406076212340506871018014060762123405089210040140607621234060794106801406076212340705901007014060762123407059600110140607621234080789104901506076212341962-07-06*0000000000                                              1962-07-06*0000000000                                              999999999999900000014";
 
@@ -698,7 +705,7 @@ public class CprTest extends TestBase {
 
         loadPerson("/person.txt");
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>("{\"cprNumber\":[\"0101001234\",\"0607621234\"]}", new HttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<>("{\"cprNumber\":[\"0101001234\",\"0607621234\"]}", new HttpHeaders());
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
@@ -752,15 +759,12 @@ public class CprTest extends TestBase {
         Assert.assertEquals(600, personObject.get("stedkode").asInt());
         Assert.assertEquals("GL", personObject.get("landekode").asText());
 
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
             Assert.assertEquals(1, existingSubscriptions.size());
             PersonSubscription subscription = existingSubscriptions.get(0);
             Assert.assertEquals("0607621234", subscription.getPersonNumber());
             Assert.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
-        } finally {
-            session.close();
         }
     }
 
@@ -891,7 +895,6 @@ public class CprTest extends TestBase {
         Assert.assertEquals("0101011234", responseObject.get("cprNummer").asText());
         JsonNode adressList = responseObject.get("addresses");
         Assert.assertEquals(18, adressList.size());
-        System.out.println(response.getBody());
     }
 
 

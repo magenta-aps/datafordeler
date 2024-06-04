@@ -21,6 +21,7 @@ import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @EnableConfigurationProperties(TokenConfigProperties.class)
+@PropertySource("classpath:/application.properties")
 public class TokenVerifier {
 
     @Autowired

@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.configuration;
 
+import dk.magenta.datafordeler.core.Environment;
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.core.util.Encryption;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
@@ -495,5 +496,35 @@ public class CvrConfiguration implements Configuration {
             }
         }
         return false;
+    }
+
+    // Configuration loaded from environment
+
+    @Transient
+    private String cvrDemoCompanyFile = Environment.getEnv("CVR_DEMO_COMPANYFILE", null);;
+
+    @Transient
+    private String cvrDemoUnitFile = Environment.getEnv("CVR_DEMO_UNITFILE", null);;
+
+    @Transient
+    private String cvrDemoParticipantFile = Environment.getEnv("CVR_DEMO_PARTICIPANTFILE", null);;
+
+    @Transient
+    private String encryptionKeyFileName = Environment.getEnv("CVR_ENCRYPTION_KEYFILE", "local/cvr/keyfile.json");
+
+    public String getCvrDemoCompanyFile() {
+        return this.cvrDemoCompanyFile;
+    }
+
+    public String getCvrDemoUnitFile() {
+        return this.cvrDemoUnitFile;
+    }
+
+    public String getCvrDemoParticipantFile() {
+        return this.cvrDemoParticipantFile;
+    }
+
+    public String getEncryptionKeyFileName() {
+        return this.encryptionKeyFileName;
     }
 }

@@ -12,8 +12,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
 import org.hibernate.Session;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
@@ -73,6 +71,9 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         this.officeUnitRecord = officeUnitRecord;
     }
 
+    public OfficeRelationUnitRecord getOfficeUnitRecord() {
+        return this.officeUnitRecord;
+    }
 
     public static final String DB_FIELD_PARTICIPANT_RELATION = "relationParticipantRecord";
 
@@ -83,6 +84,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     public void setRelationParticipantRecord(RelationParticipantRecord relationParticipantRecord) {
         this.relationParticipantRecord = relationParticipantRecord;
+    }
+
+    public RelationParticipantRecord getRelationParticipantRecord() {
+        return this.relationParticipantRecord;
     }
 
 
@@ -313,8 +318,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     @XmlElement(name = IO_FIELD_MUNICIPALITY)
     @OneToOne(cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private AddressMunicipalityRecord municipality;
+        private AddressMunicipalityRecord municipality;
 
     @JsonProperty(value = IO_FIELD_MUNICIPALITY)
     public AddressMunicipalityRecord getMunicipality() {
@@ -324,6 +328,13 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     @JsonProperty(value = IO_FIELD_MUNICIPALITY)
     public void setMunicipality(AddressMunicipalityRecord municipality) {
         this.municipality = municipality;
+    }
+
+    public Integer getMunicipalitycode() {
+        if (this.municipality != null) {
+            return this.municipality.getMunicipalityCode();
+        }
+        return null;
     }
 
     //----------------------------------------------------
@@ -513,11 +524,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         AddressRecord that = (AddressRecord) o;
+        if (!super.equals(o)) return false;
         return type == that.type &&
                 roadCode == that.roadCode &&
-                postnummer == that.postnummer &&
                 Objects.equals(addressId, that.addressId) &&
                 Objects.equals(cityName, that.cityName) &&
                 Objects.equals(supplementalCityName, that.supplementalCityName) &&
@@ -529,8 +539,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
                 Objects.equals(floor, that.floor) &&
                 Objects.equals(door, that.door) &&
                 Objects.equals(municipality, that.municipality) &&
-                Objects.equals(post, that.post) &&
-                Objects.equals(postdistrikt, that.postdistrikt) &&
+                this.getPostnummer() == that.getPostnummer() &&
                 Objects.equals(postBox, that.postBox) &&
                 Objects.equals(coName, that.coName) &&
                 Objects.equals(countryCode, that.countryCode) &&
@@ -541,7 +550,8 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), type, addressId, roadCode, cityName, supplementalCityName, roadName, houseNumberFrom, houseNumberTo, letterFrom, letterTo, floor, door, municipality, post, postnummer, postdistrikt, postBox, coName, countryCode, addressText, lastValidated, freeText);
+        int h = Objects.hash(super.hashCode(), type, addressId, roadCode, cityName, supplementalCityName, roadName, houseNumberFrom, houseNumberTo, letterFrom, letterTo, floor, door, this.getMunicipalitycode(), this.getPostnummer(), postBox, coName, countryCode, addressText, lastValidated, freeText);
+        return h;
     }
 
     @Override
@@ -606,10 +616,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         if (this.municipality != null) {
             this.municipality.traverse(setCallback, itemCallback);
         }
+        super.traverse(setCallback, itemCallback);
     }
 }

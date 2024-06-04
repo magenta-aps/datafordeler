@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Record for Company status data.
@@ -63,12 +63,11 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_ORGANIZATION_NAME = "organisationsNavn";
 
     @OneToMany(mappedBy = BaseNameRecord.DB_FIELD_FUSION, targetEntity = BaseNameRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(value = IO_FIELD_ORGANIZATION_NAME)
+        @JsonProperty(value = IO_FIELD_ORGANIZATION_NAME)
     private Set<BaseNameRecord> name;
 
-    public Set<BaseNameRecord> getName() {
-        return this.name;
+    public RecordSet<BaseNameRecord> getName() {
+        return new RecordSet<>(this.name);
     }
 
     public void setName(Set<BaseNameRecord> name) {
@@ -90,7 +89,6 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_INCOMING = "indgaaende";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_FUSION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Where(clause = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=false")
     @JsonProperty(value = IO_FIELD_INCOMING)
     private Set<AttributeRecord> incoming = new HashSet<>();
@@ -126,8 +124,8 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
         }
     }
 
-    public Set<AttributeRecord> getIncoming() {
-        return this.incoming;
+    public AttributeRecordSet getIncoming() {
+        return new AttributeRecordSet(this.incoming);
     }
 
 
@@ -135,7 +133,6 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_OUTGOING = "udgaaende";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_FUSION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Where(clause = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=true")
     @JsonProperty(value = IO_FIELD_OUTGOING)
     private Set<AttributeRecord> outgoing = new HashSet<>();
@@ -171,8 +168,8 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
         }
     }
 
-    public Set<AttributeRecord> getOutgoing() {
-        return this.outgoing;
+    public AttributeRecordSet getOutgoing() {
+        return new AttributeRecordSet(this.outgoing);
     }
 
 
@@ -216,5 +213,13 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
         subs.addAll(this.incoming);
         subs.addAll(this.outgoing);
         return subs;
+    }
+
+    @Override
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        this.getIncoming().traverse(setCallback, itemCallback);
+        this.getOutgoing().traverse(setCallback, itemCallback);
+        this.getName().traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback);
     }
 }

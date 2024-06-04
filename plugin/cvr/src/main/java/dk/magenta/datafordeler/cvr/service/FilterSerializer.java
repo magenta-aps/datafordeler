@@ -1,15 +1,11 @@
 package dk.magenta.datafordeler.cvr.service;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
-import dk.magenta.datafordeler.cvr.BitemporalSet;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import dk.magenta.datafordeler.cvr.records.CvrRecord;
 
 import java.io.IOException;
-import java.util.Set;
 import java.util.function.Function;
 
 public class FilterSerializer extends JsonSerializer<CvrRecord> {

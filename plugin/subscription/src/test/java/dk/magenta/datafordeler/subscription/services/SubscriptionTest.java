@@ -618,11 +618,6 @@ public class SubscriptionTest extends TestBase {
             transaction.commit();
         }
 
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            List<BusinessEventSubscription> subscriptions = QueryManager.getAllItems(session, BusinessEventSubscription.class);
-            System.out.println(subscriptions);
-        }
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
 
@@ -630,7 +625,6 @@ public class SubscriptionTest extends TestBase {
         dk.magenta.datafordeler.subscription.services.TestUserDetails testUserDetails = new dk.magenta.datafordeler.subscription.services.TestUserDetails();
         testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
         this.applyAccess(testUserDetails);
-
 
         ResponseEntity<String> response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription",

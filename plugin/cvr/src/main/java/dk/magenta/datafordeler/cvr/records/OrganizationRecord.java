@@ -9,8 +9,6 @@ import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -75,8 +73,7 @@ public class OrganizationRecord extends CvrRecord {
     public static final String IO_FIELD_NAME = "organisationsNavn";
 
     @OneToMany(mappedBy = BaseNameRecord.DB_FIELD_ORGANIZATION, targetEntity = BaseNameRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(value = IO_FIELD_NAME)
+        @JsonProperty(value = IO_FIELD_NAME)
     public Set<BaseNameRecord> names;
 
     public BitemporalSet<BaseNameRecord> getNames() {
@@ -102,8 +99,7 @@ public class OrganizationRecord extends CvrRecord {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_ORGANIZATION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(value = IO_FIELD_ATTRIBUTES)
+        @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     public Set<AttributeRecord> attributes;
 
     public void setAttributes(Set<AttributeRecord> attributes) {
@@ -144,8 +140,7 @@ public class OrganizationRecord extends CvrRecord {
     public static final String IO_FIELD_MEMBERDATA = "medlemsData";
 
     @OneToMany(mappedBy = OrganizationMemberdataRecord.DB_FIELD_ORGANIZATION, targetEntity = OrganizationMemberdataRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonProperty(value = IO_FIELD_MEMBERDATA)
+        @JsonProperty(value = IO_FIELD_MEMBERDATA)
     public Set<OrganizationMemberdataRecord> memberData = new HashSet<>();
 
     @JsonSetter(value = IO_FIELD_MEMBERDATA)
@@ -229,8 +224,9 @@ public class OrganizationRecord extends CvrRecord {
 
 
 
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getMemberData().traverse(setCallback, itemCallback);
+        this.getAttributes().traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback);
     }
 }

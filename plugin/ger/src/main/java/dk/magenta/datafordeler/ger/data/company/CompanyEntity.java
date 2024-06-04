@@ -23,7 +23,6 @@ import java.util.UUID;
                 columnList = CompanyEntity.DB_FIELD_GERNR
         ),
         @Index(name = GerPlugin.DEBUG_TABLE_PREFIX + CompanyEntity.TABLE_NAME + CompanyEntity.DB_FIELD_DAFO_UPDATED, columnList = CompanyEntity.DB_FIELD_DAFO_UPDATED)
-
 })
 public class CompanyEntity extends GerEntity implements IdentifiedEntity {
 
