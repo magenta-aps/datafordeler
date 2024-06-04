@@ -672,15 +672,11 @@ public class RecordTest extends TestBase {
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
             query.clearParameter(ParticipantRecordQuery.KOMMUNEKODE);
 
-
-
             time = OffsetDateTime.parse("1900-01-01T00:00:00Z");
             //query.setRegistrationTo(time);
             query.setEffectFromBefore(time);
             query.setEffectToAfter(time);
             query.applyFilters(session);
-
-
 
             query.setParameter(ParticipantRecordQuery.UNITNUMBER, "4000004988");
             Assert.assertEquals(1, QueryManager.getAllEntities(session, query, ParticipantRecord.class).size());
@@ -726,7 +722,6 @@ public class RecordTest extends TestBase {
                 }
             }
             Assert.assertTrue(foundCompanyData);
-
         }
     }
 
@@ -786,12 +781,10 @@ public class RecordTest extends TestBase {
 
         ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrNummer=25052943&fmt=dataonly", HttpMethod.GET, httpEntity, String.class);
         JsonNode responseNode = objectMapper.readTree(resp.getBody());
-
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseNode));
-
         Assert.assertEquals(1, responseNode.get("results").size());
 
-        ResponseEntity<String> resp2 = restTemplate.exchange("/cvr/company/1/rest/search?navn=MAGENTA ApS", HttpMethod.GET, httpEntity, String.class);
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?navn=MAGENTA ApS", HttpMethod.GET, httpEntity, String.class);
+        responseNode = objectMapper.readTree(resp.getBody());
         Assert.assertEquals(1, responseNode.get("results").size());
     }
 
@@ -919,7 +912,6 @@ public class RecordTest extends TestBase {
                 }
             }
 
-
         } else if (!n1.asText().equals(n2.asText())) {
             boolean skip = false;
             try {
@@ -950,15 +942,9 @@ public class RecordTest extends TestBase {
 
         Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {
-
             Session session = sessionManager.getSessionFactory().openSession();
             query.applyFilters(session);
-            //System.out.println(QueryManager.getFirstQuery(session, query));
             QueryManager.getAllEntitySets(session, query, CompanyRecord.class);
-
-            //AccessAddressQuery q = new AccessAddressQuery();
-            //q.setMunicipalityCode();
-
         }
     }
 
@@ -977,9 +963,7 @@ public class RecordTest extends TestBase {
                     session.delete(participantRecord);
                 }
             }
-            //Assert.assertEquals(0, items.size());
         }
-
 
         loadParticipant("/person.json");
         ParticipantRecordQuery query = new ParticipantRecordQuery();
@@ -1003,6 +987,4 @@ public class RecordTest extends TestBase {
             Assert.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
         }
     }
-
-
 }

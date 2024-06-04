@@ -87,7 +87,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_REG_NUMBER)
     @OneToMany(targetEntity = CompanyRegNumberRecord.class, mappedBy = CompanyRegNumberRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-        private Set<CompanyRegNumberRecord> regNumber;
+    private Set<CompanyRegNumberRecord> regNumber;
 
     public void setRegNumber(Set<CompanyRegNumberRecord> regNumber) {
         this.regNumber = regNumber;
@@ -113,7 +113,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_NAMES)
     @OneToMany(targetEntity = BaseNameRecord.class, mappedBy = BaseNameRecord.DB_FIELD_COMPANY_RELATION, cascade = CascadeType.ALL)
-        private Set<BaseNameRecord> names = new HashSet<>();
+    private Set<BaseNameRecord> names = new HashSet<>();
 
     public void setNames(Set<BaseNameRecord> names) {
         this.names = names;
@@ -139,7 +139,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_LIFECYCLE)
     @OneToMany(targetEntity = LifecycleRecord.class, mappedBy = LifecycleRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-        private Set<LifecycleRecord> lifecycle = new HashSet<>();
+    private Set<LifecycleRecord> lifecycle = new HashSet<>();
 
     public void setLifecycle(Set<LifecycleRecord> lifecycle) {
         this.lifecycle = lifecycle;
@@ -165,7 +165,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_STATUS)
     @OneToMany(targetEntity = StatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-        private Set<StatusRecord> status = new HashSet<>();
+    private Set<StatusRecord> status = new HashSet<>();
 
     public void setStatus(Set<StatusRecord> status) {
         this.status = status;
@@ -191,7 +191,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_COMPANYSTATUS)
     @OneToMany(targetEntity = CompanyStatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-        private Set<CompanyStatusRecord> companyStatus = new HashSet<>();
+    private Set<CompanyStatusRecord> companyStatus = new HashSet<>();
 
 
     public void setCompanyStatus(Set<CompanyStatusRecord> companyStatus) {
@@ -218,7 +218,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_FORM)
     @OneToMany(targetEntity = FormRecord.class, mappedBy = FormRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-        private Set<FormRecord> form = new HashSet<>();
+    private Set<FormRecord> form = new HashSet<>();
 
     public void setForm(Set<FormRecord> form) {
         this.form = form;
@@ -240,7 +240,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
 
     @OneToOne(targetEntity = CompanyParticipantRelationRecord.class, mappedBy = CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION)
-        @JsonIgnore
+    @JsonIgnore
     private CompanyParticipantRelationRecord companyParticipantRelationRecord;
 
     public void setCompanyParticipantRelationRecord(CompanyParticipantRelationRecord companyParticipantRelationRecord) {
