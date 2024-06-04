@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- File to use during testing, both in local dev and in pipeline -->
 <md:EntityDescriptor entityID="Dafo-STS" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"><md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" validUntil="2017-06-21T11:15:28.354Z"><md:KeyDescriptor use="signing"><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:X509Data><ds:X509Certificate>MIIC+zCCAeOgAwIBAgIJAKMfFL7HCxFZMA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNVBAMMCWxvY2Fs
 aG9zdDAeFw0xNzA0MjUwOTQzNTdaFw0yNzA0MjMwOTQzNTdaMBQxEjAQBgNVBAMMCWxvY2FsaG9z
 dDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOQ2ayxfLX0bWEhElW83nWslKBjLYY8x

@@ -1,9 +1,13 @@
 package dk.magenta.datafordeler.core.user;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-@ConfigurationProperties("dafo.tokenvalidation")
+
+@ConfigurationProperties(prefix="dafo.tokenvalidation")
+@ConfigurationPropertiesScan
 public class TokenConfigProperties {
+
     private int timeSkewInSeconds = 5;
 
     private long maxAssertionTimeInSeconds = 60 * 60;

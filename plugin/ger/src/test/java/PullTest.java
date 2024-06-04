@@ -59,7 +59,6 @@ public class PullTest {
     public void pullTest() throws Exception {
 
         String sheetFile = "file://" + System.getProperty("user.dir") + "/src/test/resources/GER.test.xlsx";
-        System.out.println(sheetFile);
 
         GerConfiguration gerConfiguration = new GerConfiguration();
         gerConfiguration.setCompanyRegisterType(GerConfiguration.RegisterType.LOCAL_FILE);

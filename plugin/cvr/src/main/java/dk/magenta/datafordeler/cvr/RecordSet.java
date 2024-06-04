@@ -16,12 +16,12 @@ public class RecordSet<R extends CvrRecord> implements Set<R> {
         this.inner = inner;
     }
 
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        for (R item : this.inner) {
+            item.traverse(setCallback, itemCallback);
+        }
         if (setCallback != null) {
             setCallback.accept(this);
-        }
-        for (R item : this) {
-            item.traverse(setCallback, itemCallback);
         }
     }
 
@@ -41,7 +41,18 @@ public class RecordSet<R extends CvrRecord> implements Set<R> {
 
     @Override
     public boolean contains(Object o) {
-        return this.inner.contains(o);
+		// Hibernate's own contains()-method is shit when determining this.
+		// For Company contactrecords it will return false on set.contains(set.stream().first().get())
+		// Basically denying that the member in the set is contained in the set
+        if (this.inner.contains(o)) {
+            return true;
+        }
+        for (R item : this.inner) {
+            if (item.equals(o)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

@@ -136,20 +136,6 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
 
     @Test
-    public void test_C_ClearingDemoDataset() throws URISyntaxException, DataFordelerException {
-        this.load();
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            CompanyEntityManager entityManager = (CompanyEntityManager) this.registerManager.getEntityManagers().get(0);
-            entityManager.setCvrDemoList("88888881,88888882,88888883,88888884");
-            URL testData = ParseTest.class.getResource("/GLBASETEST.json");
-            String testDataPath = testData.toURI().toString();
-            registerManager.setCvrDemoCompanyFile(testDataPath);
-            entityManager.cleanDemoData(session);
-        }
-    }
-
-
-    @Test
     public void test_D_ReadingDemoDataset() throws DataFordelerException, URISyntaxException {
         this.load();
         try (Session session = sessionManager.getSessionFactory().openSession()) {

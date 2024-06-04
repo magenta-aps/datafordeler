@@ -3,7 +3,10 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 
-import javax.persistence.*;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class CvrBitemporalDataRecord extends CvrBitemporalRecord {
@@ -36,6 +39,9 @@ public abstract class CvrBitemporalDataRecord extends CvrBitemporalRecord {
         this.companyUnitRecord = companyUnitRecord;
     }
 
+    public CompanyUnitRecord getCompanyUnitRecord() {
+        return this.companyUnitRecord;
+    }
 
     public static final String DB_FIELD_PARTICIPANT = "participantRecord";
 

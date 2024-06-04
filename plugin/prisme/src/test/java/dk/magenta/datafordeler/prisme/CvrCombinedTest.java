@@ -199,7 +199,6 @@ public class CvrCombinedTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(response.getBody())));
         Assert.assertEquals(2, objectMapper.readTree(response.getBody()).size());
 
 
@@ -278,7 +277,6 @@ public class CvrCombinedTest extends TestBase {
         );
         log.debug(response.getBody());
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(response.getBody())));
         Assert.assertEquals(0, objectMapper.readTree(response.getBody()).size());
     }
 

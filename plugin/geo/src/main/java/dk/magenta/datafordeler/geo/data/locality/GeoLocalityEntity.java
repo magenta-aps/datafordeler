@@ -79,7 +79,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public static final String DB_FIELD_NAME = "name";
     public static final String IO_FIELD_NAME = "navn";
     @OneToMany(mappedBy = LocalityNameRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
@@ -97,7 +96,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public static final String DB_FIELD_ABBREVIATION = "abbreviation";
     public static final String IO_FIELD_ABBREVIATION = "forkortelse";
     @OneToMany(mappedBy = LocalityAbbreviationRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
@@ -115,7 +113,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public static final String DB_FIELD_TYPE = "type";
     public static final String IO_FIELD_TYPE = "type";
     @OneToMany(mappedBy = LocalityTypeRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
@@ -133,7 +130,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public static final String DB_FIELD_STATUS = "status";
     public static final String IO_FIELD_STATUS = "status";
     @OneToMany(mappedBy = LocalityStatusRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
@@ -151,7 +147,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public static final String DB_FIELD_BETEGN = "betegnelse";
     public static final String IO_FIELD_BETEGN = "betegnelse";
     @OneToMany(mappedBy = LocalityBetegnRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
@@ -169,7 +164,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public static final String DB_FIELD_MUNICIPALITY = "municipality";
     public static final String IO_FIELD_MUNICIPALITY = "kommunekode";
     @OneToMany(mappedBy = LocalityMunicipalityRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
@@ -187,7 +181,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public static final String DB_FIELD_LOCALITY_ROADCODE = "localityRoadcode";
     public static final String IO_FIELD_LOCALITY_ROADCODE = "lokalitetVejkode";
     @OneToMany(mappedBy = LocalityMunicipalityRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
@@ -205,7 +198,6 @@ public class GeoLocalityEntity extends SumiffiikEntity implements IdentifiedEnti
     public static final String DB_FIELD_SHAPE = "shape";
     public static final String IO_FIELD_SHAPE = "form";
     @OneToMany(mappedBy = LocalityShapeRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),

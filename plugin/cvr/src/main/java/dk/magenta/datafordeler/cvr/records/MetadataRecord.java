@@ -6,11 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 
 @MappedSuperclass
@@ -46,7 +46,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_NEWEST_STATUS = "nyesteStatus";
 
     @OneToOne(targetEntity = StatusRecord.class, cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -71,7 +70,7 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_NEWEST_CONTACT_DATA = "nyesteKontaktoplysninger";
 
     @JsonIgnore
-    public abstract Set<MetadataContactRecord> getMetadataContactRecords();
+    public abstract RecordSet<MetadataContactRecord> getMetadataContactRecords();
 
     public abstract void setMetadataContactRecords(Set<MetadataContactRecord> metadataContactRecords);
 
@@ -123,7 +122,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_NEWEST_YEARLY_NUMBERS = "nyesteAarsbeskaeftigelse";
 
     @OneToOne(cascade = CascadeType.ALL, targetEntity = CompanyYearlyNumbersRecord.class)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -148,7 +146,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_NEWEST_QUARTERLY_NUMBERS = "nyesteKvartalsbeskaeftigelse";
 
     @OneToOne(cascade = CascadeType.ALL, targetEntity = CompanyQuarterlyNumbersRecord.class)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -173,7 +170,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_NEWEST_MONTHLY_NUMBERS = "nyesteMaanedsbeskaeftigelse";
 
     @OneToOne(cascade = CascadeType.ALL, targetEntity = CompanyMonthlyNumbersRecord.class)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -299,6 +295,24 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
             subs.add(this.newestStatus);
         }
         return subs;
+    }
+
+    @Override
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        this.getMetadataContactRecords().traverse(setCallback, itemCallback);
+        if (this.newestMonthlyNumbers != null) {
+            this.newestMonthlyNumbers.traverse(setCallback, itemCallback);
+        }
+        if (this.newestQuarterlyNumbers != null) {
+            this.newestQuarterlyNumbers.traverse(setCallback, itemCallback);
+        }
+        if (this.newestYearlyNumbers != null) {
+            this.newestYearlyNumbers.traverse(setCallback, itemCallback);
+        }
+        if (this.newestStatus != null) {
+            this.newestStatus.traverse(setCallback, itemCallback);
+        }
+        super.traverse(setCallback, itemCallback);
     }
 
     /*@Override

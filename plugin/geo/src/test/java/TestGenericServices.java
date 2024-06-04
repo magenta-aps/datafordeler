@@ -361,7 +361,6 @@ public class TestGenericServices extends GeoTest {
     @Test
     public void testUnitAddressService() throws IOException {
         ResponseEntity<String> response = this.lookup("/geo/unitaddress/1/rest/search?fmt=dataonly&bnr=B-31*");
-        System.out.println(response.getBody());
         Assert.assertEquals(200, response.getStatusCode().value());
 
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());

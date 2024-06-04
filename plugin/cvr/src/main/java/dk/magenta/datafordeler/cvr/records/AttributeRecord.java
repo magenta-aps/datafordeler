@@ -12,8 +12,6 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -83,7 +81,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_VALUES = "vaerdier";
 
     @OneToMany(mappedBy = AttributeValueRecord.DB_FIELD_ATTRIBUTE, targetEntity = AttributeValueRecord.class, cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -91,8 +88,8 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
             @Filter(name = Bitemporal.FILTER_EFFECTTO_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTTO_BEFORE),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
-            // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
+        // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_AFTER),
+        // @Filter(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONTO_BEFORE),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
@@ -187,9 +184,9 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         if (o == null || getClass() != o.getClass()) return false;
         AttributeRecord that = (AttributeRecord) o;
         return sequenceNumber == that.sequenceNumber &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(valueType, that.valueType) &&
-                Objects.equals(values, that.values) &&
+                Objects.equals(getType(), that.getType()) &&
+                Objects.equals(getValueType(), that.getValueType()) &&
+                Objects.equals(getValues(), that.getValues()) &&
                 fusionOutgoing == that.fusionOutgoing;
     }
 
@@ -201,9 +198,9 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     public void merge(AttributeRecord otherRecord) {
         if (
                 otherRecord != null &&
-                        this.sequenceNumber == otherRecord.getSequenceNumber() &&
-                        Objects.equals(this.type, otherRecord.getType()) &&
-                        Objects.equals(this.valueType, otherRecord.getValueType())
+                        this.getSequenceNumber() == otherRecord.getSequenceNumber() &&
+                        Objects.equals(this.getType(), otherRecord.getType()) &&
+                        Objects.equals(this.getValueType(), otherRecord.getValueType())
         ) {
             for (AttributeValueRecord attributeValueRecord : otherRecord.getValues()) {
                 this.addValue(attributeValueRecord);
@@ -220,8 +217,8 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
 
 
 
-    public void traverse(Consumer<RecordSet> setCallback, Consumer<CvrRecord> itemCallback) {
-        super.traverse(setCallback, itemCallback);
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getValues().traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback);
     }
 }

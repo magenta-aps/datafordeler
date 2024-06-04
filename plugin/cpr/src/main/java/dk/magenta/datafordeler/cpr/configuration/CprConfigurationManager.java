@@ -7,27 +7,18 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.security.GeneralSecurityException;
-import java.util.UUID;
 
 @Component
 public class CprConfigurationManager extends ConfigurationManager<CprConfiguration> {
 
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
-
-    @Value("${dafo.cpr.encryption.keyfile:local/cpr/keyfile.json}")
-    private String encryptionKeyFileName;
-
-    @Value("${dafo.cpr.encryption.keyfile:local/cpr/encryptedpassword}")
-    private String encryptedPassword;
 
     private final Logger log = LogManager.getLogger(CprConfigurationManager.class.getCanonicalName());
 
@@ -64,11 +55,10 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
         return this.log;
     }
 
-
     @Override
     public CprConfiguration getConfiguration() {
         CprConfiguration configuration = super.getConfiguration();
-        File encryptionFile = new File(this.encryptionKeyFileName);
+        File encryptionFile = new File(configuration.getEncryptionKeyFileName());
         configuration.setPersonRegisterPasswordEncryptionFile(encryptionFile);
         configuration.setRoadRegisterPasswordEncryptionFile(encryptionFile);
         configuration.setResidenceRegisterPasswordEncryptionFile(encryptionFile);
@@ -82,7 +72,7 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
         Transaction transaction = session.beginTransaction();
         try {
             CprConfiguration cprConfiguration = session.createQuery("select c from " + CprConfiguration.class.getCanonicalName() + " c", CprConfiguration.class).getSingleResult();
-            cprConfiguration.setDirectPasswordPasswordEncryptionFile(new File(this.encryptionKeyFileName));
+            cprConfiguration.setDirectPasswordPasswordEncryptionFile(new File(cprConfiguration.getEncryptionKeyFileName()));
             cprConfiguration.setDirectPassword(password);
             session.saveOrUpdate(cprConfiguration);
             transaction.commit();
@@ -93,14 +83,14 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
             session.close();
         }
 
-        try {
+        /*try {
             CprConfiguration configuration = super.getConfiguration();
             Files.write(new File(encryptedPassword + UUID.randomUUID()).toPath(), configuration.getEncryptedDirectPassword());
         } catch (Exception e) {
             log.error("Exception", e);
-        }
+        }*/
     }
-
+/*
     @PostConstruct
     public void printDirectPassword() throws GeneralSecurityException, IOException {
         try {
@@ -112,5 +102,5 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
         } catch (Exception ioe) {
             log.error("Exception", ioe);
         }
-    }
+    }*/
 }

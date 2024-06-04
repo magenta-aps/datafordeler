@@ -130,16 +130,15 @@ public class FormRecord extends CvrBitemporalDataRecord {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         FormRecord that = (FormRecord) o;
-        return Objects.equals(companyFormCode, that.companyFormCode) &&
-                Objects.equals(shortDescription, that.shortDescription) &&
-                Objects.equals(longDescription, that.longDescription) &&
-                Objects.equals(responsibleDatasource, that.responsibleDatasource) &&
-                Objects.equals(companyForm, that.companyForm);
+        return Objects.equals(this.getCompanyFormCode(), that.getCompanyFormCode()) &&
+                Objects.equals(this.getShortDescription(), that.getShortDescription()) &&
+                Objects.equals(this.getLongDescription(), that.getLongDescription()) &&
+                Objects.equals(this.getResponsibleDatasource(), that.getResponsibleDatasource());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), companyFormCode, shortDescription, longDescription, responsibleDatasource, companyForm);
+        return Objects.hash(super.hashCode(), this.getCompanyFormCode(), this.getShortDescription(), this.getLongDescription(), this.getResponsibleDatasource());
     }
 /*
     @Override

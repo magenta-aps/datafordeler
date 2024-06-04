@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.cvr.records;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
@@ -196,13 +195,20 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         CvrBitemporalRecord that = (CvrBitemporalRecord) o;
         return Equality.equal(lastUpdated, that.lastUpdated) &&
                 Equality.equal(lastLoaded, that.lastLoaded) &&
-                Objects.equals(validity, that.validity) &&
+                Objects.equals(this.getValidFrom(), that.getValidFrom()) &&
+                Objects.equals(this.getValidTo(), that.getValidTo()) &&
                 Equality.equal(registrationTo, that.registrationTo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastUpdated, lastLoaded, validity, registrationTo);
+        return Objects.hash(
+                lastUpdated != null ? lastUpdated.toEpochSecond() : null,
+                lastLoaded != null ? lastLoaded.toEpochSecond() : null,
+                this.getValidFrom(),
+                this.getValidTo(),
+                registrationTo != null ? registrationTo.toEpochSecond() : null
+        );
     }
 
     @JsonIgnore

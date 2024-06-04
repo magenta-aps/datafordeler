@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.Session;
 
 import javax.persistence.*;
@@ -52,9 +53,9 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             this.identification = QueryManager.getOrCreateIdentification(session, this.generateUUID(), this.getDomain());
         }
         if (existing != null && existing.merge(this)) {
-            existing.save(session);
+            session.save(existing);
         } else {
-            super.save(session);
+            session.save(this);
         }
     }
 
@@ -170,5 +171,11 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     @Override
     public IdentifiedEntity getNewest(Collection<IdentifiedEntity> collection) {
         return null;
+    }
+
+    public void delete(Session session) {
+        this.traverse(RecordSet::clear, session::delete);
+        session.delete(this);
+        session.remove(this);
     }
 }
