@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.user;
 
+import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import org.opensaml.Configuration;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
@@ -23,7 +24,7 @@ public class SamlMetadataConfiguration {
             throws Exception {
         String path = config.getIssuerMetadataPath();
         if (path == null) {
-            throw new Exception("PATH IS NULL");
+            throw new ConfigurationException("SAML Issuer metadata path is null");
         }
         File metadataFile = new File(path);
         FilesystemMetadataProvider provider = new FilesystemMetadataProvider(metadataFile);
