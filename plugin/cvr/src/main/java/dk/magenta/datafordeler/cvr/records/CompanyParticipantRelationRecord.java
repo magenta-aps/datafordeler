@@ -42,7 +42,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     }
 
     @OneToOne(targetEntity = RelationParticipantRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-        @JsonProperty(value = IO_FIELD_PARTICIPANT_RELATION)
+    @JsonProperty(value = IO_FIELD_PARTICIPANT_RELATION)
     private RelationParticipantRecord relationParticipantRecord;
 
     public void setRelationParticipantRecord(RelationParticipantRecord relationParticipantRecord) {
@@ -66,7 +66,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_COMPANY_RELATION = "virksomhed";
 
     @OneToOne(targetEntity = RelationCompanyRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-        @JsonProperty(value = IO_FIELD_COMPANY_RELATION)
+    @JsonProperty(value = IO_FIELD_COMPANY_RELATION)
     private RelationCompanyRecord relationCompanyRecord;
 
     public void setRelationCompanyRecord(RelationCompanyRecord relationCompanyRecord) {
@@ -88,7 +88,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_OFFICES = "kontorsteder";
 
     @OneToMany(targetEntity = OfficeRelationRecord.class, mappedBy = OfficeRelationRecord.DB_FIELD_COMPANY_RELATION, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JsonProperty(value = IO_FIELD_OFFICES)
+    @JsonProperty(value = IO_FIELD_OFFICES)
     private Set<OfficeRelationRecord> offices = new HashSet<>();
 
     public void setOffices(Set<OfficeRelationRecord> offices) {
@@ -107,7 +107,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_ORGANIZATIONS = "organisationer";
 
     @OneToMany(mappedBy = OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION, targetEntity = OrganizationRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JsonProperty(value = IO_FIELD_ORGANIZATIONS)
+    @JsonProperty(value = IO_FIELD_ORGANIZATIONS)
     private Set<OrganizationRecord> organizations;
 
     public void setOrganizations(Set<OrganizationRecord> organizations) {

@@ -564,7 +564,7 @@ public class PersonEntity extends CprRecordEntity {
     public static final String DB_FIELD_MOTHER = "mother";
     public static final String IO_FIELD_MOTHER = "mor";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-        @Where(clause = ParentDataRecord.DB_FIELD_IS_MOTHER + "=true")
+    @Where(clause = ParentDataRecord.DB_FIELD_IS_MOTHER + "=true")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),

@@ -70,7 +70,6 @@ public class BirthDataServiceTest extends TestBase {
                 this.csvToJsonString(expected),
                 this.csvToJsonString(response.getBody().trim())
         );
-        System.out.println("Body response: " + response.getBody());
 
         response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-15", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assert.assertEquals(204, response.getStatusCodeValue());

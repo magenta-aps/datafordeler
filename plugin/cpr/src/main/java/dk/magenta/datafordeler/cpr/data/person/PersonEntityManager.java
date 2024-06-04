@@ -125,7 +125,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             }
             super.parseData(registrationData, importMetadata);
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
-                System.out.println("createSubscription on load 1");
                 this.createSubscription(this.nonGreenlandicCprNumbers);
             }
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicFatherCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
@@ -138,7 +137,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                         nonGreenlandicFatherCprNumbers.remove(person.getPersonnummer());
                     }
                 }
-                System.out.println("createSubscription on load 2");
                 this.createSubscription(this.nonGreenlandicFatherCprNumbers);
             }
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicChildrenCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
@@ -147,12 +145,10 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                     personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicChildrenCprNumbers);
                     personQuery.applyFilters(session);
                     List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-
                     for (PersonEntity person : personEntities) {
                         nonGreenlandicChildrenCprNumbers.remove(person.getPersonnummer());
                     }
                 }
-                System.out.println("createSubscription on load 3");
                 this.createSubscription(this.nonGreenlandicChildrenCprNumbers);
             }
         } finally {

@@ -895,7 +895,6 @@ public class CprTest extends TestBase {
         Assert.assertEquals("0101011234", responseObject.get("cprNummer").asText());
         JsonNode adressList = responseObject.get("addresses");
         Assert.assertEquals(18, adressList.size());
-        System.out.println(response.getBody());
     }
 
 
