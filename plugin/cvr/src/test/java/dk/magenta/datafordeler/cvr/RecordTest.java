@@ -783,7 +783,7 @@ public class RecordTest extends TestBase {
         JsonNode responseNode = objectMapper.readTree(resp.getBody());
         Assert.assertEquals(1, responseNode.get("results").size());
 
-        resp = restTemplate.exchange("/cvr/company/1/rest/search?navn=MAGENTA ApS", HttpMethod.GET, httpEntity, String.class);
+        resp = restTemplate.exchange("/cvr/company/1/rest/search?navne=*MAGENTA ApS*", HttpMethod.GET, httpEntity, String.class);
         responseNode = objectMapper.readTree(resp.getBody());
         Assert.assertEquals(1, responseNode.get("results").size());
     }
