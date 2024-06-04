@@ -143,7 +143,7 @@ build-openapi-image:
     USER_DATABASE_PASSWORD: "testTEST1"
     STS_METADATA_PATH: "/app/conf/sts_metadata.test.xml"
     
-    STATISTICS_ENABLE: "false"
+    STATISTICS_ENABLE: "true"
     PULL_ENABLE: "true"
     CRON_ENABLE: "true"
     IP_WHITELIST: "127.0.0.1"
