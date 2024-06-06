@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.*;
 
 /**
@@ -55,7 +58,14 @@ public class DafoUserManager {
     public void init() {
         this.pituSDNWhitelist.addAll(Arrays.asList(this.pituSDNWhitelistCsep));
         this.pituIDNWhitelist.addAll(Arrays.asList(this.pituIDNWhitelistCsep));
-        this.ipWhitelist.addAll(Arrays.asList(this.ipWhitelistCsep));
+        for (String address : this.ipWhitelistCsep) {
+            try {
+                address = InetAddress.getByName(address).getHostAddress();
+            } catch (UnknownHostException e) {
+            }
+            logger.info("Whitelisting IP address "+address);
+            this.ipWhitelist.add(address);
+        }
     }
 
     /**
@@ -139,8 +149,9 @@ public class DafoUserManager {
         } else if (request instanceof MockInternalServletRequest) {
             return ((MockInternalServletRequest) request).getUserDetails();
         }
-        if (!this.getIpWhitelist().contains(request.getRemoteAddr())) {
-            throw new AccessDeniedException("Client IP rejected");
+        String remoteAddr = request.getRemoteAddr();
+        if (!this.getIpWhitelist().contains(remoteAddr)) {
+            throw new AccessDeniedException("Client IP "+remoteAddr+" rejected");
         }
         // If an authorization header starting with "SAML " is provided, use it to create a
         // SAML token based user.
