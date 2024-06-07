@@ -44,6 +44,7 @@ public class DafoEngineUserManager extends DafoUserManager implements PluginMana
      */
     @Override
     public void addUserProfilesToSamlUser(SamlDafoUserDetails samlDafoUserDetails) {
+        System.out.println("loading user "+samlDafoUserDetails.getIdentity());
         for (String profileName : samlDafoUserDetails.getAssertionUserProfileNames()) {
             UserProfile userProfile = userQueryManager.getUserProfileByName(profileName);
             if (userProfile != null) {

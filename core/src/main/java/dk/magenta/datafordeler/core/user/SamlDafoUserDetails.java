@@ -25,9 +25,7 @@ public class SamlDafoUserDetails extends DafoUserDetails {
 
     public SamlDafoUserDetails(Assertion assertion) {
         super();
-
         this.sourceAssertion = assertion;
-
         this.nameQualifier = assertion.getSubject().getNameID().getNameQualifier();
         this.identity = assertion.getSubject().getNameID().getValue();
         this.onBehalfOf = this.lookupOnBehalfOf();
@@ -36,6 +34,7 @@ public class SamlDafoUserDetails extends DafoUserDetails {
     public void addUserProfile(UserProfile userprofile) {
         this.userProfiles.put(userprofile.getName(), userprofile);
         for (String systemRole : userprofile.getSystemRoles()) {
+            System.out.println("user has role "+systemRole);
             if (systemRoles.containsKey(systemRole)) {
                 systemRoles.get(systemRole).add(userprofile);
             } else {

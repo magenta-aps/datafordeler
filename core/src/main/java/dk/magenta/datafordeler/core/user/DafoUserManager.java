@@ -174,6 +174,7 @@ public class DafoUserManager {
                     userDetails.getIdentity(),
                     userDetails.getIssueInstant()
             ));
+            loggerHelper.info("SystemRoles: "+userDetails.getSystemRoles());
 
             return userDetails;
         }
@@ -217,6 +218,7 @@ public class DafoUserManager {
      * @param samlDafoUserDetails
      */
     public void addUserProfilesToSamlUser(SamlDafoUserDetails samlDafoUserDetails) {
+        System.out.println("loading user "+samlDafoUserDetails.getIdentity());
         for (String profileName : samlDafoUserDetails.getAssertionUserProfileNames()) {
             samlDafoUserDetails.addUserProfile(new UserProfile(profileName));
         }
