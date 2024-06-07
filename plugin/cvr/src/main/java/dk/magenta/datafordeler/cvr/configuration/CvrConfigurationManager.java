@@ -49,7 +49,7 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
     @Override
     public CvrConfiguration getConfiguration() {
         CvrConfiguration configuration = super.getConfiguration();
-        File encryptionFile = new File(configuration.encryptionKeyFileName);
+        File encryptionFile = new File(configuration.getEncryptionKeyFileName());
         configuration.setCompanyRegisterPasswordEncryptionFile(encryptionFile);
         configuration.setCompanyUnitRegisterPasswordEncryptionFile(encryptionFile);
         configuration.setParticipantRegisterPasswordEncryptionFile(encryptionFile);
