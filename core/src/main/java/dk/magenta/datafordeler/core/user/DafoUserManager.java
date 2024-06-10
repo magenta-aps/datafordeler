@@ -45,27 +45,10 @@ public class DafoUserManager {
 
     private final HashSet<String> pituIDNWhitelist = new HashSet<>();
 
-    @Value("${ip.whitelist:}")
-    private String[] ipWhitelistCsep;
-
-    private final HashSet<String> ipWhitelist = new HashSet<>();
-
-    public Set<String> getIpWhitelist() {
-        return this.ipWhitelist;
-    }
-
     @PostConstruct
     public void init() {
         this.pituSDNWhitelist.addAll(Arrays.asList(this.pituSDNWhitelistCsep));
         this.pituIDNWhitelist.addAll(Arrays.asList(this.pituIDNWhitelistCsep));
-        for (String address : this.ipWhitelistCsep) {
-            try {
-                address = InetAddress.getByName(address).getHostAddress();
-            } catch (UnknownHostException e) {
-            }
-            logger.info("Whitelisting IP address "+address);
-            this.ipWhitelist.add(address);
-        }
     }
 
     /**
@@ -148,10 +131,6 @@ public class DafoUserManager {
             };
         } else if (request instanceof MockInternalServletRequest) {
             return ((MockInternalServletRequest) request).getUserDetails();
-        }
-        String remoteAddr = request.getRemoteAddr();
-        if (!this.getIpWhitelist().contains(remoteAddr)) {
-            throw new AccessDeniedException("Client IP "+remoteAddr+" rejected");
         }
         // If an authorization header starting with "SAML " is provided, use it to create a
         // SAML token based user.

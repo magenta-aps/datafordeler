@@ -164,10 +164,6 @@ public abstract class TestBase {
         when(this.dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    protected void whitelistLocalhost() {
-        when(this.dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
-    }
-
     protected ResponseEntity<String> restSearch(ParameterMap parameters, String type) throws URISyntaxException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");

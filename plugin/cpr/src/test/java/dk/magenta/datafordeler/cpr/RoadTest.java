@@ -139,7 +139,6 @@ public class RoadTest extends TestBase {
 
     @Test
     public void testRoadRecordTime() throws Exception {
-        whitelistLocalhost();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = this.getSessionManager().getSessionFactory().openSession();
         importMetadata.setSession(session);
