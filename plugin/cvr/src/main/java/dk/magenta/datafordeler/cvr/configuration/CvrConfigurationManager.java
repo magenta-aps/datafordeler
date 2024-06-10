@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -18,9 +17,6 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
 
     @Autowired
     private ConfigurationSessionManager sessionManager;
-
-    @Value("${cvr.encryption.keyfile:local/cvr/keyfile.json}")
-    private String encryptionKeyFileName;
 
     private final Logger log = LogManager.getLogger("CvrConfigurationManager");
 
@@ -53,7 +49,7 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
     @Override
     public CvrConfiguration getConfiguration() {
         CvrConfiguration configuration = super.getConfiguration();
-        File encryptionFile = new File(this.encryptionKeyFileName);
+        File encryptionFile = new File(configuration.getEncryptionKeyFileName());
         configuration.setCompanyRegisterPasswordEncryptionFile(encryptionFile);
         configuration.setCompanyUnitRegisterPasswordEncryptionFile(encryptionFile);
         configuration.setParticipantRegisterPasswordEncryptionFile(encryptionFile);
