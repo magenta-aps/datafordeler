@@ -146,7 +146,6 @@ build-openapi-image:
     STATISTICS_ENABLE: "true"
     PULL_ENABLE: "true"
     CRON_ENABLE: "true"
-    IP_WHITELIST: "127.0.0.1"
     
     CPR_PROXY_URL: ""
     CPR_LOCAL_DIR: ""

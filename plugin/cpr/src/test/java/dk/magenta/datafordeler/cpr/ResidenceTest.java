@@ -121,7 +121,6 @@ public class ResidenceTest extends TestBase {
 
     //@Test
     public void testResidenceRecordTime() throws Exception {
-        whitelistLocalhost();
         OffsetDateTime now = OffsetDateTime.now();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = this.getSessionManager().getSessionFactory().openSession();

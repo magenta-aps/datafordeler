@@ -96,10 +96,6 @@ public class RecordTest extends TestBase {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    private void whitelistLocalhost() {
-        when(dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
-    }
-
     private HashMap<Integer, JsonNode> loadCompany() throws IOException, DataFordelerException {
         return loadCompany("/company_in.json");
     }
@@ -355,7 +351,6 @@ public class RecordTest extends TestBase {
     @Test
     public void testRestCompany() throws IOException, DataFordelerException {
         loadCompany("/company_in.json");
-        whitelistLocalhost();
         ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -376,7 +371,6 @@ public class RecordTest extends TestBase {
     @Test
     public void testDataOnlyRestCompany() throws IOException, DataFordelerException {
         loadCompany("/company_in.json");
-        whitelistLocalhost();
         ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
@@ -561,8 +555,6 @@ public class RecordTest extends TestBase {
     @Test
     public void testRestCompanyUnit() throws IOException, DataFordelerException {
         loadUnit("/unit.json");
-        ObjectMapper objectMapper = this.getObjectMapper();
-        whitelistLocalhost();
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = restTemplate.exchange("/cvr/unit/1/rest/search?pnummer=1020895337", HttpMethod.GET, httpEntity, String.class);
@@ -730,7 +722,6 @@ public class RecordTest extends TestBase {
     public void testRestParticipant() throws IOException, DataFordelerException {
         loadParticipant("/person.json");
         ObjectMapper objectMapper = this.getObjectMapper();
-        whitelistLocalhost();
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = restTemplate.exchange("/cvr/participant/1/rest/search?enhedsNummer=4000004988", HttpMethod.GET, httpEntity, String.class);
@@ -748,7 +739,6 @@ public class RecordTest extends TestBase {
     @Test
     public void testRestParticipantPnr() throws IOException, DataFordelerException {
         loadParticipant("/person_pnr.json");
-        whitelistLocalhost();
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
@@ -768,7 +758,6 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testCollectiveLookup() throws IOException, DataFordelerException {
-        whitelistLocalhost();
         ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
@@ -796,7 +785,6 @@ public class RecordTest extends TestBase {
      */
     @Test
     public void testCollectiveLookupDifferentSearchParameters() throws IOException, DataFordelerException {
-        whitelistLocalhost();
         ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
