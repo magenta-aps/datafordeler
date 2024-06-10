@@ -24,7 +24,7 @@ services:
       - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
       - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
     ports:
-      - 8081:80
+      - 8000:8000
       - 5005:5005
     command: [
       "java",
@@ -77,7 +77,7 @@ services:
       - SECONDARY_DATABASE_DEFAULT_SCHEMA=dbo
       - CRON_ENABLE=true
     ports:
-      - 8082:80
+      - 8082:8000
     command: bash -c "cd /code && mvn --batch-mode -T 2C test"
     # command: bash -c "cd /code/plugin/statistik && mvn --batch-mode -T 2C -Dtest=dk.magenta.datafordeler.statistik.*Test test"
     #use docker-compose up test to execute tests
