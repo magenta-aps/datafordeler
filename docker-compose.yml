@@ -27,7 +27,7 @@ services:
     environment:
       - DATABASE_IMPORT_FILES=/app/createdbs.sql
     ports:
-      - 8080:80
+      - 8080:8000
 #      - 7012:7012
 #    command: java -Xms8g -Xmx16g -XX:+HeapDumpOnOutOfMemoryError -Djava.rmi.server.hostname=127.0.0.1 -XX:HeapDumpPath=/app/log -Dcom.sun.management.jmxremote.rmi.port=7012 -Dcom.sun.management.jmxremote.port=7012 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dloader.path=/app/plugin/ -cp /app/core/datafordeler-core-exec.jar org.springframework.boot.loader.launch.PropertiesLauncher
 
