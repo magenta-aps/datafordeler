@@ -199,17 +199,18 @@ public class MonitorService {
         this.addAccessCheckPoint(HttpMethod.valueOf(method), path, body);
     }
 
+    @Value("${server.port}")
+    private int accessPort;
 
     @RequestMapping(path = "/access")
     public void checkAccess(HttpServletRequest request, HttpServletResponse response) throws IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkAccess");
 
-        int port = Integer.parseInt(environment.getProperty("local.server.port"));
         StringJoiner successes = new StringJoiner("\n");
         StringJoiner failures = new StringJoiner("\n");
 
-        HttpHost localhost = new HttpHost("localhost", port, request.getScheme());
+        HttpHost localhost = new HttpHost("localhost", this.accessPort, request.getScheme());
 
         CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(
                 new SSLConnectionSocketFactory(
