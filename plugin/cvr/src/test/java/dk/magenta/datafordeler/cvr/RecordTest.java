@@ -96,10 +96,6 @@ public class RecordTest extends TestBase {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    private void whitelistLocalhost() {
-        when(dafoUserManager.getIpWhitelist()).thenReturn(Collections.singleton("127.0.0.1"));
-    }
-
     private HashMap<Integer, JsonNode> loadCompany() throws IOException, DataFordelerException {
         return loadCompany("/company_in.json");
     }
