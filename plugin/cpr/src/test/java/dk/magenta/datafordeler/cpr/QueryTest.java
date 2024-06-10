@@ -64,7 +64,6 @@ public class QueryTest extends TestBase {
 
     @Test
     public void testPersonAccess() throws Exception {
-        whitelistLocalhost();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
         importMetadata.setSession(session);
@@ -160,7 +159,6 @@ public class QueryTest extends TestBase {
 
     @Test
     public void testPersonRecordTime() throws Exception {
-        whitelistLocalhost();
         OffsetDateTime now = OffsetDateTime.now();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
@@ -205,7 +203,6 @@ public class QueryTest extends TestBase {
 
     @Test
     public void testPersonDataOnly() throws Exception {
-        whitelistLocalhost();
         OffsetDateTime now = OffsetDateTime.now();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
@@ -248,7 +245,6 @@ public class QueryTest extends TestBase {
 
     @Test
     public void testPersonGenericSearchParameters() throws Exception {
-        whitelistLocalhost();
         OffsetDateTime now = OffsetDateTime.now();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
@@ -388,7 +384,6 @@ public class QueryTest extends TestBase {
 
     @Test
     public void testPersonMunicipalityRestriction() throws Exception {
-        whitelistLocalhost();
         ImportMetadata importMetadata = new ImportMetadata();
         Session session = sessionManager.getSessionFactory().openSession();
         importMetadata.setSession(session);
