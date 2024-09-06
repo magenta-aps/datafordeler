@@ -54,48 +54,23 @@ variables:
   DAFODOC_IMAGE_TAG: magentaaps/datafordeler_doc:${CI_COMMIT_TAG}
 # Build stage
 #############
-
-.build-default: &build-default
-  stage: build
-  tags:
-    - docker
-  image:
-    # We use the `:debug` image as it contains `sh` needed by gitlab-ci.
-    name: gcr.io/kaniko-project/executor:v1.15.0-debug
-    entrypoint: [ "" ]
-
 build-mssql-image:
-  <<: *build-default
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - cat /kaniko/.docker/config.json
-    - /kaniko/executor
-      --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/docker/Dockerfile.sqlserver
-      --destination=${DAFOSQL_IMAGE_SHA}
-      --cache=true
+  extends: .build-docker
+  variables:
+    CI_IMAGE: ${DAFOSQL_IMAGE_SHA}
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.sqlserver
 
 build-image:
-  <<: *build-default
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - cat /kaniko/.docker/config.json
-    - /kaniko/executor
-      --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/docker/Dockerfile
-      --destination=${DAFO_IMAGE_SHA}
-      --cache=true
+  extends: .build-docker
+  variables:
+    CI_IMAGE: ${DAFO_IMAGE_SHA}
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
 
 build-openapi-image:
-  <<: *build-default
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - cat /kaniko/.docker/config.json
-    - /kaniko/executor
-      --context=${CI_PROJECT_DIR}
-      --dockerfile=${CI_PROJECT_DIR}/docker/Dockerfile.openapi
-      --destination=${DAFODOC_IMAGE_SHA}
-      --cache=true
+  extends: .build-docker
+  variables:
+    CI_IMAGE: ${DAFODOC_IMAGE_SHA}
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.openapi
 
 
  # Test stage 
