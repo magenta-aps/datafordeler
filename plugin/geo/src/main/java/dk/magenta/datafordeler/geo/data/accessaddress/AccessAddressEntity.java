@@ -73,7 +73,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     public static final String DB_FIELD_HOUSE_NUMBER = "houseNumber";
     public static final String IO_FIELD_HOUSE_NUMBER = "husNummer";
     @OneToMany(mappedBy = AccessAddressHouseNumberRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),
@@ -91,7 +90,6 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
     public static final String DB_FIELD_BLOCK_NAME = "blockName";
     public static final String IO_FIELD_BLOCK_NAME = "blokNavn";
     @OneToMany(mappedBy = AccessAddressBlockNameRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_AFTER),
             @Filter(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, condition = Monotemporal.FILTERLOGIC_REGISTRATIONFROM_BEFORE),

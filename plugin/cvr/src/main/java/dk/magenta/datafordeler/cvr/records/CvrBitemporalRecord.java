@@ -238,7 +238,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     public static void updateRegistrations(Set<? extends CvrBitemporalRecord> records, boolean onlyOneOpenRegistration) {
-        System.out.println("There are "+records.size()+" records");
+        /*System.out.println("There are "+records.size()+" records");
         if (records != null && records.size() > 1) {
             OffsetDateTime nextUpdateTime = null;
             Stream<? extends CvrBitemporalRecord> recordStream = records.stream();
@@ -252,6 +252,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 System.out.println(record.getId()+" "+record.getRegistrationFrom()+" "+record.getRegistrationTo());
                 nextUpdateTime = record.getRegistrationFrom();
             }
-        }
+        }*/
     }
 }

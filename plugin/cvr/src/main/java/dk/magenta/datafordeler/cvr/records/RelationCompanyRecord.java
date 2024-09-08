@@ -87,7 +87,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_REG_NUMBER)
     @OneToMany(targetEntity = CompanyRegNumberRecord.class, mappedBy = CompanyRegNumberRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<CompanyRegNumberRecord> regNumber;
 
     public void setRegNumber(Set<CompanyRegNumberRecord> regNumber) {
@@ -114,7 +113,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_NAMES)
     @OneToMany(targetEntity = BaseNameRecord.class, mappedBy = BaseNameRecord.DB_FIELD_COMPANY_RELATION, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<BaseNameRecord> names = new HashSet<>();
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -141,7 +139,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_LIFECYCLE)
     @OneToMany(targetEntity = LifecycleRecord.class, mappedBy = LifecycleRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<LifecycleRecord> lifecycle = new HashSet<>();
 
     public void setLifecycle(Set<LifecycleRecord> lifecycle) {
@@ -168,7 +165,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_STATUS)
     @OneToMany(targetEntity = StatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<StatusRecord> status = new HashSet<>();
 
     public void setStatus(Set<StatusRecord> status) {
@@ -195,7 +191,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_COMPANYSTATUS)
     @OneToMany(targetEntity = CompanyStatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<CompanyStatusRecord> companyStatus = new HashSet<>();
 
 
@@ -223,7 +218,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     @JsonProperty(value = IO_FIELD_FORM)
     @OneToMany(targetEntity = FormRecord.class, mappedBy = FormRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<FormRecord> form = new HashSet<>();
 
     public void setForm(Set<FormRecord> form) {
@@ -246,7 +240,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
 
     @OneToOne(targetEntity = CompanyParticipantRelationRecord.class, mappedBy = CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private CompanyParticipantRelationRecord companyParticipantRelationRecord;
 

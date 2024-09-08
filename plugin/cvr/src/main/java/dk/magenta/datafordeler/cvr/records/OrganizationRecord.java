@@ -78,7 +78,6 @@ public class OrganizationRecord extends CvrRecord {
     public static final String IO_FIELD_NAME = "organisationsNavn";
 
     @OneToMany(mappedBy = BaseNameRecord.DB_FIELD_ORGANIZATION, targetEntity = BaseNameRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -117,7 +116,6 @@ public class OrganizationRecord extends CvrRecord {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_ORGANIZATION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     public Set<AttributeRecord> attributes;
 
@@ -159,7 +157,6 @@ public class OrganizationRecord extends CvrRecord {
     public static final String IO_FIELD_MEMBERDATA = "medlemsData";
 
     @OneToMany(mappedBy = OrganizationMemberdataRecord.DB_FIELD_ORGANIZATION, targetEntity = OrganizationMemberdataRecord.class, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonProperty(value = IO_FIELD_MEMBERDATA)
     public Set<OrganizationMemberdataRecord> memberData = new HashSet<>();
 

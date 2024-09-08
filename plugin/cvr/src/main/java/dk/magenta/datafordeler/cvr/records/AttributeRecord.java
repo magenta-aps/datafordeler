@@ -85,7 +85,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_VALUES = "vaerdier";
 
     @OneToMany(mappedBy = AttributeValueRecord.DB_FIELD_ATTRIBUTE, targetEntity = AttributeValueRecord.class, cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -216,9 +215,7 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
             for (AttributeValueRecord attributeValueRecord : otherValues) {
                 this.addValue(attributeValueRecord);
             }
-            System.out.println("Update registrations for attributerecord "+this.getType());
             CvrBitemporalRecord.updateRegistrations(this.values, true);
-            System.out.println("there are "+this.values.size()+" values");
         }
     }
 

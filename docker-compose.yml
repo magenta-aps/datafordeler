@@ -84,7 +84,7 @@ services:
       - USER_DATABASE_URL=jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler
       - USER_DATABASE_USERNAME=sa
       - USER_DATABASE_PASSWORD=testTEST1
-      - STS_METADATA_PATH=/code/core/src/main/resources/dk/magenta/datafordeler/core/user/sts_metadata.xml
+      - STS_METADATA_PATH=/app/core/conf/sts_metadata.xml
       - STATISTICS_ENABLE=false
       - PULL_ENABLE=true
       - CRON_ENABLE=true
@@ -97,6 +97,8 @@ services:
       - CVR_DEMO_UNITFILE=file:///app/dev-env/local/cvr/unit.json 
       - CVR_DEMO_PARTICIPANTFILE=file:///app/dev-env/local/cvr/person.json
       - ERRORFILE_DIR=cache/log
+    volumes:
+      - ./docker/dev-env/sts_metadata.xml:/app/core/conf/sts_metadata.xml:ro
     ports:
       - 8082:80
     command: bash -c "cd /code && mvn --batch-mode -T 2C test"

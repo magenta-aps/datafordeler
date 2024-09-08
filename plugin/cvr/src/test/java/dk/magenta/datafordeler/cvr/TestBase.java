@@ -40,7 +40,7 @@ public abstract class TestBase {
     @Autowired
     protected Engine engine;
 
-    @After
+    /*@After
     public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
@@ -64,5 +64,5 @@ public abstract class TestBase {
             transaction.commit();
             QueryManager.clearCaches();
         }
-    }
+    }*/
 }

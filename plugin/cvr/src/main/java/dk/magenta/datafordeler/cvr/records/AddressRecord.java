@@ -311,7 +311,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = DB_FIELD_MUNICIPALITY + DatabaseEntry.REF, referencedColumnName = "id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private AddressMunicipalityRecord municipality;
 
     @JsonProperty(value = IO_FIELD_MUNICIPALITY)

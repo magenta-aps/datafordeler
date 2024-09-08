@@ -180,7 +180,6 @@ public class CvrRegisterManager extends RegisterManager {
                 registerType = CvrConfiguration.RegisterType.DISABLED;
             }
         }
-        System.out.println("registerType: "+String.valueOf(registerType.getValue()));
         switch (registerType) {
             case DISABLED:
                 break;
