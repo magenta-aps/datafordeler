@@ -60,7 +60,7 @@ public class ConfigurationSessionManager extends SessionManager {
     protected DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(getEnv("SECONDARY_DATABASE_CLASS", "com.microsoft.sqlserver.jdbc.SQLServerDriver"));
-        dataSource.setUrl(getEnv("SECONDARY_DATABASE_URL", ""));
+        dataSource.setUrl(getEnv("SECONDARY_DATABASE_URL", "jdbc:sqlserver://agint02listen:49700;databaseName=Datafordeler;IntegratedSecurity=true"));
         dataSource.setUsername(getEnv("SECONDARY_DATABASE_USERNAME", ""));
         dataSource.setPassword(getEnv("SECONDARY_DATABASE_PASSWORD", ""));
         return dataSource;

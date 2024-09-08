@@ -90,7 +90,7 @@ public class SessionManager {
     protected DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(getEnv("DATABASE_CLASS", "com.microsoft.sqlserver.jdbc.SQLServerDriver"));
-        dataSource.setUrl(getEnv("DATABASE_URL", ""));
+        dataSource.setUrl(getEnv("DATABASE_URL", "jdbc:sqlserver://agint02listen:49700;databaseName=Datafordeler;IntegratedSecurity=true"));
         dataSource.setUsername(getEnv("DATABASE_USERNAME", ""));
         dataSource.setPassword(getEnv("DATABASE_PASSWORD", ""));
         return dataSource;
