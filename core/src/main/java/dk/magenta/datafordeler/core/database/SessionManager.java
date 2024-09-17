@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.database;
 
+import com.fasterxml.classmate.AnnotationConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -29,15 +30,12 @@ public class SessionManager {
 
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
-
     public SessionManager() throws IOException {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setDataSource(dataSource());
+        sessionFactoryBean.setDataSource(this.dataSource());
         sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
         sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
-        for (Class managedClass : managedClasses()) {
-            sessionFactoryBean.setAnnotatedClasses(managedClass);
-        }
+        sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
         sessionFactoryBean.afterPropertiesSet();
         this.sessionFactory = sessionFactoryBean.getObject();
     }
