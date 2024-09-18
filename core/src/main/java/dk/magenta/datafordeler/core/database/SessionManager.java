@@ -33,7 +33,7 @@ public class SessionManager {
     public SessionManager() throws IOException {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setDataSource(this.dataSource());
-        sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
+        // sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
         sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
         sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
         sessionFactoryBean.afterPropertiesSet();
