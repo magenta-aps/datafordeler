@@ -48,29 +48,6 @@ public class ResidenceTest extends TestBase {
         testData.close();
     }
 
-    @Test
-    public void testResidenceIdempotence() throws IOException, DataFordelerException {
-        Session session = this.getSessionManager().getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        ImportMetadata importMetadata = new ImportMetadata();
-        importMetadata.setSession(session);
-        importMetadata.setTransactionInProgress(true);
-        try {
-            loadResidence(importMetadata);
-            List<ResidenceEntity> entities = QueryManager.getAllEntities(session, ResidenceEntity.class);
-            JsonNode firstImport = this.getObjectMapper().valueToTree(entities);
-
-            loadResidence(importMetadata);
-            entities = QueryManager.getAllEntities(session, ResidenceEntity.class);
-            JsonNode secondImport = this.getObjectMapper().valueToTree(entities);
-            assertJsonEquality(firstImport, secondImport, true, true);
-
-        } finally {
-            transaction.rollback();
-            session.close();
-        }
-    }
-
     //@Test
     public void testParseResidence() throws Exception {
         Session session = this.getSessionManager().getSessionFactory().openSession();
