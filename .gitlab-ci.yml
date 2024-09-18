@@ -59,12 +59,14 @@ build-mssql-image:
   variables:
     CI_IMAGE: ${DAFOSQL_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.sqlserver
+    BUILD_DOCKER_EXTRA_FLAGS: --build-arg=COMMIT_TAG=${CI_COMMIT_TAG}
 
 build-image:
   extends: .build-docker
   variables:
     CI_IMAGE: ${DAFO_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
+    BUILD_DOCKER_EXTRA_FLAGS: --build-arg=COMMIT_TAG=${CI_COMMIT_TAG}
 
 build-openapi-image:
   extends: .build-docker
