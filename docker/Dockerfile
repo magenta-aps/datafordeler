@@ -6,9 +6,12 @@ COPY core /code/core
 COPY plugin /code/plugin
 WORKDIR /code/
 RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
-RUN mkdir -p /app/core && mkdir -p /app/plugin/jar \
- && mv /code/core/target/*.jar /app/core/ \
- && mv /code/plugin/jar/*.jar /app/plugin/jar/
+RUN mkdir -p /app/core && mkdir -p /app/plugin/jar && \
+    mv /code/core/target/*.jar /app/core/ && \
+    mv /code/plugin/jar/*.jar /app/plugin/jar/
+
+ARG COMMIT_TAG
+ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 
 # RUN rm -r /code
 COPY conf/sts_metadata.test.xml /app/conf/sts_metadata.test.xml
