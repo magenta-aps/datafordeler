@@ -4,6 +4,26 @@ set DIR=%~dp0%
 set RUN_ARGS=-Dlog4j2.formatMsgNoLookups=true -Dloader.path=../plugin/jar/
 set RUN_JAR=%DIR%target\dafo-dataprovider.war
 
+
+set DATABASE_CLASS=com.microsoft.sqlserver.jdbc.SQLServerDriver
+set DATABASE_URL=jdbc:sqlserver://agint02listen:49700;databaseName=Datafordeler;IntegratedSecurity=true
+set DATABASE_DIALECT=org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect
+set DATABASE_SHOW_SQL=false
+set DATABASE_USERNAME=
+set DATABASE_PASSWORD=
+set DATABASE_METHOD=update
+set DATABASE_DEFAULT_SCHEMA=dbo
+
+set SECONDARY_DATABASE_CLASS=com.microsoft.sqlserver.jdbc.SQLServerDriver
+set SECONDARY_DATABASE_URL=jdbc:sqlserver://agint02listen:49700;databaseName=dafodb005;IntegratedSecurity=true
+set SECONDARY_DATABASE_DIALECT=org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect
+set SECONDARY_DATABASE_SHOW_SQL=false
+set SECONDARY_DATABASE_USERNAME=
+set SECONDARY_DATABASE_PASSWORD=
+set SECONDARY_DATABASE_METHOD=update
+set SECONDARY_DATABASE_DEFAULT_SCHEMA=dbo
+
+
 rem Load global settings
 call "%DIR%settings.bat"
 

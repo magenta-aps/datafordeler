@@ -122,13 +122,29 @@ public class Bitemporality implements Comparable<Bitemporality> {
     public boolean containsRegistration(OffsetDateTime rangeStart, OffsetDateTime rangeEnd) {
         return (this.registrationFrom == null || (rangeStart != null && !rangeStart.isBefore(this.registrationFrom))) && (this.registrationTo == null || (rangeEnd != null && !rangeEnd.isAfter(this.registrationTo)));
     }
+    public boolean containsRegistration(OffsetDateTime time) {
+        return this.containsRegistration(time, time);
+    }
 
     public boolean containsEffect(OffsetDateTime rangeStart, OffsetDateTime rangeEnd) {
         return (this.effectFrom == null || (rangeStart != null && !rangeStart.isBefore(this.effectFrom))) && (this.effectTo == null || (rangeEnd != null && !rangeEnd.isAfter(this.effectTo)));
     }
+    public boolean containsEffect(OffsetDateTime time) {
+        return this.containsEffect(time, time);
+    }
 
     public boolean contains(Bitemporality other) {
         return this.containsRegistration(other.registrationFrom, other.registrationTo) && this.containsEffect(other.effectFrom, other.effectTo);
+    }
+
+    public boolean contains(OffsetDateTime registrationTime, OffsetDateTime effectTime) {
+        return this.containsRegistration(registrationTime) && this.containsEffect(effectTime);
+    }
+    public boolean contains(OffsetDateTime time) {
+        return this.contains(time, time);
+    }
+    public boolean isCurrent() {
+        return this.contains(OffsetDateTime.now());
     }
 
     public String toString() {

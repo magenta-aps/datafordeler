@@ -59,23 +59,23 @@ public class ConfigurationSessionManager extends SessionManager {
 
     protected DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(System.getenv("SECONDARY_DATABASE_CLASS"));
-        dataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
-        dataSource.setUsername(System.getenv("SECONDARY_DATABASE_USERNAME"));
-        dataSource.setPassword(System.getenv("SECONDARY_DATABASE_PASSWORD"));
+        dataSource.setDriverClassName(getEnv("SECONDARY_DATABASE_CLASS", "com.microsoft.sqlserver.jdbc.SQLServerDriver"));
+        dataSource.setUrl(getEnv("SECONDARY_DATABASE_URL", "jdbc:sqlserver://agint02listen:49700;databaseName=dafodb005;IntegratedSecurity=true"));
+        dataSource.setUsername(getEnv("SECONDARY_DATABASE_USERNAME", ""));
+        dataSource.setPassword(getEnv("SECONDARY_DATABASE_PASSWORD", ""));
         return dataSource;
     }
 
     protected Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
 
-        hibernateProperties.setProperty("hibernate.dialect", getEnv("SECONDARY_DATABASE_DIALECT", "org.hibernate.dialect.H2Dialect"));
+        hibernateProperties.setProperty("hibernate.dialect", getEnv("SECONDARY_DATABASE_DIALECT", "org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect"));
         hibernateProperties.setProperty("hibernate.show_sql", getEnv("SECONDARY_DATABASE_SHOW_SQL", "false"));
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", getEnv("SECONDARY_DATABASE_METHOD", "validate"));
         hibernateProperties.setProperty("hibernate.default_schema", getEnv("SECONDARY_DATABASE_DEFAULT_SCHEMA", "dbo"));
 
-        hibernateProperties.setProperty("hibernate.connection.username", System.getenv("DATABASE_USERNAME"));
-        hibernateProperties.setProperty("hibernate.connection.password", System.getenv("DATABASE_PASSWORD"));
+        hibernateProperties.setProperty("hibernate.connection.username", getEnv("DATABASE_USERNAME", ""));
+        hibernateProperties.setProperty("hibernate.connection.password", getEnv("DATABASE_PASSWORD", ""));
 
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
         hibernateProperties.setProperty("hibernate.c3p0.min_size", "5");
