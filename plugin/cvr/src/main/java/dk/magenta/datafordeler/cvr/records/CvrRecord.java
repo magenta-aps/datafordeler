@@ -44,7 +44,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     }
 
     public void save(Session session) {
-        session.save(this);
+        session.saveOrUpdate(this);
     }
 
     protected static OffsetDateTime roundTime(OffsetDateTime in) {

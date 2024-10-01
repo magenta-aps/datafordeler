@@ -159,7 +159,7 @@ test-core:
   before_script:
     - cd /code/core
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -170,7 +170,7 @@ test-cpr:
   before_script:
     - cd /code/plugin/cpr
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -181,7 +181,7 @@ test-cvr:
   before_script:
     - cd /code/plugin/cvr
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit: target/surefire-reports/*.xml
@@ -191,7 +191,7 @@ test-eboks:
   before_script:
     - cd /code/plugin/eboks
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -202,7 +202,7 @@ test-eskat:
   before_script:
     - cd /code/plugin/eskat
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -213,7 +213,7 @@ test-geo:
   before_script:
     - cd /code/plugin/geo
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -224,7 +224,7 @@ test-ger:
   before_script:
     - cd /code/plugin/ger
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -235,7 +235,7 @@ test-prisme:
   before_script:
     - cd /code/plugin/prisme
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -246,7 +246,7 @@ test-combinedPitu:
   before_script:
     - cd /code/plugin/combinedPitu
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -257,7 +257,7 @@ test-statistik:
   before_script:
     - cd /code/plugin/statistik
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit:
@@ -268,7 +268,7 @@ test-subscription:
   before_script:
     - cd /code/plugin/subscription
   script:
-    - mvn --batch-mode test
+    - mvn --batch-mode -T 2C test
   artifacts:
     reports:
       junit: /code/plugin/subscription/target/surefire-reports/*.xml

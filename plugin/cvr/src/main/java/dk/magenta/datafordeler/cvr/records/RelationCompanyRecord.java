@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -280,6 +282,12 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
             for (FormRecord form : other.getForm()) {
                 this.addForm(form);
             }
+//            CvrBitemporalRecord.updateRegistrations(this.lifecycle);
+//            CvrBitemporalRecord.updateRegistrations(this.regNumber);
+//            CvrBitemporalRecord.updateRegistrations(this.names);
+//            CvrBitemporalRecord.updateRegistrations(this.status);
+//            CvrBitemporalRecord.updateRegistrations(this.companyStatus);
+//            CvrBitemporalRecord.updateRegistrations(this.form);
         }
     }
 

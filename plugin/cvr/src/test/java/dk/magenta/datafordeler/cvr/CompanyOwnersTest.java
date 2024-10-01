@@ -9,7 +9,6 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
@@ -47,7 +46,16 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-public class CompanyOwnersTest extends TestBase {
+public class CompanyOwnersTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private SessionManager sessionManager;
+
+    @Autowired
+    private CvrRegisterManager registerManager;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -58,12 +66,13 @@ public class CompanyOwnersTest extends TestBase {
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
+
     @Test
-    public void testOwners() throws DataFordelerException, URISyntaxException, JsonProcessingException {
+    public void testParseCompanyFile() throws DataFordelerException, URISyntaxException, JsonProcessingException {
         TestUserDetails testUserDetails = new TestUserDetails();
+
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);
-
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             CompanyRecordQuery query = new CompanyRecordQuery();
             OffsetDateTime time = OffsetDateTime.now();
@@ -75,15 +84,13 @@ public class CompanyOwnersTest extends TestBase {
         }
         ImportMetadata importMetadata = new ImportMetadata();
 
-        registerManager.setCvrDemoCompanyFile(ParseTest.class.getResource("/company_in4.json").toURI().toString());
-        registerManager.setCvrDemoParticipantFile(ParseTest.class.getResource("/person.json").toURI().toString());
+        URL testData = ParseTest.class.getResource("/company_in4.json");
+        String testDataPath = testData.toURI().toString();
+        registerManager.setCvrDemoCompanyFile(testDataPath);
 
-        for (EntityManager entityManager : this.registerManager.getEntityManagers()) {
-            if (entityManager.getSchema().equals("virksomhed") || entityManager.getSchema().equals("deltager")) {
-                InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
-                entityManager.parseData(stream, importMetadata);
-            }
-        }
+        CvrEntityManager entityManager = (CvrEntityManager) this.registerManager.getEntityManagers().get(0);
+        InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
+        entityManager.parseData(stream, importMetadata);
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
@@ -110,11 +117,11 @@ public class CompanyOwnersTest extends TestBase {
             Assert.assertEquals(1, reelle.size());
 
             Assert.assertEquals("Morten Kjærsgaard", reelle.get(0).get("deltager").get("navne").get(0).get("navn").asText());
-            Assert.assertEquals("0.7396", reelle.get(0).get("ejerandel").get(0).get("ejerandel").asText());
+            Assert.assertEquals("0.7396", reelle.get(0).get("ejerandel").asText());
 
             Assert.assertEquals("MAGENTA ApS", legale.get(0).get("deltager").get("navne").get(0).get("navn").asText());
-            Assert.assertEquals("1", legale.get(0).get("ejerandel").get(0).get("ejerandel").get("fra").asText());
-            Assert.assertEquals("1", legale.get(0).get("ejerandel").get(0).get("ejerandel").get("til").asText());
+            Assert.assertEquals("1", legale.get(0).get("ejerandel").get("fra").asText());
+            Assert.assertEquals("1", legale.get(0).get("ejerandel").get("til").asText());
         }
     }
 }
