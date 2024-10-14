@@ -74,7 +74,7 @@ public class TestUserDetails extends DafoUserDetails {
 
     @Override
     public Collection<UserProfile> getUserProfilesForRole(String role) {
-        return systemRoles.getOrDefault(role, Collections.EMPTY_SET);
+        return systemRoles.getOrDefault(role, new HashSet<>());
     }
 
     public void giveAccess(SystemRole... rolesDefinitions) {
