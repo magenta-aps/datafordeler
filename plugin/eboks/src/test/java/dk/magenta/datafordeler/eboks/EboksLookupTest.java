@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
@@ -35,7 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.StringJoiner;
 
 import static org.mockito.Mockito.when;
@@ -47,7 +45,6 @@ public class EboksLookupTest {
 
     @Autowired
     TestRestTemplate restTemplate;
-    HashSet<Entity> createdEntities = new HashSet<>();
     @Autowired
     private SessionManager sessionManager;
     @Autowired
@@ -144,9 +141,7 @@ public class EboksLookupTest {
     }
 
     @Test
-    public void testSurveilence() throws Exception {
-
-
+    public void testSurveillance() throws Exception {
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> response = restTemplate.exchange(
                 "/eboks/recipient/lookup?cpr=" + "{cprs}" + "&cvr={cvrs}",
@@ -155,7 +150,6 @@ public class EboksLookupTest {
                 String.class, "1111", "1111"
         );
         Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-
     }
 
 
@@ -197,7 +191,6 @@ public class EboksLookupTest {
         JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
     }
 
-
     @Test
     public void testCompanyAndCprLookup() throws Exception {
         loadCompany();
@@ -212,11 +205,10 @@ public class EboksLookupTest {
 
         TestUserDetails testUserDetails = new TestUserDetails();
 
-
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
 
         ObjectNode body = objectMapper.createObjectNode();
-        ArrayList cprList = new ArrayList();
+        ArrayList<String> cprList = new ArrayList<>();
         cprList.add("0000000000");//From GL
         cprList.add("0000000001");//From GL
         cprList.add("0000000002");//From GL
@@ -228,7 +220,7 @@ public class EboksLookupTest {
         cprList.add("0101011234");//Was from greenland
         cprList.add("0101011235");//Was from greenland before eboks
 
-        ArrayList cvrList = new ArrayList();
+        ArrayList<String> cvrList = new ArrayList<>();
         cvrList.add("25052943");
         cvrList.add("0000000007");
         cvrList.add("0000000008");
@@ -248,7 +240,6 @@ public class EboksLookupTest {
         );
         Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
-
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
@@ -260,37 +251,12 @@ public class EboksLookupTest {
                 httpEntity,
                 String.class, cprs, cvrs
         );
-
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-
         JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0101001235\",\"0000000000\",\"0000000001\",\"0000000002\",\"0101011234\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"},{\"nr\":\"0101003457\",\"reason\":\"Minor\"},{\"nr\":\"0101003456\",\"reason\":\"Dead\"},{\"nr\":\"0101011235\",\"reason\":\"NotFromGreenland\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
-
     }
-
 
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
-    }
-
-    private void cleanup() {
-        Session session = sessionManager.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        try {
-            for (Entity entity : createdEntities) {
-                try {
-                    session.delete(entity);
-                } catch (Exception e) {
-                }
-            }
-            createdEntities.clear();
-        } finally {
-            try {
-                transaction.commit();
-            } catch (Exception e) {
-            } finally {
-                session.close();
-            }
-        }
     }
 
 }
