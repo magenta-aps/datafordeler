@@ -270,12 +270,10 @@ public abstract class RegisterManager {
             File temp = File.createTempFile("datafordeler-cache-"+this.getPlugin().getName().toLowerCase(), "");
             temp.delete();
             temp.mkdir();
-            localCopyFolder = temp.getAbsolutePath();
+            return temp.getAbsolutePath();
         }
         File localFolder = new File(localCopyFolder);
-        if (!localFolder.exists()) {
-            localFolder.mkdirs();
-        }
+        localFolder.mkdirs();
         return localFolder.getAbsolutePath();
     }
 }
