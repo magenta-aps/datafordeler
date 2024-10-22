@@ -109,6 +109,9 @@ public class SingleCondition extends Condition {
         if (cls == null) {
             return value;
         }
+        if (cls == value.getClass()) {
+            return value;
+        }
         if ((cls == Long.TYPE || cls == Long.class) && !(value instanceof Long)) {
             if (value instanceof Number) {
                 return ((Number) value).longValue();
@@ -127,6 +130,8 @@ public class SingleCondition extends Condition {
             return OffsetDateTime.parse((String) value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         } else if (cls == LocalDateTime.class && value instanceof String) {
             return LocalDateTime.parse((String) value, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        } else if (cls == String.class && value instanceof Long) {
+            return Long.toString((Long) value);
         }
         return cls.cast(value);
     }

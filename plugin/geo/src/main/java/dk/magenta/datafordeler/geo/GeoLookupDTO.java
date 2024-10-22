@@ -12,6 +12,7 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeNameRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class GeoLookupDTO extends CprLookupDTO {
         this.localityName = cprDto.getLocalityName();
         this.postalCode = cprDto.getPostalCode();
         this.postalDistrict = cprDto.getPostalDistrict();
+        this.accessAddressGlobalId = cprDto.getAccessAddressGlobalId();
     }
 
     public GeoLookupDTO(ResultSet resultSet) {
@@ -76,6 +78,15 @@ public class GeoLookupDTO extends CprLookupDTO {
             }
         }
 
+        Set<UnitAddressEntity> unitAddressEntities = resultSet.get(UnitAddressEntity.class, true);
+        if (unitAddressEntities != null) {
+            for (UnitAddressEntity unitAddressEntity : unitAddressEntities) {
+                if (this.setUnitAddress(unitAddressEntity)) {
+                    break;
+                }
+            }
+        }
+
 
     }
 
@@ -97,7 +108,73 @@ public class GeoLookupDTO extends CprLookupDTO {
         this.bNumber = bNumber;
     }
 
+
+    private String municipalityGlobalId = null;
+    private String localityGlobalId = null;
+    private String postcodeGlobalId = null;
+    private String roadGlobalId = null;
+    private String buildingGlobalId = null;
+    private String accessAddressGlobalId = null;
+    private String unitAddressGlobalId = null;
+
+    public String getMunicipalityGlobalId() {
+        return this.municipalityGlobalId;
+    }
+
+    public void setMunicipalityGlobalId(String municipalityGlobalId) {
+        this.municipalityGlobalId = municipalityGlobalId;
+    }
+
+    public String getLocalityGlobalId() {
+        return this.localityGlobalId;
+    }
+
+    public void setLocalityGlobalId(String localityGlobalId) {
+        this.localityGlobalId = localityGlobalId;
+    }
+
+    public String getPostcodeGlobalId() {
+        return this.postcodeGlobalId;
+    }
+
+    public void setPostcodeGlobalId(String postcodeGlobalId) {
+        this.postcodeGlobalId = postcodeGlobalId;
+    }
+
+    public String getRoadGlobalId() {
+        return this.roadGlobalId;
+    }
+
+    public void setRoadGlobalId(String roadGlobalId) {
+        this.roadGlobalId = roadGlobalId;
+    }
+
+    public String getBuildingGlobalId() {
+        return this.buildingGlobalId;
+    }
+
+    public void setBuildingGlobalId(String buildingGlobalId) {
+        this.buildingGlobalId = buildingGlobalId;
+    }
+
+    public String getAccessAddressGlobalId() {
+        return this.accessAddressGlobalId;
+    }
+
+    public void setAccessAddressGlobalId(String accessAddressGlobalId) {
+        this.accessAddressGlobalId = accessAddressGlobalId;
+    }
+
+    public String getUnitAddressGlobalId() {
+        return this.unitAddressGlobalId;
+    }
+
+    public void setUnitAddressGlobalId(String unitAddressGlobalId) {
+        this.unitAddressGlobalId = unitAddressGlobalId;
+    }
+
     private boolean setMunicipality(GeoMunicipalityEntity entity) {
+        this.municipalityGlobalId = entity.getGlobalId();
         for (MunicipalityNameRecord municipalityNameRecord : entity.getName()) {
             this.municipalityName = municipalityNameRecord.getName();
             return true;
@@ -106,6 +183,7 @@ public class GeoLookupDTO extends CprLookupDTO {
     }
 
     private boolean setRoad(GeoRoadEntity entity) {
+        this.roadGlobalId = entity.getGlobalId();
         for (RoadNameRecord roadNameRecord : entity.getName()) {
             this.roadName = roadNameRecord.getName();
             return true;
@@ -115,6 +193,7 @@ public class GeoLookupDTO extends CprLookupDTO {
 
     private boolean setLocality(GeoLocalityEntity entity) {
         this.localityCode = entity.getCode();
+        this.localityGlobalId = entity.getGlobalId();
         for (LocalityNameRecord localityNameRecord : entity.getName()) {
             this.localityName = localityNameRecord.getName();
         }
@@ -127,6 +206,7 @@ public class GeoLookupDTO extends CprLookupDTO {
 
     private boolean setPostalcode(PostcodeEntity entity) {
         this.postalCode = entity.getCode();
+        this.postcodeGlobalId = entity.getGlobalId();
         for (PostcodeNameRecord postNameRecord : entity.getName()) {
             this.postalDistrict = postNameRecord.getName();
             return true;
@@ -136,6 +216,12 @@ public class GeoLookupDTO extends CprLookupDTO {
 
     private boolean setAccessAddress(AccessAddressEntity entity) {
         this.bNumber = entity.getBnr();
+        this.accessAddressGlobalId = entity.getGlobalId();
+        return true;
+    }
+
+    private boolean setUnitAddress(UnitAddressEntity entity) {
+        this.unitAddressGlobalId = entity.getGlobalId();
         return true;
     }
 }
