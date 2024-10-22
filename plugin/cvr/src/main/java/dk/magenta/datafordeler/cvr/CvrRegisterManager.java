@@ -98,6 +98,7 @@ public class CvrRegisterManager extends RegisterManager {
         this.cvrDemoUnitFile = configuration.getCvrDemoUnitFile();
         this.cvrDemoParticipantFile = configuration.getCvrDemoParticipantFile();
         this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
+        System.out.println("this.localCopyFolder: " + this.localCopyFolder);
     }
 
     @Override

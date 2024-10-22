@@ -69,6 +69,7 @@ public class GeoRegisterManager extends RegisterManager {
     public void init() throws IOException {
         GeoConfiguration configuration = configurationManager.getConfiguration();
         this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
+        System.out.println("this.localCopyFolder: " + this.localCopyFolder);
     }
 
     public GeoConfigurationManager getConfigurationManager() {
