@@ -63,7 +63,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
         return latest.isEmpty() ? null : latest.get(latest.size() - 1);
     }
 
-    public ObjectNode wrapRecordResult(PersonEntity input, BaseQuery query) {
+    public ObjectNode wrapRecordResult(PersonEntity input, BaseQuery query, boolean includeGlobalIds) {
 
         // Root
         NodeWrapper root = new NodeWrapper(objectMapper.createObjectNode());
@@ -152,12 +152,15 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                 int roadCode = personAddressData.getRoadCode();
                 String houseNumber = personAddressData.getHouseNumber();
                 String personBuildingNumber = personAddressData.getBuildingNumber();
+
+                String personFloor = personAddressData.getFloor();
+                String personDoor = personAddressData.getDoor();
                 if (roadCode > 0) {
                     root.put("vejkode", roadCode);
 
                     GeoLookupDTO lookup = null;
                     try {
-                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber);
+                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber, personFloor, personDoor, includeGlobalIds);
                     } catch (InvalidClientInputException e) {
                         throw new RuntimeException(e);
                     }
@@ -170,7 +173,7 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                     if (roadName != null) {
                         root.put("adresse", getAddressFormatted(
                                 roadName,
-                                personAddressData.getHouseNumber(),
+                                houseNumber,
                                 null,
                                 null, null,
                                 personAddressData.getFloor(),
@@ -186,6 +189,13 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                     root.put("stedkode", lookup.getLocalityCodeNumber());
                     root.put("lokalitetsnavn", lookup.getLocalityName());
                     root.put("lokalitetsforkortelse", lookup.getLocalityAbbrev());
+                    if (includeGlobalIds) {
+                        root.put("houseNumber", houseNumber);
+                        root.put("floor", personAddressData.getFloor());
+                        root.put("door", personAddressData.getDoor());
+                        root.put("accessAddressGlobalId", lookup.getAccessAddressGlobalId());
+                        root.put("unitAddressGlobalId", lookup.getUnitAddressGlobalId());
+                    }
                 }
 
                 if (municipalityCode > 0 && municipalityCode < 900) {

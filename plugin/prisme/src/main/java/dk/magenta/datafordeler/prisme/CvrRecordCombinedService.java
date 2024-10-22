@@ -85,13 +85,15 @@ public class CvrRecordCombinedService {
 
     public static final String PARAM_CVR_NUMBER = "cvrNumber";
     public static final String PARAM_RETURN_PARTICIPANT_DETAILS = "returnParticipantDetails";
-
+    //{09249B0A-02F9-40A9-9DBF-99F37134AE81}
+    public static final String PARAM_INCLUDE_GLOBAL_IDS = "includeGlobalIds";
 
     @RequestMapping(method = RequestMethod.GET, path = "/{cvrNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cvrNummer") String cvrNummer, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
         boolean returnParticipantDetails = "1".equals(request.getParameter(PARAM_RETURN_PARTICIPANT_DETAILS));
+        boolean includeGlobalIds = "1".equals(request.getParameter(PARAM_INCLUDE_GLOBAL_IDS));
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -104,7 +106,7 @@ public class CvrRecordCombinedService {
 
         ArrayList<String> cvrNumbers = new ArrayList<String>();
         cvrNumbers.add(cvrNummer);
-        ObjectNode formattedRecord = getJSONFromCvrList(cvrNumbers, returnParticipantDetails, false);
+        ObjectNode formattedRecord = getJSONFromCvrList(cvrNumbers, returnParticipantDetails, includeGlobalIds, false);
 
         if (formattedRecord != null && formattedRecord.size() > 0) {
             loggerHelper.urlResponsePersistablelogs(HttpStatus.OK.value(), "CprService done");
@@ -147,6 +149,8 @@ public class CvrRecordCombinedService {
         ObjectNode requestObject = (ObjectNode) requestBody;
         final List<String> cvrNumbers = (requestObject.has(PARAM_CVR_NUMBER)) ? this.getCvrNumber(requestObject.get(PARAM_CVR_NUMBER)) : null;
         boolean returnParticipantDetails = "1".equals(request.getParameter(PARAM_RETURN_PARTICIPANT_DETAILS));
+        boolean includeGlobalIds = "1".equals(request.getParameter(PARAM_INCLUDE_GLOBAL_IDS));
+
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info(
@@ -156,12 +160,12 @@ public class CvrRecordCombinedService {
         this.checkAndLogAccess(loggerHelper, returnParticipantDetails);
         loggerHelper.urlInvokePersistablelogs("CvrRecordCombinedService");
 
-        ObjectNode formattedRecord = getJSONFromCvrList(cvrNumbers, returnParticipantDetails, true);
+        ObjectNode formattedRecord = getJSONFromCvrList(cvrNumbers, returnParticipantDetails, includeGlobalIds, true);
         loggerHelper.urlResponsePersistablelogs("CvrRecordCombinedService");
         return objectMapper.writeValueAsString(formattedRecord);
     }
 
-    private ObjectNode getJSONFromCvrList(List<String> cvrNumbers, boolean returnParticipantDetails, boolean asList) throws DataFordelerException, JsonProcessingException {
+    private ObjectNode getJSONFromCvrList(List<String> cvrNumbers, boolean returnParticipantDetails, boolean includeGlobalIds, boolean asList) throws DataFordelerException, JsonProcessingException {
         Session session = sessionManager.getSessionFactory().openSession();
         GeoLookupService service = new GeoLookupService(sessionManager);
         try {
@@ -176,9 +180,9 @@ public class CvrRecordCombinedService {
                         CompanyRecord companyRecord = companyEntityIterator.next();
                         String cvrNumber = Integer.toString(companyRecord.getCvrNumber());
                         if (asList) {
-                            formattedRecord.set(cvrNumber, cvrWrapper.wrapRecord(companyRecord, service, returnParticipantDetails));
+                            formattedRecord.set(cvrNumber, cvrWrapper.wrapRecord(companyRecord, service, returnParticipantDetails, includeGlobalIds));
                         } else {
-                            formattedRecord = cvrWrapper.wrapRecord(companyRecord, service, returnParticipantDetails);
+                            formattedRecord = cvrWrapper.wrapRecord(companyRecord, service, returnParticipantDetails, includeGlobalIds);
                         }
                         cvrNumbers.remove(cvrNumber);
                     }
@@ -191,7 +195,6 @@ public class CvrRecordCombinedService {
                     Iterator<CompanyEntity> companyEntityIterator = companyEntities.iterator();
                     while (companyEntityIterator.hasNext()) {
                         CompanyEntity companyEntity = companyEntityIterator.next();
-                        String gerNo = Integer.toString(companyEntity.getGerNr());
                         if (asList) {
                             formattedRecord.set(Integer.toString(companyEntity.getGerNr()), cvrWrapper.wrapGerCompany(companyEntity, service, returnParticipantDetails));
                         } else {

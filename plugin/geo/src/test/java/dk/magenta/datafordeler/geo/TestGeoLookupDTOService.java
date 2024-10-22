@@ -1,9 +1,9 @@
+package dk.magenta.datafordeler.geo;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
-import dk.magenta.datafordeler.geo.GeoLookupDTO;
-import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 import org.hibernate.Session;
@@ -22,7 +22,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TestGeoGeoLookupDTOService extends GeoTest {
+public class TestGeoLookupDTOService extends GeoTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -36,11 +36,11 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
 
     @Test
-    public void testLookupService() throws IOException, InvalidClientInputException {
+    public void testLookupService() throws InvalidClientInputException {
 
         GeoLookupService lookupService = new GeoLookupService(sessionManager);
 
-        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197");
+        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197", "kld", "tv", true);
 
         Assert.assertEquals("Kommuneqarfik Sermersooq", geoLookupDTO.getMunicipalityName());
         Assert.assertEquals("B-3197", geoLookupDTO.getbNumber());
@@ -53,6 +53,9 @@ public class TestGeoGeoLookupDTOService extends GeoTest {
 
         Assert.assertEquals("Nuuk", lookupService.getPostalCodeDistrict(3900));
         Assert.assertEquals("Santa Claus/ juulli inua", lookupService.getPostalCodeDistrict(2412));
+
+        Assert.assertEquals("{2e3776bf-05c2-433c-adb9-8a07df6b3e8f}", geoLookupDTO.getAccessAddressGlobalId());
+        Assert.assertEquals("{1b3ac64b-c28d-40b2-a106-16cee7c188b8}", geoLookupDTO.getUnitAddressGlobalId());
     }
 
     @Test

@@ -1,3 +1,5 @@
+package dk.magenta.datafordeler.geo;
+
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;

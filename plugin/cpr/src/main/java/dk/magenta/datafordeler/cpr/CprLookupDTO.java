@@ -8,6 +8,7 @@ public class CprLookupDTO {
     protected String localityName = null;
     protected int postalCode = 0;
     protected String postalDistrict = null;
+    protected String accessAddressGlobalId = null;
 
     public String getMunicipalityName() {
         return municipalityName;
@@ -72,5 +73,13 @@ public class CprLookupDTO {
 
     public void setPostalDistrict(String postalDistrict) {
         this.postalDistrict = postalDistrict;
+    }
+
+    public String getAccessAddressGlobalId() {
+        return this.accessAddressGlobalId;
+    }
+
+    public void setAccessAddressGlobalId(String accessAddressGlobalId) {
+        this.accessAddressGlobalId = accessAddressGlobalId;
     }
 }

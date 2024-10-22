@@ -12,6 +12,7 @@ import dk.magenta.datafordeler.geo.data.locality.LocalityEntityManager;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityEntityManager;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
 import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -49,11 +50,11 @@ public abstract class TestBase {
     protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
         this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
         this.loadGeoData(sessionManager, roadEntityManager, "/road.json");
-        this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
         this.loadGeoData(sessionManager, municipalityEntityManager, "/municipality.json");
         this.loadGeoData(sessionManager, postcodeEntityManager, "/post.json");
         this.loadGeoData(sessionManager, buildingEntityManager, "/building.json");
         this.loadGeoData(sessionManager, accessAddressEntityManager, "/access.json");
+        this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
     }
 
 

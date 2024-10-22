@@ -20,7 +20,7 @@
           "Editor": "COREDATA",
           "EditDate": 1537427527000,
           "ObjektStatus": 2,
-          "HusNummer": "807",
+          "HusNummer": "18",
           "KommuneKode": 956,
           "LokalitetsKode": "0600",
           "Postnummer": 3962,
@@ -28,7 +28,7 @@
           "DataKilde": 1,
           "AdgangsadresseSumiffik": "{19E9F00E-E5BE-4A34-A7EA-8693795A8814}",
           "bygning_id": "{41947F6E-7404-4A95-9A83-18F70B6CAE77}",
-          "GlobalID": "{CC6C206C-C9CD-4829-B206-F647DC1E7260}"
+          "GlobalID": "{2E3776BF-05C2-433C-ADB9-8A07DF6B3E8F}"
         }
       },
       {
@@ -49,7 +49,7 @@
           "Editor": "COREDATA",
           "EditDate": 1537427527000,
           "ObjektStatus": 2,
-          "HusNummer": "837",
+          "HusNummer": "18",
           "KommuneKode": 956,
           "LokalitetsKode": "0601",
           "Postnummer": 3962,
