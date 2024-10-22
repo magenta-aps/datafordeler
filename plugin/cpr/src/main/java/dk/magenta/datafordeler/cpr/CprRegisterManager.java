@@ -65,6 +65,10 @@ public class CprRegisterManager extends RegisterManager {
             temp.mkdir();
             this.localCopyFolder = temp.getAbsolutePath();
         }
+        File localFolder = new File(this.localCopyFolder);
+        if (!localFolder.exists()) {
+            localFolder.mkdirs();
+        }
         this.proxyString = configuration.getProxyUrl();
     }
 
