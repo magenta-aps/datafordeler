@@ -98,7 +98,6 @@ public class CvrRegisterManager extends RegisterManager {
         this.cvrDemoUnitFile = configuration.getCvrDemoUnitFile();
         this.cvrDemoParticipantFile = configuration.getCvrDemoParticipantFile();
         this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
-        System.out.println("this.localCopyFolder: " + this.localCopyFolder);
     }
 
     @Override
@@ -203,7 +202,6 @@ public class CvrRegisterManager extends RegisterManager {
                             break;
                     }
                     if (uri != null) {
-                        System.out.println("uri: " + uri);
                         File demoCompanyFile = new File(uri);
                         FileInputStream demoCompanyFileInputStream = new FileInputStream(demoCompanyFile);
                         String content = new String(demoCompanyFileInputStream.readAllBytes());

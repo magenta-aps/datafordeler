@@ -60,7 +60,6 @@ public class CprRegisterManager extends RegisterManager {
         CprConfiguration configuration = this.configurationManager.getConfiguration();
         this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
         this.proxyString = configuration.getProxyUrl();
-        System.out.println("this.localCopyFolder: " + this.localCopyFolder);
     }
 
     public CprConfigurationManager getConfigurationManager() {
