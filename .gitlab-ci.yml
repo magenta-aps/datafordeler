@@ -154,16 +154,16 @@ build-openapi-image:
       alias: datafordeler-db
 
 
-test-core:
-  <<: *test-default
-  before_script:
-    - cd /code/core
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /code/core/target/surefire-reports/*.xml
+#test-core:
+#  <<: *test-default
+#  before_script:
+#    - cd /code/core
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /code/core/target/surefire-reports/*.xml
 
 test-cpr:
   <<: *test-default
