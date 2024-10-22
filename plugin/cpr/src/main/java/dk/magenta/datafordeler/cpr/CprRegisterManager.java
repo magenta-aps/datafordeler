@@ -58,13 +58,7 @@ public class CprRegisterManager extends RegisterManager {
     @PostConstruct
     public void init() throws IOException {
         CprConfiguration configuration = this.configurationManager.getConfiguration();
-        this.localCopyFolder = configuration.getLocalCopyFolder();
-        if (this.localCopyFolder == null || this.localCopyFolder.isEmpty()) {
-            File temp = File.createTempFile("datafordeler-cache", "");
-            temp.delete();
-            temp.mkdir();
-            this.localCopyFolder = temp.getAbsolutePath();
-        }
+        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
         this.proxyString = configuration.getProxyUrl();
     }
 

@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.geo.configuration;
 
+import dk.magenta.datafordeler.core.Environment;
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
@@ -369,6 +370,8 @@ public class GeoConfiguration implements Configuration {
         this.unitAddressDeletionRegisterURL = unitAddressDeletionRegisterURL;
     }
 
+    @Transient
+    private String localCopyFolder = Environment.getEnv("GEO_LOCAL_COPY_FOLDER", null);
 
     public RegisterType getRegisterType(String schema) {
         switch (schema) {
@@ -428,5 +431,9 @@ public class GeoConfiguration implements Configuration {
                 return this.unitAddressDeletionRegisterURL;
         }
         return null;
+    }
+
+    public String getLocalCopyFolder() {
+        return this.localCopyFolder;
     }
 }
