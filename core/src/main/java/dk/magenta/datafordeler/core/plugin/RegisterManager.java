@@ -264,4 +264,16 @@ public abstract class RegisterManager {
     public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) {
         // Override in subclasses
     }
+
+    protected String ensureLocalCopyFolder(String localCopyFolder) throws IOException {
+        if (localCopyFolder == null || localCopyFolder.isEmpty()) {
+            File temp = File.createTempFile("datafordeler-cache-"+this.getPlugin().getName().toLowerCase(), "");
+            temp.delete();
+            temp.mkdir();
+            return temp.getAbsolutePath();
+        }
+        File localFolder = new File(localCopyFolder);
+        localFolder.mkdirs();
+        return localFolder.getAbsolutePath();
+    }
 }

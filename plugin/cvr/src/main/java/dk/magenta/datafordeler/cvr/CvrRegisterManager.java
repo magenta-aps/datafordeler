@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.PluginSourceData;
 import dk.magenta.datafordeler.core.plugin.*;
 import dk.magenta.datafordeler.core.util.ItemInputStream;
+import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
@@ -64,6 +65,8 @@ public class CvrRegisterManager extends RegisterManager {
 
     private String cvrDemoParticipantFile;
 
+    private String localCopyFolder;
+
 
     private final Logger log = LogManager.getLogger(CvrRegisterManager.class.getCanonicalName());
 
@@ -87,12 +90,14 @@ public class CvrRegisterManager extends RegisterManager {
      * RegisterManager initialization; set up configuration, source fetcher and source url
      */
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
+        CvrConfiguration configuration = this.configurationManager.getConfiguration();
         this.commonFetcher = new ScanScrollCommunicator();
         this.commonFetcher.setScrollIdJsonKey("_scroll_id");
-        this.cvrDemoCompanyFile = configurationManager.getConfiguration().getCvrDemoCompanyFile();
-        this.cvrDemoUnitFile = configurationManager.getConfiguration().getCvrDemoUnitFile();
-        this.cvrDemoParticipantFile = configurationManager.getConfiguration().getCvrDemoParticipantFile();
+        this.cvrDemoCompanyFile = configuration.getCvrDemoCompanyFile();
+        this.cvrDemoUnitFile = configuration.getCvrDemoUnitFile();
+        this.cvrDemoParticipantFile = configuration.getCvrDemoParticipantFile();
+        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     @Override
