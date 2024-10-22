@@ -181,6 +181,10 @@ public class Pull extends Worker implements Runnable {
 
                 this.registerManager.beforePull(entityManager, this.importMetadata);
                 InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
+
+                stream = null;
+                log.info("Skipping actual data load");
+
                 if (stream != null) {
                     session = this.engine.sessionManager.getSessionFactory().openSession();
                     this.importMetadata.setSession(session);
