@@ -512,6 +512,9 @@ public class CvrConfiguration implements Configuration {
     @Transient
     private String encryptionKeyFileName = Environment.getEnv("CVR_ENCRYPTION_KEYFILE", "local/cvr/keyfile.json");
 
+    @Transient
+    private String localCopyFolder = Environment.getEnv("CVR_LOCAL_COPY_FOLDER", null);
+
     public String getCvrDemoCompanyFile() {
         return this.cvrDemoCompanyFile;
     }
@@ -526,5 +529,9 @@ public class CvrConfiguration implements Configuration {
 
     public String getEncryptionKeyFileName() {
         return this.encryptionKeyFileName;
+    }
+
+    public String getLocalCopyFolder() {
+        return this.localCopyFolder;
     }
 }

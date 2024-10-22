@@ -67,12 +67,8 @@ public class GeoRegisterManager extends RegisterManager {
      */
     @PostConstruct
     public void init() throws IOException {
-        if (this.localCopyFolder == null || this.localCopyFolder.isEmpty()) {
-            File temp = File.createTempFile("datafordeler-cache", "");
-            temp.delete();
-            temp.mkdir();
-            this.localCopyFolder = temp.getAbsolutePath();
-        }
+        GeoConfiguration configuration = configurationManager.getConfiguration();
+        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     public GeoConfigurationManager getConfigurationManager() {

@@ -123,7 +123,7 @@ build-openapi-image:
     CRON_ENABLE: "true"
     
     CPR_PROXY_URL: ""
-    CPR_LOCAL_DIR: ""
+    CPR_LOCAL_COPY_FOLDER: ""
     CPR_SUBSCRIPTION_ENABLE: "true"
     CPR_ENCRYPTION_KEY_FILE: "/tmp/test_cpr_key.json"
     CPR_TEST_PERSON_LIST: > 
@@ -142,6 +142,8 @@ build-openapi-image:
     CVR_DEMO_COMPANYFILE: "classpath:company_in.json"
     CVR_DEMO_UNITFILE: "classpath:unit.json"
     CVR_DEMO_PARTICIPANTFILE: "classpath:person.json"
+    CVR_LOCAL_COPY_FOLDER: ""
+    GEO_LOCAL_COPY_FOLDER: ""
     
     ERRORFILE_DIR: "cache/log"
 
