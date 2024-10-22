@@ -85,7 +85,7 @@ public class CvrRecordCombinedService {
 
     public static final String PARAM_CVR_NUMBER = "cvrNumber";
     public static final String PARAM_RETURN_PARTICIPANT_DETAILS = "returnParticipantDetails";
-
+    //{09249B0A-02F9-40A9-9DBF-99F37134AE81}
 
     @RequestMapping(method = RequestMethod.GET, path = "/{cvrNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cvrNummer") String cvrNummer, HttpServletRequest request)
@@ -191,7 +191,6 @@ public class CvrRecordCombinedService {
                     Iterator<CompanyEntity> companyEntityIterator = companyEntities.iterator();
                     while (companyEntityIterator.hasNext()) {
                         CompanyEntity companyEntity = companyEntityIterator.next();
-                        String gerNo = Integer.toString(companyEntity.getGerNr());
                         if (asList) {
                             formattedRecord.set(Integer.toString(companyEntity.getGerNr()), cvrWrapper.wrapGerCompany(companyEntity, service, returnParticipantDetails));
                         } else {
