@@ -203,6 +203,7 @@ public class CvrRegisterManager extends RegisterManager {
                             break;
                     }
                     if (uri != null) {
+                        System.out.println("uri: " + uri);
                         File demoCompanyFile = new File(uri);
                         FileInputStream demoCompanyFileInputStream = new FileInputStream(demoCompanyFile);
                         String content = new String(demoCompanyFileInputStream.readAllBytes());
