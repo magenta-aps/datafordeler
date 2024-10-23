@@ -18,7 +18,9 @@ COPY conf/sts_metadata.test.xml /app/conf/sts_metadata.test.xml
 
 # For testing
 COPY plugin/cpr/data/keyfile.json /tmp/test_cpr_key.json
+COPY ./docker/entrypoint.sh /entrypoint.sh
 EXPOSE 8000
 WORKDIR /app/core
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["java", "-Dloader.path=/app/plugin/jar/", "-cp", "datafordeler-core-exec.jar", "org.springframework.boot.loader.PropertiesLauncher"]
