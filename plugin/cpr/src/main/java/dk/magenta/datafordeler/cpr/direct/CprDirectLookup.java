@@ -70,6 +70,7 @@ public class CprDirectLookup {
         String transactionCode = configuration.getDirectTransactionCode();
         String customerNumber = String.format("%04d", configuration.getDirectCustomerNumber());
         String username = String.format("%-8.8s", configuration.getDirectUsername());
+        log.info("Direct login with username "+username);
         String password = null;
         try {
             password = String.format("%-8.8s", configuration.getDirectPassword());

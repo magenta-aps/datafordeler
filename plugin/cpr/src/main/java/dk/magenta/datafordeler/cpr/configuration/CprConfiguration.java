@@ -743,7 +743,7 @@ public class CprConfiguration implements Configuration {
     private String localCopyFolder = Environment.getEnv("CPR_LOCAL_COPY_FOLDER", null);
 
     @Transient
-    private String encryptionKeyFileName = Environment.getEnv("CPR_ENCRYPTION_KEY_FILE", "local/cpr/keyfile.json");
+    private String encryptionKeyFileName = Environment.getEnv("CPR_ENCRYPTION_KEYFILE", "local/cpr/keyfile.json");
 
     public boolean isSubscriptionEnabled() {
         return this.subscriptionEnabled;
