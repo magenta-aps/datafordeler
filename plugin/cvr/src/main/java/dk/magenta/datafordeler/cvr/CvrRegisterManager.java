@@ -214,7 +214,7 @@ public class CvrRegisterManager extends RegisterManager {
                 }
                 break;
             case ALL_LOCAL_FILES:
-                File cacheFolder = new File("local/cvr/");
+                File cacheFolder = new File(this.localCopyFolder);
                 if (cacheFolder.isDirectory()) {
                     File[] files = cacheFolder.listFiles((dir, name) -> name.startsWith(schema+"_"));
                     if (files != null) {
@@ -240,7 +240,7 @@ public class CvrRegisterManager extends RegisterManager {
             case REMOTE_HTTP:
                 final ArrayList<Throwable> errors = new ArrayList<>();
                 InputStream responseBody;
-                File cacheFile = new File("local/cvr/" + schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                File cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
                 try (Session missingCompanySession = this.sessionManager.getSessionFactory().openSession()) {
                     if (!cacheFile.exists()) {
                         log.info("Cache file " + cacheFile.getAbsolutePath() + " doesn't exist. Creating new and filling from source");

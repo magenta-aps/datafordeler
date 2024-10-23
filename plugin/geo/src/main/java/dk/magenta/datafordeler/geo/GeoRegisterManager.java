@@ -54,7 +54,6 @@ public class GeoRegisterManager extends RegisterManager {
     @Value("${dafo.geo.proxy-url:}")
     private String proxyString;
 
-    @Value("${dafo.geo.local-copy-folder:}")
     private String localCopyFolder;
 
     public GeoRegisterManager() {
@@ -197,7 +196,7 @@ public class GeoRegisterManager extends RegisterManager {
                 session.close();
                 LocalDateTime now = LocalDateTime.now();
                 long s = 1000000000L * (3600L * now.getHour() + 60L * now.getMinute() + now.getSecond()) + now.getNano();
-                File cacheFile = new File("local/geo/" + entityManager.getSchema() + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "_" + s);
+                File cacheFile = new File(this.localCopyFolder, entityManager.getSchema() + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "_" + s);
                 Charset charset = this.getConfigurationManager().getConfiguration().getCharset();
                 try {
                     if (!cacheFile.exists()) {
