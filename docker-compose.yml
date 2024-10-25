@@ -82,6 +82,72 @@ services:
     # command: bash -c "cd /code/plugin/statistik && mvn --batch-mode -T 2C -Dtest=dk.magenta.datafordeler.statistik.*Test test"
     #use docker-compose up test to execute tests
 
+  encrypt:
+    profiles:
+      - donotstart
+    image: datafordeler:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file:
+      - ./docker/dev-env/datafordeler.env
+    volumes:
+      - ./direkte:/direkte:ro
+    environment:
+      - DATABASE_CLASS=org.h2.Driver
+      - DATABASE_URL=jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO
+      - DATABASE_DIALECT=org.hibernate.dialect.H2Dialect
+      - DATABASE_USERNAME=test
+      - DATABASE_PASSWORD=test
+      - DATABASE_METHOD=create-drop
+      - DATABASE_DEFAULT_SCHEMA=dbo
+      - SECONDARY_DATABASE_CLASS=org.h2.Driver
+      - SECONDARY_DATABASE_URL=jdbc:h2:mem:db2;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO
+      - SECONDARY_DATABASE_DIALECT=org.hibernate.dialect.H2Dialect
+      - SECONDARY_DATABASE_USERNAME=test
+      - SECONDARY_DATABASE_PASSWORD=test
+      - SECONDARY_DATABASE_METHOD=create-drop
+      - SECONDARY_DATABASE_DEFAULT_SCHEMA=dbo
+      - CRON_ENABLE=true
+    ports:
+      - 8082:80
+    command: java -jar datafordeler-core-exec.jar ENCRYPT /direkte/test.json /direkte/prod.txt
+
+
+  decrypt:
+    profiles:
+      - donotstart
+    image: datafordeler:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file:
+      - ./docker/dev-env/datafordeler.env
+    volumes:
+      - ./direkte:/direkte:ro
+    environment:
+      - DATABASE_CLASS=org.h2.Driver
+      - DATABASE_URL=jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO
+      - DATABASE_DIALECT=org.hibernate.dialect.H2Dialect
+      - DATABASE_USERNAME=test
+      - DATABASE_PASSWORD=test
+      - DATABASE_METHOD=create-drop
+      - DATABASE_DEFAULT_SCHEMA=dbo
+      - SECONDARY_DATABASE_CLASS=org.h2.Driver
+      - SECONDARY_DATABASE_URL=jdbc:h2:mem:db2;DB_CLOSE_DELAY=-1;MVCC=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS DBO
+      - SECONDARY_DATABASE_DIALECT=org.hibernate.dialect.H2Dialect
+      - SECONDARY_DATABASE_USERNAME=test
+      - SECONDARY_DATABASE_PASSWORD=test
+      - SECONDARY_DATABASE_METHOD=create-drop
+      - SECONDARY_DATABASE_DEFAULT_SCHEMA=dbo
+      - CRON_ENABLE=true
+    ports:
+      - 8082:80
+    command: java -jar datafordeler-core-exec.jar DECRYPT /direkte/test.json /direkte/test.bin
+
+    # command: bash -c "cd /code/plugin/statistik && mvn --batch-mode -T 2C -Dtest=dk.magenta.datafordeler.statistik.*Test test"
+    #use docker-compose up test to execute tests
+
   openapi:
     build:
       context: .

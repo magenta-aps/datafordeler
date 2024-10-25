@@ -41,6 +41,18 @@ public class Application {
             return;
         }
 
+        if (args.length == 3 && args[0].equals("ENCRYPT")) {
+            File encryptionFile = new File(args[1]);
+            String plaintext = Files.readString(new File(args[2]).toPath());
+            byte[] encrypted = Encryption.encrypt(encryptionFile, plaintext);
+            String hex = "0x";
+            for (byte b : encrypted) {
+                hex += String.format("%02X", b);
+            }
+            System.out.println(hex);
+            return;
+        }
+
         // Run Spring
         try {
             SpringApplication.run(Application.class, args);
