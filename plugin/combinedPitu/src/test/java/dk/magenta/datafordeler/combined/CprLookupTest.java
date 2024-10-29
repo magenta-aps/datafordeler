@@ -156,13 +156,16 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
-                "/combined/personLookup/1/cpr/0101001234",
+                "/combined/personLookup/1/cpr/0101001234?includeGlobalIds=1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("0101001234", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
+        String body = response.getBody();
+        Assert.assertEquals(body, "0101001234", objectMapper.readTree(body).get("cprNummer").asText());
+        Assert.assertEquals(body, "{2e3776bf-05c2-433c-adb9-8a07df6b3e8f}", objectMapper.readTree(body).get("accessAddressGlobalId").textValue());
+        Assert.assertEquals(body, "{1b3ac64b-c28d-40b2-a106-16cee7c188b8}", objectMapper.readTree(body).get("unitAddressGlobalId").textValue());
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/1111111188",
@@ -415,22 +418,23 @@ public class CprLookupTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combined/personLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188",
+                "/combined/personLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188&includeGlobalIds=1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(7, objectMapper.readTree(response.getBody()).size());
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000001"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000002"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000003"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000004"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000005"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000006"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000007"));
-        Assert.assertNull(objectMapper.readTree(response.getBody()).get("1000000007"));
-        Assert.assertNull(objectMapper.readTree(response.getBody()).get("1111111188"));
+        JsonNode responseData = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(7, responseData.size());
+        Assert.assertNotNull(responseData.get("0000000001"));
+        Assert.assertNotNull(responseData.get("0000000002"));
+        Assert.assertNotNull(responseData.get("0000000003"));
+        Assert.assertNotNull(responseData.get("0000000004"));
+        Assert.assertNotNull(responseData.get("0000000005"));
+        Assert.assertNotNull(responseData.get("0000000006"));
+        Assert.assertNotNull(responseData.get("0000000007"));
+        Assert.assertNull(responseData.get("1000000007"));
+        Assert.assertNull(responseData.get("1111111188"));
     }
 
     @Test
@@ -450,16 +454,17 @@ public class CprLookupTest extends TestBase {
                 String.class
         );
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(8, objectMapper.readTree(response.getBody()).size());
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000001"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000002"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000003"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000004"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000005"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000006"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("0000000007"));
-        Assert.assertNull(objectMapper.readTree(response.getBody()).get("1000000007"));
-        Assert.assertNotNull(objectMapper.readTree(response.getBody()).get("1111111188"));
+        JsonNode responseData = objectMapper.readTree(response.getBody());
+        Assert.assertEquals(8, responseData.size());
+        Assert.assertNotNull(responseData.get("0000000001"));
+        Assert.assertNotNull(responseData.get("0000000002"));
+        Assert.assertNotNull(responseData.get("0000000003"));
+        Assert.assertNotNull(responseData.get("0000000004"));
+        Assert.assertNotNull(responseData.get("0000000005"));
+        Assert.assertNotNull(responseData.get("0000000006"));
+        Assert.assertNotNull(responseData.get("0000000007"));
+        Assert.assertNull(responseData.get("1000000007"));
+        Assert.assertNotNull(responseData.get("1111111188"));
     }
 
     private void applyAccess(TestUserDetails testUserDetails) {

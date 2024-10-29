@@ -32,6 +32,7 @@ public abstract class SumiffiikQuery<E extends SumiffiikEntity> extends BaseQuer
         }
     }
 
+
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>();

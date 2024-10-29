@@ -245,7 +245,7 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
     }
 
 
-    protected ObjectNode wrapRecord(CompanyRecord record, GeoLookupService lookupService, boolean returnParticipantDetails) {
+    protected ObjectNode wrapRecord(CompanyRecord record, GeoLookupService lookupService, boolean returnParticipantDetails, boolean returnGlobalIds) {
         ObjectNode root = objectMapper.createObjectNode();
 
         root.put("source", "CVR");
@@ -337,7 +337,6 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
                 root.put("postboks", Integer.parseInt(addressRecord.getPostBox()));
             }
 
-            CvrPostCode postCode = addressRecord.getPost();
             if (addressRecord.getPostnummer() != 0) {
                 root.put("postnummer", addressRecord.getPostnummer());
             }
@@ -349,6 +348,27 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
             String coName = addressRecord.getCoName();
             if (coName != null) {
                 root.put("co", coName);
+            }
+
+            if (returnGlobalIds) {
+                try {
+                    String houseNumber = addressRecord.getHouseNumberFrom() != 0 ? String.valueOf(addressRecord.getHouseNumberFrom()) : null;
+                    GeoLookupDTO lookup = lookupService.doLookup(
+                            municipalityCode,
+                            roadCode,
+                            houseNumber,
+                            null,
+                            addressRecord.getFloor(),
+                            addressRecord.getDoor(),
+                            true
+                    );
+                    root.put("houseNumber", houseNumber);
+                    root.put("floor", addressRecord.getFloor());
+                    root.put("door", addressRecord.getDoor());
+                    root.put("accessAddressGlobalId", lookup.getAccessAddressGlobalId());
+                    root.put("unitAddressGlobalId", lookup.getUnitAddressGlobalId());
+                } catch (InvalidClientInputException e) {
+                }
             }
         }
 

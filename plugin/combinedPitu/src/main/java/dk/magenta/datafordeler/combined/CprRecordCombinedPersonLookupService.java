@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
+import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -77,6 +78,7 @@ public class CprRecordCombinedPersonLookupService {
 
         String forceDirect = requestParams.getFirst("forceDirect");
         String allowDirect = requestParams.getFirst("allowDirect");
+        boolean includeGlobalIds = "1".equals(requestParams.getFirst("includeGlobalIds"));
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -104,7 +106,7 @@ public class CprRecordCombinedPersonLookupService {
                 if (personEntity == null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
-                Object obj = personOutputWrapper.wrapRecordResult(personEntity, null);
+                Object obj = personOutputWrapper.wrapRecordResult(personEntity, null, includeGlobalIds);
                 return obj.toString();
             }
 
@@ -122,7 +124,7 @@ public class CprRecordCombinedPersonLookupService {
                 throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
 
-            Object obj = personOutputWrapper.wrapRecordResult(personEntity, null);
+            Object obj = personOutputWrapper.wrapRecordResult(personEntity, null, includeGlobalIds);
             return obj.toString();
         } catch (DataStreamException e) {
             log.error(e);
@@ -135,7 +137,7 @@ public class CprRecordCombinedPersonLookupService {
 
         List<String> cprs = requestParams.get("cpr");
         String allowDirect = requestParams.getFirst("allowDirect");
-
+        boolean includeGlobalIds = "1".equals(requestParams.getFirst("includeGlobalIds"));
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -174,7 +176,7 @@ public class CprRecordCombinedPersonLookupService {
             Consumer<PersonEntity> entityWriter = personEntity -> {
                 if (personEntity != null && personEntity.getPersonnummer() != null) {
                     cprNumbers.remove(personEntity.getPersonnummer());
-                    objects.set(personEntity.getPersonnummer(), personOutputWrapper.wrapRecordResult(personEntity, personQuery));
+                    objects.set(personEntity.getPersonnummer(), personOutputWrapper.wrapRecordResult(personEntity, personQuery, includeGlobalIds));
                     session.evict(personEntity);
                 }
             };

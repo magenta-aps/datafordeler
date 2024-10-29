@@ -1,8 +1,9 @@
+package dk.magenta.datafordeler.geo;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.geo.AdresseService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

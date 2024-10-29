@@ -1,5 +1,7 @@
 package dk.magenta.datafordeler.geo.data.unitaddress;
 
+import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
@@ -10,6 +12,7 @@ import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressQuery;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by lars on 19-05-17.
@@ -27,6 +30,13 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = HOUSE_NUMBER)
     private final List<String> houseNumber = new ArrayList<>();
+
+
+    public static final String ACCESSADDRESS_ID = "accessAddressId";
+
+    @QueryField(type = QueryField.FieldType.LONG, queryName = ACCESSADDRESS_ID)
+    private final List<Identification> accessAddress = new ArrayList<>();
+
 
 
     public List<String> getBnr() {
@@ -76,6 +86,14 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     }
 
 
+    public void addAccessAddress(AccessAddressEntity accessAddressEntity) {
+        if (accessAddressEntity != null) {
+            this.accessAddress.add(accessAddressEntity.getIdentification());
+            this.updatedParameters();
+        }
+    }
+
+
     public static final String FLOOR = UnitAddressEntity.IO_FIELD_FLOOR;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = FLOOR)
@@ -99,12 +117,42 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         }
     }
 
+
+
+
+    public static final String DOOR = UnitAddressEntity.IO_FIELD_DOOR;
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = DOOR)
+    private final List<String> door = new ArrayList<>();
+
+
+    public List<String> getDoor() {
+        return floor;
+    }
+
+    public void setDoor(String door) {
+        this.door.clear();
+        this.updatedParameters();
+        this.addDoor(door);
+    }
+
+    public void addDoor(String door) {
+        if (door != null) {
+            this.door.add(door);
+            this.updatedParameters();
+        }
+    }
+
+
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>(super.getSearchParameters());
         map.put(BNR, this.bnr);
         //map.put(ROAD, this.road);
         map.put(HOUSE_NUMBER, this.houseNumber);
+        map.put(FLOOR, this.floor);
+        map.put(DOOR, this.door);
+        map.put(ACCESSADDRESS_ID, this.accessAddress);
         return map;
     }
 
@@ -130,10 +178,12 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     }
 
     private static final HashMap<String, String> joinHandles = new HashMap<>();
+    public static final String HANDLE_ACCESSADDRESS = UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS+DatabaseEntry.REF;
 
     static {
         joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseQuery.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);
-        joinHandles.put("accessaddress_id", UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS);
+        joinHandles.put("door", UnitAddressEntity.DB_FIELD_DOOR + BaseQuery.separator + UnitAddressDoorRecord.DB_FIELD_DOOR);
+        joinHandles.put(HANDLE_ACCESSADDRESS, UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS);
     }
 
     @Override
@@ -148,12 +198,14 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     protected void setupConditions() throws QueryBuildException {
         super.setupConditions();
         this.addCondition("floor", this.floor);
+        this.addCondition("door", this.door);
+        this.addCondition(HANDLE_ACCESSADDRESS, this.accessAddress, Identification.class);
     }
 
     public AccessAddressQuery addRelatedAccessAddressQuery() {
         AccessAddressQuery accessAddressQuery = new AccessAddressQuery();
         HashMap<String, String> joinHandles = new HashMap<>();
-        joinHandles.put("accessaddress_id", "id");
+        joinHandles.put(HANDLE_ACCESSADDRESS, "id");
 
         accessAddressQuery.addRelatedPostcodeQuery();
         accessAddressQuery.addRelatedLocalityQuery();

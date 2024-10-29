@@ -1,3 +1,5 @@
+package dk.magenta.datafordeler.geo;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
