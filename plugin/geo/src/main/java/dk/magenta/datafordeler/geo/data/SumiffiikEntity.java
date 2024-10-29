@@ -49,4 +49,9 @@ public abstract class SumiffiikEntity extends GeoEntity implements IdentifiedEnt
         this.sumiffiikId = sumiffiikId;
     }
 
+    @JsonProperty(value="globalId")
+    public String getGlobalId() {
+        return "{" + this.getUUID().toString() + "}";
+    }
+
 }

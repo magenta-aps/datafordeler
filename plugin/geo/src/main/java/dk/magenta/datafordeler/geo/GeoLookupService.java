@@ -16,14 +16,14 @@ import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadQuery;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
 import java.time.OffsetDateTime;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class GeoLookupService extends CprLookupService {
 
@@ -126,8 +126,10 @@ public class GeoLookupService extends CprLookupService {
             return geoLookupDTO;
         }
     }
-
     public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber) throws InvalidClientInputException {
+        return this.doLookup(municipalityCode, roadCode, houseNumber, bNumber, null, null, false);
+    }
+    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber, String floor, String door, boolean includeGlobalIds) throws InvalidClientInputException {
         if (municipalityCode < 950) {
             return new GeoLookupDTO(super.doLookup(municipalityCode, roadCode, houseNumber));
         } else {
@@ -185,11 +187,40 @@ public class GeoLookupService extends CprLookupService {
                 setQueryNow(accessAddressQuery);
                 List<AccessAddressEntity> accessAddresses = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
 
-                if (accessAddresses.size() == 0) {
+                if (accessAddresses.isEmpty()) {
                     accessAddressQuery.clearHouseNumber();
                     accessAddresses = QueryManager.getAllEntities(session, accessAddressQuery, AccessAddressEntity.class);
+                } else if (accessAddresses.size() == 1 && includeGlobalIds) {
+                    AccessAddressEntity accessAddressEntity = accessAddresses.get(0);
+                    geoLookupDTO.setAccessAddressGlobalId(accessAddressEntity.getGlobalId());
+
+                    if (floor != null || door != null) {
+                        UnitAddressQuery unitAddressQuery = new UnitAddressQuery();
+                        unitAddressQuery.addAccessAddress(accessAddressEntity);
+                        if (floor != null) {
+                            unitAddressQuery.addFloor(floor);
+                        }
+                        if (door != null) {
+                            unitAddressQuery.addDoor(door);
+                        }
+
+                        List<UnitAddressEntity> unitAddresses = QueryManager.getAllEntities(session, unitAddressQuery, UnitAddressEntity.class);
+                        if (!unitAddresses.isEmpty()) {
+                            geoLookupDTO.setUnitAddressGlobalId(unitAddresses.get(0).getGlobalId());
+                        } else {
+                            /*
+                            unitAddressQuery.setDoor(null);
+                            unitAddresses = QueryManager.getAllEntities(session, unitAddressQuery, UnitAddressEntity.class);
+                            if (unitAddresses.size() == 1) {
+                                System.out.println("Skipped door and found one");
+                                geoLookupDTO.setUnitAddressGlobalId(unitAddresses.get(0).getGlobalId());
+                            }
+                            */
+                        }
+                    }
+
                 }
-                if (accessAddresses != null && accessAddresses.size() > 0) {
+                if (accessAddresses != null && !accessAddresses.isEmpty()) {
                     //There can be more than one access-address, we just take the first one.
                     //There can be more than one accessaddress on a road, but they have the same postalcode and postaldistrict
                     for (AccessAddressEntity accessAddress : accessAddresses) {

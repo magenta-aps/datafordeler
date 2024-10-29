@@ -108,6 +108,7 @@
         "Datakilde": 1,
         "Enhedsanvendelse": 1,
         "Etage": "kld",
+        "Dor_lejlighedsnummer": "tv",
         "Objektstatus": 2,
         "EnhedsadresseSumiffik": "{EE4805F1-96AB-45A7-B045-ED4D3C28364C}",
         "GlobalID": "{1B3AC64B-C28D-40B2-A106-16CEE7C188B8}"
@@ -125,6 +126,7 @@
         "Datakilde": 1,
         "Enhedsanvendelse": 1,
         "Etage": "kld",
+        "Dor_lejlighedsnummer": "th",
         "Objektstatus": 2,
         "EnhedsadresseSumiffik": "{EE4805F1-96AB-45A7-B045-ED4D3C28364D}",
         "GlobalID": "{1B3AC64B-C28D-40B2-A106-16CEE7C188B9}"
