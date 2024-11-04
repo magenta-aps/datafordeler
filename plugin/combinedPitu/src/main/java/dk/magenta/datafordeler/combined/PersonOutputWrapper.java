@@ -190,11 +190,11 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
                     root.put("lokalitetsnavn", lookup.getLocalityName());
                     root.put("lokalitetsforkortelse", lookup.getLocalityAbbrev());
                     if (includeGlobalIds) {
-                        root.put("houseNumber", houseNumber);
-                        root.put("floor", personAddressData.getFloor());
-                        root.put("door", personAddressData.getDoor());
-                        root.put("accessAddressGlobalId", lookup.getAccessAddressGlobalId());
-                        root.put("unitAddressGlobalId", lookup.getUnitAddressGlobalId());
+                        root.put("husnummer", houseNumber);
+                        root.put("etage", personAddressData.getFloor());
+                        root.put("sidedør", personAddressData.getDoor());
+                        root.put("adgangsadresseGlobalId", lookup.getAccessAddressGlobalId());
+                        root.put("enhedsadresseGlobalId", lookup.getUnitAddressGlobalId());
                     }
                 }
 
