@@ -164,8 +164,8 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         String body = response.getBody();
         Assert.assertEquals(body, "0101001234", objectMapper.readTree(body).get("cprNummer").asText());
-        Assert.assertEquals(body, "{2e3776bf-05c2-433c-adb9-8a07df6b3e8f}", objectMapper.readTree(body).get("accessAddressGlobalId").textValue());
-        Assert.assertEquals(body, "{1b3ac64b-c28d-40b2-a106-16cee7c188b8}", objectMapper.readTree(body).get("unitAddressGlobalId").textValue());
+        Assert.assertEquals(body, "{2e3776bf-05c2-433c-adb9-8a07df6b3e8f}", objectMapper.readTree(body).get("adgangsadresseGlobalId").textValue());
+        Assert.assertEquals(body, "{1b3ac64b-c28d-40b2-a106-16cee7c188b8}", objectMapper.readTree(body).get("enhedsadresseGlobalId").textValue());
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/1111111188",
