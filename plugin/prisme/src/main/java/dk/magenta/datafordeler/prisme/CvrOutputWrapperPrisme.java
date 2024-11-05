@@ -362,11 +362,11 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
                             addressRecord.getDoor(),
                             true
                     );
-                    root.put("houseNumber", houseNumber);
-                    root.put("floor", addressRecord.getFloor());
-                    root.put("door", addressRecord.getDoor());
-                    root.put("accessAddressGlobalId", lookup.getAccessAddressGlobalId());
-                    root.put("unitAddressGlobalId", lookup.getUnitAddressGlobalId());
+                    root.put("husnummer", houseNumber);
+                    root.put("etage", addressRecord.getFloor());
+                    root.put("sidedør", addressRecord.getDoor());
+                    root.put("adgangsadresseGlobalId", lookup.getAccessAddressGlobalId());
+                    root.put("enhedsadresseGlobalId", lookup.getUnitAddressGlobalId());
                 } catch (InvalidClientInputException e) {
                 }
             }
