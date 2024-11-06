@@ -55,7 +55,11 @@ public class DirectLookup {
     public <R extends CvrEntityRecord> List<R> lookup(ObjectNode requestBody, String schema) throws DataStreamException, HttpStatusException, IOException, URISyntaxException, GeneralSecurityException {
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
 
-        File keystore = new File(configuration.getCompanyRegisterDirectLookupCertificate());
+        String certificateFile = configuration.getCompanyRegisterDirectLookupCertificate();
+        if (certificateFile == null) {
+            throw new DataStreamException("Company register certificate file not set");
+        }
+        File keystore = new File(certificateFile);
         String keystorePassword = null;
         try {
             keystorePassword = configuration.getCompanyRegisterDirectLookupPassword();
@@ -86,7 +90,11 @@ public class DirectLookup {
 
     public CompanyRecord companyLookup(String cvrNumber) throws DataFordelerException {
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
-        File keystore = new File(configuration.getCompanyRegisterDirectLookupCertificate());
+        String certificateFile = configuration.getCompanyRegisterDirectLookupCertificate();
+        if (certificateFile == null) {
+            throw new DataStreamException("Company register certificate file not set");
+        }
+        File keystore = new File(certificateFile);
         String keystorePassword = null;
         try {
             keystorePassword = configuration.getCompanyRegisterDirectLookupPassword();
@@ -124,7 +132,11 @@ public class DirectLookup {
 
     public ParticipantRecord participantLookup(String unitNumber) throws DataFordelerException {
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
-        File keystore = new File(configuration.getParticipantRegisterDirectLookupCertificate());
+        String certificateFile = configuration.getParticipantRegisterDirectLookupCertificate();
+        if (certificateFile == null) {
+            throw new DataStreamException("Participant register certificate file not set");
+        }
+        File keystore = new File(certificateFile);
         String keystorePassword = null;
         try {
             keystorePassword = configuration.getParticipantRegisterDirectLookupPassword();
