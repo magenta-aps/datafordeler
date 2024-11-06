@@ -570,7 +570,6 @@ public class RecordTest extends TestBase {
     }
 
     private HashMap<Long, JsonNode> loadParticipant(String resource) throws IOException, DataFordelerException {
-        System.out.println("LoadParticipant");
         ObjectMapper objectMapper = this.getObjectMapper();
         ImportMetadata importMetadata = new ImportMetadata();
         try (Session session = sessionManager.getSessionFactory().openSession()) {

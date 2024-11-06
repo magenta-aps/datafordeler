@@ -55,7 +55,11 @@ public class DirectLookup {
     public <R extends CvrEntityRecord> List<R> lookup(ObjectNode requestBody, String schema) throws DataStreamException, HttpStatusException, IOException, URISyntaxException, GeneralSecurityException {
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
 
-        File keystore = new File(configuration.getCompanyRegisterDirectLookupCertificate());
+        String certificateFile = configuration.getCompanyRegisterDirectLookupCertificate();
+        if (certificateFile == null) {
+            throw new DataStreamException("Company register certificate file not set");
+        }
+        File keystore = new File(certificateFile);
         String keystorePassword = null;
         try {
             keystorePassword = configuration.getCompanyRegisterDirectLookupPassword();
