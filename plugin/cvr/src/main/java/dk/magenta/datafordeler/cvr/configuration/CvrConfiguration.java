@@ -119,7 +119,7 @@ public class CvrConfiguration implements Configuration {
             "}\n";
 
 
-    private String companyRegisterDirectLookupCertificate = Environment.getEnv("CVR_DIRECT_LOOKUP_CERTIFICATE", null);
+    private String companyRegisterDirectLookupCertificate = Environment.getEnv("CVR_COMPANY_DIRECT_LOOKUP_CERTIFICATE", null);
 
     @Column
     private String companyRegisterDirectLookupPassword = "";
@@ -289,8 +289,7 @@ public class CvrConfiguration implements Configuration {
             "}";
 
 
-    @Column
-    private String participantRegisterDirectLookupCertificate = "";
+    private String participantRegisterDirectLookupCertificate = Environment.getEnv("CVR_PARTICIPANT_DIRECT_LOOKUP_CERTIFICATE", null);
 
     @Column
     private String participantRegisterDirectLookupPassword = "";
