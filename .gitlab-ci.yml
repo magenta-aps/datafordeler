@@ -334,7 +334,7 @@ Configure Production:
 # Deploy stage
 ##############
 
-Deploy Test 1:
+Deploy Datafordeler01:
   stage: deploy
   when: manual
   extends:
@@ -348,7 +348,7 @@ Deploy Test 1:
     name: test
     url: "https://test.data.gl"
 
-Deploy Test 2:
+Deploy Datafordeler02:
   stage: deploy
   when: manual
   extends:
@@ -356,7 +356,7 @@ Deploy Test 2:
     - .saltbert
   # Depend on test 1, so we only have one server down at a time
   # It needs to be checked that service 1 is up & running before taking down service 2
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test", "Deploy Test 1"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test", "Deploy Datafordeler01"]
   variables:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-test-2
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
