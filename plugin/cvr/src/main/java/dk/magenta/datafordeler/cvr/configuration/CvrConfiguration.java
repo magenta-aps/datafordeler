@@ -118,8 +118,8 @@ public class CvrConfiguration implements Configuration {
             "  }\n" +
             "}\n";
 
-    @Column
-    private String companyRegisterDirectLookupCertificate = "";
+
+    private String companyRegisterDirectLookupCertificate = Environment.getEnv("CVR_DIRECT_LOOKUP_CERTIFICATE", null);
 
     @Column
     private String companyRegisterDirectLookupPassword = "";
@@ -501,13 +501,13 @@ public class CvrConfiguration implements Configuration {
     // Configuration loaded from environment
 
     @Transient
-    private String cvrDemoCompanyFile = Environment.getEnv("CVR_DEMO_COMPANYFILE", null);;
+    private String cvrDemoCompanyFile = Environment.getEnv("CVR_DEMO_COMPANYFILE", null);
 
     @Transient
-    private String cvrDemoUnitFile = Environment.getEnv("CVR_DEMO_UNITFILE", null);;
+    private String cvrDemoUnitFile = Environment.getEnv("CVR_DEMO_UNITFILE", null);
 
     @Transient
-    private String cvrDemoParticipantFile = Environment.getEnv("CVR_DEMO_PARTICIPANTFILE", null);;
+    private String cvrDemoParticipantFile = Environment.getEnv("CVR_DEMO_PARTICIPANTFILE", null);
 
     @Transient
     private String encryptionKeyFileName = Environment.getEnv("CVR_ENCRYPTION_KEYFILE", "local/cvr/keyfile.json");
