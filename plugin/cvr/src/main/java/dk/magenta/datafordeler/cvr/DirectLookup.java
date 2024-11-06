@@ -133,7 +133,6 @@ public class DirectLookup {
     public ParticipantRecord participantLookup(String unitNumber) throws DataFordelerException {
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
         String certificateFile = configuration.getParticipantRegisterDirectLookupCertificate();
-        System.out.println("certificateFile: "+certificateFile);
         if (certificateFile == null) {
             throw new DataStreamException("Participant register certificate file not set");
         }
