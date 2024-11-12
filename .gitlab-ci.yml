@@ -345,7 +345,7 @@ Deploy Datafordeler01:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-test-1
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
-    name: test
+    name: test01
     url: "https://test.data.gl"
 
 Deploy Datafordeler02:
@@ -361,7 +361,7 @@ Deploy Datafordeler02:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-test-2
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
-    name: test
+    name: test02
     url: "https://test.data.gl"
 
 Deploy Production 1:
@@ -375,7 +375,7 @@ Deploy Production 1:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-prod-1
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
-    name: production
+    name: production01
     url: "https://data.gl"
 
 Deploy Production 2:
@@ -391,5 +391,5 @@ Deploy Production 2:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-prod-2
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
-    name: production
+    name: production02
     url: "https://data.gl"
