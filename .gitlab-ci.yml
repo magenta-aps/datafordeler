@@ -321,6 +321,15 @@ Configure Test:
   variables:
     ENDPOINT: datafordeler/salt/update-test
 
+Configure Demo:
+  stage: configure
+  extends:
+    - .rules:semver-all
+    - .config:endpoint-with-tag
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
+  variables:
+    ENDPOINT: datafordeler/salt/update-demo
+
 Configure Production:
   stage: configure
   extends:
@@ -334,7 +343,7 @@ Configure Production:
 # Deploy stage
 ##############
 
-Deploy Datafordeler01:
+Deploy Test 1:
   stage: deploy
   when: manual
   extends:
@@ -348,7 +357,7 @@ Deploy Datafordeler01:
     name: test01
     url: "https://test.data.gl"
 
-Deploy Datafordeler02:
+Deploy Test 2:
   stage: deploy
   when: manual
   extends:
@@ -356,13 +365,43 @@ Deploy Datafordeler02:
     - .saltbert
   # Depend on test 1, so we only have one server down at a time
   # It needs to be checked that service 1 is up & running before taking down service 2
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test", "Deploy Datafordeler01"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test", "Deploy Test 1"]
   variables:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-test-2
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
   environment:
     name: test02
     url: "https://test.data.gl"
+
+Deploy Demo 1:
+  stage: deploy
+  when: manual
+  extends:
+    - .rules:semver-all
+    - .saltbert
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Demo"]
+  variables:
+    SALTBERT_ORCHESTRATION: groenland.datafordeler.service-demo-1
+    SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
+  environment:
+    name: demo01
+    url: "https://demo.test.data.gl"
+
+Deploy Demo 2:
+  stage: deploy
+  when: manual
+  extends:
+    - .rules:semver-all
+    - .saltbert
+  # Depend on test 1, so we only have one server down at a time
+  # It needs to be checked that service 1 is up & running before taking down service 2
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test", "Deploy Demo 1"]
+  variables:
+    SALTBERT_ORCHESTRATION: groenland.datafordeler.service-demo-2
+    SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
+  environment:
+    name: demo02
+    url: "https://demo.test.data.gl"
 
 Deploy Production 1:
   stage: deploy
