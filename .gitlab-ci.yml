@@ -337,7 +337,7 @@ Configure Production:
     - .config:endpoint-with-tag
   needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
   variables:
-    ENDPOINT: datafordeler/salt/update-production
+    ENDPOINT: datafordeler/salt/update-prod
 
 
 # Deploy stage
