@@ -89,7 +89,7 @@ public class FatherSubscriptionTest extends TestBase {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
             ftpCommunicator.setSslSocketFactory(FatherSubscriptionTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
-        }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
+        }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
 
         String username = "test";
         String password = "test";

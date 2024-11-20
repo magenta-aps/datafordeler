@@ -236,7 +236,7 @@ public class FtpCommunicatorTest {
             public Boolean call() throws Exception {
                 FtpCommunicatorTest.this.startServer(username, password, port, tempFiles);
                 try {
-                    FtpCommunicator ftpCommunicator = new FtpCommunicator(username, password, true);
+                    FtpCommunicator ftpCommunicator = new FileProgressFtpCommunicator(username, password, true);
                     ftpCommunicator.setSslSocketFactory(getTrustAllSSLSocketFactory());
                     InputStream inputStream = ftpCommunicator.fetch(new URI("ftp://localhost:" + port + "/" + path));
                     String data = new Scanner(inputStream, "UTF-8").useDelimiter("\\A").next();

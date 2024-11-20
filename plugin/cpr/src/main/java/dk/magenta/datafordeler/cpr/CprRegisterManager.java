@@ -14,11 +14,14 @@ import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.CprGeoEntityManager;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.synchronization.CprSourceData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -110,10 +113,12 @@ public class CprRegisterManager extends RegisterManager {
         return this.configurationManager.getConfiguration().getPersonRegisterPullCronSchedule();
     }
 
-    public FtpCommunicator getFtpCommunicator(URI eventInterface, EntityManager cprEntityManager) throws DataStreamException {
+    public FtpCommunicator getFtpCommunicator(Session session, URI eventInterface, EntityManager cprEntityManager) throws DataStreamException {
         CprConfiguration configuration = this.configurationManager.getConfiguration();
         try {
-            return new FtpCommunicator(
+            return new DatabaseProgressFtpCommunicator(
+                    session,
+                    cprEntityManager.getSchema(),
                     configuration.getRegisterFtpUsername(cprEntityManager),
                     configuration.getRegisterFtpPassword(cprEntityManager),
                     eventInterface != null && "ftps".equals(eventInterface.getScheme()),
@@ -168,8 +173,8 @@ public class CprRegisterManager extends RegisterManager {
 
             case "ftp":
             case "ftps":
-                try {
-                    FtpCommunicator ftpFetcher = this.getFtpCommunicator(eventInterface, entityManager);
+                try (Session session = sessionManager.getSessionFactory().openSession()) {
+                    FtpCommunicator ftpFetcher = this.getFtpCommunicator(session, eventInterface, entityManager);
                     if (
                             importMetadata != null &&
                                     importMetadata.getImportConfiguration() != null &&
@@ -191,6 +196,17 @@ public class CprRegisterManager extends RegisterManager {
         }
 
         return responseBody;
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void loadFileCacheToDatabase() {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            EntityManager entityManager = this.entityManagerBySchema.get(PersonEntity.schema);
+            DatabaseProgressFtpCommunicator ftpFetcher = (DatabaseProgressFtpCommunicator) this.getFtpCommunicator(session, null, entityManager);
+            ftpFetcher.insertFromFolder();
+        } catch (DataStreamException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
