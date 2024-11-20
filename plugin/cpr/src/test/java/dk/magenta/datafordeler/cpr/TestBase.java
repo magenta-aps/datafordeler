@@ -270,7 +270,7 @@ public abstract class TestBase {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
             ftpCommunicator.setSslSocketFactory(getTrustAllSSLSocketFactory());
             return ftpCommunicator;
-        }).when(this.registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
+        }).when(this.registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
 
         this.ftpService = new FtpService();
         this.ftpService.startServer(username, password, port, files);

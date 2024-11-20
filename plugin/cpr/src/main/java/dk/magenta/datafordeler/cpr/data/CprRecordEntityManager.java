@@ -428,7 +428,7 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
 
         // Upload file
         URI destination = this.getSubscriptionURI();
-        FtpCommunicator ftpSender = this.getRegisterManager().getFtpCommunicator(destination, entityManager);
+        FtpCommunicator ftpSender = this.getRegisterManager().getFtpCommunicator(null, destination, entityManager);
         try {
             ftpSender.send(destination, subscriptionFile);
         } catch (IOException e) {
