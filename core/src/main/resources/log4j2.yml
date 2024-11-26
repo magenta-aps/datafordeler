@@ -1,0 +1,38 @@
+Configuration:
+  Appenders:
+    Console:
+      name: "console"
+      PatternLayout:
+        pattern: "%d [%p] [%F:%L] - %m%n"
+    RollingFile:
+      name: "main_file"
+      fileName: "/app/log/dafo.log"
+      filePattern: "/app/log/dafo.log.%d{yyyy-MM-dd}.gz"
+      PatternLayout:
+        pattern: "%d [%p] [%F:%L] - %m%n"
+      Policies:
+        CronTriggeringPolicy:
+          schedule: "0 0 0 * * ?"
+      DefaultRolloverStrategy:
+        Delete:
+          basePath: "/app/log"
+          IfFileName:
+            regex: "dafo\\.log\\.\\d{4}-\\d{2}-\\d{2}\\.gz"
+          IfLastModified:
+            age: "P365D"
+    File:
+      name: "error_file"
+      fileName: "/app/log/error.log"
+      PatternLayout:
+        pattern: "%d [%p] [%F:%L] - %m%n"
+      immediateFlush: true
+  Loggers:
+    Root:
+      level: "INFO"
+      AppenderRef:
+        - ref: "console"
+          level: "INFO"
+        - ref: "main_file"
+          level: "INFO"
+        - ref: "error_file"
+          level: "ERROR"
