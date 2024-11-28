@@ -3,7 +3,7 @@ Configuration:
     Console:
       name: "console"
       PatternLayout:
-        pattern: "TIME=%d, LEVEL=%p, FILE=%F:%L, MESSAGE=%m%n"
+        pattern: "%d [%p] [%F:%L] - %m%n"
     RollingFile:
       name: "main_file"
       fileName: "/app/log/dafo.log"
