@@ -117,6 +117,7 @@ public class CprDirectLookup {
         int errorCode = Integer.parseInt(response.substring(22, 24));
 
         if (errorCode != 0) {
+            System.out.println("Failed login with password "+password.substring(0, 4));
             throw new DataStreamException("Login failed with error code: " + errorCode + ", errorText: " + response);
         }
 
