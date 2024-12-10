@@ -288,6 +288,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
                     "Incoming REST request for " + this.getServiceName() + " with query " + requestParams.toString()
             );
             this.checkAndLogAccess(loggerHelper);
+            System.out.println("client: "+request.getHeader("uxp-client"));
 
             Q query = this.getQuery(requestParams, false);
             this.applyAreaRestrictionsToQuery(query, user);

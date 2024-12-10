@@ -50,6 +50,13 @@ public class CprDirectLookup {
     public void init() {
         this.socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         this.enabled = this.configurationManager.getConfiguration().isDirectPersonLookupEnabled();
+
+        try {
+            CprConfiguration configuration = this.getConfiguration();
+            String p = String.format("%-8.8s", configuration.getDirectPassword());
+            System.out.println("hep"+p+"bøf");
+        } catch (GeneralSecurityException | IOException e) {
+        }
     }
 
     private CprConfiguration getConfiguration() {
