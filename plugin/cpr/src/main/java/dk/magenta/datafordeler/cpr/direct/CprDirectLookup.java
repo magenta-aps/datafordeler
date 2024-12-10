@@ -50,13 +50,6 @@ public class CprDirectLookup {
     public void init() {
         this.socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         this.enabled = this.configurationManager.getConfiguration().isDirectPersonLookupEnabled();
-
-        try {
-            CprConfiguration configuration = this.getConfiguration();
-            String p = String.format("%-8.8s", configuration.getDirectPassword());
-            System.out.println("hep"+p+"bøf");
-        } catch (GeneralSecurityException | IOException e) {
-        }
     }
 
     private CprConfiguration getConfiguration() {
@@ -117,10 +110,10 @@ public class CprDirectLookup {
         int errorCode = Integer.parseInt(response.substring(22, 24));
 
         if (errorCode != 0) {
-            System.out.println("Failed login with password "+password.substring(0, 4));
+            System.out.println("Failed login "+password.substring(0, 4));
             throw new DataStreamException("Login failed with error code: " + errorCode + ", errorText: " + response);
         }
-        log.info("Successful login");
+        log.info("Login successful");
 
         // parse out token, used for authentication on subsequent requests
         this.authToken = response.substring(6, 14);
