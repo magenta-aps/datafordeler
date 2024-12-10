@@ -120,6 +120,7 @@ public class CprDirectLookup {
             System.out.println("Failed login with password "+password.substring(0, 4));
             throw new DataStreamException("Login failed with error code: " + errorCode + ", errorText: " + response);
         }
+        log.info("Successful login");
 
         // parse out token, used for authentication on subsequent requests
         this.authToken = response.substring(6, 14);
