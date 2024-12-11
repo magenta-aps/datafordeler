@@ -79,8 +79,10 @@ public class ManageCprList {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"));
-            if (query.getResultList().size() == 0) {
+            String subscriberId = Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_");
+            query.setParameter("subscriberId", subscriberId);
+            if (query.getResultList().isEmpty()) {
+                log.info("Did not find subscription with subscriber id " + subscriberId);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
@@ -117,8 +119,10 @@ public class ManageCprList {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
             Query query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
-            query.setParameter("subscriberId", Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"));
-            if (query.getResultList().size() == 0) {
+            String subscriberId = Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_");
+            query.setParameter("subscriberId", subscriberId);
+            if (query.getResultList().isEmpty()) {
+                log.info("Did not find subscription with subscriber id " + subscriberId);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
@@ -136,7 +140,8 @@ public class ManageCprList {
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
             query.setParameter("listId", listId);
             CprList foundList = (CprList) query.getResultList().get(0);
-            if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
+            String subscriberId = Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_");
+            if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
@@ -239,6 +244,7 @@ public class ManageCprList {
             query.setParameter("listId", listId);
             List<CprList> lists = query.getResultList();
             if (lists.isEmpty()) {
+                log.info("Subscriber list with id "+listId+" not found");
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             CprList foundList = lists.get(0);
