@@ -12,6 +12,7 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
@@ -61,7 +62,15 @@ public class ManageCprList {
     public void init() {
     }
 
-
+    private String getSubscriberId(HttpServletRequest request) throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
+        String subscriberId = Optional.ofNullable(
+                request.getHeader("uxp-client")
+        ).orElse(
+                dafoUserManager.getUserFromRequest(request).getIdentity()
+        ).replaceAll("/", "_");
+        log.info("Got subscriber id from request: " + subscriberId);
+        return subscriberId;
+    }
     /**
      * Create a cprList
      *
@@ -76,10 +85,10 @@ public class ManageCprList {
     @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/", headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cprListCreate(HttpServletRequest request, @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        String subscriberId = this.getSubscriberId(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
-            String subscriberId = Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_");
             query.setParameter("subscriberId", subscriberId);
             if (query.getResultList().isEmpty()) {
                 log.info("Did not find subscription with subscriber id " + subscriberId);
@@ -116,10 +125,9 @@ public class ManageCprList {
     @GetMapping("/subscriber/cprList")
     public ResponseEntity<List<CprList>> cprListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        String subscriberId = this.getSubscriberId(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-
             Query query = session.createQuery(" from " + Subscriber.class.getName() + " where subscriberId = :subscriberId", Subscriber.class);
-            String subscriberId = Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_");
             query.setParameter("subscriberId", subscriberId);
             if (query.getResultList().isEmpty()) {
                 log.info("Did not find subscription with subscriber id " + subscriberId);
@@ -135,12 +143,12 @@ public class ManageCprList {
     @DeleteMapping("/subscriber/cprList/cpr/{listId}")
     public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr", required = false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+        String subscriberId = this.getSubscriberId(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
             query.setParameter("listId", listId);
             CprList foundList = (CprList) query.getResultList().get(0);
-            String subscriberId = Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_");
             if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
@@ -176,7 +184,8 @@ public class ManageCprList {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             CprList foundList = lists.get(0);
-            if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
+            String subscriberId = this.getSubscriberId(request);
+            if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
@@ -241,6 +250,7 @@ public class ManageCprList {
             }
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
+            String subscriberId = this.getSubscriberId(request);
             query.setParameter("listId", listId);
             List<CprList> lists = query.getResultList();
             if (lists.isEmpty()) {
@@ -248,7 +258,7 @@ public class ManageCprList {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             CprList foundList = lists.get(0);
-            if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
+            if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
