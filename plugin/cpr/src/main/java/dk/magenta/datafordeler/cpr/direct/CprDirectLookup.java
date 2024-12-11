@@ -110,8 +110,10 @@ public class CprDirectLookup {
         int errorCode = Integer.parseInt(response.substring(22, 24));
 
         if (errorCode != 0) {
+            log.error("CPR Direct login failed");
             throw new DataStreamException("Login failed with error code: " + errorCode + ", errorText: " + response);
         }
+        log.info("CPR Direct Login successful");
 
         // parse out token, used for authentication on subsequent requests
         this.authToken = response.substring(6, 14);
