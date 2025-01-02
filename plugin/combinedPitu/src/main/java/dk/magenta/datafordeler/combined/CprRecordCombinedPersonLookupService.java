@@ -9,7 +9,6 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
-import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.plugin.AreaRestrictionDefinition;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
@@ -150,7 +149,8 @@ public class CprRecordCombinedPersonLookupService {
         List<String> cprNumbers = new ArrayList<String>();
 
         for (String cpr : cprs) {
-            cprNumbers.addAll(Arrays.asList(cpr.split(",")).stream().map(c -> c.replaceAll("\\D", "")).collect(Collectors.toList()));
+            Stream<String> s = Arrays.stream(cpr.split(","));
+            cprNumbers.addAll(s.map(c -> c.replaceAll("\\D", "")).collect(Collectors.toList()));
         }
 
         personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);
