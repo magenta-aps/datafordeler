@@ -79,6 +79,7 @@ public class CprRecordCombinedPersonLookupService {
         String forceDirect = requestParams.getFirst("forceDirect");
         String allowDirect = requestParams.getFirst("allowDirect");
         boolean includeGlobalIds = "1".equals(requestParams.getFirst("includeGlobalIds"));
+        cprNummer = cprNummer.replaceAll("\\D", "");
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);

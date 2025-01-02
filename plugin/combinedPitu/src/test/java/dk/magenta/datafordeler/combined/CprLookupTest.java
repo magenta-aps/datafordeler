@@ -156,7 +156,7 @@ public class CprLookupTest extends TestBase {
         Assert.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
-                "/combined/personLookup/1/cpr/0101001234?includeGlobalIds=1",
+                "/combined/personLookup/1/cpr/010100-1234?includeGlobalIds=1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
