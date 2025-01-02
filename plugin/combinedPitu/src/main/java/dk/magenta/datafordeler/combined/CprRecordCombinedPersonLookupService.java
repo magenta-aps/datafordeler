@@ -150,7 +150,7 @@ public class CprRecordCombinedPersonLookupService {
         List<String> cprNumbers = new ArrayList<String>();
 
         for (String cpr : cprs) {
-            cprNumbers.addAll(Arrays.asList(cpr.split(",")));
+            cprNumbers.addAll(Arrays.asList(cpr.split(",")).stream().map(c -> c.replaceAll("\\D", "")).collect(Collectors.toList()));
         }
 
         personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);

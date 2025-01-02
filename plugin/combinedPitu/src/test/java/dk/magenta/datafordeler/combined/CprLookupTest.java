@@ -418,7 +418,7 @@ public class CprLookupTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/combined/personLookup/1/cpr/?cpr=0000000001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188&includeGlobalIds=1",
+                "/combined/personLookup/1/cpr/?cpr=000000-0001,0000000002,0000000003,0000000004,0000000005,0000000006,0000000007,1000000007,1111111188&includeGlobalIds=1",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
