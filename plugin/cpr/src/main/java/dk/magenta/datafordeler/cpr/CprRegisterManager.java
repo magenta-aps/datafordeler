@@ -210,7 +210,7 @@ public class CprRegisterManager extends RegisterManager {
 
             ftpFetcher.listDownloadable(configuration.getPersonRegisterURI());
         } catch (DataStreamException | ConfigurationException e) {
-            throw new RuntimeException(e);
+            // Do nothing
         }
     }
 
