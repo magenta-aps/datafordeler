@@ -54,10 +54,6 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
         for (String path : newSet) {
             System.out.println("\t"+path);
         }
-        if (newSet.size() > 5) {
-            System.out.println("Something is wrong. Not downloading");
-            newSet.clear();
-        }
         return new ArrayList<>(newSet);
     }
 

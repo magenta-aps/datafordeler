@@ -159,6 +159,22 @@ public abstract class FtpCommunicator implements Communicator {
         return this.localCopyFolder;
     }
 
+
+    public void listDownloadable(URI uri) {
+        FTPClient ftpClient = null;
+        try {
+            ftpClient = performConnect(uri);
+            ftpClient.changeDirectory(uri.getPath());
+            String[] list = ftpClient.listNames();
+            List<String> remotePaths = Arrays.asList(list);
+            remotePaths.sort(Comparator.naturalOrder());
+            this.filterFilesToDownload(remotePaths);
+        } catch (IOException | DataStreamException | FTPIllegalReplyException | FTPDataTransferException |
+                 FTPAbortedException | FTPListParseException | FTPException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Fetches all yet-unfetched files from the folder denoted by the uri.
      */

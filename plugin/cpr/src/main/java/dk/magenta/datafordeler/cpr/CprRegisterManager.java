@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.WrongSubclassException;
@@ -204,7 +205,11 @@ public class CprRegisterManager extends RegisterManager {
             EntityManager entityManager = this.entityManagerBySchema.get(PersonEntity.schema);
             DatabaseProgressFtpCommunicator ftpFetcher = (DatabaseProgressFtpCommunicator) this.getFtpCommunicator(session, null, entityManager);
             ftpFetcher.insertFromFolder();
-        } catch (DataStreamException e) {
+
+            CprConfiguration configuration = this.configurationManager.getConfiguration();
+
+            ftpFetcher.listDownloadable(configuration.getPersonRegisterURI());
+        } catch (DataStreamException | ConfigurationException e) {
             throw new RuntimeException(e);
         }
     }
