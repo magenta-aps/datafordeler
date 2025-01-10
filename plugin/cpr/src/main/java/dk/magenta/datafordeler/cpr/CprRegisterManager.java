@@ -203,14 +203,15 @@ public class CprRegisterManager extends RegisterManager {
     public void loadFileCacheToDatabase() {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             EntityManager entityManager = this.entityManagerBySchema.get(PersonEntity.schema);
-            DatabaseProgressFtpCommunicator ftpFetcher = (DatabaseProgressFtpCommunicator) this.getFtpCommunicator(session, null, entityManager);
-            ftpFetcher.insertFromFolder();
+            DatabaseProgressFtpCommunicator ftpFetcher = (DatabaseProgressFtpCommunicator) this.getFtpCommunicator(
+                    session,
+                    this.getEventInterface(entityManager),
+                    entityManager
+            );
 
-            CprConfiguration configuration = this.configurationManager.getConfiguration();
-
-            ftpFetcher.listDownloadable(configuration.getPersonRegisterURI());
-        } catch (DataStreamException | ConfigurationException e) {
-            // Do nothing
+            ftpFetcher.listDownloadable(this.configurationManager.getConfiguration().getPersonRegisterURI());
+        } catch (DataFordelerException e) {
+            e.printStackTrace();
         }
     }
 
