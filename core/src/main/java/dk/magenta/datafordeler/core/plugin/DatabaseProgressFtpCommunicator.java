@@ -38,9 +38,26 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
 
     @Override
     protected List<String> filterFilesToDownload(List<String> paths) throws IOException {
+        System.out.println("Filtering files to download");
+        System.out.println("files:");
+        for (String path : paths) {
+            System.out.println("\t"+path);
+        }
         HashSet<String> found = new HashSet<>(existing(this.session, this.type, paths));
         HashSet<String> newSet = new HashSet<>(paths);
+        System.out.println("Already registered files:");
+        for (String path : found) {
+            System.out.println("\t"+path);
+        }
         newSet.removeAll(found);
+        System.out.println("Previously unseen:");
+        for (String path : newSet) {
+            System.out.println("\t"+path);
+        }
+        if (newSet.size() > 5) {
+            System.out.println("Something is wrong. Not downloading");
+            newSet.clear();
+        }
         return new ArrayList<>(newSet);
     }
 
@@ -80,14 +97,23 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
     }
 
     public void insertFromFolder() {
+        System.out.println("Inserting names of fetched files into database");
         if (this.getLocalCopyFolder() != null) {
             File folder = this.getLocalCopyFolder().toFile();
             if (folder.isDirectory()) {
                 File[] files = folder.listFiles();
                 if (files != null) {
+                    System.out.println("Files to register ("+files.length+"):");
+                    for (File file : files) {
+                        System.out.println("\t"+file.getName());
+                    }
                     this.saveList(Arrays.stream(files).map(File::getName).collect(Collectors.toList()));
                 }
+            } else {
+                System.out.println("Folder " + folder.getName() + " does not exist");
             }
+        } else {
+            System.out.println("Local copy folder is null");
         }
     }
 
