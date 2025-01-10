@@ -24,13 +24,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A class to fetch files by FTP. Files are fetched to a local folder, and an ImportInputStream is returned
  * for the fetched files.
  * Files are optionally kept and optionally marked to help determine what has already been imported.
  */
-public class FtpCommunicator implements Communicator {
+public abstract class FtpCommunicator implements Communicator {
 
     public static final String DONE_FILE_ENDING = ".done";
 
@@ -69,7 +72,6 @@ public class FtpCommunicator implements Communicator {
         this.password = password;
         this.useFtps = useFtps;
         this.proxyString = proxyString;
-
 
         if (localCopyFolder != null) {
             this.localCopyFolder = Paths.get(localCopyFolder);
@@ -130,9 +132,7 @@ public class FtpCommunicator implements Communicator {
             } else {
                 ftpClient.connect(uri.getHost());
             }
-
             ftpClient.login(this.username, this.password);
-
             return ftpClient;
         } catch (FTPIllegalReplyException | FTPException e) {
             throw new DataStreamException(e);
@@ -152,6 +152,26 @@ public class FtpCommunicator implements Communicator {
             }
         } catch (IOException e) {
             throw new DataStreamException(e);
+        }
+    }
+
+    public Path getLocalCopyFolder() {
+        return this.localCopyFolder;
+    }
+
+
+    public void listDownloadable(URI uri) {
+        FTPClient ftpClient = null;
+        try {
+            ftpClient = performConnect(uri);
+            ftpClient.changeDirectory(uri.getPath());
+            String[] list = ftpClient.listNames();
+            List<String> remotePaths = Arrays.asList(list);
+            remotePaths.sort(Comparator.naturalOrder());
+            this.filterFilesToDownload(remotePaths);
+        } catch (IOException | DataStreamException | FTPIllegalReplyException | FTPDataTransferException |
+                 FTPAbortedException | FTPListParseException | FTPException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -178,7 +198,6 @@ public class FtpCommunicator implements Communicator {
                 currentFiles.add(outputFile);
             }
             log.info("Downloaded "+currentFiles.size()+" files");
-
 
             this.onBeforeBuildStream(ftpClient, currentFiles, uri, downloadPaths);
             InputStream inputStream = this.buildChainedInputStream(currentFiles);
@@ -276,17 +295,8 @@ public class FtpCommunicator implements Communicator {
         return new LabeledSequenceInputStream(streams);
     }
 
-    protected List<String> filterFilesToDownload(List<String> paths) throws IOException {
-        Set<String> knownFiles = getLocalFilenameList();
-        List<String> result = new ArrayList<>();
-        for (String path : paths) {
-            String fileName = path.substring(path.lastIndexOf('/') + 1);
-            if (!knownFiles.contains(fileName) && !knownFiles.contains(fileName + DONE_FILE_ENDING)) {
-                result.add(path);
-            }
-        }
-        return result;
-    }
+
+    protected abstract List<String> filterFilesToDownload(List<String> paths) throws IOException;
 
     private void deleteLocalFiles(List<File> localFiles) {
         if (!this.keepFiles) {
