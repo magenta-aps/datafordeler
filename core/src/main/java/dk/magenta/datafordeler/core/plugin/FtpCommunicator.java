@@ -119,8 +119,10 @@ public abstract class FtpCommunicator implements Communicator {
         FTPClient ftpClient = new FTPClient();
         if (this.useFtps) {
             ftpClient.setSecurity(FTPClient.SECURITY_FTPS);
+            log.info("Connecting to " + uri.toString()+", using ftps");
+        } else {
+            log.info("Connecting to " + uri.toString()+", not using ftps");
         }
-        log.info("Connecting to " + uri.toString());
         setupProxy(ftpClient);
         if (this.sslSocketFactory != null) {
             ftpClient.setSSLSocketFactory(this.sslSocketFactory);
