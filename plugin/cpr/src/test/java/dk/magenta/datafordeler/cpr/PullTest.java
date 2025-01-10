@@ -127,7 +127,7 @@ public class PullTest extends TestBase {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
             ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
-        }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
+        }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
 
 
         String username = "test";
@@ -169,7 +169,7 @@ public class PullTest extends TestBase {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
             ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
-        }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
+        }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
 
 
         String username = "test";
@@ -241,8 +241,7 @@ public class PullTest extends TestBase {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
             ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
-        }).when(registerManager).getFtpCommunicator(any(URI.class), any(CprRecordEntityManager.class));
-
+        }).when(registerManager).getFtpCommunicator(any(), any(URI.class), any(CprRecordEntityManager.class));
 
         String username = "test";
         String password = "test";
@@ -285,15 +284,12 @@ public class PullTest extends TestBase {
 
         try {
             personEntityManager.createSubscriptionFile();
-
             doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
-
             File[] subFiles = personFtp.getTempDir().listFiles();
             Assert.assertEquals(1, subFiles.length);
             String contents = FileUtils.readFileToString(subFiles[0]);
             Assert.assertEquals("06123400OP0101001234                                                            \r\n" +
                     "071234560101001234               ", contents);
-
         } finally {
             personFtp.stopServer();
             localSubFolder.delete();
