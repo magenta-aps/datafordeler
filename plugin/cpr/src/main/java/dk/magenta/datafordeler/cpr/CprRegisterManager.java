@@ -208,10 +208,9 @@ public class CprRegisterManager extends RegisterManager {
                     this.getEventInterface(entityManager),
                     entityManager
             );
-
-            ftpFetcher.listDownloadable(this.configurationManager.getConfiguration().getPersonRegisterURI());
+            ftpFetcher.insertFromFolder();
         } catch (DataFordelerException e) {
-            e.printStackTrace();
+            // Do nothing
         }
     }
 
