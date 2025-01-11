@@ -206,17 +206,16 @@ public abstract class FtpCommunicator implements Communicator {
 
             if (inputStream != null) {
                 CloseDetectInputStream inputCloser = new CloseDetectInputStream(inputStream);
-                inputCloser.addAfterCloseListener(new Runnable() {
-                    @Override
-                    public void run() {
+                inputCloser.addAfterCloseListener(() -> {
+                    try {
+                        log.info("Input stream closed. Cleaning up");
+                        onStreamClose(ftpClient, currentFiles, uri, downloadPaths);
+                    } finally {
                         try {
-                            onStreamClose(ftpClient, currentFiles, uri, downloadPaths);
-                        } finally {
-                            try {
-                                ftpClient.disconnect(true);
-                            } catch (IOException | FTPIllegalReplyException | FTPException e) {
-                                log.error(e);
-                            }
+                            ftpClient.disconnect(true);
+                            log.info("FTP connection closed");
+                        } catch (IOException | FTPIllegalReplyException | FTPException e) {
+                            log.error(e);
                         }
                     }
                 });
