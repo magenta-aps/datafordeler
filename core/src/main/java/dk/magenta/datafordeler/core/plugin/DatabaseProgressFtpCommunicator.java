@@ -49,16 +49,22 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
 
     @Override
     protected void onStreamClose(FTPClient ftpClient, List<File> localFiles, URI uri, List<String> remoteFiles) {
+        log.info("onStreamClose");
+        for (File file : localFiles) {
+            log.info("    "+file.getAbsolutePath());
+        }
         this.saveList(localFiles.stream().map(File::getName).collect(Collectors.toList()));
         super.onStreamClose(ftpClient, localFiles, uri, remoteFiles);
     }
 
     private void saveList(List<String> filenames) {
         log.info("Saving list of files to database:");
+        for (String filename : filenames) {
+            log.info("    "+filename);
+        }
         Transaction transaction = this.session.beginTransaction();
         try {
             for (String filename : filter(this.session, this.type, filenames)) {
-                log.info("    "+filename);
                 this.session.save(new FtpPulledFile(this.type, filename));
             }
             transaction.commit();

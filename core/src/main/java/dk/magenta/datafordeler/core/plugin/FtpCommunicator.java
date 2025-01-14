@@ -204,11 +204,21 @@ public abstract class FtpCommunicator implements Communicator {
             this.onBeforeBuildStream(ftpClient, currentFiles, uri, downloadPaths);
             InputStream inputStream = this.buildChainedInputStream(currentFiles);
 
+            log.info("currentFiles before load:");
+            for (File file : currentFiles) {
+                log.info("  " + file.getAbsolutePath());
+            }
             if (inputStream != null) {
                 CloseDetectInputStream inputCloser = new CloseDetectInputStream(inputStream);
                 inputCloser.addAfterCloseListener(() -> {
                     try {
                         log.info("Input stream closed. Cleaning up");
+
+                        log.info("currentFiles after load:");
+                        for (File file : currentFiles) {
+                            log.info("  " + file.getAbsolutePath());
+                        }
+
                         onStreamClose(ftpClient, currentFiles, uri, downloadPaths);
                     } finally {
                         try {
