@@ -72,9 +72,8 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
             log.info("Transaction committed");
         } catch (Exception e) {
             transaction.rollback();
+            log.info("Transaction rolled back");
             throw e;
-        } finally {
-            this.session.flush();
         }
     }
 
