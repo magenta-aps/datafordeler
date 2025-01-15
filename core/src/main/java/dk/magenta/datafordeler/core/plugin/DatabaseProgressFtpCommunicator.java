@@ -65,12 +65,16 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
         Transaction transaction = this.session.beginTransaction();
         try {
             for (String filename : filter(this.session, this.type, filenames)) {
+                log.info("    "+filename+" was not filtered out");
                 this.session.save(new FtpPulledFile(this.type, filename));
             }
             transaction.commit();
+            log.info("Transaction committed");
         } catch (Exception e) {
             transaction.rollback();
             throw e;
+        } finally {
+            this.session.flush();
         }
     }
 
@@ -88,6 +92,13 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
         HashSet<String> found = new HashSet<>(existing(session, type, newFilenames));
         HashSet<String> newSet = new HashSet<>(newFilenames);
         newSet.removeAll(found);
+        for (String filename : newFilenames) {
+            if (found.contains(filename)) {
+                log.info("    "+filename+" was in existing");
+            } else {
+                log.info("    "+filename+" was not in existing");
+            }
+        }
         return newSet;
     }
 
