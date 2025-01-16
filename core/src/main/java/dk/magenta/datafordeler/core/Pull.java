@@ -179,35 +179,39 @@ public class Pull extends Worker implements Runnable {
 
                 this.log.info(this.prefix + "Pulling data for " + entityManager.getClass().getSimpleName());
 
-                this.registerManager.beforePull(entityManager, this.importMetadata);
-                InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
 
-                if (Environment.getEnv("SKIP_PULL_LOAD", false)) {
-                    stream = null;
-                    log.info("Skipping actual data load");
-                }
-
-                if (stream != null) {
-                    session = this.engine.sessionManager.getSessionFactory().openSession();
+                session = this.engine.sessionManager.getSessionFactory().openSession();
+                try {
                     this.importMetadata.setSession(session);
 
-                    try {
-                        entityManager.parseData(stream, importMetadata);
-                        if (!entityManager.shouldSkipLastUpdate(importMetadata)) {
-                            this.registerManager.setLastUpdated(entityManager, importMetadata);
-                        }
-                    } catch (Exception e) {
-                        if (this.doCancel) {
-                            break;
-                        } else {
-                            throw e;
-                        }
-                    } finally {
-                        QueryManager.clearCaches();
-                        session.close();
-                        this.importMetadata.setSession(null);
-                        stream.close();
+                    this.registerManager.beforePull(entityManager, this.importMetadata);
+                    InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
+
+                    if (Environment.getEnv("SKIP_PULL_LOAD", false)) {
+                        stream = null;
+                        log.info("Skipping actual data load");
                     }
+
+                    if (stream != null) {
+                        try {
+                            entityManager.parseData(stream, importMetadata);
+                            if (!entityManager.shouldSkipLastUpdate(importMetadata)) {
+                                this.registerManager.setLastUpdated(entityManager, importMetadata);
+                            }
+                        } catch (Exception e) {
+                            if (this.doCancel) {
+                                break;
+                            } else {
+                                throw e;
+                            }
+                        } finally {
+                            QueryManager.clearCaches();
+                            stream.close();
+                        }
+                    }
+                } finally {
+                    this.importMetadata.setSession(null);
+                    session.close();
                 }
             }
 

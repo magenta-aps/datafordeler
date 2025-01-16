@@ -62,6 +62,7 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
         for (String filename : filenames) {
             log.info("    "+filename);
         }
+        log.info("Session exists: "+session.isConnected());
         Transaction transaction = this.session.beginTransaction();
         try {
             for (String filename : filter(this.session, this.type, filenames)) {
