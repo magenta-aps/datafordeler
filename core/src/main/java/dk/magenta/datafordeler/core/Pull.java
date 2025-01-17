@@ -91,8 +91,8 @@ public class Pull extends Worker implements Runnable {
     @Override
     public void run() {
         String pluginName = this.registerManager.getPlugin().getName();
+        Session session = this.engine.sessionManager.getSessionFactory().openSession();
         try {
-            Session session = this.engine.sessionManager.getSessionFactory().openSession();
             this.log.info(this.prefix + "Beginning pull for " + pluginName);
 
             if (runningPulls.containsKey(this.registerManager)) {
@@ -152,13 +152,14 @@ public class Pull extends Worker implements Runnable {
                     }
                 }
             }
+
+
             this.importMetadata = new ImportMetadata();
+            this.importMetadata.setSession(session);
             this.importMetadata.setImportConfiguration(importConfiguration);
 
             boolean error = false;
             boolean skip = false;
-
-            this.importMetadata.setSession(session);
             for (EntityManager entityManager : this.registerManager.getEntityManagers()) {
                 if (this.doCancel) {
                     break;
@@ -176,35 +177,30 @@ public class Pull extends Worker implements Runnable {
 
                 this.log.info(this.prefix + "Pulling data for " + entityManager.getClass().getSimpleName());
 
-                try {
+                this.registerManager.beforePull(entityManager, this.importMetadata);
+                InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
 
-                    this.registerManager.beforePull(entityManager, this.importMetadata);
-                    InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
+                if (Environment.getEnv("SKIP_PULL_LOAD", false)) {
+                    stream = null;
+                    log.info("Skipping actual data load");
+                }
 
-                    if (Environment.getEnv("SKIP_PULL_LOAD", false)) {
-                        stream = null;
-                        log.info("Skipping actual data load");
-                    }
-
-                    if (stream != null) {
-                        try {
-                            entityManager.parseData(stream, importMetadata);
-                            if (!entityManager.shouldSkipLastUpdate(importMetadata)) {
-                                this.registerManager.setLastUpdated(entityManager, importMetadata);
-                            }
-                        } catch (Exception e) {
-                            if (this.doCancel) {
-                                break;
-                            } else {
-                                throw e;
-                            }
-                        } finally {
-                            QueryManager.clearCaches();
-                            stream.close();
+                if (stream != null) {
+                    try {
+                        entityManager.parseData(stream, importMetadata);
+                        if (!entityManager.shouldSkipLastUpdate(importMetadata)) {
+                            this.registerManager.setLastUpdated(entityManager, importMetadata);
                         }
+                    } catch (Exception e) {
+                        if (this.doCancel) {
+                            break;
+                        } else {
+                            throw e;
+                        }
+                    } finally {
+                        QueryManager.clearCaches();
+                        stream.close();
                     }
-                } finally {
-                    session.close();
                 }
             }
 
@@ -234,6 +230,7 @@ public class Pull extends Worker implements Runnable {
             if (this.importMetadata != null) {
                 this.importMetadata.setSession(null);
             }
+            session.close();
             runningPulls.remove(this.registerManager);
         }
     }
