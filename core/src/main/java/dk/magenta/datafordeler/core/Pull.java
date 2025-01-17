@@ -92,6 +92,7 @@ public class Pull extends Worker implements Runnable {
     public void run() {
         String pluginName = this.registerManager.getPlugin().getName();
         try {
+            Session session = this.engine.sessionManager.getSessionFactory().openSession();
             this.log.info(this.prefix + "Beginning pull for " + pluginName);
 
             if (runningPulls.containsKey(this.registerManager)) {
@@ -129,6 +130,7 @@ public class Pull extends Worker implements Runnable {
                         }
                         this.log.info(this.prefix + "Got stream from files: \n" + sj);
                         this.importMetadata = new ImportMetadata();
+                        this.importMetadata.setSession(session);
                         this.importMetadata.setImportTime(interruptedPull.getStartTime());
                         this.importMetadata.setStartChunk(interruptedPull.getChunk());
                         String importConfiguration = interruptedPull.getImportConfiguration();
@@ -137,8 +139,6 @@ public class Pull extends Worker implements Runnable {
                         }
                         this.deleteInterrupt(interruptedPull);
 
-                        Session session = this.engine.sessionManager.getSessionFactory().openSession();
-                        this.importMetadata.setSession(session);
                         try {
                             this.log.info(this.prefix + "Resuming at chunk " + interruptedPull.getChunk() + "...");
                             entityManager.parseData(cacheStream, this.importMetadata);
@@ -148,18 +148,17 @@ public class Pull extends Worker implements Runnable {
                             }
                         } finally {
                             QueryManager.clearCaches();
-                            session.close();
                         }
                     }
                 }
             }
-
-
             this.importMetadata = new ImportMetadata();
             this.importMetadata.setImportConfiguration(importConfiguration);
 
             boolean error = false;
             boolean skip = false;
+
+            this.importMetadata.setSession(session);
             for (EntityManager entityManager : this.registerManager.getEntityManagers()) {
                 if (this.doCancel) {
                     break;
@@ -169,9 +168,7 @@ public class Pull extends Worker implements Runnable {
                     continue;
                 }
 
-                Session session = this.engine.sessionManager.getSessionFactory().openSession();
                 OffsetDateTime lastUpdate = entityManager.getLastUpdated(session);
-                session.close();
                 if (lastUpdate != null && importMetadata.getImportTime().toLocalDate().isEqual(lastUpdate.toLocalDate()) && importConfiguration.size() == 0) {
                     this.log.info(this.prefix + "Already pulled data for " + entityManager.getClass().getSimpleName() + " at " + lastUpdate + ", no need to re-pull today");
                     continue;
@@ -179,10 +176,7 @@ public class Pull extends Worker implements Runnable {
 
                 this.log.info(this.prefix + "Pulling data for " + entityManager.getClass().getSimpleName());
 
-
-                session = this.engine.sessionManager.getSessionFactory().openSession();
                 try {
-                    this.importMetadata.setSession(session);
 
                     this.registerManager.beforePull(entityManager, this.importMetadata);
                     InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
@@ -210,7 +204,6 @@ public class Pull extends Worker implements Runnable {
                         }
                     }
                 } finally {
-                    this.importMetadata.setSession(null);
                     session.close();
                 }
             }
@@ -238,6 +231,9 @@ public class Pull extends Worker implements Runnable {
             this.onError(e);
             throw new RuntimeException(e);
         } finally {
+            if (this.importMetadata != null) {
+                this.importMetadata.setSession(null);
+            }
             runningPulls.remove(this.registerManager);
         }
     }
