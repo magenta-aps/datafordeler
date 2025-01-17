@@ -49,31 +49,19 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
 
     @Override
     protected void onStreamClose(FTPClient ftpClient, List<File> localFiles, URI uri, List<String> remoteFiles) {
-        log.info("onStreamClose");
-        for (File file : localFiles) {
-            log.info("    "+file.getAbsolutePath());
-        }
         this.saveList(localFiles.stream().map(File::getName).collect(Collectors.toList()));
         super.onStreamClose(ftpClient, localFiles, uri, remoteFiles);
     }
 
     private void saveList(List<String> filenames) {
-        log.info("Saving list of files to database:");
-        for (String filename : filenames) {
-            log.info("    "+filename);
-        }
-        log.info("Session exists: "+session.isConnected());
         Transaction transaction = this.session.beginTransaction();
         try {
             for (String filename : filter(this.session, this.type, filenames)) {
-                log.info("    "+filename+" was not filtered out");
                 this.session.save(new FtpPulledFile(this.type, filename));
             }
             transaction.commit();
-            log.info("Transaction committed");
         } catch (Exception e) {
             transaction.rollback();
-            log.info("Transaction rolled back");
             throw e;
         }
     }
@@ -92,13 +80,6 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
         HashSet<String> found = new HashSet<>(existing(session, type, newFilenames));
         HashSet<String> newSet = new HashSet<>(newFilenames);
         newSet.removeAll(found);
-        for (String filename : newFilenames) {
-            if (found.contains(filename)) {
-                log.info("    "+filename+" was in existing");
-            } else {
-                log.info("    "+filename+" was not in existing");
-            }
-        }
         return newSet;
     }
 
