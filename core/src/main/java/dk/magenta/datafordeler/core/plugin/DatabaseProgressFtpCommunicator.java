@@ -2,6 +2,8 @@ package dk.magenta.datafordeler.core.plugin;
 
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import it.sauronsoftware.ftp4j.FTPClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -15,6 +17,7 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
 
     private Session session;
     private String type;
+    private static final Logger log = LogManager.getLogger(DatabaseProgressFtpCommunicator.class.getCanonicalName());
 
     /**
      * Construct an instance
@@ -47,6 +50,7 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
     @Override
     protected void onStreamClose(FTPClient ftpClient, List<File> localFiles, URI uri, List<String> remoteFiles) {
         this.saveList(localFiles.stream().map(File::getName).collect(Collectors.toList()));
+        super.onStreamClose(ftpClient, localFiles, uri, remoteFiles);
     }
 
     private void saveList(List<String> filenames) {
