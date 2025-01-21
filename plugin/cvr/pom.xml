@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.magenta.datafordeler</groupId>
     <artifactId>datafordeler-plugin-cvr</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <packaging>jar</packaging>
     <name>datafordeler-plugin-cvr</name>
     <description>Company (CVR) plugin for Magenta&#39;s Greenlandic System</description>
@@ -16,7 +16,7 @@
         <groupId>dk.magenta.datafordeler</groupId>
         <artifactId>datafordeler-plugin-parent</artifactId>
         <relativePath>../parent/pom.xml</relativePath>
-        <version>1.2</version>
+        <version>1.3</version>
     </parent>
 
     <properties>
@@ -33,12 +33,12 @@
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>datafordeler-core</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>datafordeler-plugin-geo</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>

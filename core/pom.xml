@@ -4,9 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.magenta.datafordeler</groupId>
     <artifactId>datafordeler-core</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <packaging>jar</packaging>
     <name>datafordeler-core</name>
     <description>Core module for Magenta&#39;s Greenlandic System</description>
@@ -16,7 +15,7 @@
         <groupId>dk.magenta.datafordeler</groupId>
         <artifactId>datafordeler-plugin-parent</artifactId>
         <relativePath>../plugin/parent/pom.xml</relativePath>
-        <version>1.2</version>
+        <version>1.3</version>
     </parent>
 
     <properties>
