@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vividsolutions.jts.geom.*;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
-import org.geojson.LngLatAlt;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import org.geojson.LngLatAlt;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

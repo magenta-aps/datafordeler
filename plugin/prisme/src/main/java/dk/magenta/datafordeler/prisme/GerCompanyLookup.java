@@ -3,10 +3,10 @@ package dk.magenta.datafordeler.prisme;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import dk.magenta.datafordeler.ger.data.company.CompanyQuery;
+import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.util.*;
 
 @Component

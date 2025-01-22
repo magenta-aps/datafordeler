@@ -1,8 +1,8 @@
 package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
-
 import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 

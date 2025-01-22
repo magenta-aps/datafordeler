@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import dk.magenta.datafordeler.core.Environment;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
@@ -22,6 +21,7 @@ import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.cpr.records.service.PersonEntityRecordService;
 import dk.magenta.datafordeler.cpr.synchronization.SubscriptionTimerTask;
+import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -30,7 +30,6 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

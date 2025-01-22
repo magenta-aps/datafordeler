@@ -19,10 +19,10 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
 import dk.magenta.datafordeler.geo.data.road.*;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.util.*;
 
 /**

@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.statistik.utils;
 
 import dk.magenta.datafordeler.statistik.services.StatisticsService;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 public class CivilStatusFilter extends Filter {

@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
-
 import jakarta.persistence.*;
 
 @Entity

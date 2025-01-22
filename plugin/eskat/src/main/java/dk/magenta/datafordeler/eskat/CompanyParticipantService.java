@@ -18,6 +18,7 @@ import dk.magenta.datafordeler.eskat.output.ParticipantEntity;
 import dk.magenta.datafordeler.eskat.query.EskatCompanyRecordQuery;
 import dk.magenta.datafordeler.eskat.query.EskatParticipantRecordQuery;
 import dk.magenta.datafordeler.eskat.utils.DateConverter;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -27,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.util.*;
 

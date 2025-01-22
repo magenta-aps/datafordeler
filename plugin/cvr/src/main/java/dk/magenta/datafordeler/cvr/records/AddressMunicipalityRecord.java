@@ -6,9 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
-import org.hibernate.Session;
-
 import jakarta.persistence.*;
+import org.hibernate.Session;
 
 /**
  * Record for Company form.

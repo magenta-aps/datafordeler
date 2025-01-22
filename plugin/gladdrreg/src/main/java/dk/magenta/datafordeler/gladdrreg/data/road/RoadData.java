@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by lars on 16-05-17.
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "gladdrreg_road_data", indexes = {
         @Index(name = "gladdrreg_road_code", columnList = RoadData.DB_FIELD_CODE),
         @Index(name = "gladdrreg_road_name", columnList = RoadData.DB_FIELD_NAME),

@@ -30,6 +30,8 @@ import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntity;
 import dk.magenta.datafordeler.ger.data.responsible.ResponsibleQuery;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -42,8 +44,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;

@@ -3,11 +3,11 @@ package dk.magenta.datafordeler.cpr.data.residence;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.exception.QueryBuildException;
 import dk.magenta.datafordeler.core.fapi.ParameterMap;
-import dk.magenta.datafordeler.core.fapi.QueryField;
 import dk.magenta.datafordeler.cpr.data.CprQuery;
 import dk.magenta.datafordeler.cpr.data.residence.data.ResidenceBaseData;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Container for a query for Residences, defining fields and database lookup

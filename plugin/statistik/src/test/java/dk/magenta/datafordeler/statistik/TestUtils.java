@@ -13,26 +13,19 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
-import dk.magenta.datafordeler.statistik.services.StatisticsService;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 
 import static org.mockito.Mockito.when;
 
@@ -65,8 +58,6 @@ public class TestUtils {
 
     @MockitoSpyBean
     private DafoUserManager dafoUserManager;
-
-    HashSet<Entity> createdEntities = new HashSet<>();
 
     public TestUtils(SessionManager sessionManager,
                      PersonEntityManager personEntityManager) {

@@ -9,15 +9,15 @@ import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
-
 import jakarta.persistence.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 
-@javax.persistence.Entity
+@Entity
 @Table(name = "cpr_config")
 public class CprConfiguration implements Configuration {
 

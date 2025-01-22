@@ -20,14 +20,12 @@ import dk.magenta.datafordeler.ger.data.unit.UnitQuery;
 import dk.magenta.datafordeler.ger.parser.SpreadsheetConverter;
 import org.hibernate.Session;
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
-
+import org.junit.runner.RunWith;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;

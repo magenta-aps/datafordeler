@@ -11,9 +11,9 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import jakarta.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.*;
 import java.util.function.Consumer;

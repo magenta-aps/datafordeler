@@ -11,7 +11,6 @@ import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cvr.CollectiveCvrLookup;
 import dk.magenta.datafordeler.cvr.records.*;
-import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
 import dk.magenta.datafordeler.geo.GeoLookupDTO;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;

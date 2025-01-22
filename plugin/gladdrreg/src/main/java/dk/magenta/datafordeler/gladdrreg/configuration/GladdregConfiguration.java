@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 /**
  * Created by lars on 16-05-17.
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "gladdreg_config")
 public class GladdregConfiguration implements Configuration {
 

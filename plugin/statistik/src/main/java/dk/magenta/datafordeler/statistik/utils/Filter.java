@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.statistik.services.StatisticsService;
-
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;

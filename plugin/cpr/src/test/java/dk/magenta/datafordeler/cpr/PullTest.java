@@ -15,9 +15,7 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
-import dk.magenta.datafordeler.cpr.records.person.NameRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthPlaceDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.junit.Assert;
@@ -25,17 +23,15 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import jakarta.net.ssl.SSLContext;
-import jakarta.net.ssl.SSLSocketFactory;
-import jakarta.net.ssl.TrustManager;
-import jakarta.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +48,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)

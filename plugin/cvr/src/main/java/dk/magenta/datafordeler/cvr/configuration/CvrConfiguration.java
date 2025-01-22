@@ -7,8 +7,8 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-
 import jakarta.persistence.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -16,7 +16,7 @@ import java.security.GeneralSecurityException;
 /**
  * Configuration instance class, holding configuration values in fields
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "cvr_config")
 public class CvrConfiguration implements Configuration {
 

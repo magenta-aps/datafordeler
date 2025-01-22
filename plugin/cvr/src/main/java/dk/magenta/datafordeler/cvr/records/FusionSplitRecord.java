@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Where;
 
-import jakarta.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 

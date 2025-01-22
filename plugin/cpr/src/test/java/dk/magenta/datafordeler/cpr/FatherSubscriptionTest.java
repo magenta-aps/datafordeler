@@ -18,13 +18,12 @@ import org.junit.runners.MethodSorters;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import jakarta.net.ssl.SSLContext;
-import jakarta.net.ssl.SSLSocketFactory;
-import jakarta.net.ssl.TrustManager;
-import jakarta.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
@@ -35,7 +34,6 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)

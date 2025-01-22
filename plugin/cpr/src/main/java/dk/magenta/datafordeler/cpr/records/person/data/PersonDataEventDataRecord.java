@@ -7,8 +7,8 @@ import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-
 import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.Collection;
 

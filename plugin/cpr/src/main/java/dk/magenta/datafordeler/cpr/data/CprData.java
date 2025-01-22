@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.cpr.data;
 
 import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Effect;
-
 import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass

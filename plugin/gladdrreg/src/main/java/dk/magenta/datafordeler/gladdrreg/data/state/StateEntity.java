@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 /**
  * Created by lars on 16-05-17.
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "gladdrreg_state_entity", indexes = {
         @Index(name = "gladdrreg_state_identification", columnList = "identification_id")
 })
