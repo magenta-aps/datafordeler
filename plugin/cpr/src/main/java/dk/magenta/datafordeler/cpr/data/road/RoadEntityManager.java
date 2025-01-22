@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.cpr.records.road.data.CprBitemporalRoadRecord;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import dk.magenta.datafordeler.cpr.records.service.RoadEntityRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -23,19 +24,20 @@ import java.util.UUID;
 @Component
 public class RoadEntityManager extends CprRecordEntityManager<RoadDataRecord, RoadEntity> {
 
-    @Autowired
     private RoadEntityRecordService roadEntityService;
 
-    @Autowired
     private RoadParser roadParser;
 
-    @Autowired
     private SessionManager sessionManager;
 
     private static RoadEntityManager instance;
 
-    public RoadEntityManager() {
+    @Autowired
+    public RoadEntityManager(@Lazy RoadEntityRecordService roadEntityService, @Lazy RoadParser roadParser, @Lazy SessionManager sessionManager) {
         instance = this;
+        this.roadEntityService = roadEntityService;
+        this.roadParser = roadParser;
+        this.sessionManager = sessionManager;
     }
 
     @Override

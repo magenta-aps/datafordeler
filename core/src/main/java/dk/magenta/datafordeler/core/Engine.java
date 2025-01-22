@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
+import dk.magenta.datafordeler.core.user.DafoEngineUserManager;
 import dk.magenta.datafordeler.core.util.CronUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -45,17 +46,13 @@ public class CvrRegisterManager extends RegisterManager {
 
     private ScanScrollCommunicator commonFetcher;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private CvrConfigurationManager configurationManager;
+    private final CvrConfigurationManager configurationManager;
 
-    @Autowired
-    private CvrPlugin plugin;
+    private final CvrPlugin plugin;
 
-    @Autowired
-    private SessionManager sessionManager;
+    private final SessionManager sessionManager;
 
     private String cvrDemoCompanyFile;
 
@@ -68,8 +65,13 @@ public class CvrRegisterManager extends RegisterManager {
 
     private final Logger log = LogManager.getLogger(CvrRegisterManager.class.getCanonicalName());
 
-    public CvrRegisterManager() {
-
+    @Autowired
+    @Lazy
+    public CvrRegisterManager(@Lazy CvrConfigurationManager configurationManager, @Lazy CvrPlugin plugin, @Lazy SessionManager sessionManager, @Lazy ObjectMapper objectMapper) {
+        this.configurationManager = configurationManager;
+        this.plugin = plugin;
+        this.sessionManager = sessionManager;
+        this.objectMapper = objectMapper;
     }
 
     public void setCvrDemoCompanyFile(String cvrDemoCompanyFile) {

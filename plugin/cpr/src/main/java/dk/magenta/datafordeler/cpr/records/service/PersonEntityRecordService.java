@@ -24,6 +24,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +35,6 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/cpr/person/1/rest")
 public class PersonEntityRecordService extends FapiBaseService<PersonEntity, PersonRecordQuery> {
-
-    @Autowired
-    private PluginManager pluginManager;
 
     @Autowired
     private CprPlugin cprPlugin;

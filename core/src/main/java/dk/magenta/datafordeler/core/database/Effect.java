@@ -25,11 +25,6 @@ import java.util.*;
  * associated.
  */
 @MappedSuperclass
-@FilterDefs({
-        @FilterDef(name = Effect.FILTER_EFFECT_FROM, parameters = @ParamDef(name = Effect.FILTERPARAM_EFFECT_FROM, type = OffsetDateTime.class)),
-        @FilterDef(name = Effect.FILTER_EFFECT_TO, parameters = @ParamDef(name = Effect.FILTERPARAM_EFFECT_TO, type = OffsetDateTime.class)),
-        @FilterDef(name = DataItem.FILTER_RECORD_AFTER, parameters = @ParamDef(name = DataItem.FILTERPARAM_RECORD_AFTER, type = OffsetDateTime.class))
-})
 @JsonPropertyOrder({"effectFrom", "effectTo", "dataItems"})
 public abstract class Effect<R extends Registration, V extends Effect, D extends DataItem> extends DatabaseEntry implements Comparable<Effect> {
 

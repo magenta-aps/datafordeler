@@ -20,7 +20,7 @@ public class PluginManager {
 
     private static PluginManager instance;
 
-    @Autowired(required = false)
+    @Autowired
     private List<Plugin> plugins;
 
     private final HashMap<String, Plugin> pluginsByURISubstring = new HashMap<>();

@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -52,15 +53,16 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             ZoneOffset.UTC
     );
 
-    @Autowired
     private CompanyRecordService companyRecordService;
 
-    @Autowired
     private SessionManager sessionManager;
 
     private final Logger log = LogManager.getLogger(CompanyEntityManager.class.getCanonicalName());
 
-    public CompanyEntityManager() {
+    @Autowired
+    public CompanyEntityManager(@Lazy CompanyRecordService companyRecordService, @Lazy SessionManager sessionManager) {
+        this.companyRecordService = companyRecordService;
+        this.sessionManager = sessionManager;
     }
 
     @Override

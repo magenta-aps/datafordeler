@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,10 +33,8 @@ public class CvrPlugin extends Plugin {
     @Autowired
     private CvrConfigurationManager configurationManager;
 
-    @Autowired
     private CvrRegisterManager registerManager;
 
-    @Autowired
     private CompanyEntityManager companyEntityManager;
 
     @Autowired
@@ -48,9 +47,12 @@ public class CvrPlugin extends Plugin {
 
     private final CvrAreaRestrictionDefinition areaRestrictionDefinition;
 
-    public CvrPlugin() {
+    @Autowired
+    public CvrPlugin(@Lazy CvrRegisterManager cvrRegisterManager, @Lazy CompanyEntityManager companyEntityManager) {
         this.rolesDefinition = new CvrRolesDefinition();
         this.areaRestrictionDefinition = new CvrAreaRestrictionDefinition(this);
+        this.registerManager = cvrRegisterManager;
+        this.companyEntityManager = companyEntityManager;
     }
 
     /**

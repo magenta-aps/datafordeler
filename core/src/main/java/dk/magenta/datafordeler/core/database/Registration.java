@@ -29,10 +29,6 @@ import java.util.*;
  * associated. Generally, there should not be stored other data in the object.
  */
 @MappedSuperclass
-@FilterDefs({
-        @FilterDef(name = Registration.FILTER_REGISTRATION_FROM, parameters = @ParamDef(name = Registration.FILTERPARAM_REGISTRATION_FROM, type = OffsetDateTime.class)),
-        @FilterDef(name = Registration.FILTER_REGISTRATION_TO, parameters = @ParamDef(name = Registration.FILTERPARAM_REGISTRATION_TO, type = OffsetDateTime.class))
-})
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @JsonPropertyOrder({"sequenceNumber", "registrationFromBefore", "registrationToBefore", "checksum", "effects"})
 public abstract class Registration<E extends Entity, R extends Registration, V extends Effect> extends DatabaseEntry implements Comparable<Registration> {
