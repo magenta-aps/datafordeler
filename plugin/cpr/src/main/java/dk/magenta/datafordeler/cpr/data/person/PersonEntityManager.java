@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
@@ -28,6 +29,7 @@ import org.hibernate.query.Query;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -42,16 +44,12 @@ import java.util.stream.Collectors;
 @Component
 public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord, PersonEntity> {
 
-    @Autowired
     private CprConfigurationManager configurationManager;
 
-    @Autowired
     private PersonEntityRecordService personEntityService;
 
-    @Autowired
     private PersonParser personParser;
 
-    @Autowired
     private SessionManager sessionManager;
 
     @Autowired
@@ -59,8 +57,13 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
     private static PersonEntityManager instance;
 
-    public PersonEntityManager() {
+    @Autowired
+    public PersonEntityManager(@Lazy CprConfigurationManager configurationManager, @Lazy PersonEntityRecordService personEntityRecordService, @Lazy SessionManager sessionManager, @Lazy PersonParser personParser) {
         instance = this;
+        this.configurationManager = configurationManager;
+        this.personEntityService = personEntityRecordService;
+        this.sessionManager = sessionManager;
+        this.personParser = personParser;
     }
 
     public int getJobId() {

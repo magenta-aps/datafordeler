@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.cvr.service.CompanyUnitRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -25,15 +26,16 @@ public class CompanyUnitEntityManager extends CvrEntityManager<CompanyUnitRecord
             ZoneOffset.UTC
     );
 
-    @Autowired
     private CompanyUnitRecordService companyUnitEntityService;
 
-    @Autowired
     private SessionManager sessionManager;
 
     private final Logger log = LogManager.getLogger(CompanyUnitEntityManager.class.getCanonicalName());
 
-    public CompanyUnitEntityManager() {
+    @Autowired
+    public CompanyUnitEntityManager(@Lazy CompanyUnitRecordService companyUnitEntityService, @Lazy SessionManager sessionManager) {
+        this.companyUnitEntityService = companyUnitEntityService;
+        this.sessionManager = sessionManager;
     }
 
     @Override

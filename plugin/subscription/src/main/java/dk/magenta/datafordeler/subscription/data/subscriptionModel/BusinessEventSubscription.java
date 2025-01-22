@@ -31,7 +31,6 @@ public class BusinessEventSubscription extends DatabaseEntry {
     public static final String DB_FIELD_BUSINESS_EVENT_ID = "businessEventId";
 
     @Column(name = DB_FIELD_BUSINESS_EVENT_ID, unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String businessEventId;
 
     public String getBusinessEventId() {
