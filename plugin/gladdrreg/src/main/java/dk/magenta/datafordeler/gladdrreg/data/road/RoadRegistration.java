@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 /**
  * Created by lars on 16-05-17.
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "gladdrreg_road_registration", indexes = {
         @Index(name = "gladdrreg_road_entity", columnList = "entity_id"),
         @Index(name = "gladdrreg_road_registration_from", columnList = "registrationFrom"),

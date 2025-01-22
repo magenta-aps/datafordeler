@@ -1,20 +1,15 @@
 package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -27,14 +22,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;

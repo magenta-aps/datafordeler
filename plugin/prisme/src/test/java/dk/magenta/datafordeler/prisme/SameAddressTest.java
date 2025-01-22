@@ -1,17 +1,12 @@
 package dk.magenta.datafordeler.prisme;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.Entity;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
-import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -22,14 +17,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.ByteArrayInputStream;

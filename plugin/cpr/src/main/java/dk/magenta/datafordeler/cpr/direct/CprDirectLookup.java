@@ -10,14 +10,14 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.Mapping;
 import dk.magenta.datafordeler.cpr.records.person.*;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.net.ssl.SSLSocket;
-import jakarta.net.ssl.SSLSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

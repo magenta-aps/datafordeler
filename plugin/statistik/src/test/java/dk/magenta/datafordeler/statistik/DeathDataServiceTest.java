@@ -1,9 +1,7 @@
 package dk.magenta.datafordeler.statistik;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.statistik.services.DeathDataService;
@@ -15,14 +13,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;

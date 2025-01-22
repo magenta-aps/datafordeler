@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -32,7 +31,7 @@ public class BusinessEventSubscription extends DatabaseEntry {
     public static final String DB_FIELD_BUSINESS_EVENT_ID = "businessEventId";
 
     @Column(name = DB_FIELD_BUSINESS_EVENT_ID, unique = true, nullable = false)
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String businessEventId;
 
     public String getBusinessEventId() {

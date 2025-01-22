@@ -1,18 +1,15 @@
 package dk.magenta.datafordeler.cvr;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.hibernate.Session;
@@ -23,7 +20,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,12 +27,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.List;
 

@@ -9,9 +9,9 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Consumer;

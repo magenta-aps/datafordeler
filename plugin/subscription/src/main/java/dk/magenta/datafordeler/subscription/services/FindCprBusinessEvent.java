@@ -21,6 +21,8 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.BusinessEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -34,8 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;

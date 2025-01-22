@@ -2,9 +2,10 @@ package dk.magenta.datafordeler.cpr.data.residence;
 
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprRegistration;
-
+import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+
 import java.time.OffsetDateTime;
 
 /**
@@ -12,7 +13,7 @@ import java.time.OffsetDateTime;
  *
  * @see dk.magenta.datafordeler.core.database.Entity
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_registration", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_entity", columnList = "entity_id"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_registration_from", columnList = ResidenceRegistration.DB_FIELD_REGISTRATION_FROM),

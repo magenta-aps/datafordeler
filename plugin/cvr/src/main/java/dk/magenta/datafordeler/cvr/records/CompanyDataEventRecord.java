@@ -3,8 +3,8 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-
 import jakarta.persistence.*;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;

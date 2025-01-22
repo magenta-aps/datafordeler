@@ -6,11 +6,11 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
-import jakarta.persistence.*;
 import java.util.*;
 
 @Entity

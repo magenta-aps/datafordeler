@@ -5,25 +5,24 @@ import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import dk.magenta.datafordeler.cpr.records.BitemporalSet;
-import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
-import dk.magenta.datafordeler.cpr.records.CprMonotemporalRecord;
-import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
-import org.hibernate.Session;
-import org.hibernate.annotations.*;
-
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import org.hibernate.Session;
+import org.hibernate.annotations.*;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 /**
  * An Entity representing a road. Bitemporal data is structured as
  * described in {@link dk.magenta.datafordeler.core.database.Entity}
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "road_identification", columnList = RoadEntity.DB_FIELD_IDENTIFICATION, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE + RoadEntity.DB_FIELD_ROAD_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE + "," + RoadEntity.DB_FIELD_ROAD_CODE),
@@ -32,16 +31,16 @@ import java.util.*;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_DAFO_UPDATED, columnList = RoadEntity.DB_FIELD_DAFO_UPDATED)
 })
 @FilterDefs({
-        @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTTO_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_AFTER, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTTO)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTTO_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_BEFORE, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTTO)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER, type = CprMonotemporalRecord.FILTERPARAMTYPE_REGISTRATIONFROM)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE, type = CprMonotemporalRecord.FILTERPARAMTYPE_REGISTRATIONFROM)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER, type = CprMonotemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE, type = CprMonotemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
-        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_AFTER, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_AFTER, type = CprNontemporalRecord.FILTERPARAMTYPE_LASTUPDATED)),
-        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_BEFORE, type = CprNontemporalRecord.FILTERPARAMTYPE_LASTUPDATED))
+        @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, type = OffsetDateTime.class)),
+        @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, type = OffsetDateTime.class)),
+        @FilterDef(name = Bitemporal.FILTER_EFFECTTO_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_AFTER, type = OffsetDateTime.class)),
+        @FilterDef(name = Bitemporal.FILTER_EFFECTTO_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_BEFORE, type = OffsetDateTime.class)),
+        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER, type = OffsetDateTime.class)),
+        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE, type = OffsetDateTime.class)),
+        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER, type = OffsetDateTime.class)),
+        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE, type = OffsetDateTime.class)),
+        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_AFTER, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_AFTER, type = OffsetDateTime.class)),
+        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_BEFORE, type = OffsetDateTime.class))
 })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RoadEntity extends CprRecordEntity {

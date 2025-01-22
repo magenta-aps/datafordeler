@@ -5,7 +5,6 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;

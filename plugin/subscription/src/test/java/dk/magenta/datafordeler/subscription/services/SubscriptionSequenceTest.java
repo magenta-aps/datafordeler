@@ -1,21 +1,13 @@
 package dk.magenta.datafordeler.subscription.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 

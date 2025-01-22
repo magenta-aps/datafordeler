@@ -6,10 +6,10 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
+import jakarta.persistence.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import jakarta.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.time.DateTimeException;
@@ -25,7 +25,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     @Transient
     private final Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
 
-    public static final String FILTERPARAMTYPE_LASTUPDATED = "java.time.OffsetDateTime";
+    public static final Class<?> FILTERPARAMTYPE_LASTUPDATED = OffsetDateTime.class;
 
 
     public static final String DB_FIELD_ENTITY = "entity";

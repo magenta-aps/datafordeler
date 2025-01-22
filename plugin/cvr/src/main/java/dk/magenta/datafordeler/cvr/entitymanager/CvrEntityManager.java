@@ -26,6 +26,7 @@ import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.*;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -35,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

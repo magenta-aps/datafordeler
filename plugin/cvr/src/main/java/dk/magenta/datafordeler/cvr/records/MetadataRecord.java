@@ -7,14 +7,14 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.RecordSet;
-import org.hibernate.Session;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.Filters;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
+import org.hibernate.Session;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Filters;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;

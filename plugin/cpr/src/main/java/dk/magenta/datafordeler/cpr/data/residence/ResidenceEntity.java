@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprEntity;
-
+import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.UUID;
@@ -15,7 +16,7 @@ import java.util.UUID;
  * An Entity representing a residence. Bitemporal data is structured as described
  * in {@link dk.magenta.datafordeler.core.database.Entity}
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_entity", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_identification", columnList = "identification_id", unique = true)
 })

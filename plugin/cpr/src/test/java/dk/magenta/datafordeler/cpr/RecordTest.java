@@ -2,46 +2,31 @@ package dk.magenta.datafordeler.cpr;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import org.hamcrest.Matchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.junit.*;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Assert;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,8 +36,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.mockito.Mockito.when;
 
 
 @RunWith(SpringRunner.class)

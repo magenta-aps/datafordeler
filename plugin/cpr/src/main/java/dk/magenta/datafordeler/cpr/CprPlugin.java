@@ -12,10 +12,10 @@ import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
 import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -31,9 +31,7 @@ import java.util.*;
 @Component
 public class CprPlugin extends Plugin {
 
-
     public static final String DEBUG_TABLE_PREFIX = "";
-
 
     @Autowired
     private CprConfigurationManager configurationManager;
@@ -66,6 +64,7 @@ public class CprPlugin extends Plugin {
         this.registerManager.addEntityManager(this.personEntityManager);
         this.registerManager.addEntityManager(this.residenceEntityManager);
         this.registerManager.addEntityManager(this.roadEntityManager);
+        this.registerManager.setPlugin(this);
     }
 
     /**

@@ -1,5 +1,5 @@
 #FROM maven:3-jdk-11
-FROM maven:3.8.3-openjdk-16
+FROM maven:3.8.7-openjdk-18-slim
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
 COPY pom.xml /code/pom.xml
 COPY core /code/core
@@ -23,4 +23,4 @@ EXPOSE 8000
 WORKDIR /app/core
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["java", "-Dloader.path=/app/plugin/jar/", "-cp", "datafordeler-core-exec.jar", "org.springframework.boot.loader.PropertiesLauncher"]
+CMD ["java", "-Dloader.path=/app/plugin/jar/", "-cp", "datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher"]

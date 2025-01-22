@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
@@ -18,8 +18,8 @@ import java.util.Objects;
 public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends CprBitemporalRecord<E, S>> extends CprMonotemporalRecord<E, S> implements Comparable<CprBitemporalRecord>, Bitemporal {
 
 
-    public static final String FILTERPARAMTYPE_EFFECTFROM = "java.time.OffsetDateTime";
-    public static final String FILTERPARAMTYPE_EFFECTTO = "java.time.OffsetDateTime";
+    public static final Class<?> FILTERPARAMTYPE_EFFECTFROM = OffsetDateTime.class;
+    public static final Class<?> FILTERPARAMTYPE_EFFECTTO = OffsetDateTime.class;
 
 
     public static final String DB_FIELD_ENTITY = CprMonotemporalRecord.DB_FIELD_ENTITY;

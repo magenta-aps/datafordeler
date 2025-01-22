@@ -12,6 +12,8 @@ import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportSyncHandler;
 import dk.magenta.datafordeler.statistik.utils.Filter;
 import dk.magenta.datafordeler.statistik.utils.ReportValidationAndConversion;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -22,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

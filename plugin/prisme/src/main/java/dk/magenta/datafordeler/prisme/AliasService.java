@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.prisme;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dk.magenta.datafordeler.core.exception.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController

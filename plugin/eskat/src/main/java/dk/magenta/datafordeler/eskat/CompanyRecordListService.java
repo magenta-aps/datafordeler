@@ -12,14 +12,14 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import dk.magenta.datafordeler.eskat.output.EskatRecordOutputWrapper;
 import dk.magenta.datafordeler.eskat.query.EskatCompanyRecordQuery;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;

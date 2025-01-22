@@ -9,6 +9,9 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.PersistenceException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -18,10 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.PersistenceException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 

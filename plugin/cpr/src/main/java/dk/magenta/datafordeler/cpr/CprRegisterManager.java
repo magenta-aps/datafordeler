@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.cpr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.WrongSubclassException;
@@ -17,6 +16,7 @@ import dk.magenta.datafordeler.cpr.data.CprGeoEntityManager;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.synchronization.CprSourceData;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -25,7 +25,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +42,6 @@ public class CprRegisterManager extends RegisterManager {
     @Autowired
     private CprConfigurationManager configurationManager;
 
-    @Autowired
     private CprPlugin plugin;
 
     @Autowired
@@ -78,6 +76,10 @@ public class CprRegisterManager extends RegisterManager {
     @Override
     public Plugin getPlugin() {
         return this.plugin;
+    }
+
+    public void setPlugin(CprPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override

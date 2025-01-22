@@ -6,21 +6,21 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.FilterDefs;
 import org.hibernate.annotations.ParamDef;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 
 @MappedSuperclass
 @FilterDefs({
-        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_AFTER, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_AFTER, type = "java.time.OffsetDateTime")),
-        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_BEFORE, type = "java.time.OffsetDateTime"))
+        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_AFTER, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_AFTER, type = OffsetDateTime.class)),
+        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_BEFORE, type = OffsetDateTime.class))
 })
 public abstract class GeoNontemporalRecord<E extends GeoEntity> extends DatabaseEntry implements Nontemporal {
 

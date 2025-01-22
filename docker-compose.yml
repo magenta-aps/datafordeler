@@ -34,7 +34,7 @@ services:
       "-Dterminal.jline=false", "-Dterminal.ansi=true",
       "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005",
       "-cp", "datafordeler-core-exec.jar",
-      "org.springframework.boot.loader.PropertiesLauncher"
+      "org.springframework.boot.loader.launch.PropertiesLauncher"
     ]
 
   datafordeler-db:

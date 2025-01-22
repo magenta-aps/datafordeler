@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.RecordSet;
-import org.hibernate.Session;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import org.hibernate.Session;
+
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
