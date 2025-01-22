@@ -8,7 +8,7 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;

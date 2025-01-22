@@ -3,8 +3,8 @@ package dk.magenta.datafordeler.gladdrreg.data.road;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.Entity;
 
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 /**
  * Created by lars on 16-05-17.

@@ -2,7 +2,7 @@ package dk.magenta.datafordeler.gladdrreg.data.postalcode;
 
 import dk.magenta.datafordeler.core.database.Effect;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 
 /**

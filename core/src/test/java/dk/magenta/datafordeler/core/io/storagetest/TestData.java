@@ -3,12 +3,12 @@ package dk.magenta.datafordeler.core.io.storagetest;
 import dk.magenta.datafordeler.core.database.DataItem;
 import org.hibernate.Session;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import java.util.HashMap;
 import java.util.Map;
 
-@javax.persistence.Entity
+@jakarta.persistence.Entity
 @Table(name="test_data")
 public class TestData extends DataItem<TestEffect, TestData> {
 

@@ -2,12 +2,13 @@ package dk.magenta.datafordeler.plugindemo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
-@javax.persistence.Entity
+@Entity
 @Table(name="demo_data_record")
 @XmlRootElement
 public class DemoDataRecord extends DemoBitemporalRecord {

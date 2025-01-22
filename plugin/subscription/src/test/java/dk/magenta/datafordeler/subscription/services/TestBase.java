@@ -38,7 +38,7 @@ public abstract class TestBase {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    @SpyBean
+    @MockitoSpyBean
     protected DafoUserManager dafoUserManager;
 
     @Autowired

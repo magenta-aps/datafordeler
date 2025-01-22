@@ -3,7 +3,7 @@ package dk.magenta.datafordeler.core.database;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Collections;
 import java.util.List;
 

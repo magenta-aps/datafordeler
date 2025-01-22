@@ -43,8 +43,9 @@ import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.FlushModeType;
+import jakarta.persistence.FlushModeType;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +60,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -583,7 +584,7 @@ public class CprTest extends TestBase {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    @SpyBean
+    @MockitoSpyBean
     private CprDirectLookup cprDirectLookup;
 
     @Test

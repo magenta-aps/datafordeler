@@ -4,7 +4,7 @@ import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import org.springframework.http.MediaType;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 

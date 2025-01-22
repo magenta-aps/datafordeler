@@ -6,7 +6,7 @@ import dk.magenta.datafordeler.ger.data.company.CompanyQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.*;
 
 @Component

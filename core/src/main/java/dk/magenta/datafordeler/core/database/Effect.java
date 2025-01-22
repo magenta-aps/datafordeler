@@ -3,22 +3,15 @@ package dk.magenta.datafordeler.core.database;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
-import dk.magenta.datafordeler.core.util.OffsetDateTimeAdapter;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.FilterDefs;
 import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -33,9 +26,9 @@ import java.util.*;
  */
 @MappedSuperclass
 @FilterDefs({
-        @FilterDef(name = Effect.FILTER_EFFECT_FROM, parameters = @ParamDef(name = Effect.FILTERPARAM_EFFECT_FROM, type = "java.time.OffsetDateTime")),
-        @FilterDef(name = Effect.FILTER_EFFECT_TO, parameters = @ParamDef(name = Effect.FILTERPARAM_EFFECT_TO, type = "java.time.OffsetDateTime")),
-        @FilterDef(name = DataItem.FILTER_RECORD_AFTER, parameters = @ParamDef(name = DataItem.FILTERPARAM_RECORD_AFTER, type = "java.time.OffsetDateTime"))
+        @FilterDef(name = Effect.FILTER_EFFECT_FROM, parameters = @ParamDef(name = Effect.FILTERPARAM_EFFECT_FROM, type = OffsetDateTime.class)),
+        @FilterDef(name = Effect.FILTER_EFFECT_TO, parameters = @ParamDef(name = Effect.FILTERPARAM_EFFECT_TO, type = OffsetDateTime.class)),
+        @FilterDef(name = DataItem.FILTER_RECORD_AFTER, parameters = @ParamDef(name = DataItem.FILTERPARAM_RECORD_AFTER, type = OffsetDateTime.class))
 })
 @JsonPropertyOrder({"effectFrom", "effectTo", "dataItems"})
 public abstract class Effect<R extends Registration, V extends Effect, D extends DataItem> extends DatabaseEntry implements Comparable<Effect> {
@@ -110,7 +103,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     @JsonIgnore
-    @XmlTransient
     public R getRegistration() {
         return this.registration;
     }
@@ -132,8 +124,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false)
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
-    @XmlElement(name = IO_FIELD_EFFECT_FROM)
-    @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     private OffsetDateTime effectFrom;
 
     public OffsetDateTime getEffectFrom() {
@@ -149,8 +139,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String IO_FIELD_EFFECT_TO = "virkningTil";
 
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
-    @XmlElement(name = IO_FIELD_EFFECT_TO)
-    @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false)
     private OffsetDateTime effectTo;
 
@@ -175,7 +163,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
      * needs merging.
      */
     @JsonProperty(value = "data")
-    @XmlElementWrapper(name = "data")
     public Map<String, Object> getData() {
         HashMap<String, Object> outMap = new HashMap<>();
         for (D d : this.dataItems) {
@@ -198,8 +185,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     @JsonProperty(value = "data"/*, access = JsonProperty.Access.READ_ONLY*/)
-    @JacksonXmlProperty(localName = "data")
-    @JacksonXmlElementWrapper(useWrapping = false)
     public void setDataItems(Collection<D> items) {
         this.dataItems.addAll(items);
     }

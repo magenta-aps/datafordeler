@@ -7,18 +7,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 //@TestPropertySource(locations={"classpath:/application_test.properties"})
@@ -26,13 +27,13 @@ public class UserTest {
 
   public static int TEST_USERPROFILE_ID = -42;
 
-  @SpyBean
+  @MockitoSpyBean
   private UserQueryManager userQueryManager;
 
-  @SpyBean
+  @MockitoSpyBean
   private DafoEngineUserManager dafoEngineUserManager;
 
-  @SpyBean
+  @MockitoSpyBean
   private TokenVerifier tokenVerifier;
 
   @Test
@@ -70,11 +71,11 @@ public class UserTest {
         + "4EbzpvH0szzyewo6+Mn8s+VTytiXd9jgXw==";
 
     // Skip date checks on the token
-    doNothing().when(tokenVerifier).verifyTokenAge(anyObject());
-    doReturn(true).when(tokenVerifier).checkNotOnOrafter(anyObject());
+    doNothing().when(tokenVerifier).verifyTokenAge(any());
+    doReturn(true).when(tokenVerifier).checkNotOnOrafter(any());
 
     // Mock up userprofile info instead of fetching it from the database
-    doReturn(TEST_USERPROFILE_ID).when(userQueryManager).getUserProfileIdByName(anyObject());
+    doReturn(TEST_USERPROFILE_ID).when(userQueryManager).getUserProfileIdByName(any());
     doReturn(Arrays.asList("ReadDemoService")).when(userQueryManager).getSystemRoleNamesByUserProfileId(TEST_USERPROFILE_ID);
     doReturn(Arrays.asList(AreaRestriction.lookup("Demo:Cardinal directions:North"),
             AreaRestriction.lookup("Demo:Cardinal directions:East"))).when(userQueryManager).getAreaRestrictionsByUserProfileId(TEST_USERPROFILE_ID);

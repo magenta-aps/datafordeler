@@ -14,7 +14,7 @@ import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * Datafordeler Plugin to fetch, parse and serve CVR data (data on companies).

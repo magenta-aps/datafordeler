@@ -63,7 +63,7 @@ public class TestUtils {
     @Autowired
     private dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager postcodeEntityManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private DafoUserManager dafoUserManager;
 
     HashSet<Entity> createdEntities = new HashSet<>();

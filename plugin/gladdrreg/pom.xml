@@ -17,7 +17,6 @@
         <java.version>18</java.version>
         <log4j.version>2.1</log4j.version>
         <jackson.version>2.9.9</jackson.version>
-        <spring.version>5.1.7.RELEASE</spring.version>
         <spring.boot.version>3.4.1.RELEASE</spring.boot.version>
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
@@ -61,11 +60,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,6 +1,6 @@
 package dk.magenta.datafordeler.core.database;
 
-import com.fasterxml.classmate.AnnotationConfiguration;
+import jakarta.annotation.PreDestroy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -12,7 +12,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashSet;
@@ -61,7 +60,7 @@ public class SessionManager {
         managedClasses.add(dk.magenta.datafordeler.core.database.LastUpdated.class);
 
         ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
-        componentProvider.addIncludeFilter(new AnnotationTypeFilter(javax.persistence.Entity.class));
+        componentProvider.addIncludeFilter(new AnnotationTypeFilter(jakarta.persistence.Entity.class));
         componentProvider.addExcludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
 
         for (Class cls : managedClasses) {

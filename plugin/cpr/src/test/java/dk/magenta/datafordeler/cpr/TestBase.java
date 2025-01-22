@@ -46,12 +46,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.DirtiesContext;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.ManagedType;
+import jakarta.net.ssl.SSLContext;
+import jakarta.net.ssl.SSLSocketFactory;
+import jakarta.net.ssl.TrustManager;
+import jakarta.net.ssl.X509TrustManager;
+import jakarta.persistence.metamodel.EntityType;
+import jakarta.persistence.metamodel.ManagedType;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -82,7 +82,7 @@ public abstract class TestBase {
         return this.engine;
     }
 
-    @SpyBean
+    @MockitoSpyBean
     protected CprConfigurationManager configurationManager;
 
     protected CprConfiguration configuration;
@@ -96,7 +96,7 @@ public abstract class TestBase {
     @Autowired
     protected PersonCustodyRelationsManager custodyManager;
 
-    @SpyBean
+    @MockitoSpyBean
     protected PersonEntityManager personEntityManager;
 
     @Autowired
@@ -118,7 +118,7 @@ public abstract class TestBase {
         return this.configuration;
     }
 
-    @SpyBean
+    @MockitoSpyBean
     private CprRegisterManager registerManager;
 
     @Before
@@ -157,7 +157,7 @@ public abstract class TestBase {
         ignoreKeys.add("sidstImporteret");
     }
 
-    @SpyBean
+    @MockitoSpyBean
     protected DafoUserManager dafoUserManager;
 
     protected void applyAccess(TestUserDetails testUserDetails) {

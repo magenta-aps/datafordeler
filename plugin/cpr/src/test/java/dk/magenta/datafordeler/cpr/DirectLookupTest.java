@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -24,7 +25,7 @@ import java.time.ZonedDateTime;
 
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DirectLookupTest {
@@ -32,7 +33,7 @@ public class DirectLookupTest {
     @Autowired
     private CprPlugin plugin;
 
-    @SpyBean
+    @MockitoSpyBean
     private CprConfigurationManager configurationManager;
 
     @Autowired

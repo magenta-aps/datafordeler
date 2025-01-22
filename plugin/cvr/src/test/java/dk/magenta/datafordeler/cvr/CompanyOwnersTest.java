@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -42,7 +43,7 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -52,7 +53,7 @@ public class CompanyOwnersTest extends TestBase {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @SpyBean
+    @MockitoSpyBean
     private DafoUserManager dafoUserManager;
 
     private void applyAccess(TestUserDetails testUserDetails) {

@@ -12,7 +12,7 @@ import dk.magenta.datafordeler.ger.data.unit.UnitEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * Datafordeler Plugin to fetch, parse and serve Ger dk.magenta.datafordeler.ger.data (dk.magenta.datafordeler.ger.data on regions, localities, roads, addresses etc.)

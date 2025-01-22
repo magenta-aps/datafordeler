@@ -87,7 +87,7 @@ public abstract class TestBase {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    @SpyBean
+    @MockitoSpyBean
     protected DafoUserManager dafoUserManager;
 
     @Autowired
@@ -108,7 +108,7 @@ public abstract class TestBase {
     @Autowired
     protected GerPlugin gerPlugin;
 
-    @SpyBean
+    @MockitoSpyBean
     protected DirectLookup directLookup;
 
     @Autowired
