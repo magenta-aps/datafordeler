@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.text.ParseException;
 import java.time.OffsetDateTime;
@@ -27,7 +28,7 @@ public class MonitorTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @SpyBean
+    @MockitoSpyBean
     private MonitorService monitorService;
 
     @Autowired

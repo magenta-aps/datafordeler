@@ -2,11 +2,11 @@ package dk.magenta.datafordeler.core.io.storagetest;
 
 import dk.magenta.datafordeler.core.database.Effect;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAccessor;
 
-@javax.persistence.Entity
+@jakarta.persistence.Entity
 @Table(name="test_effect")
 public class TestEffect extends Effect<TestRegistration, TestEffect, TestData> {
 

@@ -4,10 +4,10 @@ import dk.magenta.datafordeler.core.database.Entity;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 import java.util.UUID;
 
-@javax.persistence.Entity
+@jakarta.persistence.Entity
 @Table(name="test_entity")
 public class TestEntity extends Entity<TestEntity, TestRegistration> {
 

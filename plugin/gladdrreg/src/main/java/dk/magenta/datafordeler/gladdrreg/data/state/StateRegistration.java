@@ -2,8 +2,8 @@ package dk.magenta.datafordeler.gladdrreg.data.state;
 
 import dk.magenta.datafordeler.core.database.Registration;
 
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 
 /**

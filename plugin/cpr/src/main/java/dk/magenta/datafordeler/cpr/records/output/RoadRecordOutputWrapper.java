@@ -11,7 +11,7 @@ import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class RoadRecordOutputWrapper extends CprRecordOutputWrapper<RoadEntity> {

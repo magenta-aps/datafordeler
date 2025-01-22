@@ -2,8 +2,8 @@ package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.plugin.Plugin;
 
-import javax.persistence.Entity;
-import javax.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import java.io.File;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;

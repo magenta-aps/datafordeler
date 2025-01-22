@@ -2,12 +2,12 @@ package dk.magenta.datafordeler.core.security;
 
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.user.TokenVerifier;
+import jakarta.annotation.PostConstruct;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
@@ -16,18 +16,18 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TokenTest {
@@ -61,7 +61,7 @@ public class TokenTest {
 
   @Autowired
   private TestRestTemplate template;
-  @SpyBean
+  @MockitoSpyBean
   TokenVerifier tokenVerifier;
   private TokenHeaderInjector tokenHeaderInjector;
 
@@ -91,8 +91,8 @@ public class TokenTest {
   @Test
   public void testParseValidToken() throws Exception {
     // Skip checks for token age
-    doNothing().when(tokenVerifier).verifyTokenAge(anyObject());
-    doReturn(true).when(tokenVerifier).checkNotOnOrafter(anyObject());
+    doNothing().when(tokenVerifier).verifyTokenAge(any());
+    doReturn(true).when(tokenVerifier).checkNotOnOrafter(any());
 
     // Make token string invalid
     tokenHeaderInjector.setTokenString(

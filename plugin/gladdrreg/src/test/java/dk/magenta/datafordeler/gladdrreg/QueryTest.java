@@ -48,7 +48,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Ignore
@@ -70,28 +70,28 @@ public class QueryTest {
     @Autowired
     private SessionManager sessionManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private AddressEntityManager addressEntityManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private BNumberEntityManager bNumberEntityManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private DistrictEntityManager districtEntityManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private LocalityEntityManager localityEntityManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private MunicipalityEntityManager municipalityEntityManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private PostalCodeEntityManager postalCodeEntityManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private RoadEntityManager roadEntityManager;
 
-    @SpyBean
+    @MockitoSpyBean
     private StateEntityManager stateEntityManager;
 
     private String wrapInEvent(String data, String schema) {

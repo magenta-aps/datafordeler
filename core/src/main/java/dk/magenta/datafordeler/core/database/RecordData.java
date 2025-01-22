@@ -2,16 +2,17 @@ package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.util.Equality;
 
-import javax.persistence.Column;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
+import jakarta.persistence.Entity;
 
 /**
  * Storage of how we got a piece of data into the system, ie. source, date, ...
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "record")
 public class RecordData extends DatabaseEntry implements Comparable<RecordData> {
 

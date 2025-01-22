@@ -2,10 +2,11 @@ package dk.magenta.datafordeler.core.plugin;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
-@javax.persistence.Entity
+import jakarta.persistence.Entity;
+@Entity
 @Table(name = "ftp_pulled_file", indexes = {
         @Index(name = "ftp_pulled_file_filename", columnList = FtpPulledFile.DB_FIELD_FILENAME, unique = true),
         @Index(name = "ftp_pulled_file_type", columnList = FtpPulledFile.DB_FIELD_TYPE),

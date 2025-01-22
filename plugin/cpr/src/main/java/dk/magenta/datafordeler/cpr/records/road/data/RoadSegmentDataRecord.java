@@ -1,6 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.road.data;
 
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class RoadSegmentDataRecord<S extends RoadSegmentDataRecord<S>> extends CprBitemporalRoadRecord<S> {

@@ -8,7 +8,7 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.unversioned.Municipality;
 import org.hibernate.Session;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Record for Company form.

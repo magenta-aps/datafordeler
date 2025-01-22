@@ -3,9 +3,9 @@ package dk.magenta.datafordeler.gladdrreg.configuration;
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.gladdrreg.GladdrregPlugin;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * Created by lars on 16-05-17.

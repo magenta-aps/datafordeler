@@ -13,7 +13,7 @@ import dk.magenta.datafordeler.cvr.RecordSet;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 

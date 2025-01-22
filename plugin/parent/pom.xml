@@ -16,11 +16,10 @@
         <java.version>16</java.version>
         <junit.version>4.13</junit.version>
         <jackson.version>2.12.4</jackson.version>
-        <spring.version>5.3.5</spring.version>
-        <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
+        <spring.boot.version>3.4.1</spring.boot.version>
         <cxf.spring.boot.starter.version>3.4.4</cxf.spring.boot.starter.version>
         <commons.io.version>2.11.0</commons.io.version>
-        <hibernate.version>5.5.2.Final</hibernate.version>
+        <hibernate.version>6.6.5.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <com.microsoft.sqlserver.version>7.4.1.jre11</com.microsoft.sqlserver.version>
         <maven.compiler.source>16</maven.compiler.source>

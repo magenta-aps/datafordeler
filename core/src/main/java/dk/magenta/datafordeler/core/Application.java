@@ -46,12 +46,6 @@ public class Application {
             SpringApplication.run(Application.class, args);
         } catch (Throwable e) {
             log.error(e);
-            while (e != null) {
-                if (e instanceof com.sun.xml.bind.v2.runtime.IllegalAnnotationsException) {
-                    log.error(((com.sun.xml.bind.v2.runtime.IllegalAnnotationsException) e).getErrors());
-                }
-                e = e.getCause();
-            }
         }
     }
 

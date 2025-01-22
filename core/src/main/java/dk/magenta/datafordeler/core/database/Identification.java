@@ -2,11 +2,12 @@ package dk.magenta.datafordeler.core.database;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import java.util.UUID;
 
+import jakarta.persistence.Entity;
 /**
  * Identifier for Entity objects, easing cross-referencing. A reference need not
  * locate the referenced Entity in the database (it may not even exist yet), but only
@@ -17,7 +18,7 @@ import java.util.UUID;
  * That way, we can always locate/create an Identification when we know this seed
  * data.
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "identification", indexes = {@Index(name = "uuid", columnList = "uuid"), @Index(name = "id", columnList = "uuid, domain")})
 public final class Identification extends DatabaseEntry implements Comparable<Identification> {
 

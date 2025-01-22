@@ -1,15 +1,16 @@
 package dk.magenta.datafordeler.core.database;
 
-import javax.persistence.CascadeType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
+import jakarta.persistence.Entity;
 
 /**
  * A collection of RecordData objects
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "record_collection")
 public class RecordCollection extends DatabaseEntry {
 

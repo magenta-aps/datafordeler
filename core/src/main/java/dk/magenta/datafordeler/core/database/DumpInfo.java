@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.dump.DumpConfiguration;
 import org.apache.commons.io.Charsets;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.time.OffsetDateTime;
+import jakarta.persistence.Entity;
 
-@javax.persistence.Entity
+
+@Entity
 @Table(name = "dump_info")
 public final class DumpInfo extends DatabaseEntry implements
         Comparable<DumpInfo> {
@@ -25,8 +27,7 @@ public final class DumpInfo extends DatabaseEntry implements
     @Lob
     private DumpData data;
 
-    private DumpInfo() {
-
+    public DumpInfo() {
     }
 
     public DumpInfo(DumpConfiguration config,

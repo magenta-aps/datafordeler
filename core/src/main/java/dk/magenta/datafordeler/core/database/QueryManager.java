@@ -8,8 +8,10 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 
-import javax.persistence.FlushModeType;
-import javax.persistence.NoResultException;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.NoResultException;
+import org.hibernate.query.Query;
+
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -85,7 +87,6 @@ public class QueryManager {
         org.hibernate.query.Query<Identification> databaseQuery = session.createQuery("select i from Identification i where i.uuid = :uuid", Identification.class);
         databaseQuery.setParameter("uuid", uuid);
         databaseQuery.setCacheable(true);
-        databaseQuery.setFlushMode(FlushModeType.COMMIT);
         try {
             return databaseQuery.getSingleResult();
         } catch (NoResultException e) {
@@ -183,7 +184,7 @@ public class QueryManager {
 
     public static <E extends DatabaseEntry> List<E> getAllEntities(Session session, Class<E> eClass, boolean joinIdentity) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName());
-        org.hibernate.query.Query<E> databaseQuery;
+        Query<E> databaseQuery;
         if (joinIdentity) {
             databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " join " + ENTITY + ".identification i where i.uuid != null", eClass);
         } else {
