@@ -50,7 +50,7 @@ public class DirectLookup {
     }
 
     @Autowired
-    private CvrRegisterManager cvrRegisterManager;
+    private CvrPlugin cvrPlugin;
 
     public <R extends CvrEntityRecord> List<R> lookup(ObjectNode requestBody, String schema) throws DataStreamException, HttpStatusException, IOException, URISyntaxException, GeneralSecurityException {
         CvrConfiguration configuration = this.configurationManager.getConfiguration();
@@ -74,7 +74,7 @@ public class DirectLookup {
         } catch (URISyntaxException | MalformedURLException e) {
             throw new DataStreamException(e);
         }
-        CvrEntityManager<R> entityManager = (CvrEntityManager<R>) cvrRegisterManager.getEntityManager(schema);
+        CvrEntityManager<R> entityManager = (CvrEntityManager<R>) (cvrPlugin.getRegisterManager()).getEntityManager(schema);
 
         try (InputStream response = httpCommunicator.post(queryUri, new StringEntity(requestBody.toString()), null)) {
             Scanner scanner = new Scanner(response, StandardCharsets.UTF_8).useDelimiter(String.valueOf(ScanScrollCommunicator.delimiter));

@@ -4,6 +4,7 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -11,10 +12,11 @@ import java.util.UUID;
 @Component("GeoMunicipalityEntityManager")
 public class MunicipalityEntityManager extends GeoEntityManager<GeoMunicipalityEntity, MunicipalityRawData> {
 
-    @Autowired
-    private MunicipalityService municipalityService;
+    private final MunicipalityService municipalityService;
 
-    public MunicipalityEntityManager() {
+    @Autowired
+    public MunicipalityEntityManager(@Lazy MunicipalityService municipalityService) {
+        this.municipalityService = municipalityService;
     }
 
     @Override

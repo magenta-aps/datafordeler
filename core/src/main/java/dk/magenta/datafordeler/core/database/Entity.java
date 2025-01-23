@@ -21,7 +21,6 @@ import java.util.*;
  * hold leaf nodes (DataItems) containing the bulk of the associated data.
  */
 @MappedSuperclass
-@Embeddable
 public abstract class Entity<E extends Entity, R extends Registration> extends DatabaseEntry implements IdentifiedEntity {
 
     @Transient

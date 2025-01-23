@@ -10,8 +10,8 @@ import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
-
 import jakarta.persistence.*;
+
 import java.nio.charset.Charset;
 
 @Entity

@@ -6,11 +6,11 @@ import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.ger.GerPlugin;
 import dk.magenta.datafordeler.ger.data.GerEntity;
 import dk.magenta.datafordeler.ger.data.RawData;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;

@@ -13,8 +13,9 @@ import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * Datafordeler Plugin to fetch, parse and serve CVR data (data on companies).
@@ -35,6 +36,7 @@ public class CvrPlugin extends Plugin {
 
     private CvrRegisterManager registerManager;
 
+    @Autowired
     private CompanyEntityManager companyEntityManager;
 
     @Autowired
@@ -48,18 +50,32 @@ public class CvrPlugin extends Plugin {
     private final CvrAreaRestrictionDefinition areaRestrictionDefinition;
 
     @Autowired
-    public CvrPlugin(@Lazy CvrRegisterManager cvrRegisterManager, @Lazy CompanyEntityManager companyEntityManager) {
+    public void setRegisterManager(CvrRegisterManager registerManager) {
+        System.out.println("Setting registermanager in plugin");
+        this.registerManager = registerManager;
+    }
+
+//    @Autowired
+//    public CvrPlugin(@Lazy CvrRegisterManager cvrRegisterManager, @Lazy CompanyEntityManager companyEntityManager) {
+//        this.rolesDefinition = new CvrRolesDefinition();
+//        this.areaRestrictionDefinition = new CvrAreaRestrictionDefinition(this);
+//        this.registerManager = cvrRegisterManager;
+//        this.companyEntityManager = companyEntityManager;
+//    }
+
+    public CvrPlugin() {
+        System.out.println("Initializing CVR plugin");
         this.rolesDefinition = new CvrRolesDefinition();
         this.areaRestrictionDefinition = new CvrAreaRestrictionDefinition(this);
-        this.registerManager = cvrRegisterManager;
-        this.companyEntityManager = companyEntityManager;
+
     }
 
     /**
      * Plugin initialization
      */
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
+        this.registerManager.setPlugin(this);
         this.registerManager.addEntityManager(this.companyEntityManager);
         this.registerManager.addEntityManager(this.companyUnitEntityManager);
         this.registerManager.addEntityManager(this.participantEntityManager);

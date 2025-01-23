@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.statistik;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
-import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
@@ -25,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 
 import static org.mockito.Mockito.when;
 

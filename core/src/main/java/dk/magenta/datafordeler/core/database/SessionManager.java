@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -22,6 +23,7 @@ import java.util.Set;
  * A bean to obtain Sessions with. This should be autowired in, and sessions obtained with
  * sessionManager.getSessionFactory().openSession();
  */
+@Primary
 @Component
 public class SessionManager {
     

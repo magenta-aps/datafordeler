@@ -1,4 +1,3 @@
-#FROM maven:3-jdk-11
 FROM maven:3.8.7-openjdk-18-slim
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
 COPY pom.xml /code/pom.xml

@@ -9,9 +9,6 @@ import dk.magenta.datafordeler.geo.data.WireCache;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import org.hibernate.Session;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.FilterDefs;
-import org.hibernate.annotations.ParamDef;
 
 import javax.xml.bind.annotation.XmlElement;
 import java.time.Instant;

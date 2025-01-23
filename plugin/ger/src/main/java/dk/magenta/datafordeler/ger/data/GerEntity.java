@@ -5,9 +5,9 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
