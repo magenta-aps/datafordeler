@@ -24,7 +24,6 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -46,13 +45,16 @@ public class CvrRegisterManager extends RegisterManager {
 
     private ScanScrollCommunicator commonFetcher;
 
-    private final ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    private final CvrConfigurationManager configurationManager;
+    @Autowired
+    private CvrConfigurationManager configurationManager;
 
-    private final CvrPlugin plugin;
+    private CvrPlugin plugin;
 
-    private final SessionManager sessionManager;
+    @Autowired
+    private SessionManager sessionManager;
 
     private String cvrDemoCompanyFile;
 
@@ -65,13 +67,13 @@ public class CvrRegisterManager extends RegisterManager {
 
     private final Logger log = LogManager.getLogger(CvrRegisterManager.class.getCanonicalName());
 
-    @Autowired
-    @Lazy
-    public CvrRegisterManager(@Lazy CvrConfigurationManager configurationManager, @Lazy CvrPlugin plugin, @Lazy SessionManager sessionManager, @Lazy ObjectMapper objectMapper) {
-        this.configurationManager = configurationManager;
+    public CvrRegisterManager() {
+    }
+
+    public void setPlugin(CvrPlugin plugin) throws IOException {
         this.plugin = plugin;
-        this.sessionManager = sessionManager;
-        this.objectMapper = objectMapper;
+        CvrConfiguration configuration = this.configurationManager.getConfiguration();
+        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     public void setCvrDemoCompanyFile(String cvrDemoCompanyFile) {
@@ -97,7 +99,6 @@ public class CvrRegisterManager extends RegisterManager {
         this.cvrDemoCompanyFile = configuration.getCvrDemoCompanyFile();
         this.cvrDemoUnitFile = configuration.getCvrDemoUnitFile();
         this.cvrDemoParticipantFile = configuration.getCvrDemoParticipantFile();
-        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     @Override

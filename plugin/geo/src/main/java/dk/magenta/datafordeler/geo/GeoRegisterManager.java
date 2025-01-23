@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.geo.configuration.GeoConfiguration;
 import dk.magenta.datafordeler.geo.configuration.GeoConfigurationManager;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -21,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
@@ -43,7 +43,6 @@ public class GeoRegisterManager extends RegisterManager {
     @Autowired
     private GeoConfigurationManager configurationManager;
 
-    @Autowired
     private GeoPlugin plugin;
 
     @Autowired
@@ -66,8 +65,6 @@ public class GeoRegisterManager extends RegisterManager {
      */
     @PostConstruct
     public void init() throws IOException {
-        GeoConfiguration configuration = configurationManager.getConfiguration();
-        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     public GeoConfigurationManager getConfigurationManager() {
@@ -77,6 +74,12 @@ public class GeoRegisterManager extends RegisterManager {
     @Override
     protected Logger getLog() {
         return this.log;
+    }
+
+    public void setPlugin(GeoPlugin plugin) throws IOException {
+        this.plugin = plugin;
+        GeoConfiguration configuration = configurationManager.getConfiguration();
+        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     @Override

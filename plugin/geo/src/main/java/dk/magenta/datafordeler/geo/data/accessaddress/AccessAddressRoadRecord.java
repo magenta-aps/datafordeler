@@ -9,9 +9,9 @@ import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.WireCache;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity

@@ -13,7 +13,6 @@ import java.util.*;
  * to all the Effects applicable (and by extension, Registrations).
  */
 @MappedSuperclass
-@Embeddable
 // @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class DataItem<V extends Effect, D extends DataItem> extends DatabaseEntry {
 

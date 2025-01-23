@@ -21,11 +21,12 @@ import dk.magenta.datafordeler.ger.parser.SpreadsheetConverter;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.junit.runner.RunWith;
+
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;

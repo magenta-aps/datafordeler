@@ -12,7 +12,6 @@ import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressQuery;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by lars on 19-05-17.

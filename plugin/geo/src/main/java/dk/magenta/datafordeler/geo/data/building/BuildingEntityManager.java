@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import dk.magenta.datafordeler.geo.data.WireCache;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -12,10 +13,11 @@ import java.util.UUID;
 @Component("GeoBuildingEntityManager")
 public class BuildingEntityManager extends GeoEntityManager<BuildingEntity, BuildingRawData> {
 
-    @Autowired
-    private BuildingService buildingService;
+    private final BuildingService buildingService;
 
-    public BuildingEntityManager() {
+    @Autowired
+    public BuildingEntityManager(@Lazy BuildingService buildingService) {
+        this.buildingService = buildingService;
     }
 
     @Override

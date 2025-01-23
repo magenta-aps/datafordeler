@@ -4,6 +4,7 @@ import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -11,10 +12,11 @@ import java.util.UUID;
 @Component("GeoLocalityEntityManager")
 public class LocalityEntityManager extends GeoEntityManager<GeoLocalityEntity, LocalityRawData> {
 
-    @Autowired
-    private LocalityService localityService;
+    private final LocalityService localityService;
 
-    public LocalityEntityManager() {
+    @Autowired
+    public LocalityEntityManager(@Lazy LocalityService localityService) {
+        this.localityService = localityService;
     }
 
     @Override

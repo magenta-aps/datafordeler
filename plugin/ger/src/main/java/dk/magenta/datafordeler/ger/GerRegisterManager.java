@@ -15,6 +15,7 @@ import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.ger.configuration.GerConfiguration;
 import dk.magenta.datafordeler.ger.configuration.GerConfigurationManager;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -40,7 +40,6 @@ public class GerRegisterManager extends RegisterManager {
     @Autowired
     private GerConfigurationManager configurationManager;
 
-    @Autowired
     private GerPlugin plugin;
 
     @Autowired
@@ -55,7 +54,6 @@ public class GerRegisterManager extends RegisterManager {
     private String localCopyFolder;
 
     public GerRegisterManager() {
-
     }
 
     /**
@@ -79,6 +77,10 @@ public class GerRegisterManager extends RegisterManager {
     @Override
     protected Logger getLog() {
         return this.log;
+    }
+
+    public void setPlugin(GerPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override

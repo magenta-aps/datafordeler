@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.cpr.records.service;
 
 import dk.magenta.datafordeler.core.MonitorService;
-import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -24,7 +23,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

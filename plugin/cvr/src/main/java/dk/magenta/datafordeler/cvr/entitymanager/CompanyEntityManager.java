@@ -53,9 +53,9 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             ZoneOffset.UTC
     );
 
-    private CompanyRecordService companyRecordService;
+    private final CompanyRecordService companyRecordService;
 
-    private SessionManager sessionManager;
+    private final SessionManager sessionManager;
 
     private final Logger log = LogManager.getLogger(CompanyEntityManager.class.getCanonicalName());
 
