@@ -213,6 +213,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.16.1</version>
+        </dependency>
+
         <!-- needed for logging on windows -->
         <dependency>
             <groupId>org.dblock.log4jna</groupId>
