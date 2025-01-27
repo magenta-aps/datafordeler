@@ -13,6 +13,7 @@ import java.util.UUID;
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "report_assignment_list")
 public class ReportAssignment extends DatabaseEntry {
 
+    public static final String DB_FIELD_CREATE_DATETIME = "createDateTime";
     public static final String DB_FIELD_REPORTTEMPLATENAME = "reportTemplateName";
     public static final String DB_FIELD_REPORTUUID = "reportUuid";
     public static final String DB_FIELD_COLLECTIONUUID = "collectionUuid";
