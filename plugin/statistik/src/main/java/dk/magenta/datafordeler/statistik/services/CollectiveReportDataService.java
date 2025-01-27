@@ -38,6 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +107,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
     public void getReportList(HttpServletRequest request, HttpServletResponse response) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException, AccessRequiredException {
 
         DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
+        OffsetDateTime cutoff = OffsetDateTime.now().minusDays(7);
         String formToken = request.getParameter("token");
         if (formToken != null) {
             user = this.getDafoUserManager().getSamlUserDetailsFromToken(formToken);
@@ -128,6 +130,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
             Root<ReportAssignment> page = criteria.from(ReportAssignment.class);
             criteria.select(page);
             criteria.where(builder.equal(page.get(ReportAssignment.DB_FIELD_REPORT_STATUS), ReportProgressStatus.started));
+            criteria.where(builder.greaterThan(page.get(ReportAssignment.DB_FIELD_CREATE_DATETIME), cutoff));
 
             TypedQuery<ReportAssignment> query = reportProgressSession.createQuery(criteria);
             query.setHint(QueryHints.HINT_CACHEABLE, true);
@@ -142,6 +145,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
 
             reportListResponse += "<br><br>Running: <br>";
             criteria.where(builder.equal(page.get(ReportAssignment.DB_FIELD_REPORT_STATUS), ReportProgressStatus.running));
+            criteria.where(builder.greaterThan(page.get(ReportAssignment.DB_FIELD_CREATE_DATETIME), cutoff));
             query = reportProgressSession.createQuery(criteria);
             query.setHint(QueryHints.HINT_CACHEABLE, true);
 
@@ -154,6 +158,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
             if (collectionUuidStarted == null && collectionUuidRunning == null) {
                 reportListResponse += "<br><br>Last done report: <br>";
                 criteria.where(builder.equal(page.get(ReportAssignment.DB_FIELD_REPORT_STATUS), ReportProgressStatus.done));
+                criteria.where(builder.greaterThan(page.get(ReportAssignment.DB_FIELD_CREATE_DATETIME), cutoff));
 
                 query = reportProgressSession.createQuery(criteria);
                 query.setHint(QueryHints.HINT_CACHEABLE, true);
