@@ -78,6 +78,7 @@ public class ConfigurationSessionManager extends SessionManager {
         hibernateProperties.setProperty("hibernate.connection.password", System.getenv("DATABASE_PASSWORD"));
 
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
+        hibernateProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
         hibernateProperties.setProperty("hibernate.c3p0.min_size", "5");
         hibernateProperties.setProperty("hibernate.c3p0.max_size", "200");
         hibernateProperties.setProperty("hibernate.c3p0.timeout", "300");
