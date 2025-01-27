@@ -113,6 +113,7 @@ public class SessionManager {
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
         hibernateProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
+        hibernateProperties.setProperty("hibernate.globally_quoted_identifiers", "true");
 
 
         hibernateProperties.setProperty("hibernate.c3p0.min_size", "5");
