@@ -87,6 +87,7 @@ public class ConfigurationSessionManager extends SessionManager {
         hibernateProperties.setProperty("hibernate.c3p0.max_statements", "50");
         hibernateProperties.setProperty("hibernate.c3p0.idle_test_period", "3000");
 
+        System.out.println(hibernateProperties.toString());
         return hibernateProperties;
     }
 
