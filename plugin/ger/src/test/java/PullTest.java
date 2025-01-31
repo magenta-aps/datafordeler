@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;
 
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -45,12 +46,6 @@ public class PullTest {
 
     @Autowired
     SessionManager sessionManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private CompanyEntityManager companyEntityManager;
 
     @MockitoSpyBean
     private GerConfigurationManager gerConfigurationManager;
@@ -68,6 +63,9 @@ public class PullTest {
         gerConfiguration.setResponsibleRegisterType(GerConfiguration.RegisterType.LOCAL_FILE);
         gerConfiguration.setResponsibleRegisterURL(sheetFile);
 
+        System.out.println("gerConfigurationManager: "+gerConfigurationManager);
+
+        doReturn(gerConfiguration).when(gerConfigurationManager).getConfiguration();
         when(gerConfigurationManager.getConfiguration()).thenReturn(gerConfiguration);
 
         Pull pull = new Pull(engine, registerManager);

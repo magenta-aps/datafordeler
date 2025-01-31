@@ -28,12 +28,6 @@ public class MonitorTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @MockitoSpyBean
-    private MonitorService monitorService;
-
-    @Autowired
-    private Engine engine;
-
     private static Logger log = LogManager.getLogger(MonitorTest.class.getCanonicalName());
 
     @Test
