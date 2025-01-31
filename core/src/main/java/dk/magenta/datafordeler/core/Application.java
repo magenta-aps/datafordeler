@@ -22,7 +22,8 @@ import java.nio.file.Files;
 @ComponentScan({"dk.magenta.datafordeler", "dk.magenta.datafordeler.core", "dk.magenta.datafordeler.core.database", "dk.magenta.datafordeler.core.util", "dk.magenta.datafordeler.core.user"})
 @EntityScan("dk.magenta.datafordeler")
 @ServletComponentScan
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication
 @EnableScheduling
 @PropertySource("classpath:/application.properties")
 

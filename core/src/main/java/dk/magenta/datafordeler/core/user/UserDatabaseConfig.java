@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.beans.PropertyVetoException;
 
-//@Component
+@Component
 public class UserDatabaseConfig {
-/*
+
     @Value("${dafo.userdatabase.enabled:false}")
     private boolean enabled;
     @Value("${dafo.userdatabase.url:}")
@@ -30,7 +30,7 @@ public class UserDatabaseConfig {
         }
     }
 
-
+    @Bean
     public ComboPooledDataSource userDataSource() throws ConfigurationException {
         ComboPooledDataSource pooledDataSource = new ComboPooledDataSource();
         try {
@@ -51,5 +51,5 @@ public class UserDatabaseConfig {
 
     public JdbcTemplate userJdbcTemplate() throws ConfigurationException {
         return new JdbcTemplate(this.userDataSource());
-    }*/
+    }
 }
