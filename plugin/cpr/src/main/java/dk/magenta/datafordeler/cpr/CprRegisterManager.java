@@ -59,8 +59,9 @@ public class CprRegisterManager extends RegisterManager {
      */
     @PostConstruct
     public void init() throws IOException {
+        System.out.println("CprRegisterManager.init()");
         CprConfiguration configuration = this.configurationManager.getConfiguration();
-        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
+        this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
         this.proxyString = configuration.getProxyUrl();
     }
 
@@ -78,8 +79,10 @@ public class CprRegisterManager extends RegisterManager {
         return this.plugin;
     }
 
-    public void setPlugin(CprPlugin plugin) {
+    public void setPlugin(CprPlugin plugin) throws IOException {
         this.plugin = plugin;
+        CprConfiguration configuration = this.configurationManager.getConfiguration();
+        this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     @Override
@@ -287,6 +290,13 @@ public class CprRegisterManager extends RegisterManager {
             s.add(line);
         }
         return new CprSourceData(schema, s.toString(), base + ":" + index);
+    }
+
+    protected String ensureLocalCopyFolder(String localCopyFolder) throws IOException {
+        if (this.localCopyFolder == null && this.plugin != null) {
+            this.localCopyFolder = super.ensureLocalCopyFolder(localCopyFolder);
+        }
+        return this.localCopyFolder;
     }
 
 }

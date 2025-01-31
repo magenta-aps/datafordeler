@@ -16,6 +16,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -60,11 +61,12 @@ public class CprPlugin extends Plugin {
      * Plugin initialization
      */
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
+        System.out.println("CprPlugin.init()");
+        this.registerManager.setPlugin(this);
         this.registerManager.addEntityManager(this.personEntityManager);
         this.registerManager.addEntityManager(this.residenceEntityManager);
         this.registerManager.addEntityManager(this.roadEntityManager);
-        this.registerManager.setPlugin(this);
     }
 
     /**
