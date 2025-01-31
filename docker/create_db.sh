@@ -16,4 +16,5 @@ done
 
 sleep 20
 #Just a simple wait 20 seconds before initiating the database with basic values
+# /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P testTEST1 -d master -i initiate-db.sql
 /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P testTEST1 -d master -i initiate-db.sql

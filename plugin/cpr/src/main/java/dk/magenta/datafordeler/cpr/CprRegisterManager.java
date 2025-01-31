@@ -59,7 +59,6 @@ public class CprRegisterManager extends RegisterManager {
      */
     @PostConstruct
     public void init() throws IOException {
-        System.out.println("CprRegisterManager.init()");
         CprConfiguration configuration = this.configurationManager.getConfiguration();
         this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
         this.proxyString = configuration.getProxyUrl();

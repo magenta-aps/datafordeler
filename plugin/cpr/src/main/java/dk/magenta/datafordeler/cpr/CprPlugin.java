@@ -62,7 +62,6 @@ public class CprPlugin extends Plugin {
      */
     @PostConstruct
     public void init() throws IOException {
-        System.out.println("CprPlugin.init()");
         this.registerManager.setPlugin(this);
         this.registerManager.addEntityManager(this.personEntityManager);
         this.registerManager.addEntityManager(this.residenceEntityManager);
