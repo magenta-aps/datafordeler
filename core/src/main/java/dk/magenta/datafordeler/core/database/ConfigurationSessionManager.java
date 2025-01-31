@@ -57,12 +57,13 @@ public class ConfigurationSessionManager extends SessionManager {
         return managedSecondaryClasses;
     }
 
-    protected DataSource dataSource() {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(System.getenv("SECONDARY_DATABASE_CLASS"));
         dataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
         dataSource.setUsername(System.getenv("SECONDARY_DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("SECONDARY_DATABASE_PASSWORD"));
+        System.out.println("SECONDARY_DATABASE_URL: "+System.getenv("SECONDARY_DATABASE_URL"));
         return dataSource;
     }
 

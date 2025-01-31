@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.role.SystemRole;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import java.util.Set;
 /**
  * Handles queries for accessing data in the DAFO user database.
  */
+@Component
 public class UserQueryManagerImpl extends UserQueryManager {
 
     private final JdbcTemplate jdbcTemplate;

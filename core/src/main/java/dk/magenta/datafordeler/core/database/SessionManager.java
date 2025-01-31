@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -32,12 +33,18 @@ public class SessionManager {
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
     public SessionManager() throws IOException {
-        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setDataSource(this.dataSource());
-        sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
-        sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
-        sessionFactoryBean.afterPropertiesSet();
-        this.sessionFactory = sessionFactoryBean.getObject();
+        try {
+            LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+            sessionFactoryBean.setDataSource(this.dataSource());
+            sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
+            sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
+            sessionFactoryBean.afterPropertiesSet();
+            this.sessionFactory = sessionFactoryBean.getObject();
+        } catch (Exception e) {
+            System.out.println("EXCEPTION:");
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public SessionFactory getSessionFactory() {
@@ -85,12 +92,13 @@ public class SessionManager {
         return managedClasses;
     }
 
-    protected DataSource dataSource() {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(System.getenv("DATABASE_CLASS"));
         dataSource.setUrl(System.getenv("DATABASE_URL"));
         dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
+        System.out.println("DATABASE_URL: "+System.getenv("DATABASE_URL"));
         return dataSource;
     }
 
