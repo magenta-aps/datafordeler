@@ -60,20 +60,23 @@ services:
     env_file:
       - ./docker/dev-env/datafordeler.env
     environment:
-      - DATABASE_CLASS=org.h2.Driver
-      - DATABASE_URL=jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS DBO
-      - DATABASE_DIALECT=org.hibernate.dialect.H2Dialect
-      - DATABASE_USERNAME=test
-      - DATABASE_PASSWORD=test
-      - DATABASE_METHOD=create-drop
-      - DATABASE_DEFAULT_SCHEMA=dbo
-      - SECONDARY_DATABASE_CLASS=org.h2.Driver
-      - SECONDARY_DATABASE_URL=jdbc:h2:mem:db2;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS DBO
-      - SECONDARY_DATABASE_DIALECT=org.hibernate.dialect.H2Dialect
-      - SECONDARY_DATABASE_USERNAME=test
-      - SECONDARY_DATABASE_PASSWORD=test
-      - SECONDARY_DATABASE_METHOD=create-drop
-      - SECONDARY_DATABASE_DEFAULT_SCHEMA=dbo
+      - DATABASE_CLASS="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+      - DATABASE_URL="jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler"
+      - DATABASE_DIALECT="org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
+      - DATABASE_SHOW_SQL="false"
+      - DATABASE_USERNAME="sa"
+      - DATABASE_PASSWORD="testTEST1"
+      - DATABASE_METHOD="create"
+      - DATABASE_DEFAULT_SCHEMA="dbo"
+
+      - SECONDARY_DATABASE_CLASS="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+      - SECONDARY_DATABASE_URL="jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler"
+      - SECONDARY_DATABASE_DIALECT="org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
+      - SECONDARY_DATABASE_SHOW_SQL="false"
+      - SECONDARY_DATABASE_USERNAME="sa"
+      - SECONDARY_DATABASE_PASSWORD="testTEST1"
+      - SECONDARY_DATABASE_METHOD="create"
+      - SECONDARY_DATABASE_DEFAULT_SCHEMA="dbo"
       - CRON_ENABLE=true
     command: bash -c "cd /code && mvn --batch-mode -T 2C test"
     # command: bash -c "cd /code/plugin/statistik && mvn --batch-mode -T 2C -Dtest=dk.magenta.datafordeler.statistik.*Test test"
