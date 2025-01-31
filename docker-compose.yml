@@ -23,6 +23,9 @@ services:
       - ./plugin/geo/src/test/resources/access.json:/app/dev-env/local/geo/access.json
       - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
       - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
+      - ./docker/createdbs.sql:/app/createdbs.sql
+    environment:
+      - DATABASE_IMPORT_FILES=/app/createdbs.sql
     ports:
       - 8080:80
     command: [
@@ -45,6 +48,8 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=testTEST1
+    ports:
+      - "1434:1433"
     volumes:
       - ./docker/dev-env/local:/app/dev-env/local
       - ./docker/dev-env/db/initiate-db.sql:/app/initiate-db.sql
@@ -62,7 +67,7 @@ services:
     environment:
       - DATABASE_CLASS="com.microsoft.sqlserver.jdbc.SQLServerDriver"
       - DATABASE_URL="jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler"
-      - DATABASE_DIALECT="org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
+      - DATABASE_DIALECT="org.hibernate.spatial.dialect.sqlserver.SqlServer2012Dialect"
       - DATABASE_SHOW_SQL="false"
       - DATABASE_USERNAME="sa"
       - DATABASE_PASSWORD="testTEST1"
@@ -71,7 +76,7 @@ services:
 
       - SECONDARY_DATABASE_CLASS="com.microsoft.sqlserver.jdbc.SQLServerDriver"
       - SECONDARY_DATABASE_URL="jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler"
-      - SECONDARY_DATABASE_DIALECT="org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
+      - SECONDARY_DATABASE_DIALECT="org.hibernate.spatial.dialect.sqlserver.SqlServer2012Dialect"
       - SECONDARY_DATABASE_SHOW_SQL="false"
       - SECONDARY_DATABASE_USERNAME="sa"
       - SECONDARY_DATABASE_PASSWORD="testTEST1"
@@ -80,7 +85,7 @@ services:
       - CRON_ENABLE=true
     command: bash -c "cd /code && mvn --batch-mode -T 2C test"
     # command: bash -c "cd /code/plugin/statistik && mvn --batch-mode -T 2C -Dtest=dk.magenta.datafordeler.statistik.*Test test"
-    #use docker-compose up test to execute tests
+    #use docker compose up test to execute tests
 
   openapi:
     build:
