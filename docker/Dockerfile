@@ -1,4 +1,4 @@
-FROM maven:3.8.7-openjdk-18-slim
+FROM jelastic/maven:3.9.5-openjdk-21
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
 COPY pom.xml /code/pom.xml
 COPY core /code/core

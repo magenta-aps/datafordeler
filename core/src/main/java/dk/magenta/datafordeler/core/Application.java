@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,9 +22,10 @@ import java.nio.file.Files;
 @ComponentScan({"dk.magenta.datafordeler", "dk.magenta.datafordeler.core", "dk.magenta.datafordeler.core.database", "dk.magenta.datafordeler.core.util", "dk.magenta.datafordeler.core.user"})
 @EntityScan("dk.magenta.datafordeler")
 @ServletComponentScan
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableScheduling
 @PropertySource("classpath:/application.properties")
+
 public class Application {
 
     private static final Logger log = LogManager.getLogger(Application.class.getCanonicalName());
