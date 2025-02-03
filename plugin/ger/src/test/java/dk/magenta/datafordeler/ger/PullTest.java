@@ -1,10 +1,10 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
+package dk.magenta.datafordeler.ger;
+
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.Pull;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.ger.GerRegisterManager;
 import dk.magenta.datafordeler.ger.configuration.GerConfiguration;
 import dk.magenta.datafordeler.ger.configuration.GerConfigurationManager;
 import dk.magenta.datafordeler.ger.data.RawData;
@@ -23,19 +23,21 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;
 
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PullTest {
 
     @Autowired
@@ -52,6 +54,11 @@ public class PullTest {
 
     @Test
     public void pullTest() throws Exception {
+        System.out.println("sessionManager: "+sessionManager);
+        System.out.println("registerManager: "+registerManager);
+        System.out.println("engine: "+engine);
+        System.out.println("gerConfigurationManager: "+gerConfigurationManager);
+        Assert.assertNotNull(gerConfigurationManager);
 
         String sheetFile = "file://" + System.getProperty("user.dir") + "/src/test/resources/GER.test.xlsx";
 
@@ -66,7 +73,6 @@ public class PullTest {
         System.out.println("gerConfigurationManager: "+gerConfigurationManager);
 
         doReturn(gerConfiguration).when(gerConfigurationManager).getConfiguration();
-        when(gerConfigurationManager.getConfiguration()).thenReturn(gerConfiguration);
 
         Pull pull = new Pull(engine, registerManager);
         pull.run();

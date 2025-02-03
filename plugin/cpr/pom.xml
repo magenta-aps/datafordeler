@@ -29,6 +29,8 @@
     </repositories>
 
     <dependencies>
+
+        <!--Magenta's specific dependencies -->
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>datafordeler-core</artifactId>
@@ -42,6 +44,12 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <!-- SQL server connection -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>${com.microsoft.sqlserver.version}</version>
+        </dependency>
 
         <!-- OpenSAML library -->
         <!-- https://mvnrepository.com/artifact/org.opensaml/opensaml -->
@@ -107,6 +115,11 @@
                     <outputDirectory>../jar</outputDirectory>
                 </configuration>
                 <version>3.1.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
             </plugin>
         </plugins>
     </build>

@@ -89,7 +89,7 @@ public class PullTest extends TestBase {
      * @throws URISyntaxException
      */
     private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
-        InputStream testData1 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST");
+        InputStream testData1 = CprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST");
         LabeledSequenceInputStream labeledInputStream = new LabeledSequenceInputStream("GLBASETEST", new ByteArrayInputStream("GLBASETEST".getBytes()), "GLBASETEST", testData1);
         ImportInputStream inputstream = new ImportInputStream(labeledInputStream);
         personEntityManager.parseData(inputstream, importMetadata);
