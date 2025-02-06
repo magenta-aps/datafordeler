@@ -15,8 +15,8 @@ import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +31,7 @@ public class TestGenericFullAdressJoin extends GeoTest {
     private ObjectMapper objectMapper;
 
 
-    @Before
+    @BeforeEach
     public void initialize() throws Exception {
         this.loadAll();
         this.loadCprAddress();

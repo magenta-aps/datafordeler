@@ -9,8 +9,8 @@ import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +34,7 @@ public class SameAddressTest extends TestBase {
 
     HashSet<Entity> createdEntities = new HashSet<>();
 
-    @Before
+    @BeforeEach
     public void load() throws IOException, DataFordelerException {
         this.loadAllGeoAdress(sessionManager);
     }

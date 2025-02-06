@@ -35,7 +35,7 @@ import dk.magenta.datafordeler.ger.data.unit.UnitEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -122,7 +122,7 @@ public abstract class TestBase {
     }
 
 
-    @After
+    @AfterEach
     public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {

@@ -336,7 +336,7 @@ public class AdresseServiceTest {
     }
 
 
-    @Before
+    @BeforeEach
     public void load() throws IOException, DataFordelerException {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
@@ -353,7 +353,7 @@ public class AdresseServiceTest {
         }
     }
 
-    @After
+    @AfterEach
     public void unload() {
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();

@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.core;
 
-import dk.magenta.datafordeler.core.testutil.OrderedRunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;

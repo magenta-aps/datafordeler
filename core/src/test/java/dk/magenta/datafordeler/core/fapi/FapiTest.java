@@ -11,7 +11,6 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.testutil.Order;
-import dk.magenta.datafordeler.core.testutil.OrderedRunner;
 import dk.magenta.datafordeler.core.testutil.TestUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.user.UserProfile;

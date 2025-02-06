@@ -11,7 +11,10 @@ import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.plugindemo.DemoPlugin;
 import dk.magenta.datafordeler.plugindemo.DemoRegisterManager;
 import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -44,9 +47,6 @@ public class RegisterManagerTest extends PluginTestBase {
     @Autowired
     private DemoPlugin plugin;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     private class OtherEntity extends Entity {
         @Override
         protected Registration createEmptyRegistration() {
@@ -54,13 +54,13 @@ public class RegisterManagerTest extends PluginTestBase {
         }
     }
 
-    @Before
+    @BeforeEach
     public void before() {
         DemoRegisterManager registerManager = (DemoRegisterManager) this.plugin.getRegisterManager();
         registerManager.setPort(this.port);
     }
 
-    @After
+    @AfterEach
     public void after() {
         DemoRegisterManager registerManager = (DemoRegisterManager) this.plugin.getRegisterManager();
         registerManager.setPort(Application.servicePort);

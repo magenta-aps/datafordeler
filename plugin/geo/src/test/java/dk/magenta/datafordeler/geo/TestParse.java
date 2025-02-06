@@ -13,8 +13,8 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import org.hibernate.Session;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +45,7 @@ public class TestParse extends GeoTest {
         return this.lookup("/geo/" + type + "/1/rest/" + id);
     }
 
-    @Before
+    @BeforeEach
     public void initialize() throws Exception {
         this.loadAll();
         this.loadCprAddress();

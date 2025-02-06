@@ -13,11 +13,11 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runners.MethodSorters;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -60,7 +60,7 @@ public class CprLookupTest extends TestBase {
     @MockitoSpyBean
     private DafoUserManager dafoUserManager;
 
-    @After
+    @AfterEach
     public void cleanup() {
         this.cleanupPersonData(sessionManager);
         this.cleanupGeoData(sessionManager);
@@ -108,7 +108,7 @@ public class CprLookupTest extends TestBase {
     }
 
 
-    @Before
+    @BeforeEach
     public void load() throws Exception {
         this.loadAllGeoAdress(sessionManager);
         this.loadPerson("/person.txt");

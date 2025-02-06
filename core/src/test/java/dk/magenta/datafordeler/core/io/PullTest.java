@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.plugin.TaskListener;
 import dk.magenta.datafordeler.core.testutil.Order;
-import dk.magenta.datafordeler.core.testutil.OrderedRunner;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.quartz.*;
