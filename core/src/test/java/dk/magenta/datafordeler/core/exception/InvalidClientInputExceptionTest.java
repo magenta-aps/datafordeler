@@ -1,14 +1,11 @@
 package dk.magenta.datafordeler.core.exception;
 
 import dk.magenta.datafordeler.core.Application;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 public class InvalidClientInputExceptionTest {
 
@@ -17,8 +14,8 @@ public class InvalidClientInputExceptionTest {
         String message = "invalid input";
         InvalidClientInputException exception = new InvalidClientInputException(message);
 
-        Assert.assertEquals(message, exception.getMessage());
-        Assert.assertEquals("datafordeler.http.invalid-client-input", exception.getCode());
+        Assertions.assertEquals(message, exception.getMessage());
+        Assertions.assertEquals("datafordeler.http.invalid-client-input", exception.getCode());
     }
 
 }

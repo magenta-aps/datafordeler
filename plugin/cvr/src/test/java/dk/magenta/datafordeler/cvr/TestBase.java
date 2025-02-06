@@ -11,7 +11,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Table;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -55,7 +55,7 @@ public abstract class TestBase {
     }
 
 
-    @After
+    @AfterEach
     public void cleanup() {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             for (CompanyRecord companyRecord : QueryManager.getAllEntities(session, CompanyRecord.class)) {

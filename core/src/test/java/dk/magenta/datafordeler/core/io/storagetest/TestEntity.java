@@ -1,10 +1,10 @@
 package dk.magenta.datafordeler.core.io.storagetest;
 
 import dk.magenta.datafordeler.core.database.Entity;
+import jakarta.persistence.Table;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-import jakarta.persistence.Table;
 import java.util.UUID;
 
 @jakarta.persistence.Entity

@@ -3,22 +3,17 @@ package dk.magenta.datafordeler.core.fapi;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Entity;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 public class QueryTest {
 
@@ -77,60 +72,59 @@ public class QueryTest {
         }
     }
 
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
     @Test
     public void testPagesize() throws Exception {
         Query query = new QueryImpl(1, 10);
-        Assert.assertEquals(10, query.getPageSize());
+        Assertions.assertEquals(10, query.getPageSize());
         query.setPageSize(20);
-        Assert.assertEquals(20, query.getPageSize());
+        Assertions.assertEquals(20, query.getPageSize());
         query.setPageSize("30");
-        Assert.assertEquals(30, query.getPageSize());
+        Assertions.assertEquals(30, query.getPageSize());
         query.setPageSize(null);
-        Assert.assertEquals(30, query.getPageSize());
+        Assertions.assertEquals(30, query.getPageSize());
     }
 
     @Test
     public void testPagesizeFail() throws Exception {
-        exception.expect(IllegalArgumentException.class);
-        Query query = new QueryImpl(1, 0);
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Query query = new QueryImpl(1, 0);
+        });
     }
 
     @Test
     public void testPage() throws Exception {
         Query query = new QueryImpl(1, 10);
-        Assert.assertEquals(1, query.getPage());
+        Assertions.assertEquals(1, query.getPage());
         query.setPage(2);
-        Assert.assertEquals(2, query.getPage());
+        Assertions.assertEquals(2, query.getPage());
         query.setPage("3");
-        Assert.assertEquals(3, query.getPage());
+        Assertions.assertEquals(3, query.getPage());
         query.setPage(null);
-        Assert.assertEquals(3, query.getPage());
+        Assertions.assertEquals(3, query.getPage());
     }
 
     @Test
     public void testPageFail() throws Exception {
-        exception.expect(IllegalArgumentException.class);
-        Query query = new QueryImpl(-1, 1);
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Query query = new QueryImpl(-1, 1);
+        });
     }
 
     @Test
     public void testOffset() {
         Query query = new QueryImpl(2, 10);
-        Assert.assertEquals(10, query.getOffset());
+        Assertions.assertEquals(10, query.getOffset());
     }
 
     @Test
     public void testCount() {
         Query query = new QueryImpl(1, 10);
-        Assert.assertEquals(10, query.getCount());
+        Assertions.assertEquals(10, query.getCount());
     }
 
     private HashMap<String, String> dateTimeTests = new HashMap<>();
 
-    @Before
+    @BeforeEach
     public void populateDateTimeTests() {
         this.dateTimeTests.put("2017-05-05T13:30:00+01:00", "2017-05-05T13:30:00+01:00");
         this.dateTimeTests.put("2017-05-05+01:00", "2017-05-05T00:00:00+01:00");
@@ -146,15 +140,15 @@ public class QueryTest {
         Query query = new QueryImpl();
         OffsetDateTime time = OffsetDateTime.now();
         query.setRegistrationFromBefore(time);
-        Assert.assertEquals(time, query.getRegistrationFromBefore());
+        Assertions.assertEquals(time, query.getRegistrationFromBefore());
         query.setRegistrationFromAfter(time);
-        Assert.assertEquals(time, query.getRegistrationFromAfter());
+        Assertions.assertEquals(time, query.getRegistrationFromAfter());
 
         for (String testDateTime : this.dateTimeTests.keySet()) {
             query.setRegistrationFromBefore(testDateTime);
-            Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationFromBefore());
+            Assertions.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationFromBefore());
             query.setRegistrationFromAfter(testDateTime);
-            Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationFromAfter());
+            Assertions.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationFromAfter());
         }
     }
 
@@ -163,11 +157,11 @@ public class QueryTest {
         Query query = new QueryImpl();
         OffsetDateTime time = OffsetDateTime.now();
         query.setRegistrationToBefore(time);
-        Assert.assertEquals(time, query.getRegistrationToBefore());
+        Assertions.assertEquals(time, query.getRegistrationToBefore());
 
         for (String testDateTime : this.dateTimeTests.keySet()) {
             query.setRegistrationToBefore(testDateTime);
-            Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationToBefore());
+            Assertions.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getRegistrationToBefore());
         }
     }
 
@@ -176,15 +170,15 @@ public class QueryTest {
         Query query = new QueryImpl();
         OffsetDateTime time = OffsetDateTime.now();
         query.setEffectFromBefore(time);
-        Assert.assertEquals(time, query.getEffectFromBefore());
+        Assertions.assertEquals(time, query.getEffectFromBefore());
         query.setEffectFromAfter(time);
-        Assert.assertEquals(time, query.getEffectFromAfter());
+        Assertions.assertEquals(time, query.getEffectFromAfter());
 
         for (String testDateTime : this.dateTimeTests.keySet()) {
             query.setEffectFromBefore(testDateTime);
-            Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectFromBefore());
+            Assertions.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectFromBefore());
             query.setEffectFromAfter(testDateTime);
-            Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectFromAfter());
+            Assertions.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectFromAfter());
         }
     }
 
@@ -193,22 +187,22 @@ public class QueryTest {
         Query query = new QueryImpl();
         OffsetDateTime time = OffsetDateTime.now();
         query.setEffectToBefore(time);
-        Assert.assertEquals(time, query.getEffectToBefore());
+        Assertions.assertEquals(time, query.getEffectToBefore());
         query.setEffectToAfter(time);
-        Assert.assertEquals(time, query.getEffectToAfter());
+        Assertions.assertEquals(time, query.getEffectToAfter());
 
         for (String testDateTime : this.dateTimeTests.keySet()) {
             query.setEffectToBefore(testDateTime);
-            Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectToBefore());
+            Assertions.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectToBefore());
             query.setEffectToAfter(testDateTime);
-            Assert.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectToAfter());
+            Assertions.assertEquals(OffsetDateTime.parse(this.dateTimeTests.get(testDateTime)), query.getEffectToAfter());
         }
     }
 
     @Test
     public void testGetSearchParameters() {
         Query query = new QueryImpl();
-        Assert.assertNotNull(query.getSearchParameters());
-        Assert.assertEquals(0, query.getSearchParameters().size());
+        Assertions.assertNotNull(query.getSearchParameters());
+        Assertions.assertEquals(0, query.getSearchParameters().size());
     }
 }

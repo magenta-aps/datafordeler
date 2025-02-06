@@ -19,15 +19,12 @@ import dk.magenta.datafordeler.ger.data.unit.UnitEntityManager;
 import dk.magenta.datafordeler.ger.data.unit.UnitQuery;
 import dk.magenta.datafordeler.ger.parser.SpreadsheetConverter;
 import org.hibernate.Session;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.test.context.junit4.SpringRunner;
-import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -35,7 +32,7 @@ import java.util.*;
 
 import static org.mockito.Mockito.doReturn;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PullTest {
@@ -58,7 +55,7 @@ public class PullTest {
         System.out.println("registerManager: "+registerManager);
         System.out.println("engine: "+engine);
         System.out.println("gerConfigurationManager: "+gerConfigurationManager);
-        Assert.assertNotNull(gerConfigurationManager);
+        Assertions.assertNotNull(gerConfigurationManager);
 
         String sheetFile = "file://" + System.getProperty("user.dir") + "/src/test/resources/GER.test.xlsx";
 
@@ -93,13 +90,16 @@ public class PullTest {
                 CompanyQuery companyQuery = new CompanyQuery();
                 companyQuery.setGerNr(gerNr);
                 List<CompanyEntity> companyEntities = QueryManager.getAllEntities(session, companyQuery, CompanyEntity.class);
-                Assert.assertEquals(1, companyEntities.size());
+                Assertions.assertEquals(1, companyEntities.size());
                 CompanyEntity companyEntity = companyEntities.get(0);
                 Map<String, Object> companyMap = companyEntity.asMap();
                 Map<String, Object> backConverted = convertToRawData(companyMap, CompanyEntityManager.getKeyMappingEntityToRaw());
 
                 for (String key : rawData.keySet()) {
-                    Assert.assertTrue(key + " expected", backConverted.containsKey(key));
+                    Assertions.assertTrue(
+                            backConverted.containsKey(key),
+                            key + " expected"
+                    );
                     Object rawValue = rawData.get(key);
                     Object backConvertedValue = backConverted.get(key);
                     if (rawValue instanceof Date) {
@@ -109,7 +109,7 @@ public class PullTest {
                         Date backConvertedDate = (Date) backConvertedValue;
                         backConvertedValue = String.format("%04d-%02d-%02d", backConvertedDate.getYear() + 1900, backConvertedDate.getMonth() + 1, backConvertedDate.getDate());
                     }
-                    //Assert.assertEquals(String.valueOf(rawValue), String.valueOf(backConvertedValue));
+                    //Assertions.assertEquals(String.valueOf(rawValue), String.valueOf(backConvertedValue));
                     if (!Objects.equals(String.valueOf(rawValue), String.valueOf(backConvertedValue))) {
                         Object c = companyMap.get(CompanyEntityManager.getKeyMappingRawToEntity().get(key));
                         System.out.println(
@@ -131,14 +131,17 @@ public class PullTest {
                 UnitQuery unitQuery = new UnitQuery();
                 unitQuery.setDeid(deid);
                 List<UnitEntity> unitEntities = QueryManager.getAllEntities(session, unitQuery, UnitEntity.class);
-                Assert.assertEquals(1, unitEntities.size());
+                Assertions.assertEquals(1, unitEntities.size());
                 UnitEntity unitEntity = unitEntities.get(0);
-                Assert.assertEquals(deid, unitEntity.getDeid());
+                Assertions.assertEquals(deid, unitEntity.getDeid());
                 Map<String, Object> unitMap = unitEntity.asMap();
                 Map<String, Object> backConverted = convertToRawData(unitMap, UnitEntityManager.getKeyMappingEntityToRaw());
 
                 for (String key : rawData.keySet()) {
-                    Assert.assertTrue(key + " expected", backConverted.containsKey(key));
+                    Assertions.assertTrue(
+                            backConverted.containsKey(key),
+                            key + " expected"
+                    );
                     Object rawValue = rawData.get(key);
                     Object backConvertedValue = backConverted.get(key);
                     if (rawValue instanceof Date) {
@@ -148,7 +151,7 @@ public class PullTest {
                         Date backConvertedDate = (Date) backConvertedValue;
                         backConvertedValue = String.format("%04d-%02d-%02d", backConvertedDate.getYear() + 1900, backConvertedDate.getMonth() + 1, backConvertedDate.getDate());
                     }
-                    //Assert.assertEquals(String.valueOf(rawValue), String.valueOf(backConvertedValue));
+                    //Assertions.assertEquals(String.valueOf(rawValue), String.valueOf(backConvertedValue));
                     if (!Objects.equals(String.valueOf(rawValue), String.valueOf(backConvertedValue))) {
                         Object c = unitMap.get(UnitEntityManager.getKeyMappingRawToEntity().get(key));
                         System.out.println(
@@ -171,15 +174,18 @@ public class PullTest {
                 responsibleQuery.setGerNr(gerNr);
                 responsibleQuery.setCvrGuid(respId);
                 List<ResponsibleEntity> responsibleEntities = QueryManager.getAllEntities(session, responsibleQuery, ResponsibleEntity.class);
-                Assert.assertEquals(1, responsibleEntities.size());
+                Assertions.assertEquals(1, responsibleEntities.size());
                 ResponsibleEntity respEntity = responsibleEntities.get(0);
-                Assert.assertEquals(Integer.valueOf(gerNr), respEntity.getGerNumber());
-                Assert.assertEquals(respId, respEntity.getCvrParticipantGuid());
+                Assertions.assertEquals(Integer.valueOf(gerNr), respEntity.getGerNumber());
+                Assertions.assertEquals(respId, respEntity.getCvrParticipantGuid());
                 Map<String, Object> respMap = respEntity.asMap();
                 Map<String, Object> backConverted = convertToRawData(respMap, ResponsibleEntityManager.getKeyMappingEntityToRaw());
 
                 for (String key : rawData.keySet()) {
-                    Assert.assertTrue(key + " expected", backConverted.containsKey(key));
+                    Assertions.assertTrue(
+                            backConverted.containsKey(key),
+                            key + " expected"
+                    );
                     Object rawValue = rawData.get(key);
                     Object backConvertedValue = backConverted.get(key);
                     if (rawValue instanceof Date) {
@@ -189,7 +195,7 @@ public class PullTest {
                         Date backConvertedDate = (Date) backConvertedValue;
                         backConvertedValue = String.format("%04d-%02d-%02d", backConvertedDate.getYear() + 1900, backConvertedDate.getMonth() + 1, backConvertedDate.getDate());
                     }
-                    //Assert.assertEquals(String.valueOf(rawValue), String.valueOf(backConvertedValue));
+                    //Assertions.assertEquals(String.valueOf(rawValue), String.valueOf(backConvertedValue));
                     if (!Objects.equals(String.valueOf(rawValue), String.valueOf(backConvertedValue))) {
                         //Object c = respMap.get(ResponsibleEntityManager.getKeyMappingRawToEntity().get(key));
                         Object c = backConvertedValue;

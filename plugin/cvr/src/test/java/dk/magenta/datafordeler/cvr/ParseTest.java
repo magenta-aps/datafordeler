@@ -16,14 +16,10 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,10 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ParseTest extends TestBase {
 
     private static final HashMap<String, String> schemaMap = new HashMap<>();
@@ -58,7 +53,7 @@ public class ParseTest extends TestBase {
             InputStream input = ParseTest.class.getResourceAsStream("/company_in.json");
             JsonNode root = objectMapper.readTree(input);
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
+            Assertions.assertTrue(itemList.isArray());
             for (JsonNode item : itemList) {
                 String type = item.get("_type").asText();
                 CompanyEntityManager entityManager = (CompanyEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
@@ -93,7 +88,7 @@ public class ParseTest extends TestBase {
 
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
 
-            Assert.assertEquals(4, companyList.size());
+            Assertions.assertEquals(4, companyList.size());
         }
     }
 
@@ -108,7 +103,7 @@ public class ParseTest extends TestBase {
             InputStream input = ParseTest.class.getResourceAsStream("/unit.json");
             JsonNode root = objectMapper.readTree(input);
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
+            Assertions.assertTrue(itemList.isArray());
             for (JsonNode item : itemList) {
                 String type = item.get("_type").asText();
                 CompanyUnitEntityManager entityManager = (CompanyUnitEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
@@ -138,7 +133,7 @@ public class ParseTest extends TestBase {
             InputStream input = ParseTest.class.getResourceAsStream("/unit.json");
             JsonNode root = objectMapper.readTree(input);
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
+            Assertions.assertTrue(itemList.isArray());
             for (JsonNode item : itemList) {
                 String type = item.get("_type").asText();
                 CompanyUnitEntityManager entityManager = (CompanyUnitEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
@@ -165,7 +160,7 @@ public class ParseTest extends TestBase {
             query.setEffectAt(time);
             query.applyFilters(session);
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            Assert.assertEquals(4, companyList.size());
+            Assertions.assertEquals(4, companyList.size());
         }
 
         //Load companies from GLBASETEST.json again to lalidate error-handling
@@ -180,7 +175,7 @@ public class ParseTest extends TestBase {
             query.setEffectAt(time);
             query.applyFilters(session);
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            Assert.assertEquals(4, companyList.size());
+            Assertions.assertEquals(4, companyList.size());
         }
 
 
@@ -199,7 +194,7 @@ public class ParseTest extends TestBase {
             TypedQuery<CompanyUnitMetadataRecord> unit = session.createQuery(unitc);
             List<Integer> unitCompanyList = unit.getResultList().stream().map(s -> s.getNewestCvrRelation()).sorted().collect(Collectors.toList());
 
-            Assert.assertEquals(unitCompanyList, subscribedCompanyList);
+            Assertions.assertEquals(unitCompanyList, subscribedCompanyList);
         }
     }
 
@@ -213,8 +208,8 @@ public class ParseTest extends TestBase {
             InputStream input = ParseTest.class.getResourceAsStream("/person.json");
             JsonNode root = objectMapper.readTree(input);
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
-            Assert.assertEquals(1, itemList.size());
+            Assertions.assertTrue(itemList.isArray());
+            Assertions.assertEquals(1, itemList.size());
             for (JsonNode item : itemList) {
                 String type = item.get("_type").asText();
                 ParticipantEntityManager entityManager = (ParticipantEntityManager) this.registerManager.getEntityManager(schemaMap.get(type));

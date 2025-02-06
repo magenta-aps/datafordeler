@@ -1,10 +1,9 @@
 package dk.magenta.datafordeler.core.database;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-
-import jakarta.persistence.Entity;
 
 @Entity
 @Table(name = "dump_data")

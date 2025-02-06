@@ -5,11 +5,10 @@ import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.statistik.services.StatisticsService;
 import dk.magenta.datafordeler.statistik.services.VoteListDataService;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +29,7 @@ import java.io.IOException;
  * 0011311111111 - Er født 2011-11-13 og har aktiv bopæl i grønland
  * 0011311111112 - Er født 2011-11-13 og har aktiv bopæl i danmark
  */
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class VoteListDataServiceTest extends TestBase {
@@ -39,7 +37,7 @@ public class VoteListDataServiceTest extends TestBase {
     @Autowired
     private VoteListDataService voteListDataService;
 
-    @Before
+    @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
         testsUtils.loadPersonData("voter.txt");
@@ -47,7 +45,7 @@ public class VoteListDataServiceTest extends TestBase {
         voteListDataService.setUseTimeintervallimit(false);
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         testsUtils.deleteAll();
     }
@@ -57,7 +55,7 @@ public class VoteListDataServiceTest extends TestBase {
         voteListDataService.setWriteToLocalFile(true);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2031-03-20&&registrationAt=2031-03-20&filterTime1=2030-11-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(403, response.getStatusCodeValue());
+        Assertions.assertEquals(403, response.getStatusCodeValue());
     }
 
     @Test
@@ -71,16 +69,16 @@ public class VoteListDataServiceTest extends TestBase {
 
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2029-11-11&&registrationAt=2029-11-11&filterTime1=2029-11-11", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
         String[] statusFiles = new File(StatisticsService.PATH_FILE).list((dir, name) -> name.startsWith(StatisticsService.ServiceName.VOTE.getIdentifier()));
-        Assert.assertEquals(1, statusFiles.length);
+        Assertions.assertEquals(1, statusFiles.length);
 
         FileInputStream fileInputStream = new FileInputStream(StatisticsService.PATH_FILE + File.separator + statusFiles[0]);
         String contents = InputStreamReader.readInputStream(
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(2, this.csvToJson(contents.trim()).size());
+        Assertions.assertEquals(2, this.csvToJson(contents.trim()).size());
     }
 
     @Test
@@ -94,16 +92,16 @@ public class VoteListDataServiceTest extends TestBase {
 
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2029-11-12&&registrationAt=2029-11-12&filterTime1=2029-11-12", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
         String[] statusFiles = new File(StatisticsService.PATH_FILE).list((dir, name) -> name.startsWith(StatisticsService.ServiceName.VOTE.getIdentifier()));
-        Assert.assertEquals(1, statusFiles.length);
+        Assertions.assertEquals(1, statusFiles.length);
 
         FileInputStream fileInputStream = new FileInputStream(StatisticsService.PATH_FILE + File.separator + statusFiles[0]);
         String contents = InputStreamReader.readInputStream(
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(3, this.csvToJson(contents.trim()).size());
+        Assertions.assertEquals(3, this.csvToJson(contents.trim()).size());
     }
 
     @Test
@@ -117,16 +115,16 @@ public class VoteListDataServiceTest extends TestBase {
 
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2029-11-13&&registrationAt=2029-11-13&filterTime1=2029-11-13", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
         String[] statusFiles = new File(StatisticsService.PATH_FILE).list((dir, name) -> name.startsWith(StatisticsService.ServiceName.VOTE.getIdentifier()));
-        Assert.assertEquals(1, statusFiles.length);
+        Assertions.assertEquals(1, statusFiles.length);
 
         FileInputStream fileInputStream = new FileInputStream(StatisticsService.PATH_FILE + File.separator + statusFiles[0]);
         String contents = InputStreamReader.readInputStream(
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(4, this.csvToJson(contents.trim()).size());
+        Assertions.assertEquals(4, this.csvToJson(contents.trim()).size());
     }
 
 
@@ -141,16 +139,16 @@ public class VoteListDataServiceTest extends TestBase {
 
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2031-03-20&&registrationAt=2031-03-20&filterTime1=2030-11-01&municipalityFilter=956", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
         String[] statusFiles = new File(StatisticsService.PATH_FILE).list((dir, name) -> name.startsWith(StatisticsService.ServiceName.VOTE.getIdentifier()));
-        Assert.assertEquals(1, statusFiles.length);
+        Assertions.assertEquals(1, statusFiles.length);
 
         FileInputStream fileInputStream = new FileInputStream(StatisticsService.PATH_FILE + File.separator + statusFiles[0]);
         String contents = InputStreamReader.readInputStream(
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(3, this.csvToJson(contents.trim()).size());
+        Assertions.assertEquals(3, this.csvToJson(contents.trim()).size());
     }
 
     @Test
@@ -163,16 +161,16 @@ public class VoteListDataServiceTest extends TestBase {
         testsUtils.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2031-03-20&&registrationAt=2031-03-20&filterTime1=2030-11-01&municipalityFilter=957", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
         String[] statusFiles = new File(StatisticsService.PATH_FILE).list((dir, name) -> name.startsWith(StatisticsService.ServiceName.VOTE.getIdentifier()));
-        Assert.assertEquals(1, statusFiles.length);
+        Assertions.assertEquals(1, statusFiles.length);
 
         FileInputStream fileInputStream = new FileInputStream(StatisticsService.PATH_FILE + File.separator + statusFiles[0]);
         String contents = InputStreamReader.readInputStream(
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(1, this.csvToJson(contents.trim()).size());
+        Assertions.assertEquals(1, this.csvToJson(contents.trim()).size());
     }
 
     @Test
@@ -186,15 +184,15 @@ public class VoteListDataServiceTest extends TestBase {
 
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/vote_list_data/?effectDate=2031-03-20&&registrationAt=2031-03-20&filterTime1=2031-01-18", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
         String[] statusFiles = new File(StatisticsService.PATH_FILE).list((dir, name) -> name.startsWith(StatisticsService.ServiceName.VOTE.getIdentifier()));
-        Assert.assertEquals(1, statusFiles.length);
+        Assertions.assertEquals(1, statusFiles.length);
 
         FileInputStream fileInputStream = new FileInputStream(StatisticsService.PATH_FILE + File.separator + statusFiles[0]);
         String contents = InputStreamReader.readInputStream(
                 fileInputStream, "UTF-8"
         );
         fileInputStream.close();
-        Assert.assertEquals(4, this.csvToJson(contents.trim()).size());
+        Assertions.assertEquals(4, this.csvToJson(contents.trim()).size());
     }
 }

@@ -36,7 +36,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.After;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.stereotype.Component;
@@ -188,7 +188,7 @@ public abstract class TestBase {
             JsonNode root = objectMapper.readTree(testData);
             testData.close();
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
+            Assertions.assertTrue(itemList.isArray());
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
 

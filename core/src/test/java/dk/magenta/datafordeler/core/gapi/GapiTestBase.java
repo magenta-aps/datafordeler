@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 
-// @RunWith(SpringRunner.class)
+// 
 public abstract class GapiTestBase {
 
     @Autowired

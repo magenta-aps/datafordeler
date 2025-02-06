@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.core.exception;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

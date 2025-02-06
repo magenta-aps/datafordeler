@@ -26,10 +26,10 @@ import dk.magenta.datafordeler.gladdrreg.data.road.RoadRegistration;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.After;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -43,7 +43,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AdresseServiceTest {
@@ -73,7 +73,7 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/adresse/lokalitet/?kommune=1234",
@@ -81,7 +81,7 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/adresse/lokalitet/?kommune=955",
@@ -89,8 +89,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 objectMapper.readTree("[{\"uuid\":\"4d9cd2a0-89f1-4acc-a259-4fd139006d87\",\"navn\":\"Paamiut\",\"forkortelse\":\"PAA\"}]").equals(
                         objectMapper.readTree(response.getBody())
                 )
@@ -106,7 +106,7 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/adresse/vej/?lokalitet=invalid-uuid",
@@ -114,7 +114,7 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/adresse/vej/?lokalitet=4d9cd2a0-89f1-4acc-a259-4fd139006d87",
@@ -122,8 +122,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[{\"uuid\":\"e4dc6c09-baae-40b1-8696-57771b2f7a81\",\"vejkode\":1,\"navn\":\"Aadarujuup Aqquserna\",\"forkortet_navn\":\"Aadarujuup Aqq.\",\"andet_navn\":null,\"cpr_navn\":null}]").equals(
                         objectMapper.readTree(response.getBody())
@@ -140,7 +140,7 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/adresse/hus/?vej=e4dc6c09-baae-40b1-8696-57771b2f7a81",
@@ -148,8 +148,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[{\"husnummer\":\"05\",\"b_nummer\":\"293\",\"b_kaldenavn\":\"testhus\"}]").equals(
                         objectMapper.readTree(response.getBody())
@@ -168,7 +168,7 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/adresse/adresse/?vej=e4dc6c09-baae-40b1-8696-57771b2f7a81",
@@ -176,8 +176,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[" +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}," +
@@ -199,7 +199,7 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/adresse/adresse/?vej=e4dc6c09-baae-40b1-8696-57771b2f7a81&husnr=5",
@@ -207,8 +207,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[" +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}," +
@@ -230,8 +230,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[]").equals(
                         objectMapper.readTree(response.getBody())
@@ -244,8 +244,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[" +
                         "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"etage\":\"1\",\"doer\":null}," +
@@ -267,8 +267,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree("[]").equals(
                         objectMapper.readTree(response.getBody())
@@ -286,7 +286,7 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/adresse/adresseoplysninger/?adresse=01234567-89ab-cdef-0123-456789abcdef",
@@ -294,8 +294,8 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree("{}").equals(
                         objectMapper.readTree(response.getBody())
@@ -308,12 +308,12 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         String expected1 = "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3a\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"vej_uuid\":\"e4dc6c09-baae-40b1-8696-57771b2f7a81\",\"vejkode\":1,\"vejnavn\":\"Aadarujuup Aqquserna\",\"lokalitet\":\"4d9cd2a0-89f1-4acc-a259-4fd139006d87\",\"lokalitetsnavn\":\"Paamiut\",\"kommunekode\":955,\"etage\":\"1\",\"doer\":null,\"bolig\":null}";
         String expected2 = "{\"uuid\":\"6921fbb1-ddd7-4c7c-bb98-bbf63ace6a3b\",\"husnummer\":\"05\",\"b_nummer\":\"293\",\"vej_uuid\":\"e4dc6c09-baae-40b1-8696-57771b2f7a81\",\"vejkode\":1,\"vejnavn\":\"Aadarujuup Aqquserna\",\"lokalitet\":\"4d9cd2a0-89f1-4acc-a259-4fd139006d87\",\"lokalitetsnavn\":\"Paamiut\",\"kommunekode\":955,\"etage\":\"2\",\"doer\":null,\"bolig\":true}";
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree(expected1).equals(
                         objectMapper.readTree(response.getBody())
@@ -326,9 +326,9 @@ public class AdresseServiceTest {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        Assert.assertTrue(
+        Assertions.assertTrue(
                 "Non-matching response " + response.getBody(),
                 objectMapper.readTree(expected2).equals(
                         objectMapper.readTree(response.getBody())

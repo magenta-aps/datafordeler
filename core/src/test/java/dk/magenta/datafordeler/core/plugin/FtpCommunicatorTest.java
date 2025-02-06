@@ -12,13 +12,11 @@ import org.apache.ftpserver.usermanager.PasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -39,7 +37,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.*;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class FtpCommunicatorTest {
@@ -241,8 +239,8 @@ public class FtpCommunicatorTest {
                     InputStream inputStream = ftpCommunicator.fetch(new URI("ftp://localhost:" + port + "/" + path));
                     String data = new Scanner(inputStream, "UTF-8").useDelimiter("\\A").next();
                     inputStream.close();
-                    Assert.assertEquals(contents, data);
-                    Assert.assertTrue(allFilesEndsWithDone());
+                    Assertions.assertEquals(contents, data);
+                    Assertions.assertTrue(allFilesEndsWithDone());
                 } finally {
                     FtpCommunicatorTest.this.stopServer();
                 }

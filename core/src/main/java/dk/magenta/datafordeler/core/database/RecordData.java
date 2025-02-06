@@ -1,13 +1,10 @@
 package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.util.Equality;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.OffsetDateTime;
 import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+
+import java.time.OffsetDateTime;
 
 /**
  * Storage of how we got a piece of data into the system, ie. source, date, ...

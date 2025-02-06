@@ -1,9 +1,9 @@
 package dk.magenta.datafordeler.core.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 

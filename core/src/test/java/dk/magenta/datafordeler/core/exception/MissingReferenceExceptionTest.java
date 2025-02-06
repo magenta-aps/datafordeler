@@ -2,14 +2,11 @@ package dk.magenta.datafordeler.core.exception;
 
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.io.Event;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 public class MissingReferenceExceptionTest {
 
@@ -18,8 +15,8 @@ public class MissingReferenceExceptionTest {
         Event event = new Event();
         MissingReferenceException exception = new MissingReferenceException(event);
 
-        Assert.assertEquals(event, exception.getEvent());
-        Assert.assertEquals("datafordeler.import.missing_reference", exception.getCode());
+        Assertions.assertEquals(event, exception.getEvent());
+        Assertions.assertEquals("datafordeler.import.missing_reference", exception.getCode());
     }
 
 }

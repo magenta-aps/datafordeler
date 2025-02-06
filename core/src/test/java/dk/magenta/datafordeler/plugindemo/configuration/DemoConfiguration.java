@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.plugindemo.configuration;
 
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.plugindemo.DemoPlugin;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

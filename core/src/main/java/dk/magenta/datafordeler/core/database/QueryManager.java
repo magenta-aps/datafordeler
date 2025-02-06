@@ -3,13 +3,12 @@ package dk.magenta.datafordeler.core.database;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.NoResultException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
-
-import jakarta.persistence.FlushModeType;
-import jakarta.persistence.NoResultException;
 import org.hibernate.query.Query;
 
 import java.time.Instant;
