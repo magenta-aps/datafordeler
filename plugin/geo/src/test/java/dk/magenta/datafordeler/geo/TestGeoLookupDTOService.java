@@ -7,8 +7,8 @@ import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityQuery;
 import org.hibernate.Session;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,13 +25,11 @@ public class TestGeoLookupDTOService extends GeoTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
-    @Before
+    @BeforeEach
     public void initialize() throws Exception {
         this.loadAll();
         this.loadCprAddress();
     }
-
 
     @Test
     public void testLookupService() throws InvalidClientInputException {
