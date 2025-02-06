@@ -13,11 +13,8 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -28,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -38,10 +34,9 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class CompanyOwnersTest extends TestBase {
 
@@ -67,7 +62,7 @@ public class CompanyOwnersTest extends TestBase {
             query.setEffectAt(time);
             query.applyFilters(session);
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            Assert.assertEquals(0, companyList.size());
+            Assertions.assertEquals(0, companyList.size());
         }
         ImportMetadata importMetadata = new ImportMetadata();
 
@@ -90,7 +85,7 @@ public class CompanyOwnersTest extends TestBase {
             query.applyFilters(session);
 
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            Assert.assertEquals(1, companyList.size());
+            Assertions.assertEquals(1, companyList.size());
 
             ResponseEntity<String> response = restTemplate.exchange(
                     "/cvr/owners/"+companyList.get(0).getCvrNumberString(),
@@ -102,15 +97,15 @@ public class CompanyOwnersTest extends TestBase {
             System.out.println(response.getBody());
             ArrayNode legale = (ArrayNode) data.get("legale_ejere");
             ArrayNode reelle = (ArrayNode) data.get("reelle_ejere");
-            Assert.assertEquals(1, legale.size());
-            Assert.assertEquals(1, reelle.size());
+            Assertions.assertEquals(1, legale.size());
+            Assertions.assertEquals(1, reelle.size());
 
-            Assert.assertEquals("Morten Kjærsgaard", reelle.get(0).get("deltager").get("navne").get(0).get("navn").asText());
-            Assert.assertEquals("0.7396", reelle.get(0).get("ejerandel").get(0).get("ejerandel").asText());
+            Assertions.assertEquals("Morten Kjærsgaard", reelle.get(0).get("deltager").get("navne").get(0).get("navn").asText());
+            Assertions.assertEquals("0.7396", reelle.get(0).get("ejerandel").get(0).get("ejerandel").asText());
 
-            Assert.assertEquals("MAGENTA ApS", legale.get(0).get("deltager").get("navne").get(0).get("navn").asText());
-            Assert.assertEquals("1", legale.get(0).get("ejerandel").get(0).get("ejerandel").get("fra").asText());
-            Assert.assertEquals("1", legale.get(0).get("ejerandel").get(0).get("ejerandel").get("til").asText());
+            Assertions.assertEquals("MAGENTA ApS", legale.get(0).get("deltager").get("navne").get(0).get("navn").asText());
+            Assertions.assertEquals("1", legale.get(0).get("ejerandel").get(0).get("ejerandel").get("fra").asText());
+            Assertions.assertEquals("1", legale.get(0).get("ejerandel").get(0).get("ejerandel").get("til").asText());
         }
     }
 }

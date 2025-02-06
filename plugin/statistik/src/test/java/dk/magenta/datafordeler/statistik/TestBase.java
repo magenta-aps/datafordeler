@@ -30,9 +30,9 @@ import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.stereotype.Component;
@@ -102,7 +102,7 @@ public abstract class TestBase {
         }
     }
 
-    @After
+    @AfterEach
     public void clearPath() {
         if (this.oldPath != null && !Objects.equals(StatisticsService.PATH_FILE, this.oldPath)) {
             this.deleteFiles(StatisticsService.PATH_FILE);
@@ -116,7 +116,7 @@ public abstract class TestBase {
         try {
             tempDir = new File(path_file);
             boolean exists = tempDir.exists();
-            Assert.assertEquals(true, exists);
+            Assertions.assertEquals(true, exists);
         } catch (Exception e) {
             // if any error occurs
             e.printStackTrace();
@@ -138,8 +138,8 @@ public abstract class TestBase {
         }
     }
 
-    @Before
-    @After
+    @BeforeEach
+    @AfterEach
     public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
@@ -198,14 +198,14 @@ public abstract class TestBase {
     public void compareJSONARRAYWithIgnoredValues(String expected, String actual, String ignoreValue) throws JsonProcessingException {
         ArrayNode expectedJsonArray = (ArrayNode) objectMapper.readTree(expected);
         ArrayNode actualJsonArray = (ArrayNode) objectMapper.readTree(actual);
-        Assert.assertEquals(expectedJsonArray.size(), actualJsonArray.size());
+        Assertions.assertEquals(expectedJsonArray.size(), actualJsonArray.size());
         for (int index = 0; index < expectedJsonArray.size(); index++) {
             ((ObjectNode) expectedJsonArray.get(index)).put(ignoreValue, "*");
             ((ObjectNode) actualJsonArray.get(index)).put(ignoreValue, "*");
         }
-        Assert.assertTrue(
-                objectMapper.writeValueAsString(expectedJsonArray) + " != " + objectMapper.writeValueAsString(actualJsonArray),
-                new UnorderedJsonListComparator().compare(expectedJsonArray, actualJsonArray) == 0
+        Assertions.assertEquals(
+                0, new UnorderedJsonListComparator().compare(expectedJsonArray, actualJsonArray),
+                objectMapper.writeValueAsString(expectedJsonArray) + " != " + objectMapper.writeValueAsString(actualJsonArray)
         );
     }
 

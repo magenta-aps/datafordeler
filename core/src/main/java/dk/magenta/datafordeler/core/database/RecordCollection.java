@@ -1,11 +1,12 @@
 package dk.magenta.datafordeler.core.database;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.Collection;
 import java.util.HashSet;
-import jakarta.persistence.Entity;
 
 /**
  * A collection of RecordData objects

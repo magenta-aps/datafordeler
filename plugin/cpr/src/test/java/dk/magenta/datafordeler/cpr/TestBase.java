@@ -27,9 +27,9 @@ import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -103,7 +103,7 @@ public abstract class TestBase {
     @Autowired
     protected PersonRecordOutputWrapper personRecordOutputWrapper;
 
-    @Before
+    @BeforeEach
     public void setupConfiguration() {
         this.configuration = ((CprConfigurationManager) this.plugin.getConfigurationManager()).getConfiguration();
         when(this.configurationManager.getConfiguration()).thenReturn(this.configuration);
@@ -116,7 +116,7 @@ public abstract class TestBase {
     @MockitoSpyBean
     private CprRegisterManager registerManager;
 
-    @Before
+    @BeforeEach
     public void setupRegisterManager() {
         this.registerManager.setProxyString(null);
     }
@@ -175,16 +175,16 @@ public abstract class TestBase {
 
     protected void assertJsonEquality(JsonNode node1, JsonNode node2, boolean ignoreArrayOrdering, boolean printDifference) {
         try {
-            Assert.assertEquals(node1.isNull(), node2.isNull());
-            Assert.assertEquals(node1.isArray(), node2.isArray());
-            Assert.assertEquals(node1.isObject(), node2.isObject());
-            Assert.assertEquals(node1.isLong(), node2.isLong());
-            Assert.assertEquals(node1.isInt(), node2.isInt());
-            Assert.assertEquals(node1.isShort(), node2.isShort());
-            Assert.assertEquals(node1.isBoolean(), node2.isBoolean());
-            Assert.assertEquals(node1.isTextual(), node2.isTextual());
+            Assertions.assertEquals(node1.isNull(), node2.isNull());
+            Assertions.assertEquals(node1.isArray(), node2.isArray());
+            Assertions.assertEquals(node1.isObject(), node2.isObject());
+            Assertions.assertEquals(node1.isLong(), node2.isLong());
+            Assertions.assertEquals(node1.isInt(), node2.isInt());
+            Assertions.assertEquals(node1.isShort(), node2.isShort());
+            Assertions.assertEquals(node1.isBoolean(), node2.isBoolean());
+            Assertions.assertEquals(node1.isTextual(), node2.isTextual());
             if (node1.isArray()) {
-                Assert.assertEquals(node1.size(), node2.size());
+                Assertions.assertEquals(node1.size(), node2.size());
                 if (ignoreArrayOrdering) {
                     for (int i = 0; i < node1.size(); i++) {
                         boolean match = false;
@@ -205,17 +205,17 @@ public abstract class TestBase {
                     }
                 }
             } else if (node1.isObject()) {
-                Assert.assertEquals(node1.size(), node2.size());
+                Assertions.assertEquals(node1.size(), node2.size());
                 Iterator<String> keys = node1.fieldNames();
                 while (keys.hasNext()) {
                     String key = keys.next();
-                    Assert.assertNotNull(node2.get(key));
+                    Assertions.assertNotNull(node2.get(key));
                     if (!ignoreKeys.contains(key)) {
                         assertJsonEquality(node1.get(key), node2.get(key), ignoreArrayOrdering, printDifference);
                     }
                 }
             } else {
-                Assert.assertEquals(node1.asText(), node2.asText());
+                Assertions.assertEquals(node1.asText(), node2.asText());
             }
         } catch (AssertionError e) {
             if (printDifference) {
@@ -277,9 +277,9 @@ public abstract class TestBase {
     }
 
     protected void assertJsonEquals(String jsonExpected, String jsonActual) throws JsonProcessingException {
-        Assert.assertTrue(
-                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual),
-                new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)) == 0
+        Assertions.assertTrue(
+                new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)) == 0,
+                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual)
         );
     }
 
@@ -294,7 +294,10 @@ public abstract class TestBase {
         this.assertJsonContains(null, jsonExpected, jsonActual);
     }
     protected void assertJsonContains(String message, JsonNode jsonExpected, JsonNode jsonActual) throws JsonProcessingException {
-        Assert.assertTrue(message, jsonContains(jsonExpected, jsonActual));
+        Assertions.assertTrue(
+                jsonContains(jsonExpected, jsonActual),
+                message
+        );
     }
     protected boolean jsonContains(JsonNode jsonExpected, JsonNode jsonActual) throws JsonProcessingException {
         if (!jsonExpected.getNodeType().equals(jsonActual.getNodeType())) {
@@ -341,7 +344,7 @@ public abstract class TestBase {
         return true;
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {

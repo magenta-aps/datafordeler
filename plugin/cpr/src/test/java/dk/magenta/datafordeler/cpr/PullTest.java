@@ -18,15 +18,11 @@ import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthPlaceDataRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -50,10 +46,9 @@ import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PullTest extends TestBase {
 
     private static SSLSocketFactory getTrustAllSSLSocketFactory() {
@@ -105,8 +100,8 @@ public class PullTest extends TestBase {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setParameter(PersonRecordQuery.FORNAVNE, "Tester");
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());
-            Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());
+            Assertions.assertEquals(1, personEntities.size());
+            Assertions.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());
         } finally {
             session.close();
         }
@@ -200,16 +195,16 @@ public class PullTest extends TestBase {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, "0101001234");
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());
+            Assertions.assertEquals(1, personEntities.size());
             PersonEntity personEntity = personEntities.get(0);
-            Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntity.getUUID());
+            Assertions.assertEquals(PersonEntity.generateUUID("0101001234"), personEntity.getUUID());
             Set<BirthPlaceDataRecord> birthPlaceDataRecords = personEntity.getBirthPlace();
-            Assert.assertEquals(1, birthPlaceDataRecords.size());
+            Assertions.assertEquals(1, birthPlaceDataRecords.size());
             BirthPlaceDataRecord birthPlaceDataRecord = birthPlaceDataRecords.iterator().next();
-            Assert.assertTrue(OffsetDateTime.parse("1991-09-23T12:00+02:00").isEqual(birthPlaceDataRecord.getRegistrationFrom()));
-            Assert.assertNull(birthPlaceDataRecord.getRegistrationTo());
-            Assert.assertEquals(9510, birthPlaceDataRecord.getAuthority());
-            Assert.assertEquals(1234, birthPlaceDataRecord.getBirthPlaceCode().intValue());
+            Assertions.assertTrue(OffsetDateTime.parse("1991-09-23T12:00+02:00").isEqual(birthPlaceDataRecord.getRegistrationFrom()));
+            Assertions.assertNull(birthPlaceDataRecord.getRegistrationTo());
+            Assertions.assertEquals(9510, birthPlaceDataRecord.getAuthority());
+            Assertions.assertEquals(1234, birthPlaceDataRecord.getBirthPlaceCode().intValue());
         } finally {
             session.close();
         }
@@ -270,7 +265,7 @@ public class PullTest extends TestBase {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             List<PersonSubscription> subscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            Assert.assertEquals(1, subscriptions.size());
+            Assertions.assertEquals(1, subscriptions.size());
         } finally {
             session.close();
         }
@@ -282,9 +277,9 @@ public class PullTest extends TestBase {
             personEntityManager.createSubscriptionFile();
             doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
             File[] subFiles = personFtp.getTempDir().listFiles();
-            Assert.assertEquals(1, subFiles.length);
+            Assertions.assertEquals(1, subFiles.length);
             String contents = FileUtils.readFileToString(subFiles[0]);
-            Assert.assertEquals("06123400OP0101001234                                                            \r\n" +
+            Assertions.assertEquals("06123400OP0101001234                                                            \r\n" +
                     "071234560101001234               ", contents);
         } finally {
             personFtp.stopServer();
@@ -302,12 +297,12 @@ public class PullTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(0, personEntities.size());//Validate that no persons is initiated in the beginning of this test
+            Assertions.assertEquals(0, personEntities.size());//Validate that no persons is initiated in the beginning of this test
         }
         pull();  // Pull 1 person from persondata
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
+            Assertions.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
 
         //Pull 39 persons from GLBASETEST
@@ -320,7 +315,7 @@ public class PullTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(52, personEntities.size());//Validate that 52 persons is now initiated
+            Assertions.assertEquals(52, personEntities.size());//Validate that 52 persons is now initiated
         }
 
         //Clean the testdata
@@ -331,7 +326,7 @@ public class PullTest extends TestBase {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             String cprs = personEntities.stream().map(p -> p.getPersonnummer()).collect(Collectors.joining(","));
-            Assert.assertEquals("Got "+cprs+" when expecting only 0101001234", 1, personEntities.size());//Validate that 1 person from the file persondata is initiated
+            Assertions.assertEquals(1, personEntities.size(), "Got "+cprs+" when expecting only 0101001234");//Validate that 1 person from the file persondata is initiated
         }
     }
 }

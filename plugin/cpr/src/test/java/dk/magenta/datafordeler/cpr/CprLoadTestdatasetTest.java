@@ -9,14 +9,10 @@ import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,10 +24,9 @@ import java.util.List;
 /**
  * Test that it is possible to load and clear data which is dedicated for demopurpose
  */
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CprLoadTestdatasetTest extends TestBase {
 
     private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
@@ -67,7 +62,7 @@ public class CprLoadTestdatasetTest extends TestBase {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(0, persons.size());
+            Assertions.assertEquals(0, persons.size());
         }
     }
 

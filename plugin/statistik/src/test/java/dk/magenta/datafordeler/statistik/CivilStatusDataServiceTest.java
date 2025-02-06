@@ -10,11 +10,10 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.statistik.services.CivilStatusDataService;
 import org.hibernate.Session;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
@@ -22,15 +21,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertNotNull;
 
 
-@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CivilStatusDataServiceTest extends TestBase {
@@ -38,7 +34,7 @@ public class CivilStatusDataServiceTest extends TestBase {
     @Autowired
     private CivilStatusDataService civilStatusDataService;
 
-    @Before
+    @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
         testsUtils.loadPersonData("marriedperson2.txt");
@@ -47,15 +43,15 @@ public class CivilStatusDataServiceTest extends TestBase {
         civilStatusDataService.setUseTimeintervallimit(false);
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         testsUtils.deleteAll();
     }
 
     private void assertJsonEquals(String jsonExpected, String jsonActual) throws JsonProcessingException {
-        Assert.assertTrue(
-                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual),
-                new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)) == 0
+        Assertions.assertEquals(
+                0, new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)),
+                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual)
         );
     }
 
@@ -71,15 +67,15 @@ public class CivilStatusDataServiceTest extends TestBase {
         PersonRecordQuery query = new PersonRecordQuery();
         query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
         List<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(session, query, PersonEntity.class).collect(Collectors.toList());
-        Assert.assertEquals(1, personEntities.size());
+        Assertions.assertEquals(1, personEntities.size());
         PersonEntity personEntity = personEntities.get(0);
-        Assert.assertEquals(5, personEntity.getCivilstatus().size());
+        Assertions.assertEquals(5, personEntity.getCivilstatus().size());
 
         query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011235");
         personEntities = QueryManager.getAllEntitiesAsStream(session, query, PersonEntity.class).collect(Collectors.toList());
-        Assert.assertEquals(1, personEntities.size());
+        Assertions.assertEquals(1, personEntities.size());
         personEntity = personEntities.get(0);
-        Assert.assertEquals(4, personEntity.getCivilstatus().size());
+        Assertions.assertEquals(4, personEntity.getCivilstatus().size());
     }
 
 
@@ -88,7 +84,7 @@ public class CivilStatusDataServiceTest extends TestBase {
         civilStatusDataService.setWriteToLocalFile(false);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/civilstate_data/?CivSt=G&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(403, response.getStatusCodeValue());
+        Assertions.assertEquals(403, response.getStatusCodeValue());
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
@@ -96,8 +92,8 @@ public class CivilStatusDataServiceTest extends TestBase {
         testsUtils.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/civilstate_data/?CivSt=G&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
-        assertNotNull("Response body", response.getBody());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertNotNull(response.getBody(), "Response body");
         String expected = "\"CivSt\";\"CivDto\";\"StatKod\";\"ProdDto\";\"Pnr\";\"AegtePnr\";\"MynKodTxt\";\"KomKod\";\"FoedMynKod\";\"FoedMynTxt\";\"FoedMynKodTxt\";\"LokNavn\";\"LokKortNavn\";\"LokKode\";\"VejKod\";\"HusNr\";\"Etage\";\"SideDoer\";\"Bnr\"\n" +
                 "\"G\";;;\"23-09-1991\";\"0101011234\";\"1111111111\";\"0\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
                 "\"G\";\"09-08-2019\";;\"09-08-2019\";\"0101011234\";\"1111111112\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
@@ -109,8 +105,8 @@ public class CivilStatusDataServiceTest extends TestBase {
                 this.csvToJsonString(response.getBody().trim()), "CivDto");
 
         response = restTemplate.exchange("/statistik/civilstate_data/?registrationAfter=2019-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
-        assertNotNull("Response body", response.getBody());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertNotNull(response.getBody(), "Response body");
         expected = "\"CivSt\";\"CivDto\";\"StatKod\";\"ProdDto\";\"Pnr\";\"AegtePnr\";\"MynKodTxt\";\"KomKod\";\"FoedMynKod\";\"FoedMynTxt\";\"FoedMynKodTxt\";\"LokNavn\";\"LokKortNavn\";\"LokKode\";\"VejKod\";\"HusNr\";\"Etage\";\"SideDoer\";\"Bnr\"\n" +
                 "\"G\";\"09-08-2019\";;\"09-08-2019\";\"0101011234\";\"1111111112\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
                 "\"G\";\"09-08-2019\";;\"03-09-2019\";\"0101011234\";\"1111111114\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"";
@@ -122,8 +118,8 @@ public class CivilStatusDataServiceTest extends TestBase {
         );
 
         response = restTemplate.exchange("/statistik/civilstate_data/?registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
-        assertNotNull("Response body", response.getBody());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertNotNull(response.getBody(), "Response body");
         expected = "\"CivSt\";\"CivDto\";\"StatKod\";\"ProdDto\";\"Pnr\";\"AegtePnr\";\"MynKodTxt\";\"KomKod\";\"FoedMynKod\";\"FoedMynTxt\";\"FoedMynKodTxt\";\"LokNavn\";\"LokKortNavn\";\"LokKode\";\"VejKod\";\"HusNr\";\"Etage\";\"SideDoer\";\"Bnr\"\n" +
                 "\"G\";;;\"23-09-1991\";\"0101011234\";\"1111111111\";\"0\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
                 "\"G\";\"09-08-2019\";;\"09-08-2019\";\"0101011234\";\"1111111112\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
@@ -149,8 +145,8 @@ public class CivilStatusDataServiceTest extends TestBase {
         testsUtils.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/civilstate_data/?pnr=0101011234&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
-        assertNotNull("Response body", response.getBody());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertNotNull(response.getBody(), "Response body");
         String expected = "\"CivSt\";\"CivDto\";\"StatKod\";\"ProdDto\";\"Pnr\";\"AegtePnr\";\"MynKodTxt\";\"KomKod\";\"FoedMynKod\";\"FoedMynTxt\";\"FoedMynKodTxt\";\"LokNavn\";\"LokKortNavn\";\"LokKode\";\"VejKod\";\"HusNr\";\"Etage\";\"SideDoer\";\"Bnr\"\n" +
                 "\"G\";;;\"23-09-1991\";\"0101011234\";\"1111111111\";\"0\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
                 "\"G\";\"09-08-2019\";;\"09-08-2019\";\"0101011234\";\"1111111112\";\"657\";\"955\";\"9504\";\"\";\"0\";;;;\"0001\";\"0005\";\"1\";\"tv\";\"1234\"\n" +
@@ -173,8 +169,8 @@ public class CivilStatusDataServiceTest extends TestBase {
         testsUtils.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/civilstate_data/?pnr=0101011235&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(200, response.getStatusCodeValue());
-        assertNotNull("Response body", response.getBody());
+        Assertions.assertEquals(200, response.getStatusCodeValue());
+        Assertions.assertNotNull(response.getBody(), "Response body");
         String expected = "\"CivSt\";\"CivDto\";\"StatKod\";\"ProdDto\";\"Pnr\";\"AegtePnr\";\"MynKodTxt\";\"KomKod\";\"FoedMynKod\";\"FoedMynTxt\";\"FoedMynKodTxt\";\"LokNavn\";\"LokKortNavn\";\"LokKode\";\"VejKod\";\"HusNr\";\"Etage\";\"SideDoer\";\"Bnr\"\n" +
                 "\"G\";\"15-03-2018\";;\"15-03-2018\";\"0101011235\";\"1111111111\";\"340\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"\n" +
                 "\"F\";\"16-12-2018\";;\"16-12-2018\";\"0101011235\";\"1111111111\";\"1350\";\"955\";\"9504\";\"\";\"0\";;;;\"0368\";\"0012\";\"\";\"\";\"\"";

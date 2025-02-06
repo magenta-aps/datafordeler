@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.util.Bitemporality;
-
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;

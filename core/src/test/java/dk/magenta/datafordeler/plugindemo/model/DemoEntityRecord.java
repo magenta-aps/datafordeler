@@ -3,13 +3,12 @@ package dk.magenta.datafordeler.plugindemo.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
-import jakarta.persistence.Entity;
-import org.hibernate.Session;
-import org.hibernate.annotations.*;
-
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
+import org.hibernate.Session;
+import org.hibernate.annotations.*;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;

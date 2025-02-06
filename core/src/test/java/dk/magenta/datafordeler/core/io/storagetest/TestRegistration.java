@@ -1,8 +1,8 @@
 package dk.magenta.datafordeler.core.io.storagetest;
 
 import dk.magenta.datafordeler.core.database.Registration;
-
 import jakarta.persistence.Table;
+
 import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAccessor;
 

@@ -2,9 +2,9 @@ package dk.magenta.datafordeler.core.dump;
 
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import jakarta.persistence.*;
 import org.springframework.http.MediaType;
 
-import jakarta.persistence.*;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 

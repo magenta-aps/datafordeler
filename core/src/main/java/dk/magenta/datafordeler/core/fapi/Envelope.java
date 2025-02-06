@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.core.fapi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.xml.bind.annotation.XmlElement;
 

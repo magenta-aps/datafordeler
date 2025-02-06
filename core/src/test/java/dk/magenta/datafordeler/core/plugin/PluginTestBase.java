@@ -1,10 +1,10 @@
 package dk.magenta.datafordeler.core.plugin;
 
 import dk.magenta.datafordeler.plugindemo.DemoPlugin;
+import jakarta.xml.bind.DatatypeConverter;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import jakarta.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

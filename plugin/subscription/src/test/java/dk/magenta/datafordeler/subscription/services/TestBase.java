@@ -11,8 +11,8 @@ import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.stereotype.Component;
@@ -40,8 +40,8 @@ public abstract class TestBase {
     @Autowired
     protected PersonEntityManager personEntityManager;
 
-    @Before
-    @After
+    @BeforeEach
+    @AfterEach
     public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {

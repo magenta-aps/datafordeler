@@ -1,10 +1,10 @@
 package dk.magenta.datafordeler.core.io.storagetest;
 
 import dk.magenta.datafordeler.core.database.DataItem;
-import org.hibernate.Session;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
+import org.hibernate.Session;
+
 import java.util.HashMap;
 import java.util.Map;
 

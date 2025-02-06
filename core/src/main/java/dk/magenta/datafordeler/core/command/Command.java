@@ -7,12 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.time.OffsetDateTime;
 

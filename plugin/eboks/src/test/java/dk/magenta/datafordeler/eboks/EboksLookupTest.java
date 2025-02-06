@@ -17,9 +17,8 @@ import dk.magenta.datafordeler.ger.GerPlugin;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +26,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -38,7 +36,7 @@ import java.util.StringJoiner;
 
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EboksLookupTest {
@@ -101,7 +99,7 @@ public class EboksLookupTest {
         JsonNode root = objectMapper.readTree(testData);
         testData.close();
         JsonNode itemList = root.get("hits").get("hits");
-        Assert.assertTrue(itemList.isArray());
+        Assertions.assertTrue(itemList.isArray());
         ImportMetadata importMetadata = new ImportMetadata();
         for (JsonNode item : itemList) {
             String source = objectMapper.writeValueAsString(item.get("_source").get("Vrvirksomhed"));
@@ -149,7 +147,7 @@ public class EboksLookupTest {
                 httpEntity,
                 String.class, "1111", "1111"
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
 
 
@@ -178,7 +176,7 @@ public class EboksLookupTest {
                 httpEntity,
                 String.class, cprs, cvrs
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
 
         response = restTemplate.exchange(
@@ -187,7 +185,7 @@ public class EboksLookupTest {
                 httpEntity,
                 String.class, cprs, cvrs
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"valid\":{\"cpr\":[],\"cvr\":[]},\"invalid\":{\"cpr\":[],\"cvr\":[]}}", response.getBody(), false);
     }
 
@@ -238,7 +236,7 @@ public class EboksLookupTest {
                 httpEntity,
                 String.class, cprs, cvrs
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
@@ -251,7 +249,7 @@ public class EboksLookupTest {
                 httpEntity,
                 String.class, cprs, cvrs
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"valid\":{\"cpr\":[\"0000000003\",\"0101001235\",\"0000000000\",\"0000000001\",\"0000000002\",\"0101011234\"],\"cvr\":[\"12345678\",\"25052943\"]},\"invalid\":{\"cpr\":[{\"nr\":\"0101001234\",\"reason\":\"NotFromGreenland\"},{\"nr\":\"0101003457\",\"reason\":\"Minor\"},{\"nr\":\"0101003456\",\"reason\":\"Dead\"},{\"nr\":\"0101011235\",\"reason\":\"NotFromGreenland\"}],\"cvr\":[{\"nr\":\"0000000007\",\"reason\":\"Missing\"},{\"nr\":\"0000000008\",\"reason\":\"Missing\"},{\"nr\":\"0000000009\",\"reason\":\"Missing\"}]}}", response.getBody(), false);
     }
 

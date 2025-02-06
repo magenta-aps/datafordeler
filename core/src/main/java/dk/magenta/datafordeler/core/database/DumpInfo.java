@@ -2,13 +2,13 @@ package dk.magenta.datafordeler.core.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.dump.DumpConfiguration;
+import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import org.apache.commons.io.Charsets;
 
-import jakarta.persistence.*;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.time.OffsetDateTime;
-import jakarta.persistence.Entity;
 
 
 @Entity

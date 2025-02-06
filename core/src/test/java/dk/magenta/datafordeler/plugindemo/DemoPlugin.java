@@ -6,10 +6,9 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.plugin.RolesDefinition;
 import dk.magenta.datafordeler.plugindemo.configuration.DemoConfigurationManager;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import jakarta.annotation.PostConstruct;
 
 @Component
 public class DemoPlugin extends Plugin {

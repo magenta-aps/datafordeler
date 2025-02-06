@@ -1,16 +1,13 @@
 package dk.magenta.datafordeler.core.util;
 
 import dk.magenta.datafordeler.core.Application;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 public class EncryptionTest {
 
@@ -21,7 +18,7 @@ public class EncryptionTest {
             keyFile.delete();
             String plaintext = "Very secret text";
             byte[] ciphertext = Encryption.encrypt(keyFile, plaintext);
-            Assert.assertEquals(plaintext, Encryption.decrypt(keyFile, ciphertext));
+            Assertions.assertEquals(plaintext, Encryption.decrypt(keyFile, ciphertext));
         } finally {
             keyFile.delete();
         }

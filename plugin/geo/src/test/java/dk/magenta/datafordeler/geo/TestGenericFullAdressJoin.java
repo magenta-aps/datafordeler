@@ -15,16 +15,14 @@ import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestGenericFullAdressJoin extends GeoTest {
@@ -114,7 +112,7 @@ SELECT *  FROM
             query.setParameter("bnr", "B-3197");
 
 
-            Assert.assertTrue(query.getResultList().size() > 0);
+            Assertions.assertTrue(query.getResultList().size() > 0);
 
             System.out.println(query.getResultList().size());
 

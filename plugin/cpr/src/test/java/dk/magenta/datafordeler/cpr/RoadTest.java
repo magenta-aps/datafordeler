@@ -17,15 +17,11 @@ import dk.magenta.datafordeler.cpr.records.road.data.RoadNameBitemporalRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,10 +32,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RoadTest extends TestBase {
 
     private void loadRoad(ImportMetadata importMetadata) throws DataFordelerException, IOException {
@@ -86,28 +81,28 @@ public class RoadTest extends TestBase {
             query.setVejkode("0004");
 
             List<RoadEntity> entities = QueryManager.getAllEntities(session, query, RoadEntity.class);
-            Assert.assertEquals(1, entities.size());
+            Assertions.assertEquals(1, entities.size());
             RoadEntity entity = entities.get(0);
 
-            Assert.assertEquals(RoadEntity.generateUUID(730, 4), entity.getUUID());
-            Assert.assertEquals(730, entity.getMunicipalityCode());
-            Assert.assertEquals(4, entity.getRoadcode());
-            Assert.assertEquals(1, entity.getName().size());
-            Assert.assertEquals(3, entity.getMemo().size());
-            Assert.assertEquals(2, entity.getPostcode().size());
-            Assert.assertEquals(0, entity.getCity().size());
+            Assertions.assertEquals(RoadEntity.generateUUID(730, 4), entity.getUUID());
+            Assertions.assertEquals(730, entity.getMunicipalityCode());
+            Assertions.assertEquals(4, entity.getRoadcode());
+            Assertions.assertEquals(1, entity.getName().size());
+            Assertions.assertEquals(3, entity.getMemo().size());
+            Assertions.assertEquals(2, entity.getPostcode().size());
+            Assertions.assertEquals(0, entity.getCity().size());
 
             RoadNameBitemporalRecord roadName = entity.getName().iterator().next();
 
-            Assert.assertTrue(Equality.equal(OffsetDateTime.parse("1900-01-01T12:00+01:00"), roadName.getEffectFrom()));
-            Assert.assertTrue(Equality.equal(OffsetDateTime.parse("2006-12-22T12:00:00+01:00"), roadName.getRegistrationFrom()));
+            Assertions.assertTrue(Equality.equal(OffsetDateTime.parse("1900-01-01T12:00+01:00"), roadName.getEffectFrom()));
+            Assertions.assertTrue(Equality.equal(OffsetDateTime.parse("2006-12-22T12:00:00+01:00"), roadName.getRegistrationFrom()));
 
             List<RoadMemoBitemporalRecord> memoIterator = entity.getMemo().stream()
                     .sorted(Comparator.comparing(RoadMemoBitemporalRecord::getNoteLine)).collect(Collectors.toList());
 
-            Assert.assertEquals("HUSNR.1 - BØRNEINSTITUTION -", memoIterator.get(0).getNoteLine());
-            Assert.assertEquals("HUSNR.2 - EGEDAL -", memoIterator.get(1).getNoteLine());
-            Assert.assertEquals("HUSNR.3 - KIRKE -", memoIterator.get(2).getNoteLine());
+            Assertions.assertEquals("HUSNR.1 - BØRNEINSTITUTION -", memoIterator.get(0).getNoteLine());
+            Assertions.assertEquals("HUSNR.2 - EGEDAL -", memoIterator.get(1).getNoteLine());
+            Assertions.assertEquals("HUSNR.3 - KIRKE -", memoIterator.get(2).getNoteLine());
 
             //Validate jsonresponse
             String jsonResponse = this.getObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(entity);
@@ -118,17 +113,17 @@ public class RoadTest extends TestBase {
             query = new RoadRecordQuery();
             query.setVejnavn("Adelgade");
             entities = QueryManager.getAllEntities(session, query, RoadEntity.class);
-            Assert.assertEquals(2, entities.size());
+            Assertions.assertEquals(2, entities.size());
 
-            Assert.assertTrue(entities.stream().anyMatch(e -> e.getUUID().equals(RoadEntity.generateUUID(730, 15))));
+            Assertions.assertTrue(entities.stream().anyMatch(e -> e.getUUID().equals(RoadEntity.generateUUID(730, 15))));
 
-            Assert.assertTrue(entities.stream().anyMatch(e -> e.getUUID().equals(RoadEntity.generateUUID(730, 16))));
+            Assertions.assertTrue(entities.stream().anyMatch(e -> e.getUUID().equals(RoadEntity.generateUUID(730, 16))));
 
             //Search for road-name with asterix
             query = new RoadRecordQuery();
             query.setVejnavn("*gade");
             entities = QueryManager.getAllEntities(session, query, RoadEntity.class);
-            Assert.assertEquals(3, entities.size());
+            Assertions.assertEquals(3, entities.size());
 
 
         } finally {
@@ -157,18 +152,18 @@ public class RoadTest extends TestBase {
         searchParameters.add("recordAfter", "2011-06-17T14:06:19.196");
 
         ResponseEntity<String> response = restSearch(searchParameters, "road");
-        Assert.assertEquals(200, response.getStatusCode().value());
+        Assertions.assertEquals(200, response.getStatusCode().value());
         JsonNode jsonBody = this.getObjectMapper().readTree(response.getBody());
         JsonNode results = jsonBody.get("results");
-        Assert.assertTrue(results.isArray());
-        Assert.assertEquals(9, results.size());
+        Assertions.assertTrue(results.isArray());
+        Assertions.assertEquals(9, results.size());
 
         for (int i = 0; i < results.size(); i++) {
             ObjectNode roadNode = (ObjectNode) results.get(i);
-            Assert.assertEquals(0, roadNode.get("navn").size());
-            Assert.assertEquals(0, roadNode.get("by").size());
-            Assert.assertEquals(0, roadNode.get("note").size());
-            Assert.assertEquals(0, roadNode.get("postnr").size());
+            Assertions.assertEquals(0, roadNode.get("navn").size());
+            Assertions.assertEquals(0, roadNode.get("by").size());
+            Assertions.assertEquals(0, roadNode.get("note").size());
+            Assertions.assertEquals(0, roadNode.get("postnr").size());
         }
 
         searchParameters = new ParameterMap();
@@ -176,16 +171,16 @@ public class RoadTest extends TestBase {
         searchParameters.add("recordAfter", "2011-06-17T14:06:19.196");
 
         response = restSearch(searchParameters, "road");
-        Assert.assertEquals(200, response.getStatusCode().value());
+        Assertions.assertEquals(200, response.getStatusCode().value());
         jsonBody = this.getObjectMapper().readTree(response.getBody());
         results = jsonBody.get("results");
-        Assert.assertTrue(results.isArray());
-        Assert.assertEquals(9, results.size());
+        Assertions.assertTrue(results.isArray());
+        Assertions.assertEquals(9, results.size());
 
 
         for (int i = 0; i < results.size(); i++) {
             ObjectNode roadNode = (ObjectNode) results.get(i);
-            Assert.assertTrue(roadNode.get("navn").size() > 0);
+            Assertions.assertTrue(roadNode.get("navn").size() > 0);
         }
     }
 
@@ -205,17 +200,17 @@ public class RoadTest extends TestBase {
 
             CprLookupDTO lookupDTO = lookupService.doLookup(730, 1, "18");
 
-            Assert.assertEquals("Randers", lookupDTO.getMunicipalityName());
-            Assert.assertEquals("Aage Beks Vej", lookupDTO.getRoadName());
-            Assert.assertEquals(8920, lookupDTO.getPostalCode());
-            Assert.assertEquals("Randers NV", lookupDTO.getPostalDistrict());
+            Assertions.assertEquals("Randers", lookupDTO.getMunicipalityName());
+            Assertions.assertEquals("Aage Beks Vej", lookupDTO.getRoadName());
+            Assertions.assertEquals(8920, lookupDTO.getPostalCode());
+            Assertions.assertEquals("Randers NV", lookupDTO.getPostalDistrict());
 
             lookupDTO = lookupService.doLookup(730, 4, "18");
 
-            Assert.assertEquals("Randers", lookupDTO.getMunicipalityName());
-            Assert.assertEquals("Aalborggade", lookupDTO.getRoadName());
-            Assert.assertEquals(8940, lookupDTO.getPostalCode());
-            Assert.assertEquals("Randers SV", lookupDTO.getPostalDistrict());
+            Assertions.assertEquals("Randers", lookupDTO.getMunicipalityName());
+            Assertions.assertEquals("Aalborggade", lookupDTO.getRoadName());
+            Assertions.assertEquals(8940, lookupDTO.getPostalCode());
+            Assertions.assertEquals("Randers SV", lookupDTO.getPostalDistrict());
         }
     }
 
@@ -258,8 +253,8 @@ public class RoadTest extends TestBase {
             roadQuery.addKommunekode(730);
             roadQuery.setVejkode(4);
             List<RoadEntity> roadEntities = QueryManager.getAllEntities(session, roadQuery, RoadEntity.class);
-            Assert.assertEquals(1, roadEntities.size());
-            Assert.assertEquals(RoadEntity.generateUUID(730, 4), roadEntities.get(0).getUUID());
+            Assertions.assertEquals(1, roadEntities.size());
+            Assertions.assertEquals(RoadEntity.generateUUID(730, 4), roadEntities.get(0).getUUID());
         } finally {
             session.close();
         }

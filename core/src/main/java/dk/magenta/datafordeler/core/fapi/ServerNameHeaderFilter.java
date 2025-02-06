@@ -1,12 +1,12 @@
 package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.Engine;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 
 @WebFilter(value = "/*", asyncSupported = true)

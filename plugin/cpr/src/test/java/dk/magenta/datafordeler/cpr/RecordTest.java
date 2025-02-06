@@ -13,20 +13,15 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
-import org.hamcrest.Matchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,10 +33,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RecordTest extends TestBase {
 
     private void loadPerson(String resource, ImportMetadata importMetadata) throws DataFordelerException, IOException {
@@ -72,10 +66,10 @@ public class RecordTest extends TestBase {
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0211081111");
 
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(1, entities.size());
+            Assertions.assertEquals(1, entities.size());
             PersonEntity personEntity = entities.get(0);
             List<AddressDataRecord> addressList = personEntity.getAddress().stream().filter(e -> !e.isUndone()).collect(Collectors.toList());
-            Assert.assertEquals(1, addressList.size());
+            Assertions.assertEquals(1, addressList.size());
         }
     }
 
@@ -96,21 +90,21 @@ public class RecordTest extends TestBase {
             query.applyFilters(session);
 
             query.setParameter(PersonRecordQuery.KOMMUNEKODE, 956);
-            Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             query.setParameter(PersonRecordQuery.KOMMUNEKODE, 958);
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.KOMMUNEKODE);
 
             query.setParameter(PersonRecordQuery.FORNAVNE, "Tester");
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.FORNAVNE);
 
             query.setParameter(PersonRecordQuery.EFTERNAVN, "Tystersen");
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             query.setParameter(PersonRecordQuery.EFTERNAVN, "Testersen");
-            Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             time = OffsetDateTime.parse("2000-01-01T00:00:00Z");
             query.setEffectFromBefore(time);
@@ -118,7 +112,7 @@ public class RecordTest extends TestBase {
             query.applyFilters(session);
 
             query.setParameter(PersonRecordQuery.EFTERNAVN,"Testersen");
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
 
         } finally {
@@ -129,7 +123,7 @@ public class RecordTest extends TestBase {
     @Test
     public void testExperimentPerson() throws DataFordelerException, IOException {
         Session session = sessionManager.getSessionFactory().openSession();
-        Assert.assertEquals(0, QueryManager.getAllEntities(session, PersonEntity.class).size());
+        Assertions.assertEquals(0, QueryManager.getAllEntities(session, PersonEntity.class).size());
 
         ImportMetadata importMetadata = new ImportMetadata();
         importMetadata.setSession(session);
@@ -143,31 +137,31 @@ public class RecordTest extends TestBase {
             query.setEffectAt(time);
             query.applyFilters(session);
 
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             query.setBirthTimeBefore(LocalDateTime.now());
             List<PersonEntity> personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(1, personList.size());
+            Assertions.assertEquals(1, personList.size());
 
             query.setBirthTimeBefore(null);
             personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(1, personList.size());
+            Assertions.assertEquals(1, personList.size());
 
             query.setBirthTimeBefore(LocalDateTime.of(1999, Month.JULY, 29, 19, 30, 40));
             personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(0, personList.size());
+            Assertions.assertEquals(0, personList.size());
 
             query.setBirthTimeBefore(LocalDateTime.of(2001, Month.JULY, 29, 19, 30, 40));
             personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(1, personList.size());
+            Assertions.assertEquals(1, personList.size());
 
             query.setBirthTimeAfter(LocalDateTime.now());
             personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(0, personList.size());
+            Assertions.assertEquals(0, personList.size());
 
             query.setBirthTimeAfter(null);
             personList = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(1, personList.size());
+            Assertions.assertEquals(1, personList.size());
 
         } finally {
             session.close();
@@ -212,44 +206,44 @@ public class RecordTest extends TestBase {
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
-            Assert.assertEquals(4, personEntity.getChildren().size());
-            Assert.assertEquals(0, personEntity.getCustody().size());
-            //Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101981234")));
-            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101121234")));
-            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101141234")));
-            Assert.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101161234")));
+            Assertions.assertEquals(4, personEntity.getChildren().size());
+            Assertions.assertEquals(0, personEntity.getCustody().size());
+            //Assertions.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101981234")));
+            Assertions.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101121234")));
+            Assertions.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101141234")));
+            Assertions.assertTrue(personEntity.getChildren().stream().anyMatch(child -> child.getChildCprNumber().equals("0101161234")));
 
             //Find a child and from that the person who has custody over the child
             query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101141234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
-            Assert.assertEquals(0, personEntity.getChildren().size());
-            Assert.assertEquals(2, personEntity.getCustody().size());
-            Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101991234")));
+            Assertions.assertEquals(0, personEntity.getChildren().size());
+            Assertions.assertEquals(2, personEntity.getCustody().size());
+            Assertions.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101991234")));
 
             //Find a child and from that the person who has custody over the child
             query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101131234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
-            Assert.assertEquals(0, personEntity.getChildren().size());
-            Assert.assertEquals(1, personEntity.getCustody().size());
-            Assert.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101011234")));
+            Assertions.assertEquals(0, personEntity.getChildren().size());
+            Assertions.assertEquals(1, personEntity.getCustody().size());
+            Assertions.assertTrue(personEntity.getCustody().stream().anyMatch(child -> child.getRelationPnr().equals("0101011234")));
 
             //Find a parent-ish and from that the child-ish custody relation
             query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.CUSTODYPNR, "0101991234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
-            Assert.assertEquals("0101141234", personEntity.getPersonnummer());
+            Assertions.assertEquals("0101141234", personEntity.getPersonnummer());
 
             //Find a parent-ish and from that the child-ish custody relation
             query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.CUSTODYPNR, "0101011234");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
-            Assert.assertEquals("0101131234", personEntity.getPersonnummer());
+            Assertions.assertEquals("0101131234", personEntity.getPersonnummer());
 
             //Find collective custody of the person '0101011234'
             //0101981234 (Should not be returned since the child is more then 18 years old)
@@ -257,25 +251,25 @@ public class RecordTest extends TestBase {
             //0101131234
             //0101161234
             List<PersonCustodyRelationsManager.ChildInfo> custodyList = custodyManager.findRelations("0101011234");
-            Assert.assertEquals(3, custodyList.size());
-            Assert.assertFalse(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101121234")));
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101131234")));
-            Assert.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101161234")));
+            Assertions.assertEquals(3, custodyList.size());
+            Assertions.assertFalse(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assertions.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101121234")));
+            Assertions.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101131234")));
+            Assertions.assertTrue(custodyList.stream().anyMatch(child -> child.getPnr().equals("0101161234")));
 
             List<PersonCustodyRelationsManager.ChildInfo> custodyListFather = custodyManager.findRelations("0101011235");
-            //Assert.assertEquals(3, custodyListFather.size());
-            Assert.assertFalse(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
-            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101121234")));
-            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
-            Assert.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101161234")));
+            //Assertions.assertEquals(3, custodyListFather.size());
+            Assertions.assertFalse(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assertions.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101121234")));
+            Assertions.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
+            Assertions.assertTrue(custodyListFather.stream().anyMatch(child -> child.getPnr().equals("0101161234")));
 
             //Find collective custody of the person '0101011234'
             //0101981234
             List<PersonCustodyRelationsManager.ChildInfo> custodyList2 = custodyManager.findRelations("0101991234");
-            Assert.assertEquals(1, custodyList2.size());
-            Assert.assertFalse(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
-            Assert.assertTrue(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
+            Assertions.assertEquals(1, custodyList2.size());
+            Assertions.assertFalse(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101981234")));
+            Assertions.assertTrue(custodyList2.stream().anyMatch(child -> child.getPnr().equals("0101141234")));
         }
     }
 
@@ -307,13 +301,13 @@ public class RecordTest extends TestBase {
             Query<PersonEntity> query2 = session.createQuery(hql, PersonEntity.class);
 
             List<PersonEntity> resultList = query2.getResultList();
-            Assert.assertEquals(17, resultList.size());
+            Assertions.assertEquals(17, resultList.size());
             Set<String> personnumre = resultList.stream().map(PersonEntity::getPersonnummer).collect(Collectors.toSet());
             Set<String> expected = new HashSet<>();
             for (int i=101011234; i<=101011250; i++) {
                 expected.add("0" + i);
             }
-            Assert.assertEquals(expected, personnumre);
+            Assertions.assertEquals(expected, personnumre);
         }
 
     }
@@ -341,7 +335,7 @@ public class RecordTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
         //Try fetching with cpr access rights
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
@@ -352,8 +346,8 @@ public class RecordTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(3, objectMapper.readTree(response.getBody()).get("children").size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(3, objectMapper.readTree(response.getBody()).get("children").size());
         JSONAssert.assertEquals("{\"parent\":\"0101011234\",\"children\":[{\"pnr\":\"0101161234\",\"status\":1},{\"pnr\":\"0101121234\",\"status\":1},{\"pnr\":\"0101131234\",\"status\":1}]}", response.getBody(), false);
 
 
@@ -366,8 +360,8 @@ public class RecordTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("children").size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(1, objectMapper.readTree(response.getBody()).get("children").size());
         JSONAssert.assertEquals("{\"parent\":\"0101991234\",\"children\":[{\"pnr\":\"0101141234\",\"status\":1}]}", response.getBody(), false);
     }
 
@@ -396,8 +390,10 @@ public class RecordTest extends TestBase {
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111111");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
-            Assert.assertTrue("Validate that when setting a name and undoing that name, it must be possible to set that same name again ",
-                    personEntity.getName().stream().anyMatch(name -> !name.isUndone()));
+            Assertions.assertTrue(
+                    personEntity.getName().stream().anyMatch(name -> !name.isUndone()),
+                    "Validate that when setting a name and undoing that name, it must be possible to set that same name again "
+            );
 
         } finally {
             session.close();
@@ -422,8 +418,10 @@ public class RecordTest extends TestBase {
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
 
-            Assert.assertTrue("Validate that the address is still correct after undoing a new adress ",
-                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
+            Assertions.assertTrue(
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null),
+                    "Validate that the address is still correct after undoing a new adress "
+            );
 
         } finally {
             session.close();
@@ -455,15 +453,19 @@ public class RecordTest extends TestBase {
 
             List<AddressDataRecord> list = personEntity.getAddress().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
 
-            Assert.assertTrue("Validate that the person has an active address ",
-                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
+            Assertions.assertTrue(
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null),
+                    "Validate that the person has an active address "
+            );
 
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111113");
             entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             personEntity = entities.get(0);
 
-            Assert.assertFalse("Validate that the person does not have an active address",
-                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null));
+            Assertions.assertFalse(
+                    personEntity.getAddress().stream().anyMatch(add -> !add.isUndone() && add.getRegistrationTo() == null && add.getEffectTo() == null),
+                    "Validate that the person does not have an active address"
+            );
 
         } finally {
             session.close();
@@ -485,38 +487,38 @@ public class RecordTest extends TestBase {
             query.setEffectAt(time);
             query.applyFilters(session);
 
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
 
             query.setParameter(PersonRecordQuery.VEJKODE, 2);
-            Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.VEJKODE);
 
             query.setParameter(PersonRecordQuery.VEJKODE, 111);
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.VEJKODE);
 
             query.setParameter(PersonRecordQuery.HOUSENO, "2");
-            Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.HOUSENO);
 
             query.setParameter(PersonRecordQuery.HOUSENO, "3");
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.HOUSENO);
 
             query.setParameter(PersonRecordQuery.FLOOR, "01");
-            Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.FLOOR);
 
             query.setParameter(PersonRecordQuery.FLOOR, "02");
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.FLOOR);
 
             query.setParameter(PersonRecordQuery.DOOR, "3");
-            Assert.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(0, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.DOOR);
 
             query.setParameter(PersonRecordQuery.DOOR, "4");
-            Assert.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
+            Assertions.assertEquals(1, QueryManager.getAllEntities(session, query, PersonEntity.class).size());
             query.clearParameter(PersonRecordQuery.DOOR);
 
         } finally {
@@ -537,28 +539,28 @@ public class RecordTest extends TestBase {
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101001234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
-            Assert.assertEquals(1, personEntity.getConame().size());
-            Assert.assertEquals(1, personEntity.getAddress().size());
-            Assert.assertEquals(1, personEntity.getBirthPlace().size());
-            Assert.assertEquals(0, personEntity.getBirthPlaceVerification().size());
-            Assert.assertEquals(1, personEntity.getBirthTime().size());
-            Assert.assertEquals(4, personEntity.getChurchRelation().size());
-            Assert.assertEquals(3, personEntity.getChurchRelationVerification().size());
-            Assert.assertEquals(0, personEntity.getCivilstatus().size());
-            Assert.assertEquals(0, personEntity.getCivilstatusAuthorityText().size());
-            Assert.assertEquals(0, personEntity.getCivilstatusVerification().size());
-            Assert.assertEquals(1, personEntity.getForeignAddress().size());
-            Assert.assertEquals(1, personEntity.getEmigration().size());
-            Assert.assertEquals(0, personEntity.getMunicipalityMove().size());
-            Assert.assertEquals(3, personEntity.getNameAuthorityText().size());
-            Assert.assertEquals(1, personEntity.getMother().size());
-            Assert.assertEquals(1, personEntity.getMotherVerification().size());
-            Assert.assertEquals(1, personEntity.getFather().size());
-            Assert.assertEquals(1, personEntity.getFatherVerification().size());
-            Assert.assertEquals(1, personEntity.getCore().size());
-            Assert.assertEquals(0, personEntity.getPosition().size());
-            Assert.assertEquals(3, personEntity.getStatus().size());
-            Assert.assertEquals(3, personEntity.getProtection().size());
+            Assertions.assertEquals(1, personEntity.getConame().size());
+            Assertions.assertEquals(1, personEntity.getAddress().size());
+            Assertions.assertEquals(1, personEntity.getBirthPlace().size());
+            Assertions.assertEquals(0, personEntity.getBirthPlaceVerification().size());
+            Assertions.assertEquals(1, personEntity.getBirthTime().size());
+            Assertions.assertEquals(4, personEntity.getChurchRelation().size());
+            Assertions.assertEquals(3, personEntity.getChurchRelationVerification().size());
+            Assertions.assertEquals(0, personEntity.getCivilstatus().size());
+            Assertions.assertEquals(0, personEntity.getCivilstatusAuthorityText().size());
+            Assertions.assertEquals(0, personEntity.getCivilstatusVerification().size());
+            Assertions.assertEquals(1, personEntity.getForeignAddress().size());
+            Assertions.assertEquals(1, personEntity.getEmigration().size());
+            Assertions.assertEquals(0, personEntity.getMunicipalityMove().size());
+            Assertions.assertEquals(3, personEntity.getNameAuthorityText().size());
+            Assertions.assertEquals(1, personEntity.getMother().size());
+            Assertions.assertEquals(1, personEntity.getMotherVerification().size());
+            Assertions.assertEquals(1, personEntity.getFather().size());
+            Assertions.assertEquals(1, personEntity.getFatherVerification().size());
+            Assertions.assertEquals(1, personEntity.getCore().size());
+            Assertions.assertEquals(0, personEntity.getPosition().size());
+            Assertions.assertEquals(3, personEntity.getStatus().size());
+            Assertions.assertEquals(3, personEntity.getProtection().size());
 
         } finally {
             session.close();
@@ -586,8 +588,8 @@ public class RecordTest extends TestBase {
             query.applyFilters(session);
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
-            Assert.assertEquals(1, personEntity.getAddress().size());
-            Assert.assertEquals("F", personEntity.getAddress().iterator().next().getBuildingNumber());
+            Assertions.assertEquals(1, personEntity.getAddress().size());
+            Assertions.assertEquals("F", personEntity.getAddress().iterator().next().getBuildingNumber());
         } finally {
             session.close();
         }
@@ -615,8 +617,8 @@ public class RecordTest extends TestBase {
 
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
-            Assert.assertEquals(1, personEntity.getCivilstatus().size());
-            Assert.assertEquals("0101010124", personEntity.getCivilstatus().iterator().next().getSpouseCpr());
+            Assertions.assertEquals(1, personEntity.getCivilstatus().size());
+            Assertions.assertEquals("0101010124", personEntity.getCivilstatus().iterator().next().getSpouseCpr());
 
 
         } finally {
@@ -649,11 +651,11 @@ public class RecordTest extends TestBase {
 
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
             PersonEntity personEntity = entities.get(0);
-            Assert.assertEquals(1, personEntity.getFather().size());
-            Assert.assertEquals(1, personEntity.getMother().size());
-            Assert.assertEquals("0101900125", personEntity.getFather().iterator().next().getCprNumber());
-            Assert.assertEquals("Bo", personEntity.getFather().iterator().next().getName());
-            Assert.assertEquals("0101900124", personEntity.getMother().iterator().next().getCprNumber());
+            Assertions.assertEquals(1, personEntity.getFather().size());
+            Assertions.assertEquals(1, personEntity.getMother().size());
+            Assertions.assertEquals("0101900125", personEntity.getFather().iterator().next().getCprNumber());
+            Assertions.assertEquals("Bo", personEntity.getFather().iterator().next().getName());
+            Assertions.assertEquals("0101900124", personEntity.getMother().iterator().next().getCprNumber());
         } finally {
             session.close();
         }
@@ -689,7 +691,7 @@ public class RecordTest extends TestBase {
                 , "0101011239", "0101011240");
         Collections.sort(a1Events);
         Collections.sort(pnrList);
-        Assert.assertTrue(a1Events.equals(pnrList));
+        Assertions.assertTrue(a1Events.equals(pnrList));
 
 
         query = new PersonRecordQuery();
@@ -703,7 +705,7 @@ public class RecordTest extends TestBase {
         List<String> a2Events = Arrays.asList("0101011240", "0101011241", "0101011242", "0101011243");
         Collections.sort(a1Events);
         Collections.sort(pnrList);
-        Assert.assertThat(pnrList, Matchers.is(a2Events));
+        Assertions.assertEquals(pnrList, a2Events);
 
         query = new PersonRecordQuery();
         query.setEvent("A01");
@@ -716,7 +718,7 @@ public class RecordTest extends TestBase {
         List<String> a1Events1 = Arrays.asList("0101011238", "0101011239");
         Collections.sort(a1Events1);
         Collections.sort(pnrList);
-        Assert.assertThat(pnrList, Matchers.is(a1Events1));
+        Assertions.assertEquals(pnrList, a1Events1);
 
         query = new PersonRecordQuery();
         query.setEvent("A01");
@@ -729,7 +731,7 @@ public class RecordTest extends TestBase {
         List<String> a1Events2 = Arrays.asList("0101011239");
         Collections.sort(a1Events2);
         Collections.sort(pnrList);
-        Assert.assertThat(pnrList, Matchers.is(a1Events2));
+        Assertions.assertEquals(pnrList, a1Events2);
 
         query = new PersonRecordQuery();
         query.setEvent("A01");
@@ -742,7 +744,7 @@ public class RecordTest extends TestBase {
         List<String> a1Events3 = Arrays.asList();
         Collections.sort(a1Events3);
         Collections.sort(pnrList);
-        Assert.assertThat(pnrList, Matchers.is(a1Events3));
+        Assertions.assertEquals(pnrList, a1Events3);
     }
 
     /**
@@ -769,7 +771,7 @@ public class RecordTest extends TestBase {
         query.applyFilters(session);
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
 
-        Assert.assertEquals(2, entities.get(0).getDataEvent().size());
+        Assertions.assertEquals(2, entities.get(0).getDataEvent().size());
     }
 
     /**
@@ -791,9 +793,9 @@ public class RecordTest extends TestBase {
             PersonRecordQuery query = new PersonRecordQuery();
             query.setParameter(PersonRecordQuery.PERSONNUMMER, "0101011234");
             List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(1, entities.size());
-            Assert.assertEquals(4, entities.get(0).getChildren().size());
-            Assert.assertEquals(0, entities.get(0).getDataEvent().size());
+            Assertions.assertEquals(1, entities.size());
+            Assertions.assertEquals(4, entities.get(0).getChildren().size());
+            Assertions.assertEquals(0, entities.get(0).getDataEvent().size());
         }
     }
 
@@ -814,7 +816,7 @@ public class RecordTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = restTemplate.exchange("/cvr/company/1/rest/search?cvrnummer=25052943", HttpMethod.GET, httpEntity, String.class);
-        Assert.assertEquals(403, resp.getStatusCodeValue());
+        Assertions.assertEquals(403, resp.getStatusCodeValue());
 
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
         this.applyAccess(testUserDetails);

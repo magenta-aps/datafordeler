@@ -4,22 +4,18 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.plugindemo.DemoRegisterManager;
 import dk.magenta.datafordeler.plugindemo.DemoRolesDefinition;
 import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SinglePluginTest extends PluginTestBase {
@@ -27,13 +23,13 @@ public class SinglePluginTest extends PluginTestBase {
     @LocalServerPort
     private int port;
 
-    @Before
+    @BeforeEach
     public void before() {
         DemoRegisterManager registerManager = (DemoRegisterManager) this.plugin.getRegisterManager();
         registerManager.setPort(this.port);
     }
 
-    @After
+    @AfterEach
     public void after() {
         DemoRegisterManager registerManager = (DemoRegisterManager) this.plugin.getRegisterManager();
         registerManager.setPort(Application.servicePort);
@@ -41,28 +37,28 @@ public class SinglePluginTest extends PluginTestBase {
 
     @Test
     public void testGetVersion() {
-        Assert.assertEquals(1L, this.plugin.getVersion());
+        Assertions.assertEquals(1L, this.plugin.getVersion());
     }
 
     @Test
     public void testGetEntityManager() throws URISyntaxException {
         URI uri = new URI("http://localhost:" + this.port);
-        Assert.assertTrue(this.plugin.getRegisterManager() instanceof RegisterManager);
-        Assert.assertTrue(this.plugin.getRegisterManager() instanceof DemoRegisterManager);
-        Assert.assertEquals(this.plugin.getEntityManager(DemoEntityRecord.schema), this.plugin.getRegisterManager().getEntityManager(DemoEntityRecord.class));
-        Assert.assertEquals(this.plugin.getEntityManager(uri), this.plugin.getEntityManager(DemoEntityRecord.schema));
+        Assertions.assertTrue(this.plugin.getRegisterManager() instanceof RegisterManager);
+        Assertions.assertTrue(this.plugin.getRegisterManager() instanceof DemoRegisterManager);
+        Assertions.assertEquals(this.plugin.getEntityManager(DemoEntityRecord.schema), this.plugin.getRegisterManager().getEntityManager(DemoEntityRecord.class));
+        Assertions.assertEquals(this.plugin.getEntityManager(uri), this.plugin.getEntityManager(DemoEntityRecord.schema));
     }
 
 
     @Test
     public void testHandlesSchema() throws URISyntaxException {
-        Assert.assertTrue(this.plugin.handlesSchema(DemoEntityRecord.schema));
-        Assert.assertFalse(this.plugin.handlesSchema("foobar"));
+        Assertions.assertTrue(this.plugin.handlesSchema(DemoEntityRecord.schema));
+        Assertions.assertFalse(this.plugin.handlesSchema("foobar"));
     }
 
 
     @Test
     public void testGetRolesDefinition() throws URISyntaxException {
-        Assert.assertTrue(this.plugin.getRolesDefinition() instanceof DemoRolesDefinition);
+        Assertions.assertTrue(this.plugin.getRolesDefinition() instanceof DemoRolesDefinition);
     }
 }

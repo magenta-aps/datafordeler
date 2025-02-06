@@ -12,14 +12,10 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -31,10 +27,9 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class cprMatchLogicTest extends TestBase {
 
     private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
@@ -77,12 +72,12 @@ public class cprMatchLogicTest extends TestBase {
 
             query.applyFilters(session);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(1, persons.size());
+            Assertions.assertEquals(1, persons.size());
 
             Set<AddressDataRecord> adresses = persons.get(0).getAddress();
 
             Set<AddressDataRecord> adresses2 = adresses.stream().filter(d -> !d.isUndone()).collect(Collectors.toSet());
-            Assert.assertEquals(1, adresses2.size());
+            Assertions.assertEquals(1, adresses2.size());
         }
     }
 

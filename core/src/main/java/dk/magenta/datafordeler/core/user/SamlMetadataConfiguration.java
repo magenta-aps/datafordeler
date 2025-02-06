@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 
-
 import java.io.File;
 
 @org.springframework.context.annotation.Configuration

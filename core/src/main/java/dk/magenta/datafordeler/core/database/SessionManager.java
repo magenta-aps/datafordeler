@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.type.filter.AnnotationTypeFilter;

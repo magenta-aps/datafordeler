@@ -6,18 +6,16 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.gapi.GapiTestBase;
 import dk.magenta.datafordeler.core.testutil.ExpectorCallback;
 import dk.magenta.datafordeler.core.testutil.Order;
-import dk.magenta.datafordeler.core.testutil.OrderedRunner;
 import dk.magenta.datafordeler.core.testutil.TestUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.user.UserProfile;
 import dk.magenta.datafordeler.plugindemo.DemoPlugin;
 import dk.magenta.datafordeler.plugindemo.DemoRegisterManager;
 import dk.magenta.datafordeler.plugindemo.DemoRolesDefinition;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -31,7 +29,6 @@ import java.util.*;
 
 import static org.mockito.Mockito.when;
 
-@RunWith(OrderedRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommandTest extends GapiTestBase {
@@ -48,14 +45,14 @@ public class CommandTest extends GapiTestBase {
     @LocalServerPort
     private int port;
 
-    @Before
+    @BeforeEach
     public void before() {
         //DemoRegisterManager registerManager = (DemoRegisterManager) this.demoPlugin.getRegisterManager();
         //registerManager.setPort(this.port);
         DemoRegisterManager.setPortOnAll(this.port);
     }
 
-    @After
+    @AfterEach
     public void after() {
         DemoRegisterManager.setPortOnAll(Application.servicePort);
     }
@@ -98,40 +95,40 @@ public class CommandTest extends GapiTestBase {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> httpPostEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> postResponse = this.restTemplate.exchange("/command/pull", HttpMethod.POST, httpPostEntity, String.class);
-        Assert.assertNotNull(postResponse);
-        Assert.assertEquals(200, postResponse.getStatusCodeValue());
+        Assertions.assertNotNull(postResponse);
+        Assertions.assertEquals(200, postResponse.getStatusCodeValue());
         JsonNode postResponseNode = objectMapper.readTree(postResponse.getBody());
 
-        Assert.assertEquals("queued", postResponseNode.get("status").asText());
-        Assert.assertEquals("pull", postResponseNode.get("commandName").asText());
-        Assert.assertNotNull(postResponseNode.get("received").asText());
+        Assertions.assertEquals("queued", postResponseNode.get("status").asText());
+        Assertions.assertEquals("pull", postResponseNode.get("commandName").asText());
+        Assertions.assertNotNull(postResponseNode.get("received").asText());
         long id = postResponseNode.get("id").asLong();
 
         String status = null;
         for (int i=0; i<60 && (status == null || "queued".equals(status)); i++) {
             HttpEntity<String> httpGetEntity = new HttpEntity<String>("", headers);
             ResponseEntity<String> getResponse = this.restTemplate.exchange("/command/" + id, HttpMethod.GET, httpGetEntity, String.class);
-            Assert.assertNotNull(getResponse);
-            Assert.assertEquals(200, getResponse.getStatusCodeValue());
+            Assertions.assertNotNull(getResponse);
+            Assertions.assertEquals(200, getResponse.getStatusCodeValue());
             JsonNode getResponseNode = objectMapper.readTree(getResponse.getBody());
             status = getResponseNode.get("status").asText();
-            Assert.assertEquals("pull", getResponseNode.get("commandName").asText());
-            Assert.assertNotNull(getResponseNode.get("received").asText());
+            Assertions.assertEquals("pull", getResponseNode.get("commandName").asText());
+            Assertions.assertNotNull(getResponseNode.get("received").asText());
             String commandBody = getResponseNode.get("commandBody").asText();
-            Assert.assertEquals("bar", objectMapper.readTree(commandBody).get("foo").asText());
+            Assertions.assertEquals("bar", objectMapper.readTree(commandBody).get("foo").asText());
             Thread.sleep(1000);
         }
-        Assert.assertTrue("running".equals(status) || "successful".equals(status));
+        Assertions.assertTrue("running".equals(status) || "successful".equals(status));
 
         HttpEntity<String> httpDeleteEntity = new HttpEntity<String>("", headers);
         ResponseEntity<String> deleteResponse = this.restTemplate.exchange("/command/"+id, HttpMethod.DELETE, httpDeleteEntity, String.class);
-        Assert.assertNotNull(deleteResponse);
-        Assert.assertEquals(200, deleteResponse.getStatusCodeValue());
+        Assertions.assertNotNull(deleteResponse);
+        Assertions.assertEquals(200, deleteResponse.getStatusCodeValue());
         JsonNode deleteResponseNode = objectMapper.readTree(deleteResponse.getBody());
         status = deleteResponseNode.get("status").asText();
-        Assert.assertTrue("cancelled".equals(status) || "successful".equals(status));
-        Assert.assertEquals("pull", deleteResponseNode.get("commandName").asText());
-        Assert.assertNotNull(deleteResponseNode.get("received").asText());
+        Assertions.assertTrue("cancelled".equals(status) || "successful".equals(status));
+        Assertions.assertEquals("pull", deleteResponseNode.get("commandName").asText());
+        Assertions.assertNotNull(deleteResponseNode.get("received").asText());
     }
 
 
@@ -172,23 +169,23 @@ public class CommandTest extends GapiTestBase {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> httpPostEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> postResponse = this.restTemplate.exchange("/command/pull", HttpMethod.POST, httpPostEntity, String.class);
-        Assert.assertNotNull(postResponse);
-        Assert.assertEquals(200, postResponse.getStatusCodeValue());
+        Assertions.assertNotNull(postResponse);
+        Assertions.assertEquals(200, postResponse.getStatusCodeValue());
         JsonNode postResponseNode = objectMapper.readTree(postResponse.getBody());
-        Assert.assertEquals("queued", postResponseNode.get("status").asText());
-        Assert.assertEquals("pull", postResponseNode.get("commandName").asText());
-        Assert.assertNotNull(postResponseNode.get("received").asText());
+        Assertions.assertEquals("queued", postResponseNode.get("status").asText());
+        Assertions.assertEquals("pull", postResponseNode.get("commandName").asText());
+        Assertions.assertNotNull(postResponseNode.get("received").asText());
         long id = postResponseNode.get("id").asLong();
 
         HttpEntity<String> httpGetEntity = new HttpEntity<String>("", headers);
         ResponseEntity<String> getResponse = this.restTemplate.exchange("/command/" + id, HttpMethod.GET, httpGetEntity, String.class);
-        Assert.assertNotNull(getResponse);
-        Assert.assertEquals(200, getResponse.getStatusCodeValue());
+        Assertions.assertNotNull(getResponse);
+        Assertions.assertEquals(200, getResponse.getStatusCodeValue());
 
         HttpEntity<String> httpDeleteEntity = new HttpEntity<String>("", headers);
         ResponseEntity<String> deleteResponse = this.restTemplate.exchange("/command/"+id, HttpMethod.DELETE, httpDeleteEntity, String.class);
-        Assert.assertNotNull(deleteResponse);
-        Assert.assertEquals(200, deleteResponse.getStatusCodeValue());
+        Assertions.assertNotNull(deleteResponse);
+        Assertions.assertEquals(200, deleteResponse.getStatusCodeValue());
     }
 
 
@@ -205,8 +202,8 @@ public class CommandTest extends GapiTestBase {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> httpPostEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> postResponse = this.restTemplate.exchange("/command/pull", HttpMethod.POST, httpPostEntity, String.class);
-        Assert.assertNotNull(postResponse);
-        Assert.assertEquals(403, postResponse.getStatusCodeValue());
+        Assertions.assertNotNull(postResponse);
+        Assertions.assertEquals(403, postResponse.getStatusCodeValue());
     }
 
     @Test
@@ -216,8 +213,8 @@ public class CommandTest extends GapiTestBase {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> httpPostEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> postResponse = this.restTemplate.exchange("/command/pull", HttpMethod.POST, httpPostEntity, String.class);
-        Assert.assertNotNull(postResponse);
-        Assert.assertEquals(403, postResponse.getStatusCodeValue());
+        Assertions.assertNotNull(postResponse);
+        Assertions.assertEquals(403, postResponse.getStatusCodeValue());
     }
 
     private String jsonList(List<String> jsonData, String listKey) {
