@@ -9,7 +9,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Assertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -62,6 +62,7 @@ public class DafoUserManager {
         Assertion samlAssertion = tokenParser.parseAssertion(tokendata);
         tokenVerifier.verifyAssertion(samlAssertion);
         return samlAssertion;
+        //OpenSaml4AuthenticationProvider authenticationProvider = new OpenSaml4AuthenticationProvider();
     }
 
 
@@ -182,6 +183,7 @@ public class DafoUserManager {
 
     public SamlDafoUserDetails getSamlUserDetailsFromToken(String tokenData)
             throws InvalidTokenException {
+
         Assertion samlAssertion = parseAndVerifyToken(tokenData);
         SamlDafoUserDetails samlDafoUserDetails = new SamlDafoUserDetails(samlAssertion);
         this.addUserProfilesToSamlUser(samlDafoUserDetails);

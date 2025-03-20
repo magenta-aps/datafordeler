@@ -19,7 +19,7 @@
         <spring.boot.version>3.4.1</spring.boot.version>
         <cxf.spring.boot.starter.version>3.4.4</cxf.spring.boot.starter.version>
         <commons.io.version>2.18.0</commons.io.version>
-        <hibernate.version>6.6.5.Final</hibernate.version>
+        <hibernate.version>6.6.8.Final</hibernate.version>
         <!-- Don't let the jre11 fool you, the package is compatible with jre >= 11 -->
         <com.microsoft.sqlserver.version>12.8.1.jre11</com.microsoft.sqlserver.version>
         <maven.compiler.source>21</maven.compiler.source>

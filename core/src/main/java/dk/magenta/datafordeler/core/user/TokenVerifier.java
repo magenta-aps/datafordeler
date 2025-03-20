@@ -1,28 +1,27 @@
 package dk.magenta.datafordeler.core.user;
 
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
-import org.joda.time.DateTime;
-import org.opensaml.common.xml.SAMLConstants;
-import org.opensaml.saml2.core.*;
-import org.opensaml.saml2.metadata.EntityDescriptor;
-import org.opensaml.saml2.metadata.IDPSSODescriptor;
+import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
+import org.opensaml.core.criterion.EntityIdCriterion;
+import org.opensaml.saml.common.xml.SAMLConstants;
+import org.opensaml.saml.saml2.core.*;
+import org.opensaml.saml.saml2.metadata.EntityDescriptor;
+import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
+import org.opensaml.saml.security.impl.SAMLSignatureProfileValidator;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
-import org.opensaml.security.MetadataCriteria;
-import org.opensaml.security.SAMLSignatureProfileValidator;
+import org.opensaml.security.credential.UsageType;
+import org.opensaml.security.criteria.UsageCriterion;
+import org.opensaml.security.trust.TrustEngine;
 import org.opensaml.xml.ConfigurationException;
-import org.opensaml.xml.security.CriteriaSet;
-import org.opensaml.xml.security.SecurityException;
-import org.opensaml.xml.security.credential.UsageType;
-import org.opensaml.xml.security.criteria.EntityIDCriteria;
-import org.opensaml.xml.security.criteria.UsageCriteria;
-import org.opensaml.xml.security.trust.TrustEngine;
-import org.opensaml.xml.signature.Signature;
-import org.opensaml.xml.validation.ValidationException;
+import org.opensaml.xmlsec.signature.Signature;
+import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
 
 /**
  * Verifies a DAFO token according to expiration, issuer, signature and audience restriction.
@@ -70,13 +69,6 @@ public class TokenVerifier {
         }
     }
 
-
-    public static boolean isDateTimeSkewValid(int skewInSec, long forwardInterval, DateTime time) {
-        long reference = System.currentTimeMillis();
-        return time.isBefore(reference + (skewInSec * 1000)) &&
-                time.isAfter(reference - ((skewInSec + forwardInterval) * 1000));
-    }
-
     public void verifyIssuer(Issuer issuer) throws InvalidTokenException {
         // Validate format of issuer
         if (issuer.getFormat() != null && !issuer.getFormat().equals(NameIDType.ENTITY)) {
@@ -110,18 +102,18 @@ public class TokenVerifier {
 
         try {
             validator.validate(signature);
-        } catch (ValidationException e) {
+        } catch (SignatureException e) {
             throw new InvalidTokenException("Invalid token signature: " + e.getMessage(), e);
         }
 
-        // Check list of neccessary criteria that ensures that it is the signature we want and
+        // Check list of necessary criteria that ensures that it is the signature we want and
         // not just any syntactically correct signature.
         CriteriaSet criteriaSet = new CriteriaSet();
-        criteriaSet.add(new EntityIDCriteria(getIssuerEntityDescriptor().getEntityID()));
-        criteriaSet.add(new MetadataCriteria(
+        criteriaSet.add(new EntityIdCriterion(getIssuerEntityDescriptor().getEntityID()));
+        criteriaSet.add(new MetadataCriterion(
                 IDPSSODescriptor.DEFAULT_ELEMENT_NAME, SAMLConstants.SAML20P_NS
         ));
-        criteriaSet.add(new UsageCriteria(UsageType.SIGNING));
+        criteriaSet.add(new UsageCriterion(UsageType.SIGNING));
 
         boolean criteriaAreValid;
         try {
@@ -138,28 +130,28 @@ public class TokenVerifier {
 
     }
 
-    public void verifyTokenAge(DateTime issueInstant) throws InvalidTokenException {
+    public void verifyTokenAge(Instant issueInstant) throws InvalidTokenException {
         long reference = System.currentTimeMillis();
         int skewInSec = config.getTimeSkewInSeconds();
         long forwardInterval = config.getMaxAssertionTimeInSeconds();
 
-        if (issueInstant.isAfter(reference + (skewInSec * 1000))) {
+        if (issueInstant.isAfter(Instant.ofEpochMilli(reference + (skewInSec * 1000L)))) {
             throw new InvalidTokenException("Token is issued in the future");
         }
 
         // If issueInstant is before the current time minus lifetime of token minus skew it is too
         // old.
-        if (issueInstant.isBefore(reference - ((skewInSec + forwardInterval) * 1000))) {
+        if (issueInstant.isBefore(Instant.ofEpochMilli(reference - ((skewInSec + forwardInterval) * 1000L)))) {
             throw new InvalidTokenException("Token is older than " + forwardInterval + " seconds");
         }
     }
 
-    public boolean checkNotBefore(DateTime time) {
-        return !time.minusSeconds(config.getTimeSkewInSeconds()).isAfterNow();
+    public boolean checkNotBefore(Instant time) {
+        return !time.minusSeconds(config.getTimeSkewInSeconds()).isAfter(Instant.now());
     }
 
-    public boolean checkNotOnOrafter(DateTime time) {
-        return !time.plusSeconds(config.getTimeSkewInSeconds()).isBeforeNow();
+    public boolean checkNotOnOrafter(Instant time) {
+        return !time.plusSeconds(config.getTimeSkewInSeconds()).isBefore(Instant.now());
     }
 
     public void verifySubject(Subject subject) throws InvalidTokenException {
@@ -181,11 +173,11 @@ public class TokenVerifier {
             );
         }
         // Check the timestamps on the SubjectConfirmationData
-        DateTime notBefore = subjectConfirmationData.getNotBefore();
+        Instant notBefore = subjectConfirmationData.getNotBefore();
         if (notBefore != null && !checkNotBefore(notBefore)) {
             throw new InvalidTokenException("Failed NotBefore constraint on SubjectConfirmationData");
         }
-        DateTime notOnOrAfter = subjectConfirmationData.getNotOnOrAfter();
+        Instant notOnOrAfter = subjectConfirmationData.getNotOnOrAfter();
         if (notOnOrAfter == null) {
             throw new InvalidTokenException("NotOnOrAfter not specified for SubjectConfirmationData");
         } else {
@@ -199,7 +191,7 @@ public class TokenVerifier {
 
 
     public void verifyConditions(Conditions conditions) throws InvalidTokenException {
-        DateTime notBefore = conditions.getNotBefore();
+        Instant notBefore = conditions.getNotBefore();
         if (notBefore == null) {
             throw new InvalidTokenException("NotBefore not defined on Conditions");
         } else {
@@ -207,7 +199,7 @@ public class TokenVerifier {
                 throw new InvalidTokenException("Failed NotBefore contraint on Conditions");
             }
         }
-        DateTime notOnOrAfter = conditions.getNotOnOrAfter();
+        Instant notOnOrAfter = conditions.getNotOnOrAfter();
         if (notOnOrAfter == null) {
             throw new InvalidTokenException("NotOnOrAfter not defined on Conditions");
         } else {

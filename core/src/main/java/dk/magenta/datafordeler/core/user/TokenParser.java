@@ -1,13 +1,12 @@
 package dk.magenta.datafordeler.core.user;
 
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
-import org.opensaml.saml2.core.Assertion;
-import org.opensaml.ws.message.decoder.MessageDecodingException;
-import org.opensaml.xml.Configuration;
+import org.opensaml.Configuration;
+import org.opensaml.messaging.decoder.MessageDecodingException;
+import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallerFactory;
 import org.opensaml.xml.io.UnmarshallingException;
-import org.opensaml.xml.util.Base64;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -18,6 +17,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
@@ -28,7 +28,7 @@ import java.util.zip.InflaterInputStream;
 public class TokenParser {
     public Assertion parseAssertion(String fromString) throws InvalidTokenException {
         try {
-            byte[] decodedBytes = Base64.decode(fromString);
+            byte[] decodedBytes = Base64.getDecoder().decode(fromString);
             if (decodedBytes == null) {
                 throw new MessageDecodingException("Unable to Base64 decode incoming message");
             }
@@ -49,7 +49,7 @@ public class TokenParser {
 
             return (Assertion) unmarshaller.unmarshall(element);
         } catch (IOException | ParserConfigurationException | SAXException | UnmarshallingException |
-                MessageDecodingException e) {
+                 MessageDecodingException e) {
             throw new InvalidTokenException("Could not parse authorization token", e);
         }
     }
