@@ -5,6 +5,8 @@ import net.shibboleth.shared.component.ComponentInitializationException;
 import net.shibboleth.shared.resolver.ResolverException;
 import net.shibboleth.shared.xml.ParserPool;
 import net.shibboleth.shared.xml.impl.BasicParserPool;
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
@@ -21,13 +23,13 @@ import java.io.File;
 @PropertySource("classpath:/application.properties")
 public class SamlMetadataConfiguration {
 
-//    static {
-//        try {
-//            InitializationService.initialize();
-//        } catch (InitializationException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    static {
+        try {
+            InitializationService.initialize();
+        } catch (InitializationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Bean
     public ParserPool parserPool() throws ComponentInitializationException {
@@ -57,21 +59,6 @@ public class SamlMetadataConfiguration {
         resolver.initialize();
         return resolver;
     }
-//
-//    @Bean
-//    public MetadataProvider samlMetadataProvider(TokenConfigProperties config)
-//            throws Exception {
-//        String path = config.getIssuerMetadataPath();
-//        if (path == null) {
-//            throw new ConfigurationException("SAML Issuer metadata path is null");
-//        }
-//        File metadataFile = new File(path);
-//        FilesystemMetadataProvider provider = new FilesystemMetadataProvider(metadataFile);
-//        provider.setRequireValidMetadata(false);
-//        provider.setParserPool(new BasicParserPool());
-//        provider.initialize();
-//        return provider;
-//    }
 
     @Bean
     public ExplicitKeySignatureTrustEngine trustEngine() {

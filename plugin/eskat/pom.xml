@@ -6,13 +6,12 @@
     <!--The identifier of the parent POM-->
     <parent>
         <groupId>dk.magenta.datafordeler</groupId>
-        <artifactId>datafordeler-plugin-parent</artifactId>
+        <artifactId>plugin-parent</artifactId>
         <relativePath>../parent/pom.xml</relativePath>
         <version>2.0.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.magenta.datafordeler</groupId>
     <artifactId>eskat</artifactId>
     <version>${project.version}</version>
     <packaging>jar</packaging>
@@ -36,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
-            <artifactId>datafordeler-plugin-cvr</artifactId>
+            <artifactId>cvr</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
