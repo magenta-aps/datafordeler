@@ -3,24 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <!--The identifier of the parent POM-->
+    <parent>
+        <groupId>dk.magenta.datafordeler</groupId>
+        <artifactId>datafordeler-plugin-parent</artifactId>
+        <relativePath>../parent/pom.xml</relativePath>
+        <version>2.0.0</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.magenta.datafordeler</groupId>
     <artifactId>datafordeler-plugin-gladdrreg</artifactId>
-    <version>1.1</version>
+    <version>${project.version}</version>
     <packaging>jar</packaging>
     <name>datafordeler-plugin-gladdrreg</name>
-    <description>Gladdrreg plugin for Magenta&#39;s Greenlandic System</description>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>18</java.version>
-        <log4j.version>2.1</log4j.version>
-        <jackson.version>2.9.9</jackson.version>
-        <spring.boot.version>3.4.1.RELEASE</spring.boot.version>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
-    </properties>
+    <description>Gladdrreg plugin for Magenta's Greenlandic System</description>
 
     <repositories>
         <repository>
@@ -33,7 +29,7 @@
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>datafordeler-core</artifactId>
-            <version>1.1</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
 

@@ -3,40 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>datafordeler-core</artifactId>
-    <version>1.3</version>
-    <packaging>jar</packaging>
-    <name>datafordeler-core</name>
-    <description>Core module for Magenta&#39;s Greenlandic System</description>
-
     <!--The identifier of the parent POM-->
     <parent>
         <groupId>dk.magenta.datafordeler</groupId>
         <artifactId>datafordeler-plugin-parent</artifactId>
         <relativePath>../plugin/parent/pom.xml</relativePath>
-        <version>1.3</version>
+        <version>2.0.0</version>
     </parent>
 
-    <properties>
-        <quartz.version>2.3.2</quartz.version>
-        <odata.version>4.8.0</odata.version>
-    </properties>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>datafordeler-core</artifactId>
+    <version>${project.version}</version>
+    <packaging>jar</packaging>
+    <name>datafordeler-core</name>
+    <description>Core module for Magenta&#39;s Greenlandic System</description>
 
-    <repositories>
-        <repository>
-            <id>shibboleth-releases</id>
-            <url>https://build.shibboleth.net/maven/releases/</url>
-        </repository>
-        <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>local-repo</id>
-            <url>file://${project.basedir}/src/main/resources/repo</url>
-        </repository>
-    </repositories>
 
     <dependencies>
 
