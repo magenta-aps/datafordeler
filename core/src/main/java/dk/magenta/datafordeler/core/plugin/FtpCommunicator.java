@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import it.sauronsoftware.ftp4j.*;
 import it.sauronsoftware.ftp4j.connectors.HTTPTunnelConnector;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.http.StatusLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
@@ -233,11 +232,6 @@ public abstract class FtpCommunicator implements Communicator {
         this.markRemoteFilesDone(ftpClient, uri, remoteFiles);
         this.markLocalFilesDone(localFiles);
         this.deleteLocalFiles(localFiles);
-    }
-
-    @Override
-    public StatusLine send(URI endpoint, String payload) throws IOException {
-        throw new UnsupportedOperationException();
     }
 
     public void send(URI endpoint, File payload) throws IOException, DataStreamException {

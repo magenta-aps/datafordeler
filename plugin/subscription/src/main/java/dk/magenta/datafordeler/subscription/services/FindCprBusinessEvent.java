@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.api.client.util.Value;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -28,6 +27,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -49,7 +49,7 @@ import java.util.stream.Stream;
 @RequestMapping("/subscription/1/findCprBusinessEvent")
 public class FindCprBusinessEvent {
 
-    @Value("${dafo.subscription.allowCallingOtherConsumersSubscriptions}")
+    @Value("${dafo.subscription.allowCallingOtherConsumersSubscriptions:false}")
     protected boolean allowCallingOtherConsumersSubscriptions = false;
 
     @Autowired

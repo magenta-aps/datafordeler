@@ -14,7 +14,6 @@ import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CvrEntityRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
-import org.apache.http.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.hc.core5.http.io.entity.StringEntity;
 @Component
 public class DirectLookup {
 
@@ -66,7 +66,6 @@ public class DirectLookup {
         } catch (GeneralSecurityException | IOException e) {
             throw new DataStreamException(e);
         }
-        HttpCommunicator httpCommunicator = new HttpCommunicator(keystore, keystorePassword);
 
         URI queryUri;
         try {
@@ -74,6 +73,7 @@ public class DirectLookup {
         } catch (URISyntaxException | MalformedURLException e) {
             throw new DataStreamException(e);
         }
+        HttpCommunicator httpCommunicator = new HttpCommunicator(queryUri, keystore, keystorePassword);
         CvrEntityManager<R> entityManager = (CvrEntityManager<R>) (cvrPlugin.getRegisterManager()).getEntityManager(schema);
 
         try (InputStream response = httpCommunicator.post(queryUri, new StringEntity(requestBody.toString()), null)) {
@@ -107,7 +107,7 @@ public class DirectLookup {
         } catch (URISyntaxException | MalformedURLException e) {
             throw new DataStreamException(e);
         }
-        HttpCommunicator httpCommunicator = new HttpCommunicator(keystore, keystorePassword);
+        HttpCommunicator httpCommunicator = new HttpCommunicator(queryUri, keystore, keystorePassword);
         InputStream response = httpCommunicator.fetch(queryUri);
         try {
             return objectMapper.readValue(response, CompanyRecord.class);
@@ -149,7 +149,7 @@ public class DirectLookup {
         } catch (URISyntaxException | MalformedURLException e) {
             throw new DataStreamException(e);
         }
-        HttpCommunicator httpCommunicator = new HttpCommunicator(keystore, keystorePassword);
+        HttpCommunicator httpCommunicator = new HttpCommunicator(queryUri, keystore, keystorePassword);
         InputStream response = httpCommunicator.fetch(queryUri);
         try {
             return objectMapper.readValue(response, ParticipantRecord.class);

@@ -1,12 +1,14 @@
 package dk.magenta.datafordeler.core.user;
 
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
-import org.opensaml.Configuration;
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.config.InitializationService;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.core.xml.io.Unmarshaller;
+import org.opensaml.core.xml.io.UnmarshallerFactory;
+import org.opensaml.core.xml.io.UnmarshallingException;
 import org.opensaml.messaging.decoder.MessageDecodingException;
 import org.opensaml.saml.saml2.core.Assertion;
-import org.opensaml.xml.io.Unmarshaller;
-import org.opensaml.xml.io.UnmarshallerFactory;
-import org.opensaml.xml.io.UnmarshallingException;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,7 +35,6 @@ public class TokenParser {
                 throw new MessageDecodingException("Unable to Base64 decode incoming message");
             }
 
-            Inflater inflater = new Inflater(true);
             ByteArrayInputStream bytesIn = new ByteArrayInputStream(decodedBytes);
             InflaterInputStream in = new InflaterInputStream(bytesIn, new Inflater(true));
 
@@ -44,7 +45,7 @@ public class TokenParser {
             Document document = docBuilder.parse(in);
             Element element = document.getDocumentElement();
 
-            UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
+            UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
 
             return (Assertion) unmarshaller.unmarshall(element);

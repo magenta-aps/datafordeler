@@ -5,14 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
-import dk.magenta.datafordeler.core.util.HttpGetWithEntity;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.EntityBuilder;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +25,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 /**
  * A special Communicator that fetches data over a HTTP connection by the
  * scan-scroll pattern: We specify the query in a POST, then get a handle back
@@ -37,13 +37,13 @@ public class ScanScrollCommunicator extends HttpCommunicator {
         this.recompilePattern();
     }
 
-    public ScanScrollCommunicator(String username, String password) {
-        super(username, password);
+    public ScanScrollCommunicator(URI httpHost, String username, String password) {
+        super(httpHost, username, password);
         this.recompilePattern();
     }
 
-    public ScanScrollCommunicator(File keystoreFile, String keystorePassword) {
-        super(keystoreFile, keystorePassword);
+    public ScanScrollCommunicator(URI httpHost, File keystoreFile, String keystorePassword) {
+        super(httpHost, keystoreFile, keystorePassword);
     }
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -130,7 +130,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                     log.info("Scan-scroll fetching from " + startUri + " with body:\n" + body);
 
                     HttpPost initialPost = new HttpPost(startUri);
-                    initialPost.setEntity(new StringEntity(body, "utf-8"));
+                    initialPost.setEntity(new StringEntity(body, StandardCharsets.UTF_8));
                     initialPost.setHeader("Content-Type", "application/json");
                     CloseableHttpResponse response;
                     log.info("Sending initial POST to " + startUri);
@@ -141,11 +141,11 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         throw new DataStreamException(e);
                     }
                     log.info("Initial POST sent");
-                    log.info("HTTP status: " + response.getStatusLine().getStatusCode());
+                    log.info("HTTP status: " + response.getCode());
                     String content = InputStreamReader.readInputStream(response.getEntity().getContent());
-                    if (response.getStatusLine().getStatusCode() != 200) {
+                    if (response.getCode() != 200) {
                         log.error(content);
-                        throw new HttpStatusException(response.getStatusLine(), startUri);
+                        throw new HttpStatusException(response, startUri);
                     }
 
                     responseNode = objectMapper.readTree(content);
@@ -160,19 +160,19 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         scrollIds.add(scrollId);
 
                         URI fetchUri = new URI(scrollUri.getScheme(), scrollUri.getUserInfo(), scrollUri.getHost(), scrollUri.getPort(), scrollUri.getPath(), "scroll=10m", null);
-                        HttpGetWithEntity partialGet = new HttpGetWithEntity(fetchUri);
-                        partialGet.setHeader("Content-Type", "application/json");
+                        EntityBuilder entityBuilder = EntityBuilder.create();
+                        entityBuilder.setContentType(ContentType.APPLICATION_JSON);
                         ObjectNode scrollObject = objectMapper.createObjectNode();
                         scrollObject.put("scroll", "10m");
                         scrollObject.put("scroll_id", scrollId);
-                        partialGet.setEntity(new StringEntity(scrollObject.toString()));
+                        entityBuilder.setText(scrollObject.toString());
+                        HttpGet partialGet = new HttpGet(fetchUri);
+                        partialGet.setEntity(new StringEntity(entityBuilder.build().toString(), StandardCharsets.UTF_8));
                         try {
                             log.info("Sending chunk GET to " + fetchUri);
                             response = httpclient.execute(partialGet);
                             content = InputStreamReader.readInputStream(response.getEntity().getContent());
-
                         } catch (IOException e) {
-                            e.printStackTrace();
                             throw new DataStreamException(e);
                         }
 
@@ -275,10 +275,10 @@ public class ScanScrollCommunicator extends HttpCommunicator {
         };
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("scroll_id", scrollId);
-        scrollDelete.setEntity(new StringEntity(objectNode.toString(), "utf-8"));
+        scrollDelete.setEntity(new StringEntity(objectNode.toString(), StandardCharsets.UTF_8));
         scrollDelete.setHeader("Content-Type", "application/json");
         try {
-            HttpResponse response = httpClient.execute(scrollDelete);
+            httpClient.execute(scrollDelete);
         } catch (IOException e) {
             log.error(e);
         }

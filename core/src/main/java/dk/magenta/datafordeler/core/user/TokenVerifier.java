@@ -1,19 +1,17 @@
 package dk.magenta.datafordeler.core.user;
 
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
-import net.shibboleth.utilities.java.support.resolver.CriteriaSet;
+import jakarta.annotation.PostConstruct;
+import net.shibboleth.shared.resolver.CriteriaSet;
+import net.shibboleth.shared.resolver.ResolverException;
 import org.opensaml.core.criterion.EntityIdCriterion;
-import org.opensaml.saml.common.xml.SAMLConstants;
+import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.saml2.core.*;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
-import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.security.impl.SAMLSignatureProfileValidator;
-import org.opensaml.saml2.metadata.provider.MetadataProvider;
-import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.criteria.UsageCriterion;
 import org.opensaml.security.trust.TrustEngine;
-import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Objects;
 
 /**
  * Verifies a DAFO token according to expiration, issuer, signature and audience restriction.
@@ -30,20 +29,26 @@ import java.time.Instant;
 @EnableConfigurationProperties(TokenConfigProperties.class)
 @PropertySource("classpath:/application.properties")
 public class TokenVerifier {
+//
+//    @Autowired
+//    private MetadataProvider metadataProvider;
 
     @Autowired
-    private MetadataProvider metadataProvider;
+    private MetadataResolver metadataResolver;
+
     @Autowired
     private TrustEngine trustEngine;
     @Autowired
     private TokenConfigProperties config;
+
+    EntityDescriptor entityDescriptor;
 
     private String cachedIssuerCert;
 
     private String getCachedIssuerCert() throws InvalidTokenException {
         if (cachedIssuerCert == null) {
             try {
-                cachedIssuerCert = getIssuerEntityDescriptor().getIDPSSODescriptor(
+                cachedIssuerCert = this.entityDescriptor.getIDPSSODescriptor(
                                 "urn:oasis:names:tc:SAML:2.0:protocol"
                         ).getKeyDescriptors().get(0).getKeyInfo().getX509Datas().get(0).getX509Certificates()
                         .get(0).getValue().replaceAll("\\s+", "");
@@ -56,16 +61,21 @@ public class TokenVerifier {
         return cachedIssuerCert;
     }
 
-    public TokenVerifier() throws ConfigurationException {
-        // Initialize OpenSAML
-        org.opensaml.DefaultBootstrap.bootstrap();
+    public TokenVerifier() {
     }
 
-    public EntityDescriptor getIssuerEntityDescriptor() throws InvalidTokenException {
-        try {
-            return (EntityDescriptor) metadataProvider.getMetadata();
-        } catch (MetadataProviderException e) {
-            throw new InvalidTokenException("Unable to fetch issuer metadata: " + e.getMessage(), e);
+    @PostConstruct
+    public void init() throws dk.magenta.datafordeler.core.exception.ConfigurationException, ResolverException {
+//        try {
+        CriteriaSet criteriaSet = new CriteriaSet();
+        criteriaSet.add(new EntityIdCriterion("Dafo-STS"));
+
+            this.entityDescriptor = this.metadataResolver.resolveSingle(criteriaSet);
+//        } catch (MetadataProviderException e) {
+//            throw new dk.magenta.datafordeler.core.exception.ConfigurationException("Could not get entity descriptor", e);
+//        }
+        if (this.entityDescriptor.getEntityID() == null) {
+            throw new dk.magenta.datafordeler.core.exception.ConfigurationException("Entity descriptor id is null");
         }
     }
 
@@ -75,7 +85,7 @@ public class TokenVerifier {
             throw new InvalidTokenException("Wrong issuer type: " + issuer.getFormat());
         }
         // Validate that issuer is expected peer entity
-        if (!issuer.getValue().equals(getIssuerEntityDescriptor().getEntityID())) {
+        if (!Objects.equals(issuer.getValue(), this.entityDescriptor.getEntityID())) {
             throw new InvalidTokenException("Invalid issuer: " + issuer.getValue());
         }
     }
@@ -109,16 +119,14 @@ public class TokenVerifier {
         // Check list of necessary criteria that ensures that it is the signature we want and
         // not just any syntactically correct signature.
         CriteriaSet criteriaSet = new CriteriaSet();
-        criteriaSet.add(new EntityIdCriterion(getIssuerEntityDescriptor().getEntityID()));
-        criteriaSet.add(new MetadataCriterion(
-                IDPSSODescriptor.DEFAULT_ELEMENT_NAME, SAMLConstants.SAML20P_NS
-        ));
+        String expectedEntityId = this.entityDescriptor.getEntityID();
+        criteriaSet.add(new EntityIdCriterion(expectedEntityId));
         criteriaSet.add(new UsageCriterion(UsageType.SIGNING));
 
         boolean criteriaAreValid;
         try {
             criteriaAreValid = trustEngine.validate(signature, criteriaSet);
-        } catch (SecurityException e) {
+        } catch (org.opensaml.security.SecurityException e) {
             throw new InvalidTokenException(
                     "Security exception while validating token signature: " + e.getMessage(), e
             );
@@ -216,7 +224,7 @@ public class TokenVerifier {
         }
         boolean found = false;
         for (Audience audience : audienceRestriction.getAudiences()) {
-            if (audience.getAudienceURI().equals(config.getAudienceURI())) {
+            if (Objects.equals(audience.getURI(), config.getAudienceURI())) {
                 found = true;
                 break;
             }
