@@ -27,7 +27,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CprListTest extends TestBase {
@@ -60,12 +59,12 @@ public class CprListTest extends TestBase {
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", "", subscriber));
 
             CprList cprList1 = new CprList("myList1");
-            session.save(cprList1);
+            session.persist(cprList1);
             CprList cprList2 = new CprList("myList2");
-            session.save(cprList2);
+            session.persist(cprList2);
             subscriber.addCprList(cprList1);
             subscriber.addCprList(cprList2);
-            session.save(subscriber);
+            session.persist(subscriber);
             transaction.commit();
         }
 

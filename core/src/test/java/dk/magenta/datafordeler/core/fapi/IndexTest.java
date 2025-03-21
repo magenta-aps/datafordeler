@@ -25,7 +25,6 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class)
 public class IndexTest {

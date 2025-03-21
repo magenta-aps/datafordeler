@@ -135,7 +135,7 @@ public class ManageSubscription {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber = objectMapper.readValue(subscriberContent, Subscriber.class);
-            session.save(subscriber);
+            session.persist(subscriber);
             transaction.commit();
             return ResponseEntity.ok(subscriber);
         } catch (PersistenceException e) {
@@ -155,7 +155,7 @@ public class ManageSubscription {
             Transaction transaction = session.beginTransaction();
             try {
                 Subscriber subscriber = new Subscriber(subscriberId);
-                session.save(subscriber);
+                session.persist(subscriber);
                 transaction.commit();
                 loggerHelper.urlInvokePersistablelogs("subscriber done");
                 return ResponseEntity.ok(subscriber);
@@ -242,7 +242,7 @@ public class ManageSubscription {
             subscription.setCprList(cprListItem);
             subscriber.addBusinessEventSubscription(subscription);
 
-            session.save(subscriber);
+            session.persist(subscriber);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
             return ResponseEntity.ok(subscription);

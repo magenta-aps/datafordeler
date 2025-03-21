@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ParseTest {

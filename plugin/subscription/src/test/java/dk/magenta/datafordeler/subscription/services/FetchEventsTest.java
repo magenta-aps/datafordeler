@@ -35,7 +35,6 @@ import java.util.*;
 import static org.mockito.Mockito.when;
 
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FetchEventsTest extends TestBase {
@@ -105,11 +104,11 @@ public class FetchEventsTest extends TestBase {
             cprList.addCprString("0101011248");
             cprList.addCprString("0101011249");
             cprList.addCprString("0101011250");
-            session.save(cprList);
+            session.persist(cprList);
 
             CvrList cvrList = new CvrList("L2");
             cvrList.addCvrString("25052943");
-            session.save(cvrList);
+            session.persist(cvrList);
 
             subscriptionT1.setCprList(cprList);
             subscriptionT2.setCprList(cprList);
@@ -137,7 +136,7 @@ public class FetchEventsTest extends TestBase {
             subscriber.addDataEventSubscription(subscriptionDE6);
             subscriber.addDataEventSubscription(subscriptionDE7);
             subscriber.addDataEventSubscription(subscriptionDE8);
-            session.save(subscriber);
+            session.persist(subscriber);
             tx.commit();
         } catch (IOException e) {
             e.printStackTrace();

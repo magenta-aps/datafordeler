@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.core.database;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.plugindemo.fapi.DemoRecordQuery;
@@ -11,20 +10,18 @@ import org.hibernate.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 import java.util.UUID;
 
-
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 public class DatabaseTest {
 
     @Autowired
     SessionManager sessionManager;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private static final String domain = "test";
 
@@ -41,7 +38,7 @@ public class DatabaseTest {
             DemoDataRecord record1 = new DemoDataRecord("København K");
             record1.setBitemporality("2017-02-21T16:02:50+01:00", null, "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");
             demoEntity1.addBitemporalRecord(record1, session);
-            session.save(demoEntity1);
+            session.persist(demoEntity1);
 
 
             UUID uuid2 = UUID.randomUUID();
@@ -51,7 +48,7 @@ public class DatabaseTest {
             DemoDataRecord record2 = new DemoDataRecord("NameWith%");
             record2.setBitemporality("2017-02-21T16:02:50+01:00", null, "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");
             demoEntity2.addBitemporalRecord(record2, session);
-            session.save(demoEntity2);
+            session.persist(demoEntity2);
 
             transaction.commit();
 

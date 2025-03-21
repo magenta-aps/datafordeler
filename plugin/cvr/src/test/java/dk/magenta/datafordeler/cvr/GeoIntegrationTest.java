@@ -9,9 +9,10 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
-
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 public class GeoIntegrationTest extends TestBase {
 

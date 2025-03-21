@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.*;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PullTest extends TestBase {

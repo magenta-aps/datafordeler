@@ -46,13 +46,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.mockito.Mockito.when;
-
 @ContextConfiguration(classes = Application.class)
-@TestPropertySource(
-        properties = {
-                "dafo.testing=true",
-        }
-)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FapiTest {
 
@@ -73,7 +67,6 @@ public class FapiTest {
 
     private static String veryEarly = "1800-01-01T00:00:00Z";
     private static String veryLate = "2200-12-31T23:59:59Z";
-
     private static ZoneId systemZone = ZoneOffset.systemDefault();
 
     @Test

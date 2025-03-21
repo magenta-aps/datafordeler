@@ -381,7 +381,7 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
             registration.setSequenceNumber(j++);
             registration.setLastImportTime(importMetadata.getImportTime());
             try {
-                session.save(registration);
+                session.persist(registration);
             } catch (javax.persistence.EntityNotFoundException e) {
                 e.printStackTrace();
             }

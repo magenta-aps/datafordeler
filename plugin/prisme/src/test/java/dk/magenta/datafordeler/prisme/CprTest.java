@@ -50,7 +50,6 @@ import java.util.UUID;
 import static org.mockito.Mockito.when;
 
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CprTest extends TestBase {
@@ -939,13 +938,13 @@ public class CprTest extends TestBase {
         deadStatusPresent.setBitemporality(afterDeathPresent);
         records.add(deadStatusPresent);
 
-        session.save(personEntity);
-        session.save(personEntity.getIdentification());
+        session.persist(personEntity);
+        session.persist(personEntity.getIdentification());
         for (CprBitemporalPersonRecord record : records) {
             record.setDafoUpdated(OffsetDateTime.now());
             record.setEntity(personEntity);
             personEntity.addBitemporalRecord(record, session, false);
-            session.save(record);
+            session.persist(record);
         }
         session.flush();
         transaction.commit();
@@ -1062,12 +1061,12 @@ public class CprTest extends TestBase {
         deadStatusPresent.setBitemporality(afterDeathPresent);
         records.add(deadStatusPresent);
 
-        session.save(personEntity);
-        session.save(personEntity.getIdentification());
+        session.persist(personEntity);
+        session.persist(personEntity.getIdentification());
         for (CprBitemporalPersonRecord record : records) {
             record.setDafoUpdated(OffsetDateTime.now());
             personEntity.addBitemporalRecord(record, session, false);
-            session.save(record);
+            session.persist(record);
         }
         session.flush();
         transaction.commit();

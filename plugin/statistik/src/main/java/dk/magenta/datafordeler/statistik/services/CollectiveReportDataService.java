@@ -48,14 +48,8 @@ import java.util.Optional;
 @RequestMapping("/statistik/collective_report")
 public class CollectiveReportDataService extends PersonStatisticsService {
 
-    private class Exclude extends Exception {
-    }
-
     @Autowired
     SessionManager sessionManager;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Autowired
     private CsvMapper csvMapper;
@@ -445,10 +439,10 @@ public class CollectiveReportDataService extends PersonStatisticsService {
                 civilStatusReport.setRegistrationAfter(registrationAfter);
                 civilStatusReport.setReportStatus(ReportProgressStatus.started);
 
-                reportProgressSession.save(birthReport);
-                reportProgressSession.save(deathReport);
-                reportProgressSession.save(movementReport);
-                reportProgressSession.save(civilStatusReport);
+                reportProgressSession.persist(birthReport);
+                reportProgressSession.persist(deathReport);
+                reportProgressSession.persist(movementReport);
+                reportProgressSession.persist(civilStatusReport);
                 reportProgressSession.getTransaction().commit();
                 currentcollectionUuid = collectionUuid;
             } else {

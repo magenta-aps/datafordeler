@@ -269,7 +269,7 @@ public class Pull extends Worker implements Runnable {
             }
             Session session = this.engine.configurationSessionManager.getSessionFactory().openSession();
             session.beginTransaction();
-            session.save(interruptedPull);
+            session.persist(interruptedPull);
             session.getTransaction().commit();
             session.close();
         }

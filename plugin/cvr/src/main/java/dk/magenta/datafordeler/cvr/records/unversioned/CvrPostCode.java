@@ -119,7 +119,7 @@ public class CvrPostCode extends DatabaseEntry {
                 post = new CvrPostCode();
                 post.setPostCode(code);
                 post.setPostDistrict(postDistrict);
-                session.save(post);
+                session.persist(post);
             } else {
                 log.debug("CvrPostCode " + code + " found (" + post.getId() + ")");
             }

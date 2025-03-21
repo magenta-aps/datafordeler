@@ -32,7 +32,6 @@ import java.util.*;
 
 import static org.mockito.Mockito.doReturn;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PullTest {

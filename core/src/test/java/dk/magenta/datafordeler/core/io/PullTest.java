@@ -19,7 +19,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.OffsetDateTime;
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PullTest extends GapiTestBase {

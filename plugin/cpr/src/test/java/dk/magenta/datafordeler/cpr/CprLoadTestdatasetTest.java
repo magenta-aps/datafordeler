@@ -24,7 +24,6 @@ import java.util.List;
 /**
  * Test that it is possible to load and clear data which is dedicated for demopurpose
  */
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CprLoadTestdatasetTest extends TestBase {

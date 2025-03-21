@@ -10,6 +10,8 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 public class DemoPlugin extends Plugin {
 
@@ -47,6 +49,7 @@ public class DemoPlugin extends Plugin {
      */
     @PostConstruct
     public void init() {
+        this.demoRegisterManager.setPlugin(this);
         this.demoRegisterManager.addEntityManager(this.demoEntityManager);
     }
 

@@ -15,9 +15,8 @@ import org.springframework.test.context.ContextConfiguration;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
-@ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = Application.class)
 public class SinglePluginTest extends PluginTestBase {
 
     @LocalServerPort

@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestParse extends GeoTest {

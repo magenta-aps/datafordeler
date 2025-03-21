@@ -34,7 +34,6 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)

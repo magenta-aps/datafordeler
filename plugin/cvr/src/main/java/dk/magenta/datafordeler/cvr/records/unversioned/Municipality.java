@@ -116,7 +116,7 @@ public class Municipality extends DatabaseEntry {
                 municipality = QueryManager.getItem(session, Municipality.class, Collections.singletonMap(DB_FIELD_CODE, code));
                 if (municipality != null && municipality.name.equals("") && name != null) {
                     municipality.setName(name);
-                    session.save(municipality);
+                    session.persist(municipality);
                 }
             }
             if (municipality == null) {
@@ -127,7 +127,7 @@ public class Municipality extends DatabaseEntry {
                     name = "";
                 }
                 municipality.setName(name);
-                session.save(municipality);
+                session.persist(municipality);
             } else {
                 log.debug("Municipality " + code + " found (" + municipality.getId() + ")");
             }

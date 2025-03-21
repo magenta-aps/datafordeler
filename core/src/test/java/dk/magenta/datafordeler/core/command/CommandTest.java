@@ -29,8 +29,9 @@ import java.util.*;
 
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = Application.class)
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = Application.class)
 public class CommandTest extends GapiTestBase {
 
     @Autowired

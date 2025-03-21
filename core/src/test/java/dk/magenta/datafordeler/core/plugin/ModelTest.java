@@ -9,7 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.UUID;
 
-
 @ContextConfiguration(classes = Application.class)
 public class ModelTest {
 

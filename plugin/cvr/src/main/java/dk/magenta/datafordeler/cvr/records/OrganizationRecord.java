@@ -168,7 +168,7 @@ public class OrganizationRecord extends CvrRecord {
 
 
     public void save(Session session) {
-        session.save(this);
+        session.persist(this);
     }
 
     @Override

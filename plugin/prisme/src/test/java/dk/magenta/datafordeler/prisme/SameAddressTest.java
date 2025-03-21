@@ -27,7 +27,6 @@ import java.util.StringJoiner;
 import static org.mockito.Mockito.when;
 
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SameAddressTest extends TestBase {

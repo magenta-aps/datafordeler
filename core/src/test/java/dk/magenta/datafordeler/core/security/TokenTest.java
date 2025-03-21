@@ -25,9 +25,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
-
-@ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = Application.class)
 public class TokenTest {
 
   private class TokenHeaderInjector implements ClientHttpRequestInterceptor {

@@ -168,7 +168,7 @@ public abstract class GerEntityManager<E extends GerEntity> extends EntityManage
                 timer.measure(TASK_POPULATE_DATA);
 
                 timer.start(TASK_SAVE);
-                session.save(entity);
+                session.persist(entity);
                 timer.measure(TASK_SAVE);
             }
         }

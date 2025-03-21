@@ -7,7 +7,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.net.URI;
 
-
 @ContextConfiguration(classes = Application.class)
 public class HttpStatusExceptionTest {
 

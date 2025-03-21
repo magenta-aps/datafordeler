@@ -148,7 +148,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
                 for (ParticipantRecord participantRecord : records) {
                     boolean updated = ParticipantEntityManager.this.enrichParticipantRecord(participantRecord);
                     if (updated) {
-                        session.save(participantRecord);
+                        session.persist(participantRecord);
                     }
                 }
                 session.flush();

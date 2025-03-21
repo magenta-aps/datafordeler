@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StatusDataServiceTest extends TestBase {

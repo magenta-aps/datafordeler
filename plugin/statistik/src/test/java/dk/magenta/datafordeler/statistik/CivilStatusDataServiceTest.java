@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CivilStatusDataServiceTest extends TestBase {

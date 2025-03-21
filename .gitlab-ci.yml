@@ -28,7 +28,6 @@ workflow:
     - <<: *if-default-branch-refs
     - <<: *if-merge-request
 
-
 include:
   - project: "labs/salt-automation"
     file:
@@ -52,6 +51,7 @@ variables:
 
   DAFODOC_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler_doc:${CI_COMMIT_SHA}
   DAFODOC_IMAGE_TAG: magentaaps/datafordeler_doc:${CI_COMMIT_TAG}
+
 # Build stage
 #############
 build-mssql-image:

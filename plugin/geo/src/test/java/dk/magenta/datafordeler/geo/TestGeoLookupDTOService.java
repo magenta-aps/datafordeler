@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import java.io.IOException;
 import java.util.List;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestGeoLookupDTOService extends GeoTest {

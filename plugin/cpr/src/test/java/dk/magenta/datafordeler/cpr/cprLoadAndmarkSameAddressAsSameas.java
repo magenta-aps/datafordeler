@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class cprLoadAndmarkSameAddressAsSameas extends TestBase {

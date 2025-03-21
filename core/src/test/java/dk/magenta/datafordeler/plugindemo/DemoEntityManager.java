@@ -19,6 +19,7 @@ import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -37,7 +38,6 @@ public class DemoEntityManager extends EntityManager {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
     private DemoEntityService demoEntityService;
 
     private HttpCommunicator commonFetcher;
@@ -48,9 +48,10 @@ public class DemoEntityManager extends EntityManager {
 
     private URI baseEndpoint = null;
 
-    public DemoEntityManager() {
+    public DemoEntityManager(@Lazy DemoEntityService demoEntityService) {
         this.managedEntityClass = DemoEntityRecord.class;
         this.commonFetcher = new HttpCommunicator();
+        this.demoEntityService = demoEntityService;
         try {
             this.baseEndpoint = new URI("http", null, "localhost", Application.servicePort, "/test", null, null);
         } catch (URISyntaxException e) {

@@ -168,7 +168,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 timer.measure(TASK_POPULATE_DATA);
 
                 timer.start(TASK_SAVE);
-                session.save(entity);
+                session.persist(entity);
                 timer.measure(TASK_SAVE);
 
             } catch (IOException e) {

@@ -33,7 +33,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RecordTest extends TestBase {

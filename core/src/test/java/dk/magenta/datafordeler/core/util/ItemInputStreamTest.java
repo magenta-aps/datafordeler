@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.Application;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.io.ByteArrayInputStream;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 public class ItemInputStreamTest {
 

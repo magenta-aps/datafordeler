@@ -7,7 +7,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
 
-
 @ContextConfiguration(classes = Application.class)
 public class DataStreamExceptionTest {
 

@@ -95,7 +95,7 @@ public class ManageCprList {
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
                 CprList cprCreateList = new CprList(cprList, subscriber);
-                session.save(cprCreateList);
+                session.persist(cprCreateList);
                 subscriber.addCprList(cprCreateList);
 
                 transaction.commit();

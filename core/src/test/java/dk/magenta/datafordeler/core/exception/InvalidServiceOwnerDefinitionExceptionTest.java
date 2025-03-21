@@ -11,9 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.regex.Pattern;
 
 
-
-@ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = Application.class)
 public class InvalidServiceOwnerDefinitionExceptionTest extends InvalidPluginDefinitionExceptionTest {
 
     @Autowired

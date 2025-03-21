@@ -326,7 +326,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                     PersonSubscription newSubscription = new PersonSubscription();
                     newSubscription.setPersonNumber(add);
                     newSubscription.setAssignment(PersonSubscriptionAssignmentStatus.CreatedInTable);
-                    session.save(newSubscription);
+                    session.persist(newSubscription);
                 }
                 for (String remove : removeCprNumbers) {
                     PersonSubscription removeSubscription = map.get(remove);
@@ -405,7 +405,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             log.info("Uploading subscription file with "+subscriptionList.size()+" items");
             this.addSubscription(content.toString(), charset, this);
             for (PersonSubscription subscription : subscriptionList) {
-                session.save(subscription);
+                session.persist(subscription);
             }
             transaction.commit();
 

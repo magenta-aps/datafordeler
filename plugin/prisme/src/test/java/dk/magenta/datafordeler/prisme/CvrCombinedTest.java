@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
  * This is becrause we do not want the unittest to access outside webservices and use passwords etc.
  * The unittest could be expanded with a mockup of the external cvr-server
  */
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CvrCombinedTest extends TestBase {

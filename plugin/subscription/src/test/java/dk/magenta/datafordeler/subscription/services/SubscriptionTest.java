@@ -22,7 +22,6 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SubscriptionTest extends TestBase {
@@ -50,7 +49,7 @@ public class SubscriptionTest extends TestBase {
             subscriptions.add(new Subscriber("user4"));
 
             for (Subscriber subscriber : subscriptions) {
-                session.save(subscriber);
+                session.persist(subscriber);
             }
 
             transaction.commit();
@@ -94,7 +93,7 @@ public class SubscriptionTest extends TestBase {
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             DataEventSubscription dataEventSubscription = subscriber.getDataEventSubscription().iterator().next();
             CprList cprList = new CprList("listId");
-            session.save(cprList);
+            session.persist(cprList);
             dataEventSubscription.setCprList(cprList);
             transaction.commit();
         }
@@ -118,7 +117,7 @@ public class SubscriptionTest extends TestBase {
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscription businessEventSubscription = subscriber.getBusinessEventSubscription().iterator().next();
             CprList cprList = new CprList("listId1");
-            session.save(cprList);
+            session.persist(cprList);
             businessEventSubscription.setCprList(cprList);
             transaction.commit();
         }
@@ -137,7 +136,7 @@ public class SubscriptionTest extends TestBase {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             CprList pnrList = new CprList("cprList1");
-            session.save(pnrList);
+            session.persist(pnrList);
             transaction.commit();
         }
 
@@ -145,7 +144,7 @@ public class SubscriptionTest extends TestBase {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             CprList pnrList = new CprList("cprList2");
-            session.save(pnrList);
+            session.persist(pnrList);
             transaction.commit();
         }
 
@@ -168,9 +167,9 @@ public class SubscriptionTest extends TestBase {
             SubscribedCprNumber prn1 = new SubscribedCprNumber(pnrList, "1234");
             SubscribedCprNumber prn2 = new SubscribedCprNumber(pnrList, "1235");
             SubscribedCprNumber prn3 = new SubscribedCprNumber(pnrList, "1236");
-            session.save(prn1);
-            session.save(prn2);
-            session.save(prn3);
+            session.persist(prn1);
+            session.persist(prn2);
+            session.persist(prn3);
             Assertions.assertEquals(1, query.getResultList().size());
             transaction.commit();
         }
@@ -496,7 +495,7 @@ public class SubscriptionTest extends TestBase {
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", "", subscriber));
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", "", subscriber));
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", "", subscriber));
-            session.save(subscriber);
+            session.persist(subscriber);
             transaction.commit();
         }
 
@@ -603,7 +602,7 @@ public class SubscriptionTest extends TestBase {
             subscriber.addDataEventSubscription(ds1);
             subscriber.addDataEventSubscription(ds2);
             subscriber.addDataEventSubscription(ds3);
-            session.save(subscriber);
+            session.persist(subscriber);
             transaction.commit();
         }
 

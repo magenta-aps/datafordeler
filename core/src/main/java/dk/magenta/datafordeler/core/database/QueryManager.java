@@ -141,7 +141,7 @@ public class QueryManager {
             if (identification == null) {
                 log.debug("Creating new for " + domain + "/" + uuid);
                 identification = new Identification(uuid, domain);
-                session.save(identification);
+                session.persist(identification);
                 identifications.put(domain, uuid, identification.getId());
             } else {
                 log.debug("Identification for " + domain + "/" + uuid + " found in database: " + identification.getId());

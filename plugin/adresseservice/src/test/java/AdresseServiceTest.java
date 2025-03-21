@@ -43,7 +43,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AdresseServiceTest {

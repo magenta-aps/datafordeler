@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.database.Entity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.OffsetDateTime;
@@ -13,7 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 public class QueryTest {
 

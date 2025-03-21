@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
 @ContextConfiguration(classes = Application.class)
 public class HttpCommunicatorTest {
 

@@ -26,7 +26,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReportProgressServiceTest extends TestBase {

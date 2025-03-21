@@ -97,7 +97,7 @@ public class CompanyStatus extends DatabaseEntry {
                 log.debug("CompanyStatus " + statusText + " not found; creating new");
                 status = new CompanyStatus();
                 status.setStatus(statusText);
-                session.save(status);
+                session.persist(status);
             } else {
                 log.debug("CompanyStatus " + statusText + " found in cache (" + status.getId() + ")");
             }

@@ -29,7 +29,6 @@ import java.io.IOException;
  * 0011311111111 - Er født 2011-11-13 og har aktiv bopæl i grønland
  * 0011311111112 - Er født 2011-11-13 og har aktiv bopæl i danmark
  */
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class VoteListDataServiceTest extends TestBase {

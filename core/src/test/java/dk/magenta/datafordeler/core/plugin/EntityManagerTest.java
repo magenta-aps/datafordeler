@@ -18,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class EntityManagerTest extends PluginTestBase {

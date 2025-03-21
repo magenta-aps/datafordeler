@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ParseTest extends TestBase {

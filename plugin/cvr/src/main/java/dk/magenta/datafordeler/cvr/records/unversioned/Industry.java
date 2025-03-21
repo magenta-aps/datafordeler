@@ -116,7 +116,7 @@ public class Industry extends DatabaseEntry {
                 industry = new Industry();
                 industry.setIndustryCode(industryCode);
                 industry.setIndustryText(industryText);
-                session.save(industry);
+                session.persist(industry);
             } else {
                 log.debug("Industry " + industryCode + " found in cache (" + industry.getId() + ")");
             }

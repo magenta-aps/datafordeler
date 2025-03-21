@@ -86,7 +86,7 @@ public class ManageCvrList {
             } else {
                 Subscriber subscriber = subscribers.get(0);
                 CvrList cvrCreateList = new CvrList(cvrList, subscriber);
-                session.save(cvrCreateList);
+                session.persist(cvrCreateList);
                 subscriber.addCvrList(cvrCreateList);
 
                 transaction.commit();

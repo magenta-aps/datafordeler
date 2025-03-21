@@ -19,7 +19,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LocalityDataServiceTest extends TestBase {

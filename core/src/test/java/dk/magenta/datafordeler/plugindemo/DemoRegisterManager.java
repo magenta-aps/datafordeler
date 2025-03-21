@@ -37,7 +37,6 @@ public class DemoRegisterManager extends RegisterManager {
     @Autowired
     private DemoConfigurationManager configurationManager;
 
-    @Autowired
     private DemoPlugin plugin;
 
     @Autowired
@@ -68,6 +67,10 @@ public class DemoRegisterManager extends RegisterManager {
     @Override
     public Plugin getPlugin() {
         return this.plugin;
+    }
+
+    public void setPlugin(DemoPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override

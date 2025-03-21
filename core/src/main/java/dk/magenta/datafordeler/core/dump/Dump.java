@@ -108,7 +108,7 @@ public class Dump extends Worker {
             }
 
             // then, save the dump
-            session.save(dump);
+            session.persist(dump);
 
             transaction.commit();
 

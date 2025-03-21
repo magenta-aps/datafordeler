@@ -16,8 +16,9 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.TimeZone;
 
-@ContextConfiguration(classes = Application.class)
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = Application.class)
 public class MonitorTest {
 
     @Autowired

@@ -30,9 +30,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-
-@ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = Application.class)
 public class RegisterManagerTest extends PluginTestBase {
 
     @LocalServerPort

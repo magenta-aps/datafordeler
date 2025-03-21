@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
-
 @ContextConfiguration(classes = Application.class)
 public class RoleTest {
 
@@ -15,7 +14,6 @@ public class RoleTest {
             "MyService",
             new ReadServiceRoleVersion(0.1f, "For testing only")
         );
-
         Assertions.assertEquals("ReadMyService", role.getRoleName());
     }
 }

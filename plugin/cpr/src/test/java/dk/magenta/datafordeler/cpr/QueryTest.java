@@ -17,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import java.io.InputStream;
 import java.time.OffsetDateTime;
 
-
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)

@@ -50,7 +50,7 @@ public class ReportSyncHandler {
         }
 
         session.beginTransaction();
-        session.save(reportStatusObject);
+        session.persist(reportStatusObject);
         session.getTransaction().commit();
         return true;
     }
@@ -106,7 +106,7 @@ public class ReportSyncHandler {
 
         if (query.getResultList().size() > 0) {
             query.getResultList().get(0).setReportStatus(status);
-            session.save(query.getResultList().get(0));
+            session.persist(query.getResultList().get(0));
         }
         session.getTransaction().commit();
     }

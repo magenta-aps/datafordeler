@@ -157,7 +157,7 @@ public class CompanyForm extends DatabaseEntry {
                 form.setShortDescription(shortDescription);
                 form.setLongDescription(longDescription);
                 form.setResponsibleDataSource(responsibleDataSource);
-                session.save(form);
+                session.persist(form);
             } else {
                 log.debug("CompanyForm " + code + " found in cache (" + form.getId() + ")");
             }

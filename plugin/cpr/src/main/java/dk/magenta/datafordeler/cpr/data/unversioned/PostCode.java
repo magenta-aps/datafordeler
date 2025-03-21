@@ -68,7 +68,7 @@ public class PostCode extends UnversionedEntity {
             postcode.setIdentification(
                     QueryManager.getOrCreateIdentification(session, generateUUID(code), PostCode.getDomain())
             );
-            session.save(postcode);
+            session.persist(postcode);
         }
         return postcode;
     }
