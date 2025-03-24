@@ -12,8 +12,10 @@ import org.opensaml.saml.metadata.resolver.RoleDescriptorResolver;
 import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
+import org.opensaml.security.trust.TrustEngine;
 import org.opensaml.xmlsec.config.impl.DefaultSecurityConfigurationBootstrap;
 import org.opensaml.xmlsec.keyinfo.KeyInfoCredentialResolver;
+import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -71,13 +73,13 @@ public class SamlMetadataConfiguration {
     }
 
     @Bean
-    public Foobar trustEngine(RoleDescriptorResolver roleDescriptorResolver) throws ComponentInitializationException {
+    public ExplicitKeySignatureTrustEngine trustEngine(RoleDescriptorResolver roleDescriptorResolver) throws ComponentInitializationException {
         KeyInfoCredentialResolver keyInfoCredResolver = DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver();
         MetadataCredentialResolver metadataCredentialResolver = new MetadataCredentialResolver();
         metadataCredentialResolver.setRoleDescriptorResolver(roleDescriptorResolver);
         metadataCredentialResolver.setKeyInfoCredentialResolver(keyInfoCredResolver);
         metadataCredentialResolver.initialize();
-        return new Foobar(
+        return new ExplicitKeySignatureTrustEngine(
                 metadataCredentialResolver,
                 keyInfoCredResolver
         );

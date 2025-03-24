@@ -13,6 +13,7 @@ import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.security.impl.SAMLSignatureProfileValidator;
 import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
+import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
@@ -33,7 +34,8 @@ public class TokenVerifier {
     private MetadataResolver metadataResolver;
 
     @Autowired
-    private Foobar trustEngine;
+    private ExplicitKeySignatureTrustEngine trustEngine;
+
     @Autowired
     private TokenConfigProperties config;
 
