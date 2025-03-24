@@ -12,6 +12,8 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -30,7 +32,12 @@ import java.util.zip.InflaterInputStream;
 public class TokenParser {
     public Assertion parseAssertion(String fromString) throws InvalidTokenException {
         try {
-            byte[] decodedBytes = Base64.getDecoder().decode(fromString);
+            byte[] decodedBytes;
+            try {
+                decodedBytes = Base64.getDecoder().decode(fromString);
+            } catch (IllegalArgumentException e) {
+                throw new MessageDecodingException("Unable to Base64 decode incoming message");
+            }
             if (decodedBytes == null) {
                 throw new MessageDecodingException("Unable to Base64 decode incoming message");
             }
@@ -44,6 +51,15 @@ public class TokenParser {
 
             Document document = docBuilder.parse(in);
             Element element = document.getDocumentElement();
+
+            DOMImplementationLS lsImpl = (DOMImplementationLS) element.getOwnerDocument().getImplementation().getFeature("LS", "3.0");
+            LSSerializer serializer = lsImpl.createLSSerializer();
+            serializer.getDomConfig().setParameter("xml-declaration", false); //by default its true, so set it to false to get String without xml-declaration
+            serializer.getDomConfig().setParameter("format-pretty-print", true);
+            String str = serializer.writeToString(element);
+
+
+            System.out.println("Element: \n"+str+"\n");
 
             UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);

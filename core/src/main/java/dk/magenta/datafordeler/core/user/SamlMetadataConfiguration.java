@@ -8,10 +8,12 @@ import net.shibboleth.shared.xml.impl.BasicParserPool;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
+import org.opensaml.saml.metadata.resolver.RoleDescriptorResolver;
 import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
+import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
 import org.opensaml.xmlsec.config.impl.DefaultSecurityConfigurationBootstrap;
-import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
+import org.opensaml.xmlsec.keyinfo.KeyInfoCredentialResolver;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -61,12 +63,23 @@ public class SamlMetadataConfiguration {
     }
 
     @Bean
-    public ExplicitKeySignatureTrustEngine trustEngine() {
+    public PredicateRoleDescriptorResolver predicateRoleDescriptorResolver(MetadataResolver metadataResolver) throws ComponentInitializationException {
+        PredicateRoleDescriptorResolver predicateRoleDescriptorResolver = new PredicateRoleDescriptorResolver(metadataResolver);
+        predicateRoleDescriptorResolver.setRequireValidMetadata(true);
+        predicateRoleDescriptorResolver.initialize();
+        return predicateRoleDescriptorResolver;
+    }
+
+    @Bean
+    public Foobar trustEngine(RoleDescriptorResolver roleDescriptorResolver) throws ComponentInitializationException {
+        KeyInfoCredentialResolver keyInfoCredResolver = DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver();
         MetadataCredentialResolver metadataCredentialResolver = new MetadataCredentialResolver();
-        // TODO: brug metadataProvider i metadataCredentialResolver på en måde
-        return new ExplicitKeySignatureTrustEngine(
+        metadataCredentialResolver.setRoleDescriptorResolver(roleDescriptorResolver);
+        metadataCredentialResolver.setKeyInfoCredentialResolver(keyInfoCredResolver);
+        metadataCredentialResolver.initialize();
+        return new Foobar(
                 metadataCredentialResolver,
-                DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver()
+                keyInfoCredResolver
         );
     }
 
