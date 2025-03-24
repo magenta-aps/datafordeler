@@ -4,30 +4,20 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import jakarta.annotation.PostConstruct;
 import net.shibboleth.shared.resolver.CriteriaSet;
 import net.shibboleth.shared.resolver.ResolverException;
-import org.opensaml.core.config.InitializationException;
-import org.opensaml.core.config.InitializationService;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.saml.criterion.EntityRoleCriterion;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.saml2.core.*;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
-import org.opensaml.saml.saml2.metadata.SPSSODescriptor;
 import org.opensaml.saml.security.impl.SAMLSignatureProfileValidator;
-import org.opensaml.security.SecurityException;
-import org.opensaml.security.credential.UsageType;
-import org.opensaml.security.criteria.UsageCriterion;
-import org.opensaml.security.trust.TrustEngine;
 import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import org.opensaml.xmlsec.signature.support.SignatureValidationParametersCriterion;
-import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-import javax.xml.namespace.QName;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -72,14 +62,11 @@ public class TokenVerifier {
 
     @PostConstruct
     public void init() throws dk.magenta.datafordeler.core.exception.ConfigurationException, ResolverException {
-//        try {
+
         CriteriaSet criteriaSet = new CriteriaSet();
         criteriaSet.add(new EntityIdCriterion("Dafo-STS"));
 
-            this.entityDescriptor = this.metadataResolver.resolveSingle(criteriaSet);
-//        } catch (MetadataProviderException e) {
-//            throw new dk.magenta.datafordeler.core.exception.ConfigurationException("Could not get entity descriptor", e);
-//        }
+        this.entityDescriptor = this.metadataResolver.resolveSingle(criteriaSet);
         if (this.entityDescriptor.getEntityID() == null) {
             throw new dk.magenta.datafordeler.core.exception.ConfigurationException("Entity descriptor id is null");
         }
@@ -94,7 +81,6 @@ public class TokenVerifier {
         if (!Objects.equals(issuer.getValue(), this.entityDescriptor.getEntityID())) {
             throw new InvalidTokenException("Invalid issuer: " + issuer.getValue());
         }
-        System.out.println("Correct issuer: " + issuer.getValue() + " == " + this.entityDescriptor.getEntityID());
     }
 
     public void verifySignatureAndTrust(Signature signature) throws InvalidTokenException {
@@ -130,14 +116,6 @@ public class TokenVerifier {
         criteriaSet.add(new EntityIdCriterion(expectedEntityId));
         criteriaSet.add(new EntityRoleCriterion(IDPSSODescriptor.DEFAULT_ELEMENT_NAME));
 //        criteriaSet.add(new UsageCriterion(UsageType.SIGNING));
-
-        SignatureValidationParametersCriterion validationCriterion = (SignatureValidationParametersCriterion)criteriaSet.get(SignatureValidationParametersCriterion.class);
-//        try {
-//            System.out.println(trustEngine.do_validate(signature, criteriaSet));
-//        } catch (SecurityException e) {
-//            throw new RuntimeException(e);
-//        }
-
 
         boolean criteriaAreValid;
         try {
