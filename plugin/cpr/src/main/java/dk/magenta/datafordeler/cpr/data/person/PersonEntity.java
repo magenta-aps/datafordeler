@@ -42,17 +42,6 @@ import java.util.stream.Collectors;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED, columnList = PersonEntity.DB_FIELD_DAFO_UPDATED)
 })
-@Filter(name=Bitemporal.FILTER_EFFECTFROM_AFTER)
-@Filter(name=Bitemporal.FILTER_EFFECTFROM_BEFORE)
-@Filter(name=Bitemporal.FILTER_EFFECTTO_AFTER)
-@Filter(name=Bitemporal.FILTER_EFFECTTO_BEFORE)
-@Filter(name=Bitemporal.FILTER_REGISTRATIONFROM_AFTER)
-@Filter(name=Bitemporal.FILTER_REGISTRATIONFROM_BEFORE)
-@Filter(name=Bitemporal.FILTER_REGISTRATIONTO_AFTER)
-@Filter(name=Bitemporal.FILTER_REGISTRATIONTO_BEFORE)
-@Filter(name=Bitemporal.FILTER_LASTUPDATED_AFTER)
-@Filter(name=Bitemporal.FILTER_LASTUPDATED_BEFORE)
-@Filter(name=DataItem.FILTER_RECORD_AFTER)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PersonEntity extends CprRecordEntity {
 
