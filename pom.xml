@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>plugin/parent</module>
+        <module>parent</module>
         <module>core</module>
         <module>plugin/geo</module>
         <module>plugin/combinedPitu</module>

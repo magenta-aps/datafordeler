@@ -58,9 +58,6 @@ public class TokenParser {
             serializer.getDomConfig().setParameter("format-pretty-print", true);
             String str = serializer.writeToString(element);
 
-
-            System.out.println("Element: \n"+str+"\n");
-
             UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
 

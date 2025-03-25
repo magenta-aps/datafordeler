@@ -4,6 +4,7 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import org.junit.jupiter.api.Test;
+import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
@@ -28,6 +29,9 @@ public class UserTest {
 
     @MockitoSpyBean
     private DafoEngineUserManager dafoEngineUserManager;
+
+    @MockitoSpyBean
+    private PredicateRoleDescriptorResolver predicateRoleDescriptorResolver;
 
     @MockitoSpyBean
     private TokenVerifier tokenVerifier;
@@ -69,6 +73,7 @@ public class UserTest {
         // Skip date checks on the token
         doNothing().when(tokenVerifier).verifyTokenAge(any());
         doReturn(true).when(tokenVerifier).checkNotOnOrafter(any());
+        doReturn(false).when(predicateRoleDescriptorResolver).isRequireValidMetadata();
 
         // Mock up userprofile info instead of fetching it from the database
         doReturn(TEST_USERPROFILE_ID).when(userQueryManager).getUserProfileIdByName(any());

@@ -87,7 +87,6 @@ public class DemoRegisterManager extends RegisterManager {
     }
 
     public void setPort(int port) {
-        System.out.println("setting port on "+id+" to "+port);
         this.port = port;
         PluginManager pluginManager = this.plugin.getPluginManager();
 
@@ -112,7 +111,6 @@ public class DemoRegisterManager extends RegisterManager {
     @Override
     public URI getBaseEndpoint() {
         try {
-            System.out.println(this.port +" on "+id);
             return new URI("http", null, "localhost", this.port, "/test", null, null);
         } catch (URISyntaxException e) {
             e.printStackTrace();

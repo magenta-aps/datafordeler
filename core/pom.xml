@@ -6,8 +6,8 @@
     <!--The identifier of the parent POM-->
     <parent>
         <groupId>dk.magenta.datafordeler</groupId>
-        <artifactId>plugin-parent</artifactId>
-        <relativePath>../plugin/parent/pom.xml</relativePath>
+        <artifactId>parent</artifactId>
+        <relativePath>../parent/pom.xml</relativePath>
         <version>2.0.0</version>
     </parent>
 
@@ -17,7 +17,6 @@
     <packaging>jar</packaging>
     <name>datafordeler-core</name>
     <description>Core module for Magenta's Greenlandic System</description>
-
 
     <dependencies>
 
@@ -218,11 +217,11 @@
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.commons</groupId>-->
+<!--            <artifactId>commons-lang3</artifactId>-->
+<!--            <version>3.17.0</version>-->
+<!--        </dependency>-->
 
         <!-- Cron scheduling -->
         <dependency>
@@ -295,9 +294,9 @@
 
         <!-- FTP4J -->
         <dependency>
-            <groupId>it.sauronsoftware</groupId>
+            <groupId>com.github.asbachb</groupId>
             <artifactId>ftp4j</artifactId>
-            <version>1.6</version>
+            <version>1.7.3</version>
         </dependency>
 
 

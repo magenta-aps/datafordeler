@@ -36,6 +36,7 @@ public class SessionManager {
             LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
             sessionFactoryBean.setDataSource(this.dataSource());
             sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
+            sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
             sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
             sessionFactoryBean.afterPropertiesSet();
             this.sessionFactory = sessionFactoryBean.getObject();
@@ -97,7 +98,6 @@ public class SessionManager {
         dataSource.setUrl(System.getenv("DATABASE_URL"));
         dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
-        System.out.println("DATABASE_URL: "+System.getenv("DATABASE_URL"));
         return dataSource;
     }
 

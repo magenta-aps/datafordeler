@@ -1,10 +1,12 @@
 FROM jelastic/maven:3.9.5-openjdk-21
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
 COPY pom.xml /code/pom.xml
-COPY core /code/core
-COPY plugin /code/plugin
+COPY parent/pom.xml /code/parent/pom.xml
+COPY core/pom.xml /code/core/pom.xml
 WORKDIR /code/core/
 RUN mvn dependency:resolve
+COPY core /code/core
+COPY plugin /code/plugin
 WORKDIR /code/
 RUN mvn $MAVEN_CLI_OPTS install package -DskipTests
 RUN mkdir -p /app/core && mkdir -p /app/plugin/jar && mkdir -p /app/log && \

@@ -138,7 +138,6 @@ public class TokenTest {
         );
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
-        System.out.println("TEST COMPLETE");
     }
 
 }

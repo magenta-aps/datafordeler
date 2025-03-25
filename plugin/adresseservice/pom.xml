@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.magenta.datafordeler</groupId>
     <artifactId>adresseservice</artifactId>
     <version>1.1</version>
     <packaging>jar</packaging>
@@ -13,8 +12,8 @@
 
     <parent>
         <groupId>dk.magenta.datafordeler</groupId>
-        <artifactId>plugin-parent</artifactId>
-        <relativePath>../parent/pom.xml</relativePath>
+        <artifactId>parent</artifactId>
+        <relativePath>../../parent/pom.xml</relativePath>
         <version>${project.version}</version>
     </parent>
 

@@ -6,8 +6,8 @@
     <!--The identifier of the parent POM-->
     <parent>
         <groupId>dk.magenta.datafordeler</groupId>
-        <artifactId>plugin-parent</artifactId>
-        <relativePath>../parent/pom.xml</relativePath>
+        <artifactId>parent</artifactId>
+        <relativePath>../../parent/pom.xml</relativePath>
         <version>2.0.0</version>
     </parent>
 

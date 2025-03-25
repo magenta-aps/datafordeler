@@ -67,7 +67,7 @@ public class FapiTest {
 
     private static String veryEarly = "1800-01-01T00:00:00Z";
     private static String veryLate = "2200-12-31T23:59:59Z";
-    private static ZoneId systemZone = ZoneOffset.systemDefault();
+    private static ZoneId systemZone = ZoneOffset.ofHours(1);
 
     @Test
     @Order(order = 1)

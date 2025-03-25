@@ -11,6 +11,8 @@ import org.opensaml.saml.saml2.core.*;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.security.impl.SAMLSignatureProfileValidator;
+import org.opensaml.security.credential.UsageType;
+import org.opensaml.security.criteria.UsageCriterion;
 import org.opensaml.xmlsec.signature.Signature;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
@@ -117,7 +119,7 @@ public class TokenVerifier {
         String expectedEntityId = this.entityDescriptor.getEntityID();
         criteriaSet.add(new EntityIdCriterion(expectedEntityId));
         criteriaSet.add(new EntityRoleCriterion(IDPSSODescriptor.DEFAULT_ELEMENT_NAME));
-//        criteriaSet.add(new UsageCriterion(UsageType.SIGNING));
+        criteriaSet.add(new UsageCriterion(UsageType.SIGNING));
 
         boolean criteriaAreValid;
         try {
@@ -127,12 +129,9 @@ public class TokenVerifier {
                     "Security exception while validating token signature: " + e.getMessage(), e
             );
         }
-        System.out.println("criteriaAreValid: "+criteriaAreValid);
-
         if (!criteriaAreValid) {
             throw new InvalidTokenException("Signature is not trusted or invalid");
         }
-
     }
 
     public void verifyTokenAge(Instant issueInstant) throws InvalidTokenException {
