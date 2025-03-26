@@ -66,7 +66,7 @@ public class CprAdressHistoryService {
         this.monitorService.addAccessCheckPoint("/prisme/cpr/addresshistory/1/1234");
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cprNummer}","/{cprNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
             throws AccessDeniedException, InvalidTokenException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException, InvalidClientInputException {
 

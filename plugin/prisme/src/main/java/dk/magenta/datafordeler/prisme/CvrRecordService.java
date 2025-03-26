@@ -112,7 +112,7 @@ public class CvrRecordService {
         this.enableGerLookup = enableGerLookup;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cvrNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cvrNummer}", "/{cvrNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cvrNummer") String cvrNummer, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
@@ -173,7 +173,7 @@ public class CvrRecordService {
     protected static final byte[] END_OBJECT = "}".getBytes();
     protected static final byte[] OBJECT_SEPARATOR = ",\n".getBytes();
 
-    @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"", "/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getBulk(HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, IOException, HttpNotFoundException, InvalidCertificateException {
         JsonNode requestBody;

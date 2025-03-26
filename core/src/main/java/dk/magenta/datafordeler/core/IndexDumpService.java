@@ -118,7 +118,7 @@ public class IndexDumpService {
     }
 
     @RequestMapping(path = "by-id/{id}")
-    public void get(@PathVariable Long id,
+    public void get(@PathVariable("id") Long id,
                     HttpServletRequest request,
                     HttpServletResponse response)
             throws InvalidTokenException, AccessDeniedException, AccessRequiredException, IOException, InvalidCertificateException {
@@ -129,7 +129,7 @@ public class IndexDumpService {
     }
 
     @RequestMapping(path = "by-name/{name}")
-    public void get(@PathVariable String name,
+    public void get(@PathVariable("name") String name,
                     HttpServletRequest request,
                     HttpServletResponse response)
             throws InvalidTokenException, AccessDeniedException, AccessRequiredException, IOException, InvalidCertificateException {

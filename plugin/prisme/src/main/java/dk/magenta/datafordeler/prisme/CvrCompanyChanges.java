@@ -59,7 +59,7 @@ public class CvrCompanyChanges {
     public static final String PARAM_UPDATED_SINCE = "updatedSince";
     public static final String COMPANY_FORMS = "companyForms";
 
-    @RequestMapping(method = RequestMethod.GET, path = "/lookup", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/lookup", "/lookup/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@RequestParam(value = COMPANY_FORMS, required = true, defaultValue = "") List<String> companyForms, @RequestParam(value = PARAM_UPDATED_SINCE, required = true) String updatedSince, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 

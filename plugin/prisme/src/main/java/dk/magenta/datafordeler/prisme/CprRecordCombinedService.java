@@ -78,7 +78,7 @@ public class CprRecordCombinedService {
     public void init() {
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cprNummer}","/{cprNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cprNummer") String cprNummer, @RequestParam(value = "forceDirect", required = false) String forceDirect, HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
 
@@ -165,7 +165,7 @@ public class CprRecordCombinedService {
     private static final byte[] END_OBJECT = "}".getBytes();
     private static final byte[] OBJECT_SEPARATOR = ",\n".getBytes();
 
-    @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"", "/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getBulk(HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, InvalidParameterException, IOException, HttpNotFoundException, InvalidCertificateException {
         JsonNode requestBody;

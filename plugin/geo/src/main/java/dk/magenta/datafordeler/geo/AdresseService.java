@@ -110,7 +110,7 @@ public class AdresseService {
      * @param request HTTP request containing a municipality parameter
      * @return Json-formatted string containing a list of found objects
      */
-    @RequestMapping("/lokalitet")
+    @RequestMapping(path={"/lokalitet","/lokalitet/"})
     public void getLocalities(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getLocalities(request);
         setHeaders(response);
@@ -170,7 +170,7 @@ public class AdresseService {
      * @param request HTTP request containing a locality parameter
      * @return Json-formatted string containing a list of found objects
      */
-    @RequestMapping("/vej")
+    @RequestMapping(path={"/vej", "/vej/"})
     public void getRoads(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getRoads(request);
         setHeaders(response);
@@ -336,7 +336,7 @@ public class AdresseService {
      * @param request HTTP request containing a road parameter
      * @return Json-formatted string containing a list of found objects
      */
-    @RequestMapping("/hus")
+    @RequestMapping(path={"/hus", "/hus/"})
     public void getAccessAddresses(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getAccessAddresses(request);
         setHeaders(response);
@@ -452,7 +452,7 @@ public class AdresseService {
      *                and optionally a house parameter or bnr parameter
      * @return Json-formatted string containing a list of found objects
      */
-    @RequestMapping("/adresse")
+    @RequestMapping(path={"/adresse","/adresse/"})
     public void getUnitAddresses(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getUnitAddresses(request);
         setHeaders(response);
@@ -680,7 +680,7 @@ public class AdresseService {
     /**
      * Finds more detailed data on unit address
      */
-    @RequestMapping("/adresseoplysninger")
+    @RequestMapping(path={"/adresseoplysninger", "/adresseoplysninger/"})
     public void getAddressData(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getAddressData(request);
         setHeaders(response);

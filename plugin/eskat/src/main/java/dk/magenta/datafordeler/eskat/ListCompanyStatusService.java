@@ -52,7 +52,7 @@ public class ListCompanyStatusService {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/list", "/list/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<String> getSingle(HttpServletRequest request)
             throws DataFordelerException {
 

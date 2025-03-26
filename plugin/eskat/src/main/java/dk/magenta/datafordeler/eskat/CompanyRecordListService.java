@@ -76,9 +76,11 @@ public class CompanyRecordListService extends CompanyRecordService {
     protected void sendAsCSV(Stream<CompanyRecord> entities, HttpServletRequest request, HttpServletResponse response) throws IOException, HttpNotFoundException {
     }
 
-
     @Override
     public List<ResultSet<CompanyRecord>> searchByQuery(CompanyRecordQuery query, Session session) {
+        System.out.println("searchByQuery");
+        System.out.println(query.toHql());
+        System.out.println(query.getSearchParameters());
         List<ResultSet<CompanyRecord>> allRecords = new ArrayList<>();
 
         query.setEffectToAfter(BaseQuery.ALWAYSTIMEINTERVAL);

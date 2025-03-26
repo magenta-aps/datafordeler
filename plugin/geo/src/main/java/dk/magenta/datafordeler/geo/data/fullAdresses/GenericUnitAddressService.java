@@ -104,7 +104,7 @@ public class GenericUnitAddressService {
     private final Logger log = LogManager.getLogger(AdresseService.class.getCanonicalName());
 
 
-    @RequestMapping("/search")
+    @RequestMapping(path={"/search", "/search/"})
     public Envelope getLocalities(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws DataFordelerException, IOException {
 
         //This was supposed to use the BaseQuery from core, but it was not completely supported

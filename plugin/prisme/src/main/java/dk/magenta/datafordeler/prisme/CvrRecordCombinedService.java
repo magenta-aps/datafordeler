@@ -88,7 +88,7 @@ public class CvrRecordCombinedService {
     //{09249B0A-02F9-40A9-9DBF-99F37134AE81}
     public static final String PARAM_INCLUDE_GLOBAL_IDS = "includeGlobalIds";
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cvrNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cvrNummer}", "/{cvrNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cvrNummer") String cvrNummer, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
@@ -133,7 +133,7 @@ public class CvrRecordCombinedService {
         return QueryManager.getAllEntities(session, query, CompanyRecord.class);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"","/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getBulk(HttpServletRequest request)
             throws DataFordelerException, IOException {
         JsonNode requestBody;

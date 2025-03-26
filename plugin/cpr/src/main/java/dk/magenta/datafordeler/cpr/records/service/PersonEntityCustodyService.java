@@ -55,7 +55,7 @@ public class PersonEntityCustodyService {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cpr}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cpr}","/{cpr}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cpr") String cpr, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 

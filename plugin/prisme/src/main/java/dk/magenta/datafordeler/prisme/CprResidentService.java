@@ -63,7 +63,7 @@ public class CprResidentService {
     public void init() {
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cprNummer}", "/{cprNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResidentItem getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
             throws AccessDeniedException, InvalidTokenException, HttpNotFoundException, InvalidCertificateException, InvalidClientInputException {
 

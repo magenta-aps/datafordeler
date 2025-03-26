@@ -73,7 +73,7 @@ public class MonitorService {
 
     private final Logger log = LogManager.getLogger(MonitorService.class.getName());
 
-    @RequestMapping(path = "/database")
+    @RequestMapping(path = {"/database", "/database/"})
     public void checkDatabaseConnections(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = sessionManager.getSessionFactory().openSession();
         Query query = session.createQuery("select 1 from Identification").setMaxResults(1);
@@ -93,7 +93,7 @@ public class MonitorService {
         response.setStatus(200);
     }
 
-    @RequestMapping(path = "/pull")
+    @RequestMapping(path = {"/pull", "/pull/"})
     public void checkPulls(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException, DataFordelerException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkPulls");
@@ -143,7 +143,7 @@ public class MonitorService {
     @Value("${dafo.error_file:cache/log/dafo.err}")
     private String errorFileConfig;
 
-    @RequestMapping(path = "/errors")
+    @RequestMapping(path = {"/errors", "/errors/"})
     public void checkErrors(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkErrors");
@@ -207,7 +207,7 @@ public class MonitorService {
     }
 
 
-    @RequestMapping(path = "/access")
+    @RequestMapping(path = {"/access","/access/"})
     public void checkAccess(HttpServletRequest request, HttpServletResponse response) throws IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkAccess");

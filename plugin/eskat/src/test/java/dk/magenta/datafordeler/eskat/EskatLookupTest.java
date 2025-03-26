@@ -87,6 +87,7 @@ public class EskatLookupTest {
     }
 
     private void loadCompanyFile(String resource, ImportMetadata importMetadata) throws IOException, DataFordelerException {
+        System.out.println("loadCompanyFile");
         InputStream testData = EskatLookupTest.class.getResourceAsStream(resource);
         JsonNode root = objectMapper.readTree(testData);
         testData.close();
@@ -98,6 +99,9 @@ public class EskatLookupTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
             companyEntityManager.parseData(bais, importMetadata);
             bais.close();
+        }
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            System.out.println(QueryManager.getAllEntities(session, CompanyRecord.class));
         }
     }
 
@@ -222,12 +226,12 @@ public class EskatLookupTest {
         TestUserDetails testUserDetails = new TestUserDetails();
         ObjectNode body = objectMapper.createObjectNode();
         HttpEntity<String> httpEntity;
-        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        httpEntity = new HttpEntity<>(body.toString(), new HttpHeaders());
 
         ResponseEntity<String> response;
 
         response = restTemplate.exchange(
-                "/eskat/company/1/rest/search/?cvrnummer=25052943",
+                "/eskat/company/1/rest/search?cvrnummer=25052943",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
@@ -273,7 +277,7 @@ public class EskatLookupTest {
                 String.class
         );
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertEquals(false, response.getBody().contains("25052943"));
+        Assertions.assertEquals(true, response.getBody().contains("25052943"));
 
         response = restTemplate.exchange(
                 "/eskat/company/1/rest/search/?navne=MAGENH*",

@@ -60,7 +60,7 @@ public class CompanyRecordDetailService {
 
     @GetMapping("/{cvr}")
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
-    ResponseEntity companyDetail(HttpServletRequest request, @PathVariable String cvr) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
+    ResponseEntity companyDetail(HttpServletRequest request, @PathVariable("cvr") String cvr) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);

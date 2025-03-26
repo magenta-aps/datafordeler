@@ -79,7 +79,7 @@ public class EboksRecieveLookupService {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{lookup}","/{lookup}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@RequestParam(value = "cpr", required = false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 

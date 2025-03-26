@@ -70,7 +70,7 @@ public class SameAddressService {
     public void init() {
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cprNumber}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cprNumber}", "/{cprNumber}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cprNumber") String cprNummer, HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
 
