@@ -302,7 +302,7 @@ public class Pull extends Worker implements Runnable {
         Session session = this.engine.configurationSessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         try {
-            session.delete(interruptedPull);
+            session.remove(interruptedPull);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();

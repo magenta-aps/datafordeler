@@ -125,7 +125,7 @@ public class CvrListTest extends TestBase {
             Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
-            session.delete(cvrList);
+            session.remove(cvrList);
             transaction.commit();
         }
 

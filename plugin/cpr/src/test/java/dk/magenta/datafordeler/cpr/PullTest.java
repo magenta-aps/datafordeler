@@ -107,6 +107,10 @@ public class PullTest extends TestBase {
     }
 
     private void pull() throws Exception {
+        this.pull(objectMapper.createObjectNode());
+    }
+
+    private void pull(ObjectNode importconfig) throws Exception {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         when(configurationManager.getConfiguration()).thenReturn(configuration);
 
@@ -136,10 +140,11 @@ public class PullTest extends TestBase {
             configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
             configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpDownloadFolder("/");
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-            Pull pull = new Pull(engine, plugin);
+            Pull pull = new Pull(engine, plugin, importconfig);
             pull.run();
         } finally {
             personFtp.stopServer();
@@ -309,7 +314,6 @@ public class PullTest extends TestBase {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPersonWithOrigin(importMetadata);
-            session.close();
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -319,8 +323,7 @@ public class PullTest extends TestBase {
 
         //Clean the testdata
         ObjectNode config = (ObjectNode) objectMapper.readTree("{\"" + CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE + "\": [5], \"cleantestdatafirst\":true}");
-        Pull pull = new Pull(engine, plugin, config);
-        pull.run();
+        pull(config);
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);

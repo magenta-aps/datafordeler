@@ -175,7 +175,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
     public void delete(Session session) {
         this.traverse(RecordSet::clear, session::delete);
-        session.delete(this);
+        session.remove(this);
         session.remove(this);
     }
 }

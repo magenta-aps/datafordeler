@@ -171,14 +171,18 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                     PersonRecordQuery.PERSONNUMMER,
                     Arrays.stream(testPersonList).filter(s -> !s.isBlank()).map(String::strip).collect(Collectors.toList())
             );
-            session.beginTransaction();
-            personQuery.setPageSize(1000);
+            personQuery.setPageSize(1000000);
             personQuery.applyFilters(session);
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            for (PersonEntity personForDeletion : personEntities) {
-                session.delete(personForDeletion);
+            Transaction transaction = session.beginTransaction();
+            try {
+                for (PersonEntity personForDeletion : personEntities) {
+                    session.remove(personForDeletion);
+                }
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
             }
-            session.getTransaction().commit();
         } catch (Exception e) {
             log.error("Failed cleaning data", e);
         }
@@ -330,7 +334,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 for (String remove : removeCprNumbers) {
                     PersonSubscription removeSubscription = map.get(remove);
                     if (removeSubscription != null) {
-                        session.delete(removeSubscription);
+                        session.remove(removeSubscription);
                     }
                 }
                 session.getTransaction().commit();

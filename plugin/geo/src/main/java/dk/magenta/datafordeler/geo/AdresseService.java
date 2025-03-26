@@ -209,7 +209,7 @@ public class AdresseService {
                             "JOIN " + UnitAddressEntity.class.getCanonicalName() + " unit ON unit.accessAddress = access.identification " +
                             "JOIN unit.usage unit_usage " +
                             "WHERE locality_reference.uuid = :uuid " +
-                            "AND road.code != null " +
+                            "AND road.code is not null " +
                             "AND road.code != 0 "
                     //"AND unit_usage.usage = 1 "
             );

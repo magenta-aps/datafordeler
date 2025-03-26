@@ -151,7 +151,7 @@ public class ManageCvrList {
             }
             List<SubscribedCvrNumber> subscribedList = foundList.getCvr().stream().filter(item -> cvrs.contains(item.getCvrNumber())).collect(Collectors.toList());
             for (SubscribedCvrNumber subscribed : subscribedList) {
-                session.delete(subscribed);
+                session.remove(subscribed);
                 foundList.getCvr().remove(subscribed);
             }
             transaction.commit();

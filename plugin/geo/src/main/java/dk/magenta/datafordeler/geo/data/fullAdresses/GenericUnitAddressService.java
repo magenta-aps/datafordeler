@@ -50,7 +50,7 @@ public class GenericUnitAddressService {
         etage("unitAddressFloor.floor", false),
         bloknavn("accessAddressBlockNameRecord.name", false),
         kommune_kode("geoMunicipalityEntity.code", true),
-        kommune_navn("municipalityName.name", false),
+        kommune_navn("municipalityNameRecord.name", false),
         lokalitet_kode("localityRecord.code", false),
         lokalitet_navn("localityName.name", false),
         post_kode("postcodeEntity.code", true),
@@ -124,7 +124,7 @@ public class GenericUnitAddressService {
             envelope.setRequestTimestamp(user.getCreationTime());
             envelope.setUsername(user.toString());
 
-            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunicipalityEntity, geoMunicipalityEntity.name AS municipalityName " +
+            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunicipalityEntity " +
                     "\nFROM " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity " +
                     "\nLEFT JOIN " + UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity." + UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + "=accessAddressEntity." + AccessAddressEntity.DB_FIELD_IDENTIFICATION + " " +
                     "\nLEFT JOIN " + UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor." + UnitAddressFloorRecord.DB_FIELD_ENTITY + "=unitAddressEntity" + " " +

@@ -90,7 +90,6 @@ public class QueryTest extends TestBase {
         Assertions.assertEquals(200, response.getStatusCode().value());
         jsonBody = objectMapper.readTree(response.getBody());
         results = jsonBody.get("results");
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(results));
         Assertions.assertTrue(results.isArray());
         Assertions.assertEquals(0, results.size());
 
@@ -174,7 +173,6 @@ public class QueryTest extends TestBase {
         Assertions.assertEquals(200, response.getStatusCode().value());
         jsonBody = objectMapper.readTree(response.getBody());
         results = jsonBody.get("results");
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(results));
         Assertions.assertTrue(results.isArray());
         Assertions.assertEquals(1, results.size());
     }

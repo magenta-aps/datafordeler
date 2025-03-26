@@ -144,7 +144,7 @@ public class CprListTest extends TestBase {
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList2");
             CprList cprList = (CprList) query.getResultList().get(0);
-            session.delete(cprList);
+            session.remove(cprList);
             transaction.commit();
         }
 

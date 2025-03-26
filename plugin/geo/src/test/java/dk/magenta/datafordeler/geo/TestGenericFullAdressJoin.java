@@ -82,24 +82,24 @@ SELECT *  FROM
             String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, accessAddressPostcodeRecord, accessAddressRoadRecord, postcodeEntity, geoMunipialicityEntity, roadEntity  " +
                     "FROM " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity " +
                     "JOIN " + UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity." + UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + "=accessAddressEntity." + AccessAddressEntity.DB_FIELD_IDENTIFICATION + " " +
-                    "JOIN " + AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord." + AccessAddressHouseNumberRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "JOIN " + AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord." + AccessAddressHouseNumberRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
 
-                    "JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
                     "JOIN " + GeoLocalityEntity.class.getCanonicalName() + " localityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_CODE + "=localityRecord." + GeoLocalityEntity.DB_FIELD_CODE + " " +
-                    "JOIN " + LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName." + LocalityNameRecord.DB_FIELD_ENTITY + "=localityRecord." + "id" + " " +
+                    "JOIN " + LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName." + LocalityNameRecord.DB_FIELD_ENTITY + "=localityRecord" + " " +
 
-                    "JOIN " + AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord." + AccessAddressBlockNameRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "JOIN " + AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord." + AccessAddressBlockNameRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
 
-                    "JOIN " + AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "JOIN " + AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
                     "JOIN " + PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_CODE + "=postcodeEntity." + PostcodeEntity.DB_FIELD_CODE + " " +
-                    "JOIN " + PostcodeNameRecord.class.getCanonicalName() + " postcodeName ON postcodeName." + PostcodeNameRecord.DB_FIELD_ENTITY + "=postcodeEntity." + "id" + " " +
+                    "JOIN " + PostcodeNameRecord.class.getCanonicalName() + " postcodeName ON postcodeName." + PostcodeNameRecord.DB_FIELD_ENTITY + "=postcodeEntity" + " " +
 
-                    "JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
                     "JOIN " + GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE + "=roadEntity." + GeoRoadEntity.DB_FIELD_IDENTIFICATION + " " +
 
                     "JOIN " + RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord." + RoadMunicipalityRecord.DB_FIELD_CODE + "=accessAddressRoadRecord." + "municipalityCode" + " " +
                     "JOIN " + GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity." + GeoMunicipalityEntity.DB_FIELD_CODE + "=roadMunipialicityRecord." + RoadMunicipalityRecord.DB_FIELD_CODE + " " +
-                    "JOIN " + MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName." + MunicipalityNameRecord.DB_FIELD_ENTITY + "=geoMunipialicityEntity." + "id" + " " +
+                    "JOIN " + MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName." + MunicipalityNameRecord.DB_FIELD_ENTITY + "=geoMunipialicityEntity" + " " +
 
                     " WHERE accessAddressEntity.bnr=:bnr AND municipalityName.name='Kommuneqarfik Sermersooq'" +
                     "";//B-3197

@@ -186,7 +186,7 @@ public class ManageSubscription {
             String subscriberId = this.getSubscriberId(request, user);
             Subscriber subscriber = this.getSubscriber(session, subscriberId);
             Transaction transaction = session.beginTransaction();
-            session.delete(subscriber);
+            session.remove(subscriber);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("subscriber done");
             return ResponseEntity.ok(subscriber);
@@ -306,7 +306,7 @@ public class ManageSubscription {
             String subscriberId = this.getSubscriberId(request, user);
             if (subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {
                 subscription.getSubscriber().removeBusinessEventSubscription(subscription);
-                session.delete(subscription);
+                session.remove(subscription);
                 transaction.commit();
                 loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
                 return ResponseEntity.ok(subscription);
@@ -429,7 +429,7 @@ public class ManageSubscription {
             String subscriberId = this.getSubscriberId(request, user);
             if (subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {
                 subscription.getSubscriber().removeDataEventSubscription(subscription);
-                session.delete(subscription);
+                session.remove(subscription);
                 transaction.commit();
                 loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
                 return ResponseEntity.ok(subscription);

@@ -256,7 +256,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
                 E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
                 if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
-                    session.delete(entity);
+                    session.remove(entity);
                 }
             });
             session.getTransaction().commit();

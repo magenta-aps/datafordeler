@@ -633,7 +633,7 @@ public class FapiTest {
             Transaction transaction = session.beginTransaction();
             DemoEntityRecord entity = QueryManager.getEntity(session, uuid, DemoEntityRecord.class);
             if (entity != null) {
-                session.delete(entity);
+                session.remove(entity);
             }
             transaction.commit();
         } finally {

@@ -942,7 +942,7 @@ public class RecordTest extends TestBase {
             if (items.size() > 0) {
                 System.out.println(items.get(0).getId()+": "+items.get(0).getUnitNumber());
                 for (ParticipantRecord participantRecord : items) {
-                    session.delete(participantRecord);
+                    session.remove(participantRecord);
                 }
             }
         }

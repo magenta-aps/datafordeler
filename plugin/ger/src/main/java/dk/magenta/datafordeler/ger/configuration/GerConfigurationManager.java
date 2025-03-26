@@ -26,7 +26,6 @@ public class GerConfigurationManager extends ConfigurationManager<GerConfigurati
             // Very important to call init() on ConfigurationManager, or the config will not be loaded
             super.init();
             this.sqlServerDriver = new SQLServerDriver();
-            System.out.println(this.sqlServerDriver);
         } catch (Exception e) {
             System.out.println("Error initializing GerConfigurationManager: ");
             e.printStackTrace();

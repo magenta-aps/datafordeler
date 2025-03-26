@@ -443,6 +443,7 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
         try {
             return this.getRegisterManager().getEventInterface(this) != null;
         } catch (DataFordelerException e) {
+            e.printStackTrace();
             return false;
         }
     }

@@ -215,7 +215,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
         }
         if (!onlyDetect) {
             for (R registration : toDelete) {
-                session.delete(registration);
+                session.remove(registration);
             }
         }
     }

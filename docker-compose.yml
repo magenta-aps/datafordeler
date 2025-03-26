@@ -10,9 +10,11 @@ services:
     env_file:
       - ./docker/dev-env/datafordeler.env
     volumes:
+      - ./core/src:/app/core/src
+      - ./plugin/cpr:/app/plugin/cpr
+      - ./plugin/cvr:/app/plugin/cvr
+      - ./plugin/geo:/app/plugin/geo
       - ./docker/dev-env/sts_metadata.xml:/app/conf/sts_metadata.xml:ro
-      - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
-      - ./plugin/cpr/src/test/resources/GLBASETEST2:/app/dev-env/local/cpr/download/d170610.l534901
 #      - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
       - ./plugin/cvr/src/test/resources/unit.json:/app/dev-env/local/cvr/unit.json
       - ./plugin/cvr/src/test/resources/person.json:/app/dev-env/local/cvr/person.json
@@ -65,10 +67,26 @@ services:
       - ./docker/dev-env/datafordeler.env
     depends_on:
       - datafordeler-db
+    volumes:
+      - ./core/src:/app/core/src
+      - ./plugin/cpr:/app/plugin/cpr
+      - ./plugin/cvr:/app/plugin/cvr
+      - ./plugin/geo:/app/plugin/geo
+      - ./plugin/cpr/src/test/resources/GLBASETEST:/app/dev-env/local/cpr/download/d170608.l534902
+      - ./plugin/cpr/src/test/resources/GLBASETEST2:/app/dev-env/local/cpr/download/d170610.l534901
+      - ./plugin/cvr/src/test/resources/unit.json:/app/dev-env/local/cvr/unit.json
+      - ./plugin/cvr/src/test/resources/person.json:/app/dev-env/local/cvr/person.json
+      - ./plugin/geo/src/test/resources/municipality.json:/app/dev-env/local/geo/municipality.json
+      - ./plugin/geo/src/test/resources/locality.json:/app/dev-env/local/geo/locality.json
+      - ./plugin/geo/src/test/resources/post.json:/app/dev-env/local/geo/post.json
+      - ./plugin/geo/src/test/resources/road.json:/app/dev-env/local/geo/road.json
+      - ./plugin/geo/src/test/resources/access.json:/app/dev-env/local/geo/access.json
+      - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
+      - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
 #    command: bash -c "cd /code/core && mvn --batch-mode -T 2C test -Dtest=FapiTest#restLookupJSONByParametersTest"
     # command: bash -c "cd /code/plugin/ger && mvn test"
     # command: bash -c "cd /code/plugin/cpr && mvn test"
-    command: bash -c "cd /code/plugin/geo && mvn --batch-mode -T 2C test -Dtest=TestGenericServices#testGenericService"
+    command: bash -c "cd /code/plugin/geo && mvn --batch-mode -T 2C test -Dtest=TestService#testRoad"
     #use docker compose up test to execute tests
 
   openapi:

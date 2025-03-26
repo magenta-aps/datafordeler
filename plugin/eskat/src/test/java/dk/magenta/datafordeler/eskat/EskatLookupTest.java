@@ -693,7 +693,7 @@ public class EskatLookupTest {
         try {
             for (Entity entity : createdEntities) {
                 try {
-                    session.delete(entity);
+                    session.remove(entity);
                 } catch (Exception e) {
                 }
             }

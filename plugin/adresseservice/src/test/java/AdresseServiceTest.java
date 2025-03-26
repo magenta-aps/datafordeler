@@ -359,7 +359,7 @@ public class AdresseServiceTest {
         Transaction transaction = session.beginTransaction();
         try {
             for (Entity entity : createdEntities) {
-                session.delete(entity);
+                session.remove(entity);
             }
             createdEntities.clear();
         } finally {

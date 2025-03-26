@@ -98,12 +98,9 @@ public abstract class GeoTest {
         try {
             importMetadata.setTransactionInProgress(true);
             importMetadata.setSession(session);
-            System.out.println("load");
             entityManager.parseData(data, importMetadata);
             transaction.commit();
-            System.out.println("committed");
         } catch (Exception e) {
-            System.out.println("Rolling back");
             transaction.rollback();
             e.printStackTrace();
         } finally {
@@ -112,8 +109,6 @@ public abstract class GeoTest {
         }
         transaction = session.beginTransaction();
         try {
-            System.out.println("wire");
-
             entityManager.wireAll(session);
             transaction.commit();
         } catch (Exception e) {
@@ -122,7 +117,6 @@ public abstract class GeoTest {
         } finally {
             session.close();
         }
-        System.out.println("load complete");
     }
 
 }

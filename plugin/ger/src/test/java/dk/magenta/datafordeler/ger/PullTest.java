@@ -50,10 +50,6 @@ public class PullTest {
 
     @Test
     public void pullTest() throws Exception {
-        System.out.println("sessionManager: "+sessionManager);
-        System.out.println("registerManager: "+registerManager);
-        System.out.println("engine: "+engine);
-        System.out.println("gerConfigurationManager: "+gerConfigurationManager);
         Assertions.assertNotNull(gerConfigurationManager);
 
         String sheetFile = "file://" + System.getProperty("user.dir") + "/src/test/resources/GER.test.xlsx";

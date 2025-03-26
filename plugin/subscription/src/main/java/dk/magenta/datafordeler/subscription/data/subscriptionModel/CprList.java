@@ -95,7 +95,7 @@ public class CprList extends DatabaseEntry {
         SubscribedCprNumber number = this.cprs.stream().filter(f -> cpr.equals(f.getCprNumber())).findFirst().orElse(null);
         if (number != null) {
             this.cprs.remove(number);
-            session.delete(number);
+            session.remove(number);
         }
     }
 

@@ -240,7 +240,7 @@ public class TestUtils {
         Transaction transaction = session.beginTransaction();
         Collection<E> entities = QueryManager.getAllEntities(session, eClass);
         for (E entity : entities) {
-            session.delete(entity);
+            session.remove(entity);
         }
         transaction.commit();
         session.close();

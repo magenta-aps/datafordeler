@@ -90,7 +90,7 @@ public class CvrList extends DatabaseEntry {
         SubscribedCvrNumber number = this.cvrs.stream().filter(f -> cvr.equals(f.getCvrNumber())).findFirst().orElse(null);
         if (number != null) {
             this.cvrs.remove(number);
-            session.delete(number);
+            session.remove(number);
         }
     }
 }

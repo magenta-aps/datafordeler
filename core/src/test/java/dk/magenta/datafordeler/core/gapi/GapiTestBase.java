@@ -82,7 +82,7 @@ public abstract class GapiTestBase {
             Transaction transaction = session.beginTransaction();
             DemoEntityRecord entity = QueryManager.getEntity(session, UUID.fromString(uuid), DemoEntityRecord.class);
             if (entity != null) {
-                session.delete(entity);
+                session.remove(entity);
             }
             transaction.commit();
         } finally {

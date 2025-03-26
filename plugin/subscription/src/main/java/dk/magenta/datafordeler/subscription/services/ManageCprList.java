@@ -157,7 +157,7 @@ public class ManageCprList {
             }
             List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
             for (SubscribedCprNumber subscribed : subscribedList) {
-                session.delete(subscribed);
+                session.remove(subscribed);
                 foundList.getCpr().remove(subscribed);
             }
             transaction.commit();
