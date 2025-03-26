@@ -41,7 +41,6 @@ public class SessionManager {
             sessionFactoryBean.afterPropertiesSet();
             this.sessionFactory = sessionFactoryBean.getObject();
         } catch (Exception e) {
-            System.out.println("EXCEPTION:");
             e.printStackTrace();
             throw e;
         }

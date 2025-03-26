@@ -176,7 +176,6 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             personQuery.applyFilters(session);
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             for (PersonEntity personForDeletion : personEntities) {
-                System.out.println("Cleaning "+personForDeletion.getPersonnummer());
                 session.delete(personForDeletion);
             }
             session.getTransaction().commit();

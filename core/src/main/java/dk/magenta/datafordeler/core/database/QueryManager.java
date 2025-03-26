@@ -185,7 +185,7 @@ public class QueryManager {
         log.debug("Get all Entities of class " + eClass.getCanonicalName());
         Query<E> databaseQuery;
         if (joinIdentity) {
-            databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " join " + ENTITY + ".identification i where i.uuid != null", eClass);
+            databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " join " + ENTITY + ".identification i where i.uuid is not null", eClass);
         } else {
             databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY, eClass);
         }

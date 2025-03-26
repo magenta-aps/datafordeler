@@ -65,10 +65,10 @@ services:
       - ./docker/dev-env/datafordeler.env
     depends_on:
       - datafordeler-db
-    command: bash -c "cd /code/core && mvn --batch-mode -T 2C test -Dtest=FapiTest#restLookupJSONByParametersTest"
+#    command: bash -c "cd /code/core && mvn --batch-mode -T 2C test -Dtest=FapiTest#restLookupJSONByParametersTest"
     # command: bash -c "cd /code/plugin/ger && mvn test"
     # command: bash -c "cd /code/plugin/cpr && mvn test"
-#    command: bash -c "cd /code/plugin/cvr && mvn test"
+    command: bash -c "cd /code/plugin/geo && mvn --batch-mode -T 2C test -Dtest=TestGenericServices#testGenericService"
     #use docker compose up test to execute tests
 
   openapi:

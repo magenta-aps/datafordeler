@@ -1,8 +1,10 @@
 package dk.magenta.datafordeler.geo;
 
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
+import dk.magenta.datafordeler.geo.data.WireCache;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
 import dk.magenta.datafordeler.geo.data.building.BuildingEntityManager;
 import dk.magenta.datafordeler.geo.data.locality.LocalityEntityManager;
@@ -96,16 +98,31 @@ public abstract class GeoTest {
         try {
             importMetadata.setTransactionInProgress(true);
             importMetadata.setSession(session);
+            System.out.println("load");
             entityManager.parseData(data, importMetadata);
+            transaction.commit();
+            System.out.println("committed");
+        } catch (Exception e) {
+            System.out.println("Rolling back");
+            transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            importMetadata.setTransactionInProgress(false);
+            data.close();
+        }
+        transaction = session.beginTransaction();
+        try {
+            System.out.println("wire");
+
+            entityManager.wireAll(session);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
             e.printStackTrace();
         } finally {
-            importMetadata.setTransactionInProgress(false);
             session.close();
-            data.close();
         }
+        System.out.println("load complete");
     }
 
 }

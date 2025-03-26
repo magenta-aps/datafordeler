@@ -176,6 +176,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
             }
         });
 
+        session.flush();
         this.wireAll(session, wireCache);
 
         if (!wrappedInTransaction) {
@@ -320,6 +321,12 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
         List<E> items = QueryManager.getAllEntities(session, this.getEntityClass());
         for (E item : items) {
             item.wire(session, wireCache);
+            session.persist(item);
         }
+    }
+    public void wireAll(Session session) {
+        WireCache wireCache = new WireCache();
+        this.populateWireCache(wireCache, session);
+        this.wireAll(session, wireCache);
     }
 }
