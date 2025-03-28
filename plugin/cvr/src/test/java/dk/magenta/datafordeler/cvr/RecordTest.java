@@ -948,20 +948,7 @@ public class RecordTest extends TestBase {
             List<ParticipantRecord> items = QueryManager.getAllEntities(session, ParticipantRecord.class);
             if (!items.isEmpty()) {
                 for (ParticipantRecord participantRecord : items) {
-
                     Transaction transaction = session.beginTransaction();
-//                    if (participantRecord.getMetadata() != null) {
-//                        session.remove(participantRecord.getMetadata());
-//                    }
-//                    for (CompanyParticipantRelationRecord companyParticipantRelationRecord : participantRecord.getCompanyRelation()) {
-//                        if (companyParticipantRelationRecord.getRelationParticipantRecord() != null) {
-//                            session.remove(companyParticipantRelationRecord.getRelationParticipantRecord());
-//                        }
-//                        if (companyParticipantRelationRecord.getRelationCompanyRecord() != null) {
-//                            session.remove(companyParticipantRelationRecord.getRelationCompanyRecord());
-//                        }
-//                        session.remove(companyParticipantRelationRecord);
-//                    }
                     session.remove(participantRecord);
                     transaction.commit();
                 }
