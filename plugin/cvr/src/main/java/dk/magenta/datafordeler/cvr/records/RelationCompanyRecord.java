@@ -237,7 +237,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
 
-    @OneToOne(targetEntity = CompanyParticipantRelationRecord.class, mappedBy = CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION)
+    @OneToOne(targetEntity = CompanyParticipantRelationRecord.class, mappedBy = CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION, cascade = CascadeType.ALL)
     @JsonIgnore
     private CompanyParticipantRelationRecord companyParticipantRelationRecord;
 

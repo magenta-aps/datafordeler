@@ -33,7 +33,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -63,8 +62,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
 
-    @Value("${dafo.cpr.demoCompanyList}")
-    private String cvrDemoList;
+    private String cvrDemoList = "";
 
     private static final String TASK_PARSE = "CvrParse";
     private static final String TASK_FIND_ENTITY = "CvrFindEntity";

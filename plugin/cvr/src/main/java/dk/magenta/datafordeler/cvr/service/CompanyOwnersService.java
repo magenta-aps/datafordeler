@@ -52,8 +52,7 @@ public class CompanyOwnersService {
     @Autowired
     private SessionManager sessionManager;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final Logger log = LogManager.getLogger(CompanyOwnersService.class.getCanonicalName());
 

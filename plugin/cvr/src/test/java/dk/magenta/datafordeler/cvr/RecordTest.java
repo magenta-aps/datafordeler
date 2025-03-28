@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.Application;
@@ -933,16 +934,36 @@ public class RecordTest extends TestBase {
     @MockitoSpyBean
     private DirectLookup directLookup;
 
+    protected FilterProvider getFilterProvider() {
+        return new SimpleFilterProvider().addFilter(
+                "ParticipantRecordFilter",
+                SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
+        );
+    }
+
     @Test
     public void testEnrich() throws IOException, DataFordelerException {
         this.cleanup();
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<ParticipantRecord> items = QueryManager.getAllEntities(session, ParticipantRecord.class);
-            System.out.println("There are "+items.size()+" participants");
-            if (items.size() > 0) {
-                System.out.println(items.get(0).getId()+": "+items.get(0).getUnitNumber());
+            if (!items.isEmpty()) {
                 for (ParticipantRecord participantRecord : items) {
+
+                    Transaction transaction = session.beginTransaction();
+//                    if (participantRecord.getMetadata() != null) {
+//                        session.remove(participantRecord.getMetadata());
+//                    }
+//                    for (CompanyParticipantRelationRecord companyParticipantRelationRecord : participantRecord.getCompanyRelation()) {
+//                        if (companyParticipantRelationRecord.getRelationParticipantRecord() != null) {
+//                            session.remove(companyParticipantRelationRecord.getRelationParticipantRecord());
+//                        }
+//                        if (companyParticipantRelationRecord.getRelationCompanyRecord() != null) {
+//                            session.remove(companyParticipantRelationRecord.getRelationCompanyRecord());
+//                        }
+//                        session.remove(companyParticipantRelationRecord);
+//                    }
                     session.remove(participantRecord);
+                    transaction.commit();
                 }
             }
         }

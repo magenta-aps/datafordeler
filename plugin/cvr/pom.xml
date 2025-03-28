@@ -13,7 +13,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cvr</artifactId>
-    <version>${project.version}</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
     <name>datafordeler-plugin-cvr</name>
     <description>Company (CVR) plugin for Magenta's Greenlandic System</description>

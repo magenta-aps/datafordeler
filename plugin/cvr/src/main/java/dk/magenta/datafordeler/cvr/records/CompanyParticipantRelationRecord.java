@@ -71,7 +71,9 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
 
     public void setRelationCompanyRecord(RelationCompanyRecord relationCompanyRecord) {
         this.relationCompanyRecord = relationCompanyRecord;
-        relationCompanyRecord.setCompanyParticipantRelationRecord(this);
+        if (relationCompanyRecord != null) {
+            relationCompanyRecord.setCompanyParticipantRelationRecord(this);
+        }
     }
 
     public RelationCompanyRecord getRelationCompanyRecord() {
