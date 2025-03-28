@@ -57,10 +57,6 @@ public class ManageCprList {
     private final Logger log = LogManager.getLogger(ManageCprList.class.getCanonicalName());
 
 
-    @PostConstruct
-    public void init() {
-    }
-
     private String getSubscriberId(HttpServletRequest request) throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
         String subscriberId = Optional.ofNullable(
                 request.getHeader("uxp-client")
@@ -81,7 +77,7 @@ public class ManageCprList {
      * @throws InvalidTokenException
      * @throws InvalidCertificateException
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/", headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList", "/subscriber/cprList/"}, headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cprListCreate(HttpServletRequest request, @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         String subscriberId = this.getSubscriberId(request);
@@ -121,7 +117,7 @@ public class ManageCprList {
      *
      * @return
      */
-    @GetMapping("/subscriber/cprList")
+    @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/cprList", "/subscriber/cprList/"})
     public ResponseEntity<List<CprList>> cprListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         String subscriberId = this.getSubscriberId(request);
@@ -139,7 +135,7 @@ public class ManageCprList {
     }
 
 
-    @DeleteMapping("/subscriber/cprList/cpr/{listId}")
+    @RequestMapping(method = RequestMethod.DELETE, path = {"/subscriber/cprList/cpr/{listId}", "/subscriber/cprList/cpr/{listId}/"})
     public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr", required = false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         String subscriberId = this.getSubscriberId(request);
@@ -171,7 +167,7 @@ public class ManageCprList {
         }
     }
 
-    @PostMapping("/subscriber/cprList/cpr/{listId}")
+    @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList/cpr/{listId}", "/subscriber/cprList/cpr/{listId}/"})
     public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -223,7 +219,7 @@ public class ManageCprList {
      *
      * @return
      */
-    @GetMapping("/subscriber/cprList/cpr")
+    @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/cprList/cpr", "/subscriber/cprList/cpr/"})
     public ResponseEntity<dk.magenta.datafordeler.core.fapi.Envelope> cprListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");

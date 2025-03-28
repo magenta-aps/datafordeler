@@ -16,6 +16,7 @@ services:
       - ./plugin/geo:/app/plugin/geo
       - ./plugin/eskat:/app/plugin/eskat
       - ./plugin/eboks:/app/plugin/eboks
+      - ./plugin/subscription:/app/plugin/subscription
       - ./docker/dev-env/sts_metadata.xml:/app/conf/sts_metadata.xml:ro
 #      - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
       - ./plugin/cvr/src/test/resources/unit.json:/app/dev-env/local/cvr/unit.json
