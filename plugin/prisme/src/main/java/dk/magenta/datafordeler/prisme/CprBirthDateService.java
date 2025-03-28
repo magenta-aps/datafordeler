@@ -29,10 +29,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -66,11 +63,8 @@ public class CprBirthDateService {
 
     private final Logger log = LogManager.getLogger(CprBirthDateService.class.getCanonicalName());
 
-    @PostConstruct
-    public void init() {
-    }
 
-    @GetMapping("/search")
+    @RequestMapping(method = RequestMethod.GET, path = {"/search", "/search/"})
     public Envelope findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidParameterException {
 
         String updatedSince = requestParams.getFirst("updatedSince");

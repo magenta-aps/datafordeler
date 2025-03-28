@@ -62,7 +62,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
 
-    private String cvrDemoList = "";
+    protected String cvrDemoList = "";
 
     private static final String TASK_PARSE = "CvrParse";
     private static final String TASK_FIND_ENTITY = "CvrFindEntity";
@@ -166,6 +166,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             if (importMetadata.getImportConfiguration() != null &&
                     importMetadata.getImportConfiguration().has("cleantestdatafirst") &&
                     importMetadata.getImportConfiguration().get("cleantestdatafirst").booleanValue()) {
+                System.out.println("CLEANING DEMO DATA");
                 cleanDemoData(session);
             }
             Industry.initializeCache(session);
@@ -304,7 +305,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                 if (cvr != null && cvr != 0) {
                     try {
                         CompanySubscription companySubscription = new CompanySubscription(cvr);
-                        sessionSub.save(companySubscription);
+                        sessionSub.persist(companySubscription);
                     } catch (Exception e) {
                         // Empty catch as a convenient way for if the system tries to add the same cvr twice
                     }
@@ -324,17 +325,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * democompanys is used on the demoenvironment for demo and education purposes
      */
     public void cleanDemoData(Session session) {
-        CompanyRecordQuery personQuery = new CompanyRecordQuery();
-        List<String> testCompanyList = Arrays.asList(cvrDemoList.split(","));
-        personQuery.setParameter(CompanyRecordQuery.CVRNUMMER, testCompanyList);
-        session.beginTransaction();
-        personQuery.setPageSize(1000);
-        personQuery.applyFilters(session);
-        List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
-        for (CompanyRecord companyForDeletion : companyEntities) {
-            session.remove(companyForDeletion);
-        }
-        session.getTransaction().commit();
     }
 
 

@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.*;
+import org.hibernate.Session;
 
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Record for one participant on a Company or CompanyUnit
@@ -84,7 +87,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_REG_NUMBER = "regNummer";
 
     @JsonProperty(value = IO_FIELD_REG_NUMBER)
-    @OneToMany(targetEntity = CompanyRegNumberRecord.class, mappedBy = CompanyRegNumberRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = CompanyRegNumberRecord.class, mappedBy = CompanyRegNumberRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CompanyRegNumberRecord> regNumber;
 
     public void setRegNumber(Set<CompanyRegNumberRecord> regNumber) {
@@ -96,6 +99,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addRegNumber(CompanyRegNumberRecord record) {
         if (!this.regNumber.contains(record)) {
+            System.out.println("adding reg number record " + record);
             record.setParticipantRelationCompanyRecord(this);
             this.regNumber.add(record);
         }
@@ -110,7 +114,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_NAMES = "navne";
 
     @JsonProperty(value = IO_FIELD_NAMES)
-    @OneToMany(targetEntity = BaseNameRecord.class, mappedBy = BaseNameRecord.DB_FIELD_COMPANY_RELATION, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = BaseNameRecord.class, mappedBy = BaseNameRecord.DB_FIELD_COMPANY_RELATION, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BaseNameRecord> names = new HashSet<>();
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -122,6 +126,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addName(BaseNameRecord record) {
         if (!this.names.contains(record)) {
+            System.out.println("adding name record "+record);
             record.setRelationCompanyRecord(this);
             this.names.add(record);
         }
@@ -136,7 +141,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_LIFECYCLE = "livsforloeb";
 
     @JsonProperty(value = IO_FIELD_LIFECYCLE)
-    @OneToMany(targetEntity = LifecycleRecord.class, mappedBy = LifecycleRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = LifecycleRecord.class, mappedBy = LifecycleRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LifecycleRecord> lifecycle = new HashSet<>();
 
     public void setLifecycle(Set<LifecycleRecord> lifecycle) {
@@ -148,6 +153,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addLifecycle(LifecycleRecord record) {
         if (!this.lifecycle.contains(record)) {
+            System.out.println("adding lifecycle record " + record);
             record.setRelationCompanyRecord(this);
             this.lifecycle.add(record);
         }
@@ -162,7 +168,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_STATUS = "status";
 
     @JsonProperty(value = IO_FIELD_STATUS)
-    @OneToMany(targetEntity = StatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = StatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StatusRecord> status = new HashSet<>();
 
     public void setStatus(Set<StatusRecord> status) {
@@ -174,6 +180,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addStatus(StatusRecord record) {
         if (!this.status.contains(record)) {
+            System.out.println("adding status record " + record);
             record.setRelationCompanyRecord(this);
             this.status.add(record);
         }
@@ -188,7 +195,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_COMPANYSTATUS = "virksomhedsstatus";
 
     @JsonProperty(value = IO_FIELD_COMPANYSTATUS)
-    @OneToMany(targetEntity = CompanyStatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = CompanyStatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CompanyStatusRecord> companyStatus = new HashSet<>();
 
 
@@ -201,6 +208,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addCompanyStatus(CompanyStatusRecord record) {
         if (!this.companyStatus.contains(record)) {
+            System.out.println("adding company status record " + record);
             record.setRelationCompanyRecord(this);
             this.companyStatus.add(record);
         }
@@ -215,7 +223,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_FORM = "virksomhedsform";
 
     @JsonProperty(value = IO_FIELD_FORM)
-    @OneToMany(targetEntity = FormRecord.class, mappedBy = FormRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = FormRecord.class, mappedBy = FormRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FormRecord> form = new HashSet<>();
 
     public void setForm(Set<FormRecord> form) {
@@ -226,10 +234,15 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
     public void addForm(FormRecord record) {
+        System.out.println("adding form record " + record);
         if (!this.form.contains(record)) {
+            System.out.println("not already present");
             record.setRelationCompanyRecord(this);
             this.form.add(record);
+        } else {
+            System.out.println("already present");
         }
+
     }
 
     public BitemporalSet<FormRecord> getForm() {
@@ -283,6 +296,12 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
+    public void wire(Session session) {
+        for (FormRecord formRecord : this.form) {
+            formRecord.wire(session);
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -310,5 +329,16 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         subs.addAll(this.companyStatus);
         subs.addAll(this.form);
         return subs;
+    }
+
+    @Override
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getCompanyStatus().traverse(setCallback, itemCallback);
+        this.getForm().traverse(setCallback, itemCallback);
+        this.getLifecycle().traverse(setCallback, itemCallback);
+        this.getStatus().traverse(setCallback, itemCallback);
+        this.getNames().traverse(setCallback, itemCallback);
+        this.getRegNumber().traverse(setCallback, itemCallback);
     }
 }

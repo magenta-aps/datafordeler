@@ -26,7 +26,8 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FormRecord extends CvrBitemporalDataRecord {
+public class
+FormRecord extends CvrBitemporalDataRecord {
 
     public static final String TABLE_NAME = "cvr_record_form";
 
@@ -108,7 +109,7 @@ public class FormRecord extends CvrBitemporalDataRecord {
 
     public static final String DB_FIELD_PARTICIPANT_COMPANY_RELATION = "relationCompanyRecord";
 
-    @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = DB_FIELD_PARTICIPANT_COMPANY_RELATION + DatabaseEntry.REF)
     @JsonIgnore
     private RelationCompanyRecord relationCompanyRecord;

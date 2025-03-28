@@ -177,7 +177,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
         when(plugin.getRegisterManager(), registerManager, "/GLBASETEST.json");
         //Clean the testdata
-        config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cpr\",\"remote\":false,\"cleantestdatafirst\":true}");
+        config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cvr\",\"remote\":false,\"cleantestdatafirst\":true}");
         pull = new Pull(engine, plugin, config);
         pull.run();
 
@@ -188,7 +188,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
         when(plugin.getRegisterManager(), registerManager, "/EMPTYGLBASETEST.json");
         //Clean the testdata
-        config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cpr\",\"remote\":false,\"cleantestdatafirst\":true}");
+        config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cvr\",\"remote\":false,\"cleantestdatafirst\":true}");
         pull = new Pull(engine, plugin, config);
         pull.run();
 

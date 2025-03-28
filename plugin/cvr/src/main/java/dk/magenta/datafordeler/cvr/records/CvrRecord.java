@@ -78,9 +78,11 @@ public abstract class CvrRecord extends DatabaseEntry {
 
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        System.out.println("    ".repeat(level) + this.getClass().getSimpleName()+"#"+this.getId());
         if (itemCallback != null) {
             itemCallback.accept(this);
         }
     }
 
+    public static int level = 0;
 }

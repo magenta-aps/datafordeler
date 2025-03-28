@@ -47,7 +47,7 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
 
     @OneToOne(targetEntity = OfficeRelationUnitRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = DB_FIELD_UNIT + DatabaseEntry.REF)
-        @JsonProperty(value = IO_FIELD_UNIT)
+    @JsonProperty(value = IO_FIELD_UNIT)
     private OfficeRelationUnitRecord officeRelationUnitRecord;
 
     public OfficeRelationUnitRecord getOfficeRelationUnitRecord() {
@@ -136,10 +136,12 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
         if (this.officeRelationUnitRecord != null) {
+            CvrRecord.level++;
             this.officeRelationUnitRecord.traverse(setCallback, itemCallback);
+            CvrRecord.level--;
         }
-        super.traverse(setCallback, itemCallback);
     }
 }

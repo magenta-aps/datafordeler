@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
@@ -300,5 +301,24 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             return false;
         });
         transaction.commit();
+    }
+
+    /**
+     * Clean democompanys which has been initiated in the database.
+     * democompanys is used on the demoenvironment for demo and education purposes
+     */
+    @Override
+    public void cleanDemoData(Session session) {
+        CompanyRecordQuery personQuery = new CompanyRecordQuery();
+        List<String> testCompanyList = Arrays.asList(cvrDemoList.split(","));
+        personQuery.setParameter(CompanyRecordQuery.CVRNUMMER, testCompanyList);
+        session.beginTransaction();
+        personQuery.setPageSize(1000);
+        personQuery.applyFilters(session);
+        List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
+        for (CompanyRecord companyForDeletion : companyEntities) {
+            session.remove(companyForDeletion);
+        }
+        session.getTransaction().commit();
     }
 }

@@ -218,7 +218,7 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
 
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
-        this.getValues().traverse(setCallback, itemCallback);
         super.traverse(setCallback, itemCallback);
+        this.getValues().traverse(setCallback, itemCallback);
     }
 }

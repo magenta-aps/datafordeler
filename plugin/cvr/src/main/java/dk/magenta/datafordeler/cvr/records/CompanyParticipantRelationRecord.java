@@ -167,9 +167,9 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         if (this.relationParticipantRecord != null) {
             this.relationParticipantRecord.wire(session);
         }
-//        if (this.relationCompanyRecord != null) {
-//            this.relationCompanyRecord.wire(session);
-//        }
+        if (this.relationCompanyRecord != null) {
+            this.relationCompanyRecord.wire(session);
+        }
         for (OfficeRelationRecord officeRelationRecord : this.offices) {
             officeRelationRecord.wire(session);
         }

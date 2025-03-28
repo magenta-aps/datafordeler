@@ -157,6 +157,8 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
     public List<ResultSet<CompanyRecord>> searchByQuery(CompanyRecordQuery query, Session session) {
         List<ResultSet<CompanyRecord>> allRecords = new ArrayList<>();
 
+        System.out.println(query.toHql());
+        System.out.println(query.getConditionParameters());
         List<ResultSet<CompanyRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {
             log.info("There are " + localResults.size() + " local results");

@@ -110,7 +110,7 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
     public static final String DB_FIELD_COMPANY_RELATION = "relationCompanyRecord";
 
     @JsonIgnore
-    @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = DB_FIELD_COMPANY_RELATION + DatabaseEntry.REF)
     private RelationCompanyRecord relationCompanyRecord;
 

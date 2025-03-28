@@ -20,9 +20,13 @@ public class RecordSet<R extends CvrRecord> implements Set<R> {
     }
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+//        System.out.println("    ".repeat(CvrRecord.level*4) + "traverse list vvv");
+        CvrRecord.level++;
         for (R item : this.inner) {
             item.traverse(setCallback, itemCallback);
         }
+        CvrRecord.level--;
+//        System.out.println("    ".repeat(CvrRecord.level*4) + "^^^");
         if (setCallback != null) {
             setCallback.accept(this);
         }

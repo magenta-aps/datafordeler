@@ -299,7 +299,9 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
+        CvrRecord.level++;
         if (this.newestMonthlyNumbers != null) {
             this.newestMonthlyNumbers.traverse(setCallback, itemCallback);
         }
@@ -312,7 +314,7 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
         if (this.newestStatus != null) {
             this.newestStatus.traverse(setCallback, itemCallback);
         }
-        super.traverse(setCallback, itemCallback);
+        CvrRecord.level--;
     }
 
     /*@Override

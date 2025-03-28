@@ -213,8 +213,8 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
-        super.traverse(setCallback, itemCallback);
     }
 }

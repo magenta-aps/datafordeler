@@ -92,6 +92,7 @@ public class CompanyOwnersTest extends TestBase {
                     new HttpEntity<>("", new HttpHeaders()),
                     String.class
             );
+            Assertions.assertEquals(200, response.getStatusCode().value());
             ObjectNode data = (ObjectNode) objectMapper.readTree(response.getBody());
             System.out.println(response.getBody());
             ArrayNode legale = (ArrayNode) data.get("legale_ejere");

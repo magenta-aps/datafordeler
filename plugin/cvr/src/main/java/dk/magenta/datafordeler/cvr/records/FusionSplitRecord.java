@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.Where;
 
 import java.util.*;
@@ -89,7 +90,7 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_INCOMING = "indgaaende";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_FUSION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=false")
+    @SQLRestriction(AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=false")
     @JsonProperty(value = IO_FIELD_INCOMING)
     private Set<AttributeRecord> incoming = new HashSet<>();
 
@@ -133,7 +134,7 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_OUTGOING = "udgaaende";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_FUSION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=true")
+    @SQLRestriction(AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=true")
     @JsonProperty(value = IO_FIELD_OUTGOING)
     private Set<AttributeRecord> outgoing = new HashSet<>();
 
@@ -217,9 +218,9 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getIncoming().traverse(setCallback, itemCallback);
         this.getOutgoing().traverse(setCallback, itemCallback);
         this.getName().traverse(setCallback, itemCallback);
-        super.traverse(setCallback, itemCallback);
     }
 }

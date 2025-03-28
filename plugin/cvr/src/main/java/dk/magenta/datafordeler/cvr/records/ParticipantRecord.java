@@ -600,9 +600,13 @@ public class ParticipantRecord extends CvrEntityRecord {
         for (AddressRecord address : this.businessAddress) {
             address.wire(session);
         }
+        for (CompanyParticipantRelationRecord companyParticipantRelationRecord : this.companyRelation) {
+            companyParticipantRelationRecord.wire(session);
+        }
         if (this.metadata != null) {
             this.metadata.wire(session);
         }
+        // TODO: wire on traverse
     }
 
     @Override

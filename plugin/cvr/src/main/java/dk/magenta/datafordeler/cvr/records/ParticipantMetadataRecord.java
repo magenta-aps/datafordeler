@@ -5,13 +5,16 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.*;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantMetadataRecord.TABLE_NAME, indexes = {
@@ -66,8 +69,8 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
     }
 
     @JsonIgnore
-    public Set<AddressRecord> getNewestLocation() {
-        return this.newestLocation;
+    public BitemporalSet<AddressRecord> getNewestLocation() {
+        return new BitemporalSet<>(this.newestLocation);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_LOCATION)
@@ -86,7 +89,7 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_NEWEST_CONTACT_DATA = "nyesteKontaktoplysninger";
 
     @OneToMany(targetEntity = MetadataContactRecord.class, mappedBy = MetadataContactRecord.DB_FIELD_PARTICIPANT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-        private Set<MetadataContactRecord> metadataContactRecords = new HashSet<>();
+    private Set<MetadataContactRecord> metadataContactRecords = new HashSet<>();
 
     @JsonProperty(IO_FIELD_NEWEST_CONTACT_DATA)
     public void setMetadataContactData(Set<String> contactData) {
@@ -125,8 +128,8 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
         return contacts;
     }
 
-    public Set<MetadataContactRecord> getMetadataContactRecords() {
-        return this.metadataContactRecords;
+    public RecordSet<MetadataContactRecord> getMetadataContactRecords() {
+        return new RecordSet<>(this.metadataContactRecords);
     }
 
 
@@ -163,4 +166,11 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord {
         ParticipantMetadataRecord that = (ParticipantMetadataRecord) o;
         return this.cvrNumber == that.cvrNumber;
     }*/
+
+    @Override
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getMetadataContactRecords().traverse(setCallback, itemCallback);
+        this.getNewestLocation().traverse(setCallback, itemCallback);
+    }
 }

@@ -123,7 +123,7 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     }
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
-        this.getAttributes().traverse(setCallback, itemCallback);
         super.traverse(setCallback, itemCallback);
+        this.getAttributes().traverse(setCallback, itemCallback);
     }
 }

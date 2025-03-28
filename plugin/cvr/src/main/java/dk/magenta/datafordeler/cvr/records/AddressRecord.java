@@ -617,9 +617,11 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
-        if (this.municipality != null) {
-            this.municipality.traverse(setCallback, itemCallback);
-        }
         super.traverse(setCallback, itemCallback);
+        if (this.municipality != null) {
+            CvrRecord.level++;
+            this.municipality.traverse(setCallback, itemCallback);
+            CvrRecord.level--;
+        }
     }
 }
