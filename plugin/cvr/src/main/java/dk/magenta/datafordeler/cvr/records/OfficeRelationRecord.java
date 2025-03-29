@@ -139,9 +139,7 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
         super.traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
         if (this.officeRelationUnitRecord != null) {
-            CvrRecord.level++;
             this.officeRelationUnitRecord.traverse(setCallback, itemCallback);
-            CvrRecord.level--;
         }
     }
 }

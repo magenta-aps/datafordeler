@@ -442,7 +442,6 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
         this.getNewestSecondaryIndustry1().traverse(setCallback, itemCallback);
         this.getNewestSecondaryIndustry2().traverse(setCallback, itemCallback);
         this.getNewestSecondaryIndustry3().traverse(setCallback, itemCallback);
-        CvrRecord.level++;
         CompanyYearlyNumbersRecord yearlyNumbersRecord = this.getNewestYearlyNumbers();
         if (yearlyNumbersRecord != null) {
             yearlyNumbersRecord.traverse(setCallback, itemCallback);
@@ -451,7 +450,6 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
         if (quarterlyNumbersRecord != null) {
             quarterlyNumbersRecord.traverse(setCallback, itemCallback);
         }
-        CvrRecord.level--;
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
     }
 }
