@@ -184,7 +184,12 @@ public class ParseTest extends TestBase {
             // Read subscription to validate that missing companies gets subscribed
             CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
             allCompanySubscription.from(CompanySubscription.class);
-            List<Integer> subscribedCompanyList = session.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
+
+            List<Integer> subscribedCompanyList = session.createQuery(allCompanySubscription)
+                    .getResultList().stream()
+                    .map(CompanySubscription::getCvrNumber)
+                    .sorted()
+                    .collect(Collectors.toList());
 
             // Read companyunits to validate that their missing CVR'r is assigned to subscription
             CriteriaQuery<CompanyUnitMetadataRecord> unitQuery = subscriptionBuilder.createQuery(CompanyUnitMetadataRecord.class);

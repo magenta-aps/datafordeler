@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -74,6 +75,11 @@ public class CompanyOwnersService {
         map.put("0.9", Pair.of("0.9", "0.9999"));
         map.put("1.0", Pair.of("1", "1"));
         intervalMap = Collections.unmodifiableMap(map);
+    }
+
+    public CompanyOwnersService() {
+        this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        this.objectMapper.registerModule(new JavaTimeModule());
     }
 
     @PostConstruct

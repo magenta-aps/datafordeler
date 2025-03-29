@@ -87,7 +87,6 @@ public class EskatLookupTest {
     }
 
     private void loadCompanyFile(String resource, ImportMetadata importMetadata) throws IOException, DataFordelerException {
-        System.out.println("loadCompanyFile");
         InputStream testData = EskatLookupTest.class.getResourceAsStream(resource);
         JsonNode root = objectMapper.readTree(testData);
         testData.close();

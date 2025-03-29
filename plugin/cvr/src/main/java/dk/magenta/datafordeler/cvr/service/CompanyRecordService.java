@@ -107,12 +107,16 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
     @Override
     protected CompanyRecordQuery getEmptyQuery() {
         CompanyRecordQuery query = new CompanyRecordQuery();
-        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+
+
+        /*Plugin geoPlugin = pluginManager.getPluginByName("geo");
 
         EntityManager accessAddressManager = geoPlugin.getEntityManager("AccessAddress");
         query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality cvr_company__locationAddress__municipality");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress__municipality.municipality cvr_company__locationAddress__municipality__municipality");
+*/
+
 
         /*Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {

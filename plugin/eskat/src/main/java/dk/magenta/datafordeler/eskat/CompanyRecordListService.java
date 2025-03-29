@@ -78,19 +78,12 @@ public class CompanyRecordListService extends CompanyRecordService {
 
     @Override
     public List<ResultSet<CompanyRecord>> searchByQuery(CompanyRecordQuery query, Session session) {
-        System.out.println("searchByQuery");
-        System.out.println(query.toHql());
-        System.out.println(query.getSearchParameters());
         List<ResultSet<CompanyRecord>> allRecords = new ArrayList<>();
-
         query.setEffectToAfter(BaseQuery.ALWAYSTIMEINTERVAL);
-
         List<ResultSet<CompanyRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {
-            //log.info("There are "+localResults.size()+" local results");
             allRecords.addAll(localResults);
         }
-
         HashSet<String> cvrNumbers = new HashSet<>(query.getParameter(CompanyRecordQuery.CVRNUMMER));
         if (!cvrNumbers.isEmpty()) {
             cvrNumbers.removeAll(allRecords.stream().map(resultset -> Integer.toString(resultset.getPrimaryEntity().getCvrNumber())).collect(Collectors.toSet()));

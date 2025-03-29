@@ -79,7 +79,6 @@ public abstract class TestBase {
             for (ParticipantRecord participantRecord : QueryManager.getAllEntities(session, ParticipantRecord.class)) {
                 Transaction transaction = session.beginTransaction();
                 participantRecord.delete(session);
-                dumpHibernateSession(session);
                 transaction.commit();
             }
         }

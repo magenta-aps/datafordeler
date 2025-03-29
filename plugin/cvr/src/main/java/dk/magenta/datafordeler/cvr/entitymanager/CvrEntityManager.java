@@ -286,7 +286,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                     "WHERE aggregateStatus = 'Aktiv' " +
                     "AND (newestCvrRelation) NOT IN " +
                     "(SELECT company.cvrNumber FROM " + CompanyRecord.class.getCanonicalName() + " company " +
-                    "JOIN " + CompanyMetadataRecord.class.getCanonicalName() + " companyMetadata ON company.id" + "=companyMetadata." + CompanyMetadataRecord.DB_FIELD_COMPANY + ")";
+                    "JOIN " + CompanyMetadataRecord.class.getCanonicalName() + " companyMetadata ON company" + "=companyMetadata." + CompanyMetadataRecord.DB_FIELD_COMPANY + ")";
 
             Query querya = sessionSub.createQuery(hql_companies);
             companies = querya.getResultList();
@@ -316,6 +316,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         } catch (Exception e) {
             String companies_csep = (companies == null) ? null : companies.stream().map(Object::toString).collect(Collectors.joining(", "));
             log.error("Error creating subscription for CVR: "+companies_csep);
+            e.printStackTrace();
         }
     }
 

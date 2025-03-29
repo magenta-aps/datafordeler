@@ -234,15 +234,10 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
     public void addForm(FormRecord record) {
-        System.out.println("adding form record " + record);
         if (!this.form.contains(record)) {
-            System.out.println("not already present");
             record.setRelationCompanyRecord(this);
             this.form.add(record);
-        } else {
-            System.out.println("already present");
         }
-
     }
 
     public BitemporalSet<FormRecord> getForm() {

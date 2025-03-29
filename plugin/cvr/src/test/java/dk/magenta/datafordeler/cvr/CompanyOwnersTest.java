@@ -94,7 +94,6 @@ public class CompanyOwnersTest extends TestBase {
             );
             Assertions.assertEquals(200, response.getStatusCode().value());
             ObjectNode data = (ObjectNode) objectMapper.readTree(response.getBody());
-            System.out.println(response.getBody());
             ArrayNode legale = (ArrayNode) data.get("legale_ejere");
             ArrayNode reelle = (ArrayNode) data.get("reelle_ejere");
             Assertions.assertEquals(1, legale.size());

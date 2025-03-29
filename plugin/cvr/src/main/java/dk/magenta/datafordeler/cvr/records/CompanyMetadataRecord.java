@@ -548,12 +548,10 @@ public class CompanyMetadataRecord extends MetadataRecord {
         this.getNewestName().traverse(setCallback, itemCallback);
         this.getNewestLocation().traverse(setCallback, itemCallback);
         this.getNewestForm().traverse(setCallback, itemCallback);
-        CvrRecord.level++;
         StatusRecord statusRecord = this.getNewestStatus();
         if (statusRecord != null) {
             statusRecord.traverse(setCallback, itemCallback);
         }
-        CvrRecord.level--;
         this.getNewestPrimaryIndustry().traverse(setCallback, itemCallback);
         this.getNewestSecondaryIndustry1().traverse(setCallback, itemCallback);
         this.getNewestSecondaryIndustry2().traverse(setCallback, itemCallback);
