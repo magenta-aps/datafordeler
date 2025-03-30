@@ -164,11 +164,9 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
      * Demopersons is used on the demoenvironment for demo and education purposes
      */
     public void cleanDemoData() {
-        System.out.println("cleanDemoData");
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             List<String> testPersonList = Arrays.stream(configurationManager.getConfiguration().getTestpersonList().split(",")).filter(s -> !s.isBlank()).map(String::strip).collect(Collectors.toList());
-            System.out.println(testPersonList);
             personQuery.setParameter(
                     PersonRecordQuery.PERSONNUMMER,
                     testPersonList
