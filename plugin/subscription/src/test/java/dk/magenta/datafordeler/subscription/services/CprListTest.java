@@ -36,11 +36,9 @@ public class CprListTest extends TestBase {
     /**
      * Initiate lists
      * Test that it is possible to find a specific CPR-list and add new items
-     *
-     * @throws Exception
      */
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
 
         initMocks(this);
         ManageSubscription controller = new ManageSubscription();

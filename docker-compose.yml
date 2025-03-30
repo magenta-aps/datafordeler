@@ -16,6 +16,7 @@ services:
       - ./plugin/geo:/app/plugin/geo
       - ./plugin/eskat:/app/plugin/eskat
       - ./plugin/eboks:/app/plugin/eboks
+      - ./plugin/statistik:/app/plugin/statistik
       - ./plugin/subscription:/app/plugin/subscription
       - ./docker/dev-env/sts_metadata.xml:/app/conf/sts_metadata.xml:ro
 #      - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
@@ -29,7 +30,6 @@ services:
       - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
       - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
       - ./docker/createdbs.sql:/app/createdbs.sql
-      - ./plugin/cpr/pom.xml:/code/plugin/cpr/pom.xml:ro
     environment:
       - DATABASE_IMPORT_FILES=/app/createdbs.sql
     ports:

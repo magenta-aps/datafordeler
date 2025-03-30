@@ -15,21 +15,24 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RoadDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private RoadDataService roadDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
-        testsUtils.loadGeoLocalityData("Lokalitet_test.json");
-        testsUtils.loadGeoRoadData("Vejmidte_test.json");
-        testsUtils.loadAccessLocalityData("Adgangsadresse_test.json");//HER
-        testsUtils.loadPostalLocalityData("Postnummer_test.json");
+        this.loadGeoLocalityData("Lokalitet_test.json");
+        this.loadGeoRoadData("Vejmidte_test.json");
+        this.loadAccessLocalityData("Adgangsadresse_test.json");//HER
+        this.loadPostalLocalityData("Postnummer_test.json");
     }
 
     @Test
@@ -38,12 +41,12 @@ public class RoadDataServiceTest extends TestBase {
 
     @Test
     public void testService() throws JsonProcessingException {
-        roadDataService.setWriteToLocalFile(false);
+        when(roadDataService.getWriteToLocalFile()).thenReturn(false);
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/road_data/", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());

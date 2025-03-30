@@ -17,34 +17,37 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import static org.mockito.Mockito.when;
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StatusDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private StatusDataService statusDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
-        testsUtils.loadPersonData("statusperson.txt");
+        this.loadPersonData("statusperson.txt");
         this.loadAllGeoAdress(sessionManager);
-        statusDataService.setUseTimeintervallimit(false);
     }
 
     @AfterEach
     public void cleanup() {
-        testsUtils.deleteAll();
+        this.deleteAll();
     }
 
     @Test
     public void testStatusDataService() throws JsonProcessingException {
-        statusDataService.setWriteToLocalFile(false);
+        when(statusDataService.getTimeintervallimit()).thenReturn(false);
+        when(statusDataService.getWriteToLocalFile()).thenReturn(false);
 
         ResponseEntity<String> response;// = restTemplate.exchange("/statistik/status_data/?effectDate=2018-04-16", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         //Assertions.assertEquals(403, response.getStatusCodeValue());
@@ -52,7 +55,7 @@ public class StatusDataServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/status_data/?effectDate=2018-07-01&registrationAt=2018-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());
@@ -68,7 +71,8 @@ public class StatusDataServiceTest extends TestBase {
 
     @Test
     public void testFileOutput() throws IOException {
-        statusDataService.setWriteToLocalFile(true);
+        when(statusDataService.getTimeintervallimit()).thenReturn(false);
+        when(statusDataService.getWriteToLocalFile()).thenReturn(true);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/status_data/?effectDate=2018-05-01&registrationAt=2018-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(403, response.getStatusCodeValue());
@@ -76,7 +80,7 @@ public class StatusDataServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/status_data/?effectDate=2018-07-01&registrationAt=2018-08-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
 

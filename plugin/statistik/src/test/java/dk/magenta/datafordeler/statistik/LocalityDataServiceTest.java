@@ -16,30 +16,33 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LocalityDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private LocalityDataService localityDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
-        testsUtils.loadGeoLocalityData("Lokalitet_test.json");
+        this.loadGeoLocalityData("Lokalitet_test.json");
     }
 
     @Test
     public void testService() throws JsonProcessingException {
-        localityDataService.setWriteToLocalFile(false);
+        when(localityDataService.getWriteToLocalFile()).thenReturn(false);
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<String, Object>();
         form.add("file", new InputStreamResource(LocalityDataServiceTest.class.getResourceAsStream("/addressInput.csv")));

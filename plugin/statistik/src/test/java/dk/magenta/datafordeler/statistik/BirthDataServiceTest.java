@@ -17,34 +17,37 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import static org.mockito.Mockito.when;
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BirthDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private BirthDataService birthDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
-        testsUtils.loadPersonData("bornperson.txt");
+        this.loadPersonData("bornperson.txt");
         this.loadAllGeoAdress(sessionManager);
-        birthDataService.setUseTimeintervallimit(false);
     }
 
     @AfterEach
     public void cleanup() {
-        testsUtils.deleteAll();
+        this.deleteAll();
     }
 
     @Test
     public void testService() throws JsonProcessingException {
-        birthDataService.setWriteToLocalFile(false);
+        when(birthDataService.getTimeintervallimit()).thenReturn(false);
+        when(birthDataService.getWriteToLocalFile()).thenReturn(false);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/birth_data/", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(403, response.getStatusCodeValue());
@@ -52,7 +55,7 @@ public class BirthDataServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-01&afterDate=1999-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());
@@ -71,7 +74,8 @@ public class BirthDataServiceTest extends TestBase {
 
     @Test
     public void testFileOutput() throws IOException {
-        birthDataService.setWriteToLocalFile(true);
+        when(birthDataService.getTimeintervallimit()).thenReturn(false);
+        when(birthDataService.getWriteToLocalFile()).thenReturn(true);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(403, response.getStatusCodeValue());
@@ -79,7 +83,7 @@ public class BirthDataServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());

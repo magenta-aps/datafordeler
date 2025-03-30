@@ -117,7 +117,6 @@ public class RoadDataService extends StatisticsService {
                     "LEFT JOIN accessAddress." + AccessAddressEntity.DB_FIELD_POSTCODE + " accessAddressPostcode " +
                     "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_MUNICIPALITY + " roadMunicipality " +
                     "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_NAME + " roadName " +
-                    "LEFT JOIN accessAddress." + AccessAddressEntity.DB_FIELD_POSTCODE + " accessAddressPostcode " +
                     "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_LOCALITY + " roadLocality " +
                     "JOIN " + GeoLocalityEntity.class.getCanonicalName() + " locality ON roadLocality.reference = locality." + GeoLocalityEntity.DB_FIELD_IDENTIFICATION + " " +
                     "JOIN locality." + GeoLocalityEntity.DB_FIELD_NAME + " localityName" +

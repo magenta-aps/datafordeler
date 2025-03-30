@@ -23,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ import java.util.List;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReportProgressServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private BirthDataService birthDataService;//Just one of the reportservices to use in test
 
     @Test
@@ -121,7 +122,7 @@ public class ReportProgressServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-01&afterDate=1999-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(409, response.getStatusCodeValue());
@@ -142,7 +143,7 @@ public class ReportProgressServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-01", HttpMethod.POST, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(409, response.getStatusCodeValue());
@@ -157,7 +158,7 @@ public class ReportProgressServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);

@@ -7,7 +7,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
 
@@ -16,21 +15,16 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SubscriptionSequenceTest extends TestBase {
 
-    MockMvc mvc;
-
 
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-
     /**
      * Test that it is possible to create a new subscription
-     *
-     * @throws Exception
      */
     @Test
-    public void testSequenceToBePerformedWithCustomer() throws Exception {
+    public void testSequenceToBePerformedWithCustomer() {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));

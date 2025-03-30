@@ -16,36 +16,41 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import static org.mockito.Mockito.when;
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MovementDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private MovementDataService movementDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
-        testsUtils.deleteAll();
+        this.deleteAll();
         this.setPath();
         this.loadAllGeoAdress(sessionManager);
-        testsUtils.loadPersonData("movedperson.txt");
-        testsUtils.loadPersonData("movedpersonExample2.txt");
-        testsUtils.loadPersonData("movedpersonExample3.txt");
+        this.loadPersonData("movedperson.txt");
+        this.loadPersonData("movedpersonExample2.txt");
+        this.loadPersonData("movedpersonExample3.txt");
     }
 
     @AfterEach
     public void cleanup() {
-        testsUtils.deleteAll();
+        this.deleteAll();
     }
 
     @Test
     public void testServiceMovedPerson() throws Exception {
-        movementDataService.setWriteToLocalFile(false);
+
+        when(movementDataService.getWriteToLocalFile()).thenReturn(false);
+
         TestUserDetails testUserDetails = new TestUserDetails();
 
         HttpEntity<String> httpEntity = new HttpEntity<>("", new HttpHeaders());
@@ -54,7 +59,7 @@ public class MovementDataServiceTest extends TestBase {
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/movement_data/?pnr=0101001234&registrationAfter=1900-01-01&registrationBefore=2018-08-01", HttpMethod.GET, httpEntity, String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());
@@ -70,7 +75,7 @@ public class MovementDataServiceTest extends TestBase {
 
     @Test
     public void testServiceMovedPersonEx2() throws Exception {
-        movementDataService.setWriteToLocalFile(false);
+        when(movementDataService.getWriteToLocalFile()).thenReturn(false);
         TestUserDetails testUserDetails = new TestUserDetails();
 
         HttpEntity<String> httpEntity = new HttpEntity<>("", new HttpHeaders());
@@ -79,7 +84,7 @@ public class MovementDataServiceTest extends TestBase {
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/movement_data/?pnr=0101011235&registrationAfter=1900-01-01&registrationBefore=2019-08-01", HttpMethod.GET, httpEntity, String.class);
         Assertions.assertNotNull(response.getBody());
@@ -97,7 +102,7 @@ public class MovementDataServiceTest extends TestBase {
 
     @Test
     public void testServiceMovedPersonEx3() throws Exception {
-        movementDataService.setWriteToLocalFile(false);
+        when(movementDataService.getWriteToLocalFile()).thenReturn(false);
         TestUserDetails testUserDetails = new TestUserDetails();
 
         HttpEntity<String> httpEntity = new HttpEntity<>("", new HttpHeaders());
@@ -106,7 +111,7 @@ public class MovementDataServiceTest extends TestBase {
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/movement_data/?pnr=0101011236&registrationAfter=1900-01-01&registrationBefore=2019-08-01", HttpMethod.GET, httpEntity, String.class);
         Assertions.assertNotNull(response.getBody());
@@ -125,7 +130,7 @@ public class MovementDataServiceTest extends TestBase {
 
     @Test
     public void testFileOutput() throws IOException {
-        movementDataService.setWriteToLocalFile(true);
+        when(movementDataService.getWriteToLocalFile()).thenReturn(true);
 
         TestUserDetails testUserDetails = new TestUserDetails();
 
@@ -135,7 +140,7 @@ public class MovementDataServiceTest extends TestBase {
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/movement_data/", HttpMethod.GET, httpEntity, String.class);
         Assertions.assertEquals(400, response.getStatusCodeValue());

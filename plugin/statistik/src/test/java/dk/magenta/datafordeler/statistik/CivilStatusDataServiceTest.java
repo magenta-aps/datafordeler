@@ -21,30 +21,32 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.mockito.Mockito.when;
 
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CivilStatusDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private CivilStatusDataService civilStatusDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
-        testsUtils.loadPersonData("marriedperson2.txt");
-        testsUtils.loadPersonData("marriedperson3.txt");
+        this.loadPersonData("marriedperson2.txt");
+        this.loadPersonData("marriedperson3.txt");
         this.loadAllGeoAdress(sessionManager);
-        civilStatusDataService.setUseTimeintervallimit(false);
     }
 
     @AfterEach
     public void cleanup() {
-        testsUtils.deleteAll();
+        this.deleteAll();
     }
 
     private void assertJsonEquals(String jsonExpected, String jsonActual) throws JsonProcessingException {
@@ -61,6 +63,9 @@ public class CivilStatusDataServiceTest extends TestBase {
      */
     @Test
     public void testMarriageInitiated() throws JsonProcessingException, InvalidClientInputException {
+
+        when(civilStatusDataService.getTimeintervallimit()).thenReturn(false);
+
 
         Session session = sessionManager.getSessionFactory().openSession();
         PersonRecordQuery query = new PersonRecordQuery();
@@ -80,7 +85,8 @@ public class CivilStatusDataServiceTest extends TestBase {
 
     @Test
     public void testServiceMarried() throws JsonProcessingException {
-        civilStatusDataService.setWriteToLocalFile(false);
+        when(civilStatusDataService.getTimeintervallimit()).thenReturn(false);
+        when(civilStatusDataService.getWriteToLocalFile()).thenReturn(false);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/civilstate_data/?CivSt=G&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(403, response.getStatusCodeValue());
@@ -88,7 +94,7 @@ public class CivilStatusDataServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/civilstate_data/?CivSt=G&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());
@@ -137,11 +143,13 @@ public class CivilStatusDataServiceTest extends TestBase {
     @Test
     public void testCivilStateChangeWithPnr0101011234() throws JsonProcessingException {
 
-        civilStatusDataService.setWriteToLocalFile(false);
+        when(civilStatusDataService.getTimeintervallimit()).thenReturn(false);
+        when(civilStatusDataService.getWriteToLocalFile()).thenReturn(false);
+
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/civilstate_data/?pnr=0101011234&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());
@@ -161,11 +169,13 @@ public class CivilStatusDataServiceTest extends TestBase {
     @Test
     public void testCivilStateChangeWithPnr0101011235() throws JsonProcessingException {
 
-        civilStatusDataService.setWriteToLocalFile(false);
+        when(civilStatusDataService.getTimeintervallimit()).thenReturn(false);
+        when(civilStatusDataService.getWriteToLocalFile()).thenReturn(false);
+
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/civilstate_data/?pnr=0101011235&registrationAfter=1980-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());

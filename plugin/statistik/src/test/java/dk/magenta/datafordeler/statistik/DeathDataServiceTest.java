@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
@@ -17,35 +18,39 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+
+import static org.mockito.Mockito.when;
 
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DeathDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private DeathDataService deathDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
-        testsUtils.loadPersonData("deadperson.txt");
+        this.loadPersonData("deadperson.txt");
         this.loadAllGeoAdress(sessionManager);
-        deathDataService.setUseTimeintervallimit(false);
     }
 
     @AfterEach
     public void cleanup() {
-        testsUtils.deleteAll();
+        this.deleteAll();
     }
 
     @Test
     public void testService() throws JsonProcessingException {
-        deathDataService.setWriteToLocalFile(false);
+
+        when(deathDataService.getTimeintervallimit()).thenReturn(false);
+        when(deathDataService.getWriteToLocalFile()).thenReturn(false);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/death_data/?registrationAfter=2017-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(403, response.getStatusCodeValue());
@@ -53,7 +58,7 @@ public class DeathDataServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/death_data/?registrationAfter=2000-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());
@@ -69,14 +74,16 @@ public class DeathDataServiceTest extends TestBase {
 
     @Test
     public void testFileOutput() throws IOException {
-        deathDataService.setWriteToLocalFile(true);
+        when(deathDataService.getTimeintervallimit()).thenReturn(false);
+        when(deathDataService.getWriteToLocalFile()).thenReturn(true);
+
         ResponseEntity<String> response = restTemplate.exchange("/statistik/death_data/?registrationAfter=2017-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(403, response.getStatusCodeValue());
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/death_data/?registrationAfter=2017-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
 

@@ -17,31 +17,34 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AddressDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     protected AddressDataService addressDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
-        testsUtils.loadPersonData("bornperson.txt");
+        this.loadPersonData("bornperson.txt");
         this.loadAllGeoAdress(sessionManager);
-        addressDataService.setUseTimeintervallimit(false);
     }
 
     @Test
     public void testService() throws JsonProcessingException {
-        addressDataService.setWriteToLocalFile(false);
+        when(addressDataService.getTimeintervallimit()).thenReturn(false);
+        when(addressDataService.getWriteToLocalFile()).thenReturn(false);
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/address_data/?registrationAfter=2000-01-01", HttpMethod.GET, new HttpEntity("", new HttpHeaders()), String.class);
         Assertions.assertEquals(InputStreamReader.readInputStream(AddressDataService.class.getResourceAsStream("/addressServiceForm.html")), response.getBody());

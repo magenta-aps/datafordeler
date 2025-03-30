@@ -184,6 +184,7 @@ public abstract class StatisticsService {
             if (outputStream != null) {
                 int written = this.run(filter, outputStream, reportUuid);
                 this.getLogger().info(outputDescription);
+                System.out.println("written: "+written);
                 if (written == 0) {
                     response.sendError(HttpStatus.NO_CONTENT.value());
                 }
@@ -206,7 +207,7 @@ public abstract class StatisticsService {
     protected abstract Logger getLogger();
 
     protected Filter getFilter(HttpServletRequest request) throws Exception {
-        return new Filter(request, timeintervallimit);
+        return new Filter(request, this.getTimeintervallimit());
     }
 
 
@@ -250,6 +251,10 @@ public abstract class StatisticsService {
 
     public void setUseTimeintervallimit(boolean timeintervallimit) {
         this.timeintervallimit = timeintervallimit;
+    }
+
+    public boolean getTimeintervallimit() {
+        return this.timeintervallimit;
     }
 
     public boolean getWriteToLocalFile() {

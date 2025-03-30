@@ -15,30 +15,33 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AdoptionDataServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private AdoptionDataService adoptionDataService;
 
     @BeforeEach
     public void initialize() throws Exception {
         this.setPath();
-        testsUtils.loadPersonData("adoptedpersons.txt");
+        this.loadPersonData("adoptedpersons.txt");
         this.loadAllGeoAdress(sessionManager);
-        adoptionDataService.setUseTimeintervallimit(false);
     }
 
     @AfterEach
     public void cleanup() {
-        testsUtils.deleteAll();
+        this.deleteAll();
     }
 
     @Test
     public void testService() throws JsonProcessingException {
-        adoptionDataService.setWriteToLocalFile(false);
+        when(adoptionDataService.getTimeintervallimit()).thenReturn(false);
+        when(adoptionDataService.getWriteToLocalFile()).thenReturn(false);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/adoption_data/", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(403, response.getStatusCodeValue());
@@ -46,7 +49,7 @@ public class AdoptionDataServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         response = restTemplate.exchange("/statistik/adoption_data/?registrationAfter=2000-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
         Assertions.assertEquals(200, response.getStatusCodeValue());
