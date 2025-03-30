@@ -78,6 +78,7 @@ public abstract class FtpCommunicator implements Communicator {
                 throw new DataStreamException("Unable to create temporary folder", e);
             }
         }
+        System.out.println("localCopyFolder: " + localCopyFolder);
         this.keepFiles = keepFiles;
         this.markLocalFiles = markLocalFiles;
         this.markRemoteFiles = markRemoteFiles;
@@ -92,6 +93,10 @@ public abstract class FtpCommunicator implements Communicator {
         temp.delete();
         temp.mkdir();
         return Paths.get(temp.getAbsolutePath());
+    }
+
+    public void setKeepFiles(boolean keepFiles) {
+        this.keepFiles = keepFiles;
     }
 
     protected void setupProxy(FTPClient ftpClient) throws DataStreamException {

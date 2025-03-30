@@ -66,6 +66,7 @@ public abstract class GeoTest {
     }
 
     public void loadCprAddress() throws Exception {
+        System.out.println("LOADCPRADDRESS");
         InputStream testData = GeoTest.class.getResourceAsStream("/roaddata.txt");
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();

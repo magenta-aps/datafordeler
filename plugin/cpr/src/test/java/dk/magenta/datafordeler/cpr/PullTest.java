@@ -18,9 +18,11 @@ import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthPlaceDataRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -119,6 +121,7 @@ public class PullTest extends TestBase {
 
         doAnswer((Answer<FtpCommunicator>) invocation -> {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
+            ftpCommunicator.setKeepFiles(false);
             ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
         }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
@@ -308,6 +311,8 @@ public class PullTest extends TestBase {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assertions.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
+
+        System.out.println("\n\n\n\n---");
 
         //Pull 39 persons from GLBASETEST
         try (Session session = sessionManager.getSessionFactory().openSession()) {

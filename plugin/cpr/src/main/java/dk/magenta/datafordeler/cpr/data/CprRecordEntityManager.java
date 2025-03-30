@@ -19,6 +19,8 @@ import dk.magenta.datafordeler.core.util.Stopwatch;
 import dk.magenta.datafordeler.cpr.CprRegisterManager;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.records.CprDataRecord;
 import org.apache.logging.log4j.LogManager;
@@ -225,6 +227,8 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                             break;
                         }
                         String origin = labeledSequenceInputStream != null ? labeledSequenceInputStream.getCurrentLabel() : null;
+                        System.out.println("origin: " + origin);
+                        System.out.println("line: " + line);
                         ArrayList<String> dataChunk = dataChunks.computeIfAbsent(origin, k -> new ArrayList<>());
                         dataChunk.add(line);
                         size += line.length();
@@ -261,6 +265,8 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                             ListHashMap<E, T> recordMap = new ListHashMap<>();
                             HashMap<UUID, E> entityCache = new HashMap<>();
                             for (T record : chunkRecords) {
+                                System.out.println("Got record " + record.getRecordClass());
+                                System.out.println("    "+record.getLine());
                                 this.checkInterrupt(importMetadata);
                                 this.handleRecord(record, importMetadata);
                                 if (this.filter(record, importMetadata.getImportConfiguration())) {
@@ -273,6 +279,10 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                                         if (entity == null) {
                                             entity = this.createBasicEntity(record);
                                             entity.setIdentification(identification);
+                                            System.out.println("Create "+entity.getClass().getSimpleName());
+                                            if (entity instanceof PersonEntity) {
+                                                System.out.println(((PersonEntity) entity).getPersonNumber());
+                                            }
                                         }
                                         entityCache.put(uuid, entity);
                                     }

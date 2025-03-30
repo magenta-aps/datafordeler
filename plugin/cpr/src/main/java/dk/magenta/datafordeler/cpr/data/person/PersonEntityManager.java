@@ -164,12 +164,14 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
      * Demopersons is used on the demoenvironment for demo and education purposes
      */
     public void cleanDemoData() {
+        System.out.println("cleanDemoData");
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            String[] testPersonList = configurationManager.getConfiguration().getTestpersonList().split(",");
+            List<String> testPersonList = Arrays.stream(configurationManager.getConfiguration().getTestpersonList().split(",")).filter(s -> !s.isBlank()).map(String::strip).collect(Collectors.toList());
+            System.out.println(testPersonList);
             personQuery.setParameter(
                     PersonRecordQuery.PERSONNUMMER,
-                    Arrays.stream(testPersonList).filter(s -> !s.isBlank()).map(String::strip).collect(Collectors.toList())
+                    testPersonList
             );
             personQuery.setPageSize(1000000);
             personQuery.applyFilters(session);
@@ -181,7 +183,9 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 }
                 transaction.commit();
             } catch (Exception e) {
+                e.printStackTrace();
                 transaction.rollback();
+                throw e;
             }
         } catch (Exception e) {
             log.error("Failed cleaning data", e);
