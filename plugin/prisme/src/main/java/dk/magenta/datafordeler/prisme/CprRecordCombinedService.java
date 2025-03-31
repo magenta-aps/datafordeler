@@ -109,6 +109,7 @@ public class CprRecordCombinedService {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found in direct lookup");
                 }
                 Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
+                System.out.println("Returning with creating subscription");
                 return streamPersonOut(user, obj);
             }
 
@@ -118,6 +119,7 @@ public class CprRecordCombinedService {
                 if (personEntity == null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
+                System.out.println("Should create subscription");
                 entityManager.createSubscription(session, Collections.singleton(cprNummer));
                 Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
                 return streamPersonOut(user, obj);
@@ -129,20 +131,24 @@ public class CprRecordCombinedService {
             loggerHelper.urlInvokePersistablelogs("CprRecordCombinedService done");
             switch (personAttrQuality) {
                 case PersonInformationIsOk:
+                    System.out.println("Returning with creating subscription");
                     return objectMapper.writeValueAsString(obj);
                 case needDirectLookup:
                     personEntity = cprDirectLookup.getPerson(cprNummer);
                     obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
+                    System.out.println("Returning with creating subscription");
                     return streamPersonOut(user, obj);
                 case needSubscriptionAndDirectLookup:
                     personEntity = cprDirectLookup.getPerson(cprNummer);
                     if (personEntity == null) {
                         throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                     }
+                    System.out.println("Should create subscription");
                     entityManager.createSubscription(session, Collections.singleton(cprNummer));
                     obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
                     return streamPersonOut(user, obj);
                 default:
+                    System.out.println("Returning with creating subscription");
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
         } catch (DataStreamException e) {

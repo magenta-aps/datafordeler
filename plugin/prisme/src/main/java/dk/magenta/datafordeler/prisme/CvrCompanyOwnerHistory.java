@@ -179,6 +179,7 @@ public class CvrCompanyOwnerHistory {
                                 }
                             }
                         } catch (Exception e) {
+                            e.printStackTrace();
                             throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                         }
                     } else if ("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {

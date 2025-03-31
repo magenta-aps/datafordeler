@@ -614,15 +614,12 @@ public class CprTest extends TestBase {
         Assertions.assertEquals(600, responseObject.get("stedkode").asInt());
         Assertions.assertEquals("GL", responseObject.get("landekode").asText());
 
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
             Assertions.assertEquals(1, existingSubscriptions.size());
             PersonSubscription subscription = existingSubscriptions.get(0);
             Assertions.assertEquals("0707611234", subscription.getPersonNumber());
             Assertions.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
-        } finally {
-            session.close();
         }
     }
 

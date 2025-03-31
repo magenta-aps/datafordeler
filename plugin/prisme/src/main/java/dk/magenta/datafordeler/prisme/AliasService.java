@@ -24,29 +24,29 @@ public class AliasService {
     @Autowired
     private CprRecordService cprService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/cvr/{cvrNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/cvr/{cvrNummer}", "/cvr/{cvrNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getCvrSingle(@PathVariable("cvrNummer") String cvrNummer, HttpServletRequest request) throws JsonProcessingException, DataFordelerException {
         return this.cvrService.getSingle(cvrNummer, request);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/cvr", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"/cvr", "/cvr/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getCvrBulk(HttpServletRequest request) throws HttpNotFoundException, InvalidTokenException, IOException, InvalidClientInputException, AccessDeniedException, AccessRequiredException, InvalidCertificateException {
         return this.cvrService.getBulk(request);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/cpr/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/cpr/{cprNummer}", "/cpr/{cprNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getCprSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
         return this.cprService.getSingle(cprNummer, request);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"", "/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getCprBulkDeprecate(HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, InvalidParameterException, IOException, HttpNotFoundException, InvalidCertificateException {
         return this.cprService.getBulk(request);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/cpr", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"/cpr/", "/cpr"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getCprBulk(HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, InvalidParameterException, IOException, HttpNotFoundException, InvalidCertificateException {
         return this.cprService.getBulk(request);

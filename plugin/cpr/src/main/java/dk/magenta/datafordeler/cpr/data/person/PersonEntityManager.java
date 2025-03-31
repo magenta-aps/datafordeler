@@ -25,6 +25,7 @@ import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -317,7 +318,12 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
      * @param removeCprNumbers
      */
     public void createSubscription(Session session, Set<String> addCprNumbers, Set<String> removeCprNumbers) {
-        this.log.info("Collected these numbers for subscription: " + addCprNumbers);
+        this.log.info("Collected these numbers for subscription: " + addCprNumbers+", removal: "+removeCprNumbers);
+        Transaction t = session.getTransaction();
+        boolean insideTransaction = t.getStatus() != TransactionStatus.NOT_ACTIVE;
+        if (!insideTransaction) {
+            session.beginTransaction();
+        }
 
         HashSet<String> cprNumbersToBeAdded = new HashSet<>(addCprNumbers);
         List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
@@ -339,6 +345,9 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             if (removeSubscription != null) {
                 session.remove(removeSubscription);
             }
+        }
+        if (!insideTransaction) {
+            session.getTransaction().commit();
         }
         this.log.info("Subscription created");
     }
