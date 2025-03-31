@@ -102,7 +102,7 @@ public class CivilStatusDataService extends PersonStatisticsService {
 
     @Override
     protected Filter getFilter(HttpServletRequest request) throws Exception {
-        return new CivilStatusFilter(request, this.timeintervallimit);
+        return new CivilStatusFilter(request, this.getTimeintervallimit());
     }
 
     @Override

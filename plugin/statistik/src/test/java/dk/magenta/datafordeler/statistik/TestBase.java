@@ -99,12 +99,10 @@ public abstract class TestBase {
 
 
     public void applyAccess(TestUserDetails testUserDetails) {
-        System.out.println("Applying access");
-        System.out.println(dafoUserManager.getFallbackUser());
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
+    protected void loadAllGeoAdress() throws IOException {
         this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
         this.loadGeoData(sessionManager, roadEntityManager, "/road.json");
         this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
@@ -298,10 +296,10 @@ public abstract class TestBase {
 
     public void loadRoadData(InputStream testData) throws Exception {
         ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        importMetadata.setSession(session);
-        cprRoadEntityManager.parseData(testData, importMetadata);
-        session.close();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            cprRoadEntityManager.parseData(testData, importMetadata);
+        }
         testData.close();
     }
 
@@ -323,13 +321,18 @@ public abstract class TestBase {
 
     public void loadGeoRoadData(InputStream testData) throws DataFordelerException {
         ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        importMetadata.setSession(session);
-        Transaction transaction = session.beginTransaction();
-        importMetadata.setTransactionInProgress(true);
-        roadEntityManager.parseData(testData, importMetadata);
-        transaction.commit();
-        session.close();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            try {
+                importMetadata.setTransactionInProgress(true);
+                roadEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
     }
 
     public void loadGeoLocalityData(String resource) throws DataFordelerException {
@@ -350,13 +353,18 @@ public abstract class TestBase {
 
     public void loadGeoLocalityData(InputStream testData) throws DataFordelerException {
         ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        importMetadata.setSession(session);
-        Transaction transaction = session.beginTransaction();
-        importMetadata.setTransactionInProgress(true);
-        localityEntityManager.parseData(testData, importMetadata);
-        transaction.commit();
-        session.close();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            try {
+                importMetadata.setTransactionInProgress(true);
+                localityEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
     }
 
 
@@ -378,13 +386,18 @@ public abstract class TestBase {
 
     public void loadAccessLocalityData(InputStream testData) throws DataFordelerException {
         ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        importMetadata.setSession(session);
-        Transaction transaction = session.beginTransaction();
-        importMetadata.setTransactionInProgress(true);
-        accessAddressEntityManager.parseData(testData, importMetadata);
-        transaction.commit();
-        session.close();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            try {
+                importMetadata.setTransactionInProgress(true);
+                accessAddressEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
     }
 
 
@@ -406,36 +419,51 @@ public abstract class TestBase {
 
     public void loadPostalLocalityData(InputStream testData) throws DataFordelerException {
         ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        importMetadata.setSession(session);
-        Transaction transaction = session.beginTransaction();
-        importMetadata.setTransactionInProgress(true);
-        postcodeEntityManager.parseData(testData, importMetadata);
-        transaction.commit();
-        session.close();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            try {
+                importMetadata.setTransactionInProgress(true);
+                postcodeEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
     }
 
 
     public void loadPersonData(InputStream testData) throws Exception {
         ImportMetadata importMetadata = new ImportMetadata();
-        Session session = sessionManager.getSessionFactory().openSession();
-        importMetadata.setSession(session);
-        Transaction transaction = session.beginTransaction();
-        importMetadata.setTransactionInProgress(true);
-        personEntityManager.parseData(testData, importMetadata);
-        transaction.commit();
-        session.close();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            importMetadata.setTransactionInProgress(true);
+            try {
+                personEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
     }
 
     public <E extends DatabaseEntry> void deleteAll(Class<E> eClass) {
-        Session session = sessionManager.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Collection<E> entities = QueryManager.getAllEntities(session, eClass);
-        for (E entity : entities) {
-            session.remove(entity);
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            try {
+                Collection<E> entities = QueryManager.getAllEntities(session, eClass);
+                for (E entity : entities) {
+                    session.remove(entity);
+                }
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
         }
-        transaction.commit();
-        session.close();
     }
 
     public void deleteAll() {

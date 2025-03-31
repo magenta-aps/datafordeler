@@ -273,24 +273,25 @@ public class PullTest extends TestBase {
         try {
             List<PersonSubscription> subscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
             Assertions.assertEquals(1, subscriptions.size());
+
+
+            personFtp.startServer(username, password, personPort, Collections.EMPTY_LIST);
+            File localSubFolder = File.createTempFile("foo", "bar");
+
+            try {
+                personEntityManager.createSubscriptionFile(session);
+                doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
+                File[] subFiles = personFtp.getTempDir().listFiles();
+                Assertions.assertEquals(1, subFiles.length);
+                String contents = FileUtils.readFileToString(subFiles[0]);
+                Assertions.assertEquals("06123400OP0101001234                                                            \r\n" +
+                        "071234560101001234               ", contents);
+            } finally {
+                personFtp.stopServer();
+                localSubFolder.delete();
+            }
         } finally {
             session.close();
-        }
-
-        personFtp.startServer(username, password, personPort, Collections.EMPTY_LIST);
-        File localSubFolder = File.createTempFile("foo", "bar");
-
-        try {
-            personEntityManager.createSubscriptionFile();
-            doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
-            File[] subFiles = personFtp.getTempDir().listFiles();
-            Assertions.assertEquals(1, subFiles.length);
-            String contents = FileUtils.readFileToString(subFiles[0]);
-            Assertions.assertEquals("06123400OP0101001234                                                            \r\n" +
-                    "071234560101001234               ", contents);
-        } finally {
-            personFtp.stopServer();
-            localSubFolder.delete();
         }
     }
 

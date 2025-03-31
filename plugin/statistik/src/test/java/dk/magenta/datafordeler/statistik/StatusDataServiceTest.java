@@ -36,7 +36,7 @@ public class StatusDataServiceTest extends TestBase {
     public void initialize() throws Exception {
         this.setPath();
         this.loadPersonData("statusperson.txt");
-        this.loadAllGeoAdress(sessionManager);
+        this.loadAllGeoAdress();
     }
 
     @AfterEach

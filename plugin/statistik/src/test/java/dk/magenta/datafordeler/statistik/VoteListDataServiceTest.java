@@ -43,7 +43,7 @@ public class VoteListDataServiceTest extends TestBase {
     public void initialize() throws Exception {
         this.setPath();
         this.loadPersonData("voter.txt");
-        this.loadAllGeoAdress(sessionManager);
+        this.loadAllGeoAdress();
     }
 
     @AfterEach

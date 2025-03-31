@@ -35,7 +35,7 @@ public class MovementDataServiceTest extends TestBase {
     public void initialize() throws Exception {
         this.deleteAll();
         this.setPath();
-        this.loadAllGeoAdress(sessionManager);
+        this.loadAllGeoAdress();
         this.loadPersonData("movedperson.txt");
         this.loadPersonData("movedpersonExample2.txt");
         this.loadPersonData("movedpersonExample3.txt");

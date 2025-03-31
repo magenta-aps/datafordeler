@@ -166,7 +166,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             if (importMetadata.getImportConfiguration() != null &&
                     importMetadata.getImportConfiguration().has("cleantestdatafirst") &&
                     importMetadata.getImportConfiguration().get("cleantestdatafirst").booleanValue()) {
-                System.out.println("CLEANING DEMO DATA");
                 cleanDemoData(session);
             }
             Industry.initializeCache(session);

@@ -198,7 +198,7 @@ public class QueryManager {
 
     private static final boolean logQuery = false;
 
-    public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
+    public static org.hibernate.query.Query<Object> getQuery(Session session, BaseQuery query) {
         query.applyFilters(session);
 
         String queryString = query.toHql();
@@ -210,7 +210,7 @@ public class QueryManager {
         }
 
         // Build query
-        org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
+        org.hibernate.query.Query<Object> databaseQuery = session.createQuery(queryString, Object.class);
 
         // Insert parameters, casting as necessary
         Map<String, Object> extraParameters = query.getConditionParameters();
@@ -272,7 +272,7 @@ public class QueryManager {
         }
         LinkedHashMap<UUID, ResultSet<E>> identitySetList = new LinkedHashMap<>();
         log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
+        org.hibernate.query.Query<Object> databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
 

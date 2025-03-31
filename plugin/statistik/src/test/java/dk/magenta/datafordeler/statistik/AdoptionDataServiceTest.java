@@ -30,7 +30,7 @@ public class AdoptionDataServiceTest extends TestBase {
     public void initialize() throws Exception {
         this.setPath();
         this.loadPersonData("adoptedpersons.txt");
-        this.loadAllGeoAdress(sessionManager);
+        this.loadAllGeoAdress();
     }
 
     @AfterEach

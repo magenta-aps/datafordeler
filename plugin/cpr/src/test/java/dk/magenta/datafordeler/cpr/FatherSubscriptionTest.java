@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -146,7 +147,11 @@ public class FatherSubscriptionTest extends TestBase {
      */
     @Test
     public void testSubscriptionCreation() throws Exception {
-        personEntityManager.createSubscription(Collections.singleton("1111111111"), Collections.singleton("1111111111"));
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            personEntityManager.createSubscription(session, Collections.singleton("1111111111"), Collections.singleton("1111111111"));
+            transaction.commit();
+        }
     }
 
 }

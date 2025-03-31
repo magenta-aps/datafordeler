@@ -184,7 +184,6 @@ public abstract class StatisticsService {
             if (outputStream != null) {
                 int written = this.run(filter, outputStream, reportUuid);
                 this.getLogger().info(outputDescription);
-                System.out.println("written: "+written);
                 if (written == 0) {
                     response.sendError(HttpStatus.NO_CONTENT.value());
                 }

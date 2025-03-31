@@ -118,7 +118,7 @@ public class CprRecordCombinedService {
                 if (personEntity == null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
-                entityManager.createSubscription(Collections.singleton(cprNummer));
+                entityManager.createSubscription(session, Collections.singleton(cprNummer));
                 Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
                 return streamPersonOut(user, obj);
             }
@@ -139,7 +139,7 @@ public class CprRecordCombinedService {
                     if (personEntity == null) {
                         throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                     }
-                    entityManager.createSubscription(Collections.singleton(cprNummer));
+                    entityManager.createSubscription(session, Collections.singleton(cprNummer));
                     obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
                     return streamPersonOut(user, obj);
                 default:
@@ -270,7 +270,7 @@ public class CprRecordCombinedService {
                 outputStream.write(END_OBJECT);
                 outputStream.flush();
 
-                entityManager.createSubscription(found);
+                entityManager.createSubscription(entitySession, found);
 
             } catch (InvalidClientInputException e) {
                 e.printStackTrace();

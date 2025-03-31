@@ -34,7 +34,7 @@ public class AddressDataServiceTest extends TestBase {
     public void initialize() throws Exception {
         this.setPath();
         this.loadPersonData("bornperson.txt");
-        this.loadAllGeoAdress(sessionManager);
+        this.loadAllGeoAdress();
     }
 
     @Test

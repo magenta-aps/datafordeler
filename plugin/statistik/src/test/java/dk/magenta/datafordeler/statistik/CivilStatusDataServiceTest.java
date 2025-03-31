@@ -41,7 +41,7 @@ public class CivilStatusDataServiceTest extends TestBase {
         this.setPath();
         this.loadPersonData("marriedperson2.txt");
         this.loadPersonData("marriedperson3.txt");
-        this.loadAllGeoAdress(sessionManager);
+        this.loadAllGeoAdress();
     }
 
     @AfterEach

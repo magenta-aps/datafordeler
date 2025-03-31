@@ -99,7 +99,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addRegNumber(CompanyRegNumberRecord record) {
         if (!this.regNumber.contains(record)) {
-            System.out.println("adding reg number record " + record);
             record.setParticipantRelationCompanyRecord(this);
             this.regNumber.add(record);
         }
@@ -126,7 +125,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addName(BaseNameRecord record) {
         if (!this.names.contains(record)) {
-            System.out.println("adding name record "+record);
             record.setRelationCompanyRecord(this);
             this.names.add(record);
         }
@@ -153,7 +151,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addLifecycle(LifecycleRecord record) {
         if (!this.lifecycle.contains(record)) {
-            System.out.println("adding lifecycle record " + record);
             record.setRelationCompanyRecord(this);
             this.lifecycle.add(record);
         }
@@ -180,7 +177,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addStatus(StatusRecord record) {
         if (!this.status.contains(record)) {
-            System.out.println("adding status record " + record);
             record.setRelationCompanyRecord(this);
             this.status.add(record);
         }
@@ -208,7 +204,6 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void addCompanyStatus(CompanyStatusRecord record) {
         if (!this.companyStatus.contains(record)) {
-            System.out.println("adding company status record " + record);
             record.setRelationCompanyRecord(this);
             this.companyStatus.add(record);
         }

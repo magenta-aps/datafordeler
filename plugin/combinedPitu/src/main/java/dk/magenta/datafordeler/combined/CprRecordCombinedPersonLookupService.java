@@ -117,7 +117,7 @@ public class CprRecordCombinedPersonLookupService {
             }
             if (personEntity == null && "true".equalsIgnoreCase(allowDirect)) {
                 personEntity = cprDirectLookup.getPerson(cprNummer);
-                entityManager.createSubscription(Collections.singleton(cprNummer));
+                entityManager.createSubscription(session, Collections.singleton(cprNummer));
             }
 
             if (personEntity == null) {
@@ -189,7 +189,7 @@ public class CprRecordCombinedPersonLookupService {
                 remaining.stream().map(cprNummer -> {
                     try {
                         PersonEntity personEntity = cprDirectLookup.getPerson(cprNummer);
-                        entityManager.createSubscription(Collections.singleton(cprNummer));
+                        entityManager.createSubscription(session, Collections.singleton(cprNummer));
                         if (personEntity != null) {
                             found.add(cprNummer);
                             return personEntity;
@@ -201,7 +201,7 @@ public class CprRecordCombinedPersonLookupService {
                 }).forEach(entityWriter);
             }
             try {
-                entityManager.createSubscription(found);
+                entityManager.createSubscription(session, found);
             } catch (Exception e) {
                 log.error("Failed to create subscription for "+found.stream().collect(Collectors.joining(","))+": "+e.getMessage());
             }

@@ -38,7 +38,7 @@ public class DeathDataServiceTest extends TestBase {
     public void initialize() throws Exception {
         this.setPath();
         this.loadPersonData("deadperson.txt");
-        this.loadAllGeoAdress(sessionManager);
+        this.loadAllGeoAdress();
     }
 
     @AfterEach
