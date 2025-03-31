@@ -153,7 +153,7 @@ public class PersonEntity extends CprRecordEntity {
 
     public static final String DB_FIELD_BIRTHPLACE = "birthPlace";
     public static final String IO_FIELD_BIRTHPLACE = "fødselsted";
-    @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),

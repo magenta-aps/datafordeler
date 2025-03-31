@@ -318,7 +318,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
      * @param removeCprNumbers
      */
     public void createSubscription(Session session, Set<String> addCprNumbers, Set<String> removeCprNumbers) {
-        this.log.info("Collected these numbers for subscription: " + addCprNumbers+", removal: "+removeCprNumbers);
+        this.log.debug("Collected these numbers for subscription: " + addCprNumbers+", removal: "+removeCprNumbers);
         Transaction t = session.getTransaction();
         boolean insideTransaction = t.getStatus() != TransactionStatus.NOT_ACTIVE;
         if (!insideTransaction) {

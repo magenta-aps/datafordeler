@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,14 @@ public class PullTest extends TestBase {
         ImportInputStream inputstream = new ImportInputStream(labeledInputStream);
         personEntityManager.parseData(inputstream, importMetadata);
         testData1.close();
+    }
+
+    @BeforeEach
+    public void setUp() {
+        File localfolder = new File(configuration.getLocalCopyFolder());
+        for (File f : localfolder.listFiles()) {
+            f.delete();
+        }
     }
 
 
@@ -205,6 +214,7 @@ public class PullTest extends TestBase {
             Assertions.assertEquals(1, personEntities.size());
             PersonEntity personEntity = personEntities.get(0);
             Assertions.assertEquals(PersonEntity.generateUUID("0101001234"), personEntity.getUUID());
+
             Set<BirthPlaceDataRecord> birthPlaceDataRecords = personEntity.getBirthPlace();
             Assertions.assertEquals(1, birthPlaceDataRecords.size());
             BirthPlaceDataRecord birthPlaceDataRecord = birthPlaceDataRecords.iterator().next();
@@ -312,8 +322,6 @@ public class PullTest extends TestBase {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             Assertions.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
-
-        System.out.println("\n\n\n\n---");
 
         //Pull 39 persons from GLBASETEST
         try (Session session = sessionManager.getSessionFactory().openSession()) {

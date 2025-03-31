@@ -293,8 +293,8 @@ public class RecordTest extends TestBase {
                     "FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
                     "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity " +
                     "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity " +
-                    "WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + motherPnr + " " +
-                    "AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=" + fatherPnr;
+                    "WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "='" + motherPnr + "' " +
+                    "AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "='" + fatherPnr + "'";
 
 
             Query<PersonEntity> query2 = session.createQuery(hql, PersonEntity.class);
