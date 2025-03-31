@@ -270,7 +270,7 @@ public class ManageSubscription {
                 cprListItem = this.getCprList(session, cprList);
                 subscription.setCprList(cprListItem);
             }
-            session.update(subscription);
+            session.persist(subscription);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
             return ResponseEntity.ok(subscription);
@@ -358,7 +358,7 @@ public class ManageSubscription {
             subscription.setCprList(cprListItem);
             subscription.setCvrList(cvrListItem);
             subscriber.addDataEventSubscription(subscription);
-            session.update(subscriber);
+            session.persist(subscriber);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
             return ResponseEntity.ok(subscription);
@@ -395,7 +395,7 @@ public class ManageSubscription {
                 CvrList cvrListItem = this.getCvrList(session, cvrList);
                 subscription.setCvrList(cvrListItem);
             }
-            session.update(subscription);
+            session.persist(subscription);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
             return ResponseEntity.ok(subscription);

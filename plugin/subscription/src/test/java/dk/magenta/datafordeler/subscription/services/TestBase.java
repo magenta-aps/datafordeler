@@ -57,10 +57,11 @@ public abstract class TestBase {
             };
             Transaction transaction = session.beginTransaction();
             for (Class cls : classes) {
-                List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
+                /*List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
                 for (DatabaseEntry e : eList) {
                     session.remove(e);
-                }
+                }*/
+                session.createQuery("delete from " + cls.getName()).executeUpdate();
             }
             transaction.commit();
             QueryManager.clearCaches();

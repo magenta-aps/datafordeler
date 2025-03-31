@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -169,6 +170,7 @@ public class ManageCprList {
 
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList/cpr/{listId}", "/subscriber/cprList/cpr/{listId}/"})
     public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
+        System.out.println("cprListCprPut("+listId+")");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -188,6 +190,7 @@ public class ManageCprList {
                 return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
             JsonNode requestBody = objectMapper.readTree(request.getInputStream());
+            System.out.println(requestBody);
             Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
             while (cprBodyIterator.hasNext()) {
                 JsonNode node = cprBodyIterator.next();
