@@ -97,8 +97,11 @@ public class PullTest extends TestBase {
     public void setUp() {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         File localfolder = new File(configuration.getLocalCopyFolder());
-        for (File f : localfolder.listFiles()) {
-            f.delete();
+        System.out.println(localfolder);
+        if (localfolder.isDirectory()) {
+            for (File f : localfolder.listFiles()) {
+                f.delete();
+            }
         }
     }
 
