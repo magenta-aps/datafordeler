@@ -95,6 +95,7 @@ public class PullTest extends TestBase {
 
     @BeforeEach
     public void setUp() {
+        CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         File localfolder = new File(configuration.getLocalCopyFolder());
         for (File f : localfolder.listFiles()) {
             f.delete();
@@ -176,8 +177,9 @@ public class PullTest extends TestBase {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
             ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
-        }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
-
+        })
+                .when(registerManager)
+                .getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
 
         String username = "test";
         String password = "test";
@@ -194,6 +196,7 @@ public class PullTest extends TestBase {
         try {
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
             configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpDownloadFolder("/");
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
@@ -267,6 +270,7 @@ public class PullTest extends TestBase {
             configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
             configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpDownloadFolder("/");
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
