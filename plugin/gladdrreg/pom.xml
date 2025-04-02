@@ -13,7 +13,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>gladdrreg</artifactId>
-    <version>${project.version}</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
     <name>datafordeler-plugin-gladdrreg</name>
     <description>Gladdrreg plugin for Magenta's Greenlandic System</description>

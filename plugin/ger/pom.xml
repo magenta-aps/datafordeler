@@ -13,7 +13,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ger</artifactId>
-    <version>${project.version}</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
     <name>datafordeler-plugin-ger</name>
     <description>Company (GER) plugin for Magenta's Greenlandic System</description>

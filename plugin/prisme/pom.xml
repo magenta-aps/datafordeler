@@ -13,7 +13,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>prisme</artifactId>
-    <version>${project.version}</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
     <name>datafordeler-plugin-prisme</name>
     <description>Prisme plugin for Magenta's Greenlandic System</description>
