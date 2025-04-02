@@ -159,7 +159,6 @@ public class PullTest {
                 }
             }
 
-            System.out.println("Responsible");
             sheetName = "Ansvarlige";
             sheet = sheets.get(sheetName);
             for (RawData rawData : sheet) {

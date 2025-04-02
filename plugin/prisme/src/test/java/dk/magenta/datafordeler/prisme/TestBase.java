@@ -138,7 +138,7 @@ public abstract class TestBase {
             for (Class cls : classes) {
                 List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
                 for (DatabaseEntry e : eList) {
-                    session.remove(e);
+                    session.remove(e);  // Cascading delete
                 }
             }
             transaction.commit();

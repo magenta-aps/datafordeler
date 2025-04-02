@@ -79,18 +79,12 @@ public class FindCprDataEvent {
     private final Logger log = LogManager.getLogger(FindCprDataEvent.class.getCanonicalName());
 
 
-    @PostConstruct
-    public void init() {
-
-    }
-
-
     /**
      * Get a list of all subscriptions
      *
      * @return
      */
-    @GetMapping("/fetchEvents")
+    @RequestMapping(path = {"/fetchEvents", "/fetchEvents/"})
     public ResponseEntity<Envelope> findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");
@@ -153,9 +147,9 @@ public class FindCprDataEvent {
 
                 // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
-                        " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) " +
+                        " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list = numbers.cprList) " +
                         " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
-                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.id = dataeventDataRecord.entity) " +
+                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
                         " where (list.listId=:listId OR :listId IS NULL) AND" +
                         " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
                         " (dataeventDataRecord.timestamp IS NOT NULL) AND" +

@@ -169,7 +169,6 @@ public class SubscriptionSequenceTest extends TestBase {
         JSONAssert.assertEquals("[" +
                 "{\"listId\":\"list01\"},{\"listId\":\"list02\"}]", response.getBody(), false);
 
-        System.out.println("NOW!");
         //Manage businesseventsubscriptions
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription/?businessEventId=newBusinessEventId&kodeId=A04&cprList=list01",

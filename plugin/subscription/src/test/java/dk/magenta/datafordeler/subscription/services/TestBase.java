@@ -18,6 +18,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -44,27 +46,53 @@ public abstract class TestBase {
     @AfterEach
     public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
+
         try (Session session = sessionFactory.openSession()) {
             QueryManager.clearCaches();
-            Class[] classes = new Class[]{
-                    SubscribedCprNumber.class,
-                    SubscribedCvrNumber.class,
+            List<Class<? extends DatabaseEntry>> classes = Arrays.asList(
                     CprList.class,
                     CvrList.class,
                     BusinessEventSubscription.class,
                     DataEventSubscription.class,
-                    Subscriber.class,
-            };
+                    SubscribedCprNumber.class,
+                    SubscribedCvrNumber.class,
+                    Subscriber.class
+                    );
             Transaction transaction = session.beginTransaction();
             for (Class cls : classes) {
-                /*List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
+                List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
                 for (DatabaseEntry e : eList) {
                     session.remove(e);
-                }*/
-                session.createQuery("delete from " + cls.getName()).executeUpdate();
+                }
             }
             transaction.commit();
             QueryManager.clearCaches();
         }
+
+//        Session session = sessionFactory.getCurrentSession();
+//        QueryManager.clearCaches();
+//        List<Class<? extends DatabaseEntry>> classes = Arrays.asList(
+//                BusinessEventSubscription.class,
+//                DataEventSubscription.class,
+//                CprList.class,
+//                CvrList.class,
+//                SubscribedCprNumber.class,
+//                SubscribedCvrNumber.class,
+//                Subscriber.class
+//        );
+//        Transaction transaction = session.beginTransaction();
+//        for (Class cls : classes) {
+//            System.out.println("Querying...");
+//            List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
+//            System.out.println("Removing " + eList.size() + " entries from table "+cls.getSimpleName());
+//            for (DatabaseEntry e : eList) {
+//                session.remove(e);
+//            }
+//            System.out.println("Removed " + eList.size() + " entries from table "+cls.getSimpleName());
+////                session.createQuery("delete from " + cls.getName()).executeUpdate();
+//        }
+//        transaction.commit();
+//        QueryManager.clearCaches();
+
     }
 }

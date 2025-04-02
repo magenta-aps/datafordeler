@@ -147,15 +147,15 @@ public class FindCvrDataEvent {
 
                 // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT company FROM " + CvrList.class.getCanonicalName() + " list " +
-                        " INNER JOIN " + SubscribedCvrNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cvrList) " +
-                        " INNER JOIN " + CompanyRecord.class.getCanonicalName() + " company ON (company.cvrNumber = numbers.cvrNumber) " +
-                        " INNER JOIN " + CompanyDataEventRecord.class.getCanonicalName() + " dataeventDataRecord ON (company.id = dataeventDataRecord.companyRecord) " +
+                        " INNER JOIN " + SubscribedCvrNumber.class.getCanonicalName() + " numbers ON (list = numbers.cvrList) " +
+                        " INNER JOIN " + CompanyRecord.class.getCanonicalName() + " company ON (cast(company.cvrNumber as string) = numbers.cvrNumber) " +
+                        " INNER JOIN " + CompanyDataEventRecord.class.getCanonicalName() + " dataeventDataRecord ON (company = dataeventDataRecord.companyRecord) " +
                         " where" +
                         " (list.listId=:listId OR :listId IS NULL) AND" +
                         " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
                         " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
-                        " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                        " (dataeventDataRecord.timestamp >= :offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                        " (dataeventDataRecord.timestamp <= :offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
                 Query<CompanyRecord> query = session.createQuery(queryString, CompanyRecord.class);
                 if (pageSize != null) {

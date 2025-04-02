@@ -323,7 +323,6 @@ public class FetchEventsTest extends TestBase {
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
 
-        System.out.println(results);
         Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(

@@ -40,7 +40,7 @@ public class SubscribedCvrNumber extends DatabaseEntry {
     }
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cvrlistId")
     private CvrList cvrList;
 

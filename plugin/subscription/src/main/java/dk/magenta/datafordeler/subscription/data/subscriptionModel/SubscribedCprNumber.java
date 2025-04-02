@@ -40,7 +40,7 @@ public class SubscribedCprNumber extends DatabaseEntry {
         this.cprNumber = cprNumber;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cprlistId")
     private CprList cprList;
 

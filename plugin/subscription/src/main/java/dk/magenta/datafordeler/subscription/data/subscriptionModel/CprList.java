@@ -37,7 +37,7 @@ public class CprList extends DatabaseEntry {
 
     public static final String DB_FIELD_SUBSCRIBER = "subscriber_id";
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = DB_FIELD_SUBSCRIBER)
     private Subscriber subscriber;
 

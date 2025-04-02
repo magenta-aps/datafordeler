@@ -136,14 +136,14 @@ public class FindCprBusinessEvent {
 
                 // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                 String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
-                        " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list.id = numbers.cprList) " +
+                        " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list = numbers.cprList) " +
                         " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
-                        " INNER JOIN " + PersonEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person.id = dataeventDataRecord.entity) " +
+                        " INNER JOIN " + PersonEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
                         " where (list.listId=:listId OR :listId IS NULL) AND" +
                         " (dataeventDataRecord.eventId=:eventId OR :eventId IS NULL) AND" +
                         " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
-                        " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                        " (dataeventDataRecord.timestamp >= :offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                        " (dataeventDataRecord.timestamp <= :offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
                 Query query = session.createQuery(queryString);
                 if (pageSize != null) {

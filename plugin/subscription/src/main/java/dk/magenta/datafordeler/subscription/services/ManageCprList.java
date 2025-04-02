@@ -170,7 +170,6 @@ public class ManageCprList {
 
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList/cpr/{listId}", "/subscriber/cprList/cpr/{listId}/"})
     public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
-        System.out.println("cprListCprPut("+listId+")");
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -190,7 +189,6 @@ public class ManageCprList {
                 return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
             JsonNode requestBody = objectMapper.readTree(request.getInputStream());
-            System.out.println(requestBody);
             Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
             while (cprBodyIterator.hasNext()) {
                 JsonNode node = cprBodyIterator.next();
