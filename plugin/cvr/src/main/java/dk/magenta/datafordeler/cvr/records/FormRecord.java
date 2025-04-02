@@ -69,9 +69,9 @@ FormRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_SHORT_DESCRIPTION = "kortBeskrivelse";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_SHORT_DESCRIPTION)
     private String shortDescription;
 
+    @JsonProperty(value = IO_FIELD_SHORT_DESCRIPTION)
     public String getShortDescription() {
         if (this.companyForm != null) {
             return this.companyForm.getShortDescription();
@@ -79,6 +79,7 @@ FormRecord extends CvrBitemporalDataRecord {
         return this.shortDescription;
     }
 
+    @JsonProperty(value = IO_FIELD_SHORT_DESCRIPTION)
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
@@ -86,14 +87,19 @@ FormRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_LONG_DESCRIPTION = "langBeskrivelse";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_LONG_DESCRIPTION)
     private String longDescription;
 
+    @JsonProperty(value = IO_FIELD_LONG_DESCRIPTION)
     public String getLongDescription() {
         if (this.companyForm != null) {
             return this.companyForm.getLongDescription();
         }
         return this.longDescription;
+    }
+
+    @JsonProperty(value = IO_FIELD_LONG_DESCRIPTION)
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
     }
 
     public static final String IO_FIELD_RESPONSIBLE_DATASOURCE = "ansvarligDataleverandør";
