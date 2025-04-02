@@ -317,10 +317,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public static final String IO_FIELD_MUNICIPALITY = "kommune";
 
     @XmlElement(name = IO_FIELD_MUNICIPALITY)
-    @OneToOne(cascade = CascadeType.ALL)
-        private AddressMunicipalityRecord municipality;
-
     @JsonProperty(value = IO_FIELD_MUNICIPALITY)
+    @OneToOne(cascade = CascadeType.ALL)
+    private AddressMunicipalityRecord municipality;
+
     public AddressMunicipalityRecord getMunicipality() {
         return this.municipality;
     }

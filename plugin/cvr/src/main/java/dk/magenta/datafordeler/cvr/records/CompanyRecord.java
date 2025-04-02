@@ -1217,7 +1217,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
     @OneToMany(targetEntity = FusionSplitRecord.class, mappedBy = FusionSplitRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Where(clause = FusionSplitRecord.DB_FIELD_SPLIT + "=false")
-        @JsonProperty(value = IO_FIELD_FUSIONS)
+    @JsonProperty(value = IO_FIELD_FUSIONS)
     private Set<FusionSplitRecord> fusions = new HashSet<>();
 
     public RecordSet<FusionSplitRecord> getFusions() {
@@ -1258,7 +1258,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
     @OneToMany(targetEntity = FusionSplitRecord.class, mappedBy = FusionSplitRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Where(clause = FusionSplitRecord.DB_FIELD_SPLIT + "=true")
-        @JsonProperty(value = IO_FIELD_SPLITS)
+    @JsonProperty(value = IO_FIELD_SPLITS)
     private Set<FusionSplitRecord> splits = new HashSet<>();
 
     public RecordSet<FusionSplitRecord> getSplits() {

@@ -15,7 +15,6 @@ import org.hibernate.Session;
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__municipality", columnList = AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + DatabaseEntry.REF),
-
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
@@ -33,9 +32,9 @@ public class AddressMunicipalityRecord extends CvrBitemporalRecord {
     }
 
     @Transient
-    @JsonProperty(value = IO_FIELD_MUNICIPALITY_CODE)
     private int municipalityCode;
 
+    @JsonProperty(value = IO_FIELD_MUNICIPALITY_CODE)
     public int getMunicipalityCode() {
         if (this.municipality != null) {
             return this.municipality.getCode();
@@ -43,6 +42,7 @@ public class AddressMunicipalityRecord extends CvrBitemporalRecord {
         return this.municipalityCode;
     }
 
+    @JsonProperty(value = IO_FIELD_MUNICIPALITY_CODE)
     public void setMunicipalityCode(int municipalityCode) {
         this.municipalityCode = municipalityCode;
     }

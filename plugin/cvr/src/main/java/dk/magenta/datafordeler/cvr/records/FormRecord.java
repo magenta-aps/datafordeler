@@ -51,14 +51,19 @@ FormRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_CODE = "virksomhedsformkode";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_CODE)
     private String companyFormCode;
 
+    @JsonProperty(value = IO_FIELD_CODE)
     public String getCompanyFormCode() {
         if (this.companyForm != null) {
             return this.companyForm.getCompanyFormCode();
         }
         return this.companyFormCode;
+    }
+
+    @JsonProperty(value = IO_FIELD_CODE)
+    public void setCompanyFormCode(String companyFormCode) {
+        this.companyFormCode = companyFormCode;
     }
 
     public static final String IO_FIELD_SHORT_DESCRIPTION = "kortBeskrivelse";
@@ -72,6 +77,10 @@ FormRecord extends CvrBitemporalDataRecord {
             return this.companyForm.getShortDescription();
         }
         return this.shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
     public static final String IO_FIELD_LONG_DESCRIPTION = "langBeskrivelse";

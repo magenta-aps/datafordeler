@@ -222,6 +222,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                         try {
                             int count = this.parseData(this.getObjectMapper().readTree(data), importMetadata, session, filter);
                         } catch (JsonParseException e) {
+                            e.printStackTrace();
                             ImportInterruptedException ex = new ImportInterruptedException(e);
                             session.getTransaction().rollback();
                             importMetadata.setTransactionInProgress(false);

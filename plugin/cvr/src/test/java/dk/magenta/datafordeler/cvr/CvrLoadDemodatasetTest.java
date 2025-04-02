@@ -12,6 +12,8 @@ import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
+
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import org.hibernate.Session;
@@ -86,7 +88,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
                     map.put(cvr, "STATUS", company.getCompanyStatus().iterator().next().getStatus());
                 }
                 if (company.getPostalAddress().size() > 0) {
-                    map.put(cvr, "MUNICIPALITYCODE", Integer.toString(company.getPostalAddress().iterator().next().getMunicipality().getMunicipalityCode()));
+                    map.put(cvr, "MUNICIPALITYCODE", Integer.toString(company.getPostalAddress().iterator().next().getMunicipalitycode()));
                 }
             }
 
@@ -183,7 +185,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assertions.assertEquals(4+prior, companyRecords.size());//Validate that 4 company from the file persondata is initiated
+            Assertions.assertEquals(4+prior, companyRecords.size());  // Validate that 4 company from the file persondata is initiated
         }
 
         when(plugin.getRegisterManager(), registerManager, "/EMPTYGLBASETEST.json");

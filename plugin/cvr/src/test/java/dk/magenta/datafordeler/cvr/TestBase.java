@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import dk.magenta.datafordeler.core.database.InterruptedPull;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,20 +68,23 @@ public abstract class TestBase {
                 companyRecord.delete(session);
                 transaction.commit();
             }
-        }
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
+
             for (CompanyUnitRecord companyUnitRecord : QueryManager.getAllEntities(session, CompanyUnitRecord.class)) {
                 Transaction transaction = session.beginTransaction();
                 companyUnitRecord.delete(session);
                 transaction.commit();
             }
-        }
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
             for (ParticipantRecord participantRecord : QueryManager.getAllEntities(session, ParticipantRecord.class)) {
                 Transaction transaction = session.beginTransaction();
                 participantRecord.delete(session);
                 transaction.commit();
             }
+            Transaction transaction = session.beginTransaction();
+            List<InterruptedPull> interruptedPulls = QueryManager.getAllItems(session, InterruptedPull.class);
+            for (InterruptedPull interruptedPull : interruptedPulls) {
+                session.remove(interruptedPull);
+            }
+            transaction.commit();
         }
     }
 
