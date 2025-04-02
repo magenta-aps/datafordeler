@@ -362,9 +362,9 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public static final String IO_FIELD_POSTCODE = "postnummer";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_POSTCODE)
     private int postnummer;
 
+    @JsonProperty(value = IO_FIELD_POSTCODE)
     public int getPostnummer() {
         if (this.post != null) {
             return this.post.getPostCode();
@@ -372,6 +372,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         return this.postnummer;
     }
 
+    @JsonProperty(value = IO_FIELD_POSTCODE)
     @XmlElement(name = IO_FIELD_POSTCODE)
     public void setPostnummer(int code) {
         this.postnummer = code;
@@ -383,9 +384,9 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public static final String IO_FIELD_POSTDISTRICT = "postdistrikt";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_POSTDISTRICT)
     private String postdistrikt;
 
+    @JsonProperty(value = IO_FIELD_POSTDISTRICT)
     public String getPostdistrikt() {
         if (this.post != null) {
             return this.post.getPostDistrict();
@@ -394,6 +395,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     }
 
     @XmlElement(name = IO_FIELD_POSTDISTRICT)
+    @JsonProperty(value = IO_FIELD_POSTDISTRICT)
     public void setPostdistrikt(String district) {
         this.postdistrikt = district;
     }
