@@ -198,7 +198,7 @@ public class QueryManager {
 
     private static final boolean logQuery = false;
 
-    public static org.hibernate.query.Query<Object> getQuery(Session session, BaseQuery query) {
+    public static Query<Object> getQuery(Session session, BaseQuery query) {
         query.applyFilters(session);
 
         String queryString = query.toHql();
