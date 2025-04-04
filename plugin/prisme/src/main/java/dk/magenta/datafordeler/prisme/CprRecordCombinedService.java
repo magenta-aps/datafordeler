@@ -24,6 +24,8 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import dk.magenta.datafordeler.geo.GeoLookupService;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -32,8 +34,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
@@ -78,7 +78,7 @@ public class CprRecordCombinedService {
     public void init() {
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cprNummer}","/{cprNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cprNummer") String cprNummer, @RequestParam(value = "forceDirect", required = false) String forceDirect, HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
 
@@ -118,7 +118,7 @@ public class CprRecordCombinedService {
                 if (personEntity == null) {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
-                entityManager.createSubscription(Collections.singleton(cprNummer));
+                entityManager.createSubscription(session, Collections.singleton(cprNummer));
                 Object obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
                 return streamPersonOut(user, obj);
             }
@@ -139,7 +139,7 @@ public class CprRecordCombinedService {
                     if (personEntity == null) {
                         throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                     }
-                    entityManager.createSubscription(Collections.singleton(cprNummer));
+                    entityManager.createSubscription(session, Collections.singleton(cprNummer));
                     obj = personOutputWrapper.wrapRecordResult(personEntity, personQuery);
                     return streamPersonOut(user, obj);
                 default:
@@ -165,7 +165,7 @@ public class CprRecordCombinedService {
     private static final byte[] END_OBJECT = "}".getBytes();
     private static final byte[] OBJECT_SEPARATOR = ",\n".getBytes();
 
-    @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"", "/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getBulk(HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, InvalidParameterException, IOException, HttpNotFoundException, InvalidCertificateException {
         JsonNode requestBody;
@@ -270,7 +270,7 @@ public class CprRecordCombinedService {
                 outputStream.write(END_OBJECT);
                 outputStream.flush();
 
-                entityManager.createSubscription(found);
+                entityManager.createSubscription(entitySession, found);
 
             } catch (InvalidClientInputException e) {
                 e.printStackTrace();

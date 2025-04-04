@@ -19,10 +19,11 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntityManager;
 import dk.magenta.datafordeler.geo.data.road.*;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -46,7 +47,6 @@ public class GeoPlugin extends Plugin {
 
     @Autowired
     private GeoRegisterManager registerManager;
-
 
     @Autowired
     private MunicipalityEntityManager municipalityEntityManager;
@@ -81,7 +81,8 @@ public class GeoPlugin extends Plugin {
      * Plugin initialization
      */
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
+        this.registerManager.setPlugin(this);
         this.registerManager.addEntityManager(this.municipalityEntityManager);
         this.registerManager.addEntityManager(this.localityEntityManager);
         this.registerManager.addEntityManager(this.roadEntityManager);

@@ -8,10 +8,9 @@ import dk.magenta.datafordeler.core.fapi.JsonModifier;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.util.BitemporalityQuery;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 @Component
 public class RoadRecordOutputWrapper extends CprRecordOutputWrapper<RoadEntity> {

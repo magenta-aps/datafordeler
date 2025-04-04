@@ -11,13 +11,13 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.geo.GeoAreaRestrictionDefinition;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.GeoRolesDefinition;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.stream.Stream;
 

@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.cpr;
 
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.io.ImportInputStream;
@@ -10,37 +9,26 @@ import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import org.hibernate.Session;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class cprMatchLogicTest extends TestBase {
 
     private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
@@ -83,12 +71,12 @@ public class cprMatchLogicTest extends TestBase {
 
             query.applyFilters(session);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(1, persons.size());
+            Assertions.assertEquals(1, persons.size());
 
             Set<AddressDataRecord> adresses = persons.get(0).getAddress();
 
             Set<AddressDataRecord> adresses2 = adresses.stream().filter(d -> !d.isUndone()).collect(Collectors.toSet());
-            Assert.assertEquals(1, adresses2.size());
+            Assertions.assertEquals(1, adresses2.size());
         }
     }
 

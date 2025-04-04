@@ -18,6 +18,8 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.FormRecord;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -29,8 +31,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class CvrCompanyChanges {
     public static final String PARAM_UPDATED_SINCE = "updatedSince";
     public static final String COMPANY_FORMS = "companyForms";
 
-    @RequestMapping(method = RequestMethod.GET, path = "/lookup", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/lookup", "/lookup/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@RequestParam(value = COMPANY_FORMS, required = true, defaultValue = "") List<String> companyForms, @RequestParam(value = PARAM_UPDATED_SINCE, required = true) String updatedSince, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 

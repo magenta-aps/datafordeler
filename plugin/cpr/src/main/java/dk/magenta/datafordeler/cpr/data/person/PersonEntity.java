@@ -12,20 +12,19 @@ import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import dk.magenta.datafordeler.cpr.records.BitemporalSet;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
-import dk.magenta.datafordeler.cpr.records.CprMonotemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Index;
-import javax.persistence.Table;
-import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -37,23 +36,11 @@ import java.util.stream.Collectors;
  * An Entity representing a person. Bitemporal data is structured as
  * described in {@link dk.magenta.datafordeler.core.database.Entity}
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_entity", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_identification", columnList = PersonEntity.DB_FIELD_IDENTIFICATION, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED, columnList = PersonEntity.DB_FIELD_DAFO_UPDATED)
-})
-@FilterDefs({
-        @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTTO_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_AFTER, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTTO)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTTO_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_BEFORE, type = CprBitemporalRecord.FILTERPARAMTYPE_EFFECTTO)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER, type = CprMonotemporalRecord.FILTERPARAMTYPE_REGISTRATIONFROM)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE, type = CprMonotemporalRecord.FILTERPARAMTYPE_REGISTRATIONFROM)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER, type = CprMonotemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE, type = CprMonotemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
-        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_AFTER, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_AFTER, type = CprNontemporalRecord.FILTERPARAMTYPE_LASTUPDATED)),
-        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_BEFORE, type = CprNontemporalRecord.FILTERPARAMTYPE_LASTUPDATED))
 })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PersonEntity extends CprRecordEntity {
@@ -166,7 +153,7 @@ public class PersonEntity extends CprRecordEntity {
 
     public static final String DB_FIELD_BIRTHPLACE = "birthPlace";
     public static final String IO_FIELD_BIRTHPLACE = "fødselsted";
-    @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),

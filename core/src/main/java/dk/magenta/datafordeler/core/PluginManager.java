@@ -4,12 +4,12 @@ import dk.magenta.datafordeler.core.fapi.FapiBaseService;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public class PluginManager {
 
     private static PluginManager instance;
 
-    @Autowired(required = false)
+    @Autowired
     private List<Plugin> plugins;
 
     private final HashMap<String, Plugin> pluginsByURISubstring = new HashMap<>();

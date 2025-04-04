@@ -3,14 +3,13 @@ package dk.magenta.datafordeler.core.configuration;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.plugindemo.configuration.DemoConfiguration;
 import dk.magenta.datafordeler.plugindemo.configuration.DemoConfigurationManager;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 public class ConfigurationTest {
 
@@ -20,8 +19,8 @@ public class ConfigurationTest {
     @Test
     public void testConfiguration() throws Exception {
         DemoConfiguration configuration = configurationManager.getConfiguration();
-        Assert.assertNotNull(configuration);
+        Assertions.assertNotNull(configuration);
         configurationManager.init();
-        Assert.assertEquals(configuration.getPullCronSchedule(), configurationManager.getConfiguration().getPullCronSchedule());
+        Assertions.assertEquals(configuration.getPullCronSchedule(), configurationManager.getConfiguration().getPullCronSchedule());
     }
 }

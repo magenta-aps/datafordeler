@@ -4,19 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.BitemporalityQuery;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import dk.magenta.datafordeler.cpr.records.person.GenericParentOutputDTO;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Component

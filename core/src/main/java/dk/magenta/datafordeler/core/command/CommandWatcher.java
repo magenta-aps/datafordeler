@@ -2,6 +2,9 @@ package dk.magenta.datafordeler.core.command;
 
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.persistence.PersistenceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -11,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.persistence.PersistenceException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;

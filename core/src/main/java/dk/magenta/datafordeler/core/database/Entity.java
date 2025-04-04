@@ -2,18 +2,14 @@ package dk.magenta.datafordeler.core.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import dk.magenta.datafordeler.core.util.Equality;
+import jakarta.persistence.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -25,7 +21,6 @@ import java.util.*;
  * hold leaf nodes (DataItems) containing the bulk of the associated data.
  */
 @MappedSuperclass
-@Embeddable
 public abstract class Entity<E extends Entity, R extends Registration> extends DatabaseEntry implements IdentifiedEntity {
 
     @Transient
@@ -38,7 +33,6 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
     public static final String DB_FIELD_IDENTIFICATION = "identification";
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JsonIgnore
-    @XmlTransient
     protected Identification identification;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "entity")
@@ -118,9 +112,6 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
 
     @OrderBy("registrationFrom asc")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = IO_FIELD_REGISTRATIONS)
-    @XmlElement(name = IO_FIELD_REGISTRATIONS)
-    @JacksonXmlProperty(localName = IO_FIELD_REGISTRATIONS)
-    @JacksonXmlElementWrapper(useWrapping = false)
     public List<R> getRegistrations() {
         ArrayList<R> registrations = new ArrayList<>(this.registrations);
         Collections.sort(registrations);
@@ -224,7 +215,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
         }
         if (!onlyDetect) {
             for (R registration : toDelete) {
-                session.delete(registration);
+                session.remove(registration);
             }
         }
     }

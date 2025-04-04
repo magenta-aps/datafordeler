@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.records.unversioned.CompanyForm;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.persistence.*;
 import java.util.Objects;
 
 /**
@@ -26,7 +26,8 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + FormRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FormRecord extends CvrBitemporalDataRecord {
+public class
+FormRecord extends CvrBitemporalDataRecord {
 
     public static final String TABLE_NAME = "cvr_record_form";
 
@@ -50,9 +51,9 @@ public class FormRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_CODE = "virksomhedsformkode";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_CODE)
     private String companyFormCode;
 
+    @JsonProperty(value = IO_FIELD_CODE)
     public String getCompanyFormCode() {
         if (this.companyForm != null) {
             return this.companyForm.getCompanyFormCode();
@@ -60,12 +61,17 @@ public class FormRecord extends CvrBitemporalDataRecord {
         return this.companyFormCode;
     }
 
+    @JsonProperty(value = IO_FIELD_CODE)
+    public void setCompanyFormCode(String companyFormCode) {
+        this.companyFormCode = companyFormCode;
+    }
+
     public static final String IO_FIELD_SHORT_DESCRIPTION = "kortBeskrivelse";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_SHORT_DESCRIPTION)
     private String shortDescription;
 
+    @JsonProperty(value = IO_FIELD_SHORT_DESCRIPTION)
     public String getShortDescription() {
         if (this.companyForm != null) {
             return this.companyForm.getShortDescription();
@@ -73,17 +79,27 @@ public class FormRecord extends CvrBitemporalDataRecord {
         return this.shortDescription;
     }
 
+    @JsonProperty(value = IO_FIELD_SHORT_DESCRIPTION)
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
     public static final String IO_FIELD_LONG_DESCRIPTION = "langBeskrivelse";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_LONG_DESCRIPTION)
     private String longDescription;
 
+    @JsonProperty(value = IO_FIELD_LONG_DESCRIPTION)
     public String getLongDescription() {
         if (this.companyForm != null) {
             return this.companyForm.getLongDescription();
         }
         return this.longDescription;
+    }
+
+    @JsonProperty(value = IO_FIELD_LONG_DESCRIPTION)
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
     }
 
     public static final String IO_FIELD_RESPONSIBLE_DATASOURCE = "ansvarligDataleverandør";
@@ -108,7 +124,7 @@ public class FormRecord extends CvrBitemporalDataRecord {
 
     public static final String DB_FIELD_PARTICIPANT_COMPANY_RELATION = "relationCompanyRecord";
 
-    @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = DB_FIELD_PARTICIPANT_COMPANY_RELATION + DatabaseEntry.REF)
     @JsonIgnore
     private RelationCompanyRecord relationCompanyRecord;

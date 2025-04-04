@@ -8,7 +8,7 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.gladdrreg.data.SumiffiikData;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by lars on 16-05-17.
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "gladdrreg_bnumber_data", indexes = {
         @Index(name = "gladdrreg_bnumber_code", columnList = BNumberData.DB_FIELD_CODE),
         @Index(name = "gladdrreg_bnumber_type", columnList = BNumberData.DB_FIELD_TYPE),

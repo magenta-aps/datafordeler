@@ -3,9 +3,9 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class CprList extends DatabaseEntry {
 
     public static final String DB_FIELD_SUBSCRIBER = "subscriber_id";
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = DB_FIELD_SUBSCRIBER)
     private Subscriber subscriber;
 
@@ -95,7 +95,7 @@ public class CprList extends DatabaseEntry {
         SubscribedCprNumber number = this.cprs.stream().filter(f -> cpr.equals(f.getCprNumber())).findFirst().orElse(null);
         if (number != null) {
             this.cprs.remove(number);
-            session.delete(number);
+            session.remove(number);
         }
     }
 

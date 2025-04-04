@@ -6,32 +6,22 @@ import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-import dk.magenta.datafordeler.cvr.DirectLookup;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,10 +34,8 @@ import java.util.Date;
 
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CvrOwnerHistoryTest extends TestBase {
 
     @Test
@@ -78,7 +66,7 @@ public class CvrOwnerHistoryTest extends TestBase {
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
 
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
         response = restTemplate.exchange(
@@ -87,7 +75,7 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
 
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -97,7 +85,7 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
 
         response = restTemplate.exchange(
@@ -106,7 +94,7 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 
         ParticipantRecord participant3 = new ParticipantRecord();
         participant3.setBusinessKey(1111111113L);
@@ -118,7 +106,7 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("{\"cvrNummer\":\"88888885\",\"virksomhedsformkode\":\"30\"," +
                         "\"shortDescription\":\"I/S\",\"longDescription\":\"Interessentskab\",\"pnrs\":[{\"pnr\":" +
@@ -156,7 +144,7 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class, companyForms
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
 
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
@@ -169,8 +157,8 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class, companyForms
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(objectMapper.readTree(response.getBody()).get("cvrs").size() == 1);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(objectMapper.readTree(response.getBody()).get("cvrs").size() == 1);
 
 
         companyFormsList.add("80");
@@ -182,8 +170,8 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class, companyForms
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(objectMapper.readTree(response.getBody()).get("cvrs").size() == 2);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(objectMapper.readTree(response.getBody()).get("cvrs").size() == 2);
 
         Date currentDate = new Date();
         String localDateTime = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().plusWeeks(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -194,8 +182,8 @@ public class CvrOwnerHistoryTest extends TestBase {
                 httpEntity,
                 String.class, companyForms
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(objectMapper.readTree(response.getBody()).get("cvrs").size() == 0);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(objectMapper.readTree(response.getBody()).get("cvrs").size() == 0);
 
     }
 
@@ -208,7 +196,7 @@ public class CvrOwnerHistoryTest extends TestBase {
             JsonNode root = objectMapper.readTree(testData);
             testData.close();
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
+            Assertions.assertTrue(itemList.isArray());
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
 

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -123,7 +123,7 @@ public class OrganizationMemberdataRecord extends CvrRecord {
     }
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
-        this.getAttributes().traverse(setCallback, itemCallback);
         super.traverse(setCallback, itemCallback);
+        this.getAttributes().traverse(setCallback, itemCallback);
     }
 }

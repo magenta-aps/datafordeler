@@ -13,6 +13,9 @@ import dk.magenta.datafordeler.core.role.SystemRoleType;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
+import jakarta.persistence.NoResultException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -24,9 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.persistence.NoResultException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -152,7 +152,7 @@ public class CommandService {
      * @throws AccessDeniedException
      * @throws DataStreamException
      */
-    @RequestMapping(method = RequestMethod.GET, path = "{id}")
+    @RequestMapping(method = RequestMethod.GET, path = {"/{id}", "/{id}/"})
     public void doGet(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long commandId)
             throws IOException, HttpNotFoundException, InvalidClientInputException, InvalidTokenException, AccessRequiredException, AccessDeniedException, DataStreamException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
@@ -181,7 +181,7 @@ public class CommandService {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "pull/summary/{plugin}/{state}")
+    @RequestMapping(method = RequestMethod.GET, path = {"/pull/summary/{plugin}/{state}","/pull/summary/{plugin}/{state}/"})
     public void doGetSummary(HttpServletRequest request, HttpServletResponse response, @PathVariable("plugin") String pluginName, @PathVariable("state") String state)
             throws IOException, HttpNotFoundException, InvalidClientInputException, InvalidTokenException, AccessRequiredException, AccessDeniedException, DataStreamException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
@@ -236,7 +236,7 @@ public class CommandService {
      * @throws AccessRequiredException
      * @throws DataStreamException
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/{command}")
+    @RequestMapping(method = RequestMethod.POST, path = {"/{command}", "/{command}/"})
     public void doPost(HttpServletRequest request, HttpServletResponse response, @PathVariable("command") String commandName)
             throws IOException, InvalidClientInputException, InvalidTokenException, AccessDeniedException, AccessRequiredException, DataStreamException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
@@ -283,7 +283,7 @@ public class CommandService {
      * @throws AccessDeniedException
      * @throws AccessRequiredException
      */
-    @RequestMapping(method = RequestMethod.DELETE, path = "{id}")
+    @RequestMapping(method = RequestMethod.DELETE, path = {"/{id}", "/{id}/"})
     public void doDelete(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long commandId)
             throws IOException, InvalidClientInputException, HttpNotFoundException, InvalidTokenException, DataStreamException, AccessDeniedException, AccessRequiredException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);

@@ -57,7 +57,7 @@ public class ConfigurationSessionManager extends SessionManager {
         return managedSecondaryClasses;
     }
 
-    protected DataSource dataSource() {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(System.getenv("SECONDARY_DATABASE_CLASS"));
         dataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
@@ -78,12 +78,16 @@ public class ConfigurationSessionManager extends SessionManager {
         hibernateProperties.setProperty("hibernate.connection.password", System.getenv("DATABASE_PASSWORD"));
 
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
+        hibernateProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
+        hibernateProperties.setProperty("hibernate.globally_quoted_identifiers_skip_column_definitions", "true");
+
         hibernateProperties.setProperty("hibernate.c3p0.min_size", "5");
         hibernateProperties.setProperty("hibernate.c3p0.max_size", "200");
         hibernateProperties.setProperty("hibernate.c3p0.timeout", "300");
         hibernateProperties.setProperty("hibernate.c3p0.max_statements", "50");
         hibernateProperties.setProperty("hibernate.c3p0.idle_test_period", "3000");
 
+        System.out.println("ConfigurationSessionManager properties: "+hibernateProperties.toString());
         return hibernateProperties;
     }
 

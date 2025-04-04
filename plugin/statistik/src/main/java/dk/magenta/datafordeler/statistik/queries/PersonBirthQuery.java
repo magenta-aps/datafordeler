@@ -7,8 +7,8 @@ import dk.magenta.datafordeler.core.fapi.Condition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.statistik.utils.Filter;
+import jakarta.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;

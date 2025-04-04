@@ -12,14 +12,17 @@ import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
-import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.PersistenceException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,9 +31,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.PersistenceException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.Iterator;
@@ -58,10 +58,6 @@ public class ManageCprList {
     private final Logger log = LogManager.getLogger(ManageCprList.class.getCanonicalName());
 
 
-    @PostConstruct
-    public void init() {
-    }
-
     private String getSubscriberId(HttpServletRequest request) throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
         String subscriberId = Optional.ofNullable(
                 request.getHeader("uxp-client")
@@ -82,7 +78,7 @@ public class ManageCprList {
      * @throws InvalidTokenException
      * @throws InvalidCertificateException
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cprList/", headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList", "/subscriber/cprList/"}, headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cprListCreate(HttpServletRequest request, @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         String subscriberId = this.getSubscriberId(request);
@@ -96,7 +92,7 @@ public class ManageCprList {
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
                 CprList cprCreateList = new CprList(cprList, subscriber);
-                session.save(cprCreateList);
+                session.persist(cprCreateList);
                 subscriber.addCprList(cprCreateList);
 
                 transaction.commit();
@@ -122,7 +118,7 @@ public class ManageCprList {
      *
      * @return
      */
-    @GetMapping("/subscriber/cprList")
+    @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/cprList", "/subscriber/cprList/"})
     public ResponseEntity<List<CprList>> cprListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         String subscriberId = this.getSubscriberId(request);
@@ -140,7 +136,7 @@ public class ManageCprList {
     }
 
 
-    @DeleteMapping("/subscriber/cprList/cpr/{listId}")
+    @RequestMapping(method = RequestMethod.DELETE, path = {"/subscriber/cprList/cpr/{listId}", "/subscriber/cprList/cpr/{listId}/"})
     public ResponseEntity cprListCprDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cpr", required = false, defaultValue = "") List<String> cprs) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         String subscriberId = this.getSubscriberId(request);
@@ -158,7 +154,7 @@ public class ManageCprList {
             }
             List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
             for (SubscribedCprNumber subscribed : subscribedList) {
-                session.delete(subscribed);
+                session.remove(subscribed);
                 foundList.getCpr().remove(subscribed);
             }
             transaction.commit();
@@ -172,7 +168,7 @@ public class ManageCprList {
         }
     }
 
-    @PostMapping("/subscriber/cprList/cpr/{listId}")
+    @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList/cpr/{listId}", "/subscriber/cprList/cpr/{listId}/"})
     public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -224,7 +220,7 @@ public class ManageCprList {
      *
      * @return
      */
-    @GetMapping("/subscriber/cprList/cpr")
+    @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/cprList/cpr", "/subscriber/cprList/cpr/"})
     public ResponseEntity<dk.magenta.datafordeler.core.fapi.Envelope> cprListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");

@@ -1,8 +1,7 @@
 package dk.magenta.datafordeler.cvr.records;
 
 import dk.magenta.datafordeler.core.database.Monotemporal;
-
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class CvrNontemporalRecord extends CvrRecord {

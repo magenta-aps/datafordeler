@@ -10,11 +10,11 @@ import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
-import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Consumer;
@@ -213,8 +213,8 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
-        super.traverse(setCallback, itemCallback);
     }
 }

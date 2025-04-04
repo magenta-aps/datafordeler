@@ -150,7 +150,7 @@ public abstract class EntityManager {
             lastUpdated.setSchemaName(this.getSchema());
         }
         lastUpdated.setTimestamp(time);
-        session.saveOrUpdate(lastUpdated);
+        session.persist(lastUpdated);
     }
 
     // Override as needed in subclasses

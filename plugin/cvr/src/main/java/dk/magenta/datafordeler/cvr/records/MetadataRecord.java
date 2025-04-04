@@ -7,14 +7,14 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -299,6 +299,7 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
         if (this.newestMonthlyNumbers != null) {
             this.newestMonthlyNumbers.traverse(setCallback, itemCallback);
@@ -312,7 +313,6 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
         if (this.newestStatus != null) {
             this.newestStatus.traverse(setCallback, itemCallback);
         }
-        super.traverse(setCallback, itemCallback);
     }
 
     /*@Override

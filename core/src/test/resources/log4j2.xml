@@ -19,13 +19,16 @@
         </File>
     </Appenders>
     <Loggers>
+        <Logger name="org.opensaml" level="debug">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Logger name="dk.magenta.datafordeler" level="info"/>
         <Logger name="dk.magenta.datafordeler" level="urlinvoke"/>
         <Logger name="dk.magenta.datafordeler" level="urlresponse"/>
         <Logger name="dk.magenta.datafordeler" level="error">
             <AppenderRef ref="MonitorFile" />
         </Logger>
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

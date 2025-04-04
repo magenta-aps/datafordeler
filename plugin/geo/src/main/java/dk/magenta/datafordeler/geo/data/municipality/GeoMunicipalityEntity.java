@@ -12,12 +12,10 @@ import dk.magenta.datafordeler.geo.data.MonotemporalSet;
 import dk.magenta.datafordeler.geo.data.RawData;
 import dk.magenta.datafordeler.geo.data.SumiffiikEntity;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.HashSet;

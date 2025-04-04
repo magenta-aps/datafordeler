@@ -1,11 +1,10 @@
 package dk.magenta.datafordeler.cvr.service;
 
 import dk.magenta.datafordeler.cvr.output.ParticipantPnrRecordOutputWrapper;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/cvr/participant_pnr/1/rest")

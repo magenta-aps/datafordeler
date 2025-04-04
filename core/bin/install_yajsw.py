@@ -1,15 +1,9 @@
+import glob
 import os
+import re
+import ssl
 import urllib2
 import zipfile
-import tempfile
-import time
-import platform
-import subprocess
-import ssl
-import shutil
-import re
-import glob
-import pprint
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BIN_DIR = os.path.join(BASE_DIR, "bin")

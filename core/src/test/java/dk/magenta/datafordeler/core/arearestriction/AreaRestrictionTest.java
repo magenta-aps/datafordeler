@@ -2,14 +2,13 @@ package dk.magenta.datafordeler.core.arearestriction;
 
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.plugindemo.DemoPlugin;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 public class AreaRestrictionTest {
 
@@ -22,15 +21,15 @@ public class AreaRestrictionTest {
         String description = "typeDescription";
         AreaRestrictionType type = new AreaRestrictionType(name, description, demoPlugin);
 
-        Assert.assertEquals(name, type.getName());
-        Assert.assertEquals(description, type.getDescription());
-        Assert.assertEquals(demoPlugin.getName(), type.getServiceName());
-        Assert.assertEquals(demoPlugin.getName() + ":" + name, type.lookupName());
+        Assertions.assertEquals(name, type.getName());
+        Assertions.assertEquals(description, type.getDescription());
+        Assertions.assertEquals(demoPlugin.getName(), type.getServiceName());
+        Assertions.assertEquals(demoPlugin.getName() + ":" + name, type.lookupName());
 
         AreaRestriction areaRestriction = type.addChoice("testArea", "areaDescription", "12345");
-        Assert.assertEquals(1, type.getChoices().size());
-        Assert.assertEquals(areaRestriction, type.getChoices().iterator().next());
-        Assert.assertEquals(type, areaRestriction.getType());
+        Assertions.assertEquals(1, type.getChoices().size());
+        Assertions.assertEquals(areaRestriction, type.getChoices().iterator().next());
+        Assertions.assertEquals(type, areaRestriction.getType());
     }
 
     @Test
@@ -43,12 +42,12 @@ public class AreaRestrictionTest {
 
         AreaRestriction areaRestriction = new AreaRestriction(name, description, sumiffiik, type);
 
-        Assert.assertEquals(name, areaRestriction.getName());
-        Assert.assertEquals(description, areaRestriction.getDescription());
-        Assert.assertEquals(sumiffiik, areaRestriction.getSumifiik());
-        Assert.assertEquals(type, areaRestriction.getType());
-        Assert.assertEquals(typeLookup+":"+name, areaRestriction.lookupName());
-        Assert.assertEquals(areaRestriction, AreaRestriction.lookup(typeLookup+":"+name));
+        Assertions.assertEquals(name, areaRestriction.getName());
+        Assertions.assertEquals(description, areaRestriction.getDescription());
+        Assertions.assertEquals(sumiffiik, areaRestriction.getSumifiik());
+        Assertions.assertEquals(type, areaRestriction.getType());
+        Assertions.assertEquals(typeLookup+":"+name, areaRestriction.lookupName());
+        Assertions.assertEquals(areaRestriction, AreaRestriction.lookup(typeLookup+":"+name));
     }
 
 }

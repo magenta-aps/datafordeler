@@ -81,4 +81,4 @@ rem Copy compiled WAR so running will not hold a lock on the compiled file desti
 copy "%DIR%\target\%COREJAR%" "%RUN_JAR%"
 
 rem Run the JAR file
-call "%JAVA_HOME%\bin\java.exe" -cp "%RUN_JAR%" %RUN_ARGS% org.springframework.boot.loader.PropertiesLauncher
+call "%JAVA_HOME%\bin\java.exe" -cp "%RUN_JAR%" %RUN_ARGS% org.springframework.boot.loader.launch.PropertiesLauncher

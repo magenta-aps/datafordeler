@@ -2,9 +2,9 @@ package dk.magenta.datafordeler.geo.data.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 
 @MappedSuperclass

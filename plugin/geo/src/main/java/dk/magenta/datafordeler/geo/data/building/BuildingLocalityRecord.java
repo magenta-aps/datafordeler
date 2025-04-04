@@ -3,10 +3,10 @@ package dk.magenta.datafordeler.geo.data.building;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.common.LocalityReferenceRecord;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity

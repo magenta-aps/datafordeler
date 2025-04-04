@@ -9,16 +9,23 @@ import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.user.UserQueryManager;
 import dk.magenta.datafordeler.core.util.CronUtil;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
-import org.apache.http.HttpHost;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
-import org.apache.http.ssl.SSLContexts;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.config.TlsConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
+import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.ssl.TLS;
+import org.apache.hc.core5.ssl.SSLContexts;
+import org.apache.hc.core5.ssl.TrustStrategy;
+import org.apache.hc.core5.util.Timeout;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -26,17 +33,17 @@ import org.hibernate.query.Query;
 import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.system.ApplicationPid;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -66,7 +73,7 @@ public class MonitorService {
 
     private final Logger log = LogManager.getLogger(MonitorService.class.getName());
 
-    @RequestMapping(path = "/database")
+    @RequestMapping(path = {"/database", "/database/"})
     public void checkDatabaseConnections(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = sessionManager.getSessionFactory().openSession();
         Query query = session.createQuery("select 1 from Identification").setMaxResults(1);
@@ -86,7 +93,7 @@ public class MonitorService {
         response.setStatus(200);
     }
 
-    @RequestMapping(path = "/pull")
+    @RequestMapping(path = {"/pull", "/pull/"})
     public void checkPulls(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException, DataFordelerException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkPulls");
@@ -136,7 +143,7 @@ public class MonitorService {
     @Value("${dafo.error_file:cache/log/dafo.err}")
     private String errorFileConfig;
 
-    @RequestMapping(path = "/errors")
+    @RequestMapping(path = {"/errors", "/errors/"})
     public void checkErrors(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkErrors");
@@ -200,8 +207,8 @@ public class MonitorService {
     }
 
 
-    @RequestMapping(path = "/access")
-    public void checkAccess(HttpServletRequest request, HttpServletResponse response) throws IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+    @RequestMapping(path = {"/access","/access/"})
+    public void checkAccess(HttpServletRequest request, HttpServletResponse response) throws IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkAccess");
 
@@ -209,25 +216,34 @@ public class MonitorService {
         StringJoiner successes = new StringJoiner("\n");
         StringJoiner failures = new StringJoiner("\n");
 
-        HttpHost localhost = new HttpHost("localhost", port, request.getScheme());
+        HttpHost localhost = new HttpHost(request.getScheme(), "localhost", port);
 
-        CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(
-                new SSLConnectionSocketFactory(
-                        SSLContexts.custom().loadTrustMaterial((TrustStrategy) (chain, authType) -> true).build(),
-                        new NoopHostnameVerifier()
-                )
-        ).build();
+        SSLContext sslContext = SSLContexts.custom()
+                .loadTrustMaterial((TrustStrategy) (chain, authType) -> true)
+                .build();
+        TlsSocketStrategy tlsStrategy = new DefaultClientTlsStrategy(sslContext);
+
+        HttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                .setTlsSocketStrategy(tlsStrategy)
+                .setDefaultTlsConfig(TlsConfig.custom()
+                        .setHandshakeTimeout(Timeout.ofSeconds(30))
+                        .setSupportedProtocols(TLS.V_1_2)
+                        .build())
+                .build();
+
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connectionManager).build();
+
 
         for (AccessCheckpoint endpoint : this.accessCheckPoints) {
-            BasicHttpEntityEnclosingRequest httpRequest = new BasicHttpEntityEnclosingRequest(endpoint.method.name(), endpoint.path);
+            HttpUriRequestBase httpRequest = new HttpUriRequestBase(endpoint.method.name(), new URI("http://localhost"+endpoint.path));
             if (endpoint.requestBody != null) {
                 httpRequest.setEntity(new StringEntity(endpoint.requestBody));
             }
             CloseableHttpResponse resp = httpClient.execute(localhost, httpRequest);
             try {
-                int code = resp.getStatusLine().getStatusCode();
+                int code = resp.getCode();
                 StringJoiner joiner = (code == 403) ? successes : failures;
-                joiner.add(endpoint.method.name() + " " + endpoint.path + " : " + code + " " + resp.getStatusLine().getReasonPhrase());
+                joiner.add(endpoint.method.name() + " " + endpoint.path + " : " + code + " " + resp.getReasonPhrase());
                 resp.close();
             } catch (IOException e) {
                 e.printStackTrace();

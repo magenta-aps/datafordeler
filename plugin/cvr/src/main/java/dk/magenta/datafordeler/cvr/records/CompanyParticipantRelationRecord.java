@@ -9,9 +9,9 @@ import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Consumer;
@@ -71,7 +71,9 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
 
     public void setRelationCompanyRecord(RelationCompanyRecord relationCompanyRecord) {
         this.relationCompanyRecord = relationCompanyRecord;
-        relationCompanyRecord.setCompanyParticipantRelationRecord(this);
+        if (relationCompanyRecord != null) {
+            relationCompanyRecord.setCompanyParticipantRelationRecord(this);
+        }
     }
 
     public RelationCompanyRecord getRelationCompanyRecord() {
@@ -165,9 +167,9 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         if (this.relationParticipantRecord != null) {
             this.relationParticipantRecord.wire(session);
         }
-//        if (this.relationCompanyRecord != null) {
-//            this.relationCompanyRecord.wire(session);
-//        }
+        if (this.relationCompanyRecord != null) {
+            this.relationCompanyRecord.wire(session);
+        }
         for (OfficeRelationRecord officeRelationRecord : this.offices) {
             officeRelationRecord.wire(session);
         }

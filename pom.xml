@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.magenta.datafordeler</groupId>
     <artifactId>datafordeler</artifactId>
-    <version>1.2</version>
+    <version>2.0.0</version>
     <name>datafordeler</name>
     <description></description>
     <packaging>pom</packaging>
 
     <modules>
-        <module>plugin/parent</module>
+        <module>parent</module>
         <module>core</module>
         <module>plugin/geo</module>
         <module>plugin/combinedPitu</module>

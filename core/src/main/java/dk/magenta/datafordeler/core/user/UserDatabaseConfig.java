@@ -30,15 +30,7 @@ public class UserDatabaseConfig {
         }
     }
 
-    /**
-     * Generates a datasource to use for creating the userJdbcTemplate bean.
-     * This method can _not_ create a bean as spring boot autoconfiguration will try to use that
-     * bean for the primary DAFO database and fail.
-     * This also means that it is not possible to configuration property injection to configure
-     * the datasource.
-     *
-     * @return A configured DataSource
-     */
+    @Bean
     public ComboPooledDataSource userDataSource() throws ConfigurationException {
         ComboPooledDataSource pooledDataSource = new ComboPooledDataSource();
         try {
@@ -56,11 +48,7 @@ public class UserDatabaseConfig {
         return pooledDataSource;
     }
 
-    /**
-     * Builds a JdbcTemplate bean used for working with the DAFO users database.
-     *
-     * @return A configured JdbcTemplate
-     */
+
     public JdbcTemplate userJdbcTemplate() throws ConfigurationException {
         return new JdbcTemplate(this.userDataSource());
     }

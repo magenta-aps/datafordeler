@@ -1,31 +1,22 @@
 package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CvrList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -35,7 +26,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CvrListTest extends TestBase {
@@ -48,7 +38,7 @@ public class CvrListTest extends TestBase {
      *
      * @throws Exception
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         initMocks(this);
@@ -65,11 +55,11 @@ public class CvrListTest extends TestBase {
 
             CvrList cvrList1 = new CvrList("myList1");
             subscriber.addCvrList(cvrList1);
-            session.save(cvrList1);
+            session.persist(cvrList1);
             CvrList cvrList2 = new CvrList("myList2");
             subscriber.addCvrList(cvrList2);
-            session.save(cvrList2);
-            session.save(subscriber);
+            session.persist(cvrList2);
+            session.persist(subscriber);
             transaction.commit();
         }
 
@@ -110,7 +100,7 @@ public class CvrListTest extends TestBase {
             Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
-            Assert.assertEquals(4, cvrList.getCvr().size());
+            Assertions.assertEquals(4, cvrList.getCvr().size());
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -127,7 +117,7 @@ public class CvrListTest extends TestBase {
             Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList list = (CvrList) query.getResultList().get(0);
-            Assert.assertEquals(3, list.getCvr().size());
+            Assertions.assertEquals(3, list.getCvr().size());
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -135,7 +125,7 @@ public class CvrListTest extends TestBase {
             Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
             CvrList cvrList = (CvrList) query.getResultList().get(0);
-            session.delete(cvrList);
+            session.remove(cvrList);
             transaction.commit();
         }
 
@@ -143,7 +133,7 @@ public class CvrListTest extends TestBase {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from " + CvrList.class.getName() + " where listId = :listId", CvrList.class);
             query.setParameter("listId", "myList1");
-            Assert.assertEquals(0, query.getResultList().size());
+            Assertions.assertEquals(0, query.getResultList().size());
         }
 
     }
@@ -172,7 +162,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
                 "{\"listId\":\"myList2\"}]", response.getBody(), false);
 
@@ -184,7 +174,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CVR-list has one element
         response = restTemplate.exchange(
@@ -193,7 +183,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
                 "{\"listId\":\"myList2\"}," +
                 "{\"listId\":\"cvrTestList1\"}]", response.getBody(), false);
@@ -206,7 +196,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CVR-list has two elements
         response = restTemplate.exchange(
@@ -215,7 +205,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
                 "{\"listId\":\"myList2\"}," +
                 "{\"listId\":\"cvrTestList1\"}," +
@@ -242,7 +232,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         body = objectMapper.createObjectNode();
         cvrList = objectMapper.createArrayNode();
@@ -259,7 +249,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/nonexistent",
@@ -267,7 +257,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         //Confirm that the CVR-list has two elements
         response = restTemplate.exchange(
@@ -276,10 +266,10 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
-        Assert.assertEquals(9, results.size());
+        Assertions.assertEquals(9, results.size());
 
         //Try fetching with no cvr access rights
         response = restTemplate.exchange(
@@ -288,7 +278,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
 
         response = restTemplate.exchange(
@@ -297,7 +287,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/?listId=cvrTestList1",
@@ -305,10 +295,10 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(7, results.size());
+        Assertions.assertEquals(7, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cvrList/cvr/?listId=nonexistent",
@@ -316,7 +306,7 @@ public class CvrListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
 }

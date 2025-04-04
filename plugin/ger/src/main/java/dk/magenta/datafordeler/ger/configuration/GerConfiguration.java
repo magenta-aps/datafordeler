@@ -5,8 +5,7 @@ import dk.magenta.datafordeler.ger.GerPlugin;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntity;
 import dk.magenta.datafordeler.ger.data.unit.UnitEntity;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ger_config")

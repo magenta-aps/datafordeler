@@ -2,10 +2,10 @@ package dk.magenta.datafordeler.cpr.data.person;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

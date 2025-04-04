@@ -15,6 +15,9 @@ import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressRoadRecord;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.statistik.utils.Filter;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -24,9 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
@@ -117,7 +117,6 @@ public class RoadDataService extends StatisticsService {
                     "LEFT JOIN accessAddress." + AccessAddressEntity.DB_FIELD_POSTCODE + " accessAddressPostcode " +
                     "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_MUNICIPALITY + " roadMunicipality " +
                     "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_NAME + " roadName " +
-                    "LEFT JOIN accessAddress." + AccessAddressEntity.DB_FIELD_POSTCODE + " accessAddressPostcode " +
                     "JOIN roadEntity." + GeoRoadEntity.DB_FIELD_LOCALITY + " roadLocality " +
                     "JOIN " + GeoLocalityEntity.class.getCanonicalName() + " locality ON roadLocality.reference = locality." + GeoLocalityEntity.DB_FIELD_IDENTIFICATION + " " +
                     "JOIN locality." + GeoLocalityEntity.DB_FIELD_NAME + " localityName" +

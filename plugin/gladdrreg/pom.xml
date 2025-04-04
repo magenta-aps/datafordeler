@@ -3,25 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <!--The identifier of the parent POM-->
+    <parent>
+        <groupId>dk.magenta.datafordeler</groupId>
+        <artifactId>parent</artifactId>
+        <relativePath>../../parent/pom.xml</relativePath>
+        <version>2.0.0</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.magenta.datafordeler</groupId>
-    <artifactId>datafordeler-plugin-gladdrreg</artifactId>
-    <version>1.1</version>
+    <artifactId>gladdrreg</artifactId>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
     <name>datafordeler-plugin-gladdrreg</name>
-    <description>Gladdrreg plugin for Magenta&#39;s Greenlandic System</description>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
-        <log4j.version>2.1</log4j.version>
-        <jackson.version>2.9.9</jackson.version>
-        <spring.version>5.1.7.RELEASE</spring.version>
-        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
+    <description>Gladdrreg plugin for Magenta's Greenlandic System</description>
 
     <repositories>
         <repository>
@@ -34,13 +29,8 @@
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>datafordeler-core</artifactId>
-            <version>1.1</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.2</version>
         </dependency>
 
 
@@ -52,20 +42,15 @@
 
         <!-- Unit testing -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

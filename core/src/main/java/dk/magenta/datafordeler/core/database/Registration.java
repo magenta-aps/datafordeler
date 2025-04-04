@@ -7,16 +7,16 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.OffsetDateTimeAdapter;
+import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.Session;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Filters;
 
-import javax.persistence.CascadeType;
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
@@ -29,10 +29,6 @@ import java.util.*;
  * associated. Generally, there should not be stored other data in the object.
  */
 @MappedSuperclass
-@FilterDefs({
-        @FilterDef(name = Registration.FILTER_REGISTRATION_FROM, parameters = @ParamDef(name = Registration.FILTERPARAM_REGISTRATION_FROM, type = "java.time.OffsetDateTime")),
-        @FilterDef(name = Registration.FILTER_REGISTRATION_TO, parameters = @ParamDef(name = Registration.FILTERPARAM_REGISTRATION_TO, type = "java.time.OffsetDateTime"))
-})
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @JsonPropertyOrder({"sequenceNumber", "registrationFromBefore", "registrationToBefore", "checksum", "effects"})
 public abstract class Registration<E extends Entity, R extends Registration, V extends Effect> extends DatabaseEntry implements Comparable<Registration> {

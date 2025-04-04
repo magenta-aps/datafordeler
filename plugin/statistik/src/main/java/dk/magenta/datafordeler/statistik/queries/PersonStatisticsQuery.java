@@ -11,8 +11,8 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.statistik.services.StatisticsService;
 import dk.magenta.datafordeler.statistik.utils.Filter;
+import jakarta.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;

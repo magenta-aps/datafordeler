@@ -12,14 +12,13 @@ import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
+import jakarta.persistence.*;
 import org.hibernate.Session;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Filters;
+import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
-import javax.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -33,18 +32,6 @@ import java.util.function.Consumer;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantRecord.TABLE_NAME + "__" + ParticipantRecord.DB_FIELD_DAFO_UPDATED, columnList = ParticipantRecord.DB_FIELD_DAFO_UPDATED)
 })
 
-@FilterDefs({
-        @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTFROM_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_EFFECTFROM)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTTO_AFTER, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_EFFECTTO)),
-        @FilterDef(name = Bitemporal.FILTER_EFFECTTO_BEFORE, parameters = @ParamDef(name = Bitemporal.FILTERPARAM_EFFECTTO_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_EFFECTTO)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONFROM)),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONFROM)),
-        //@FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
-        //@FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_REGISTRATIONTO)),
-        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_AFTER, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_AFTER, type = CvrBitemporalRecord.FILTERPARAMTYPE_LASTUPDATED)),
-        @FilterDef(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, parameters = @ParamDef(name = Nontemporal.FILTERPARAM_LASTUPDATED_BEFORE, type = CvrBitemporalRecord.FILTERPARAMTYPE_LASTUPDATED))
-})
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonFilter("ParticipantRecordFilter")  // Keeps businessKey from being outputted in normal outputwrappers
 public class ParticipantRecord extends CvrEntityRecord {
@@ -192,7 +179,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_PARTICIPANT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION)
+    @SQLRestriction(AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -233,7 +220,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     public static final String IO_FIELD_POSTAL_ADDRESS = "postadresse";
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_PARTICIPANT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL)
+    @SQLRestriction(AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -274,7 +261,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     public static final String IO_FIELD_BUSINESS_ADDRESS = "forretningsadresse";
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_PARTICIPANT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_BUSINESS)
+    @SQLRestriction(AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_BUSINESS)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -315,7 +302,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     public static final String IO_FIELD_PHONE = "telefonNummer";
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_PARTICIPANT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER)
+    @SQLRestriction(ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -357,7 +344,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     public static final String IO_FIELD_FAX = "telefaxNummer";
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_PARTICIPANT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER)
+    @SQLRestriction(ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -399,7 +386,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     public static final String IO_FIELD_EMAIL = "elektroniskPost";
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_PARTICIPANT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE)
+    @SQLRestriction(ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -485,7 +472,7 @@ public class ParticipantRecord extends CvrEntityRecord {
 
     @OneToOne(targetEntity = ParticipantMetadataRecord.class, mappedBy = ParticipantMetadataRecord.DB_FIELD_PARTICIPANT, cascade = CascadeType.ALL)
     @JoinColumn(name = DB_FIELD_META + DatabaseEntry.REF)
-        @JsonProperty(value = IO_FIELD_META)
+    @JsonProperty(value = IO_FIELD_META)
     private ParticipantMetadataRecord metadata;
 
     public void setMetadata(ParticipantMetadataRecord metadata) {
@@ -613,9 +600,13 @@ public class ParticipantRecord extends CvrEntityRecord {
         for (AddressRecord address : this.businessAddress) {
             address.wire(session);
         }
+        for (CompanyParticipantRelationRecord companyParticipantRelationRecord : this.companyRelation) {
+            companyParticipantRelationRecord.wire(session);
+        }
         if (this.metadata != null) {
             this.metadata.wire(session);
         }
+        // TODO: wire on traverse
     }
 
     @Override

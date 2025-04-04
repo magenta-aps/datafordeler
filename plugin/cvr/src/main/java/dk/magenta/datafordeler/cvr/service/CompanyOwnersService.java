@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -26,6 +27,8 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.output.ParticipantRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -35,8 +38,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -52,8 +53,7 @@ public class CompanyOwnersService {
     @Autowired
     private SessionManager sessionManager;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final Logger log = LogManager.getLogger(CompanyOwnersService.class.getCanonicalName());
 
@@ -75,6 +75,11 @@ public class CompanyOwnersService {
         map.put("0.9", Pair.of("0.9", "0.9999"));
         map.put("1.0", Pair.of("1", "1"));
         intervalMap = Collections.unmodifiableMap(map);
+    }
+
+    public CompanyOwnersService() {
+        this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        this.objectMapper.registerModule(new JavaTimeModule());
     }
 
     @PostConstruct

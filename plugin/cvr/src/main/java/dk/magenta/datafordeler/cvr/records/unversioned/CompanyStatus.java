@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.Collections;
 import java.util.HashMap;
@@ -97,7 +97,7 @@ public class CompanyStatus extends DatabaseEntry {
                 log.debug("CompanyStatus " + statusText + " not found; creating new");
                 status = new CompanyStatus();
                 status.setStatus(statusText);
-                session.save(status);
+                session.persist(status);
             } else {
                 log.debug("CompanyStatus " + statusText + " found in cache (" + status.getId() + ")");
             }

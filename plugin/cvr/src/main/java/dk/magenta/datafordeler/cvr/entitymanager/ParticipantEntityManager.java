@@ -17,7 +17,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -33,19 +33,19 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
             ZoneOffset.UTC
     );
 
-    @Qualifier("participantRecordService")
-    @Autowired
     private ParticipantRecordService participantEntityService;
 
-    @Autowired
     private SessionManager sessionManager;
 
-    @Autowired
     private DirectLookup directLookup;
 
     private final Logger log = LogManager.getLogger(ParticipantEntityManager.class);
 
-    public ParticipantEntityManager() {
+    @Autowired
+    public ParticipantEntityManager(@Lazy ParticipantRecordService participantRecordService, @Lazy SessionManager sessionManager, @Lazy DirectLookup directLookup) {
+        this.participantEntityService = participantRecordService;
+        this.sessionManager = sessionManager;
+        this.directLookup = directLookup;
     }
 
     @Override
@@ -148,7 +148,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
                 for (ParticipantRecord participantRecord : records) {
                     boolean updated = ParticipantEntityManager.this.enrichParticipantRecord(participantRecord);
                     if (updated) {
-                        session.save(participantRecord);
+                        session.persist(participantRecord);
                     }
                 }
                 session.flush();

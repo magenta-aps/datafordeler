@@ -7,17 +7,13 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import org.hibernate.Session;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GeoIntegrationTest extends TestBase {
 
     @Autowired

@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import java.util.Objects;
 
 /**

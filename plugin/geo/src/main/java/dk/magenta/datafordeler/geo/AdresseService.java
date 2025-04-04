@@ -23,6 +23,10 @@ import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressNumberRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressUsageRecord;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.FlushModeType;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -30,10 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.FlushModeType;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -110,7 +110,7 @@ public class AdresseService {
      * @param request HTTP request containing a municipality parameter
      * @return Json-formatted string containing a list of found objects
      */
-    @RequestMapping("/lokalitet")
+    @RequestMapping(path={"/lokalitet","/lokalitet/"})
     public void getLocalities(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getLocalities(request);
         setHeaders(response);
@@ -170,7 +170,7 @@ public class AdresseService {
      * @param request HTTP request containing a locality parameter
      * @return Json-formatted string containing a list of found objects
      */
-    @RequestMapping("/vej")
+    @RequestMapping(path={"/vej", "/vej/"})
     public void getRoads(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getRoads(request);
         setHeaders(response);
@@ -209,7 +209,7 @@ public class AdresseService {
                             "JOIN " + UnitAddressEntity.class.getCanonicalName() + " unit ON unit.accessAddress = access.identification " +
                             "JOIN unit.usage unit_usage " +
                             "WHERE locality_reference.uuid = :uuid " +
-                            "AND road.code != null " +
+                            "AND road.code is not null " +
                             "AND road.code != 0 "
                     //"AND unit_usage.usage = 1 "
             );
@@ -336,7 +336,7 @@ public class AdresseService {
      * @param request HTTP request containing a road parameter
      * @return Json-formatted string containing a list of found objects
      */
-    @RequestMapping("/hus")
+    @RequestMapping(path={"/hus", "/hus/"})
     public void getAccessAddresses(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getAccessAddresses(request);
         setHeaders(response);
@@ -452,7 +452,7 @@ public class AdresseService {
      *                and optionally a house parameter or bnr parameter
      * @return Json-formatted string containing a list of found objects
      */
-    @RequestMapping("/adresse")
+    @RequestMapping(path={"/adresse","/adresse/"})
     public void getUnitAddresses(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getUnitAddresses(request);
         setHeaders(response);
@@ -680,7 +680,7 @@ public class AdresseService {
     /**
      * Finds more detailed data on unit address
      */
-    @RequestMapping("/adresseoplysninger")
+    @RequestMapping(path={"/adresseoplysninger", "/adresseoplysninger/"})
     public void getAddressData(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
         String payload = this.getAddressData(request);
         setHeaders(response);

@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Record for Company, CompanyUnit or Participant attribute values.

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.util.Bitemporality;
+import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 
 @MappedSuperclass
@@ -19,7 +19,6 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = DB_FIELD_ENTITY + DatabaseEntry.REF)
     @JsonIgnore
-    @XmlTransient
     private DemoEntityRecord entity;
 
     public DemoEntityRecord getEntity() {
@@ -45,8 +44,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
 
 
-    public static final String FILTERPARAMTYPE_REGISTRATIONFROM = "java.time.OffsetDateTime";
-    public static final String FILTERPARAMTYPE_REGISTRATIONTO = "java.time.OffsetDateTime";
+    public static final Class<?> FILTERPARAMTYPE_REGISTRATIONFROM = OffsetDateTime.class;
+    public static final Class<?> FILTERPARAMTYPE_REGISTRATIONTO = OffsetDateTime.class;
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_FROM = Monotemporal.DB_FIELD_REGISTRATION_FROM;
@@ -91,8 +90,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
 
 
-    public static final String FILTERPARAMTYPE_EFFECTFROM = "java.time.OffsetDateTime";
-    public static final String FILTERPARAMTYPE_EFFECTTO = "java.time.OffsetDateTime";
+    public static final Class<?> FILTERPARAMTYPE_EFFECTFROM = OffsetDateTime.class;
+    public static final Class<?> FILTERPARAMTYPE_EFFECTTO = OffsetDateTime.class;
 
 
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
@@ -133,7 +132,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
         return new Bitemporality(this.registrationFrom, this.registrationTo, this.effectFrom, this.effectTo);
     }
 
-    public static final String FILTERPARAMTYPE_LASTUPDATED = "java.time.OffsetDateTime";
+    public static final Class<?> FILTERPARAMTYPE_LASTUPDATED = OffsetDateTime.class;
 
     public static final String DB_FIELD_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;

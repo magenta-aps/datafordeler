@@ -138,49 +138,58 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
             session.beginTransaction();
             importMetadata.setTransactionInProgress(true);
         }
-        timer.clear();
-        final WireCache wireCache = new WireCache();
-        this.populateWireCache(wireCache, session);
-        Charset charset = this.geoConfigurationManager.getConfiguration().getCharset();
+        try {
+            timer.clear();
+            final WireCache wireCache = new WireCache();
+            this.populateWireCache(wireCache, session);
+            Charset charset = this.geoConfigurationManager.getConfiguration().getCharset();
 
-        GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
-            try {
-                timer.start(TASK_PARSE);
-                T rawData = objectMapper.readerFor(this.getRawClass()).readValue(jsonNode);
-                timer.measure(TASK_PARSE);
+            GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
+                try {
+                    timer.start(TASK_PARSE);
+                    T rawData = objectMapper.readerFor(this.getRawClass()).readValue(jsonNode);
+                    timer.measure(TASK_PARSE);
 
-                timer.start(TASK_FIND_ENTITY);
-                UUID uuid = this.generateUUID(rawData);
-                E entity = entityCache.get(uuid);
-                if (entity == null) {
-                    Identification identification = QueryManager.getOrCreateIdentification(session, uuid, this.getDomain());
-                    entity = QueryManager.getEntity(session, identification, this.getEntityClass());
+                    timer.start(TASK_FIND_ENTITY);
+                    UUID uuid = this.generateUUID(rawData);
+                    E entity = entityCache.get(uuid);
                     if (entity == null) {
-                        entity = this.createBasicEntity(rawData, session);
-                        entity.setIdentification(identification);
+                        Identification identification = QueryManager.getOrCreateIdentification(session, uuid, this.getDomain());
+                        entity = QueryManager.getEntity(session, identification, this.getEntityClass());
+                        if (entity == null) {
+                            entity = this.createBasicEntity(rawData, session);
+                            entity.setIdentification(identification);
+                        }
+                        entityCache.put(uuid, entity);
                     }
-                    entityCache.put(uuid, entity);
+                    timer.measure(TASK_FIND_ENTITY);
+
+                    timer.start(TASK_POPULATE_DATA);
+                    this.updateEntity(entity, rawData, importMetadata);
+                    timer.measure(TASK_POPULATE_DATA);
+
+                    timer.start(TASK_SAVE);
+                    session.persist(entity);
+                    timer.measure(TASK_SAVE);
+
+                } catch (IOException e) {
+                    log.error("Error importing " + this.getEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
                 }
-                timer.measure(TASK_FIND_ENTITY);
+            });
 
-                timer.start(TASK_POPULATE_DATA);
-                this.updateEntity(entity, rawData, importMetadata);
-                timer.measure(TASK_POPULATE_DATA);
+            session.flush();
+            this.wireAll(session, wireCache);
 
-                timer.start(TASK_SAVE);
-                session.save(entity);
-                timer.measure(TASK_SAVE);
-
-            } catch (IOException e) {
-                log.error("Error importing " + this.getEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
+            if (!wrappedInTransaction) {
+                session.getTransaction().commit();
+                importMetadata.setTransactionInProgress(false);
             }
-        });
-
-        this.wireAll(session, wireCache);
-
-        if (!wrappedInTransaction) {
-            session.getTransaction().commit();
-            importMetadata.setTransactionInProgress(false);
+        } catch (Exception e) {
+            if (!wrappedInTransaction) {
+                session.getTransaction().rollback();
+                importMetadata.setTransactionInProgress(false);
+            }
+            throw e;
         }
         log.info(timer.formatAllTotal());
     }
@@ -255,7 +264,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
                 E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
                 if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
-                    session.delete(entity);
+                    session.remove(entity);
                 }
             });
             session.getTransaction().commit();
@@ -320,6 +329,12 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
         List<E> items = QueryManager.getAllEntities(session, this.getEntityClass());
         for (E item : items) {
             item.wire(session, wireCache);
+            session.persist(item);
         }
+    }
+    public void wireAll(Session session) {
+        WireCache wireCache = new WireCache();
+        this.populateWireCache(wireCache, session);
+        this.wireAll(session, wireCache);
     }
 }

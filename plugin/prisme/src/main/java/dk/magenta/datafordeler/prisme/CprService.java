@@ -21,6 +21,8 @@ import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.geo.GeoLookupService;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -33,8 +35,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -76,7 +76,7 @@ public class CprService {
         this.monitorService.addAccessCheckPoint("POST", "/prisme/cpr/1/", "{}");
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cprNummer}", "/{cprNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
 
@@ -120,7 +120,7 @@ public class CprService {
     private static final byte[] END_OBJECT = "}".getBytes();
     private static final byte[] OBJECT_SEPARATOR = ",\n".getBytes();
 
-    @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"", "/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public StreamingResponseBody getBulk(HttpServletRequest request)
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, InvalidParameterException, IOException, HttpNotFoundException, InvalidCertificateException {
         JsonNode requestBody;

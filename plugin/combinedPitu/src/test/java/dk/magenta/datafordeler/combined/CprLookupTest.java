@@ -13,8 +13,11 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runners.MethodSorters;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -22,12 +25,10 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -38,7 +39,6 @@ import java.util.StringJoiner;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -56,10 +56,10 @@ public class CprLookupTest extends TestBase {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @SpyBean
+    @MockitoSpyBean
     private DafoUserManager dafoUserManager;
 
-    @After
+    @AfterEach
     public void cleanup() {
         this.cleanupPersonData(sessionManager);
         this.cleanupGeoData(sessionManager);
@@ -107,7 +107,7 @@ public class CprLookupTest extends TestBase {
     }
 
 
-    @Before
+    @BeforeEach
     public void load() throws Exception {
         this.loadAllGeoAdress(sessionManager);
         this.loadPerson("/person.txt");
@@ -126,8 +126,8 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        Assert.assertEquals(null, objectMapper.readTree(response.getBody()).get("cprNummer"));
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(null, objectMapper.readTree(response.getBody()).get("cprNummer"));
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/?cpr=0000000007",
@@ -135,7 +135,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
     }
 
@@ -152,8 +152,8 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/010100-1234?includeGlobalIds=1",
@@ -161,11 +161,11 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         String body = response.getBody();
-        Assert.assertEquals(body, "0101001234", objectMapper.readTree(body).get("cprNummer").asText());
-        Assert.assertEquals(body, "{2e3776bf-05c2-433c-adb9-8a07df6b3e8f}", objectMapper.readTree(body).get("adgangsadresseGlobalId").textValue());
-        Assert.assertEquals(body, "{1b3ac64b-c28d-40b2-a106-16cee7c188b8}", objectMapper.readTree(body).get("enhedsadresseGlobalId").textValue());
+        Assertions.assertEquals(body, "0101001234", objectMapper.readTree(body).get("cprNummer").asText());
+        Assertions.assertEquals(body, "{2e3776bf-05c2-433c-adb9-8a07df6b3e8f}", objectMapper.readTree(body).get("adgangsadresseGlobalId").textValue());
+        Assertions.assertEquals(body, "{1b3ac64b-c28d-40b2-a106-16cee7c188b8}", objectMapper.readTree(body).get("enhedsadresseGlobalId").textValue());
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/1111111188",
@@ -173,7 +173,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -187,7 +187,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
         TestUserDetails testUserDetails = new TestUserDetails();
         httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -204,8 +204,8 @@ public class CprLookupTest extends TestBase {
 
         JsonNode jsonNode = objectMapper.readTree(response.getBody());
         ArrayNode resultList = (ArrayNode) jsonNode.get("results");
-        Assert.assertEquals(3, resultList.size());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(3, resultList.size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&lokalitet_kode=0600&pageSize=1000",
@@ -216,8 +216,8 @@ public class CprLookupTest extends TestBase {
 
         jsonNode = objectMapper.readTree(response.getBody());
         resultList = (ArrayNode) jsonNode.get("results");
-        Assert.assertEquals(51, resultList.size());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(51, resultList.size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&kommune_kode=957&pageSize=1000",
@@ -228,8 +228,8 @@ public class CprLookupTest extends TestBase {
 
         jsonNode = objectMapper.readTree(response.getBody());
         resultList = (ArrayNode) jsonNode.get("results");
-        Assert.assertEquals(0, resultList.size());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(0, resultList.size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/combined/cpr/birthIntervalDate/1/search/?birthAfter=1990-01-01&birthBefore=2041-01-01&kommune_kode=956&pageSize=1000",
@@ -240,8 +240,8 @@ public class CprLookupTest extends TestBase {
 
         jsonNode = objectMapper.readTree(response.getBody());
         resultList = (ArrayNode) jsonNode.get("results");
-        Assert.assertEquals(54, resultList.size());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(54, resultList.size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/combined/cpr/birthIntervalDate/1/search/?birthAfter=2010-01-01&birthBefore=2012-01-01&kommune_kode=956&pageSize=1000",
@@ -252,8 +252,8 @@ public class CprLookupTest extends TestBase {
 
         jsonNode = objectMapper.readTree(response.getBody());
         resultList = (ArrayNode) jsonNode.get("results");
-        Assert.assertEquals(3, resultList.size());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(3, resultList.size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/combined/cpr/birthIntervalDate/1/search/?birthAfter=2012-01-01&birthBefore=2014-01-01&kommune_kode=956&pageSize=1000",
@@ -264,8 +264,8 @@ public class CprLookupTest extends TestBase {
 
         jsonNode = objectMapper.readTree(response.getBody());
         resultList = (ArrayNode) jsonNode.get("results");
-        Assert.assertEquals(0, resultList.size());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(0, resultList.size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
 
@@ -286,8 +286,8 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals("0000000007", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/0101001234?allowDirect=true",
@@ -295,8 +295,8 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("0101001234", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals("0101001234", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/1111111188?allowDirect=true",
@@ -304,8 +304,8 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("1111111188", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals("1111111188", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
     }
 
     @Test
@@ -325,7 +325,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/0101001234?forceDirect=true",
@@ -333,7 +333,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/combined/personLookup/1/cpr/1111111188?forceDirect=true",
@@ -341,8 +341,8 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals("1111111188", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals("1111111188", objectMapper.readTree(response.getBody()).get("cprNummer").asText());
     }
 
     @Test
@@ -359,8 +359,8 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        Assert.assertTrue(response.getBody().contains("error"));
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertTrue(response.getBody().contains("error"));
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
@@ -371,7 +371,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101001234\",\"fornavn\":\"Tester Testmember\"," +
                 "\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956," +
                 "\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\"," +
@@ -385,7 +385,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101001235\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956,\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\",\"postnummer\":3962,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"}},\"far\":{},\"mor\":{\"cprNummer\":\"0101001234\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956,\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\",\"postnummer\":3962,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"},\"myndighedshaver\":false},\"soeskende\":[{\"cprNummer\":\"0101001235\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"}]}", response.getBody(), JSONCompareMode.LENIENT);
 
         //Find familyrelation of "0312600013", this person has a strange formatted fathers cpr (0000000000)
@@ -395,7 +395,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0312600013\",\"adresse\":{\"tilflytningsdato\":\"2016-10-15\"," +
                 "\"myndighedskode\":541,\"vejkode\":5411,\"kommune\":null,\"postnummer\":0,\"bynavn\":null,\"stedkode\":0,\"landekode\":\"DK\"}},\"far\":{},\"mor\":{},\"soeskende\":[]}", response.getBody(), JSONCompareMode.LENIENT);
 
@@ -406,7 +406,7 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101141234\",\"adresse\":{}},\"far\":{\"cprNummer\":\"0101011235\",\"adresse\":{},\"myndighedshaver\":true},\"mor\":{},\"soeskende\":[{\"cprNummer\":\"0101011234\"},{\"cprNummer\":\"0101011235\"},{\"cprNummer\":\"0101981234\"},{\"cprNummer\":\"0101121234\"},{\"cprNummer\":\"0101141234\"},{\"cprNummer\":\"0101161234\"},{\"cprNummer\":\"0101991234\"},{\"cprNummer\":\"0101131234\"}]}", response.getBody(), JSONCompareMode.LENIENT);
     }
 
@@ -423,18 +423,18 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JsonNode responseData = objectMapper.readTree(response.getBody());
-        Assert.assertEquals(7, responseData.size());
-        Assert.assertNotNull(responseData.get("0000000001"));
-        Assert.assertNotNull(responseData.get("0000000002"));
-        Assert.assertNotNull(responseData.get("0000000003"));
-        Assert.assertNotNull(responseData.get("0000000004"));
-        Assert.assertNotNull(responseData.get("0000000005"));
-        Assert.assertNotNull(responseData.get("0000000006"));
-        Assert.assertNotNull(responseData.get("0000000007"));
-        Assert.assertNull(responseData.get("1000000007"));
-        Assert.assertNull(responseData.get("1111111188"));
+        Assertions.assertEquals(7, responseData.size());
+        Assertions.assertNotNull(responseData.get("0000000001"));
+        Assertions.assertNotNull(responseData.get("0000000002"));
+        Assertions.assertNotNull(responseData.get("0000000003"));
+        Assertions.assertNotNull(responseData.get("0000000004"));
+        Assertions.assertNotNull(responseData.get("0000000005"));
+        Assertions.assertNotNull(responseData.get("0000000006"));
+        Assertions.assertNotNull(responseData.get("0000000007"));
+        Assertions.assertNull(responseData.get("1000000007"));
+        Assertions.assertNull(responseData.get("1111111188"));
     }
 
     @Test
@@ -453,24 +453,24 @@ public class CprLookupTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JsonNode responseData = objectMapper.readTree(response.getBody());
-        Assert.assertEquals(8, responseData.size());
-        Assert.assertNotNull(responseData.get("0000000001"));
-        Assert.assertNotNull(responseData.get("0000000002"));
-        Assert.assertNotNull(responseData.get("0000000003"));
-        Assert.assertNotNull(responseData.get("0000000004"));
-        Assert.assertNotNull(responseData.get("0000000005"));
-        Assert.assertNotNull(responseData.get("0000000006"));
-        Assert.assertNotNull(responseData.get("0000000007"));
-        Assert.assertNull(responseData.get("1000000007"));
-        Assert.assertNotNull(responseData.get("1111111188"));
+        Assertions.assertEquals(8, responseData.size());
+        Assertions.assertNotNull(responseData.get("0000000001"));
+        Assertions.assertNotNull(responseData.get("0000000002"));
+        Assertions.assertNotNull(responseData.get("0000000003"));
+        Assertions.assertNotNull(responseData.get("0000000004"));
+        Assertions.assertNotNull(responseData.get("0000000005"));
+        Assertions.assertNotNull(responseData.get("0000000006"));
+        Assertions.assertNotNull(responseData.get("0000000007"));
+        Assertions.assertNull(responseData.get("1000000007"));
+        Assertions.assertNotNull(responseData.get("1111111188"));
     }
 
     private void applyAccess(TestUserDetails testUserDetails) {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    @SpyBean
+    @MockitoSpyBean
     private CprDirectLookup cprDirectLookup;
 }

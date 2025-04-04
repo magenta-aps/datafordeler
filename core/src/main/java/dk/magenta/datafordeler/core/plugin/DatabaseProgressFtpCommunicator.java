@@ -57,7 +57,7 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
         Transaction transaction = this.session.beginTransaction();
         try {
             for (String filename : filter(this.session, this.type, filenames)) {
-                this.session.save(new FtpPulledFile(this.type, filename));
+                this.session.persist(new FtpPulledFile(this.type, filename));
             }
             transaction.commit();
         } catch (Exception e) {

@@ -1,13 +1,11 @@
 package dk.magenta.datafordeler.core.util;
 
 import dk.magenta.datafordeler.core.Application;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 public class DoubleHashMapTest {
 
@@ -17,9 +15,9 @@ public class DoubleHashMapTest {
         String key1 = "foo";
         String key2 = "bar";
         map.put(key1, key2, "foobar");
-        Assert.assertTrue(map.containsKey(key1, key2));
-        Assert.assertFalse(map.containsKey(key1, "nothing_here"));
-        Assert.assertFalse(map.containsKey("nothing_here", "nothing_here"));
+        Assertions.assertTrue(map.containsKey(key1, key2));
+        Assertions.assertFalse(map.containsKey(key1, "nothing_here"));
+        Assertions.assertFalse(map.containsKey("nothing_here", "nothing_here"));
     }
 
     @Test
@@ -30,9 +28,9 @@ public class DoubleHashMapTest {
         String value = "foobar";
         map.put(key1, key2, "dummy");
         map.put(key1, key2, value);
-        Assert.assertEquals(value, map.get(key1, key2));
-        Assert.assertNotEquals("dummy", map.get(key1, key2));
-        Assert.assertNotEquals(value, map.get(key1, "nothing_here"));
-        Assert.assertNotEquals(value, map.get("nothing_here", "nothing_here"));
+        Assertions.assertEquals(value, map.get(key1, key2));
+        Assertions.assertNotEquals("dummy", map.get(key1, key2));
+        Assertions.assertNotEquals(value, map.get(key1, "nothing_here"));
+        Assertions.assertNotEquals(value, map.get("nothing_here", "nothing_here"));
     }
 }

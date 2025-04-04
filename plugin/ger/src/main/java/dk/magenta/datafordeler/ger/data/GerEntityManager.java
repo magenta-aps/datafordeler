@@ -3,8 +3,9 @@ package dk.magenta.datafordeler.ger.data;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
+import dk.magenta.datafordeler.core.database.Identification;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
@@ -167,7 +168,7 @@ public abstract class GerEntityManager<E extends GerEntity> extends EntityManage
                 timer.measure(TASK_POPULATE_DATA);
 
                 timer.start(TASK_SAVE);
-                session.save(entity);
+                session.persist(entity);
                 timer.measure(TASK_SAVE);
             }
         }

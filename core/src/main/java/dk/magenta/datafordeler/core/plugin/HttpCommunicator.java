@@ -1,32 +1,37 @@
 package dk.magenta.datafordeler.core.plugin;
 
 
-import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.*;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.ssl.SSLContexts;
+import org.apache.hc.client5.http.auth.CredentialsProvider;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.config.TlsConfig;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.client5.http.impl.auth.CredentialsProviderBuilder;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
+import org.apache.hc.client5.http.ssl.TlsSocketStrategy;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.http.ssl.TLS;
+import org.apache.hc.core5.ssl.SSLContexts;
+import org.apache.hc.core5.util.Timeout;
 
 import javax.net.ssl.SSLContext;
 import java.io.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
@@ -49,20 +54,25 @@ public class HttpCommunicator implements Communicator {
     private File keystoreFile;
     private String keystorePassword;
 
+    private HttpHost httpHost;
+
     public HttpCommunicator() {
     }
 
-    public HttpCommunicator(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public HttpCommunicator(URI httpHost, String username, String password) {
+        this(httpHost, username, password, null, null);
     }
 
-    public HttpCommunicator(File keystoreFile, String keystorePassword) {
-        this.keystoreFile = keystoreFile;
-        this.keystorePassword = keystorePassword;
+    public HttpCommunicator(URI httpHost, File keystoreFile, String keystorePassword) {
+        this(httpHost, null, null, keystoreFile, keystorePassword);
     }
 
-    public HttpCommunicator(String username, String password, File keystoreFile, String keystorePassword) {
+    public HttpCommunicator(URI httpHost, String username, String password, File keystoreFile, String keystorePassword) {
+        try {
+            this.httpHost = HttpHost.create(new URI(httpHost.getScheme(), null, httpHost.getHost(), httpHost.getPort(), null, null, null));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         this.username = username;
         this.password = password;
         this.keystoreFile = keystoreFile;
@@ -88,9 +98,8 @@ public class HttpCommunicator implements Communicator {
         } catch (IOException e) {
             throw new DataStreamException(e);
         }
-        StatusLine statusLine = response.getStatusLine();
-        if (statusLine.getStatusCode() != 200) {
-            throw new HttpStatusException(statusLine, uri);
+        if (response.getCode() != 200) {
+            throw new HttpStatusException(response, uri);
         }
         try {
             return response.getEntity().getContent();
@@ -121,10 +130,9 @@ public class HttpCommunicator implements Communicator {
         }
         post.setEntity(body);
         try {
-            HttpResponse response = httpclient.execute(post);
-            StatusLine statusLine = response.getStatusLine();
-            if (statusLine.getStatusCode() != 200) {
-                throw new HttpStatusException(statusLine, uri);
+            CloseableHttpResponse response = httpclient.execute(post);
+            if (response.getCode() != 200) {
+                throw new HttpStatusException(response, uri);
             }
             return response.getEntity().getContent();
         } catch (IOException e) {
@@ -132,26 +140,14 @@ public class HttpCommunicator implements Communicator {
         }
     }
 
-    @Override
-    public StatusLine send(URI endpoint, String payload) throws DataFordelerException {
-        CloseableHttpClient httpclient = this.buildClient();
-        HttpPost request = new HttpPost(endpoint);
-        try {
-            request.setEntity(new StringEntity(payload));
-            // TODO: Do this in a thread?
-            return httpclient.execute(request).getStatusLine();
-        } catch (IOException e) {
-            throw new DataStreamException(e);
-        }
-    }
-
     protected CloseableHttpClient buildClient() throws DataStreamException {
-        HttpClientBuilder builder = HttpClients.custom();
+        HttpClientBuilder httpclient = HttpClients.custom();
+
 
         if (this.username != null && this.password != null) {
-            CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-            credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(this.username, this.password));
-            builder.setDefaultCredentialsProvider(credentialsProvider);
+            CredentialsProvider credentialsProvider = CredentialsProviderBuilder.create()
+                    .add(this.httpHost, this.username, this.password.toCharArray()).build();
+            httpclient.setDefaultCredentialsProvider(credentialsProvider);
         }
 
         if (this.keystoreFile != null && this.keystorePassword != null) {
@@ -162,25 +158,24 @@ public class HttpCommunicator implements Communicator {
                 try (FileInputStream fileInputStream = new FileInputStream(this.keystoreFile)) {
                     keyStore.load(fileInputStream, this.keystorePassword.toCharArray());
                 }
-                SSLContextBuilder sslBuilder = SSLContexts.custom().loadKeyMaterial(
-                        keyStore,
-                        this.keystorePassword.toCharArray()
-                );
-                SSLContext sslContext = sslBuilder.build();
-                SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
-                        sslContext,
-                        new String[]{"TLSv1.2"},
-                        null,
-                        SSLConnectionSocketFactory.getDefaultHostnameVerifier()
-                );
-                builder.setSSLSocketFactory(socketFactory);
+                SSLContext sslContext = SSLContexts.custom().loadKeyMaterial(keyStore, this.keystorePassword.toCharArray()).build();
+
+                TlsSocketStrategy tlsStrategy = new DefaultClientTlsStrategy(sslContext);
+                HttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                        .setTlsSocketStrategy(tlsStrategy)
+                        .setDefaultTlsConfig(TlsConfig.custom()
+                                .setHandshakeTimeout(Timeout.ofSeconds(30))
+                                .setSupportedProtocols(TLS.V_1_2)
+                                .build())
+                        .build();
+                httpclient.setConnectionManager(connectionManager);
             } catch (NoSuchAlgorithmException | CertificateException | KeyManagementException | IOException | KeyStoreException | UnrecoverableKeyException e) {
                 throw new DataStreamException(e);
             }
         }
 
-        builder.setDefaultCookieStore(this.cookieStore);
-        return builder.build();
+        httpclient.setDefaultCookieStore(this.cookieStore);
+        return httpclient.build();
     }
 
     public void setUsername(String username) {

@@ -11,6 +11,8 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyStatusRecord;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -20,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +52,7 @@ public class ListCompanyStatusService {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/list", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/list", "/list/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<String> getSingle(HttpServletRequest request)
             throws DataFordelerException {
 

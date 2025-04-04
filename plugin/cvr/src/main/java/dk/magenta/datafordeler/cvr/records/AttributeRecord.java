@@ -10,10 +10,10 @@ import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
-import javax.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -218,7 +218,7 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
 
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
-        this.getValues().traverse(setCallback, itemCallback);
         super.traverse(setCallback, itemCallback);
+        this.getValues().traverse(setCallback, itemCallback);
     }
 }

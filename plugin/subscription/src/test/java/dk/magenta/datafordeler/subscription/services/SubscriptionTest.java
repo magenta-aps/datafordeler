@@ -1,27 +1,19 @@
 package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -30,17 +22,13 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
-
-
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SubscriptionTest extends TestBase {
 
     MockMvc mvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         initMocks(this);
@@ -61,7 +49,7 @@ public class SubscriptionTest extends TestBase {
             subscriptions.add(new Subscriber("user4"));
 
             for (Subscriber subscriber : subscriptions) {
-                session.save(subscriber);
+                session.persist(subscriber);
             }
 
             transaction.commit();
@@ -69,9 +57,9 @@ public class SubscriptionTest extends TestBase {
     }
 
     private void assertJsonEquals(String jsonExpected, String jsonActual) throws JsonProcessingException {
-        Assert.assertTrue(
-                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual),
-                new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)) == 0
+        Assertions.assertEquals(
+                0, new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(jsonActual)),
+                objectMapper.readTree(jsonExpected) + "   !=   " + objectMapper.readTree(jsonActual)
         );
     }
 
@@ -105,7 +93,7 @@ public class SubscriptionTest extends TestBase {
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             DataEventSubscription dataEventSubscription = subscriber.getDataEventSubscription().iterator().next();
             CprList cprList = new CprList("listId");
-            session.save(cprList);
+            session.persist(cprList);
             dataEventSubscription.setCprList(cprList);
             transaction.commit();
         }
@@ -129,7 +117,7 @@ public class SubscriptionTest extends TestBase {
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
             BusinessEventSubscription businessEventSubscription = subscriber.getBusinessEventSubscription().iterator().next();
             CprList cprList = new CprList("listId1");
-            session.save(cprList);
+            session.persist(cprList);
             businessEventSubscription.setCprList(cprList);
             transaction.commit();
         }
@@ -139,8 +127,8 @@ public class SubscriptionTest extends TestBase {
             Query query = session.createQuery("select a from " + Subscriber.class.getName() + " a where a.subscriberId = :subscriberId", Subscriber.class);
             query.setParameter("subscriberId", "user2");
             Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-            Assert.assertEquals(1, subscriber.getBusinessEventSubscription().size());
-            Assert.assertEquals(1, subscriber.getDataEventSubscription().size());
+            Assertions.assertEquals(1, subscriber.getBusinessEventSubscription().size());
+            Assertions.assertEquals(1, subscriber.getDataEventSubscription().size());
             transaction.commit();
         }
 
@@ -148,7 +136,7 @@ public class SubscriptionTest extends TestBase {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             CprList pnrList = new CprList("cprList1");
-            session.save(pnrList);
+            session.persist(pnrList);
             transaction.commit();
         }
 
@@ -156,7 +144,7 @@ public class SubscriptionTest extends TestBase {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             CprList pnrList = new CprList("cprList2");
-            session.save(pnrList);
+            session.persist(pnrList);
             transaction.commit();
         }
 
@@ -165,7 +153,7 @@ public class SubscriptionTest extends TestBase {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "cprList2");
-            Assert.assertEquals(1, query.getResultList().size());
+            Assertions.assertEquals(1, query.getResultList().size());
             transaction.commit();
         }
 
@@ -179,10 +167,10 @@ public class SubscriptionTest extends TestBase {
             SubscribedCprNumber prn1 = new SubscribedCprNumber(pnrList, "1234");
             SubscribedCprNumber prn2 = new SubscribedCprNumber(pnrList, "1235");
             SubscribedCprNumber prn3 = new SubscribedCprNumber(pnrList, "1236");
-            session.save(prn1);
-            session.save(prn2);
-            session.save(prn3);
-            Assert.assertEquals(1, query.getResultList().size());
+            session.persist(prn1);
+            session.persist(prn2);
+            session.persist(prn3);
+            Assertions.assertEquals(1, query.getResultList().size());
             transaction.commit();
         }
 
@@ -194,7 +182,7 @@ public class SubscriptionTest extends TestBase {
 
             CprList pnrList = (CprList) query.getResultList().get(0);
 
-            Assert.assertEquals(3, pnrList.getCpr().size());
+            Assertions.assertEquals(3, pnrList.getCpr().size());
             transaction.commit();
         }
 
@@ -225,7 +213,7 @@ public class SubscriptionTest extends TestBase {
 
             Subscriber subscriber = (Subscriber) query2.getResultList().get(0);
             BusinessEventSubscription businessEventSubscription = subscriber.getBusinessEventSubscription().iterator().next();
-            Assert.assertEquals(3, businessEventSubscription.getCprList().getCpr().size());
+            Assertions.assertEquals(3, businessEventSubscription.getCprList().getCpr().size());
             transaction.commit();
         }
     }
@@ -276,7 +264,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals(
                 "{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}",
                 response.getBody()
@@ -293,7 +281,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals(
                 "{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}",
                 response.getBody()
@@ -310,7 +298,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     /**
@@ -356,7 +344,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
@@ -365,7 +353,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber",
@@ -395,7 +383,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/",
@@ -403,7 +391,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber",
@@ -411,7 +399,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals(
                 "[" +
                         "{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
@@ -467,7 +455,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals(
                 "{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}",
                 response.getBody()
@@ -479,7 +467,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(
+        Assertions.assertEquals(
                 objectMapper.readTree("[" +
                         "{\"subscriberId\":\"user1\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
                         "{\"subscriberId\":\"user3\",\"businessEventSubscription\":[],\"dataEventSubscription\":[],\"cprLists\":[],\"cvrLists\":[]}," +
@@ -507,7 +495,7 @@ public class SubscriptionTest extends TestBase {
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription1", "", subscriber));
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription2", "", subscriber));
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", "", subscriber));
-            session.save(subscriber);
+            session.persist(subscriber);
             transaction.commit();
         }
 
@@ -526,7 +514,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals(
                 "[" +
                         "{\"cprList\":null,\"businessEventId\":\"subscription1\",\"kodeId\":\"A01\"}," +
@@ -542,7 +530,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription",
@@ -550,7 +538,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         assertJsonEquals("[" +
                         "{\"cprList\":null,\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A04\"}," +
@@ -567,7 +555,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
@@ -575,7 +563,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         assertJsonEquals(
                 "[" +
@@ -614,7 +602,7 @@ public class SubscriptionTest extends TestBase {
             subscriber.addDataEventSubscription(ds1);
             subscriber.addDataEventSubscription(ds2);
             subscriber.addDataEventSubscription(ds3);
-            session.save(subscriber);
+            session.persist(subscriber);
             transaction.commit();
         }
 
@@ -632,7 +620,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals("[" +
                 "{\"cprList\":null,\"businessEventId\":\"subscription1\",\"kodeId\":\"A01\"}," +
                 "{\"cprList\":null,\"businessEventId\":\"subscription2\",\"kodeId\":\"A01\"}," +
@@ -647,7 +635,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription",
@@ -655,7 +643,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals(
                 "[" +
                 "{\"cprList\":null,\"businessEventId\":\"subscription3\",\"kodeId\":\"A01\"}," +
@@ -670,7 +658,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals("[" +
                 "{\"cprList\":null,\"dataEventId\":\"subscription3\",\"cprList\":null,\"cvrList\":null,\"kodeId\":\"\"}," +
                 "{\"cprList\":null,\"dataEventId\":\"subscription1\",\"cprList\":null,\"cvrList\":null,\"kodeId\":\"\"}," +
@@ -684,7 +672,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         //JSONAssert.assertEquals("{\"subscriberId\":\"user2\",\"businessEventSubscription\":[],\"dataEventSubscription\":[]}", response.getBody(), false);
 
         response = restTemplate.exchange(
@@ -693,7 +681,7 @@ public class SubscriptionTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         assertJsonEquals(
                 "[" +
                 "{\"cprList\":null,\"dataEventId\":\"subscription3\",\"kodeId\":\"\",\"cprList\":null,\"cvrList\":null}," +

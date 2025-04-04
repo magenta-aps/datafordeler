@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.parsers.ResidenceParser;
 import dk.magenta.datafordeler.cpr.records.residence.ResidenceRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -18,17 +19,18 @@ import java.util.UUID;
 @Component
 public class ResidenceEntityManager extends CprGeoEntityManager<ResidenceRecord, ResidenceEntity, ResidenceRegistration, ResidenceEffect, ResidenceBaseData> {
 
-    @Autowired
     private ResidenceEntityService residenceEntityService;
 
-    @Autowired
     private ResidenceParser residenceParser;
 
-    @Autowired
     private SessionManager sessionManager;
 
-    public ResidenceEntityManager() {
+    @Autowired
+    public ResidenceEntityManager(@Lazy ResidenceEntityService residenceEntityService, @Lazy ResidenceParser residenceParser, @Lazy SessionManager sessionManager) {
         this.managedEntityClass = ResidenceEntity.class;
+        this.residenceEntityService = residenceEntityService;
+        this.residenceParser = residenceParser;
+        this.sessionManager = sessionManager;
     }
 
     @Override

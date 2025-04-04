@@ -3,21 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.magenta.datafordeler</groupId>
-    <artifactId>datafordeler-plugin-cvr</artifactId>
-    <version>1.2</version>
-    <packaging>jar</packaging>
-    <name>datafordeler-plugin-cvr</name>
-    <description>Company (CVR) plugin for Magenta&#39;s Greenlandic System</description>
-
     <!--The identifier of the parent POM-->
     <parent>
         <groupId>dk.magenta.datafordeler</groupId>
-        <artifactId>datafordeler-plugin-parent</artifactId>
-        <relativePath>../parent/pom.xml</relativePath>
-        <version>1.2</version>
+        <artifactId>parent</artifactId>
+        <relativePath>../../parent/pom.xml</relativePath>
+        <version>2.0.0</version>
     </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>cvr</artifactId>
+    <version>2.0.0</version>
+    <packaging>jar</packaging>
+    <name>datafordeler-plugin-cvr</name>
+    <description>Company (CVR) plugin for Magenta's Greenlandic System</description>
+
 
     <properties>
     </properties>
@@ -33,24 +33,19 @@
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>datafordeler-core</artifactId>
-            <version>1.2</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
-            <artifactId>datafordeler-plugin-geo</artifactId>
-            <version>1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${hibernate.jpa.version}</version>
+            <artifactId>geo</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- Unit testing -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -59,11 +54,6 @@
             <version>${commons.io.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -76,14 +66,12 @@
             <artifactId>jackson-dataformat-csv</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-
-        <!-- OpenSAML library -->
-        <!-- https://mvnrepository.com/artifact/org.opensaml/opensaml -->
         <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
-            <version>2.6.4</version>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
+
 
     </dependencies>
 

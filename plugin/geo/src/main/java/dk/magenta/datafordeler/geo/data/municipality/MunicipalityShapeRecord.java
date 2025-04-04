@@ -4,10 +4,9 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.common.AreaRecord;
-
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = GeoPlugin.DEBUG_TABLE_PREFIX + MunicipalityShapeRecord.TABLE_NAME, indexes = {

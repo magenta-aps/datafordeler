@@ -37,7 +37,6 @@ public class DemoRegisterManager extends RegisterManager {
     @Autowired
     private DemoConfigurationManager configurationManager;
 
-    @Autowired
     private DemoPlugin plugin;
 
     @Autowired
@@ -70,6 +69,10 @@ public class DemoRegisterManager extends RegisterManager {
         return this.plugin;
     }
 
+    public void setPlugin(DemoPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public SessionManager getSessionManager() {
         return this.sessionManager;
@@ -84,7 +87,6 @@ public class DemoRegisterManager extends RegisterManager {
     }
 
     public void setPort(int port) {
-        System.out.println("setting port on "+id+" to "+port);
         this.port = port;
         PluginManager pluginManager = this.plugin.getPluginManager();
 
@@ -109,7 +111,6 @@ public class DemoRegisterManager extends RegisterManager {
     @Override
     public URI getBaseEndpoint() {
         try {
-            System.out.println(this.port +" on "+id);
             return new URI("http", null, "localhost", this.port, "/test", null, null);
         } catch (URISyntaxException e) {
             e.printStackTrace();

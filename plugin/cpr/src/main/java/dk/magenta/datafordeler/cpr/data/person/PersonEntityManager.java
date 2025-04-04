@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import dk.magenta.datafordeler.core.Environment;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
@@ -22,15 +21,17 @@ import dk.magenta.datafordeler.cpr.records.person.data.ParentDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import dk.magenta.datafordeler.cpr.records.service.PersonEntityRecordService;
 import dk.magenta.datafordeler.cpr.synchronization.SubscriptionTimerTask;
+import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,16 +44,12 @@ import java.util.stream.Collectors;
 @Component
 public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord, PersonEntity> {
 
-    @Autowired
     private CprConfigurationManager configurationManager;
 
-    @Autowired
     private PersonEntityRecordService personEntityService;
 
-    @Autowired
     private PersonParser personParser;
 
-    @Autowired
     private SessionManager sessionManager;
 
     @Autowired
@@ -60,8 +57,13 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
     private static PersonEntityManager instance;
 
-    public PersonEntityManager() {
+    @Autowired
+    public PersonEntityManager(@Lazy CprConfigurationManager configurationManager, @Lazy PersonEntityRecordService personEntityRecordService, @Lazy SessionManager sessionManager, @Lazy PersonParser personParser) {
         instance = this;
+        this.configurationManager = configurationManager;
+        this.personEntityService = personEntityRecordService;
+        this.sessionManager = sessionManager;
+        this.personParser = personParser;
     }
 
     public int getJobId() {
@@ -117,6 +119,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     @Override
     public void parseData(InputStream registrationData, ImportMetadata importMetadata) throws DataFordelerException {
         try {
+            Session session = importMetadata.getSession();
             //With this flag true initiated testdata is cleared before initiation of new data is initiated
             if (importMetadata.getImportConfiguration() != null &&
                     importMetadata.getImportConfiguration().has("cleantestdatafirst") &&
@@ -124,32 +127,37 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 cleanDemoData();
             }
             super.parseData(registrationData, importMetadata);
+            boolean wrappedInTransaction =importMetadata.isTransactionInProgress();
+            if (!wrappedInTransaction) {
+                session.beginTransaction();
+                importMetadata.setTransactionInProgress(true);
+            }
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
-                this.createSubscription(this.nonGreenlandicCprNumbers);
+                this.createSubscription(session, this.nonGreenlandicCprNumbers);
             }
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicFatherCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
-                try (Session session = sessionManager.getSessionFactory().openSession()) {
-                    PersonRecordQuery personQuery = new PersonRecordQuery();
-                    personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicFatherCprNumbers);
-                    personQuery.applyFilters(session);
-                    List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-                    for (PersonEntity person : personEntities) {
-                        nonGreenlandicFatherCprNumbers.remove(person.getPersonnummer());
-                    }
+                PersonRecordQuery personQuery = new PersonRecordQuery();
+                personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicFatherCprNumbers);
+                personQuery.applyFilters(session);
+                List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
+                for (PersonEntity person : personEntities) {
+                    nonGreenlandicFatherCprNumbers.remove(person.getPersonnummer());
                 }
-                this.createSubscription(this.nonGreenlandicFatherCprNumbers);
+                this.createSubscription(session, this.nonGreenlandicFatherCprNumbers);
             }
             if (this.isSetupSubscriptionEnabled() && !this.nonGreenlandicChildrenCprNumbers.isEmpty() && !importMetadata.hasImportConfiguration()) {
-                try (Session session = sessionManager.getSessionFactory().openSession()) {
-                    PersonRecordQuery personQuery = new PersonRecordQuery();
-                    personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicChildrenCprNumbers);
-                    personQuery.applyFilters(session);
-                    List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-                    for (PersonEntity person : personEntities) {
-                        nonGreenlandicChildrenCprNumbers.remove(person.getPersonnummer());
-                    }
+                PersonRecordQuery personQuery = new PersonRecordQuery();
+                personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, nonGreenlandicChildrenCprNumbers);
+                personQuery.applyFilters(session);
+                List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
+                for (PersonEntity person : personEntities) {
+                    nonGreenlandicChildrenCprNumbers.remove(person.getPersonnummer());
                 }
-                this.createSubscription(this.nonGreenlandicChildrenCprNumbers);
+                this.createSubscription(session, this.nonGreenlandicChildrenCprNumbers);
+            }
+            if (!wrappedInTransaction) {
+                session.getTransaction().commit();
+                importMetadata.setTransactionInProgress(false);
             }
         } finally {
             this.nonGreenlandicCprNumbers.clear();
@@ -165,20 +173,25 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     public void cleanDemoData() {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             PersonRecordQuery personQuery = new PersonRecordQuery();
-            String[] testPersonList = configurationManager.getConfiguration().getTestpersonList().split(",");
+            List<String> testPersonList = Arrays.stream(configurationManager.getConfiguration().getTestpersonList().split(",")).filter(s -> !s.isBlank()).map(String::strip).collect(Collectors.toList());
             personQuery.setParameter(
                     PersonRecordQuery.PERSONNUMMER,
-                    Arrays.stream(testPersonList).filter(s -> !s.isBlank()).map(String::strip).collect(Collectors.toList())
+                    testPersonList
             );
-            session.beginTransaction();
-            personQuery.setPageSize(1000);
+            personQuery.setPageSize(1000000);
             personQuery.applyFilters(session);
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            for (PersonEntity personForDeletion : personEntities) {
-                System.out.println("Cleaning "+personForDeletion.getPersonnummer());
-                session.delete(personForDeletion);
+            Transaction transaction = session.beginTransaction();
+            try {
+                for (PersonEntity personForDeletion : personEntities) {
+                    session.remove(personForDeletion);
+                }
+                transaction.commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+                transaction.rollback();
+                throw e;
             }
-            session.getTransaction().commit();
         } catch (Exception e) {
             log.error("Failed cleaning data", e);
         }
@@ -294,8 +307,8 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         return personEntity;
     }
 
-    public void createSubscription(Set<String> addCprNumbers) {
-        this.createSubscription(addCprNumbers, Collections.EMPTY_SET);
+    public void createSubscription(Session session, Set<String> addCprNumbers) {
+        this.createSubscription(session, addCprNumbers, Collections.EMPTY_SET);
     }
 
     /**
@@ -304,56 +317,55 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
      * @param addCprNumbers
      * @param removeCprNumbers
      */
-    public void createSubscription(Set<String> addCprNumbers, Set<String> removeCprNumbers) {
-        this.log.info("Collected these numbers for subscription: " + addCprNumbers);
-
-        HashSet<String> cprNumbersToBeAdded = new HashSet<String>(addCprNumbers);
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
-            List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            HashMap<String, PersonSubscription> map = new HashMap<>();
-            for (PersonSubscription subscription : existingSubscriptions) {
-                map.put(subscription.getPersonNumber(), subscription);
-            }
-
-            cprNumbersToBeAdded.removeAll(removeCprNumbers);
-            cprNumbersToBeAdded.removeAll(map.keySet());
-
+    public void createSubscription(Session session, Set<String> addCprNumbers, Set<String> removeCprNumbers) {
+        this.log.debug("Collected these numbers for subscription: " + addCprNumbers+", removal: "+removeCprNumbers);
+        Transaction t = session.getTransaction();
+        boolean insideTransaction = t.getStatus() != TransactionStatus.NOT_ACTIVE;
+        if (!insideTransaction) {
             session.beginTransaction();
-            try {
-                for (String add : cprNumbersToBeAdded) {
-                    PersonSubscription newSubscription = new PersonSubscription();
-                    newSubscription.setPersonNumber(add);
-                    newSubscription.setAssignment(PersonSubscriptionAssignmentStatus.CreatedInTable);
-                    session.save(newSubscription);
-                }
-                for (String remove : removeCprNumbers) {
-                    PersonSubscription removeSubscription = map.get(remove);
-                    if (removeSubscription != null) {
-                        session.delete(removeSubscription);
-                    }
-                }
-                session.getTransaction().commit();
-            } catch (Exception e) {
-                session.getTransaction().rollback();
-                log.warn(e);
+        }
+
+        HashSet<String> cprNumbersToBeAdded = new HashSet<>(addCprNumbers);
+        List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
+        HashMap<String, PersonSubscription> map = new HashMap<>();
+        for (PersonSubscription subscription : existingSubscriptions) {
+            map.put(subscription.getPersonNumber(), subscription);
+        }
+
+        cprNumbersToBeAdded.removeAll(removeCprNumbers);
+        cprNumbersToBeAdded.removeAll(map.keySet());
+        for (String add : cprNumbersToBeAdded) {
+            PersonSubscription newSubscription = new PersonSubscription();
+            newSubscription.setPersonNumber(add);
+            newSubscription.setAssignment(PersonSubscriptionAssignmentStatus.CreatedInTable);
+            session.persist(newSubscription);
+        }
+        for (String remove : removeCprNumbers) {
+            PersonSubscription removeSubscription = map.get(remove);
+            if (removeSubscription != null) {
+                session.remove(removeSubscription);
             }
-        } finally {
-            session.close();
+        }
+        if (!insideTransaction) {
+            session.getTransaction().commit();
+        }
+        this.log.info("Subscription created");
+    }
+
+    public void createSubscriptionFile() {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            this.createSubscriptionFile(session);
         }
     }
 
     /**
      * Create the subscription-file from the table of subscriptions, and upload them to FTP-server
      */
-    public void createSubscriptionFile() {
+    public void createSubscriptionFile(Session session) {
         log.info("Creating subscription file");
         String charset = this.getConfiguration().getRegisterCharset(this);
 
-        Transaction transaction = null;
-        Session session = sessionManager.getSessionFactory().openSession();
         try {
-            transaction = session.beginTransaction();
 
             Query<PersonSubscription> subscriptionQuery = session.createQuery(
                     "from "+PersonSubscription.class.getCanonicalName()+" "+
@@ -404,15 +416,11 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             log.info("Uploading subscription file with "+subscriptionList.size()+" items");
             this.addSubscription(content.toString(), charset, this);
             for (PersonSubscription subscription : subscriptionList) {
-                session.save(subscription);
+                session.persist(subscription);
             }
-            transaction.commit();
 
         } catch (Exception e) {
             log.error(e);
-            transaction.rollback();
-        } finally {
-            session.close();
         }
     }
 

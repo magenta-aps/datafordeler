@@ -2,14 +2,14 @@ package dk.magenta.datafordeler.gladdrreg.data.municipality;
 
 import dk.magenta.datafordeler.core.database.Registration;
 
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 
 /**
  * Created by lars on 16-05-17.
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "gladdrreg_municipality_registration", indexes = {
         @Index(name = "gladdrreg_minicipality_entity", columnList = "entity_id"),
         @Index(name = "gladdrreg_municipality_registration_from", columnList = "registrationFrom"),

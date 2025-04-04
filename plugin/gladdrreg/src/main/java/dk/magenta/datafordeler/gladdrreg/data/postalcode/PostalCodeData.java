@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.gladdrreg.data.SumiffiikData;
 
-import javax.persistence.Column;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by lars on 16-05-17.
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "gladdrreg_postalcode_data", indexes = {
         @Index(name = "gladdrreg_postalcode_code", columnList = PostalCodeData.DB_FIELD_CODE),
         @Index(name = "gladdrreg_postalcode_name", columnList = PostalCodeData.DB_FIELD_NAME)

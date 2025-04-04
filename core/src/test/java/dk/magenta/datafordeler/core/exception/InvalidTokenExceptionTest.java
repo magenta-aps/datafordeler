@@ -1,13 +1,10 @@
 package dk.magenta.datafordeler.core.exception;
 
 import dk.magenta.datafordeler.core.Application;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 public class InvalidTokenExceptionTest {
 
@@ -16,16 +13,16 @@ public class InvalidTokenExceptionTest {
         String message = "Your token is bad, and you should feel bad";
         InvalidTokenException exception1 = new InvalidTokenException(message);
 
-        Assert.assertEquals(message, exception1.getMessage());
-        Assert.assertNull(exception1.getCause());
-        Assert.assertEquals("datafordeler.authorization.invalid_token", exception1.getCode());
+        Assertions.assertEquals(message, exception1.getMessage());
+        Assertions.assertNull(exception1.getCause());
+        Assertions.assertEquals("datafordeler.authorization.invalid_token", exception1.getCode());
 
         NullPointerException cause = new NullPointerException();
         InvalidTokenException exception2 = new InvalidTokenException(message, cause);
 
-        Assert.assertEquals(message, exception2.getMessage());
-        Assert.assertEquals(cause, exception2.getCause());
-        Assert.assertEquals("datafordeler.authorization.invalid_token", exception2.getCode());
+        Assertions.assertEquals(message, exception2.getMessage());
+        Assertions.assertEquals(cause, exception2.getCause());
+        Assertions.assertEquals("datafordeler.authorization.invalid_token", exception2.getCode());
     }
 
 }

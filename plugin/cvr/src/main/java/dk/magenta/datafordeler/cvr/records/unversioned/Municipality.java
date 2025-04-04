@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.Collections;
 import java.util.HashMap;
@@ -116,7 +116,7 @@ public class Municipality extends DatabaseEntry {
                 municipality = QueryManager.getItem(session, Municipality.class, Collections.singletonMap(DB_FIELD_CODE, code));
                 if (municipality != null && municipality.name.equals("") && name != null) {
                     municipality.setName(name);
-                    session.save(municipality);
+                    session.persist(municipality);
                 }
             }
             if (municipality == null) {
@@ -127,7 +127,7 @@ public class Municipality extends DatabaseEntry {
                     name = "";
                 }
                 municipality.setName(name);
-                session.save(municipality);
+                session.persist(municipality);
             } else {
                 log.debug("Municipality " + code + " found (" + municipality.getId() + ")");
             }

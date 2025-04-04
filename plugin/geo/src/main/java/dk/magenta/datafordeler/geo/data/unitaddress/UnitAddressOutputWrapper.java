@@ -3,10 +3,10 @@ package dk.magenta.datafordeler.geo.data.unitaddress;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.geo.data.GeoOutputWrapper;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

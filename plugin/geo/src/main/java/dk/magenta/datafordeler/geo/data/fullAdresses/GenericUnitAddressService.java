@@ -20,6 +20,8 @@ import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -30,8 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -49,8 +49,8 @@ public class GenericUnitAddressService {
         husNummer("accessAddressNumberRecord.number", false),
         etage("unitAddressFloor.floor", false),
         bloknavn("accessAddressBlockNameRecord.name", false),
-        kommune_kode("geoMunipialicityEntity.code", true),
-        kommune_navn("municipalityName.name", false),
+        kommune_kode("geoMunicipalityEntity.code", true),
+        kommune_navn("municipalityNameRecord.name", false),
         lokalitet_kode("localityRecord.code", false),
         lokalitet_navn("localityName.name", false),
         post_kode("postcodeEntity.code", true),
@@ -66,7 +66,7 @@ public class GenericUnitAddressService {
             this.numberType = numberType;
         }
 
-        public String getSerarchString() {
+        public String getSearchString() {
             return searchString;
         }
 
@@ -104,7 +104,7 @@ public class GenericUnitAddressService {
     private final Logger log = LogManager.getLogger(AdresseService.class.getCanonicalName());
 
 
-    @RequestMapping("/search")
+    @RequestMapping(path={"/search", "/search/"})
     public Envelope getLocalities(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws DataFordelerException, IOException {
 
         //This was supposed to use the BaseQuery from core, but it was not completely supported
@@ -124,32 +124,32 @@ public class GenericUnitAddressService {
             envelope.setRequestTimestamp(user.getCreationTime());
             envelope.setUsername(user.toString());
 
-            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunipialicityEntity, geoMunipialicityEntity.name AS munipialicityName " +
-                    "FROM " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity " +
-                    "JOIN " + UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity." + UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + "=accessAddressEntity." + AccessAddressEntity.DB_FIELD_IDENTIFICATION + " " +
-                    "JOIN " + UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor." + UnitAddressFloorRecord.DB_FIELD_ENTITY + "=unitAddressEntity." + "id" + " " +
+            String hql = "SELECT DISTINCT accessAddressEntity, unitAddressEntity, localityRecord, postcodeEntity, roadEntity, geoMunicipalityEntity " +
+                    "\nFROM " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity " +
+                    "\nLEFT JOIN " + UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity." + UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + "=accessAddressEntity." + AccessAddressEntity.DB_FIELD_IDENTIFICATION + " " +
+                    "\nLEFT JOIN " + UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor." + UnitAddressFloorRecord.DB_FIELD_ENTITY + "=unitAddressEntity" + " " +
 
-                    "JOIN " + AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord." + AccessAddressHouseNumberRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "\nLEFT JOIN " + AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord." + AccessAddressHouseNumberRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
 
-                    "JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
-                    "JOIN " + GeoLocalityEntity.class.getCanonicalName() + " localityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_CODE + "=localityRecord." + GeoLocalityEntity.DB_FIELD_CODE + " " +
-                    "JOIN " + LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName." + LocalityNameRecord.DB_FIELD_ENTITY + "=localityRecord." + "id" + " " +
+                    "\nLEFT JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
+                    "\nLEFT JOIN " + GeoLocalityEntity.class.getCanonicalName() + " localityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_CODE + "=localityRecord." + GeoLocalityEntity.DB_FIELD_CODE + " " +
+                    "\nLEFT JOIN " + LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName." + LocalityNameRecord.DB_FIELD_ENTITY + "=localityRecord" + " " +
 
-                    "JOIN " + AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord." + AccessAddressBlockNameRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
+                    "\nLEFT JOIN " + AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord." + AccessAddressBlockNameRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
 
-                    "JOIN " + AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
-                    "JOIN " + PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_CODE + "=postcodeEntity." + PostcodeEntity.DB_FIELD_CODE + " " +
-                    "JOIN " + PostcodeNameRecord.class.getCanonicalName() + " postcodeName ON postcodeName." + PostcodeNameRecord.DB_FIELD_ENTITY + "=postcodeEntity." + "id" + " " +
+                    "\nLEFT JOIN " + AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
+                    "\nLEFT JOIN " + PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_CODE + "=postcodeEntity." + PostcodeEntity.DB_FIELD_CODE + " " +
+                    "\nLEFT JOIN " + PostcodeNameRecord.class.getCanonicalName() + " postcodeName ON postcodeName." + PostcodeNameRecord.DB_FIELD_ENTITY + "=postcodeEntity" + " " +
 
-                    "JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity." + "id" + " " +
-                    "JOIN " + GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE + "=roadEntity." + GeoRoadEntity.DB_FIELD_IDENTIFICATION + " " +
-                    "JOIN " + RoadNameRecord.class.getCanonicalName() + " roadName ON roadName." + RoadNameRecord.DB_FIELD_ENTITY + "=roadEntity." + "id" + " " +
+                    "\nLEFT JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
+                    "\nLEFT JOIN " + GeoRoadEntity.class.getCanonicalName() + " roadEntity ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ROAD_REFERENCE + "=roadEntity." + GeoRoadEntity.DB_FIELD_IDENTIFICATION + " " +
+                    "\nLEFT JOIN " + RoadNameRecord.class.getCanonicalName() + " roadName ON roadName." + RoadNameRecord.DB_FIELD_ENTITY + "=roadEntity" + " " +
 
-                    "JOIN " + RoadMunicipalityRecord.class.getCanonicalName() + " roadMunipialicityRecord ON roadMunipialicityRecord." + RoadMunicipalityRecord.DB_FIELD_CODE + "=accessAddressRoadRecord." + "municipalityCode" + " " +
-                    "JOIN " + GeoMunicipalityEntity.class.getCanonicalName() + " geoMunipialicityEntity ON geoMunipialicityEntity." + GeoMunicipalityEntity.DB_FIELD_CODE + "=roadMunipialicityRecord." + RoadMunicipalityRecord.DB_FIELD_CODE + " " +
-                    "JOIN " + MunicipalityNameRecord.class.getCanonicalName() + " municipalityName ON municipalityName." + MunicipalityNameRecord.DB_FIELD_ENTITY + "=geoMunipialicityEntity." + "id" + " " +
+                    "\nLEFT JOIN " + RoadMunicipalityRecord.class.getCanonicalName() + " roadMunicipalityRecord ON roadMunicipalityRecord." + RoadMunicipalityRecord.DB_FIELD_CODE + "=accessAddressRoadRecord." + "municipalityCode" + " " +
+                    "\nLEFT JOIN " + GeoMunicipalityEntity.class.getCanonicalName() + " geoMunicipalityEntity ON geoMunicipalityEntity." + GeoMunicipalityEntity.DB_FIELD_CODE + "=roadMunicipalityRecord." + RoadMunicipalityRecord.DB_FIELD_CODE + " " +
+                    "\nLEFT JOIN " + MunicipalityNameRecord.class.getCanonicalName() + " municipalityNameRecord ON municipalityNameRecord." + MunicipalityNameRecord.DB_FIELD_ENTITY + "=geoMunicipalityEntity" + " " +
 
-                    " WHERE geoMunipialicityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
+                    "\nWHERE geoMunicipalityEntity.code > 900 ";//Just always filter on greenland adresses no matter what
 
             for (String key : requestParams.keySet()) {
                 String parameterName = key;
@@ -164,18 +164,18 @@ public class GenericUnitAddressService {
                 if (parameterMappings.containsKey(parameterName)) {
                     if (parameterMappings.get(parameterName).isNumberType()) {
                         if ("lt".equals(comparator)) {
-                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + "<:" + parameterName;
+                            hql += "\n AND " + parameterMappings.get(parameterName).getSearchString() + "<:" + parameterName;
                         } else if ("gt".equals(comparator)) {
-                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + ">:" + parameterName;
+                            hql += "\n AND " + parameterMappings.get(parameterName).getSearchString() + ">:" + parameterName;
                         } else {
-                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + "=:" + parameterName;
+                            hql += "\n AND " + parameterMappings.get(parameterName).getSearchString() + "=:" + parameterName;
                         }
                     } else {
                         String value = requestParams.getFirst(key);
                         if (value.contains("*")) {
-                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + " LIKE :" + parameterName;
+                            hql += "\n AND " + parameterMappings.get(parameterName).getSearchString() + " LIKE :" + parameterName;
                         } else {
-                            hql += " AND " + parameterMappings.get(parameterName).getSerarchString() + " = :" + parameterName;
+                            hql += "\n AND " + parameterMappings.get(parameterName).getSearchString() + " = :" + parameterName;
                         }
                     }
                 }
@@ -223,6 +223,7 @@ public class GenericUnitAddressService {
             ArrayList<FullAddressDTO> adressElementList = new ArrayList<FullAddressDTO>();
 
             for (Object[] item : resultList) {
+
                 AccessAddressEntity accessAddressEntity = (AccessAddressEntity) item[0];
                 UnitAddressEntity unitAddressEntity = (UnitAddressEntity) item[1];
                 GeoLocalityEntity localityRecord = (GeoLocalityEntity) item[2];

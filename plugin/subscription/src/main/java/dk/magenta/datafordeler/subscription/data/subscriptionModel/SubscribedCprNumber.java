@@ -2,8 +2,7 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(
@@ -41,7 +40,7 @@ public class SubscribedCprNumber extends DatabaseEntry {
         this.cprNumber = cprNumber;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cprlistId")
     private CprList cprList;
 

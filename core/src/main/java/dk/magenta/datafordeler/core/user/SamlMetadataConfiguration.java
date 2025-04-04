@@ -1,13 +1,20 @@
 package dk.magenta.datafordeler.core.user;
 
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
-import org.opensaml.Configuration;
-import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
-import org.opensaml.saml2.metadata.provider.MetadataProvider;
-import org.opensaml.security.MetadataCredentialResolver;
-import org.opensaml.xml.parse.BasicParserPool;
-import org.opensaml.xml.security.keyinfo.KeyInfoCredentialResolver;
-import org.opensaml.xml.signature.impl.ExplicitKeySignatureTrustEngine;
+import net.shibboleth.shared.component.ComponentInitializationException;
+import net.shibboleth.shared.resolver.ResolverException;
+import net.shibboleth.shared.xml.ParserPool;
+import net.shibboleth.shared.xml.impl.BasicParserPool;
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.config.InitializationService;
+import org.opensaml.saml.metadata.resolver.MetadataResolver;
+import org.opensaml.saml.metadata.resolver.RoleDescriptorResolver;
+import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
+import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
+import org.opensaml.saml.security.impl.MetadataCredentialResolver;
+import org.opensaml.xmlsec.config.impl.DefaultSecurityConfigurationBootstrap;
+import org.opensaml.xmlsec.keyinfo.KeyInfoCredentialResolver;
+import org.opensaml.xmlsec.signature.support.impl.ExplicitKeySignatureTrustEngine;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -19,28 +26,62 @@ import java.io.File;
 @PropertySource("classpath:/application.properties")
 public class SamlMetadataConfiguration {
 
+    static {
+        try {
+            InitializationService.initialize();
+        } catch (InitializationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Bean
-    public MetadataProvider samlMetadataProvider(TokenConfigProperties config)
-            throws Exception {
+    public ParserPool parserPool() throws ComponentInitializationException {
+        BasicParserPool parserPool = new BasicParserPool();
+        parserPool.setMaxPoolSize(100);
+        parserPool.setCoalescing(true);
+        parserPool.setIgnoreComments(true);
+        parserPool.setIgnoreElementContentWhitespace(true);
+        parserPool.setNamespaceAware(true);
+        parserPool.setExpandEntityReferences(false);
+        parserPool.setXincludeAware(false);
+        parserPool.initialize();
+        return parserPool;
+    }
+
+    @Bean
+    public MetadataResolver filesystemMetadataResolver(TokenConfigProperties config, ParserPool parserPool) throws ConfigurationException, ResolverException, ComponentInitializationException {
         String path = config.getIssuerMetadataPath();
         if (path == null) {
             throw new ConfigurationException("SAML Issuer metadata path is null");
         }
         File metadataFile = new File(path);
-        FilesystemMetadataProvider provider = new FilesystemMetadataProvider(metadataFile);
-        provider.setRequireValidMetadata(false);
-        provider.setParserPool(new BasicParserPool());
-        provider.initialize();
-        return provider;
+        FilesystemMetadataResolver resolver = new FilesystemMetadataResolver(metadataFile);
+        resolver.setRequireValidMetadata(false);
+        resolver.setParserPool(parserPool);
+        resolver.setId("sts-metadata");
+        resolver.initialize();
+        return resolver;
     }
 
     @Bean
-    public ExplicitKeySignatureTrustEngine trustEngine(MetadataProvider metadataProvider) {
-        MetadataProvider mdProvider = metadataProvider;
-        MetadataCredentialResolver mdCredResolver = new MetadataCredentialResolver(mdProvider);
-        KeyInfoCredentialResolver keyInfoCredResolver =
-                Configuration.getGlobalSecurityConfiguration().getDefaultKeyInfoCredentialResolver();
-        return new ExplicitKeySignatureTrustEngine(mdCredResolver, keyInfoCredResolver);
+    public PredicateRoleDescriptorResolver predicateRoleDescriptorResolver(MetadataResolver metadataResolver) throws ComponentInitializationException {
+        PredicateRoleDescriptorResolver predicateRoleDescriptorResolver = new PredicateRoleDescriptorResolver(metadataResolver);
+        predicateRoleDescriptorResolver.setRequireValidMetadata(true);
+        predicateRoleDescriptorResolver.initialize();
+        return predicateRoleDescriptorResolver;
+    }
+
+    @Bean
+    public ExplicitKeySignatureTrustEngine trustEngine(RoleDescriptorResolver roleDescriptorResolver) throws ComponentInitializationException {
+        KeyInfoCredentialResolver keyInfoCredResolver = DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver();
+        MetadataCredentialResolver metadataCredentialResolver = new MetadataCredentialResolver();
+        metadataCredentialResolver.setRoleDescriptorResolver(roleDescriptorResolver);
+        metadataCredentialResolver.setKeyInfoCredentialResolver(keyInfoCredResolver);
+        metadataCredentialResolver.initialize();
+        return new ExplicitKeySignatureTrustEngine(
+                metadataCredentialResolver,
+                keyInfoCredResolver
+        );
     }
 
 }

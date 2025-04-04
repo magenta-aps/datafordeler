@@ -6,13 +6,10 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.util.Monotemporality;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
 import dk.magenta.datafordeler.geo.data.WireCache;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import org.hibernate.Session;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.FilterDefs;
-import org.hibernate.annotations.ParamDef;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlElement;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -23,12 +20,6 @@ import java.util.Comparator;
 import java.util.Objects;
 
 @MappedSuperclass
-@FilterDefs({
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER, type = "java.time.OffsetDateTime")),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONFROM_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE, type = "java.time.OffsetDateTime")),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_AFTER, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER, type = "java.time.OffsetDateTime")),
-        @FilterDef(name = Monotemporal.FILTER_REGISTRATIONTO_BEFORE, parameters = @ParamDef(name = Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE, type = "java.time.OffsetDateTime"))
-})
 public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRecord<E> implements Monotemporal {
 
     public static final String DB_FIELD_ENTITY = GeoNontemporalRecord.DB_FIELD_ENTITY;

@@ -3,24 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.magenta.datafordeler</groupId>
-    <artifactId>subscription</artifactId>
-    <version>1.2</version>
-    <packaging>jar</packaging>
-    <name>datafordeler-plugin-subscription</name>
-    <description>Subscription plugin for Magentas Greenlandic System</description>
-
     <!--The identifier of the parent POM-->
     <parent>
         <groupId>dk.magenta.datafordeler</groupId>
-        <artifactId>datafordeler-plugin-parent</artifactId>
-        <relativePath>../parent/pom.xml</relativePath>
-        <version>1.2</version>
+        <artifactId>parent</artifactId>
+        <relativePath>../../parent/pom.xml</relativePath>
+        <version>2.0.0</version>
     </parent>
 
-    <properties>
-    </properties>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>subscription</artifactId>
+    <version>2.0.0</version>
+    <packaging>jar</packaging>
+    <name>datafordeler-plugin-subscription</name>
+    <description>Subscription plugin for Magentas Greenlandic System</description>
 
     <repositories>
         <repository>
@@ -33,25 +29,20 @@
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>datafordeler-core</artifactId>
-            <version>1.2</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
-            <artifactId>datafordeler-plugin-cpr</artifactId>
-            <version>1.2</version>
+            <artifactId>cpr</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
-            <artifactId>datafordeler-plugin-cvr</artifactId>
-            <version>1.2</version>
+            <artifactId>cvr</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${hibernate.jpa.version}</version>
         </dependency>
 
         <!-- Jackson (JSON) -->
@@ -102,9 +93,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>

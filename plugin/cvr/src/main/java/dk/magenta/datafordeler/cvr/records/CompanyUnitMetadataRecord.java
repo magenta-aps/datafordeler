@@ -7,12 +7,13 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import org.hibernate.Session;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -47,7 +48,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
 
 
     @OneToMany(targetEntity = MetadataContactRecord.class, mappedBy = MetadataContactRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-        private Set<MetadataContactRecord> metadataContactRecords = new HashSet<>();
+    private Set<MetadataContactRecord> metadataContactRecords = new HashSet<>();
 
     public RecordSet<MetadataContactRecord> getMetadataContactRecords() {
         return new RecordSet<>(this.metadataContactRecords);
@@ -84,7 +85,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
-    @JsonProperty(value = IO_FIELD_NEWEST_NAME)
+    @JsonIgnore
     private Set<BaseNameRecord> newestName = new HashSet<>();
 
     public void setNewestName(Set<BaseNameRecord> newestName) {
@@ -135,7 +136,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
-    @JsonProperty(value = IO_FIELD_NEWEST_LOCATION)
+    @JsonIgnore
     private Set<AddressRecord> newestLocation = new HashSet<>();
 
     public void setNewestLocation(Set<AddressRecord> newestLocation) {
@@ -174,7 +175,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     public static final String IO_FIELD_NEWEST_PRIMARY_INDUSTRY = "nyesteHovedbranche";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=0")
+    @SQLRestriction(CompanyIndustryRecord.DB_FIELD_INDEX + "=0")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -187,7 +188,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
-    @JsonProperty(value = IO_FIELD_NEWEST_PRIMARY_INDUSTRY)
+    @JsonIgnore
     private Set<CompanyIndustryRecord> newestPrimaryIndustry = new HashSet<>();
 
     public void setNewestPrimaryIndustry(Set<CompanyIndustryRecord> newestPrimaryIndustry) {
@@ -227,7 +228,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY1 = "nyesteBibranche1";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=1")
+    @SQLRestriction(CompanyIndustryRecord.DB_FIELD_INDEX + "=1")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -240,17 +241,17 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
-    @JsonProperty(value = IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
+    @JsonIgnore
     private Set<CompanyIndustryRecord> newestSecondaryIndustry1 = new HashSet<>();
 
-    public void setNewestSecondaryIndustry1(Set<CompanyIndustryRecord> newestSecondaryIndustry1) {
+    public void addNewestSecondaryIndustry1(Set<CompanyIndustryRecord> newestSecondaryIndustry1) {
         this.newestSecondaryIndustry1 = (newestSecondaryIndustry1 == null) ? new HashSet<>() : new HashSet<>(newestSecondaryIndustry1);
         for (CompanyIndustryRecord industryRecord : this.newestSecondaryIndustry1) {
             industryRecord.setUnitMetadataRecord(this);
         }
     }
 
-    @JsonSetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
+    @JsonProperty(IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
     public void addNewestSecondaryIndustry1(CompanyIndustryRecord newestSecondaryIndustry1) {
         if (newestSecondaryIndustry1 != null && !this.newestSecondaryIndustry1.contains(newestSecondaryIndustry1)) {
             newestSecondaryIndustry1.setMetadataRecord(this);
@@ -264,7 +265,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
         return new RecordSet<>(this.newestSecondaryIndustry1);
     }
 
-    @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
+    @JsonProperty(IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
     public CompanyIndustryRecord getLatestNewestSecondaryIndustry1() {
         CompanyIndustryRecord latest = null;
         for (CompanyIndustryRecord industryRecord : this.newestSecondaryIndustry1) {
@@ -280,7 +281,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY2 = "nyesteBibranche2";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=2")
+    @SQLRestriction(CompanyIndustryRecord.DB_FIELD_INDEX + "=2")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -293,7 +294,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
-    @JsonProperty(value = IO_FIELD_NEWEST_SECONDARY_INDUSTRY2)
+    @JsonIgnore
     private Set<CompanyIndustryRecord> newestSecondaryIndustry2 = new HashSet<>();
 
     public void setNewestSecondaryIndustry2(Set<CompanyIndustryRecord> newestSecondaryIndustry2) {
@@ -333,7 +334,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY3 = "nyesteBibranche3";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=3")
+    @SQLRestriction(CompanyIndustryRecord.DB_FIELD_INDEX + "=3")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -346,7 +347,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_AFTER, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_AFTER),
             @Filter(name = Nontemporal.FILTER_LASTUPDATED_BEFORE, condition = CvrNontemporalRecord.FILTERLOGIC_LASTUPDATED_BEFORE)
     })
-    @JsonProperty(value = IO_FIELD_NEWEST_SECONDARY_INDUSTRY3)
+    @JsonIgnore
     private Set<CompanyIndustryRecord> newestSecondaryIndustry3 = new HashSet<>();
 
     public void setNewestSecondaryIndustry3(Set<CompanyIndustryRecord> newestSecondaryIndustry3) {
@@ -434,6 +435,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getNewestName().traverse(setCallback, itemCallback);
         this.getNewestLocation().traverse(setCallback, itemCallback);
         this.getNewestPrimaryIndustry().traverse(setCallback, itemCallback);
@@ -449,6 +451,5 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
             quarterlyNumbersRecord.traverse(setCallback, itemCallback);
         }
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
-        super.traverse(setCallback, itemCallback);
     }
 }

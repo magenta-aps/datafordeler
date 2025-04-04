@@ -12,17 +12,15 @@ import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.AddressRecord;
+
 import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,10 +33,8 @@ import java.util.List;
 /**
  * Test that it is possible to load and clear data which is dedicated for demopurpose
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CvrLoadDemodatasetTest extends TestBase {
 
     private static final HashMap<String, String> schemaMap = new HashMap<>();
@@ -81,7 +77,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
 
-            Assert.assertEquals(4, companyList.size());
+            Assertions.assertEquals(4, companyList.size());
 
             DoubleHashMap<String, String, String> map = new DoubleHashMap<>();
             for (CompanyRecord company : companyList) {
@@ -92,29 +88,29 @@ public class CvrLoadDemodatasetTest extends TestBase {
                     map.put(cvr, "STATUS", company.getCompanyStatus().iterator().next().getStatus());
                 }
                 if (company.getPostalAddress().size() > 0) {
-                    map.put(cvr, "MUNICIPALITYCODE", Integer.toString(company.getPostalAddress().iterator().next().getMunicipality().getMunicipalityCode()));
+                    map.put(cvr, "MUNICIPALITYCODE", Integer.toString(company.getPostalAddress().iterator().next().getMunicipalitycode()));
                 }
             }
 
-            Assert.assertEquals("A. And Møntpudser", map.get("88888881", "METANAME"));
-            Assert.assertEquals("A. And Moentpudser", map.get("88888881", "NAME"));
-            Assert.assertEquals("NORMAL", map.get("88888881", "STATUS"));
-            Assert.assertEquals("956", map.get("88888881", "MUNICIPALITYCODE"));
+            Assertions.assertEquals("A. And Møntpudser", map.get("88888881", "METANAME"));
+            Assertions.assertEquals("A. And Moentpudser", map.get("88888881", "NAME"));
+            Assertions.assertEquals("NORMAL", map.get("88888881", "STATUS"));
+            Assertions.assertEquals("956", map.get("88888881", "MUNICIPALITYCODE"));
 
-            Assert.assertEquals("Faetter Hoejben spilleservice", map.get("88888882", "METANAME"));
-            Assert.assertEquals("Faetter Hoejben spilleservice", map.get("88888882", "NAME"));
-            Assert.assertEquals("NORMAL", map.get("88888882", "STATUS"));
-            Assert.assertEquals("751", map.get("88888882", "MUNICIPALITYCODE"));
+            Assertions.assertEquals("Faetter Hoejben spilleservice", map.get("88888882", "METANAME"));
+            Assertions.assertEquals("Faetter Hoejben spilleservice", map.get("88888882", "NAME"));
+            Assertions.assertEquals("NORMAL", map.get("88888882", "STATUS"));
+            Assertions.assertEquals("751", map.get("88888882", "MUNICIPALITYCODE"));
 
-            Assert.assertEquals("Georg Gearloes opfindelser", map.get("88888883", "METANAME"));
-            Assert.assertEquals("Georg Gearloes opfindelser", map.get("88888883", "NAME"));
-            Assert.assertEquals("NORMAL", map.get("88888883", "STATUS"));
-            Assert.assertEquals("956", map.get("88888883", "MUNICIPALITYCODE"));
+            Assertions.assertEquals("Georg Gearloes opfindelser", map.get("88888883", "METANAME"));
+            Assertions.assertEquals("Georg Gearloes opfindelser", map.get("88888883", "NAME"));
+            Assertions.assertEquals("NORMAL", map.get("88888883", "STATUS"));
+            Assertions.assertEquals("956", map.get("88888883", "MUNICIPALITYCODE"));
 
-            Assert.assertEquals("Anderssines catering service", map.get("88888884", "METANAME"));
-            Assert.assertEquals("Anderssines catering service", map.get("88888884", "NAME"));
-            Assert.assertEquals("NORMAL", map.get("88888884", "STATUS"));
-            Assert.assertEquals("751", map.get("88888884", "MUNICIPALITYCODE"));
+            Assertions.assertEquals("Anderssines catering service", map.get("88888884", "METANAME"));
+            Assertions.assertEquals("Anderssines catering service", map.get("88888884", "NAME"));
+            Assertions.assertEquals("NORMAL", map.get("88888884", "STATUS"));
+            Assertions.assertEquals("751", map.get("88888884", "MUNICIPALITYCODE"));
 
         }
     }
@@ -130,7 +126,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
             query.setEffectAt(time);
             query.applyFilters(session);
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            Assert.assertEquals(4, companyList.size());
+            Assertions.assertEquals(4, companyList.size());
         }
     }
 
@@ -145,7 +141,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
             query.setEffectAt(time);
             query.applyFilters(session);
             List<CompanyRecord> companyList = QueryManager.getAllEntities(session, query, CompanyRecord.class);
-            Assert.assertEquals(4, companyList.size());
+            Assertions.assertEquals(4, companyList.size());
         }
     }
 
@@ -170,7 +166,7 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assert.assertEquals(prior, companyRecords.size());//Validate that 0 company from the file persondata is initiated
+            Assertions.assertEquals(prior, companyRecords.size());//Validate that 0 company from the file persondata is initiated
         }
 
         this.load();
@@ -183,24 +179,24 @@ public class CvrLoadDemodatasetTest extends TestBase {
 
         when(plugin.getRegisterManager(), registerManager, "/GLBASETEST.json");
         //Clean the testdata
-        config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cpr\",\"remote\":false,\"cleantestdatafirst\":true}");
+        config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cvr\",\"remote\":false,\"cleantestdatafirst\":true}");
         pull = new Pull(engine, plugin, config);
         pull.run();
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> companyRecords = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assert.assertEquals(4+prior, companyRecords.size());//Validate that 4 company from the file persondata is initiated
+            Assertions.assertEquals(4+prior, companyRecords.size());  // Validate that 4 company from the file persondata is initiated
         }
 
         when(plugin.getRegisterManager(), registerManager, "/EMPTYGLBASETEST.json");
         //Clean the testdata
-        config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cpr\",\"remote\":false,\"cleantestdatafirst\":true}");
+        config = (ObjectNode) objectMapper.readTree("{\"plugin\":\"cvr\",\"remote\":false,\"cleantestdatafirst\":true}");
         pull = new Pull(engine, plugin, config);
         pull.run();
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<CompanyRecord> personEntities = QueryManager.getAllEntities(session, CompanyRecord.class);
-            Assert.assertEquals(prior, personEntities.size());//Validate that 0 company from the file persondata is initiated
+            Assertions.assertEquals(prior, personEntities.size());//Validate that 0 company from the file persondata is initiated
         }
     }
 
